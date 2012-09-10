@@ -11,7 +11,6 @@ Bundler.require :default, :development
 ENV["RAILS_ENV"] ||= 'test'
 # require File.expand_path("../../config/environment", __FILE__)
 
-
 Combustion.path = 'spec/dummy'
 Combustion.initialize!
 

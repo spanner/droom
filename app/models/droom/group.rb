@@ -10,14 +10,6 @@ module Droom
     has_many :attachments, :as => :attachee
     has_many :documents, :through => :attachments
   
-    named_scope :containing, lambda { |person|
-      {
-        :joins => "INNER JOIN memberships as mb on mb.group_id = groups.id", 
-        :conditions => ["mb.person_id = ?", reader.id],
-        :group => column_names.map { |n| 'groups.' + n }.join(',')
-      }
-    }
-  
     def admit(person)
       self.readers << reader
     end

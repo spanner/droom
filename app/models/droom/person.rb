@@ -2,7 +2,6 @@
 
 module Droom
   class Person < ActiveRecord::Base
-    include Enumerize
   
     ### Associations
     #
@@ -29,10 +28,10 @@ module Droom
     # The treatment here is very basic compared to the yearbook's uploader, but we might bring that across
     # if this starts to look like a useful directory resource.
     #
-    has_upload :image, { 
-      :styles => {:standard =? "400x300#", :thumb => "100x100#"}
+    has_attached_file :image, { 
+      :styles => {:standard => "400x300#", :thumb => "100x100#"},
       :default_url => "/assets/person/nopicture_:style.png"
-    })
+    }
     before_save :read_upload
   
     def image_url(style=:standard)

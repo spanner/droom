@@ -1,11 +1,10 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe EventRecurrenceRule do
-  dataset :recurrence
+describe RecurrenceRule do
   
   describe "date-limited rule" do
     before do 
-      @rule = event_recurrence_rules(:date_limited)
+      @rule = FactoryGirl.create(:date_limited)
     end
     
     it "should be bounded" do
@@ -23,7 +22,7 @@ describe EventRecurrenceRule do
 
   describe "count-limited rule" do
     before do 
-      @rule = event_recurrence_rules(:count_limited)
+      @rule = FactoryGirl.create(:count_limited)
     end
     
     it "should be bounded" do
@@ -41,7 +40,7 @@ describe EventRecurrenceRule do
 
   describe "unlimited rule" do
     before do 
-      @rule = event_recurrence_rules(:unlimited)
+      @rule = FactoryGirl.create(:unlimited)
     end
     
     it "should not be bounded" do

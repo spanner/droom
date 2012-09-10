@@ -1,7 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Ical do
-  dataset :calendars
   
   before do
     @ical = calendars(:dummy).ical

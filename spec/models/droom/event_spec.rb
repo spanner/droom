@@ -1,7 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Event do
-  dataset :calendar_events
   
   before do
     @ical = calendars(:dummy).ical
@@ -9,8 +8,8 @@ describe Event do
   end
       
   describe "A simple event" do
-    before do 
-      @event = events(:simple)
+    before do
+      @event = FactoryGirl.create(:simple)
     end
     
     it "should be valid" do
@@ -29,17 +28,10 @@ describe Event do
       @event.duration.should == 0
     end
   end
-  
-  describe "A facebook event" do
-    it "should return a facebook url" do
-      events(:facebooked).facebook_url.should == "http://www.facebook.com/event.php?eid=101"
-      events(:simple).facebook_url.should be_nil
-    end
-  end
 
   describe "A spanning event" do
     before do 
-      @event = events(:spanning)
+      @event = FactoryGirl.create(:spanning)
     end
     
     it "should have the right duration" do
@@ -53,7 +45,7 @@ describe Event do
 
   describe "A repeating event" do
     before do 
-      @event = events(:repeating)
+      @event = FactoryGirl.create(:repeating)
       @event.send :update_occurrences
     end
     

@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails"
   s.add_dependency 'paperclip', "~> 3.1.0"
   s.add_dependency 'enumerize'
-  s.add_dependency 'geokit'
+  s.add_dependency 'geokit-rails3'
   s.add_dependency 'ri_cal'
   s.add_dependency 'chronic'
   s.add_dependency 'kaminari'

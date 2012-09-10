@@ -8,6 +8,7 @@ gemspec
 # jquery-rails is used by the dummy application
 gem "jquery-rails"
 gem "haml"
+gem "geokit-rails3"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
