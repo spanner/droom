@@ -1,4 +1,4 @@
-module Dataroom
+module Droom
   module ApplicationHelper
   end
 end

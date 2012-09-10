@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-# Declare your gem's dependencies in dataroom.gemspec.
+# Declare your gem's dependencies in droom.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
 gemspec
@@ -19,7 +19,7 @@ end
 
 group :test, :development do
   gem 'haml'
-  gem 'paperclip'
+  gem 'paperclip', "~> 3.1.0"
   gem 'combustion', '~> 0.3.1'
   gem "rspec-rails", "~> 2.0"
   gem 'factory_girl_rails'

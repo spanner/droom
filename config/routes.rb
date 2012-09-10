@@ -1,2 +1,2 @@
-Dataroom::Engine.routes.draw do
+Droom::Engine.routes.draw do
 end
