@@ -1,6 +1,6 @@
 FactoryGirl.define do
   
-  factory :event do
+  factory :event, :class => "Droom::Event"  do
     description "an event"
     
     factory :simple do

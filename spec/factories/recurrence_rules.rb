@@ -1,6 +1,6 @@
 FactoryGirl.define do
   
-  factory :recurrence_rule do
+  factory :recurrence_rule, :class => "Droom::RecurrenceRule"  do
     factory :date_limited do
       period "weekly"
       interval 1
@@ -22,5 +22,4 @@ FactoryGirl.define do
     end
 
   end
-  
 end

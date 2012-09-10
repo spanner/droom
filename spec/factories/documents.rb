@@ -1,8 +1,8 @@
 FactoryGirl.define do
   
-  factory :download do
-    name "A download"
-    description "Test download"
+  factory :document, :class => "Droom::Document"   do
+    name "A document"
+    description "Test document"
     # document
     
     factory :grouped do

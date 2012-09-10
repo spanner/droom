@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resources :users
+  mount Droom::Engine => "/droom"
 end

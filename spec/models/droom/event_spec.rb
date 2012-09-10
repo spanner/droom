@@ -1,12 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Event do
-  
-  before do
-    @ical = calendars(:dummy).ical
-    @ical.parse_file(File.dirname(__FILE__) + "/../files/dummy.ics")
-  end
-      
+describe Droom::Event do
+        
   describe "A simple event" do
     before do
       @event = FactoryGirl.create(:simple)
@@ -90,8 +85,6 @@ describe Event do
       end
 
     end
-    
   end
-
 end
 
