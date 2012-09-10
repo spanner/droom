@@ -1,0 +1,19 @@
+%tr{:class => ".node.level-1"}
+  - render_region :tbody do |tbody|
+    - tbody.title_cell do
+      %td.event_venue
+        %h3.title
+          = link_to event_venue.title, edit_admin_event_venue_url(event_venue)
+        %p.description
+          = link_to pluralize(event_venue.events.count, t('event_venues_admin.index.event')), admin_event_venue_events_url(event_venue)
+    - tbody.location_cell do
+      %td.location
+        = event_venue.address
+    - tbody.url_cell do
+      %td.url
+        - if event_venue.url
+          = link_to truncate(event_venue.url, 48), event_venue.url
+    - tbody.modify_cell do
+      %td.actions
+        - confirmation = "Are you sure you want to delete entirely the event venue '#{event_venue.title}'?"
+        = link_to image('minus') + " " + t('event_venues_admin.index.remove'), remove_admin_event_venue_url(event_venue), :class => 'action'

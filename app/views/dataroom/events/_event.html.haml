@@ -1,0 +1,47 @@
+- no_date ||= false
+- @seen_events ||= []
+
+- if event
+  - event_master_id = event.master_id || event.id
+  - repeating = true if @seen_events[event_master_id]
+  - @seen_events[event_master_id] = true;
+  - cssclasses = ['event']
+  - cssclasses << 'repeat' if repeating
+  - cssclasses << event.calendar.slug if event.calendar
+
+
+  %div{:class => cssclasses.join(' ')}
+    - unless no_date
+      .datemark
+        .mon= event.short_month
+        .dom= event.mday_padded
+    .summary
+      %h2
+        - if event.url
+          = link_to event.title, event.url, :class => 'title'
+        - else
+          = event.title
+        = link_to t('event_calendar_extension.download_event'), event_url(event, :format => :ics), :class => 'ical download'
+        - unless event.facebook_id.blank?
+          = link_to t('event_calendar_extension.view_on_facebook'), event.facebook_url, :class => 'facebook event'
+        = render :partial => 'events/keywords', :locals => {:event => event}
+          
+      %p.practicalities
+        %span.date
+          = event.summarize_start
+        - if event.event_venue
+          %span.location
+            = t('event_page.at')
+            - if event.event_venue.url
+              = link_to event.event_venue.title, event.event_venue.url, :class => 'location'
+            - else
+              = event.event_venue.title
+            - if event.event_venue.address
+              %br
+              = event.event_venue.address
+        - elsif event.location
+          %span.location
+            = event.location
+      - unless repeating
+        = event.description_paragraph
+    

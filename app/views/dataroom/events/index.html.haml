@@ -1,0 +1,64 @@
+= render :partial => 'events/other_page_parts'
+
+- content_for :events do
+  = render :partial => 'event', :collection => events
+
+  - if events.length < 5 && continuing_events.any?
+    - if events.any?
+      %h2.listheader
+        = t('event_page.continuing_events_title')
+    = render :partial => 'event', :collection => continuing_events
+
+  - if events.empty? && continuing_events.empty?
+    - if period
+      %h2
+        = t('event_page.sorry_no_events')
+        = render :partial => 'events/defacet'
+    - else
+      %h2
+        = t('event_page.sorry_no_upcoming_events')
+
+- content_for :continuing_events do
+  - if continuing_events.any? && events.length >= 5
+    #continuing
+      %h3
+        = t('event_page.continuing_events_title')
+      %ul
+        - continuing_events.each do |event|
+          %li
+            - if event.url
+              = link_to event.title, event.url, :class => 'title'
+            - else
+              = event.title
+            %span.detail
+              = t('event_page.runs_until')
+              = event.last_day
+              - if event.event_venue
+                = t('event_page.at')
+                = link_to event.event_venue.title, event.event_venue.url
+              - elsif event.location
+                = t('event_page.at')
+                = event.location
+
+- content_for :calendar do
+  #calendar
+    = render :partial => "events/minicalendar", :locals => {:date => period ? period.start : Date.today}
+
+- content_for :pagination do
+  = will_paginate events
+
+- content_for :faceting do
+  = render :partial => 'faceting'
+
+- content_for :title do
+  = t('event_page.calendar')
+  
+- content_for :full_title do
+  = t('events').titlecase
+  = list_description
+
+= yield :faceting
+#events
+  = yield :pagination if events.previous_page
+  = yield :events
+  = yield :pagination if events.next_page
