@@ -24,6 +24,8 @@ group :test, :development do
   gem 'paperclip', "~> 3.1.0"
   gem "capybara"
   gem "rspec-rails", "~> 2.0"
+  gem 'watchr'
+  gem 'spork', '~> 0.9.0.rc'
   gem 'factory_girl_rails'
   gem "database_cleaner"
   gem 'shoulda-matchers'

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe Droom::Document do
   
   before do
-    @site = Page.current_site = FactoryGirl.create(:test)
+    # @site = Page.current_site = FactoryGirl.create(:test)
   end
   
   it "should have a groups association" do
