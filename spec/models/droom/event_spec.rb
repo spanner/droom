@@ -11,7 +11,7 @@ describe Droom::Event do
       @event.valid?.should be_true
     end
     
-    [:name, :start_date].each do |field|
+    [:name, :start].each do |field|
       it "should not be valid without a #{field}" do
         @event.send "#{field}=".intern, nil
         @event.valid?.should be_false
@@ -19,8 +19,31 @@ describe Droom::Event do
     end
     
     it "should not mind if it has no end date" do
-      @event.end_date.should be_nil
+      @event.finish.should be_nil
       @event.duration.should == 0
+    end
+    
+    describe "should have a" do
+      
+      it "start time" do
+        @event.start_time.should == "18:30:00"
+      end
+    
+      it "start date" do
+        @event.start_date.to_s.should == "2009-11-03"
+      end
+
+      it "finish time" do
+        @event.finish_time.should == nil
+        # @event.finish_time = 
+        # @event.finish_time.should ==
+      end
+
+      it "finish date" do
+        @event.finish_date.should == nil
+        # @event.finish_date = 
+        # @event.finish_date.should ==
+      end
     end
   end
 
@@ -79,7 +102,7 @@ describe Droom::Event do
       end
       
       it "should have a different date and uuid" do
-        [:start_date, :end_date, :uuid].each do |att|
+        [:start, :finish, :uuid].each do |att|
           @occurrence.send(att).should_not == @event.send(att)
         end
       end
