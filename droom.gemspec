@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'geokit-rails3'
   s.add_dependency 'ri_cal'
   s.add_dependency 'chronic'
+  s.add_dependency 'time_of_day'
   s.add_dependency 'kaminari'
   s.add_dependency 'haml'
   s.add_dependency "uuidtools"

@@ -44,9 +44,11 @@ ActiveRecord::Schema.define(:version => 20120911070124) do
   end
 
   create_table "droom_events", :force => true do |t|
-    t.datetime "start_date"
-    t.datetime "end_date"
+    t.datetime "start"
+    t.datetime "finish"
     t.string   "name"
+    t.text     "description"
+    t.string   "url"
     t.integer  "event_set_id"
     t.integer  "created_by_id"
     t.string   "uuid"
@@ -117,7 +119,6 @@ ActiveRecord::Schema.define(:version => 20120911070124) do
     t.datetime "limiting_date"
     t.integer  "limiting_count"
     t.integer  "created_by_id"
-    t.integer  "integer"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
   end

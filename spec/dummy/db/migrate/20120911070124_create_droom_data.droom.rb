@@ -2,8 +2,8 @@
 class CreateDroomData < ActiveRecord::Migration
   def change
     create_table :droom_events do |t|
-      t.datetime :start_date
-      t.datetime :end_date
+      t.datetime :start
+      t.datetime :finish
       t.string :name
       t.text :description
       t.string :url
