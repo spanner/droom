@@ -172,7 +172,7 @@ module Droom
     # If the time is set before the date, we default to that time today. Times default to 00:00 in the usual way.
     #
     def start_time=(value)
-      start = (start_date || Date.today) + parse_date(value).time_of_day
+      start = (start_date || Date.today) + parse_date(value).time_of_day!
     end
     
     def start_date=(value)
