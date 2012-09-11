@@ -10,6 +10,9 @@ gem "jquery-rails"
 gem "haml"
 gem "geokit-rails3"
 gem "paperclip", '~> 3.1.0'
+gem "debugger"
+gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
+gem "date_validator"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

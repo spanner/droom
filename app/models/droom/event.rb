@@ -2,6 +2,7 @@ require 'uuidtools'
 
 module Droom
   class Event < ActiveRecord::Base
+    attr_accessible :start_date, :end_date, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url
 
     belongs_to :created_by, :class_name => 'User'
 
@@ -22,8 +23,10 @@ module Droom
     has_many :recurrence_rules, :dependent => :destroy, :conditions => {:active => true}
     accepts_nested_attributes_for :recurrence_rules, :allow_destroy => true
 
-    validates_presence_of :uuid, :name, :start_date
-    validates_uniqueness_of :uuid
+    validates :start_date, :presence => true, :date => true
+    validates :end_date, :date => {:after => :start_date}, :allow_nil => true
+    validates :uuid, :presence => true, :uniqueness => true
+    validates :name, :presence_unless_recurrence => true
 
     before_validation :set_uuid
     after_save :update_occurrences
@@ -190,7 +193,11 @@ module Droom
       if recurrence_rules.any?
         recurrence_horizon = Time.now + 10.years
         as_ri_cal_event.occurrences(:before => recurrence_horizon).each do |occ|
-          occurrences.create!(self.attributes.merge(:start_date => occ.dtstart, :end_date => occ.dtend, :uuid => nil)) unless occ.dtstart == self.start_date
+          occurrences.create!({
+            :start_date => occ.dtstart,
+            :end_date => occ.dtend,
+            :uuid => nil
+          }) unless occ.dtstart == self.start_date
         end
       end
     end
