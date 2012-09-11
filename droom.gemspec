@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'kaminari'
   s.add_dependency 'haml'
   s.add_dependency "uuidtools"
+  s.add_dependency "date_validator"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
