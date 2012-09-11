@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe RecurrenceRule do
+describe Droom::RecurrenceRule do
   
   describe "date-limited rule" do
     before do 
@@ -58,7 +58,7 @@ describe RecurrenceRule do
 
   describe "imported rule" do
     before do 
-      @rule = EventRecurrenceRule.from("FREQ=DAILY;INTERVAL=1;UNTIL=20090228")
+      @rule = Droom::RecurrenceRule.from("FREQ=DAILY;INTERVAL=1;UNTIL=20090228")
     end
     
     it "should be bounded" do
