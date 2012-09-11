@@ -2,7 +2,7 @@ xml = Builder::XmlMarkup.new
 xml.instruct! :xml, :version => "1.0"
 xml.rss :version => "2.0" do
   xml.channel do
-    xml.title Radiant::Config['event_calendar.feed_title'] || "#{Radiant::Config['admin.title']} Events"
+    xml.title "Events"
     xml.description list_description
     xml.link calendar_url(calendar_parameters.merge(:format => :html))
 

@@ -2,6 +2,7 @@
 
 module Droom
   class Person < ActiveRecord::Base
+    attr_accessible :name, :email, :phone, :description, :user_id
   
     ### Associations
     #
@@ -32,7 +33,6 @@ module Droom
       :styles => {:standard => "400x300#", :thumb => "100x100#"},
       :default_url => "/assets/person/nopicture_:style.png"
     }
-    before_save :read_upload
   
     def image_url(style=:standard)
       image.url(style)
@@ -95,14 +95,6 @@ module Droom
 
     # ### Administration & callbacks
     #
-    # *read_upload* is called before_save. If there is a new upload, or any of our scale and crop values are changed, it will assign 
-    # the upload file to the person image. Even if it's the same image as before, the effect is to trigger post-processing again
-    # and apply the new crop and scale values.
-    #
-    def read_upload
-      self.image = self.image_upload.file if self.image_upload && (self.image_upload_id_changed? || self.image_scale_width_changed? || self.image_offset_top_changed? || self.image_offset_left_changed?)
-    end
-  
     # On creation we must create a user object too. This has the side effect of sending out a login invitation.
     #
     def create_user
