@@ -7,41 +7,33 @@
   - @seen_events[event_master_id] = true;
   - cssclasses = ['event']
   - cssclasses << 'repeat' if repeating
-  - cssclasses << event.calendar.slug if event.calendar
-
 
   %div{:class => cssclasses.join(' ')}
     - unless no_date
       .datemark
-        .mon= event.short_month
-        .dom= event.mday_padded
+        .mon= event.start.strftime('%b')
+        .dom= event.start.strftime('%d')
     .summary
       %h2
         - if event.url
-          = link_to event.title, event.url, :class => 'title'
+          = link_to event.name, event.url, :class => 'name'
         - else
-          = event.title
-        = link_to t('event_calendar_extension.download_event'), event_url(event, :format => :ics), :class => 'ical download'
-        - unless event.facebook_id.blank?
-          = link_to t('event_calendar_extension.view_on_facebook'), event.facebook_url, :class => 'facebook event'
-        = render :partial => 'events/keywords', :locals => {:event => event}
+          = event.name
+        = link_to t(:download_event), event_url(event, :format => :ics), :class => 'ical download'
           
       %p.practicalities
         %span.date
-          = event.summarize_start
-        - if event.event_venue
+          = event.start_time
+        - if event.venue
           %span.location
             = t('event_page.at')
-            - if event.event_venue.url
-              = link_to event.event_venue.title, event.event_venue.url, :class => 'location'
+            - if event.venue.url
+              = link_to event.venue.name, event.venue.url, :class => 'location'
             - else
-              = event.event_venue.title
-            - if event.event_venue.address
+              = event.venue.name
+            - if event.venue.address
               %br
-              = event.event_venue.address
-        - elsif event.location
-          %span.location
-            = event.location
+              = event.venue.address
       - unless repeating
-        = event.description_paragraph
+        = simple_format event.description
     

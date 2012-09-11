@@ -37,7 +37,7 @@ module Droom
         elsif period.start
           @events = @events.after(period.start) 
         else
-          @events = @events.b@eventsore(period.finish) 
+          @events = @events.before(period.finish) 
         end
       else
         @events = @events.future
@@ -45,12 +45,7 @@ module Droom
     end
   
     def get_continuing_events
-      return @continuing_events if @continuing_events
-      if period && period.start
-        @continuing_events = Event.unfinished(period.start).by_end_date
-      else
-        @continuing_events = Event.unfinished(Time.now).by_end_date
-      end
+      @continuing_events ||= Event.unfinished(period ? period.start : Time.now).by_finish
     end
   
     def period

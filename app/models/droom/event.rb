@@ -3,7 +3,7 @@ require 'chronic'
 
 module Droom
   class Event < ActiveRecord::Base
-    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url
+    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time
 
     belongs_to :created_by, :class_name => 'User'
 
@@ -64,6 +64,8 @@ module Droom
     scope :unfinished, lambda { |start| # datetimable object.
       where(['start < :start AND finish > :start', {:start => start}])
     }
+    
+    scope :by_finish, order("finish ASC")
   
     scope :coincident_with, lambda { |start, finish| # datetimable objects.
       where(['(start < :finish AND finish > :start) OR (finish IS NULL AND start > :start AND start < :finish)', {:start => start, :finish => finish}])
@@ -172,19 +174,19 @@ module Droom
     # If the time is set before the date, we default to that time today. Times default to 00:00 in the usual way.
     #
     def start_time=(value)
-      start = (start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
+      self.start = (start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
     end
     
     def start_date=(value)
-      start = parse_date(value).to_date + start_time
+      self.start = parse_date(value).to_date + start_time
     end
   
     def finish_time=(value)
-      finish = (finish_date || start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
+      self.finish = (finish_date || start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
     end
     
     def finish_date=(value)
-      finish = parse_date(value).to_date + finish_time
+      self.finish = parse_date(value).to_date + finish_time
     end
 
 

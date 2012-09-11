@@ -3,7 +3,7 @@
 %h1
   = t :calendar
   
-- if user_signed_in? && current_user.events
+- if user_signed_in? && current_user.events.any?
   %section.personal
     %h2= t :your_events
     = render :partial => 'event', :collection => current_user.events
