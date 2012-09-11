@@ -11,7 +11,7 @@ describe Droom::Event do
       @event.valid?.should be_true
     end
     
-    [:title, :start_date].each do |field|
+    [:name, :start_date].each do |field|
       it "should not be valid without a #{field}" do
         @event.send "#{field}=".intern, nil
         @event.valid?.should be_false
@@ -73,7 +73,7 @@ describe Droom::Event do
       end
       
       it "should resemble its master in most ways" do
-        [:title, :description, :event_venue, :keywords, :url, :postcode, :duration].each do |att|
+        [:name, :description, :event_venue, :keywords, :url, :postcode, :duration].each do |att|
           @occurrence.send(att).should == @event.send(att)
         end
       end

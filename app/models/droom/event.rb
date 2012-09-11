@@ -22,7 +22,7 @@ module Droom
     has_many :recurrence_rules, :dependent => :destroy, :conditions => {:active => true}
     accepts_nested_attributes_for :recurrence_rules, :allow_destroy => true
 
-    validates_presence_of :uuid, :title, :start_date, :status_id
+    validates_presence_of :uuid, :name, :start_date
     validates_uniqueness_of :uuid
 
     before_validation :set_uuid
@@ -152,7 +152,7 @@ module Droom
     end
   
     def add_recurrence(rule)
-      self.recurrence_rules << EventRecurrenceRule.from(rule)
+      self.recurrence_rules << Droom::RecurrenceRule.from(rule)
     end
 
 
@@ -161,13 +161,13 @@ module Droom
     def as_ri_cal_event
       RiCal.Event do |cal_event|
         cal_event.uid = uuid
-        cal_event.summary = title
+        cal_event.summary = name
         cal_event.description = description if description
         cal_event.dtstart =  (all_day? ? start_date.to_date : start_date) if start_date
         cal_event.dtend = (all_day? ? end_date.to_date : end_date) if end_date
         cal_event.url = url if url
         cal_event.rrules = recurrence_rules.map(&:to_ical) if recurrence_rules.any?
-        cal_event.location = location if location
+        cal_event.location = venue.name if venue
       end
     end
   
@@ -188,8 +188,8 @@ module Droom
     def update_occurrences
       occurrences.destroy_all
       if recurrence_rules.any?
-        recurrence_horizon = Time.now + (Radiant::Config['event_calendar.recurrence_horizon'] || 10).to_i.years
-        to_ri_cal.occurrences(:before => recurrence_horizon).each do |occ|
+        recurrence_horizon = Time.now + 10.years
+        as_ri_cal_event.occurrences(:before => recurrence_horizon).each do |occ|
           occurrences.create!(self.attributes.merge(:start_date => occ.dtstart, :end_date => occ.dtend, :uuid => nil)) unless occ.dtstart == self.start_date
         end
       end

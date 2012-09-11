@@ -3,6 +3,8 @@ module Droom
   
     belongs_to :created_by, :class_name => 'User'
     belongs_to :event
+    
+    attr_accessible :period, :interval, :basis, :limiting_count, :limiting_date
   
     def active
       new_record? ? false : read_attribute(:active)
