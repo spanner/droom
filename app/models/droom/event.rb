@@ -172,7 +172,7 @@ module Droom
     # If the time is set before the date, we default to that time today. Times default to 00:00 in the usual way.
     #
     def start_time=(value)
-      start = (start_date || Date.today) + parse_date(value).time_of_day
+      start = (start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
     end
     
     def start_date=(value)
@@ -180,7 +180,7 @@ module Droom
     end
   
     def finish_time=(value)
-      finish = (finish_date || start_date || Date.today).to_date + parse_date(value).time_of_day
+      finish = (finish_date || start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
     end
     
     def finish_date=(value)
@@ -275,7 +275,7 @@ module Droom
     def parse_date(value)
       case value
       when Numeric
-        Time.at(value).to_datetime
+        Time.at(value)
       when String
         Chronic.parse(value)
       else

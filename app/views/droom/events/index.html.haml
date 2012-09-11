@@ -1,3 +1,5 @@
+- @seen_events = {}
+
 %h1
   = t :calendar
   
@@ -13,5 +15,5 @@
 
 - if @continuing_events.any?
   %section.continuing
-    %h2= t :continuing events
+    %h2= t :continuing_events
     = render :partial => 'event', :collection => @continuing_events
