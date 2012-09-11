@@ -8,6 +8,7 @@ class CreateDroomData < ActiveRecord::Migration
       t.text :description
       t.string :url
       t.integer :event_set_id
+      t.integer :venue_id
       t.integer :created_by_id
       t.string :uuid
       t.boolean :all_day

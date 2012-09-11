@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-
+require 'awesome_print'
 describe Droom::Event do
         
   describe "A simple event" do
@@ -23,26 +23,30 @@ describe Droom::Event do
       @event.duration.should == 0
     end
     
-    describe "should have a" do
+    describe "can change its" do
       
       it "start time" do
-        @event.start_time.should == "18:30:00"
+        @event.start_time.should == Time.new(2009,11,03,18,30,00)
+        @event.start_time = "01:00"
+        @event.start_time.should == Time.new(2009,11,03,01,00,00)
       end
     
       it "start date" do
-        @event.start_date.to_s.should == "2009-11-03"
+        @event.start_date.should == Date.new(2009,11,03)
+        @event.start_date = "20 March 2013"
+        @event.start_date.should == Date.new(2013,03,20)
       end
 
       it "finish time" do
         @event.finish_time.should == nil
-        # @event.finish_time = 
-        # @event.finish_time.should ==
+        @event.finish_time = "9pm"
+        @event.finish_time.should == Time.new(2009, 11, 3, 21, 0, 0)
       end
 
       it "finish date" do
         @event.finish_date.should == nil
-        # @event.finish_date = 
-        # @event.finish_date.should ==
+        @event.finish_date = "30 April 2014"
+        @event.finish_date.should == Date.new(2014,04,30)
       end
     end
   end
@@ -87,7 +91,7 @@ describe Droom::Event do
     end
     
     describe "recurring" do
-      before do 
+      before do
         @occurrence = @event.occurrences.last
       end
       
@@ -96,7 +100,7 @@ describe Droom::Event do
       end
       
       it "should resemble its master in most ways" do
-        [:name, :description, :venue, :keywords, :url, :postcode, :duration].each do |att|
+        [:name, :description, :venue, :url, :duration].each do |att|
           @occurrence.send(att).should == @event.send(att)
         end
       end

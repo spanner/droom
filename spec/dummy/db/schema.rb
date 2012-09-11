@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20120911070124) do
     t.string   "url"
     t.integer  "event_set_id"
     t.integer  "created_by_id"
+    t.integer  "venue_id"
     t.string   "uuid"
     t.boolean  "all_day"
     t.integer  "master_id"

@@ -13,7 +13,7 @@ gem "paperclip", '~> 3.1.0'
 gem "debugger"
 gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
 gem "date_validator"
-
+gem 'time_of_day'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'

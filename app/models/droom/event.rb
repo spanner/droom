@@ -3,7 +3,7 @@ require 'chronic'
 
 module Droom
   class Event < ActiveRecord::Base
-    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time
+    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue
 
     belongs_to :created_by, :class_name => 'User'
 
@@ -27,7 +27,7 @@ module Droom
     validates :start, :presence => true, :date => true
     validates :finish, :date => {:after => :start, :allow_nil => true}
     validates :uuid, :presence => true, :uniqueness => true
-    validates :name, :presence_unless_recurrence => true
+    validates :name, :presence => true
 
     before_validation :set_uuid
     after_save :update_occurrences
@@ -178,7 +178,7 @@ module Droom
     end
     
     def start_date=(value)
-      self.start = parse_date(value).to_date + start_time
+      self.start = parse_date(value).to_date# + start_time
     end
   
     def finish_time=(value)
@@ -186,11 +186,8 @@ module Droom
     end
     
     def finish_date=(value)
-      self.finish = parse_date(value).to_date + finish_time
+      self.finish = parse_date(value).to_date# + finish_time
     end
-
-
-
 
 
 
@@ -266,6 +263,10 @@ module Droom
         recurrence_horizon = Time.now + 10.years
         as_ri_cal_event.occurrences(:before => recurrence_horizon).each do |occ|
           occurrences.create!({
+            :name => self.name,
+            :url => self.url,
+            :description => self.description,
+            :venue => self.venue,
             :start => occ.dtstart,
             :finish => occ.dtend,
             :uuid => nil
