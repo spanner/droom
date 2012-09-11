@@ -31,7 +31,7 @@ module Droom
     before_validation :set_uuid
     after_save :update_occurrences
   
-    default_scope :order => 'start_date ASC', :include => :event_venue
+    default_scope :order => 'start_date ASC', :include => :venue
     scope :primary, { :conditions => "master_id IS NULL" }
     scope :recurrent, { :conditions => "master_id IS NOT NULL" }
   
@@ -73,7 +73,7 @@ module Droom
     }
   
     scope :at_venue, lambda { |venue| # EventVenue object
-      where(["event_venue_id = ?", venue.id])
+      where(["venue_id = ?", venue.id])
     }
   
     scope :except_these, lambda { |uuids| # array of uuid strings

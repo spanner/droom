@@ -73,7 +73,7 @@ describe Droom::Event do
       end
       
       it "should resemble its master in most ways" do
-        [:name, :description, :event_venue, :keywords, :url, :postcode, :duration].each do |att|
+        [:name, :description, :venue, :keywords, :url, :postcode, :duration].each do |att|
           @occurrence.send(att).should == @event.send(att)
         end
       end
