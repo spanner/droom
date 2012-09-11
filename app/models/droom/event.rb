@@ -180,7 +180,7 @@ module Droom
     end
   
     def finish_time=(value)
-      finish = (finish_date || Date.today).to_date + parse_date(value).time_of_day
+      finish = (finish_date || start_date || Date.today).to_date + parse_date(value).time_of_day
     end
     
     def finish_date=(value)
