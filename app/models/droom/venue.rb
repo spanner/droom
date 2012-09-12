@@ -17,7 +17,7 @@ module Droom
         :title => title,
         :postcode => postcode,
         :lat => lat,
-        :lng => lng,
+        :lng => lng
       }
     end
 

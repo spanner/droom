@@ -142,5 +142,5 @@ ActiveRecord::Schema.define(:version => 20120911070124) do
   end
 
   add_index "droom_venues", ["lat", "lng"], :name => "index_droom_venues_on_lat_and_lng"
-
+  
 end

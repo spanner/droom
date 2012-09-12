@@ -53,38 +53,7 @@ module Droom
     def formal_name
       [title, name].join(' ')
     end
-  
-    # Invitation is handled by the user class, along with all the other account management toil,
-    # but from an administrator's point of view it makes sense to think of inviting the listed person,
-    # so here we pass the message on.
-    #
-    def invite!
-      create_user unless user
-      user.invite!
-    end
-  
-    # An invited person has a user object and the user has been sent an invitation. She may or may not 
-    # have received it or activated the account.
-    #
-    scope :invited, joins("INNER JOIN users on users.person_id = people.id").where("users.invited_at IS NOT NULL")
-    scope :uninvited, joins("INNER JOIN users on users.person_id = people.id").where("users.invited_at IS NULL")
-    scope :uninvitable, where("people.email IS NULL OR people.email = ''")
-  
-    def invited?
-      self.user && self.user.invited?
-    end
-  
-    def invited_at
-      self.user.invited_at if self.user
-    end
-  
-    scope :active, joins("INNER JOIN users on users.person_id = people.id").where("users.activated = 1")
-    scope :inactive, joins("INNER JOIN users on users.person_id = people.id").where("users.activated = 0")
-  
-    def activated?
-      self.user && self.user.activated?
-    end
-    
+      
     # *for_selection* returns a list of people in options_for_select format with which to populate a select box.
     # 
     def self.for_selection
@@ -100,7 +69,7 @@ module Droom
     def create_user
       unless self.user
         if self.name? && self.email?
-          self.build_user(:preferred_name => [self.title, self.name].join(' '), :email => self.email).save(:validation => false)
+          self.build_user(:name => [self.title, self.name].join(' '), :email => self.email).save(:validation => false)
         end
       end
     end
@@ -115,13 +84,6 @@ module Droom
         self.user.update_column(:email, self.email)
       end
     end
-    
-    def invite_user
-      if send_invitation?
-        create_user
-        user.invite!
-      end
-    end
-    
+        
   end
 end

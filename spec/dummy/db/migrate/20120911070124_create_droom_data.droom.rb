@@ -108,6 +108,4 @@ class CreateDroomData < ActiveRecord::Migration
     end
     add_index  :droom_venues, [:lat, :lng]
 
-  end
-
 end
