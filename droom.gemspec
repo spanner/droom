@@ -20,13 +20,14 @@ Gem::Specification.new do |s|
   s.add_dependency 'paperclip', "~> 3.1.0"
   s.add_dependency 'enumerize'
   s.add_dependency 'geokit-rails3'
-  s.add_dependency 'ri_cal'
   s.add_dependency 'chronic'
   s.add_dependency 'time_of_day'
   s.add_dependency 'kaminari'
   s.add_dependency 'haml'
   s.add_dependency "uuidtools"
   s.add_dependency "date_validator"
+  s.add_dependency "dav4rack"
+  s.add_dependency "ri_cal"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

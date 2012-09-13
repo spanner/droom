@@ -1,9 +1,9 @@
 module Droom
   class Document < ActiveRecord::Base
+    attr_accessible :name, :file
 
     belongs_to :created_by, :class_name => 'User'
     has_many :attachments
-    # we assume that paperclip options have been set elsewhere
     has_attached_file :file
     
     validates :file, :presence => true

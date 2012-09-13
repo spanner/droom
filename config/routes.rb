@@ -1,6 +1,13 @@
 Droom::Engine.routes.draw do
-  root :to => 'events#index'
   
+  match '/' => DAV4Rack::Handler.new(
+    :root => Rails.root.to_s, 
+    :root_uri_path => '/',
+    :resource_class => Droom::DavResource
+  ), :anchor => false, :constraints => { :subdomain => "dav" }
+
+  root :to => 'events#index'
+    
   resources :events 
   resources :documents
   resources :people

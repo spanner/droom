@@ -1,5 +1,6 @@
 require 'uuidtools'
 require 'chronic'
+require 'ri_cal'
 
 module Droom
   class Event < ActiveRecord::Base
@@ -30,6 +31,7 @@ module Droom
     validates :name, :presence => true
 
     before_validation :set_uuid
+    before_save :check_slug
     after_save :update_occurrences
   
     default_scope :order => 'start ASC', :include => :venue
@@ -40,7 +42,6 @@ module Droom
     #
     # All of these methods return scopes.
     #
-  
     scope :after, lambda { |datetime| # datetime. eg calendar.occurrences.after(Time.now)
       where(['start > ?', datetime])
     }
@@ -246,12 +247,13 @@ module Droom
     def to_ical
       as_ri_cal_event.to_s
     end
-  
-
-
 
   protected
-
+  
+    def check_slug
+      ensure_presence_and_uniqueness_of(:slug, "#{name} #{start.strftime("%d %b %Y")}")
+    end
+    
     def set_uuid
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
     end

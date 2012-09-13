@@ -10,6 +10,8 @@ module Droom
     has_many :attachments, :as => :attachee
     has_many :documents, :through => :attachments
   
+    before_save :check_slug
+  
     def admit(person)
       self.readers << reader
     end
@@ -18,5 +20,10 @@ module Droom
       self.memberships.for(person).first
     end
   
+  protected
+  
+    def check_slug
+      ensure_presence_and_uniqueness_of(:slug, name)
+    end
   end
 end

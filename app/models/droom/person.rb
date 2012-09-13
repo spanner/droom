@@ -10,9 +10,9 @@ module Droom
     has_many :memberships
     has_many :groups, :through => :groups
 
-    # Documents can be attached to most things
-    has_many :attachments, :as => :attachee
-    has_many :documents, :through => :attachments
+    has_many :personal_documents
+    # has_many :attachments, :through => :personal_documents
+    # has_many :documents, :through => :attachments
 
     # The `user` is this person's administrative account for logging in and out and forgetting her password.
     # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
@@ -59,7 +59,22 @@ module Droom
     def self.for_selection
       self.published.map{|p| [p.name, p.id] }
     end
-
+    
+    
+    # Here we work through all the relations _other than_ personal_documents in order to gather the set of 
+    # attachments that ought to have personal versions. This is called during many update_personal_documents 
+    # calls in order to make sure that they are all present.
+    
+    def gather_new_attachments
+      Droom::Attachment.to_groups(groups).not_personal_for(self) + Droom::Attachment.to_events(events).not_personal_for(self)
+    end
+    
+    def update_personal_documents
+      gather_new_attachments.each do |att|
+        att.create_personal_document(:person => self)
+      end
+    end
+    
   private
 
     # ### Administration & callbacks
