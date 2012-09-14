@@ -32,6 +32,24 @@ $datemark_margin: 10px
   &:hover
     background-position: 0 -16px
   
+=icon_with_text($url)
+  display: inline-block
+  text-indent: 26px
+  margin-top: 0
+  line-height: 30px
+  min-height: 30px
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($url)
+  &:hover
+    background-position: 0 -48px
+
+=hover
+  &:hover
+    color: $hover
+  
 
 a.download
   +icon('droom/download.png')
@@ -86,7 +104,69 @@ div
         +bold
     p.description
       margin-top: 0
+    div.documents
+      float: right
+      width: 150px
+      margin-left: 20px
+      h3
+        a
+          +icon_with_text('droom/download.png')
+          color: $dark
+          +hover
 
+ul.downloads
+  margin: 0
+  padding: 0
+  list-style: none
+  li
+    a.document
+      display: block
+      padding: 8px 0 0 28px
+      min-height: 22px
+      line-height: 22px
+      background: 
+        repeat: no-repeat
+        position: 0 0
+        image: image-url('droom/icons.png')
+      &.pdf
+        background-position: 0 -48px
+      &.doc, &.docx
+        background-position: 0 -96px
+        color: #1683ab
+        +hover
+      &.xls, &.xlsx
+        background-position: 0 -144px
+        color: #369620
+        +hover
+
+div.document
+  position: relative
+  margin-left: - $datemark_width - $datemark_margin
+  margin-bottom: 20px
+  h2.name
+    +light
+    font-size: 2.5em
+    margin: 0
+    a
+      display: block
+      min-height: 50px
+      padding-left: $datemark_width + $datemark_margin
+      background:
+        position: 0 -10px
+        repeat: no-repeat
+        image: image-url('droom/medium_icons.png')
+      &.pdf
+        background-position: 0 -110px
+      &.doc, &.docx
+        background-position: 0 -210px
+      &.xls, &.xlsx
+        background-position: 0 -310px
+    
+  p.description
+    margin-top: 0
+    margin-left: $datemark_width + $datemark_margin
+  
+      
 .eventline
   font-size: 80%
   h4
@@ -95,9 +175,11 @@ div
     margin-top: 0
 
 p.twister
+  &:first-child
+    margin-top: 0
   a
     display: block
-    padding-left: 20px
+    padding-left: 18px
     background: 
       repeat: no-repeat
       position: 0 -62px
@@ -106,11 +188,9 @@ p.twister
       background-position: 0 -94px
   &.closed
     a
-      background-position:  0 -2px
+      background-position:  0 2px
       &:hover
         background-position: 0 -30px
-
-
 
 
 
@@ -156,110 +236,8 @@ p.twister
       color: $dark
   
     
-.controls
-  position: relative
-  clear: left
-  width: 853px
-  margin: 5px
-  overflow: hidden
-  &.footer
-    padding-top: 50px
-  .instructions
-    p
-      font-size: 1.3em
-      line-height: 1.05
-      margin: 0
-      +light
-      color: $mid
-      span.note
-        font-size: 0.8em
-        a
-          color: $dark
-          &:hover
-            color: $hover
-  .button
-    position: relative
-    float: right
-    margin-left: 10px
-    margin-bottom: 5px
-    margin-right: 0
-    overflow: hidden
-    width: 140px
-    input[type="submit"]
-      +light
-      display: block
-      background: $mid image-url('smallbullet.png') no-repeat 0.5em 1em
-      padding: 0 0 0 24px
-      text-align: left
-      width: 180px
-      color: white
-      height: 39px
-      border: none
-      &.unavailable
-        background-color: $mid
-        +opacity(0.5)
-        &:hover
-          background-color: $mid
-      &.waiting
-        background:
-          color: $pale
-          image: image-url('smallspinner.gif')
-          position: 5px 11px
-        &:hover
-          background-color: $pale
-    a
-      display: block
-      padding: 10px 10px 0 24px
-      background: $mid image-url('smallbullet.png') no-repeat 0.5em 1em
-      color: white
-      height: 2em
-      &.unavailable
-        background-color: $mid
-        +opacity(0.5)
-        &:hover
-          background-color: $mid
-      &.waiting
-        background:
-          color: $pale
-          image: image-url('smallspinner.gif')
-          position: 0.5em 0.8em
-        &:hover
-          background-color: $pale
-  .cancel
-    input[type="submit"]
-      background-image: image-url('cancel.png')
-      +button($dark)
-  .new
-    input[type="submit"]
-      background-image: image-url('small_go.png')
-      +button($green)
-  .edit
-    input[type="submit"]
-      background-image: image-url('smallbullet.png')
-      +button($blue)
-  .save
-    input[type="submit"]
-      background-image: image-url('small_go.png')
-      +button($green)
-  .publish
-    input[type="submit"]
-      background-image: image-url('small_go.png')
-      +button($rubine)
-  .upload
-    input[type="submit"]
-      background-image: image-url('small_up.png')
-      +button($rubine)
-  .remove
-    input[type="submit"]
-      background-image: image-url('cancel.png')
-      +button($rubine)
-  .help
-    input[type="submit"]
-      background-image: image-url('help.png')
-      +button($help)
-      text-indent: 100px
-  a:active
-    background-color: $active
+
+
 
 
 span.erratic

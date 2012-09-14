@@ -28,6 +28,7 @@
         = render :partial => 'event', :collection => @other_events
       
 #marginalia
+
   - unless @my_past_events.empty? && @my_future_events.empty?
     %section.general
       - if @other_events.any?

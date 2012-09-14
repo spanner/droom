@@ -28,18 +28,20 @@ class CreateDroomData < ActiveRecord::Migration
       t.attachment :file
       t.string :file_fingerprint
       t.integer :created_by_id
+      t.boolean :public
+      t.boolean :private
       t.timestamps
     end
 
     create_table :droom_personal_documents do |t|
-      t.integer :attachment_id
+      t.integer :document_attachment_id
       t.integer :person_id
       t.integer :version
       t.attachment :file
       t.string :file_fingerprint
       t.timestamps
     end
-    add_index :droom_personal_documents, :attachment_id
+    add_index :droom_personal_documents, :document_attachment_id
     add_index :droom_personal_documents, :person_id
 
     create_table :droom_people do |t|
@@ -121,7 +123,8 @@ class CreateDroomData < ActiveRecord::Migration
       t.string :post_code
       t.string :url
       t.decimal :lat, :precision => 15, :scale => 10
-      t.decimal :lng, :precision => 15, :scale => 10      
+      t.decimal :lng, :precision => 15, :scale => 10    
+      t.boolean :prepend_article  
       t.timestamps
     end
     add_index  :droom_venues, [:lat, :lng]

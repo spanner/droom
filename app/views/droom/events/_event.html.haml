@@ -28,7 +28,14 @@
       %h2.name
         = event.name
         = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
-          
+      
+      - if event.documents.any?
+        .documents
+          %h3 
+            = link_to t(:downloads), '#', :title => t(:click_to_download_zipfile)
+          %ul.downloads
+            = render :partial => 'droom/documents/li', :collection => event.documents
+      
       %p.practicalities
         %time
           = l(event.start_time, :format => :natural)
@@ -36,10 +43,11 @@
           %span.location
             = t(:at)
             - if event.venue.url
-              = link_to event.venue.proper_name + ',', event.venue.url
+              = link_to event.venue.proper_name, event.venue.url
             - else
-              = event.venue.proper_name + ','
+              = event.venue.proper_name
             - if event.venue.address?
+              %br
               = event.venue.address
               
       - unless short || repeating

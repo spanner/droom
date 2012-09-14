@@ -1,0 +1,19 @@
+- @seen_events = {}
+
+#documents
+  - if @my_documents.any?
+    %section.personal
+      %p.twister
+        = link_to t(:your_personal_documents), '#'
+      .twisted
+        = render :partial => 'document', :collection => @my_documents
+  
+#marginalia
+
+  %section.general
+    - if @documents.any?
+      %p.twister
+        = link_to t(:other_documents), '#'
+      .twisted
+        %ul.downloads
+          = render :partial => 'li', :collection => @documents

@@ -15,6 +15,15 @@ module Droom
     validates :file, :presence => true
     default_scope order('updated_at DESC, created_at DESC')
 
+    scope :all_private, where("private = 1 OR private = 't'")
+    scope :not_private, where("NOT(private = 1 OR private = 't')")
+    scope :all_public, where("public = 1 OR public = 't'")
+    scope :not_public, where("NOT(public = 1 OR public = 't')")
+    
+    scope :personal_and_public, lambda { |person|
+      
+    }
+
     def file_ok?
       file.exists?
     end
@@ -23,8 +32,12 @@ module Droom
       document_attachments.create(:attachee => attachee)
     end
     
+    def file_extension
+      File.extname(file_file_name).sub(/^\./, '')
+    end
+    
   protected
-  
+    
     def set_version
       if file.dirty?
         self.version = (version || 0) + 1

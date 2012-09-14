@@ -1,0 +1,7 @@
+%div.document
+  %h2.name
+    = link_to document.name, document.file.url, :class => "#{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
+
+  - if document.description
+    %p.description
+      = document.description

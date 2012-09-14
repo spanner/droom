@@ -7,6 +7,7 @@ jQuery ($) ->
       @_twisted = @_twister.siblings('.twisted')
       @_toggle = @_twister.find('a')
       @_toggle.click @toggle
+      @close() if @_twister.hasClass('closed')
 
     toggle: (e) =>
       console.log "toggle", @_twisted

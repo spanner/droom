@@ -203,14 +203,22 @@ module Droom
       self.finish = parse_date(value).to_date# + finish_time
     end
 
-
-
     def duration
       if finish
         finish - start
       else
         0
       end
+    end
+
+
+    def visible_to?(user_or_person)
+      return true if self.public?
+      return false unless user_or_person
+      return true if user_or_person.admin?
+      return true if user_or_person.person.invited_to?(self)
+      return false if self.private?
+      return true
     end
 
     def one_day?

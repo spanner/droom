@@ -84,6 +84,15 @@ module Droom
       end
     end
     
+    def personal_version_of(document)
+      self.personal_documents.derived_from(document).first
+    end
+
+    def personal_or_generic_version_of(document)
+      personal_version_of(document) || document
+    end
+
+
 
 
 
@@ -95,6 +104,16 @@ module Droom
       memberships.find_or_create_by_group_id(group.id)
     end
     
+    
+    # some magic glue to allow slightly indiscriminate use of user and person objects.
+    
+    def person
+      self
+    end
+    
+    def admin?
+      user && user.admin?
+    end
     
   private
 

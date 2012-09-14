@@ -11,12 +11,26 @@ module Droom
       :path => ":rails_root/webdav/:person/:slug/:filename"
     }
     
+    scope :derived_from, lambda { |document|
+      select("droom_personal_documents.*")
+        .joins("INNER JOIN droom_document_attachments on droom_personal_documents.document_attachment_id = droom_document_attachments.id")
+        .where(["droom_document_attachments.document_id = ?", document.id])
+    }
+    
     def document
       document_attachment.document
     end
     
     def document=(doc)
       document_attachment = Droom::DocumentAttachment.create(:document => doc)
+    end
+    
+    def name
+      document.name
+    end
+
+    def description
+      document.description
     end
     
     def file_changed?
@@ -33,6 +47,10 @@ module Droom
     
     def slug
       document_attachment.slug
+    end
+    
+    def file_extension
+      File.extname(file_file_name).sub(/^\./, '')
     end
     
   protected

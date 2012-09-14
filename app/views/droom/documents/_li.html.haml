@@ -1,0 +1,7 @@
+- document ||= li
+- if current_user.person
+  - if pd = current_user.person.personal_or_generic_version_of(document)
+    - document = pd
+
+%li
+  = link_to document.name, document.file.url, :class => "document #{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
