@@ -33,14 +33,14 @@ class CreateDroomData < ActiveRecord::Migration
     end
 
     create_table :droom_personal_documents do |t|
-      t.integer :attachment_id
+      t.integer :document_attachment_id
       t.integer :person_id
       t.integer :version
       t.attachment :file
       t.string :file_fingerprint
       t.timestamps
     end
-    add_index :droom_personal_documents, :attachment_id
+    add_index :droom_personal_documents, :document_attachment_id
     add_index :droom_personal_documents, :person_id
 
     create_table :droom_people do |t|

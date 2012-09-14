@@ -20,11 +20,11 @@ module Droom
     end
     
     def file_changed?
-      file.fingerprint != file_fingerprint
+      file_fingerprint != Digest::MD5.file(file.path).to_s
     end
 
     def file_touched?
-      File.mtime(file.uploaded_file) > file.updated_at
+      File.mtime(file.path) > Time.at(file.updated_at)
     end
   
     def file_path
