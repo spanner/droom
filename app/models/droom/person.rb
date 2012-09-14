@@ -2,7 +2,7 @@
 
 module Droom
   class Person < ActiveRecord::Base
-    attr_accessible :name, :email, :phone, :description, :user_id
+    attr_accessible :name, :email, :phone, :description, :user
   
     ### Associations
     #
@@ -19,7 +19,7 @@ module Droom
     # The `user` is this person's administrative account for logging in and out and forgetting her password.
     # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
     # without having a person.
-    belongs_to :user, :dependent => :destroy
+    belongs_to :user, :class_name => "::User", :dependent => :destroy
     before_save :update_user
 
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
@@ -84,15 +84,15 @@ module Droom
       end
     end
     
-    
-    
-    
+
+
+
     def invite_to(event)
-      events << event
+      invitations.find_or_create_by_event_id(event.id)
     end
     
     def admit_to(group)
-      groups << group
+      memberships.find_or_create_by_group_id(group.id)
     end
     
     
@@ -100,7 +100,8 @@ module Droom
 
     # ### Administration & callbacks
     #
-    # On creation we must create a user object too. This has the side effect of sending out a login invitation.
+    # At some point we may want to create a user to log in and look after this person. 
+    # This usually has the side effect of sending out a login invitation.
     #
     def create_user
       unless self.user
@@ -123,3 +124,4 @@ module Droom
         
   end
 end
+

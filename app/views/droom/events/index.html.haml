@@ -1,19 +1,19 @@
 - @seen_events = {}
 
-%h1
-  = t :calendar
-  
-- if user_signed_in? && current_user.events.any?
-  %section.personal
-    %h2= t :your_events
-    = render :partial => 'event', :collection => current_user.events
+#events
 
-- if @events.any?
-  %section.general
-    %h2= t :events_coming_up
-    = render :partial => 'event', :collection => @events
+  - if user_signed_in? && current_user.person
+    - if @my_future_events.any?
+      .personal
+        %p.note= t :your_events
+        = render :partial => 'event', :collection => @my_future_events
 
-- if @continuing_events.any?
-  %section.continuing
-    %h2= t :continuing_events
-    = render :partial => 'event', :collection => @continuing_events
+  - if @events.any?
+    .general
+      %p.note= t :events_coming_up
+      = render :partial => 'event', :collection => @events
+
+  - if @continuing_events.any?
+    .continuing
+      %p.note= t :continuing_events
+      = render :partial => 'event', :collection => @continuing_events

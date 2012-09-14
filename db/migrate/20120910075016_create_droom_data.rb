@@ -95,7 +95,7 @@ class CreateDroomData < ActiveRecord::Migration
       t.integer :created_by_id
       t.timestamps
     end
-    add_index :droom_document_attachments, [:attachee_type, :attachee_id]
+    add_index :droom_document_attachments, [:attachee_type, :attachee_id], :name => :attachee
 
     create_table :droom_recurrence_rules do |t|
       t.integer :event_id
@@ -119,6 +119,7 @@ class CreateDroomData < ActiveRecord::Migration
       t.string :post_region
       t.string :post_country
       t.string :post_code
+      t.string :url
       t.decimal :lat, :precision => 15, :scale => 10
       t.decimal :lng, :precision => 15, :scale => 10      
       t.timestamps

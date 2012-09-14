@@ -1,5 +1,6 @@
-- no_date ||= false
 - @seen_events ||= []
+- short ||= false
+- show_header ||= false
 
 - if event
   - event_master_id = event.master_id || event.id
@@ -7,33 +8,40 @@
   - @seen_events[event_master_id] = true;
   - cssclasses = ['event']
   - cssclasses << 'repeat' if repeating
+  - cssclasses << 'private' if event.private?
+  - cssclasses << 'public' if event.public?
+
+  - if show_header 
+    - header = month_header_for(event.start_date)
+    - if header != @event_header
+      %p.note
+        = @event_header = header
 
   %div{:class => cssclasses.join(' ')}
-    - unless no_date
-      .datemark
-        .mon= event.start.strftime('%b')
-        .dom= event.start.strftime('%d')
+    .datemark
+      %span.mon= event.start.strftime('%b')
+      %span.dom= event.start.strftime('%d')
+      - if event.start.year != Date.today.year
+        %span.year= event.start.strftime('%Y')
+
     .summary
-      %h2
-        - if event.url
-          = link_to event.name, event.url, :class => 'name'
-        - else
-          = event.name
-        = link_to t(:download_event), event_url(event, :format => :ics), :class => 'ical download'
+      %h2.name
+        = event.name
+        = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
           
       %p.practicalities
-        %span.date
-          = event.start_time
+        %time
+          = l(event.start_time, :format => :natural)
         - if event.venue
           %span.location
-            = t('event_page.at')
+            = t(:at)
             - if event.venue.url
-              = link_to event.venue.name, event.venue.url, :class => 'location'
+              = link_to event.venue.proper_name + ',', event.venue.url
             - else
-              = event.venue.name
-            - if event.venue.address
-              %br
+              = event.venue.proper_name + ','
+            - if event.venue.address?
               = event.venue.address
-      - unless repeating
-        = simple_format event.description
+              
+      - unless short || repeating
+        = simple_format event.description, :class => "description"
     

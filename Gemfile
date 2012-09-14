@@ -14,6 +14,8 @@ gem "debugger"
 gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
 gem "date_validator"
 gem 'time_of_day'
+gem "rubyzip"
+gem "snail"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

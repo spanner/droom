@@ -8,7 +8,11 @@ module Droom
     has_many :personal_documents, :dependent => :destroy
     
     scope :not_personal_for, lambda {|person|
-      select("droom_document_attachments.*").join("LEFT OUTER JOIN droom_personal_documents ON droom_personal_documents.attachment_id = droom_document_attachments.id").where(["droom_personal_documents.person_id = ?", person.id]).group_by("droom_document_attachments.id").where("COUNT(droom_personal_documents.id) = 0")
+      select("droom_document_attachments.*")
+        .join("LEFT OUTER JOIN droom_personal_documents ON droom_personal_documents.attachment_id = droom_document_attachments.id")
+        .where(["droom_personal_documents.person_id = ?", person.id])
+        .group_by("droom_document_attachments.id")
+        .where("COUNT(droom_personal_documents.id) = 0")
     }
     
     def slug

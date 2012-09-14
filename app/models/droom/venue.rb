@@ -1,20 +1,48 @@
+require 'snail'
+
 module Droom
   class Venue < ActiveRecord::Base
-
+    attr_accessible :name, :post_line1, :post_line2, :post_city, :post_country
+    
     belongs_to :created_by, :class_name => 'User'
     has_many :events, :dependent => :nullify
     acts_as_mappable
 
-    default_scope :order => 'title asc'
+    default_scope :order => 'name asc'
     before_validation :geocode_location
 
-    def to_s
-      title
+    def proper_name
+      if prepend_article?
+        "the #{name}"
+      else
+        name
+      end
     end
+
+    def to_s
+      name
+    end
+    
+    # Snail is a library that abstracts away - as far as possible - the vagaries of international address formats. Here we map our data columns onto Snail's abstract representations so that they can be rendered into the correct format for their country.
+    def address
+      Snail.new(
+        :line_1 => post_line1,
+        :line_2 => post_line2,
+        :city => post_city,
+        :region => post_region,
+        :postal_code => post_code,
+        :country => post_country
+      ).to_s
+    end
+
+    def address?
+      post_line1? && post_city
+    end
+
     
     def as_json(options={})
       json = {
-        :title => title,
+        :name => name,
         :postcode => postcode,
         :lat => lat,
         :lng => lng

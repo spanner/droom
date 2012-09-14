@@ -2,5 +2,23 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  dashboard: "Dashboard"
   hello: "Hello world"
   sign_in: "Sign in"
+  download_ical: "Download event"
+  calendar: "Calendar"
+  library: "Library" 
+  directory: "Directory" 
+  preferences: "Preferences"
+  profile: "Profile"
+  on: "on"
+  at: "at"
+  time:
+    formats:
+      natural: "%l:%M%P"
+  date:
+    formats:
+      month_header: "%B %Y"
+      natural: "%d %B"
+      natural_with_year: "%d %B %Y"
+      

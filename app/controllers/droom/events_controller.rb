@@ -7,20 +7,26 @@ module Droom
     before_filter :authenticate_user!  
     before_filter :numerical_parameters
     before_filter :get_events
-    before_filter :get_continuing_events, :only => :index
     
-    # delivers designated lists of events in minimal formats
+    def dashboard
+      if current_user.person
+        @my_future_events = current_user.person.events.future_and_current
+        @my_past_events = current_user.person.events.past
+        @other_events = Droom::Event.future_and_current.not_private.without_invitations_to(current_user.person)
+      elsif current_user.admin?
+        @other_events = Droom::Event.future
+      else
+        @other_events = Droom::Event.future.not_private.limit(10)
+      end
+      respond_with @my_future_events
+    end
 
     def index
       respond_with @events
     end
   
-    def personal
-      @events = current_user.events
-    end
-  
     def show
-      @event = Event.find(params[:id])
+      @event = Droom::Event.find(params[:id])
       respond_with @event
     end
   
@@ -43,11 +49,7 @@ module Droom
         @events = @events.future
       end
     end
-  
-    def get_continuing_events
-      @continuing_events ||= Event.unfinished(period ? period.start : Time.now).by_finish
-    end
-  
+    
     def period
       return @period if @period
       this = Date.today

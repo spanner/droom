@@ -1,10 +1,11 @@
+require 'zip/zip'
 require 'uuidtools'
 require 'chronic'
 require 'ri_cal'
 
 module Droom
   class Event < ActiveRecord::Base
-    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue
+    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :private, :public
 
     belongs_to :created_by, :class_name => 'User'
 
@@ -47,23 +48,23 @@ module Droom
     }
   
     scope :before, lambda { |datetime| # datetime. eg calendar.occurrences.before(Time.now)
-      where(['start < ?', datetime])
+      where(['start < :date AND (finish IS NULL or finish < :date)', :date => datetime])
     }
   
     scope :within, lambda { |period| # CalendarPeriod object
-      where(['start > :start AND start < :finish', {:start => period.start, :finish => period.finish}])
+      where(['start > :start AND start < :finish', :start => period.start, :finish => period.finish])
     }
 
     scope :between, lambda { |start, finish| # datetimable objects. eg. Event.between(reader.last_login, Time.now)
-      where(['start > :start AND start < :finish', {:start => start, :finish => finish}])
+      where(['start > :start AND start < :finish', :start => start, :finish => finish])
     }
   
     scope :future_and_current, lambda {
-      where(['(finish > :now) OR (finish IS NULL AND start > :now)', {:now => Time.now}])
+      where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now])
     }
   
     scope :unfinished, lambda { |start| # datetimable object.
-      where(['start < :start AND finish > :start', {:start => start}])
+      where(['start < :start AND finish > :start', :start => start])
     }
     
     scope :by_finish, order("finish ASC")
@@ -80,10 +81,22 @@ module Droom
       where(["venue_id = ?", venue.id])
     }
   
-    scope :except_these, lambda { |uuids| # array of uuid strings
+    scope :except_these_uuids, lambda { |uuids| # array of uuid strings
       placeholders = uuids.map{'?'}.join(',')
       where(["uuid NOT IN (#{placeholders})", *uuids])
     }
+    
+    scope :without_invitations_to, lambda { |person| # Person object
+      select("droom_events.*")
+        .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.person_id = #{sanitize(person.id)}")
+        .group("droom_events.id")
+        .having("COUNT(droom_invitations.id) = 0")
+    }
+    
+    scope :all_private, where("private = 1 OR private = 't'")
+    scope :not_private, where("private = 0 OR private = 'f'")
+    scope :all_public, where("public = 1 OR public = 't'")
+    scope :not_public, where("public = 0 OR public = 'f'")
 
     def self.in_the_last(period)           # seconds. eg calendar.occurrences.in_the_last(1.week)
       finish = Time.now
@@ -228,8 +241,9 @@ module Droom
       self.recurrence_rules << Droom::RecurrenceRule.from(rule)
     end
 
-
-
+    def document_set
+      # create zipfile
+    end
 
     def as_ri_cal_event
       RiCal.Event do |cal_event|

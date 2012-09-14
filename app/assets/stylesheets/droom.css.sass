@@ -1,0 +1,307 @@
+$datemark_width: 50px
+$datemark_margin: 10px
+
+=icon($url)
+  display: inline-block
+  text-indent: 34px
+  height: 32px
+  width: 32px
+  line-height: 32px
+  overflow: hidden
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($url)
+  &:hover
+    background-position: 0 -32px
+  
+=smallicon($url)
+  display: inline-block
+  text-indent: 25px
+  height: 16px
+  width: 16px
+  line-height: 16px
+  overflow: hidden
+  margin: 0 0 18px -8px
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($url)
+  &:hover
+    background-position: 0 -16px
+  
+
+a.download
+  +icon('droom/download.png')
+  
+a.ical
+  +smallicon('droom/ical.png')
+
+div
+  // border: 1px dotted green
+
+.event
+  position: relative
+  margin-left: - $datemark_width - $datemark_margin
+  margin-bottom: 20px
+  .datemark
+    float: left
+    width: $datemark_width
+    margin-right: $datemark_margin
+    text-align: right
+    color: $mid
+    line-height: 3em
+    padding-top: 6px
+    span
+      display: block
+      line-height: 1
+      text-align: center
+    span.mon
+      +light
+      text-transform: uppercase
+      font-size: 1em
+    span.dom
+      +bold
+      font-size: 2em
+      letter-spacing: -0.1em
+      margin-left: -4px
+      margin-top: -2px
+    span.year
+      +light
+      font-size: 1em
+      margin-top: -2px
+      
+  .summary
+    overflow: hidden
+    h2.name
+      +light
+      font-size: 3em
+      margin: 0
+    p.practicalities
+      margin: 0
+      color: $mid
+      time
+        +bold
+    p.description
+      margin-top: 0
+
+.eventline
+  font-size: 80%
+  h4
+    margin: 0
+  p
+    margin-top: 0
+
+p.twister
+  a
+    display: block
+    padding-left: 20px
+    background: 
+      repeat: no-repeat
+      position: 0 -62px
+      image: image-url('droom/twister.png')
+    &:hover
+      background-position: 0 -94px
+  &.closed
+    a
+      background-position:  0 -2px
+      &:hover
+        background-position: 0 -30px
+
+
+
+
+
+
+
+
+
+
+
+.pagination
+  position: relative
+  clear: left
+  margin: 40px 0
+  height: 40px
+  span
+    display: block
+    float: left
+    margin-right: 5px
+    a
+      display: block
+      background-color: $pale
+      color: $dark
+      padding: 5px 10px
+      min-width: 16px
+      text-align: center
+      &:hover
+        background-color: $link
+        color: white
+      &:visited
+        color: $dark
+    &.current
+      +bold
+      background-color: $verypale
+      color: $mid
+      padding: 5px 10px
+      min-width: 16px
+      text-align: center
+    &.gap
+      border: 1px solid white
+      padding: 5px 10px
+      min-width: 16px
+      text-align: center
+      color: $dark
+  
+    
+.controls
+  position: relative
+  clear: left
+  width: 853px
+  margin: 5px
+  overflow: hidden
+  &.footer
+    padding-top: 50px
+  .instructions
+    p
+      font-size: 1.3em
+      line-height: 1.05
+      margin: 0
+      +light
+      color: $mid
+      span.note
+        font-size: 0.8em
+        a
+          color: $dark
+          &:hover
+            color: $hover
+  .button
+    position: relative
+    float: right
+    margin-left: 10px
+    margin-bottom: 5px
+    margin-right: 0
+    overflow: hidden
+    width: 140px
+    input[type="submit"]
+      +light
+      display: block
+      background: $mid image-url('smallbullet.png') no-repeat 0.5em 1em
+      padding: 0 0 0 24px
+      text-align: left
+      width: 180px
+      color: white
+      height: 39px
+      border: none
+      &.unavailable
+        background-color: $mid
+        +opacity(0.5)
+        &:hover
+          background-color: $mid
+      &.waiting
+        background:
+          color: $pale
+          image: image-url('smallspinner.gif')
+          position: 5px 11px
+        &:hover
+          background-color: $pale
+    a
+      display: block
+      padding: 10px 10px 0 24px
+      background: $mid image-url('smallbullet.png') no-repeat 0.5em 1em
+      color: white
+      height: 2em
+      &.unavailable
+        background-color: $mid
+        +opacity(0.5)
+        &:hover
+          background-color: $mid
+      &.waiting
+        background:
+          color: $pale
+          image: image-url('smallspinner.gif')
+          position: 0.5em 0.8em
+        &:hover
+          background-color: $pale
+  .cancel
+    input[type="submit"]
+      background-image: image-url('cancel.png')
+      +button($dark)
+  .new
+    input[type="submit"]
+      background-image: image-url('small_go.png')
+      +button($green)
+  .edit
+    input[type="submit"]
+      background-image: image-url('smallbullet.png')
+      +button($blue)
+  .save
+    input[type="submit"]
+      background-image: image-url('small_go.png')
+      +button($green)
+  .publish
+    input[type="submit"]
+      background-image: image-url('small_go.png')
+      +button($rubine)
+  .upload
+    input[type="submit"]
+      background-image: image-url('small_up.png')
+      +button($rubine)
+  .remove
+    input[type="submit"]
+      background-image: image-url('cancel.png')
+      +button($rubine)
+  .help
+    input[type="submit"]
+      background-image: image-url('help.png')
+      +button($help)
+      text-indent: 100px
+  a:active
+    background-color: $active
+
+
+span.erratic
+  display: block
+  overflow: hidden
+  input[type="text"], input[type="password"], input[type="email"], select
+    border-color: lighten($error, 40)
+    color: $error
+    &.empty
+      color: lighten($error, 40)
+  .error_message
+    color: $error
+    display: block
+    +bold
+    a.closer
+      display: block
+      float: left
+      width: 16px
+      height: 16px
+      margin-right: 2px
+      +text-hidden
+      background: 
+        image: image-url('crosses.png')
+        color: transparent
+        position: 3px -58px
+        repeat: no-repeat
+
+
+a.add
+  padding-left: 16px
+  color: $blue
+  background:
+    image: image-url('plus_bullet.png')
+    position: 0 3px
+    repeat: no-repeat
+    scroll: scroll
+  &:hover
+    background-position: 0 -45px
+    color: $hover
+  &:active
+    background-position: 0 -91px
+    color: $active
+  &.waiting
+    color: $pale
+    background-image: image-url('smallspinner.gif')
