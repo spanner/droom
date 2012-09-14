@@ -4,11 +4,11 @@ module Droom
     belongs_to :created_by, :class_name => 'User'
     belongs_to :leader, :class_name => 'Person'
 
-    has_many :memberships
+    has_many :memberships, :dependent => :destroy
     has_many :people, :through => :memberships, :uniq => true
   
-    has_many :attachments, :as => :attachee
-    has_many :documents, :through => :attachments
+    has_many :document_attachments, :as => :attachee, :dependent => :destroy
+    has_many :documents, :through => :document_attachments
   
     before_save :check_slug
   
@@ -23,7 +23,7 @@ module Droom
   protected
   
     def check_slug
-      ensure_presence_and_uniqueness_of(:slug, name)
+      ensure_presence_and_uniqueness_of(:slug, name.parameterize)
     end
   end
 end

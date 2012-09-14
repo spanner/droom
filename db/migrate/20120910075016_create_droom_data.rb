@@ -7,6 +7,7 @@ class CreateDroomData < ActiveRecord::Migration
       t.string :slug
       t.text :description
       t.string :url
+      t.integer :venue_id
       t.integer :event_set_id
       t.integer :created_by_id
       t.string :uuid
@@ -38,8 +39,8 @@ class CreateDroomData < ActiveRecord::Migration
       t.string :file_fingerprint
       t.timestamps
     end
-    add_index :droom_events, :attachment_id
-    add_index :droom_events, :person_id
+    add_index :droom_personal_documents, :attachment_id
+    add_index :droom_personal_documents, :person_id
 
     create_table :droom_people do |t|
       t.string :name
@@ -87,14 +88,14 @@ class CreateDroomData < ActiveRecord::Migration
     add_index :droom_invitations, :event_id
     add_index :droom_invitations, :person_id
 
-    create_table :droom_attachments do |t|
+    create_table :droom_document_attachments do |t|
       t.integer :document_id
       t.string :attachee_type
       t.integer :attachee_id
       t.integer :created_by_id
       t.timestamps
     end
-    add_index :droom_attachments, [:attachee_type, :attachee_id]
+    add_index :droom_document_attachments, [:attachee_type, :attachee_id]
 
     create_table :droom_recurrence_rules do |t|
       t.integer :event_id

@@ -5,13 +5,15 @@ module Droom
     belongs_to :created_by, :class_name => "User"
     
     after_save :update_personal_documents
-    after_delete :update_personal_documents
+    after_destroy :update_personal_documents
     
   protected
   
-    def update_personal_documents
-      People.each do |person|
-        person.send :update_personal_documents
+    # This can be very expensive but should only happen rarely.
+    def create_personal_documents
+      attachables = [group] + group.events
+      attachables.each do |attachee|
+        person.send :gather_documents_from, attachee
       end
     end
 

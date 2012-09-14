@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(:version => 20120911070124) do
 
-  create_table "droom_attachments", :force => true do |t|
+  create_table "droom_document_attachments", :force => true do |t|
     t.integer  "document_id"
     t.string   "attachee_type"
     t.integer  "attachee_id"
@@ -22,15 +22,17 @@ ActiveRecord::Schema.define(:version => 20120911070124) do
     t.datetime "updated_at",    :null => false
   end
 
-  add_index "droom_attachments", ["attachee_type", "attachee_id"], :name => "index_droom_attachments_on_attachee_type_and_attachee_id"
+  add_index "droom_document_attachments", ["attachee_type", "attachee_id"], :name => "attachee"
 
   create_table "droom_documents", :force => true do |t|
     t.string   "name"
     t.text     "description"
+    t.integer  "version"
     t.string   "file_file_name"
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
+    t.string   "file_fingerprint"
     t.integer  "created_by_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
@@ -47,23 +49,28 @@ ActiveRecord::Schema.define(:version => 20120911070124) do
     t.datetime "start"
     t.datetime "finish"
     t.string   "name"
+    t.string   "slug"
     t.text     "description"
     t.string   "url"
+    t.integer  "venue_id"
     t.integer  "event_set_id"
     t.integer  "created_by_id"
-    t.integer  "venue_id"
     t.string   "uuid"
     t.boolean  "all_day"
     t.integer  "master_id"
+    t.boolean  "private"
+    t.boolean  "public"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
 
   add_index "droom_events", ["event_set_id"], :name => "index_droom_events_on_event_set_id"
   add_index "droom_events", ["master_id"], :name => "index_droom_events_on_master_id"
+  add_index "droom_events", ["public"], :name => "index_droom_events_on_public"
 
   create_table "droom_groups", :force => true do |t|
     t.string   "name"
+    t.string   "slug"
     t.integer  "leader_id"
     t.integer  "created_by_id"
     t.datetime "created_at",    :null => false
@@ -111,6 +118,22 @@ ActiveRecord::Schema.define(:version => 20120911070124) do
   add_index "droom_people", ["email"], :name => "index_droom_people_on_email"
   add_index "droom_people", ["user_id"], :name => "index_droom_people_on_user_id"
 
+  create_table "droom_personal_documents", :force => true do |t|
+    t.integer  "attachment_id"
+    t.integer  "person_id"
+    t.integer  "version"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.string   "file_fingerprint"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "droom_personal_documents", ["attachment_id"], :name => "index_droom_personal_documents_on_attachment_id"
+  add_index "droom_personal_documents", ["person_id"], :name => "index_droom_personal_documents_on_person_id"
+
   create_table "droom_recurrence_rules", :force => true do |t|
     t.integer  "event_id"
     t.boolean  "active",         :default => false
@@ -142,5 +165,5 @@ ActiveRecord::Schema.define(:version => 20120911070124) do
   end
 
   add_index "droom_venues", ["lat", "lng"], :name => "index_droom_venues_on_lat_and_lng"
-  
+
 end

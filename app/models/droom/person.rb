@@ -6,11 +6,13 @@ module Droom
   
     ### Associations
     #
-    # 'Groups' are the usual means of invitation to events or access to documents. 
-    has_many :memberships
-    has_many :groups, :through => :groups
+    has_many :memberships, :dependent => :destroy
+    has_many :groups, :through => :memberships
 
-    has_many :personal_documents
+    has_many :invitations, :dependent => :destroy
+    has_many :events, :through => :invitations
+
+    has_many :personal_documents, :dependent => :destroy
     # has_many :attachments, :through => :personal_documents
     # has_many :documents, :through => :attachments
 
@@ -60,20 +62,39 @@ module Droom
       self.published.map{|p| [p.name, p.id] }
     end
     
-    
-    # Here we work through all the relations _other than_ personal_documents in order to gather the set of 
-    # attachments that ought to have personal versions. This is called during many update_personal_documents 
-    # calls in order to make sure that they are all present.
-    
-    def gather_new_attachments
-      Droom::Attachment.to_groups(groups).not_personal_for(self) + Droom::Attachment.to_events(events).not_personal_for(self)
+    # The usual way to delivery personal documents to a Person is to call `gather_documents_from(event or group)` 
+    # on the creation of an invitation or a membership. 
+    #
+    def gather_documents_from(attachee)
+      attachee.document_attachments.each do |att|
+        self.personal_documents.create(:document_attachment => att)
+      end
     end
     
-    def update_personal_documents
-      gather_new_attachments.each do |att|
+    # but it is also possible to scan through all our associated events and groups and to create new personal 
+    # documents for any that do not already have them.
+    # NB this will not recreate deleted files: we only look as far as the PersonalDocument object, not the file 
+    # it would usually have. This is to allow people to delete files they don't want, without having them 
+    # constantly recreated.
+    #
+    def gather_new_documents
+      new_attachments = Droom::Attachment.to_groups(groups).not_personal_for(self) + Droom::Attachment.to_events(events).not_personal_for(self)
+      new_attachments.each do |att|
         att.create_personal_document(:person => self)
       end
     end
+    
+    
+    
+    
+    def invite_to(event)
+      events << event
+    end
+    
+    def admit_to(group)
+      groups << group
+    end
+    
     
   private
 

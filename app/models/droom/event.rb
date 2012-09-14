@@ -8,11 +8,11 @@ module Droom
 
     belongs_to :created_by, :class_name => 'User'
 
-    has_many :invitations
+    has_many :invitations, :dependent => :destroy
     has_many :users, :through => :invitations
 
-    has_many :attachments, :as => :attachee
-    has_many :documents, :through => :attachments
+    has_many :document_attachments, :as => :attachee, :dependent => :destroy
+    has_many :documents, :through => :document_attachments
   
     belongs_to :venue
     accepts_nested_attributes_for :venue
@@ -251,7 +251,7 @@ module Droom
   protected
   
     def check_slug
-      ensure_presence_and_uniqueness_of(:slug, "#{name} #{start.strftime("%d %b %Y")}")
+      ensure_presence_and_uniqueness_of(:slug, "#{start.strftime("%Y %m %d")} #{name}".parameterize)
     end
     
     def set_uuid

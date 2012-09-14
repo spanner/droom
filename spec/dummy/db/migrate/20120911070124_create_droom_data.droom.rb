@@ -5,26 +5,43 @@ class CreateDroomData < ActiveRecord::Migration
       t.datetime :start
       t.datetime :finish
       t.string :name
+      t.string :slug
       t.text :description
       t.string :url
-      t.integer :event_set_id
       t.integer :venue_id
+      t.integer :event_set_id
       t.integer :created_by_id
       t.string :uuid
       t.boolean :all_day
       t.integer :master_id
+      t.boolean :private
+      t.boolean :public
       t.timestamps
     end
     add_index :droom_events, :event_set_id
     add_index :droom_events, :master_id
+    add_index :droom_events, :public
 
     create_table :droom_documents do |t|
       t.string :name
       t.text :description
+      t.integer :version
       t.attachment :file
+      t.string :file_fingerprint
       t.integer :created_by_id
       t.timestamps
     end
+
+    create_table :droom_personal_documents do |t|
+      t.integer :attachment_id
+      t.integer :person_id
+      t.integer :version
+      t.attachment :file
+      t.string :file_fingerprint
+      t.timestamps
+    end
+    add_index :droom_personal_documents, :attachment_id
+    add_index :droom_personal_documents, :person_id
 
     create_table :droom_people do |t|
       t.string :name
@@ -42,6 +59,7 @@ class CreateDroomData < ActiveRecord::Migration
 
     create_table :droom_groups do |t|
       t.string :name
+      t.string :slug
       t.integer :leader_id
       t.integer :created_by_id
       t.timestamps
@@ -71,14 +89,14 @@ class CreateDroomData < ActiveRecord::Migration
     add_index :droom_invitations, :event_id
     add_index :droom_invitations, :person_id
 
-    create_table :droom_attachments do |t|
+    create_table :droom_document_attachments do |t|
       t.integer :document_id
       t.string :attachee_type
       t.integer :attachee_id
       t.integer :created_by_id
       t.timestamps
     end
-    add_index :droom_attachments, [:attachee_type, :attachee_id]
+    add_index :droom_document_attachments, [:attachee_type, :attachee_id], :name => "attachee"
 
     create_table :droom_recurrence_rules do |t|
       t.integer :event_id
@@ -107,5 +125,7 @@ class CreateDroomData < ActiveRecord::Migration
       t.timestamps
     end
     add_index  :droom_venues, [:lat, :lng]
+
+  end
 
 end
