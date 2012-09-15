@@ -12,10 +12,10 @@ module Droom
 
     def root
       unless @dav_root
-        @dav_root = Rails.root + "webdav/#{user.id}"
+        raise ActiveRecord::RecordNotFound unless person = user.person
+        @dav_root = Rails.root + "webdav/#{person.id}"
         Dir.mkdir(@dav_root, 0600) unless File.exist?(@dav_root)
       end
-      Rails.logger.warn ">>> dav_root: #{@dav_root}"
       @dav_root
     end
   
