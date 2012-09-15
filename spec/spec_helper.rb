@@ -14,7 +14,7 @@ Spork.prefork do
   require 'rspec/rails'
   require 'factory_girl_rails'
   require 'database_cleaner'
-
+  require 'awesome_print'
   ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
 
   # Requires supporting ruby files with custom matchers and macros, etc,
