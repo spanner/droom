@@ -1,5 +1,5 @@
 $datemark_width: 50px
-$datemark_margin: 10px
+$datemark_margin: 8px
 
 =icon($url)
   display: inline-block
@@ -161,6 +161,10 @@ div.document
         background-position: 0 -210px
       &.xls, &.xlsx
         background-position: 0 -310px
+  p.attachment
+    margin: 0
+    margin-left: $datemark_width + $datemark_margin
+    color: $mid
     
   p.description
     margin-top: 0

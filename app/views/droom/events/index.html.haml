@@ -2,18 +2,5 @@
 
 #events
 
-  - if user_signed_in? && current_user.person
-    - if @my_future_events.any?
-      .personal
-        %p.note= t :your_events
-        = render :partial => 'event', :collection => @my_future_events
-
-  - if @events.any?
-    .general
-      %p.note= t :events_coming_up
-      = render :partial => 'event', :collection => @events
-
-  - if @continuing_events.any?
-    .continuing
-      %p.note= t :continuing_events
-      = render :partial => 'event', :collection => @continuing_events
+  %p
+    This will be a navigable view of the whole calendar (rather than the personal selection provided by the dashboard page). By default it shows all future events, but it can also be paged by month, and there will be the usual quick-search field.

@@ -98,6 +98,11 @@ module Droom
     scope :all_public, where("public = 1 OR public = 't'")
     scope :not_public, where("public = 0 OR public = 'f'")
 
+    scope :name_matching, lambda { |fragment| 
+      fragment = "%#{fragment}%"
+      where('droom_events.name like ?', fragment)
+    }
+
     def self.in_the_last(period)           # seconds. eg calendar.occurrences.in_the_last(1.week)
       finish = Time.now
       start = finish - period

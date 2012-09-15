@@ -20,6 +20,11 @@ module Droom
     scope :all_public, where("public = 1 OR public = 't'")
     scope :not_public, where("NOT(public = 1 OR public = 't')")
     
+    scope :name_matching, lambda { |fragment| 
+      fragment = "%#{fragment}%"
+      where('droom_documents.name like ?', fragment)
+    }
+    
     scope :personal_and_public, lambda { |person|
       
     }

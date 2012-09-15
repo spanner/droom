@@ -1,0 +1,14 @@
+#search_results
+  %h4
+    - if @searching
+      = t :search_results
+    - else
+      = t :all_events
+
+  - if @events.any?
+    = render :partial => 'event_line', :collection => @events
+
+  - else
+    %p.error
+      = t :no_results
+    

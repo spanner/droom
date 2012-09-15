@@ -13,27 +13,22 @@
 
   - if @my_past_events.any?
     %section.past
-      %p.twister.closed
+      %p.twister
         = link_to t(:your_past_events), '#'
       .twisted
         = render :partial => 'event', :collection => @my_past_events
 
-  - if @my_past_events.empty? && @my_future_events.empty?
+  - if @all_events
     %p
       = t :no_events_for_you
-    %section.general
-      %p.twister.closed
-        = link_to t(:future_events), '#'
-      .twisted
-        = render :partial => 'event', :collection => @other_events
       
 #marginalia
 
-  - unless @my_past_events.empty? && @my_future_events.empty?
-    %section.general
-      - if @other_events.any?
-        %p.twister
-          = link_to t(:other_future_events), '#'
-        .twisted
-          = render :partial => 'event_line', :collection => @other_events
+#marginalia
   
+  %form#search{:action => search_events_url}
+    = text_field_tag :q, params[:q], :placeholder => t(:search)
+    = submit_tag "go"
+
+  %section.results
+    = render :partial => "search_results"

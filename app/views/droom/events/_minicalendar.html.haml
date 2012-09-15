@@ -1,6 +1,6 @@
 - date ||= Date.today
 - month = date.month
-- month_events = Event.coincident_with(date.beginning_of_month, date.end_of_month)
+- month_events = Droom::Event.coincident_with(date.beginning_of_month, date.end_of_month)
 
 - first_shown = date.beginning_of_month.beginning_of_week
 - last_shown = date.end_of_month.end_of_week

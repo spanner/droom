@@ -6,7 +6,7 @@ module Droom
   
     before_filter :authenticate_user!  
     before_filter :numerical_parameters
-    before_filter :get_events
+    before_filter :find_events
     
     def dashboard
       if current_user.person
@@ -14,9 +14,9 @@ module Droom
         @my_past_events = current_user.person.events.past
         @other_events = Droom::Event.future_and_current.not_private.without_invitations_to(current_user.person)
       elsif current_user.admin?
-        @other_events = Droom::Event.future
+        @all_events = Droom::Event.future
       else
-        @other_events = Droom::Event.future.not_private.limit(10)
+        @all_events = Droom::Event.future.not_private.limit(10)
       end
       respond_with @my_future_events
     end
@@ -24,10 +24,21 @@ module Droom
     def index
       respond_with @events
     end
+    
+    def search
+      respond_with @events do |format|
+        format.js { render :partial => 'search_results' }
+      end
+    end
   
     def show
       @event = Droom::Event.find(params[:id])
-      respond_with @event
+      respond_with @event do |format|
+        format.ics {
+          rical = RiCal.Calendar { |cal| cal.add_subcomponent(@event.as_ri_cal_event) }
+          send_data rical.to_s, :filename => "#{@event.slug}.ics", :type => "text/calendar"
+        }
+      end
     end
   
     ### helper methods
@@ -35,7 +46,7 @@ module Droom
     
   protected
     
-    def get_events
+    def find_events
       @events = Event.scoped({})
       if period
         if period.bounded?
@@ -48,6 +59,15 @@ module Droom
       else
         @events = @events.future
       end
+
+      unless params[:q].blank?
+        @searching = true
+        @events = @events.name_matching(params[:q])
+      end
+      
+      @show = params[:show] || 10
+      @page = params[:page] || 1
+      @events.page(@page).per(@show)
     end
     
     def period

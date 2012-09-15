@@ -22,6 +22,7 @@ en:
   click_to_download: "Click to download %{name}"
   your_personal_documents: "Your personal documents"
   other_documents: "Other available documents"
+  search: Search
   time:
     formats:
       natural: "%l:%M%P"

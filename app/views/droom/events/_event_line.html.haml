@@ -2,7 +2,7 @@
 
 .eventline    
   %h4
-    = event.name
+    = link_to event.name, event_url(event)
   %p
     - date_format = event.start.year == Date.today.year ? :natural : :natural_with_year
     = l event.start_time, :format => :natural

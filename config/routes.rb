@@ -6,9 +6,9 @@ Droom::Engine.routes.draw do
     :resource_class => Droom::DavResource
   ), :anchor => false, :constraints => { :subdomain => "dav" }
 
-  resources :events 
-  resources :documents
-  resources :people
+  resources :events, :documents, :people do
+    get "search", :on => :collection
+  end
   
   match "/library" => 'documents#index', :as => :library
   match "/directory" => 'people#index', :as => :directory
