@@ -3,7 +3,8 @@ Droom::Engine.routes.draw do
   match '/' => DAV4Rack::Handler.new(
     :root => Rails.root.to_s, 
     :root_uri_path => '/',
-    :resource_class => Droom::DavResource
+    :resource_class => Droom::DavResource,
+    :log_to => (Rails.root + 'log/dav.log').to_s
   ), :anchor => false, :constraints => { :subdomain => "dav" }
 
   resources :events, :documents, :people do

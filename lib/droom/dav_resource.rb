@@ -14,7 +14,7 @@ module Droom
       unless @dav_root
         raise ActiveRecord::RecordNotFound unless person = user.person
         @dav_root = Rails.root + "webdav/#{person.id}"
-        Dir.mkdir(@dav_root, 0600) unless File.exist?(@dav_root)
+        Dir.mkdir(@dav_root) unless File.exist?(@dav_root)
       end
       @dav_root
     end

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Droom::VERSION
   s.authors     = ["William Ross"]
   s.email       = ["will@spanner.org"]
-  s.homepage    = "droom.spanner.org"
+  s.homepage    = "http://droom.spanner.org"
   s.summary     = "Droom is your new data room."
   s.description = "Droom is nice and clean."
 
