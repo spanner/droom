@@ -1,0 +1,8 @@
+#marginalia
+  
+  %form#search{:action => search_events_url}
+    = text_field_tag :q, params[:q], :placeholder => t(:search)
+    = submit_tag "go"
+
+  %section.results
+    = render :partial => "droom/shared/search_results"

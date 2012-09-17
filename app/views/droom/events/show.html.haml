@@ -1,21 +1,44 @@
-- content_for :events do
-  = render :partial => 'event', :collection => events
-
-- content_for :calendar do
-  #calendar
-    = render :partial => "events/minicalendar", :locals => {:date => period ? period.start : Date.today}
-
-- content_for :title do
-  = @event.title
-  
-- content_for :event do
-  = render :partial => 'event', :object => @event
-
-- content_for :facebook_id do
-  = @event.facebook_id
-
-- content_for :facebook_url do
-  = @event.facebook_url
-
 #events
-  = yield :event
+  .event
+    .datemark
+      %span.mon= @event.start.strftime('%b')
+      %span.dom= @event.start.strftime('%d')
+      - if @event.start.year != Date.today.year
+        %span.year= @event.start.strftime('%Y')
+
+    .summary
+      %h2.name
+        = @event.name
+        = link_to t(:download_ical), event_url(@event, :format => :ics), :class => 'ical icon'
+  
+      %p.practicalities
+        %time
+          = l(@event.start_time, :format => :natural)
+        - if @event.venue
+          %span.location
+            = t(:at)
+            - if @event.venue.url
+              = link_to @event.venue.proper_name, @event.venue.url
+            - else
+              = @event.venue.proper_name
+            - if @event.venue.address?
+              %br
+              = @event.venue.address
+          
+      = simple_format @event.description, :class => "description"
+      
+    - if @event.document_attachments.any?
+      .documents
+        - if @event.agenda_sections.any?
+          = render :partial => "droom/events/attachment_list", :object => @event.document_attachments.unfiled, :locals => {:limit => 100}
+          - @event.agenda_sections.each do |asec|
+            - if asec.document_attachments.any?
+              %h3
+                = asec.name
+              = render :partial => "droom/events/attachment_list", :object => asec.document_attachments, :locals => {:limit => 100}
+        - else
+          = render :partial => "droom/events/attachment_list", :object => @asec.document_attachments, :locals => {:limit => 100}
+
+
+
+= render :partial => 'droom/shared/marginalia'

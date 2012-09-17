@@ -23,6 +23,11 @@ en:
   your_personal_documents: "Your personal documents"
   other_documents: "Other available documents"
   search: Search
+  future_events: "Events coming up"
+  more_documents_count:
+    zero: "No more documents"
+    one: "and one more document..."
+    other: "and %{count} more documents..."
   time:
     formats:
       natural: "%l:%M%P"

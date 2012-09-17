@@ -15,6 +15,8 @@ module Droom
     has_many :document_attachments, :as => :attachee, :dependent => :destroy
     has_many :documents, :through => :document_attachments
   
+    has_many :agenda_sections
+  
     belongs_to :venue
     accepts_nested_attributes_for :venue
 
@@ -35,9 +37,9 @@ module Droom
     before_save :check_slug
     after_save :update_occurrences
   
-    default_scope :order => 'start ASC', :include => :venue
-    scope :primary, { :conditions => "master_id IS NULL" }
-    scope :recurrent, { :conditions => "master_id IS NOT NULL" }
+    scope :primary, where("master_id IS NULL")
+    scope :recurrent, where(:conditions => "master_id IS NOT NULL")
+    default_scope order('start ASC').includes(:venue)
   
     ## Event retrieval in various ways
     #
@@ -215,6 +217,24 @@ module Droom
         0
       end
     end
+    
+
+
+
+
+    def documents_by_category
+      @dbc ||= document_attachments.each_with_object({}) do |att, hash|
+        hash[att.section_label] ||= []
+        hash[att.section_label].push(att.document)
+      end
+    end
+
+    def unfiled_documents
+      attachments.unfiled
+    end
+
+
+
 
 
     def visible_to?(user_or_person)

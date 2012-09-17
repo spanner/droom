@@ -27,7 +27,7 @@ module Droom
     
     def search
       respond_with @events do |format|
-        format.js { render :partial => 'search_results' }
+        format.js { render :partial => 'droom/shared/search_results' }
       end
     end
   

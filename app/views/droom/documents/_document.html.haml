@@ -2,11 +2,6 @@
   %h2.name
     = link_to document.name, document.file.url, :class => "#{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
 
-  - if document.document_attachment.attachee
-    %p.attachment
-      = t :attached_to 
-      = link_to document.document_attachment.attachee.name, url_for(document.document_attachment.attachee)
-
   - if document.description
     %p.description
       = document.description

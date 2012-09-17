@@ -26,7 +26,7 @@
 
     .summary
       %h2.name
-        = event.name
+        = link_to event.name, event_url(event)
         = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
       
       - if event.documents.any?
@@ -34,7 +34,10 @@
           %h3 
             = link_to t(:downloads), '#', :title => t(:click_to_download_zipfile)
           %ul.downloads
-            = render :partial => 'droom/documents/li', :collection => event.documents
+            = render :partial => 'droom/documents/listing', :collection => event.documents.limit(3)
+            - if event.documents.count > 3
+              %li
+                = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event), :class => "more"
       
       %p.practicalities
         %time

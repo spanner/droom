@@ -1,6 +1,6 @@
 module Droom
   class Document < ActiveRecord::Base
-    attr_accessible :name, :file
+    attr_accessible :name, :file, :description
     attr_accessor :old_version
 
     belongs_to :created_by, :class_name => 'User'

@@ -1,0 +1,4 @@
+- if attachment_list && attachment_list.any?
+  %ul.downloads
+    = render :partial => "droom/events/attachment", :collection => attachment_list
+  
