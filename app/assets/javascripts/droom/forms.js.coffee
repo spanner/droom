@@ -55,6 +55,7 @@ jQuery ($) ->
       if (k >= 32 and k <= 165) or k == 8
         if @_prompt.val() == ""
           @display @_original_content
+          @_original_content.fadeTo "fast", 1
         else
           @_form.submit()
 
