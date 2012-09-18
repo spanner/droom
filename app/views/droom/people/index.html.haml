@@ -3,6 +3,8 @@
     %tbody
       - @people.each do |p|
         %tr.person
+          %td
+            .icon
           %td.name
             %h3
               = p.name
@@ -13,7 +15,8 @@
             %p
               = p.phone || "no phone"
 
-
+#marginalia
+  
   / %p
   /   This will be a searchable list of all the people in the system. They need not be confined to users of the system. 
   /   Its main purpose is to provide quick access to contact information, but for group members (such as the Trustees)
