@@ -71,6 +71,15 @@ module Droom
         end
       else
         @events = @events.future
+        if params[:year]
+          @events = @events.in_year(params[:year])
+          if params[:month]
+            @events = @events.in_month(params[:year], params[:month])
+            if params[:mday]
+              @events = @events.on_day(params[:year], params[:month], params[:mday])
+            end
+          end
+        end
       end
 
       unless params[:q].blank?
@@ -101,6 +110,9 @@ module Droom
     # months can be passed around either as names or numbers
     # any date part can be 'now' or 'next' for ease of linking
     # and everything is converted to_i to save clutter later
+    def month_names
+      ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    end
   
     def numerical_parameters
       if params[:month] && month_names.include?(params[:month].titlecase)

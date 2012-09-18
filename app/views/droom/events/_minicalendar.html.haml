@@ -1,5 +1,9 @@
-- date = Date.parse(params[:date]) if params[:date]
-- date ||= Date.today
+- if params[:day]
+  - date = Date.new(params[:year], params[:month], params[:mday])
+- elsif params[:month]
+  - date = Date.new(params[:year], params[:month], 1)
+- else
+  - date ||= Date.today
 - month = date.month
 - month_events = Droom::Event.coincident_with(date.beginning_of_month, date.end_of_month)
 
@@ -25,7 +29,7 @@
   %tbody
     - weeks = {}
     - first_shown.upto(last_shown) do |day|
-      - new_events_today = month_events.select{ |e| e.start_date <= day + 1.day && e.start_date > day }
+      - new_events_today = month_events.select{ |e| e.start_date == day }
       - continuing_events = month_events.select{ |e| e.start_date <= day && e.finish_date && e.finish_date >= day }
       
       - cell_class = "d"

@@ -1,13 +1,10 @@
 - @seen_events = {}
 #events
-  - if params[:view] == "month"
-    = link_to "All", calendar_url(:date => params[:date])
-    = render 'minicalendar'
-  - else
-    = link_to "Months", calendar_url(:date => params[:date], :view => "month")
-    = render :partial => 'event', :collection => @events
+  = render :partial => 'event', :collection => @events
   
   %p
     This will be a navigable view of the whole calendar (rather than the personal selection provided by the dashboard page).
     By default it shows all future events, but it can also be paged by month, and there will be the usual quick-search field.
 
+#marginalia
+  = render 'minicalendar'
