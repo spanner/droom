@@ -1,5 +1,5 @@
 # This has been pulled from the yearbook and simplified. Docs need updating to match.
-
+require 'vcard'
 module Droom
   class Person < ActiveRecord::Base
     attr_accessible :name, :email, :phone, :description, :user
@@ -121,6 +121,46 @@ module Droom
     
     def admin?
       user && user.admin?
+    end
+    
+    # Snail is a library that abstracts away - as far as possible - the vagaries of international address formats. Here we map our data columns onto Snail's abstract representations so that they can be rendered into the correct format for their country.
+    def address
+      Snail.new(
+        :line_1 => post_line1,
+        :line_2 => post_line2,
+        :city => post_city,
+        :region => post_region,
+        :postal_code => post_code,
+        :country => post_country
+      ).to_s
+    end
+    
+    def address?
+      post_line1? && post_city
+    end
+    
+    def to_vcf
+    	@vcard ||= Vpim::Vcard::Maker.make2 do |maker|
+    		maker.add_name do |n|
+    		  n.given = name || ""
+  		  end
+    		maker.add_addr {|a| 
+    		  a.location = 'home' # until we do this properly with multiple contact sets
+          a.country = post_country || ""
+          a.region = post_region || ""
+          a.locality = post_city || ""
+          a.street = "#{post_line1}, #{post_line2}"
+          a.postalcode = post_code || ""
+    		}
+    		maker.add_tel phone { |t| t.location = 'home' } unless phone.blank?
+        # maker.add_tel mobile { |t| t.location = 'cell' } unless mobile.blank?
+    		maker.add_email email { |e| t.location = 'home' }
+    	end
+    	@vcard.to_s
+    end
+    
+    def self.vcards_for(people=[])
+      people.map(&:vcf).join("\n")
     end
     
   private

@@ -1,0 +1,27 @@
+- person ||= @person
+%tr.person
+  %td
+    .icon
+  %td.name
+    %h3
+      = person.name
+  %td.email
+    %p
+      = mail_to person.email
+  %td.phone
+    - if person.phone
+      %p
+        = person.phone
+    - else
+      %p.unavailable
+        no phone
+  %td.address
+    - if person.address?
+      %p
+        = person.address
+    - else
+      %p.unavailable
+        no address
+  %td
+    %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
+      %p

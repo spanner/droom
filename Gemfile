@@ -16,6 +16,7 @@ gem "date_validator"
 gem 'time_of_day'
 gem "rubyzip"
 gem "snail"
+gem "vcard"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

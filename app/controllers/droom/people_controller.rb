@@ -1,14 +1,23 @@
 module Droom
   class PeopleController < Droom::EngineController
-    respond_to :json, :html, :js
+    respond_to :json, :html, :js, :vcf
     before_filter :authenticate_user!  
-    before_filter :find_people  
+    before_filter :find_people, :only => :index
+    before_filter :get_person, :only => :show
     
     def index
       respond_with @people
     end
     
+    def show
+      respond_with @person
+    end
+    
   protected
+    
+    def get_person
+      @person = Person.find(params[:id])
+    end
     
     def find_people
       @people = Person.scoped({})

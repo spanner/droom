@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency "dav4rack"
   s.add_dependency "ri_cal"
   s.add_dependency "snail"
+  s.add_dependency "vcard"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
