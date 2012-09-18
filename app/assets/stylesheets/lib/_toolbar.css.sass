@@ -3,7 +3,6 @@
 .wysihtml
   position: relative
   width: 600px
-  border: 1px solid $verypale
   textarea
     position: relative
     
@@ -11,14 +10,14 @@
     position: relative
     
   iframe
-    border: none !important
+    border: 1px solid $pale !important
     overflow: hidden
     width: 100%
+    color: $dark
   
   header
     display: block
-    border-radius: 4px 4px 0 0
-    width: 100%
+    float: left
     background: #eee
     position: relative
     z-index: 1
@@ -76,9 +75,9 @@
     background-position: ($tool_button_width/2 - 231px) center
 
   [data-wysihtml5-command="formatBlock"]
-    &[data-wysihtml5-command-value="h1"]::after
-      background-position: ($tool_button_width/2 - 378px) center
     &[data-wysihtml5-command-value="h2"]::after
+      background-position: ($tool_button_width/2 - 378px) center
+    &[data-wysihtml5-command-value="h3"]::after
       background-position: ($tool_button_width/2 - 462px) center
 
   [data-wysihtml5-command="createLink"]::after

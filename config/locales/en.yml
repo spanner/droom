@@ -10,7 +10,10 @@ en:
           venue_name: "Choose or add a location"
           start_time: "Time"
           start_date: "Date"
-    
+  cancel: "cancel"
+  mon: "MON"
+  dom: "00"
+  year: "YEAR"
   add_event: "Add an event"
   dashboard: "Dashboard"
   hello: "Hello world"
@@ -23,8 +26,10 @@ en:
   preferences: "Preferences"
   profile: "Profile"
   search: "Search"
-  on: "on"
+  "on": "on"
   at: "at"
+  or: "or"
+  event_time: "Time"
   your_future_events: "Your present and future events"
   your_past_events: "Your past events"
   other_future_events: "Other events coming up"
@@ -33,6 +38,7 @@ en:
   your_personal_documents: "Your personal documents"
   other_documents: "Other available documents"
   search: Search
+  save_event: "Save event"
   quick_search: "Quick search"
   future_events: "Events coming up"
   future_event_count:

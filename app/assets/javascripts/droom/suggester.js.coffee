@@ -16,9 +16,20 @@ jQuery ($) ->
       new Suggester(@, options)
     @
 
+  $.fn.venue_picker = (options) ->
+    options = $.extend(
+      submit_form: true
+      threshold: 1
+      type: 'venue'
+    , options)
+    @each ->
+      new Suggester(@, options)
+    @
+
   class Suggester
     constructor: (element, options) ->
       @prompt = $(element)
+      @type = @prompt.attr('data-type')
       @form = @prompt.parents("form")
       if options.type
         @url = "/suggestions/#{options.type}"
@@ -49,8 +60,8 @@ jQuery ($) ->
       
     place: () =>
       @container.css
-        top: @prompt.position().top + @prompt.outerHeight() - 2
-        left: @prompt.position().left
+        top: @prompt.offset().top + @prompt.outerHeight() - 2
+        left: @prompt.offset().left
         width: @prompt.outerWidth() - 2
 
     reset: () =>
@@ -86,12 +97,12 @@ jQuery ($) ->
       @show()
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
-          link = $("<a href=\"#\" class=\"" + suggestion.type + "\">" + suggestion.text + "</a>")
+          link = $("<a href=\"#\">#{suggestion.text}</a>")
           link.hover () =>
             @hover(link)
             link.click (e) =>
               @select(e, link)
-          $("<li></li>").append(link).appendTo @container
+          $("<li></li>").addClass(suggestion.type).append(link).appendTo @container
 
         @suggestions = @container.find("a")
       else
