@@ -144,7 +144,11 @@ module Droom
     end
 
     ## Instance methods
-    #    
+    #
+    def identifier
+      'event'
+    end
+    
     # We store the start and end points of the event as a single DateTime value to make comparison simple.
     # The setters for date and time are overridden to pass strings through chronic's natural language parser
     # and to treat numbers as epoch seconds. These should all work as you'd expect:
@@ -220,17 +224,12 @@ module Droom
     
 
 
-
-
-    def documents_by_category
-      @dbc ||= document_attachments.each_with_object({}) do |att, hash|
-        hash[att.section_label] ||= []
-        hash[att.section_label].push(att.document)
-      end
+    def venue_name
+      venue.name if venue
     end
-
-    def unfiled_documents
-      attachments.unfiled
+    
+    def venue_name=(name)
+      self.venue = Droom::Venue.find_or_create_by_name(name)
     end
 
 

@@ -40,9 +40,22 @@ module Droom
         }
       end
     end
-  
-    ### helper methods
-  
+    
+    def new
+      @event = Droom::Event.new(:start => Time.now)
+    end
+    
+    def create
+      
+    end
+    
+    def edit
+      
+    end
+    
+    def update
+      
+    end
     
   protected
     

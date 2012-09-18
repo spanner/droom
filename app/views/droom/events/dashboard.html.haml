@@ -21,5 +21,12 @@
   - if @all_events
     %p
       = t :no_events_for_you
-      
-= render :partial => 'droom/shared/marginalia'
+
+#marginalia
+  = render :partial => 'droom/shared/search_form'
+
+  #future_events.search_results
+    %h4
+      = t :future_events
+    - if @events.any?
+      = render :partial => 'event_line', :collection => @events

@@ -1,0 +1,9 @@
+%ul.search_results
+  - if @suggestions.any?
+    - @suggestions.each do |sugg|
+      = render :partial => "droom/#{sugg.identifier.pluralize}/suggested", :object => sugg
+  
+  - else
+    %li.error
+      = t :no_results
+  

@@ -29,6 +29,10 @@ module Droom
       
     }
 
+    def identifier
+      'document'
+    end
+
     def file_ok?
       file.exists?
     end

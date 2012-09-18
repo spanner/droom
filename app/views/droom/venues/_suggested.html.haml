@@ -1,0 +1,6 @@
+- venue ||= suggested
+
+%li.venue
+  = link_to venue.name, venue_url(venue), :class => 'popup', :remote => true
+  %span.note
+    = t :future_event_count, :count => venue.events.count
