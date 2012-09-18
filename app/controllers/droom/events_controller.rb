@@ -2,7 +2,8 @@ module Droom
   class EventsController < Droom::EngineController
     require "uri"
     require "ri_cal"
-    respond_to :json, :rss, :ics, :html
+    respond_to :json, :rss, :ics, :html, :js
+    layout :normal_unless_pjax
   
     before_filter :authenticate_user!  
     before_filter :numerical_parameters
@@ -42,11 +43,18 @@ module Droom
     end
     
     def new
-      @event = Droom::Event.new
+      params[:event] ||= {}
+      @event = Droom::Event.new({:start => Time.now}.merge(params[:event]))
+      respond_with @event
     end
     
     def create
-      
+      @event = Droom::Event.new(params[:event])
+      if @event.save
+        render :show
+      else
+        render :new
+      end
     end
     
     def edit
@@ -58,6 +66,14 @@ module Droom
     end
     
   protected
+  
+    def normal_unless_pjax
+      if request.headers['X-PJAX']
+        false
+      else
+        "application"
+      end
+    end
     
     def find_events
       @events = Event.scoped({})

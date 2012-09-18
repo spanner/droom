@@ -2,6 +2,9 @@
 - @event_header = month_header_for(Date.today)
 
 #events
+  - if admin?
+    %p.admin
+      = link_to t(:add_event), new_event_url, :class => "append", :remote => true, :data => {:type => "html"}
 
   - if user_signed_in? && current_user.person
     - if @my_future_events.any?

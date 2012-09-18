@@ -60,8 +60,8 @@ jQuery ($) ->
       
     place: () =>
       @container.css
-        top: @prompt.position().top + @prompt.outerHeight() - 2
-        left: @prompt.position().left
+        top: @prompt.offset().top + @prompt.outerHeight() - 2
+        left: @prompt.offset().left
         width: @prompt.outerWidth() - 2
 
     reset: () =>

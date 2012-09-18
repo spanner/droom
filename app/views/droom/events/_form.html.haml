@@ -1,43 +1,35 @@
-#events
-  .event
-    = form_for @event, :html => {:class => 'edit event'} do |f|
-      .datemark
-        %a{:class => "datepicker", :href => "#"}
-          - if @event.start
-            %span.mon= @event.start.strftime('%b')
-            %span.dom= @event.start.strftime('%d')
-            - if @event.start.year != Date.today.year
-              %span.year= @event.start.strftime('%Y')
-          - else
-            %span.mon= t(:mon)
-            %span.dom= t(:dom)
-          
-        = f.hidden_field :start_date
-        
-      .summary
-        %p.name
-          = f.text_field :name, :class => 'name', :placeholder => Droom::Event.human_attribute_name("name")
-  
-        %p.practicalities
-          = f.text_field :start_time, :class => "timepicker", :value => (I18n.l(@event.start_time, :format => :precise) if @event.start_time), :placeholder => t(:event_time)
-          = t :at
-          %span.venue
-            %span.name
-              = f.text_field :venue_name, :class => "venuepicker", :placeholder => Droom::Event.human_attribute_name("venue_name"), :autocomplete => "off"
-              
-        .description.wysihtml
-          .toolbar#t1
-            = render 'toolbar'
-          = f.text_area :description, :id => 'd1'
+= form_for @event, :html => {:class => 'edit event'} do |f|
+  .datemark.datepicker
+    %a{:href => "#"}
+      - if @event.start
+        %span.mon= @event.start.strftime('%b')
+        %span.dom= @event.start.strftime('%d')
+        %span.year= @event.start.strftime('%Y')
+      - else
+        %span.mon= t(:mon)
+        %span.dom= t(:dom)
+        %span.year= t(:year)
       
-      - unless @event.new_record?
-        .documents
-          - if @event.agenda_sections.any?
-            = render :partial => "droom/events/attachment_list", :object => @event.document_attachments.unfiled, :locals => {:limit => 100}
-            - @event.agenda_sections.each do |asec|
-              - if asec.document_attachments.any?
-                %h3
-                  = asec.name
-                = render :partial => "droom/events/attachment_list", :object => asec.document_attachments, :locals => {:limit => 100}
-          - else
-            = render :partial => "droom/events/attachment_list", :object => @asec.document_attachments, :locals => {:limit => 100}
+    = f.hidden_field :start_date
+    .kal
+
+  .summary
+    %p.name
+      = f.text_field :name, :class => 'name', :placeholder => Droom::Event.human_attribute_name("name")
+
+    %p.practicalities
+      = f.text_field :start_time, :class => "timepicker", :value => (I18n.l(@event.start_time, :format => :precise) if @event.start_time), :placeholder => t(:event_time)
+      = t :at
+      %span.venue
+        %span.name
+          = f.text_field :venue_name, :class => "venuepicker", :placeholder => Droom::Event.human_attribute_name("venue_name"), :autocomplete => "off"
+          
+    .description.wysihtml
+      .toolbar#t1
+        = render 'toolbar'
+      = f.text_area :description, :id => 'd1'
+  
+    .buttons
+      = f.submit t(:save_event)
+      = t :or
+      = link_to t(:cancel), "/", :class => 'cancel'

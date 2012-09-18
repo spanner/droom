@@ -5,6 +5,7 @@ $tool_button_width: 32px
 
 @import definitions
 @import lib/toolbar
+@import lib/kalendae
 
 =icon($url)
   display: inline-block
@@ -66,37 +67,67 @@ a.ical
 div
   // border: 1px dotted green
 
-div.event
+.datemark
+  float: left
+  width: $datemark_width
+  margin-right: $datemark_margin
+  text-align: right
+  color: $mid
+  line-height: 3em
+  padding-top: 6px
+  span
+    display: block
+    line-height: 1
+    text-align: center
+  span.mon
+    +light
+    text-transform: uppercase
+    font-size: 1em
+  span.dom
+    +bold
+    font-size: 2em
+    letter-spacing: -0.1em
+    margin-left: -4px
+    margin-top: -2px
+  span.year
+    +light
+    font-size: 1em
+    margin-top: -2px
+  &.editing
+    +box-shadow
+    a, a:visited
+      color: $dark
+
+div.event, form.event
   position: relative
   margin-left: - $datemark_width - $datemark_margin
   margin-bottom: 20px
-  .datemark
-    float: left
-    width: $datemark_width
-    margin-right: $datemark_margin
-    text-align: right
-    color: $mid
-    line-height: 3em
-    padding-top: 6px
-    span
-      display: block
-      line-height: 1
-      text-align: center
-    span.mon
-      +light
-      text-transform: uppercase
+
+form.event
+  p.name
+    margin: 0
+  a.datepicker
+    color: $input
+  input.name
+    width: 500px
+    font-size: 2.5em
+  p.practicalities
+    margin: 0 0.5em
+  input.timepicker
+    +bold
+    font-size: 1.2em
+    width: 50px
+  input.venuepicker
+    font-size: 1.2em
+    width: 300px
+    padding: 4px
+  .description
+    margin-top: 0.5em
+    textarea
+      width: 500px
       font-size: 1em
-    span.dom
-      +bold
-      font-size: 2em
-      letter-spacing: -0.1em
-      margin-left: -4px
-      margin-top: -2px
-    span.year
-      +light
-      font-size: 1em
-      margin-top: -2px
-      
+
+div.event, form.event
   .summary
     overflow: hidden
     h2.name
@@ -127,29 +158,9 @@ div.event
   .documents
     padding-left: $datemark_width + $datemark_margin
     
-  form.edit
-    a.datepicker
-      color: $input
-    input.name
-      width: 590px
-      font-size: 2.5em
-    p.practicalities
-      margin-top: 0.5em
-    input.timepicker
-      +bold
-      font-size: 1.2em
-      width: 50px
-    input.venuepicker
-      font-size: 1.2em
-      width: 350px
-      padding: 4px
-  .description
-    margin-top: 0.5em
-    textarea
-      width: 590px
-      font-size: 1em
-  
-  
+
+
+
 div.document
   position: relative
   margin-left: - $datemark_width - $datemark_margin
@@ -281,9 +292,11 @@ span.erratic
         repeat: no-repeat
 
 
-a.add
+a.add, a.append
   padding-left: 16px
   color: $blue
+  &:visited
+    color: $blue
   background:
     image: image-url('droom/plus_bullet.png')
     position: 0 3px
@@ -404,3 +417,70 @@ li.document
     padding: 5px 0 0 0
     min-height: 22px
 
+
+
+#mask
+  position: fixed
+  top: 0
+  left: 0
+  height: 100%
+  width: 100%
+  background-color: white
+  display: none
+  z-index: 25
+
+div.popup
+  position: fixed
+  top: 100px
+  left: 100px
+  width: 600px
+  padding: 20px
+  z-index: 50
+  min-height: 400px
+  background-color: white
+  +box_shadow
+  border: 4px solid rgba(211, 24, 31, 0.6)
+  
+div.interjected
+  position: relative
+  width: 600px
+  z-index: 40
+  
+div.kal
+  position: absolute
+  left: 0
+  top: 0
+  padding: 10px
+  background-color: white
+  +box-shadow
+  z-index: 200
+  
+div.timepicker
+  +box-shadow(0 2px 2px #444)
+  position: absolute
+  display: none
+  height: 191px
+  width: 60px
+  overflow-x: none
+  overflow-y: auto
+  background: #fff
+  border: 1px solid #aaa
+  z-index: 99
+  margin: 0
+  ul
+    list-style-type: none
+    margin: 0
+    padding: 0
+  li
+    cursor: pointer
+    padding: 4px 3px
+    &.selected
+      background: $rubine
+      color: #fff
+      +bold
+    &:hover
+      background: $verypale
+    &:active
+      background: $rubine
+      color: #fff
+      

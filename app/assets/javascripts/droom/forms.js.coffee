@@ -130,3 +130,160 @@ jQuery ($) ->
   $.fn.html_editable = ()->
     @each ->
       new Editor(@)
+      
+
+
+
+
+  class Interjection
+    constructor: (content, marker, @_options) ->
+      @_content = $(content)
+      @_mask = $('#mask')
+      @_marker = $(marker)
+      @_container = $('<div class="interjected" />')
+      @_container.insertAfter(@_marker).hide().append(@_content)
+      @_content.activate()
+      @_content.find('a.cancel').click @hide
+      @show()
+      
+    show: (e) =>
+      e.preventDefault() if e
+      @_mask.fadeTo('fast', 0.8)
+      @_container.slideDown('fast')
+      # @_mask.bind "click", @hide
+
+    hide: (e) =>
+      e.preventDefault() if e
+      @_mask.fadeOut('slow')
+      @_container.slideUp('slow')
+      # @_mask.unbind "click", @hide
+
+  $.fn.append_remote_content = () ->
+    @each ->
+      $(@).remote_link (response) =>
+        new Interjection(response, @)
+
+
+
+
+
+
+  class Popup
+    constructor: (content) ->
+      @_content = $(content)
+      @_mask = $('#mask')
+      @_container = $('<div class="popup" />')
+      @_container.insertAfter(@_mask).hide().append(@_content)
+      @_content.find('a.cancel').click @hide
+      @_content.activate()
+      @show()
+
+    show: (e) =>
+      e.preventDefault() if e
+      @_container.fadeTo('fast', 1)
+      @_mask.fadeTo('fast', 0.8)
+      @_mask.bind "click", @hide
+
+    hide: (e) =>
+      e.preventDefault() if e
+      @_container.fadeOut('fast')
+      @_mask.fadeOut('fast')
+      @_mask.unbind "click", @hide
+
+
+  $.fn.popup_remote_content = () ->
+    @remote_link (response) ->
+      new Popup(response)
+
+
+
+
+  $.fn.remote_link = (callback) ->
+    @
+      .on 'ajax:beforeSend', (event, xhr, settings) ->
+        $(@).addClass('waiting')
+        xhr.setRequestHeader('X-PJAX', 'true')
+      .on 'ajax:error', (event, xhr, status) ->
+        console.log "remote_link error:", status
+        $(@).removeClass('waiting').addClass('erratic')
+      .on 'ajax:success', (event, response, status) ->
+        $(@).removeClass('waiting')
+        callback(response)
+
+
+
+
+  class DatePicker
+    constructor: (element) ->
+      @_container = $(element)
+      @_trigger = @_container.find('a')
+      @_field = @_container.find('input')
+      @_holder = @_container.find('div.kal')
+      @_mon = @_container.find('span.mon')
+      @_dom = @_container.find('span.dom')
+      @_year = @_container.find('span.year')
+      @_kal = new Kalendae @_holder[0]
+      @_holder.hide()
+      @_trigger.click @toggle
+      @_kal.subscribe 'change', () =>
+        @hide()
+        [year, month, day] = @_kal.getSelected().split('-')
+        @_year.text(year)
+        @_dom.text(day)
+        @_mon.text(Kalendae.moment.monthsShort[parseInt(month, 10) - 1])
+
+    toggle: (e) =>
+      e.preventDefault() if e
+      if @_holder.is(':visible') then @hide() else @show()
+
+    show: () =>
+      @_holder.fadeIn "fast", () =>
+        @_container.addClass('editing')
+
+    hide: () =>
+      @_container.removeClass('editing')
+      @_holder.fadeOut("fast")
+
+
+  $.fn.date_picker = () ->
+    @each ->
+      new DatePicker(@)
+    @
+
+
+
+
+  class TimePicker
+    constructor: (element) ->
+      holder = $('<div class="timepicker" />')
+      menu = $('<ul />').appendTo(holder)
+      field = $(element)
+      for i in [0..24]
+        $("<li>#{i}:00</li><li>#{i}:30</li>").appendTo(menu)
+      menu.find('li').click (e) ->
+        e.preventDefault()
+        field.val $(@).text()
+        field.trigger('change')
+      field.after holder
+      field.focus @show
+      field.blur @hide
+      @holder = holder
+      @field = field
+
+    show: (e) =>
+      position = @field.position()
+      @holder.css
+        left: position.left
+        top: position.top + @field.outerHeight() - 2
+      @holder.show()
+      $(document).bind "click", @hide
+      
+    hide: (e) =>
+      unless e.target is @field[0]
+        $(document).unbind "click", @hide
+        @holder.hide()
+
+  $.fn.time_picker = () ->
+    @each ->
+      new TimePicker(@)
+      
