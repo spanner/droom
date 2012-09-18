@@ -1,3 +1,4 @@
+- date = Date.parse(params[:date]) if params[:date]
 - date ||= Date.today
 - month = date.month
 - month_events = Droom::Event.coincident_with(date.beginning_of_month, date.end_of_month)
@@ -11,16 +12,16 @@
   %thead
     %tr
       %td.m
-        = link_to '&lt;', url_for_month(before), :title => (I18n.l before, :format => :calendar_period_minicalendar_title), :class => 'previous'
+        = link_to '<', url_for_month(before), :title => (I18n.l before, :format => :calendar_period_minicalendar_title), :class => 'previous'
       %td{:colspan => 5}
         %h3
         = link_to_unless_current I18n.l(date, :format => :calendar_period_minicalendar_month), url_for_month(date)
       %td.m
-        = link_to '&gt;', url_for_month(after), :title => (I18n.l after, :format => :calendar_period_minicalendar_title), :class => 'next'
+        = link_to '>', url_for_month(after), :title => (I18n.l after, :format => :calendar_period_minicalendar_title), :class => 'next'
     %tr
-    /   - day_names.each do |d|
-    /     %th.day_name{:scope => 'col'}
-    /       = d.first
+      - day_names.each do |d|
+        %th.day_name{:scope => 'col'}
+          = d.first
   %tbody
     - weeks = {}
     - first_shown.upto(last_shown) do |day|
@@ -32,10 +33,10 @@
       - cell_class += " t" if day == ::Date.current
       - if new_events_today.any?
         - cell_class += " e"
-        - date_label = %{<a href="#{url_for_date(day)}">#{day.mday}</a>}
+        - date_label = link_to day.mday, url_for_date(day)
       - elsif continuing_events.any?
         - cell_class += " c"
-        - date_label = %{<a href="#{url_for_date(day)}">#{day.mday}</a>}
+        - date_label = link_to day.mday, url_for_date(day)
       - else
         - cell_class += " u"
         - date_label = day.mday
