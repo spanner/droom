@@ -42,7 +42,7 @@ module Droom
     end
     
     def new
-      @event = Droom::Event.new(:start => Time.now)
+      @event = Droom::Event.new
     end
     
     def create

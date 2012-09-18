@@ -11,6 +11,7 @@ jQuery ($) ->
   $.fn.activate = () ->
     @find('.twister').twister()
     @find('.wysihtml').html_editable()
+    @find('.venuepicker').venue_picker()
       
 $ ->
   $('body').activate()

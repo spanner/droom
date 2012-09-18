@@ -14,7 +14,7 @@ module Droom
       respond_with @suggestions do |format|
         format.json {
           render :json => @suggestions.map { |suggestion| {
-            :type => suggestion.class.to_s.downcase,
+            :type => suggestion.identifier,
             :text => suggestion.name
           }}.to_json
         }
@@ -32,7 +32,9 @@ module Droom
         @klasses = searchable_classes.values
       else
         @types = searchable_classes.keys & [params[:type]].flatten
-        @klasses = searchable_classes.values_at(@types)
+        Rails.logger.warn "??? suggestion types #{@types.inspect}"
+        @klasses = searchable_classes.values_at(*@types)
+        Rails.logger.warn "??? suggestion klasses #{@klasses.inspect}"
       end
     end
   

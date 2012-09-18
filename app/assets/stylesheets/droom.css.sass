@@ -128,6 +128,8 @@ div.event
     padding-left: $datemark_width + $datemark_margin
     
   form.edit
+    a.datepicker
+      color: $input
     input.name
       width: 590px
       font-size: 2.5em
@@ -146,7 +148,8 @@ div.event
     textarea
       width: 590px
       font-size: 1em
-
+  
+  
 div.document
   position: relative
   margin-left: - $datemark_width - $datemark_margin
@@ -306,36 +309,38 @@ ul.suggestions
   background-color: white
   border: 1px solid $pale
   border-top: 0
+  z-index: 100
   +box-shadow
   li
-    a
+    a, a:visited
       display: block
       padding: 8px 8px 8px 25px
       cursor: hand
+      color: $dark
       background:
         position: 6px 11px
         repeat: no-repeat
         scroll: scroll
-      &.person
-        color: $tag
-        background-image: image-url('person_bullet.png')
-      &.event
-        color: $inst
-        background-image: image-url('event_bullet.png')
-      &.document
-        color: $link
-        background-image: image-url('document_bullet.png')
-      &.venue
-        color: $link
-        background-image: image-url('venue_bullet.png')
       &.hover
         color: white
         background-color: $active
-        background-position: 6px -129px
+        background-position: 6px -132px
       &:active
         color: $active
         background-color: white
-        background-position: 6px -95px
+        background-position: 6px -132px
+    &.person
+      a
+        background-image: image-url('droom/person_bullet.png')
+    &.event
+      a
+        background-image: image-url('droom/event_bullet.png')
+    &.document
+      a
+        background-image: image-url('droom/document_bullet.png')
+    &.venue
+      a
+        background-image: image-url('droom/venue_bullet.png')
 
 ul.search_results
   position: absolute
@@ -398,3 +403,4 @@ li.document
     display: block
     padding: 5px 0 0 0
     min-height: 22px
+

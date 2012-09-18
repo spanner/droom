@@ -1,22 +1,29 @@
 #events
   .event
     = form_for @event, :html => {:class => 'edit event'} do |f|
-      .datemark.picker
-        %span.mon= @event.start.strftime('%b')
-        %span.dom= @event.start.strftime('%d')
-        - if @event.start.year != Date.today.year
-          %span.year= @event.start.strftime('%Y')
-
+      .datemark
+        %a{:class => "datepicker", :href => "#"}
+          - if @event.start
+            %span.mon= @event.start.strftime('%b')
+            %span.dom= @event.start.strftime('%d')
+            - if @event.start.year != Date.today.year
+              %span.year= @event.start.strftime('%Y')
+          - else
+            %span.mon= t(:mon)
+            %span.dom= t(:dom)
+          
+        = f.hidden_field :start_date
+        
       .summary
         %p.name
           = f.text_field :name, :class => 'name', :placeholder => Droom::Event.human_attribute_name("name")
   
         %p.practicalities
-          = f.text_field :start_time, :class => "timepicker", :value => I18n.l(@event.start_time, :format => :precise), :placeholder => Droom::Event.human_attribute_name("start_time")
+          = f.text_field :start_time, :class => "timepicker", :value => (I18n.l(@event.start_time, :format => :precise) if @event.start_time), :placeholder => t(:event_time)
           = t :at
           %span.venue
             %span.name
-              = f.text_field :venue_name, :class => "venuepicker", :placeholder => Droom::Event.human_attribute_name("venue_name")
+              = f.text_field :venue_name, :class => "venuepicker", :placeholder => Droom::Event.human_attribute_name("venue_name"), :autocomplete => "off"
               
         .description.wysihtml
           .toolbar#t1
