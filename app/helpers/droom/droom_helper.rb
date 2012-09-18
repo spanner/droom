@@ -52,5 +52,17 @@ module Droom
       end
     end
     
+    def url_for_month(date)
+      calendar_url(:year => date.year, :month => date.month)
+    end
+
+    def url_for_date(date)
+      calendar_url(:year => date.year, :month => date.month, :mday => date.day)      
+    end
+    
+    def day_names
+      ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    end
+    
   end
 end
