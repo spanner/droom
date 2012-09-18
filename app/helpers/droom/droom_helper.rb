@@ -52,5 +52,13 @@ module Droom
       end
     end
     
+    def url_for_month(date)
+      calendar_url(:date => date)
+    end
+
+    def url_for_date(date)
+      calendar_url(:date => date)      
+    end
+    
   end
 end

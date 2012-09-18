@@ -13,7 +13,7 @@ Droom::Engine.routes.draw do
   
   match "/library" => 'documents#index', :as => :library
   match "/directory" => 'people#index', :as => :directory
-  match "/calendar" => 'events#index', :as => :directory
+  match "/calendar" => 'events#index', :as => :calendar
   root :to => 'events#dashboard'
   
 end

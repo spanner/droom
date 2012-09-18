@@ -14,18 +14,18 @@
         = link_to '&lt;', url_for_month(before), :title => (I18n.l before, :format => :calendar_period_minicalendar_title), :class => 'previous'
       %td{:colspan => 5}
         %h3
-          = link_to_unless_current I18n.l(date, :format => :calendar_period_minicalendar_month), url_for_month(date)
+        = link_to_unless_current I18n.l(date, :format => :calendar_period_minicalendar_month), url_for_month(date)
       %td.m
         = link_to '&gt;', url_for_month(after), :title => (I18n.l after, :format => :calendar_period_minicalendar_title), :class => 'next'
     %tr
-      - day_names.each do |d|
-        %th.day_name{:scope => 'col'}
-          = d.first
+    /   - day_names.each do |d|
+    /     %th.day_name{:scope => 'col'}
+    /       = d.first
   %tbody
     - weeks = {}
     - first_shown.upto(last_shown) do |day|
       - new_events_today = month_events.select{ |e| e.start_date <= day + 1.day && e.start_date > day }
-      - continuing_events = month_events.select{ |e| e.start_date <= day && e.end_date && e.end_date >= day }
+      - continuing_events = month_events.select{ |e| e.start_date <= day && e.finish_date && e.finish_date >= day }
       
       - cell_class = "d"
       - cell_class += " o" if day.month != date.month

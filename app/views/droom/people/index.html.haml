@@ -1,7 +1,21 @@
 #people
+  %table
+    %tbody
+      - @people.each do |p|
+        %tr.person
+          %td.name
+            %h3
+              = p.name
+          %td.email
+            %p
+              = link_to p.email, "mailto:#{p.email}"
+          %td.phone
+            %p
+              = p.phone || "no phone"
 
-  %p
-    This will be a searchable list of all the people in the system. They need not be confined to users of the system. 
-    Its main purpose is to provide quick access to contact information, but for group members (such as the Trustees)
-    it will also provide a look at the rest of their group.
 
+  / %p
+  /   This will be a searchable list of all the people in the system. They need not be confined to users of the system. 
+  /   Its main purpose is to provide quick access to contact information, but for group members (such as the Trustees)
+  /   it will also provide a look at the rest of their group.
+  / 

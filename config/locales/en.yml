@@ -36,4 +36,6 @@ en:
       month_header: "%B %Y"
       natural: "%d %B"
       natural_with_year: "%d %B %Y"
+      calendar_period_minicalendar_title: "%B %Y"
+      calendar_period_minicalendar_month: "%B"
       
