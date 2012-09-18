@@ -2,6 +2,16 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  activerecord:
+    attributes:
+      droom:
+        event:
+          name: "Event name"
+          venue_name: "Choose or add a location"
+          start_time: "Time"
+          start_date: "Date"
+    
+  add_event: "Add an event"
   dashboard: "Dashboard"
   hello: "Hello world"
   sign_in: "Sign in"
@@ -23,7 +33,12 @@ en:
   your_personal_documents: "Your personal documents"
   other_documents: "Other available documents"
   search: Search
+  quick_search: "Quick search"
   future_events: "Events coming up"
+  future_event_count:
+    zero: "No events coming up"
+    one: "One event coming up"
+    other: "%{count} events coming up"
   more_documents_count:
     zero: "No more documents"
     one: "and one more document..."
@@ -31,6 +46,7 @@ en:
   time:
     formats:
       natural: "%l:%M%P"
+      precise: "%H:%M"
   date:
     formats:
       month_header: "%B %Y"

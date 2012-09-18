@@ -1,2 +1,2 @@
 require 'snail'
-Snail.home_country = "Hong Kong"
+Snail.home_country = "hk"

@@ -1,7 +1,10 @@
-@import definitions
-
 $datemark_width: 50px
 $datemark_margin: 8px
+$tool_button_height: 32px
+$tool_button_width: 32px
+
+@import definitions
+@import lib/toolbar
 
 =icon($url)
   display: inline-block
@@ -63,7 +66,7 @@ a.ical
 div
   // border: 1px dotted green
 
-.event
+div.event
   position: relative
   margin-left: - $datemark_width - $datemark_margin
   margin-bottom: 20px
@@ -103,6 +106,8 @@ div
       a
         color: $dark
         +hover
+    p.name
+      margin: 0
     p.practicalities
       margin: 0
       color: $mid
@@ -122,37 +127,25 @@ div
   .documents
     padding-left: $datemark_width + $datemark_margin
     
-
-
-  
-ul.downloads
-  margin: 0
-  padding: 0
-  list-style: none
-  li
-    a.document
-      display: block
-      padding: 8px 0 0 28px
-      min-height: 22px
-      line-height: 22px
-      background: 
-        repeat: no-repeat
-        position: 0 0
-        image: image-url('droom/icons.png')
-      &.pdf
-        background-position: 0 -48px
-      &.doc, &.docx
-        background-position: 0 -96px
-        color: #1683ab
-        +hover
-      &.xls, &.xlsx
-        background-position: 0 -144px
-        color: #369620
-        +hover
-    a.more
-      display: block
-      padding: 5px 0 0 0
-      min-height: 22px
+  form.edit
+    input.name
+      width: 590px
+      font-size: 2.5em
+    p.practicalities
+      margin-top: 0.5em
+    input.timepicker
+      +bold
+      font-size: 1.2em
+      width: 50px
+    input.venuepicker
+      font-size: 1.2em
+      width: 350px
+      padding: 4px
+  .description
+    margin-top: 0.5em
+    textarea
+      width: 590px
+      font-size: 1em
 
 div.document
   position: relative
@@ -289,7 +282,7 @@ a.add
   padding-left: 16px
   color: $blue
   background:
-    image: image-url('plus_bullet.png')
+    image: image-url('droom/plus_bullet.png')
     position: 0 3px
     repeat: no-repeat
     scroll: scroll
@@ -302,3 +295,106 @@ a.add
   &.waiting
     color: $pale
     background-image: image-url('smallspinner.gif')
+
+
+ul.suggestions
+  position: absolute
+  overflow: hidden
+  color: $link
+  margin: 0
+  padding: 0
+  background-color: white
+  border: 1px solid $pale
+  border-top: 0
+  +box-shadow
+  li
+    a
+      display: block
+      padding: 8px 8px 8px 25px
+      cursor: hand
+      background:
+        position: 6px 11px
+        repeat: no-repeat
+        scroll: scroll
+      &.person
+        color: $tag
+        background-image: image-url('person_bullet.png')
+      &.event
+        color: $inst
+        background-image: image-url('event_bullet.png')
+      &.document
+        color: $link
+        background-image: image-url('document_bullet.png')
+      &.venue
+        color: $link
+        background-image: image-url('venue_bullet.png')
+      &.hover
+        color: white
+        background-color: $active
+        background-position: 6px -129px
+      &:active
+        color: $active
+        background-color: white
+        background-position: 6px -95px
+
+ul.search_results
+  position: absolute
+  overflow: hidden
+  margin: 0
+  padding: 0
+  list-style: none
+  li
+    > a
+      display: block
+      padding: 8px 0 0 28px
+      cursor: hand
+      background:
+        repeat: no-repeat
+        scroll: scroll
+        image: image-url('droom/object_icons.png')
+    &.event
+      a
+        background-position: 0 4px
+    &.person
+      a
+        background-position: 0 -46px
+    &.venue
+      a
+        background-position: 0 -146px
+    &.document
+      a
+        background-image: image-url('droom/icons.png')
+        
+    span.note
+      display: block
+      margin-left: 25px
+
+ul.downloads
+  margin: 0
+  padding: 0
+  list-style: none
+
+li.document
+  a
+    display: block
+    padding: 8px 0 0 28px
+    min-height: 22px
+    line-height: 22px
+    background: 
+      repeat: no-repeat
+      position: 0 0
+      image: image-url('droom/icons.png')
+    &.pdf
+      background-position: 0 -48px
+    &.doc, &.docx
+      background-position: 0 -96px
+      color: #1683ab
+      +hover
+    &.xls, &.xlsx
+      background-position: 0 -144px
+      color: #369620
+      +hover
+  a.more
+    display: block
+    padding: 5px 0 0 0
+    min-height: 22px

@@ -1,0 +1,3 @@
+%form#searchform{:action => suggestions_url}<
+  = text_field_tag :term, params[:term], :placeholder => t(:quick_search), :autocomplete => "off"
+  = submit_tag "go"

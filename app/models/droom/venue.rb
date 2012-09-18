@@ -11,6 +11,16 @@ module Droom
     default_scope :order => 'name asc'
     before_validation :geocode_location
 
+    scope :name_matching, lambda { |fragment| 
+      fragment = "%#{fragment}%"
+      where('droom_venues.name like ?', fragment)
+    }
+
+    # *for_selection* returns a set of [name, id] pairs suitable for use as select options.
+    def self.for_selection
+      self.all.map{|v| [v.proper_name, v.id] }
+    end
+
     def proper_name
       if prepend_article?
         "the #{name}"
@@ -21,6 +31,10 @@ module Droom
 
     def to_s
       name
+    end
+    
+    def identifier
+      'venue'
     end
     
     # Snail is a library that abstracts away - as far as possible - the vagaries of international address formats. Here we map our data columns onto Snail's abstract representations so that they can be rendered into the correct format for their country.

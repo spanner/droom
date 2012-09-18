@@ -1,0 +1,12 @@
+- event ||= suggested
+- date_format = event.start.year == Date.today.year ? :natural : :natural_with_year
+
+%li.event
+  = link_to event.name, event_url(event), :class => "popup", :remote => true
+  %span.note
+    = l event.start_time, :format => :natural
+    = t :on
+    = l event.start_date, :format => date_format
+    - if event.venue
+      = t :at
+      = event.venue.proper_name

@@ -26,6 +26,11 @@ module Droom
     validates :name, :presence => true
     validates :email, :presence => true
 
+    scope :name_matching, lambda { |fragment| 
+      fragment = "%#{fragment}%"
+      where('droom_people.name like ?', fragment)
+    }
+
     ### Images
     #
     # The treatment here is very basic compared to the yearbook's uploader, but we might bring that across
@@ -40,6 +45,9 @@ module Droom
       image.url(style)
     end
   
+    def identifier
+      'person'
+    end
 
     # I don't think we're using this anywhere at the moment, but a JSON API will grow here. Other classes already make more use of 
     # JSON representation, eg institutions for mapping or tags for tagging.
