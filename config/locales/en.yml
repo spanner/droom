@@ -60,4 +60,5 @@ en:
       natural_with_year: "%d %B %Y"
       calendar_period_minicalendar_title: "%B %Y"
       calendar_period_minicalendar_month: "%B"
+      dashed_short_date_format: "%d-%m-%Y"
       

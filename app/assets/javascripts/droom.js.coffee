@@ -6,6 +6,7 @@
 #= require lib/parser_rules/advanced
 #= require droom/forms
 #= require droom/suggester
+#= require droom/sort
 #= require_self
 
 jQuery ($) ->
@@ -17,6 +18,9 @@ jQuery ($) ->
     @find('.timepicker').time_picker()
     @find('a.popup').popup_remote_content()
     @find('a.append').append_remote_content()
+    @find('table.sortable').table_sort
+      sort: "name"
+      order: "ASC"
       
 $ ->
   $('body').activate()

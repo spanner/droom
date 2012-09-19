@@ -35,6 +35,7 @@ module Droom
     def show
       @event = Droom::Event.find(params[:id])
       respond_with @event do |format|
+        format.js { render :partial => 'event' }
         format.ics {
           rical = RiCal.Calendar { |cal| cal.add_subcomponent(@event.as_ri_cal_event) }
           send_data rical.to_s, :filename => "#{@event.slug}.ics", :type => "text/calendar"

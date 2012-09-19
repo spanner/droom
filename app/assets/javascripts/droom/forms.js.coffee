@@ -78,6 +78,7 @@ jQuery ($) ->
     display: (results) =>
       $(@_options.replacing).replaceWith results
       $(@_options.clearing).val "" if @_options.clearing?
+      $(@_options.replacing).popup_remote_content()
 
 
   $.fn.captive = (options) ->
@@ -162,10 +163,6 @@ jQuery ($) ->
     @each ->
       $(@).remote_link (response) =>
         new Interjection(response, @)
-
-
-
-
 
 
   class Popup

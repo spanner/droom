@@ -13,7 +13,7 @@ module Droom
     after_update :refresh_personal_documents
     
     validates :file, :presence => true
-    default_scope order('updated_at DESC, created_at DESC')
+    # default_scope order('updated_at DESC, created_at DESC')
 
     scope :all_private, where("private = 1 OR private = 't'")
     scope :not_private, where("NOT(private = 1 OR private = 't')")
@@ -28,6 +28,12 @@ module Droom
     scope :personal_and_public, lambda { |person|
       
     }
+    
+    scope :with_latest_event, 
+      select('droom_documents.*, droom_events.id AS event_id, droom_events.name AS event_name')
+        .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id 
+                INNER JOIN droom_events ON droom_document_attachments.attachee_id = droom_events.id AND droom_document_attachments.attachee_type = "Droom::Event"')
+        .group('droom_documents.id')
 
     def identifier
       'document'

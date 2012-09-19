@@ -1,0 +1,11 @@
+- document ||= @document
+%td.name
+  %h3
+    = link_to document.name, document.file.url, :class => "#{document.file_extension} table_icon", :title => t(:click_to_download, :name => document.file_file_name)
+%td.created
+  %p
+    = I18n.l document.created_at.to_date, :format => :dashed_short_date_format
+%td.event
+  %p
+    = link_to document.event_name, event_url(Droom::Event.find(document.event_id), :format => :js), :class => "popup", :remote => true, :data => {:type => "html"}
+    

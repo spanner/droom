@@ -4,10 +4,13 @@ module Droom
   
     before_filter :authenticate_user!  
     before_filter :find_documents
-    before_filter :get_my_documents, :only => [:index]
+    
     
     def index
-      respond_with @my_documents
+      respond_to do |format|
+        format.html
+        format.js { render :partial => 'documents_table' }
+      end
     end
     
     def search
@@ -28,21 +31,26 @@ module Droom
   
   protected
     
-    def get_my_documents
-      @my_documents = current_user.person.personal_documents if current_user.person
-    end
-    
-    def find_documents
+    def find_documents    
       if params[:q].blank?
         @searching = false
-        @documents = Droom::Document.scoped({})
+        @documents = Droom::Document.with_latest_event
       else
         @searching = true
-        @documents = Droom::Document.name_matching(params[:q])
+        @documents = Droom::Document.with_latest_event.name_matching(params[:q])
       end
       @show = params[:show] || 10
       @page = params[:page] || 1
       @documents.page(@page).per(@show)
+
+      sort_parameters = {
+        'created' => 'documents.created_at',
+        'event' => 'event_name'
+      }
+
+      @by = params[:sort] || 'documents.created_at'
+      @order = params[:order] || 'DESC'
+      @documents = @documents.order("#{@by} #{@order}")
     end
     
   end
