@@ -19,7 +19,7 @@
         = link_to '<', url_for_month(before), :title => (I18n.l before, :format => :calendar_period_minicalendar_title), :class => 'previous'
       %td{:colspan => 5}
         %h3
-        = link_to_unless_current I18n.l(date, :format => :calendar_period_minicalendar_month), url_for_month(date)
+          = link_to I18n.l(date, :format => :calendar_period_minicalendar_month), url_for_month(date)
       %td.m
         = link_to '>', url_for_month(after), :title => (I18n.l after, :format => :calendar_period_minicalendar_title), :class => 'next'
     %tr

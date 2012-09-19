@@ -1,0 +1,13 @@
+- @seen_events = {}
+
+
+
+#events
+  = render :partial => 'event', :collection => @events
+<<<<<<< Updated upstream
+
+=======
+  
+>>>>>>> Stashed changes
+#marginalia
+  = render 'minicalendar'

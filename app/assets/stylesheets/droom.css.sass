@@ -56,6 +56,9 @@ $tool_button_width: 32px
 =hover
   &:hover
     color: $hover
+
+=blurred($color: $pale)
+  text-shadow: $color 0 0 2px
   
 
 a.download
@@ -509,3 +512,73 @@ div.timepicker
       background: $rubine
       color: #fff
       
+table.minimonth
+  font-style: normal
+  border-collapse: collapse
+  border:
+    style: solid
+    width: 1px
+    color: $page
+  color: $text
+  margin: 5px 0
+  h3
+    font-size: 1.4em
+    line-height: 1
+    margin: 10px 0
+  a
+    display: block
+    color: $link
+    font-weight: lighter
+    text-decoration: none
+  a:hover
+    color: $hover
+  th, td
+    font-weight: normal
+    border:
+      style: solid
+      width: 1px
+      color: $page
+    vertical-align: top
+    text-align: center
+    height: 32px
+    width: 30px
+    line-height: 32px
+    padding: 0
+    overflow: hidden
+  td.m
+    a
+      display: block
+      overflow: hidden
+      font-size: 1.4em
+      line-height: 1
+      width: 32px
+      height: 32px
+      text-indent: 50px
+      background:
+        position: 5px 5px
+        repeat: no-repeat
+        image: image-url('droom/minimonth.png')
+      &:hover
+        background-position: 5px -43px
+      &.previous
+        background-position: 5px -91px
+        &:hover
+          background-position: 5px -139px
+  td.day_name
+    color: $verypale
+  td.o
+    color: $pale
+    a
+      color: $pale
+    a:hover
+      color: $page
+  td.t
+    background-color: $page
+  td.w
+  td.e
+  td.u
+    +blurred
+    color: $verypale
+  td.t
+    font-weight: bold
+  td.p
