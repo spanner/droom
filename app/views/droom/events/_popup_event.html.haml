@@ -1,0 +1,6 @@
+- event ||= @event
+#popup
+  %h3
+    = link_to event.name, event_url(event)
+    = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
+  = event.description
