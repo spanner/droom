@@ -1,6 +1,8 @@
 require 'dav4rack'
 require 'dav4rack/file_resource'
+require "droom/monkeys"
 require "droom/helpers"
+require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
 require "droom/dav_resource"

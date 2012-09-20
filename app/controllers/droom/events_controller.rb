@@ -32,6 +32,11 @@ module Droom
       end
     end
     
+    def feed
+      @events = Droom::Event.all
+      respond_with @events
+    end
+    
     def show
       respond_with @event do |format|
         format.js {

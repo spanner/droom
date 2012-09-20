@@ -4,6 +4,7 @@ module Droom
     before_filter :authenticate_user!  
     before_filter :find_people, :only => :index
     before_filter :get_person, :only => :show
+    before_filter :confine_to_self, :except => [:index, :show]
     
     def index
       respond_with @people
@@ -11,6 +12,10 @@ module Droom
     
     def show
       respond_with @person
+    end
+    
+    def feed
+      respond_with @person.events
     end
     
   protected
@@ -32,5 +37,9 @@ module Droom
       @people.page(@page).per(@show)
     end
  
+    def confine_to_self
+      @person = current_user.person unless admin?
+    end
+
   end
 end

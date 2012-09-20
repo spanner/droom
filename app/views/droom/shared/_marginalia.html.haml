@@ -5,4 +5,21 @@
 
   = render :partial => 'droom/shared/search_form'
 
-  .search_results
+  #shortcuts.search_results
+    %h3
+      Setup
+    %ul.setup
+      %li.ical
+        = link_to t(:personal_calendar_feed), feed_person_url(current_user.person, :protocol => "webcal", :format => :ics)
+      %li.ical
+        = link_to t(:general_calendar_feed), feed_events_url(:protocol => "webcal", :format => :ics)
+      %li.sharing
+        = link_to t(:set_up_dropbox), '#', :class => 'notyet'
+      %li.sharing
+        = link_to t(:set_up_goodreader), '#', :class => 'notyet'
+      %li.sharing
+        = link_to t(:set_up_iAnnotatePDF), '#', :class => 'notyet'
+      %li.sharing
+        = link_to t(:other_document_readers), '#', :class => 'notyet'
+        
+      
