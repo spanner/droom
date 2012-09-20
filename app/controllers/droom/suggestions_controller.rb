@@ -6,7 +6,11 @@ module Droom
 
     def index
       fragment = params[:term]
+      
+      
+      
       max = params[:limit] || 10
+      
       @suggestions = @klasses.collect {|klass| 
         klass.constantize.name_matching(fragment).limit(max) 
       }.flatten.sort_by(&:name).slice(0, max)

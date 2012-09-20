@@ -23,17 +23,5 @@
 
   - unless @my_future_events.any? or @my_past_events.any?
     %p
-      = t :no_events_for_you
+      = render :partial => 'event', :collection => @all_events
 
-#marginalia
-  #minicalendar
-    .scroller
-      = render 'minicalendar'
-
-  = render :partial => 'droom/shared/search_form'
-
-  #future_events.search_results
-    %h4
-      = t :future_events
-    - if @all_events.any?
-      = render :partial => 'event_line', :collection => @events
