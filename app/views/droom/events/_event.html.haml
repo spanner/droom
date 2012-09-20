@@ -36,8 +36,8 @@
           %ul.downloads
             = render :partial => 'droom/documents/listing', :collection => event.documents.limit(3)
             - if event.documents.count > 3
-              %li
-                = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event), :class => "more"
+              %li.more
+                = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
       
       %p.practicalities
         %time

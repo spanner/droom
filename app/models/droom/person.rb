@@ -140,23 +140,23 @@ module Droom
     end
     
     def to_vcf
-    	@vcard ||= Vpim::Vcard::Maker.make2 do |maker|
-    		maker.add_name do |n|
-    		  n.given = name || ""
-  		  end
-    		maker.add_addr {|a| 
-    		  a.location = 'home' # until we do this properly with multiple contact sets
+      @vcard ||= Vpim::Vcard::Maker.make2 do |maker|
+        maker.add_name do |n|
+          n.given = name || ""
+        end
+        maker.add_addr {|a| 
+          a.location = 'home' # until we do this properly with multiple contact sets
           a.country = post_country || ""
           a.region = post_region || ""
           a.locality = post_city || ""
           a.street = "#{post_line1}, #{post_line2}"
           a.postalcode = post_code || ""
-    		}
-    		maker.add_tel phone { |t| t.location = 'home' } unless phone.blank?
+        }
+        maker.add_tel phone { |t| t.location = 'home' } unless phone.blank?
         # maker.add_tel mobile { |t| t.location = 'cell' } unless mobile.blank?
-    		maker.add_email email { |e| t.location = 'home' }
-    	end
-    	@vcard.to_s
+        maker.add_email email { |e| t.location = 'home' }
+      end
+      @vcard.to_s
     end
     
     def self.vcards_for(people=[])

@@ -7,7 +7,9 @@ module Droom
   
     before_filter :authenticate_user!  
     before_filter :numerical_parameters
-    before_filter :find_events
+    before_filter :get_event, :only => [:show, :edit]
+    before_filter :build_event, :only => [:new, :create]
+    before_filter :find_events, :only => [:index]
     
     def dashboard
       if current_user.person
@@ -23,33 +25,22 @@ module Droom
     end
 
     def index
-      respond_with @events
-    end
-    
-    def search
       respond_with @events do |format|
-        format.js { render :partial => 'droom/shared/search_results' }
-      end
-    end
-  
-    def show
-      @event = Droom::Event.find(params[:id])
-      respond_with @event do |format|
-        format.ics {
-          rical = RiCal.Calendar { |cal| cal.add_subcomponent(@event.as_ri_cal_event) }
-          send_data rical.to_s, :filename => "#{@event.slug}.ics", :type => "text/calendar"
+        format.js {
+          render :partial => 'droom/events/minicalendar'
         }
       end
     end
     
+    def show
+      respond_with @event
+    end
+    
     def new
-      params[:event] ||= {}
-      @event = Droom::Event.new({:start => Time.now}.merge(params[:event]))
       respond_with @event
     end
     
     def create
-      @event = Droom::Event.new(params[:event])
       if @event.save
         render :show
       else
@@ -75,32 +66,42 @@ module Droom
       end
     end
     
-    def find_events
-      @events = Event.scoped({})
-      if period
-        if period.bounded?
-          @events = @events.between(period.start, period.finish) 
-        elsif period.start
-          @events = @events.after(period.start) 
-        else
-          @events = @events.before(period.finish) 
-        end
-      else
-        @events = @events.future
-        if params[:year]
-          @events = @events.in_year(params[:year])
-          if params[:month]
-            @events = @events.in_month(params[:year], params[:month])
-            if params[:mday]
-              @events = @events.on_day(params[:year], params[:month], params[:mday])
-            end
-          end
-        end
-      end
+    def build_event
+      params[:event] ||= {}
+      @event = Droom::Event.new({:start => Time.now}.merge(params[:event]))
+    end
 
+    def get_event
+      @event = Droom::Event.find(params[:id])
+    end
+    
+    def find_events
+      @events = Event.scoped({})  #todo: visible or personal scope
+      today = Date.today
+      year = params[:year] || today.year
+      month = params[:month] || today.month
+      mday = params[:mday] || today.mday
+      datemarker = Date.civil(year, month, mday)
+      
+      if !params[:mday].blank?
+        @events = @events.on_day(year, month, mday)
+        @pagetitle = I18n.t(:events_on, :day => I18n.l(datemarker, :format => :natural))
+
+      elsif !params[:month].blank?
+        @events = @events.in_month(year, month)
+        @pagetitle = I18n.t(:events_in, :period => I18n.l(datemarker, :format => :month))
+
+      elsif !params[:year].blank?
+        @events = @events.in_year(year)
+        @pagetitle = I18n.t(:events_in, :period => I18n.l(datemarker, :format => :year))
+
+      else
+        @pagetitle = I18n.t(:future_events)
+      end
+      
       unless params[:q].blank?
-        @searching = true
         @events = @events.name_matching(params[:q])
+        @pagetitle << I18n.t(:matching, :term => params[:q])
       end
       
       @show = params[:show] || 10
@@ -108,20 +109,6 @@ module Droom
       @events.page(@page).per(@show)
     end
     
-    def period
-      return @period if @period
-      this = Date.today
-      if params[:mday]
-        start = Date.civil(params[:year] || this.year, params[:month] || this.month, params[:mday])
-        @period = Droom::Period.between(start, start.to_datetime.end_of_day)
-      elsif params[:month]
-        start = Date.civil(params[:year] || this.year, params[:month])
-        @period = Droom::Period.between(start, start.to_datetime.end_of_month)
-      elsif params[:year]
-        start = Date.civil(params[:year])
-        @period = Droom::Period.between(start, start.to_datetime.end_of_year)
-      end
-    end
 
     # months can be passed around either as names or numbers
     # any date part can be 'now' or 'next' for ease of linking

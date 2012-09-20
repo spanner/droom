@@ -1,5 +1,9 @@
 - @seen_events = {}
+
 #events
+  %h1.quiet
+    = @pagetitle
+    
   = render :partial => 'event', :collection => @events
 
 #marginalia

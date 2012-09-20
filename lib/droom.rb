@@ -2,7 +2,6 @@ require 'dav4rack'
 require 'dav4rack/file_resource'
 require "droom/helpers"
 require "droom/engine"
-require "droom/period"
 require "droom/validators"
 require "droom/dav_resource"
 require 'paperclip/io_adapters/url_adapter'

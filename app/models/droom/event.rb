@@ -53,10 +53,6 @@ module Droom
       where(['start < :date AND (finish IS NULL or finish < :date)', :date => datetime])
     }
   
-    scope :within, lambda { |period| # CalendarPeriod object
-      where(['start > :start AND start < :finish', :start => period.start, :finish => period.finish])
-    }
-
     scope :between, lambda { |start, finish| # datetimable objects. eg. Event.between(reader.last_login, Time.now)
       where(['start > :start AND start < :finish', :start => start, :finish => finish])
     }
@@ -277,7 +273,7 @@ module Droom
       # create zipfile
     end
 
-    def as_ri_cal_event
+    def to_rical
       RiCal.Event do |cal_event|
         cal_event.uid = uuid
         cal_event.summary = name
@@ -285,13 +281,13 @@ module Droom
         cal_event.dtstart =  (all_day? ? start_date : start) if start
         cal_event.dtend = (all_day? ? finish_date : finish) if finish
         cal_event.url = url if url
-        cal_event.rrules = recurrence_rules.map(&:to_ical) if recurrence_rules.any?
+        cal_event.rrules = recurrence_rules.map(&:to_rical) if recurrence_rules.any?
         cal_event.location = venue.name if venue
       end
     end
   
-    def to_ical
-      as_ri_cal_event.to_s
+    def to_ics
+      to_rical.to_s
     end
 
   protected
@@ -309,7 +305,7 @@ module Droom
       occurrences.destroy_all
       if recurrence_rules.any?
         recurrence_horizon = Time.now + 10.years
-        as_ri_cal_event.occurrences(:before => recurrence_horizon).each do |occ|
+        to_rical.occurrences(:before => recurrence_horizon).each do |occ|
           occurrences.create!({
             :name => self.name,
             :url => self.url,

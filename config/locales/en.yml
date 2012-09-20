@@ -20,6 +20,10 @@ en:
   sign_in: "Sign in"
   download_ical: "Download event"
   downloads: "Downloads"
+  events: "Events"
+  events_between: "Events between %{start} and %{finish}"
+  events_in: "Events in %{period}"
+  events_on: "Events on %{day}"
   calendar: "Calendar"
   library: "Library" 
   directory: "Directory" 
@@ -58,6 +62,9 @@ en:
       month_header: "%B %Y"
       natural: "%d %B"
       natural_with_year: "%d %B %Y"
-      calendar_period_minicalendar_title: "%B %Y"
-      calendar_period_minicalendar_month: "%B"
+      minicalendar_title: "%B %Y"
+      minicalendar_month: "%B"
+      year: "%Y"
+      month: "%B %Y"
+      
       

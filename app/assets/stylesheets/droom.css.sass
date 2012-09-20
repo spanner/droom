@@ -440,9 +440,12 @@ li.document
       background-position: 0 -144px
       color: #369620
       +hover
-  a.more
+
+li.more
+  +pale
+  a
     display: block
-    padding: 5px 0 0 0
+    padding: 5px 0
     min-height: 22px
 
 
@@ -522,16 +525,14 @@ table.minimonth
   color: $text
   margin: 5px 0
   h3
-    font-size: 1.4em
-    line-height: 1
-    margin: 10px 0
+    font-size: 1.2em
+    line-height: 22px
+    margin: 10px 0 5px 0
   a
     display: block
     color: $link
     font-weight: lighter
     text-decoration: none
-  a:hover
-    color: $hover
   th, td
     font-weight: normal
     border:
@@ -555,17 +556,18 @@ table.minimonth
       height: 32px
       text-indent: 50px
       background:
-        position: 5px 5px
+        position: 0 5px
         repeat: no-repeat
         image: image-url('droom/minimonth.png')
       &:hover
-        background-position: 5px -43px
+        background-position: 0 -43px
       &.previous
-        background-position: 5px -91px
+        background-position: 0 -91px
         &:hover
-          background-position: 5px -139px
-  td.day_name
-    color: $verypale
+          background-position: 0 -139px
+  th.day_name
+    +bold
+    color: $dark
   td.o
     color: $pale
     a
@@ -573,9 +575,12 @@ table.minimonth
     a:hover
       color: $page
   td.t
-    background-color: $page
+    background-color: $palest
   td.w
   td.e
+    a:hover
+      background-color: $hover
+      color: $page
   td.u
     +blurred
     color: $verypale

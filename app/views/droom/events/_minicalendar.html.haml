@@ -16,12 +16,12 @@
   %thead
     %tr
       %td.m
-        = link_to '<', url_for_month(before), :title => (I18n.l before, :format => :calendar_period_minicalendar_title), :class => 'previous'
+        = link_to '<', url_for_month(before), :title => (I18n.l before, :format => :minicalendar_title), :class => 'previous'
       %td{:colspan => 5}
         %h3
-          = link_to I18n.l(date, :format => :calendar_period_minicalendar_month), url_for_month(date)
+          = link_to I18n.l(date, :format => :minicalendar_title), url_for_month(date)
       %td.m
-        = link_to '>', url_for_month(after), :title => (I18n.l after, :format => :calendar_period_minicalendar_title), :class => 'next'
+        = link_to '>', url_for_month(after), :title => (I18n.l after, :format => :minicalendar_title), :class => 'next'
     %tr
       - day_names.each do |d|
         %th.day_name{:scope => 'col'}
@@ -34,7 +34,7 @@
       
       - cell_class = "d"
       - cell_class += " o" if day.month != date.month
-      - cell_class += " t" if day == ::Date.current
+      - cell_class += " t" if day == Date.today
       - if new_events_today.any?
         - cell_class += " e"
         - date_label = link_to day.mday, url_for_date(day)
