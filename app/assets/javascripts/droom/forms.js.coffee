@@ -78,7 +78,7 @@ jQuery ($) ->
     display: (results) =>
       $(@_options.replacing).replaceWith results
       $(@_options.clearing).val "" if @_options.clearing?
-      $(@_options.replacing).popup_remote_content()
+      $(@_options.replacing).find('a.popup').popup_remote_content()
 
 
   $.fn.captive = (options) ->

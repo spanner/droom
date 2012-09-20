@@ -1,11 +1,18 @@
-- document ||= @document
-%td.name
-  %h3
-    = link_to document.name, document.file.url, :class => "#{document.file_extension} table_icon", :title => t(:click_to_download, :name => document.file_file_name)
-%td.created
-  %p
-    = I18n.l document.created_at.to_date, :format => :dashed_short_date_format
-%td.event
-  %p
-    = link_to document.event_name, event_url(Droom::Event.find(document.event_id), :format => :js), :class => "popup", :remote => true, :data => {:type => "html"}
+- document ||= table_document
+- flip = false
+
+%tr{:class => flip ? "document odd" : "document even" }
+  %td.name
+    = link_to document.name, document.file.url, :class => "#{document.file_extension} document", :title => t(:click_to_download, :name => document.file_file_name)
+  %td.filename.minor
+    %span.note
+      = document.file_file_name
+  %td.created.minor
+    %span.note
+      = l document.created_at.to_date, :format => :natural_with_year
+  %td.event
+    = link_to document.event_name, event_url(Droom::Event.find(document.event_id), :format => :js), :class => "event popup", :remote => true, :data => {:type => "html"}
+  %td.agenda_section.minor
+    %span.note
+      = truncate(document.agenda_section_name, :length => 24, :separator => " ")
     
