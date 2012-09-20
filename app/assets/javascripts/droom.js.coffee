@@ -8,6 +8,7 @@
 #= require droom/forms
 #= require droom/suggester
 #= require droom/calendar
+#= require droom/sort
 #= require_self
 
 jQuery ($) ->
@@ -20,6 +21,9 @@ jQuery ($) ->
     @find('a.popup').popup_remote_content()
     @find('a.append').append_remote_content()
     @find('#minicalendar').calendar()
+    @find('table.sortable').table_sort
+      sort: "name"
+      order: "ASC"
       
 $ ->
   $('body').activate()

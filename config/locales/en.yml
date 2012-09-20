@@ -59,6 +59,7 @@ en:
       precise: "%H:%M"
   date:
     formats:
+      dashed_short_date_format: "%d-%m-%Y"
       month_header: "%B %Y"
       natural: "%d %B"
       natural_with_year: "%d %B %Y"

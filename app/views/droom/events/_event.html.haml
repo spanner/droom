@@ -1,7 +1,7 @@
 - @seen_events ||= []
 - short ||= false
 - show_header ||= false
-
+- event ||= @event
 - if event
   - event_master_id = event.master_id || event.id
   - repeating = true if @seen_events[event_master_id]

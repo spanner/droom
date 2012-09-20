@@ -1,13 +1,15 @@
 - @seen_events = {}
 
-
-
 #events
+  %h1.quiet
+    = @pagetitle
+    
   = render :partial => 'event', :collection => @events
-<<<<<<< Updated upstream
 
+<<<<<<< HEAD
 =======
-  
->>>>>>> Stashed changes
 #marginalia
   = render 'minicalendar'
+  = render :partial => 'droom/shared/search_form'
+  .search_results
+>>>>>>> c81221cfadd74d5b314f3aa96d0cbba04b9fccee

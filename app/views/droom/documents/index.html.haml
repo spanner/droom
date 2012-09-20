@@ -1,10 +1,20 @@
 - @seen_events = {}
 
 #documents
-  - if @my_documents.any?
-    %section.personal
-      %p.twister
-        = link_to t(:your_personal_documents), '#'
-      .twisted
-        = render :partial => 'document', :collection => @my_documents
+  %table.sortable
+    %thead
+      %tr
+        %th
+          %a{:href => "#", :"data-sort" => "name"}
+            Name
+            .pointer
+        %th
+          %a{:href => "#", :"data-sort" => "created_at"}
+            Created at
+            .pointer
+        %th
+          %a{:href => "#", :"data-sort" => "event_name"}
+            Event
+            .pointer
+    %tbody
   

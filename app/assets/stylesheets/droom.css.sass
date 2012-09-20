@@ -194,8 +194,30 @@ div.document
   p.description
     margin-top: 0
     margin-left: $datemark_width + $datemark_margin
-
-#people
+    
+table
+  th
+    a
+      position: relative
+      padding-right: 20px
+      display: inline-block
+      .pointer
+        opacity: 0.2
+        position: absolute
+        top: 0
+        right: 0
+        width: 20px
+        height: 20px
+        background:
+          position: 0 -1px
+          repeat: no-repeat
+          image: image-url("droom/arrows.png")
+      &[data-order="ASC"] .pointer
+        opacity: 1
+        background-position: 0 -283px
+      &[data-order="DESC"] .pointer
+        opacity: 1
+        background-position: 0 -667px
   td
     padding: 0.25em 1em 0.25em 0
     border-bottom: 1px dotted #AFAFAF
@@ -211,6 +233,27 @@ div.document
       line-height: 25px
       &.unavailable
         color: #aaa
+      a
+        display: block
+        padding: 8px 0 0 28px
+        min-height: 22px
+        line-height: 22px
+        &.table_icon
+          background: 
+            repeat: no-repeat
+            position: 0 0
+            image: image-url('droom/icons.png')
+          &.pdf
+            background-position: 0 -48px
+          &.doc, &.docx
+            background-position: 0 -96px
+            color: #1683ab
+            +hover
+          &.xls, &.xlsx
+            background-position: 0 -144px
+            color: #369620
+            +hover
+    
     a.vcard
       p
         border: none
