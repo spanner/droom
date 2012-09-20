@@ -15,11 +15,11 @@ module Droom
       if current_user.person
         @my_future_events = current_user.person.events.future_and_current
         @my_past_events = current_user.person.events.past
-        @other_events = Droom::Event.future_and_current.not_private.without_invitations_to(current_user.person)
+        @all_events = Droom::Event.future_and_current.not_private.without_invitations_to(current_user.person)
       elsif current_user.admin?
-        @all_events = Droom::Event.future
+        @all_events = Droom::Event.future_and_current
       else
-        @all_events = Droom::Event.future.not_private.limit(10)
+        @all_events = Droom::Event.future_and_current.not_private.limit(10)
       end
       respond_with @my_future_events
     end

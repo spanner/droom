@@ -21,15 +21,19 @@
       .twisted
         = render :partial => 'event', :collection => @my_past_events
 
-  - if @all_events
+  - unless @my_future_events.any? or @my_past_events.any?
     %p
       = t :no_events_for_you
 
 #marginalia
+  #minicalendar
+    .scroller
+      = render 'minicalendar'
+
   = render :partial => 'droom/shared/search_form'
 
   #future_events.search_results
     %h4
       = t :future_events
-    - if @events.any?
+    - if @all_events.any?
       = render :partial => 'event_line', :collection => @events

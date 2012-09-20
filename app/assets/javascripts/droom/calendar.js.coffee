@@ -49,13 +49,13 @@ jQuery ($) ->
       old = @_scroller.find('table')
       if direction == 'left'
         @_scroller.append(table)
-        @_container.animate {scrollLeft: @_width}, () =>
+        @_container.animate {scrollLeft: @_width}, 'fast', () =>
           old.remove()
           @_container.scrollLeft(0)
           @init()
       else
         @_scroller.prepend(table)
-        @_container.scrollLeft(@_width).animate {scrollLeft: 0}, () =>
+        @_container.scrollLeft(@_width).animate {scrollLeft: 0}, 'fast', () =>
           old.remove()
           @init()
         
