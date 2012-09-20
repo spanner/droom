@@ -18,6 +18,7 @@ jQuery ($) ->
       @get("/documents.js?sort=#{sort}&order=#{order}")
     
     get: (url) =>
+      @body.fadeTo('fast', 0.2)
       $.ajax
         url: (url)
         dataType: "html"
@@ -31,6 +32,7 @@ jQuery ($) ->
     activate: () =>
       @body.find('a.popup').popup_remote_content()
       @body.find('.pagination').find('a').retable(@)
+      @body.fadeTo('fast', 1)
       
     clear: () =>
       @body.children().remove()

@@ -8,14 +8,7 @@ module Droom
     
     def index
       respond_to do |format|
-        format.html
         format.js { render :partial => 'documents_table' }
-      end
-    end
-    
-    def search
-      respond_with @documents do |format|
-        format.js { render :partial => 'search_results' }
       end
     end
   
@@ -47,13 +40,9 @@ module Droom
       }
       params[:sort] = 'name' unless sort_parameters[params[:sort]]
 
-
       @by = sort_parameters[params[:sort]]
       @order = sort_orders[params[:order]]
-      
-      Rails.logger.warn "^^   by is #{@by} and order is #{@order}"
-      
-      @show = params[:show] || 10
+      @show = params[:show] || 20
       @page = params[:page] || 1
       @documents = Droom::Document.with_latest_event
       @documents = @documents.name_matching(params[:q]) unless params[:q].blank?

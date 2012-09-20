@@ -2,27 +2,26 @@
 - @event_header = month_header_for(Date.today)
 
 #events
-  - if admin?
-    %p.admin
-      = link_to t(:add_event), new_event_url, :class => "append", :remote => true, :data => {:type => "html"}
 
-  - if user_signed_in? && current_user.person
-    - if @my_future_events.any?
-      %section.personal
-        %p.twister
-          = link_to t(:your_future_events), '#'
-        .twisted
-          = render :partial => 'event', :collection => @my_future_events
+  - if @my_future_events.any?
+    %section.personal
+      %p.note
+        = t :your_future_events, :count => @my_future_events.count
+      = render :partial => 'event', :collection => @my_future_events
 
   - if @my_past_events.any?
     %section.past
-      %p.twister
-        = link_to t(:your_past_events), '#'
-      .twisted
-        = render :partial => 'event', :collection => @my_past_events
+      %p.note
+        = t :your_past_events
+      = render :partial => 'event', :collection => @my_past_events
 
   - unless @my_future_events.any? or @my_past_events.any?
-    %p
+    %h2
+      = t :future_events
+    %p.note
+      = t :your_future_events, :count => 0
+      = t :other_future_events
+      
       = render :partial => 'event', :collection => @all_events
 
 = render :partial => 'droom/shared/marginalia'

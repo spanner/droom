@@ -33,7 +33,11 @@ module Droom
     end
     
     def show
-      respond_with @event
+      respond_with @event do |format|
+        format.js {
+          render :partial => 'droom/events/event'
+        }
+      end
     end
     
     def new
