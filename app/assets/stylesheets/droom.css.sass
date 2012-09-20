@@ -514,7 +514,20 @@ div.timepicker
     &:active
       background: $rubine
       color: #fff
-      
+
+
+#minicalendar
+  position: relative
+  overflow: hidden
+  width: 222px
+  height: 300px
+  .scroller
+    width: 500px
+    height: 300px
+    table
+      position: relative
+      float: left
+
 table.minimonth
   font-style: normal
   border-collapse: collapse
@@ -565,6 +578,11 @@ table.minimonth
         background-position: 0 -91px
         &:hover
           background-position: 0 -139px
+      &.waiting
+        background-image: image-url('droom/spinner.gif')
+        background-position: 8px 12px
+        &:hover
+          background-position: 8px 12px
   th.day_name
     +bold
     color: $dark

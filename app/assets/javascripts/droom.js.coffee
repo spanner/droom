@@ -1,4 +1,5 @@
 #= require lib/modernizr
+#= require lib/extensions
 #= require jquery
 #= require jquery_ujs
 #= require lib/kalendae
@@ -6,6 +7,7 @@
 #= require lib/parser_rules/advanced
 #= require droom/forms
 #= require droom/suggester
+#= require droom/calendar
 #= require_self
 
 jQuery ($) ->
@@ -17,6 +19,7 @@ jQuery ($) ->
     @find('.timepicker').time_picker()
     @find('a.popup').popup_remote_content()
     @find('a.append').append_remote_content()
+    @find('#minicalendar').calendar()
       
 $ ->
   $('body').activate()

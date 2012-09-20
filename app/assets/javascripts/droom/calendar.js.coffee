@@ -1,0 +1,78 @@
+jQuery ($) ->
+
+  class Calendar
+    constructor: (element, options) ->
+      @_container = $(element)
+      @_scroller = @_container.find('.scroller')
+      @_table = null
+      @_cache = {}
+      @_month = null
+      @_year = null
+      @_request = null
+      @_incoming = {}
+      @_width = @_container.width()
+      $.calendar = @
+      @init()
+
+    init: () =>
+      @_table = @_container.find('table')
+      @_month = parseInt(@_table.attr('data-month'), 10)
+      @_year = parseInt(@_table.attr('data-year'), 10)
+      @cache(@_year, @_month, @_table)
+      @_table.find('a.next, a.previous').calendar_changer()
+      
+    cache: (year, month, table) =>
+      @_cache[year] ?= {}
+      @_cache[year][month] ?= table
+    
+    cached:  (year, month) =>
+      @_cache[year] ?= {}
+      @_cache[year][month]
+      
+    show: (year, month) =>
+      if cached = @cached(year, month)
+        @update(cached, year, month)
+      else
+        @_request = $.ajax
+          type: "GET"
+          dataType: "html"
+          url: "/calendar.js?month=#{encodeURIComponent(month)}&year=#{encodeURIComponent(year)}"
+          success: (response) =>
+            @update(response, year, month)
+
+    update: (response, year, month) =>
+      @_container.find('a').removeClass('waiting')
+      direction = "left" if ((year * 12) + month) > ((@_year * 12) + @_month)
+      @sweep response, direction
+      
+    sweep: (table, direction) =>
+      old = @_scroller.find('table')
+      if direction == 'left'
+        @_scroller.append(table)
+        @_container.animate {scrollLeft: @_width}, () =>
+          old.remove()
+          @_container.scrollLeft(0)
+          @init()
+      else
+        @_scroller.prepend(table)
+        @_container.scrollLeft(@_width).animate {scrollLeft: 0}, () =>
+          old.remove()
+          @init()
+        
+
+
+
+  $.fn.calendar = ->
+    @each ->
+      new Calendar(@)
+    @
+    
+  $.fn.calendar_changer = ->
+    @click (e) ->
+      e.preventDefault() if e
+      link = $(@)
+      year = parseInt(link.attr('data-year'), 10)
+      month = parseInt(link.attr('data-month'), 10)
+      link.addClass('waiting')
+      $.calendar?.show(year, month)
+    @

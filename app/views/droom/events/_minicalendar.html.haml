@@ -12,16 +12,16 @@
 - before = date.beginning_of_month - 1.day
 - after = date.end_of_month + 1.day
 
-%table.minimonth
+%table.minimonth{:data => {:month => date.month, :year => date.year}}
   %thead
     %tr
       %td.m
-        = link_to '<', url_for_month(before), :title => (I18n.l before, :format => :minicalendar_title), :class => 'previous'
+        = link_to '<', url_for_month(before), :title => (I18n.l before, :format => :minicalendar_title), :class => 'previous', :data => {:month => before.month, :year => before.year}
       %td{:colspan => 5}
         %h3
           = link_to I18n.l(date, :format => :minicalendar_title), url_for_month(date)
       %td.m
-        = link_to '>', url_for_month(after), :title => (I18n.l after, :format => :minicalendar_title), :class => 'next'
+        = link_to '>', url_for_month(after), :title => (I18n.l after, :format => :minicalendar_title), :class => 'next', :data => {:month => after.month, :year => after.year}
     %tr
       - day_names.each do |d|
         %th.day_name{:scope => 'col'}
