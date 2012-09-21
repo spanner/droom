@@ -15,31 +15,20 @@ describe Droom::Document do
   
   describe "on update" do
     describe "if its file has changed" do
-      before :each do
+      it "should trigger a version update" do
+        @document.should_receive(:refresh_personal_documents)
         @document.file = Rack::Test::UploadedFile.new(Droom::Engine.root() + 'spec/fixtures/images/frog.png', 'image/png')
-        @document.save!
-      end
-      it "should increment its version number" do
+        @document.save
         @document.version.should == 2
-      end
-      it "should trigger the update of its personal_document clones" do
-        @document.personal_documents.each do |pd|
-          pd.version.should == 2
-        end
       end
     end
     
     describe "if its file has not changed" do
-      before :each do
-        @document.save!
-      end
-      it "should not increment its version number" do
+      it "should not trigger a version update" do
+        @document.should_not_receive(:refresh_personal_documents)
+        @document.name = "something else"
+        @document.save
         @document.version.should == 1
-      end
-      it "should not trigger the update of its personal_document clones" do
-        @document.personal_documents.each do |pd|
-          ###
-        end
       end
     end
   end

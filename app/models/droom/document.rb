@@ -10,7 +10,7 @@ module Droom
     has_attached_file :file
     
     before_save :set_version
-    after_update :refresh_personal_documents
+    after_post_process :refresh_personal_documents
     
     validates :file, :presence => true
     # default_scope order('updated_at DESC, created_at DESC')

@@ -6,14 +6,26 @@ module Droom
 
     def index
       fragment = params[:term]
-      
-      
-      
       max = params[:limit] || 10
+
+      if @types.include?('event') && span = Chronic.parse(fragment, :guess => false)
+        @suggestions = Droom::Event.touching_span(span)
       
-      @suggestions = @klasses.collect {|klass| 
-        klass.constantize.name_matching(fragment).limit(max) 
-      }.flatten.sort_by(&:name).slice(0, max)
+      else
+        @suggestions = @klasses.collect {|klass| 
+          klass.constantize.name_matching(fragment).limit(max) 
+        }.flatten.sort_by(&:name).slice(0, max)
+        
+      end
+      
+      
+      # detect date-basis
+      # identify point
+      # identify range around point
+      # get events from period
+      # set partial
+      
+      
       
       respond_with @suggestions do |format|
         format.json {
@@ -36,9 +48,7 @@ module Droom
         @klasses = searchable_classes.values
       else
         @types = searchable_classes.keys & [params[:type]].flatten
-        Rails.logger.warn "??? suggestion types #{@types.inspect}"
         @klasses = searchable_classes.values_at(*@types)
-        Rails.logger.warn "??? suggestion klasses #{@klasses.inspect}"
       end
     end
   

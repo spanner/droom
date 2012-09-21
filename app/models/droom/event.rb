@@ -54,7 +54,7 @@ module Droom
     }
   
     scope :between, lambda { |start, finish| # datetimable objects. eg. Event.between(reader.last_login, Time.now)
-      where(['start > :start AND start < :finish', :start => start, :finish => finish])
+      where(['start > :start AND start < :finish AND (finish IS NULL or finish < :finish)', :start => start, :finish => finish])
     }
   
     scope :future_and_current, lambda {
@@ -129,6 +129,14 @@ module Droom
       start = DateTime.civil(year, month, day)
       finish = start + 1.day
       between(start, finish)
+    end
+    
+    def self.in_span(span)                  # Chronic::Span
+      between(span.begin, span.end)
+    end
+
+    def self.falling_within(span)           # Chronic::Span
+      coincident_with(span.begin, span.end)
     end
 
     def self.future

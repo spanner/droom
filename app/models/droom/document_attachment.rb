@@ -12,10 +12,10 @@ module Droom
     
     scope :not_personal_for, lambda {|person|
       select("droom_document_attachments.*")
-        .join("LEFT OUTER JOIN droom_personal_documents ON droom_personal_documents.attachment_id = droom_document_attachments.id")
+        .joins("LEFT OUTER JOIN droom_personal_documents ON droom_personal_documents.document_attachment_id = droom_document_attachments.id")
         .where(["droom_personal_documents.person_id = ?", person.id])
-        .group_by("droom_document_attachments.id")
-        .where("COUNT(droom_personal_documents.id) = 0")
+        .group("droom_document_attachments.id")
+        .having("COUNT(droom_personal_documents.id) = 0")
     }
     
     scope :unfiled, where("agenda_section_id IS NULL")

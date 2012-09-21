@@ -29,6 +29,8 @@ class CreateDroomData < ActiveRecord::Migration
       t.attachment :file
       t.string :file_fingerprint
       t.integer :created_by_id
+      t.boolean :public
+      t.boolean :private
       t.timestamps
     end
 
@@ -96,7 +98,7 @@ class CreateDroomData < ActiveRecord::Migration
       t.integer :created_by_id
       t.timestamps
     end
-    add_index :droom_document_attachments, [:attachee_type, :attachee_id], :name => "attachee"
+    add_index :droom_document_attachments, [:attachee_type, :attachee_id], :name => :attachee
 
     create_table :droom_recurrence_rules do |t|
       t.integer :event_id
@@ -120,8 +122,10 @@ class CreateDroomData < ActiveRecord::Migration
       t.string :post_region
       t.string :post_country
       t.string :post_code
+      t.string :url
       t.decimal :lat, :precision => 15, :scale => 10
-      t.decimal :lng, :precision => 15, :scale => 10      
+      t.decimal :lng, :precision => 15, :scale => 10    
+      t.boolean :prepend_article  
       t.timestamps
     end
     add_index  :droom_venues, [:lat, :lng]
