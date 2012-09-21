@@ -54,13 +54,12 @@ jQuery ($) ->
       k = e.which
       if (k >= 32 and k <= 165) or k == 8
         if @_prompt.val() == ""
-          @display @_original_content
-          @_original_content.fadeTo "fast", 1
+          @revert()
         else
           @_form.submit()
 
     submit: (e) =>
-      e.preventDefault()  if e
+      e.preventDefault() if e
       $(@_options.replacing).fadeTo "fast", 0.2
       @_request.abort() if @_request
       @_form.find("input[type='submit']").addClass "waiting"
@@ -74,11 +73,17 @@ jQuery ($) ->
     update: (results) =>
       @_form.find("input[type='submit']").removeClass "waiting"
       @display results
-
+    
+    revert: (e) =>
+      e.preventDefault() if e
+      @display @_original_content
+      @_original_content.fadeTo "fast", 1
+      
     display: (results) =>
       $(@_options.replacing).replaceWith results
       $(@_options.clearing).val "" if @_options.clearing?
       $(@_options.replacing).find('a.popup').popup_remote_content()
+      $(@_options.replacing).find('a.cancel').click @revert
 
 
   $.fn.captive = (options) ->

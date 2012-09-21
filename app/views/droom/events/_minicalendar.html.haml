@@ -19,7 +19,7 @@
         = link_to '<', url_for_month(before), :title => (I18n.l before, :format => :minicalendar_title), :class => 'previous', :data => {:month => before.month, :year => before.year}
       %td{:colspan => 5}
         %h3
-          = link_to I18n.l(date, :format => :minicalendar_title), url_for_month(date)
+          = link_to I18n.l(date, :format => :minicalendar_title), url_for_month(date), :class => "month"
       %td.m
         = link_to '>', url_for_month(after), :title => (I18n.l after, :format => :minicalendar_title), :class => 'next', :data => {:month => after.month, :year => after.year}
     %tr
@@ -37,7 +37,7 @@
       - cell_class += " t" if day == Date.today
       - if new_events_today.any?
         - cell_class += " e"
-        - date_label = link_to day.mday, url_for_date(day)
+        - date_label = link_to day.mday, url_for_date(day), :class => "day"
       - elsif continuing_events.any?
         - cell_class += " c"
         - date_label = link_to day.mday, url_for_date(day)

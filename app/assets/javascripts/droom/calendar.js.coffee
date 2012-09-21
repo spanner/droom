@@ -20,6 +20,8 @@ jQuery ($) ->
       @_year = parseInt(@_table.attr('data-year'), 10)
       @cache(@_year, @_month, @_table)
       @_table.find('a.next, a.previous').calendar_changer()
+      @_table.find('a.day').day_search()
+      @_table.find('a.month').month_search()
       
     cache: (year, month, table) =>
       @_cache[year] ?= {}
@@ -58,9 +60,23 @@ jQuery ($) ->
         @_container.scrollLeft(@_width).animate {scrollLeft: 0}, 'fast', () =>
           old.remove()
           @init()
-        
+    
+    monthName: () =>
+      Kalendae.moment.months[@_month-1]
+      
+    searchForm: =>
+      @_form ?= $('#searchform')
+      
+    searchFor: (day) =>
+      if day?
+        @search("#{@monthName()} #{day}, #{@_year}")
+      else
+        @search("#{@monthName()} #{@_year}")
 
-
+    search: (term) =>
+      @searchForm().find('input#term').val(term)
+      @searchForm().submit()
+      
 
   $.fn.calendar = ->
     @each ->
@@ -76,3 +92,16 @@ jQuery ($) ->
       link.addClass('waiting')
       $.calendar?.show(year, month)
     @
+
+  $.fn.day_search = ->
+    @click (e) ->
+      e.preventDefault() if e
+      $.calendar?.searchFor($(@).text())
+      
+  $.fn.month_search = ->
+    @click (e) ->
+      e.preventDefault() if e
+      $.calendar?.searchFor()
+  
+      
+      

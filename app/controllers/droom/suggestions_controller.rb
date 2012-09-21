@@ -9,7 +9,7 @@ module Droom
       max = params[:limit] || 10
 
       if @types.include?('event') && span = Chronic.parse(fragment, :guess => false)
-        @suggestions = Droom::Event.touching_span(span)
+        @suggestions = Droom::Event.falling_within(span)
       
       else
         @suggestions = @klasses.collect {|klass| 
@@ -17,16 +17,7 @@ module Droom
         }.flatten.sort_by(&:name).slice(0, max)
         
       end
-      
-      
-      # detect date-basis
-      # identify point
-      # identify range around point
-      # get events from period
-      # set partial
-      
-      
-      
+            
       respond_with @suggestions do |format|
         format.json {
           render :json => @suggestions.map { |suggestion| {

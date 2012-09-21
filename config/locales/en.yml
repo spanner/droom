@@ -18,6 +18,7 @@ en:
   dashboard: "Dashboard"
   hello: "Hello world"
   sign_in: "Sign in"
+  clear_search: "Clear search"
   document_agenda_section: "Filed under"
   document_name: "Name"
   document_filename: "Filename"
