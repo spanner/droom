@@ -50,6 +50,8 @@ en:
   click_to_download: "Click to download %{name}"
   your_personal_documents: "Your personal documents"
   other_documents: "Other available documents"
+  personal_calendar_feed: "Personal calendar subscription"
+  general_calendar_feed: "General calendar subscription"
   search: Search
   save_event: "Save event"
   quick_search: "Quick search"

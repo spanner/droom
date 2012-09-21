@@ -7,6 +7,7 @@ module Droom
   
     before_filter :authenticate_user!  
     before_filter :numerical_parameters
+    before_filter :get_person
     before_filter :get_event, :only => [:show, :edit]
     before_filter :build_event, :only => [:new, :create]
     before_filter :find_events, :only => [:index]
@@ -75,6 +76,10 @@ module Droom
       end
     end
     
+    def get_person
+      @person = Droom::Person.find(params[:person_id]) unless params[:person_id].blank?
+    end
+    
     def build_event
       params[:event] ||= {}
       @event = Droom::Event.new({:start => Time.now}.merge(params[:event]))
@@ -85,7 +90,7 @@ module Droom
     end
     
     def find_events
-      @events = Event.scoped({})  #todo: visible or personal scope
+      @events = @person ? @person.events : Event.scoped({})  #todo: visible or personal scope
       today = Date.today
       year = params[:year] || today.year
       month = params[:month] || today.month

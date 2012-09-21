@@ -8,11 +8,17 @@ Droom::Engine.routes.draw do
   ), :anchor => false, :constraints => { :subdomain => "dav" }
 
   resources :events do
-    get :feed, :on => :collection
+    collection do
+      match "feed/:auth_token.:format" => "events#feed", :as => :feed
+    end
   end
   
   resources :people do
-    get :feed, :on => :member
+    resources :events do
+      collection do
+        match "feed/:auth_token.:format" => "events#feed", :as => :feed
+      end
+    end
   end
   
   resources :venues

@@ -3,7 +3,7 @@ module Droom
     respond_to :json, :html, :js, :vcf
     before_filter :authenticate_user!  
     before_filter :find_people, :only => :index
-    before_filter :get_person, :only => :show
+    before_filter :get_person, :only => [:show, :feed]
     before_filter :confine_to_self, :except => [:index, :show]
     
     def index
@@ -12,10 +12,6 @@ module Droom
     
     def show
       respond_with @person
-    end
-    
-    def feed
-      respond_with @person.events
     end
     
   protected
@@ -38,7 +34,7 @@ module Droom
     end
  
     def confine_to_self
-      @person = current_user.person unless admin?
+      @person = current_user.person unless current_user.admin?
     end
 
   end

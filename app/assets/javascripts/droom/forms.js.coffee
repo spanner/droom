@@ -78,6 +78,7 @@ jQuery ($) ->
       e.preventDefault() if e
       @display @_original_content
       @_original_content.fadeTo "fast", 1
+      @_prompt.val("")
       
     display: (results) =>
       $(@_options.replacing).replaceWith results
