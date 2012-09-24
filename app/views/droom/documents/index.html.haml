@@ -1,7 +1,7 @@
 - @seen_events = {}
 
 #documents
-  %table.sortable
+  %table.sortable{:"data-url" => "documents"}
     %thead
       %tr
         %th
@@ -17,7 +17,8 @@
             Event
             .pointer
     %tbody
-  
+      = render :partial => 'document_table'
+      
 #marginalia
   = render :partial => 'droom/shared/search_form'
   .search_results
