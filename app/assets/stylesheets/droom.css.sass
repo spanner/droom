@@ -56,6 +56,9 @@ $tool_button_width: 32px
 =hover
   &:hover
     color: $hover
+
+=blurred($color: $pale)
+  text-shadow: $color 0 0 2px
   
 
 a.download
@@ -74,7 +77,7 @@ div
   text-align: right
   color: $mid
   line-height: 3em
-  padding-top: 6px
+  padding-top: 5px
   span
     display: block
     line-height: 1
@@ -191,66 +194,55 @@ div.document
   p.description
     margin-top: 0
     margin-left: $datemark_width + $datemark_margin
-    
-table
+
+ 
+table.main
   th
-    a
+    text-align: left
+    vertical-align: bottom
+    +bold
+    a.sorter
       position: relative
-      padding-right: 20px
       display: inline-block
-      .pointer
-        opacity: 0.2
-        position: absolute
-        top: 0
-        right: 0
-        width: 20px
-        height: 20px
-        background:
-          position: 0 -1px
-          repeat: no-repeat
-          image: image-url("droom/arrows.png")
-      &[data-order="ASC"] .pointer
-        opacity: 1
-        background-position: 0 -283px
-      &[data-order="DESC"] .pointer
-        opacity: 1
-        background-position: 0 -667px
-  td
-    padding: 0.25em 1em 0.25em 0
-    border-bottom: 1px dotted #AFAFAF
-    .icon
-      width: 34px
-      height: 45px
-      background: 
-        position: -8px -108px
+      padding: 4px 16px 4px 0
+      color: $pale
+      background:
+        position: right top
         repeat: no-repeat
-        image: image-url("droom/medium_object_icons.png")
-    h3, p
-      margin: 0
-      line-height: 25px
-      &.unavailable
-        color: #aaa
-      a
+        image: image-url('droom/tablesort.png')
+      &:hover
+        color: $link
+        background-position: right -32px
+      &[data-order="ASC"]
+        color: $dark
+        background-position: right -96px
+        &:hover
+          color: $link
+          background-position: right -64px
+      &[data-order="DESC"]
+        color: $dark
+        background-position: right -160px
+        &:hover
+          color: $link
+          background-position: right -32px
+  td, th
+    padding: 0.5em 2em 0.5em 0
+    vertical-align: top
+    line-height: 25px
+    &.minor
+      max-width: 150px
+  td
+    &.name
+      +bold
+    &.minor
+      span
         display: block
-        padding: 8px 0 0 28px
-        min-height: 22px
-        line-height: 22px
-        &.table_icon
-          background: 
-            repeat: no-repeat
-            position: 0 0
-            image: image-url('droom/icons.png')
-          &.pdf
-            background-position: 0 -48px
-          &.doc, &.docx
-            background-position: 0 -96px
-            color: #1683ab
-            +hover
-          &.xls, &.xlsx
-            background-position: 0 -144px
-            color: #369620
-            +hover
-    
+        padding: 12px 0
+    a.event
+      display: block
+      padding: 8px 0
+      min-height: 22px
+      line-height: 22px
     a.vcard
       p
         border: none
@@ -450,6 +442,13 @@ ul.search_results
     &.document
       a
         background-image: image-url('droom/icons.png')
+    &.cancel
+      a
+        color: $mid
+        background-image: image-url('droom/minisymbols.png')
+        background-position: 0 -598px
+        padding: 0 0 0 24px
+        margin-top: 6px
         
     span.note
       display: block
@@ -460,29 +459,31 @@ ul.downloads
   padding: 0
   list-style: none
 
-li.document
+li.document a, a.document
+  display: block
+  padding: 8px 0 0 28px
+  min-height: 22px
+  line-height: 22px
+  background: 
+    repeat: no-repeat
+    position: 0 0
+    image: image-url('droom/icons.png')
+  &.pdf
+    background-position: 0 -48px
+  &.doc, &.docx
+    background-position: 0 -96px
+    color: #1683ab
+    +hover
+  &.xls, &.xlsx
+    background-position: 0 -144px
+    color: #369620
+    +hover
+
+li.more
+  +pale
   a
     display: block
-    padding: 8px 0 0 28px
-    min-height: 22px
-    line-height: 22px
-    background: 
-      repeat: no-repeat
-      position: 0 0
-      image: image-url('droom/icons.png')
-    &.pdf
-      background-position: 0 -48px
-    &.doc, &.docx
-      background-position: 0 -96px
-      color: #1683ab
-      +hover
-    &.xls, &.xlsx
-      background-position: 0 -144px
-      color: #369620
-      +hover
-  a.more
-    display: block
-    padding: 5px 0 0 0
+    padding: 5px 0
     min-height: 22px
 
 
@@ -551,6 +552,150 @@ div.timepicker
     &:active
       background: $rubine
       color: #fff
-      
-#map
+
+
+#minicalendar
+  position: relative
+  overflow: hidden
+  width: 222px
+  height: 260px
+  .scroller
+    width: 500px
+    height: 260px
+    table
+      position: relative
+      float: left
+
+#search, .search_results
+  position: relative
+  margin-left: 10px
   
+table.minimonth
+  font-style: normal
+  border-collapse: collapse
+  border:
+    style: solid
+    width: 1px
+    color: $page
+  color: $text
+  margin: 5px 0
+  h3
+    font-size: 1.2em
+    line-height: 22px
+    margin: 10px 0 5px 0
+  a
+    display: block
+    color: $link
+    font-weight: lighter
+    text-decoration: none
+  th, td
+    font-weight: normal
+    border:
+      style: solid
+      width: 1px
+      color: $page
+    vertical-align: top
+    text-align: center
+    height: 32px
+    width: 30px
+    line-height: 32px
+    padding: 0
+    overflow: hidden
+  td.m
+    a
+      display: block
+      overflow: hidden
+      font-size: 1.4em
+      line-height: 1
+      width: 32px
+      height: 32px
+      text-indent: 50px
+      background:
+        position: 0 5px
+        repeat: no-repeat
+        image: image-url('droom/minimonth.png')
+      &:hover
+        background-position: 0 -43px
+      &.previous
+        background-position: 0 -91px
+        &:hover
+          background-position: 0 -139px
+      &.waiting
+        background-image: image-url('droom/spinner.gif')
+        background-position: 8px 12px
+        &:hover
+          background-position: 8px 12px
+  th.day_name
+    +bold
+    color: $dark
+  td.o
+    color: $pale
+    a
+      color: $pale
+    a:hover
+      color: $page
+  td.t
+    background-color: $palest
+  td.w
+  td.e
+    a:hover
+      background-color: $hover
+      color: $page
+  td.u
+    +blurred
+    color: $verypale
+  td.t
+    font-weight: bold
+  td.p
+
+
+.pagination
+  position: relative
+  clear: left
+  margin: 40px 0
+  height: 40px
+  span
+    display: block
+    float: left
+    margin-right: 5px
+    a
+      display: block
+      background-color: $pale
+      color: $dark
+      padding: 5px 10px
+      min-width: 16px
+      text-align: center
+      &:hover
+        background-color: $link
+        color: white !important
+      &:visited
+        color: $dark
+    &.current
+      +bold
+      background-color: $verypale
+      color: $mid
+      padding: 5px 10px
+      min-width: 16px
+      text-align: center
+    &.gap
+      border: 1px solid white
+      padding: 5px 10px
+      min-width: 16px
+      text-align: center
+      color: $dark
+
+h3.setup
+  padding-left: 22px
+  background:
+    repeat: no-repeat
+    position: 0 0
+    image: image-url('droom/setup.png')
+    
+ul.setup
+  list-style: none
+  padding: 0
+  li
+    a
+
+#map
+  height: 700px

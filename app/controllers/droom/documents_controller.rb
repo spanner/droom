@@ -8,14 +8,7 @@ module Droom
     
     def index
       respond_to do |format|
-        format.html
         format.js { render :partial => 'documents_table' }
-      end
-    end
-    
-    def search
-      respond_with @documents do |format|
-        format.js { render :partial => 'search_results' }
       end
     end
   
@@ -31,26 +24,29 @@ module Droom
   
   protected
     
-    def find_documents    
-      if params[:q].blank?
-        @searching = false
-        @documents = Droom::Document.with_latest_event
-      else
-        @searching = true
-        @documents = Droom::Document.with_latest_event.name_matching(params[:q])
-      end
-      @show = params[:show] || 10
-      @page = params[:page] || 1
-      @documents.page(@page).per(@show)
+    def find_documents
+      sort_orders = {
+        'asc' => "ASC",
+        'desc' => "DESC"
+      }
+      params[:order] = 'asc' unless sort_orders[params[:order]]
 
       sort_parameters = {
-        'created' => 'documents.created_at',
-        'event' => 'event_name'
+        'name' => 'droom_documents.name',
+        'filename' => 'droom_documents.file_file_name',
+        'created' => 'droom_documents.created_at',
+        'event' => 'event_name',
+        'section' => 'case when agenda_section_name is null then 1 else 0 end, agenda_section_name'
       }
+      params[:sort] = 'name' unless sort_parameters[params[:sort]]
 
-      @by = params[:sort] || 'documents.created_at'
-      @order = params[:order] || 'DESC'
-      @documents = @documents.order("#{@by} #{@order}")
+      @by = sort_parameters[params[:sort]]
+      @order = sort_orders[params[:order]]
+      @show = params[:show] || 20
+      @page = params[:page] || 1
+      @documents = Droom::Document.with_latest_event
+      @documents = @documents.name_matching(params[:q]) unless params[:q].blank?
+      @documents = @documents.order("#{@by} #{@order}").page(@page).per(@show)
     end
     
   end

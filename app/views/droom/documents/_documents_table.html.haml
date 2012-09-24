@@ -1,3 +1,5 @@
-- @documents.each do |d|
-  %tr.document
-    = render 'table_document', :document => d
+= render :partial => 'table_document', :collection => @documents
+%tr
+  %td{:colspan => 6}
+    .pagination
+      = paginate @documents, :params => {:format => :js}

@@ -1,0 +1,26 @@
+#marginalia
+  #minicalendar
+    .scroller
+      = render 'droom/events/minicalendar'
+
+  = render :partial => 'droom/shared/search_form'
+
+  #shortcuts.search_results
+    %h3.setup
+      = t :setup
+    %ul.setup
+      - if current_user.person
+        %li.ical
+          = link_to t(:personal_calendar_feed), feed_person_events_url(current_user.person, :auth_token => current_user.authentication_token, :protocol => "webcal", :format => :ics)
+      %li.ical
+        = link_to t(:general_calendar_feed), feed_events_url(:auth_token => current_user.authentication_token, :protocol => "webcal", :format => :ics)
+      %li.sharing
+        = link_to t(:set_up_dropbox), '#', :class => 'notyet'
+      %li.sharing
+        = link_to t(:set_up_goodreader), '#', :class => 'notyet'
+      %li.sharing
+        = link_to t(:set_up_iAnnotatePDF), '#', :class => 'notyet'
+      %li.sharing
+        = link_to t(:other_document_readers), '#', :class => 'notyet'
+        
+      

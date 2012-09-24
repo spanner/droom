@@ -7,7 +7,22 @@ Droom::Engine.routes.draw do
     :log_to => [(Rails.root + 'log/dav.log').to_s, Logger::DEBUG]
   ), :anchor => false, :constraints => { :subdomain => "dav" }
 
-  resources :events, :people, :venues, :documents
+  resources :events do
+    collection do
+      match "feed/:auth_token.:format" => "events#feed", :as => :feed
+    end
+  end
+  
+  resources :people do
+    resources :events do
+      collection do
+        match "feed/:auth_token.:format" => "events#feed", :as => :feed
+      end
+    end
+  end
+  
+  resources :venues
+  resources :documents
   
   match "/library" => 'documents#index', :as => :library
   match "/directory" => 'people#index', :as => :directory

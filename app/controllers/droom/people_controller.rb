@@ -3,7 +3,8 @@ module Droom
     respond_to :json, :html, :js, :vcf
     before_filter :authenticate_user!  
     before_filter :find_people, :only => :index
-    before_filter :get_person, :only => :show
+    before_filter :get_person, :only => [:show, :feed]
+    before_filter :confine_to_self, :except => [:index, :show]
     
     def index
       respond_with @people
@@ -32,5 +33,9 @@ module Droom
       @people.page(@page).per(@show)
     end
  
+    def confine_to_self
+      @person = current_user.person unless current_user.admin?
+    end
+
   end
 end

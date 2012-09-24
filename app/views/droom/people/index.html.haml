@@ -1,9 +1,6 @@
 #people
-  %table
+  %table.main
     %tbody
       - @people.each do |p|
         = render :partial => 'person', :object => p
-
-#marginalia
-  = render :partial => 'droom/shared/search_form'
-  .search_results
+  

@@ -74,7 +74,7 @@ module Droom
       rrule
     end
   
-    def to_ical
+    def to_rical
       rule.to_ical
     end
 

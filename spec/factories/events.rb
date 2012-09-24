@@ -7,6 +7,12 @@ FactoryGirl.define do
       name "Simple Event"
       start "2009-11-03 18:30:00"
     end
+
+    factory :closed do
+      sequence(:name)  {|n| "Event #{n}" }
+      start "2009-11-03 10:30:00"
+      finish "2009-11-03 18:30:00"
+    end
     
     factory :repeating do
       name "Repeating Event"

@@ -56,8 +56,9 @@ module Droom
     
     def as_json(options={})
       json = {
+        :id => id,
         :name => name,
-        :postcode => postcode,
+        :postcode => post_code,
         :lat => lat,
         :lng => lng
       }

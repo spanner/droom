@@ -113,5 +113,42 @@ describe Droom::Event do
 
     end
   end
+
+  describe "retrieval" do
+    before do
+      base = Time.new(2013, 1, 1, 9, 0, 0)
+      40.times { |i| FactoryGirl.create(:closed, :start => base + i.days, :finish => base + i.days + 1.hour) }
+      FactoryGirl.create(:closed, :start => base + 28.days, :finish => base + 32.days)
+      
+      @beg = Time.new(2013, 1, 5, 12, 0, 0)
+      @end = Time.new(2013, 1, 15, 12, 0, 0)
+      @span = Chronic.parse("January 2013", :guess => false)
+    end
+    
+    it "should return all the events falling before a date" do
+      
+      p "before beg: #{Droom::Event.before(@beg).map(&:name).join(',')}"
+      
+      Droom::Event.before(@beg).count.should == 5
+      Droom::Event.before(@end).count.should == 15
+    end
+    
+    it "should return all the events falling after a date" do
+      Droom::Event.after(@beg).count.should == 36
+      Droom::Event.after(@end).count.should == 26
+    end
+    
+    it "should return all the events that start or end between two dates" do
+      Droom::Event.coincident_with(@beg, @end).count.should == 10
+    end
+
+    it "should return all the events that overlap with a span" do
+      Droom::Event.falling_within(@span).count.should == 32
+    end
+      
+    it "should return all the events that lie within a span" do
+      Droom::Event.in_span(@span).count.should == 31
+    end
+  end
 end
 

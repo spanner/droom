@@ -17,6 +17,7 @@ gem 'time_of_day'
 gem "rubyzip"
 gem "snail"
 gem "vcard"
+gem "chronic"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

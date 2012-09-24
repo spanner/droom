@@ -1,24 +1,23 @@
 - @seen_events = {}
 
 #documents
-  %table.sortable{:"data-url" => "documents"}
+  %table.main.sortable
     %thead
       %tr
         %th
-          %a{:href => "#", :"data-sort" => "name"}
-            Name
-            .pointer
+          %a.sorter{:href => "#", :"data-sort" => "name"}
+            = t :document_name
+        %th.minor
+          %a.sorter{:href => "#", :"data-sort" => "filename"}
+            = t :document_filename
+        %th.minor
+          %a.sorter{:href => "#", :"data-sort" => "created"}
+            = t :document_created_at
         %th
-          %a{:href => "#", :"data-sort" => "created_at"}
-            Created at
-            .pointer
-        %th
-          %a{:href => "#", :"data-sort" => "event_name"}
-            Event
-            .pointer
+          %a.sorter{:href => "#", :"data-sort" => "event"}
+            = t :document_attached_to
+        %th.minor
+          %a.sorter{:href => "#", :"data-sort" => "section"}
+            = t :document_agenda_section
     %tbody
-      = render :partial => 'document_table'
-      
-#marginalia
-  = render :partial => 'droom/shared/search_form'
-  .search_results
+      = render :partial => 'documents_table'
