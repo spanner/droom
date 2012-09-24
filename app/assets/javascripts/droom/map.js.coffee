@@ -1,8 +1,21 @@
-#= require droom/map_interface
-
 jQuery ($) ->
-  
   $.infowindows = []
+  
+  class Map
+    constructor: (element) ->
+      @container = $(element)
+      lat = @container.attr('data-lat') || 22.280147
+      lng = @container.attr('data-lng') || 114.158302
+      zoom = @container.attr('data-zoom') || 12
+      @map = new google.maps.Map element,
+        center: new google.maps.LatLng lat, lng
+        zoom: parseInt(zoom)
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+        mapTypeControlOptions: 
+          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+
+    getMap: () =>
+      @map  
   
   class Point
     constructor: (point, map) ->
@@ -33,7 +46,7 @@ jQuery ($) ->
       
   $.fn.init_map = () ->
     @each ->
-      $.gmap = new Map.Gmap(@).getMap()
+      $.gmap = new Map(@).getMap()
       $(@).show_venues()
   
   $.fn.show_venues = () ->
@@ -43,8 +56,13 @@ jQuery ($) ->
         $.getJSON src, (response) =>
           bounds = new google.maps.LatLngBounds()
           $.each response, (i, venue) =>
-            latlng = new google.maps.LatLng(venue.lat, venue.lng )
+            latlng = new google.maps.LatLng venue.lat, venue.lng
             bounds.extend latlng
-            venue = new Point(venue, map)
+            venue = new Point venue, map
 
-          map.fitBounds(bounds)
+          map.fitBounds bounds
+
+  $.urlParam = (name) ->
+    results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
+    return 0  unless results
+    results[1] or 0
