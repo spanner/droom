@@ -32,4 +32,3 @@ $ ->
   $('form#searchform').captive
     replacing: '.search_results'
     fast: true
-  

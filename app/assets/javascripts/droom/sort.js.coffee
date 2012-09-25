@@ -1,19 +1,32 @@
 jQuery ($) ->
-
+  $.headers = []
+  
+  $.param = (name) ->
+    decodeURIComponent $.urlParam(name)
+    
   class TableSort
     constructor: (element, options) ->
       @order = options.order
       @sort = options.sort
       @table = $(element)
       @body = @table.find('tbody')
+      @_original_content = @body.children()
+      @sort = $.param("sort") unless $.param("sort") is "0"
+      @order = $.param("order") unless $.param("order") is "0"
       @headers = @table.find('th a')
       $.each @headers, (i, header) =>
-        new SortLink header, @
+        header = new SortLink header, @
+        $.headers.push header
       @activate()
-        
+      @resort @sort, @order
+      if Modernizr.history
+        $(window).bind 'popstate', @restoreState
+      
     resort: (sort, order) =>
       sort ?= "name"
-      order ?= "asc"
+      order ?= "ASC"
+      @sort = sort
+      @order = order
       console.log "resort", sort, order
       @get("/documents.js?sort=#{sort}&order=#{order}")
     
@@ -26,36 +39,61 @@ jQuery ($) ->
     
     refresh: (data, textStatus, jqXHR) =>
       @clear()
+      @saveState(data) if Modernizr.history
       $(data).appendTo(@body)
+      @body.fadeTo('fast', 1)
       @activate()
 
     activate: () =>
       @body.find('a.popup').popup_remote_content()
       @body.find('.pagination').find('a').retable(@)
-      @body.fadeTo('fast', 1)
       
     clear: () =>
       @body.children().remove()
       
+    saveState: (results) =>
+      url = window.location.pathname + '?sort=' + encodeURIComponent(@sort) + '&order=' + encodeURIComponent(@order)
+      state = 
+        html: results
+        sort: @sort
+        order: @order
+      history.pushState state, "New page title", url
+
+    restoreState: (e) =>
+      event = e.originalEvent
+      if event.state? && event.state.html?
+        @clear()
+        @order = event.state.order
+        @sort = event.state.sort
+        $(event.state.html).appendTo(@body)
+        $.each $.headers, (i, header) =>
+          header.check()
+        @activate()
+        
 
   class SortLink
     constructor: (element, table) ->
       @table = table
       @_link = $(element)
       @_sort = @_link.attr("data-sort")
-      @_order = null
       @_link.bind "click", @click
+      @check()
+      @_order = @_link.attr("data-order")
+      
+    check: () =>
       if @table.sort == @_sort
+        @table.headers.removeAttr('data-order')
         @_link.attr("data-order", @table.order)
       
-    click: () =>
+    click: (e) =>
+      e.preventDefault()
       @table.headers.removeAttr('data-order')
-      if @_order == "asc"
+      if @_order == "ASC"
         @_link.attr('data-order', 'DESC')
-        @_order = "desc"
+        @_order = "DESC"
       else
         @_link.attr('data-order', 'ASC')
-        @_order = "asc"
+        @_order = "ASC"
       @table.resort(@_sort, @_order)
       
 

@@ -1,13 +1,13 @@
 module Droom
   class DocumentsController < Droom::EngineController
-    respond_to :json, :html, :js
+    respond_to :html, :js, :json
   
     before_filter :authenticate_user!  
     before_filter :find_documents
     
     
     def index
-      respond_to do |format|
+      respond_with @documents do |format|
         format.js { render :partial => 'documents_table' }
       end
     end
@@ -26,10 +26,10 @@ module Droom
     
     def find_documents
       sort_orders = {
-        'asc' => "ASC",
-        'desc' => "DESC"
+        'ASC' => "ASC",
+        'DESC' => "DESC"
       }
-      params[:order] = 'asc' unless sort_orders[params[:order]]
+      params[:order] = 'ASC' unless sort_orders[params[:order]]
 
       sort_parameters = {
         'name' => 'droom_documents.name',

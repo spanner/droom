@@ -6,7 +6,14 @@ jQuery ($) ->
       r = Math.random()*16|0
       v = if c is 'x' then r else r & 0x3 | 0x8
       v.toString 16
-  
+
+  # Query string parser for history-restoration purposes.
+
+  $.urlParam = (name) ->
+    results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
+    return 0  unless results
+    results[1] or 0
+
 
   class Twister
     constructor: (element) ->
@@ -44,12 +51,20 @@ jQuery ($) ->
       @_prompt = @_form.find("input[type=\"text\"]")
       @_request = null
       @_original_content = $(@_options.replacing).clone()
+      @_original_term = decodeURIComponent $.urlParam("p") unless decodeURIComponent($.urlParam("p")) == "0"
+      if @_original_term
+        @_prompt.val(@_original_term)
+        @submit() unless @_prompt is ""
+      else
+        @revert()
       @_form.submit @submit
       if @_options.fast
         @_form.find("input[type=\"text\"]").keyup @keyed
         @_form.find("input[type=\"radio\"]").click @submit
         @_form.find("input[type=\"checkbox\"]").click @submit
-        
+      if Modernizr.history
+        $(window).bind 'popstate', @restoreState
+      
     keyed: (e) =>
       k = e.which
       if (k >= 32 and k <= 165) or k == 8
@@ -57,7 +72,7 @@ jQuery ($) ->
           @revert()
         else
           @_form.submit()
-
+    
     submit: (e) =>
       e.preventDefault() if e
       $(@_options.replacing).fadeTo "fast", 0.2
@@ -69,16 +84,36 @@ jQuery ($) ->
         url: @_form.attr("action") + ".js"
         data: @_form.serialize()
         success: @update
-
+    
     update: (results) =>
       @_form.find("input[type='submit']").removeClass "waiting"
+      @saveState(results) if Modernizr.history
       @display results
     
+    saveState: (results) =>
+      results ?= @_original_content.html()
+      term = @_prompt.val()
+      if term
+        url = window.location.pathname + '?p=' + encodeURIComponent(term)
+      else
+        url = window.location.pathname
+      state = 
+        html: results
+        term: term
+      history.pushState state, "New page title", url
+    
+    restoreState: (e) =>
+      event = e.originalEvent
+      if event.state? && event.state.html?
+        @display event.state.html
+        @_prompt.val(event.state.term)
+      
     revert: (e) =>
       e.preventDefault() if e
       @display @_original_content
       @_original_content.fadeTo "fast", 1
       @_prompt.val("")
+      @saveState()
       
     display: (results) =>
       $(@_options.replacing).replaceWith results
