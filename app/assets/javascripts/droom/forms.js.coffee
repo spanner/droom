@@ -51,10 +51,10 @@ jQuery ($) ->
       @_prompt = @_form.find("input[type=\"text\"]")
       @_request = null
       @_original_content = $(@_options.replacing).clone()
-      @_original_term = decodeURIComponent $.urlParam("p") unless decodeURIComponent($.urlParam("p")) == "0"
+      @_original_term = decodeURIComponent($.urlParam("p")) unless decodeURIComponent($.urlParam("p")) is "0"
       if @_original_term
         @_prompt.val(@_original_term)
-        @submit() unless @_prompt is ""
+        @submit() unless @_prompt.val() is ""
       else
         @revert()
       @_form.submit @submit

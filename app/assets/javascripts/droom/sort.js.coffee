@@ -1,7 +1,7 @@
 jQuery ($) ->
   $.headers = []
   
-  $.param = (name) ->
+  $.params = (name) ->
     decodeURIComponent $.urlParam(name)
     
   class TableSort
@@ -11,8 +11,8 @@ jQuery ($) ->
       @table = $(element)
       @body = @table.find('tbody')
       @_original_content = @body.children()
-      @sort = $.param("sort") unless $.param("sort") is "0"
-      @order = $.param("order") unless $.param("order") is "0"
+      @sort = $.params("sort") unless $.params("sort") is "0"
+      @order = $.params("order") unless $.params("order") is "0"
       @headers = @table.find('th a')
       $.each @headers, (i, header) =>
         header = new SortLink header, @
