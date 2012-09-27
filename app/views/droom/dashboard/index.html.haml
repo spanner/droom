@@ -1,0 +1,28 @@
+
+#events
+  = Droom.active_dashboard_modules.each do |mod|
+    = render :partial => "droom/dashboard/#{mod}"
+   
+   
+
+  - if @my_past_events.any?
+    %section.past
+      %p.note
+        = t :your_past_events
+      = render :partial => 'droom/events/event', :collection => @my_past_events, :locals => {:brief => true}
+
+  - if @my_documents.any?
+    %section.documents
+      %p.note
+        = t :your_documents
+      = render :partial => 'droom/documents/document', :collection => @my_documents, :locals => {:brief => true}
+
+  - unless @my_future_events.any? or @my_past_events.any?
+    %p.note
+      = t :your_future_events, :count => 0
+      = t :other_future_events
+      
+      = render :partial => 'droom/events/event', :collection => @all_events
+
+
+= render :partial => 'droom/shared/marginalia'

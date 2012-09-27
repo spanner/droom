@@ -38,4 +38,5 @@ group :test, :development do
   gem "database_cleaner"
   gem 'shoulda-matchers'
   gem 'awesome_print'
+  gem 'forgery'
 end

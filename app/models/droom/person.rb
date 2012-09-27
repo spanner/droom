@@ -71,37 +71,56 @@ module Droom
       self.published.map{|p| [p.name, p.id] }
     end
     
-    # The usual way to delivery personal documents to a Person is to call `gather_documents_from(event or group)` 
-    # on the creation of an invitation or a membership. 
-    #
-    def gather_documents_from(attachee)
-      attachee.document_attachments.each do |att|
-        self.personal_documents.create(:document_attachment => att)
-      end
-    end
     
-    # but it is also possible to scan through all our associated events and groups and to create new personal 
-    # documents for any that do not already have them.
+    # We defer the creation and updating of personal documents until the person actually logs in over DAV. At that stage a call 
+    # goes to person.gather_and_update_documents and the copying begins. It's not really ideal from a responsiveness point of view
+    # but it saves a great deal of update hassle (and storage space).
+    #
     # NB this will not recreate deleted files: we only look as far as the PersonalDocument object, not the file 
     # it would usually have. This is to allow people to delete files they don't want, without having them 
     # constantly recreated.
     #
-    def gather_new_documents
-      new_attachments = Droom::Attachment.to_groups(groups).not_personal_for(self) + Droom::Attachment.to_events(events).not_personal_for(self)
-      new_attachments.each do |att|
-        att.create_personal_document(:person => self)
+    def gather_and_update_documents
+      # first we force the creation of all relevant subfolders, so that the initial directory view is populated.
+      create_and_update_dav_directories
+
+      # then we create, or if relevant update, all of this person's documents. #todo: This will be a delayed job.
+      attachments = Droom::Attachment.to_groups(groups) + Droom::Attachment.to_events(events)
+      attachments.each do |att|
+        att.create_or_update_personal_document_for(self)
       end
     end
     
-    def personal_version_of(document)
-      self.personal_documents.derived_from(document).first
+    def create_and_update_dav_directories
+      create_dav_folder('Unattached')
+      (events + groups).each do |associate|
+        create_dav_directory(associate.slug)
+      end
     end
-
+    
+    def create_dav_directory(name)
+      FileUtils.mkdir_p(Rails.root + "#{Droom.dav_root}/#{self.id}/#{name}")
+    end
+    
+    # If a personal version exists, we will return that since it may contain annotations or amendments.
+    #
     def personal_or_generic_version_of(document)
       personal_version_of(document) || document
     end
 
+    # But if there has been no DAV login there can be no personal version.
+    #
+    def personal_version_of(document)
+      personal_documents.derived_from(document).first
+    end
 
+    # group_documents returns all those documents that have been attached to a group of which this person is a member.
+    # These documents will not show up in the calendar (since they are not attached to an event) so it's often a useful list.
+    #
+    def group_documents
+      Droom::Document.attached_to_these_groups(groups)
+    end
+    
 
 
 

@@ -32,6 +32,6 @@ Droom::Engine.routes.draw do
   match '/suggestions', :to => 'suggestions#index', :as => "suggestions"
   match '/suggestions/:type', :to => 'suggestions#index'
   
-  root :to => 'events#dashboard'
+  root :to => 'dashboard#index'
   
 end

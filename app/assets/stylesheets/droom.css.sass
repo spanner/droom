@@ -83,17 +83,17 @@ div
     line-height: 1
     text-align: center
   span.mon
-    +light
+    +heading
     text-transform: uppercase
     font-size: 1em
   span.dom
-    +bold
+    +heading
     font-size: 2em
     letter-spacing: -0.1em
     margin-left: -4px
     margin-top: -2px
   span.year
-    +light
+    +heading
     font-size: 1em
     margin-top: -2px
   &.editing
@@ -130,16 +130,17 @@ form.event
       width: 500px
       font-size: 1em
 
+h2.name
+  +heading
+  font-size: 3em
+  margin: 0
+  a
+    color: $dark
+    +hover
+
 div.event, form.event
   .summary
     overflow: hidden
-    h2.name
-      +light
-      font-size: 3em
-      margin: 0
-      a
-        color: $dark
-        +hover
     p.name
       margin: 0
     p.practicalities
@@ -151,15 +152,12 @@ div.event, form.event
       margin-top: 0
     div.documents
       float: right
-      width: 180px
       margin-left: 20px
       h3
         a
           +icon_with_text('droom/download.png')
           color: $dark
           +hover
-  .documents
-    padding-left: $datemark_width + $datemark_margin
     
 
 
@@ -169,13 +167,15 @@ div.document
   margin-left: - $datemark_width - $datemark_margin
   margin-bottom: 20px
   h2.name
-    +light
-    font-size: 2.5em
-    margin: 0
+    font-size: 2em
+    line-height: 1
+    + p
+      margin-top: -15px
     a
       display: block
       min-height: 50px
       padding-left: $datemark_width + $datemark_margin
+      padding-top: 4px
       background:
         position: 0 -10px
         repeat: no-repeat
@@ -588,6 +588,8 @@ table.minimonth
     color: $link
     font-weight: lighter
     text-decoration: none
+  th
+    +heading
   th, td
     font-weight: normal
     border:
@@ -626,7 +628,6 @@ table.minimonth
         &:hover
           background-position: 8px 12px
   th.day_name
-    +bold
     color: $dark
   td.o
     color: $pale

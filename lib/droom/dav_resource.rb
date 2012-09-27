@@ -12,8 +12,7 @@ module Droom
 
     def root
       unless @dav_root
-        raise ActiveRecord::RecordNotFound unless person = user.person
-        @dav_root = Rails.root + "webdav/#{person.id}"
+        @dav_root = Rails.root + "webdav/#{@person.id}"
         Dir.mkdir(@dav_root) unless File.exist?(@dav_root)
       end
       @dav_root
@@ -24,6 +23,8 @@ module Droom
      def authenticate(email, password)
        self.user = User.find_by_email(email)
        user.try(:valid_password?, password)
+       raise ActiveRecord::RecordNotFound unless @person = user.person
+       @person.refresh_personal_documents
      end
 
   end

@@ -4,7 +4,7 @@ describe Droom::Event do
         
   describe "A simple event" do
     before do
-      @event = FactoryGirl.create(:simple)
+      @event = FactoryGirl.create(:simple_event)
     end
     
     it "should be valid" do
@@ -53,7 +53,7 @@ describe Droom::Event do
 
   describe "A spanning event" do
     before do 
-      @event = FactoryGirl.create(:spanning)
+      @event = FactoryGirl.create(:spanning_event)
     end
     
     it "should have the right duration" do
@@ -67,7 +67,7 @@ describe Droom::Event do
 
   describe "A repeating event" do
     before do 
-      @event = FactoryGirl.create(:repeating)
+      @event = FactoryGirl.create(:repeating_event)
       @event.send :update_occurrences
     end
     
@@ -117,8 +117,8 @@ describe Droom::Event do
   describe "retrieval" do
     before do
       base = Time.new(2013, 1, 1, 9, 0, 0)
-      40.times { |i| FactoryGirl.create(:closed, :start => base + i.days, :finish => base + i.days + 1.hour) }
-      FactoryGirl.create(:closed, :start => base + 28.days, :finish => base + 32.days)
+      40.times { |i| FactoryGirl.create(:closed_event, :start => base + i.days, :finish => base + i.days + 1.hour) }
+      FactoryGirl.create(:closed_event, :start => base + 28.days, :finish => base + 32.days)
       
       @beg = Time.new(2013, 1, 5, 12, 0, 0)
       @end = Time.new(2013, 1, 15, 12, 0, 0)

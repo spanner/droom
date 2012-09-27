@@ -1,3 +1,7 @@
+Paperclip.interpolates :dav_root do |attachment, style|
+  Droom.dav_root
+end
+
 Paperclip.interpolates :person do |attachment, style|
   attachment.instance.person_id
 end

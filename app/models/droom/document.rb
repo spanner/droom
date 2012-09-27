@@ -29,6 +29,13 @@ module Droom
       
     }
     
+    scope :attached_to_these_groups, lambda { |groups|
+      placeholders = groups.map{'?'}.join(',')
+      select('droom_documents.*')
+        .joins('INNER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id AND droom_document_attachments.attachee_type = "Droom::Event"')
+        .where(["droom_document_attachments.attachee_id IN(#{placeholders})", groups.map(&:id)])
+    }
+    
     scope :with_latest_event, 
       select('droom_documents.*, droom_agenda_sections.name AS agenda_section_name, droom_events.id AS event_id, droom_events.name AS event_name')
         .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id 
@@ -57,15 +64,6 @@ module Droom
     def set_version
       if file.dirty?
         self.version = (version || 0) + 1
-      end
-    end
-    
-    # This is probably where we'll put the delay call
-    def refresh_personal_documents
-      if version_changed?
-        self.personal_documents.each do |pd|
-          pd.send :reclone_file
-        end
       end
     end
 

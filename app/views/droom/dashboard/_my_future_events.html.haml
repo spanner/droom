@@ -1,0 +1,5 @@
+- if current_user.person
+  - if events = current_user.person.events.future_and_current
+    %h2.quiet
+      = t :my_future_events
+    = render :partial => "droom/events/event", :collection => events

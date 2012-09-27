@@ -16,7 +16,6 @@ describe Droom::Document do
   describe "on update" do
     describe "if its file has changed" do
       it "should trigger a version update" do
-        @document.should_receive(:refresh_personal_documents)
         @document.file = Rack::Test::UploadedFile.new(Droom::Engine.root() + 'spec/fixtures/images/frog.png', 'image/png')
         @document.save
         @document.version.should == 2
@@ -25,7 +24,6 @@ describe Droom::Document do
     
     describe "if its file has not changed" do
       it "should not trigger a version update" do
-        @document.should_not_receive(:refresh_personal_documents)
         @document.name = "something else"
         @document.save
         @document.version.should == 1

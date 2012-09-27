@@ -12,19 +12,6 @@ module Droom
     before_filter :build_event, :only => [:new, :create]
     before_filter :find_events, :only => [:index]
     
-    def dashboard
-      if current_user.person
-        @my_future_events = current_user.person.events.future_and_current
-        @my_past_events = current_user.person.events.past
-        @all_events = Droom::Event.future_and_current.not_private.without_invitations_to(current_user.person)
-      elsif current_user.admin?
-        @all_events = Droom::Event.future_and_current
-      else
-        @all_events = Droom::Event.future_and_current.not_private.limit(10)
-      end
-      respond_with @my_future_events
-    end
-
     def index
       respond_with @events do |format|
         format.js {

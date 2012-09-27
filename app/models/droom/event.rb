@@ -10,7 +10,7 @@ module Droom
     belongs_to :created_by, :class_name => 'User'
 
     has_many :invitations, :dependent => :destroy
-    has_many :users, :through => :invitations
+    has_many :people, :through => :invitations
 
     has_many :document_attachments, :as => :attachee, :dependent => :destroy
     has_many :documents, :through => :document_attachments

@@ -8,13 +8,17 @@ module Droom
 
     has_attached_file :file, {
       :storage => :filesystem,
-      :path => ":rails_root/webdav/:person/:slug/:filename"
+      :path => ":rails_root/:dav_root/:person/:slug/:filename"
     }
     
     scope :derived_from, lambda { |document|
       select("droom_personal_documents.*")
         .joins("INNER JOIN droom_document_attachments on droom_personal_documents.document_attachment_id = droom_document_attachments.id")
         .where(["droom_document_attachments.document_id = ?", document.id])
+    }
+
+    scope :belonging_to, lambda { |person|
+      where(["person_id = ?", person.id])
     }
     
     def document
@@ -51,6 +55,10 @@ module Droom
     
     def file_extension
       File.extname(file_file_name).sub(/^\./, '')
+    end
+    
+    def reclone_if_changed
+      reclone_file if document.version > self.version
     end
     
   protected

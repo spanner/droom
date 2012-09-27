@@ -1,0 +1,5 @@
+- if current_user.person
+  - if documents = current_user.person.group_documents
+    %h2.quiet
+      = t :my_group_documents
+    = render :partial => "droom/documents/document", :collection => documents

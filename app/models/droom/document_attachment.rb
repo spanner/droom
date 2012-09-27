@@ -24,9 +24,17 @@ module Droom
       if attachee 
         attachee.slug
       else
-        'unattached'
+        'Unattached'
       end
     end
     
+    def create_or_update_personal_document_for(person)
+      if pd = personal_documents.belonging_to(person)
+        pd.reclone_if_changed
+      else 
+        personal_documents.create(:person => person)
+      end
+    end
+  
   end
 end
