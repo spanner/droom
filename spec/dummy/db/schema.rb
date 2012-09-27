@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(:version => 20120921094605) do
   add_index "droom_invitations", ["event_id"], :name => "index_droom_invitations_on_event_id"
   add_index "droom_invitations", ["person_id"], :name => "index_droom_invitations_on_person_id"
 
-  create_table "droom_membership", :force => true do |t|
+  create_table "droom_memberships", :force => true do |t|
     t.integer  "person_id"
     t.integer  "group_id"
     t.integer  "created_by_id"
@@ -108,8 +108,8 @@ ActiveRecord::Schema.define(:version => 20120921094605) do
     t.datetime "updated_at",    :null => false
   end
 
-  add_index "droom_membership", ["group_id"], :name => "index_droom_membership_on_group_id"
-  add_index "droom_membership", ["person_id"], :name => "index_droom_membership_on_person_id"
+  add_index "droom_memberships", ["group_id"], :name => "index_droom_memberships_on_group_id"
+  add_index "droom_memberships", ["person_id"], :name => "index_droom_memberships_on_person_id"
 
   create_table "droom_people", :force => true do |t|
     t.string   "name"

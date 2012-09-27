@@ -73,14 +73,14 @@ class CreateDroomData < ActiveRecord::Migration
       t.timestamps
     end
 
-    create_table :droom_membership do |t|
+    create_table :droom_memberships do |t|
       t.integer :person_id
       t.integer :group_id
       t.integer :created_by_id
       t.timestamps
     end
-    add_index :droom_membership, :person_id
-    add_index :droom_membership, :group_id
+    add_index :droom_memberships, :person_id
+    add_index :droom_memberships, :group_id
 
     create_table :droom_invitations do |t|
       t.integer :person_id

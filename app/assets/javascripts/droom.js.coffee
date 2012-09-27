@@ -13,7 +13,17 @@
 #= require_self
 
 jQuery ($) ->
+  $.fn.flash = ->
+    @each ->
+      container = $(this)
+      container.fadeIn "fast"
+      $("<a href=\"#\" class=\"closer\">close</a>").prependTo(container)
+      container.bind "click", (e) ->
+        e.preventDefault()
+        container.fadeOut "fast"
+
   $.fn.activate = () ->
+    @find('#flashes p:parent').flash()
     @find('.twister').twister()
     @find('.wysihtml').html_editable()
     @find('.venuepicker').venue_picker()

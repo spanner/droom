@@ -92,7 +92,7 @@ module Droom
     end
     
     def create_and_update_dav_directories
-      create_dav_folder('Unattached')
+      create_dav_directory('Unattached')
       (events + groups).each do |associate|
         create_dav_directory(associate.slug)
       end

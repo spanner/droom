@@ -6,12 +6,8 @@ module Droom
     belongs_to :created_by, :class_name => 'User'
     has_many :document_attachments, :dependent => :destroy
     has_many :personal_documents, :through => :document_attachments
-
     has_attached_file :file
-    
     before_save :set_version
-    after_post_process :refresh_personal_documents
-    
     validates :file, :presence => true
     # default_scope order('updated_at DESC, created_at DESC')
 

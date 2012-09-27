@@ -55,6 +55,9 @@ en:
   general_calendar_feed: "General calendar subscription"
   search: Search
   save_event: "Save event"
+  my_future_events: "Your invitations"
+  my_past_events: "Your past events"
+  my_group_documents: "Your documents"
   quick_search: "Quick search"
   future_events: "Events coming up"
   future_event_count:

@@ -61,13 +61,11 @@ describe Droom::PersonalDocument do
   describe "recloning" do
     # reclone is called from the document when its file changes
     describe "after no file changes" do
-      it "should clone the new file" do
+      it "should clone the new file"
     end
     
     describe "after file changes" do
-      it "should archive the old file with a version suffix" do
-        
-      end
+      it "should archive the old file with a version suffix"
       it "should clone the new file"
       it "should receive the new document version"
       it "should record the new file fingerprint"

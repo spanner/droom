@@ -8,9 +8,9 @@ describe Droom::Person do
   
   describe "DAV storage" do
     it "should be able to create a single DAV folder" do
-      folder_name = Forgery(:basic).text
-      @person.create_dav_directory(folder_name)
-      File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/#{folder_name}").should be_true
+      filename = rand(36**12).to_s(36)
+      @person.create_dav_directory("just_testing")
+      File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/just_testing").should be_true
     end
     
     it "should be able to create folders for all of its events and groups" do
@@ -19,9 +19,10 @@ describe Droom::Person do
       @person.invite_to(event)
       @person.admit_to(group)
       @person.create_and_update_dav_directories
+      File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/unattached").should be_true
       File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/#{event.slug}").should be_true
       File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/#{group.slug}").should be_true
     end
   end
-    
+  
 end

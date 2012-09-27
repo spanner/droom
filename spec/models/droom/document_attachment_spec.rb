@@ -17,11 +17,11 @@ describe Droom::DocumentAttachment do
   describe "slug" do
     it "should be the same as the slug of whatever we are attached to" do
       @da.attachee = @group
-      @da.slug.should_not == 'unattached'
+      @da.slug.should_not == 'Unattached'
       @da.slug.should == @group.slug
     end
     it "or if unattached, should say so" do
-      @da.slug.should == 'unattached'
+      @da.slug.should == 'Unattached'
     end
   end
 
