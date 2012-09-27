@@ -133,7 +133,7 @@ jQuery ($) ->
     key: (e) =>
       key_code = e.which
       if @movement(key_code)
-        @show()  if @suggestions.length > 0
+        @show() if @suggestions.length > 0
         if @visible
           @movement(key_code).call @, e
           e.preventDefault()

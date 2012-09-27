@@ -4,6 +4,3 @@
     %h2.quiet
       = t :my_past_events
     = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
-  - else 
-    %p
-      No past events for

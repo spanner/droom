@@ -28,7 +28,7 @@ module Droom
     scope :attached_to_these_groups, lambda { |groups|
       placeholders = groups.map{'?'}.join(',')
       select('droom_documents.*')
-        .joins('INNER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id AND droom_document_attachments.attachee_type = "Droom::Event"')
+        .joins('INNER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id AND droom_document_attachments.attachee_type = "Droom::Group"')
         .where(["droom_document_attachments.attachee_id IN(#{placeholders})", groups.map(&:id)])
     }
     
