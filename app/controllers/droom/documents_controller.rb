@@ -1,10 +1,12 @@
 module Droom
   class DocumentsController < Droom::EngineController
     respond_to :html, :js, :json
+    layout :no_layout_if_pjax
   
     before_filter :authenticate_user!  
-    before_filter :find_documents
-    
+    before_filter :find_documents, :only => [:index]
+    before_filter :get_document, :only => [:show, :edit, :update]
+    before_filter :build_document, :only => [:new, :create]
     
     def index
       respond_with @documents do |format|
@@ -21,9 +23,22 @@ module Droom
       response.headers['Content-Length'] = @download.document_file_size
       render :nothing => true
     end
-  
+    
+    def edit
+      
+    end
+      
   protected
     
+    def build_document
+      params[:document] ||= {}
+      @document = Droom::Document.new(params[:document])
+    end
+
+    def get_document
+      @document = Droom::Document.find(params[:id])
+    end
+
     def find_documents
       sort_orders = {
         'ASC' => "ASC",

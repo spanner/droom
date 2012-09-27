@@ -1,6 +1,8 @@
-%div.document
-  %h2.name
-    = link_to document.name, document.file.url, :class => "#{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
+%div.document.holder
+  %h2.name<
+    = link_to document.name, document.file.url, :class => "dl #{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
+    - if admin?
+      = link_to t(:edit_document), edit_document_url(document), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay", :type => "html"}
 
   - if document.description
     %p.description

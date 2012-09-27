@@ -1,5 +1,5 @@
 $datemark_width: 50px
-$datemark_margin: 8px
+$datemark_margin: 5px
 $tool_button_height: 32px
 $tool_button_width: 32px
 
@@ -58,7 +58,7 @@ $tool_button_width: 32px
     color: $hover
 
 =blurred($color: $pale)
-  text-shadow: $color 0 0 2px
+  text-shadow: $color 0 0 3px
   
 
 a.download
@@ -101,10 +101,13 @@ div
     a, a:visited
       color: $dark
 
-div.event, form.event
+div.event, form.event, div.document, form.document
   position: relative
   margin-left: - $datemark_width - $datemark_margin
   margin-bottom: 20px
+  .wrapper
+    margin-left: $datemark_width + $datemark_margin
+    width: 100%
 
 form.event
   p.name
@@ -112,8 +115,11 @@ form.event
   a.datepicker
     color: $input
   input.name
-    width: 500px
-    font-size: 2.5em
+    +heading
+    width: 600px
+    font-size: 3em
+    margin-top: -5px
+    margin-left: -6px
   p.practicalities
     margin: 0 0.5em
   input.timepicker
@@ -127,9 +133,33 @@ form.event
   .description
     margin-top: 0.5em
     textarea
-      width: 500px
+      width: 600px
       font-size: 1em
+      height: 250px
 
+form.document
+  .filepicker
+    position: relative
+    float: left
+    width: $datemark_width
+    margin-right: $datemark_margin
+  p.name, p.description
+    margin: 0
+  input.name
+    +heading
+    width: 600px
+    font-size: 2em
+    padding: 2px
+    margin-top: -2px
+    margin-left: -3px
+  textarea
+    width: 600px
+    padding: 2px
+    font-size: 1em
+    height: 100px
+    margin-top: -4px
+    margin-left: -3px
+  
 h2.name
   +heading
   font-size: 3em
@@ -137,6 +167,9 @@ h2.name
   a
     color: $dark
     +hover
+
+h2.quiet
+  font-size: 1.25em
 
 div.event, form.event
   .summary
@@ -155,37 +188,38 @@ div.event, form.event
       margin-left: 20px
       h3
         a
-          +icon_with_text('droom/download.png')
+          +icon_with_text("droom/download.png")
           color: $dark
           +hover
     
 
-
+a.dl, a.ul
+  display: inline-block
+  min-height: 50px
+  text-indent: $datemark_width + $datemark_margin
+  padding-top: 4px
+  background:
+    position: 0 -10px
+    repeat: no-repeat
+    image: image-url('droom/medium_icons.png')
+  &.pdf
+    background-position: 0 -110px
+  &.doc, &.docx
+    background-position: 0 -210px
+  &.xls, &.xlsx
+    background-position: 0 -310px
+  &.minimal
+    height: 50px
+    width: $datemark_width
+    overflow: hidden
+    line-height: 100px
 
 div.document
-  position: relative
-  margin-left: - $datemark_width - $datemark_margin
-  margin-bottom: 20px
   h2.name
     font-size: 2em
     line-height: 1
     + p
       margin-top: -15px
-    a
-      display: block
-      min-height: 50px
-      padding-left: $datemark_width + $datemark_margin
-      padding-top: 4px
-      background:
-        position: 0 -10px
-        repeat: no-repeat
-        image: image-url('droom/medium_icons.png')
-      &.pdf
-        background-position: 0 -110px
-      &.doc, &.docx
-        background-position: 0 -210px
-      &.xls, &.xlsx
-        background-position: 0 -310px
   p.attachment
     margin: 0
     margin-left: $datemark_width + $datemark_margin
@@ -351,26 +385,55 @@ span.erratic
         position: 3px -58px
         repeat: no-repeat
 
-
-a.add, a.append
-  padding-left: 16px
-  color: $blue
-  &:visited
-    color: $blue
+p.admin
+  margin-left: -26px
+  
+a.add, a.edit
+  display: inline-block
+  +heading
+  text-indent: 26px
+  margin-right: 10px
+  height: 24px
+  line-height: 20px
   background:
-    image: image-url('droom/plus_bullet.png')
-    position: 0 3px
+    image: image-url('droom/minisymbols.png')
+    position: 0 -48px
     repeat: no-repeat
     scroll: scroll
   &:hover
-    background-position: 0 -45px
     color: $hover
   &:active
-    background-position: 0 -91px
     color: $active
   &.waiting
     color: $pale
     background-image: image-url('smallspinner.gif')
+  &.minimal
+    width: 24px
+    line-height: 100px
+    overflow: hidden
+
+a.add
+  background-position: 0 -48px
+  color: $green
+  &:visited
+    color: $green
+  &:hover
+    background-position: 0 -72px
+  &:active
+    background-position: 0 -96px
+
+a.edit
+  background-position: 0 -720px
+  color: $blue
+  &:visited
+    color: $blue
+  &:hover
+    background-position: 0 -744px
+  &:active
+    background-position: 0 -768px
+  
+
+a.edit
 
 
 ul.suggestions
@@ -498,6 +561,23 @@ li.more
   display: none
   z-index: 25
 
+.mask
+  position: absolute
+  top: 0
+  left: 0
+  height: 100%
+  width: 100%
+  background-color: white
+  display: none
+  z-index: 15
+
+.wrapper
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 30
+  
+
 div.popup
   position: fixed
   top: 100px
@@ -571,6 +651,7 @@ div.timepicker
   margin-left: 10px
   
 table.minimonth
+  +light
   font-style: normal
   border-collapse: collapse
   border:
@@ -629,22 +710,22 @@ table.minimonth
           background-position: 8px 12px
   th.day_name
     color: $dark
-  td.o
-    color: $pale
-    a
-      color: $pale
-    a:hover
-      color: $page
   td.t
     background-color: $palest
   td.w
+  td.u
+    color: $pale
+    +blurred
   td.e
     a:hover
       background-color: $hover
       color: $page
-  td.u
-    +blurred
+  td.o
     color: $verypale
+    a
+      color: $pale
+      &:hover
+        color: $page
   td.t
     font-weight: bold
   td.p

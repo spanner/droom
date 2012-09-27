@@ -13,6 +13,38 @@ jQuery ($) ->
     results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
     return 0  unless results
     results[1] or 0
+    
+
+
+  class Toggle
+    constructor: (element, selector) ->
+      @_container = $(element)
+      @_affected = $(selector)
+      @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide')
+      @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show')
+      @_container.click @toggle
+      @_showing = @_affected.is(":visible")
+      
+    toggle: (e) =>
+      e.preventDefault() if e
+      if @_showing then @hide() else @show()
+
+    show: =>
+      console.log "showing toggle", @_container, @_showing_text
+      @_affected.show()
+      @_container.text(@_showing_text)
+      @_showing = true
+      
+    hide: =>
+      console.log "hiding toggle", @_container, @_hiding_text
+      @_affected.hide()
+      @_container.text(@_hiding_text)
+      @_showing = false
+
+  $.fn.toggle = () ->
+    @each ->
+      new Toggle(@, $(@).attr('data-affected'))
+    
 
 
   class Twister
@@ -175,15 +207,52 @@ jQuery ($) ->
       
 
 
+  class TemporaryOverlay
+    constructor: (content, container) ->
+      @_content = $(content)
+      @_holder = $(container)
+      @_container = $('<div class="wrapper" />')
+      @_mask = $('#mask')
+      @_holder.append @_container
+      @_container.hide().append(@_content).activate()
+      @_content.find('a.cancel').click @hide
+      @show()
+
+    show: (e) =>
+      e.preventDefault() if e
+      @_mask.bind "click", @hide
+      @_mask.fadeTo 'fast', 0.8
+      @_container.fadeIn 'fast'
+
+    hide: (e) =>
+      e.preventDefault() if e
+      @_mask.fadeOut('slow')
+      @_mask.unbind "click", @hide
+      @_container.fadeOut('slow')
+
+
+  $.fn.overlay_remote_content = () ->
+    @each ->
+      $(@).remote_link (response) =>
+        new TemporaryOverlay response, $(@).parents('.holder')
+
 
 
   class Interjection
-    constructor: (content, marker, @_options) ->
+    constructor: (content, target, @_position) ->
+      @_options = $.extend {position: 'after'}, @_opts
       @_content = $(content)
       @_mask = $('#mask')
-      @_marker = $(marker)
+      @_target = $(target)
       @_container = $('<div class="interjected" />')
-      @_container.insertAfter(@_marker).hide().append(@_content)
+      switch @_position
+        when "prepend" then @_container.prependTo(@_target)
+        when "append" then @_container.appendTo(@_target)
+        when "before" then @_container.insertBefore(@_target)
+        when "after" then @_container.insertAfter(@_target)
+        else throw "bad interjection"
+
+      @_container.hide().append(@_content)
       @_content.activate()
       @_content.find('a.cancel').click @hide
       @show()
@@ -192,18 +261,17 @@ jQuery ($) ->
       e.preventDefault() if e
       @_mask.fadeTo('fast', 0.8)
       @_container.slideDown('fast')
-      # @_mask.bind "click", @hide
 
     hide: (e) =>
       e.preventDefault() if e
       @_mask.fadeOut('slow')
       @_container.slideUp('slow')
-      # @_mask.unbind "click", @hide
 
-  $.fn.append_remote_content = () ->
+  $.fn.prepend_remote_content = (target) ->
     @each ->
+      target ?= $(@).attr('data-target')
       $(@).remote_link (response) =>
-        new Interjection(response, @)
+        new Interjection response, target, 'prepend'
 
 
   class Popup

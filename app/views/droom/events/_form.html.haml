@@ -15,14 +15,14 @@
 
   .summary
     %p.name
-      = f.text_field :name, :class => 'name', :placeholder => Droom::Event.human_attribute_name("name")
+      = f.text_field :name, :class => 'name', :placeholder => t(:event_name)
 
     %p.practicalities
       = f.text_field :start_time, :class => "timepicker", :value => (I18n.l(@event.start_time, :format => :precise) if @event.start_time), :placeholder => t(:event_time)
       = t :at
       %span.venue
         %span.name
-          = f.text_field :venue_name, :class => "venuepicker", :placeholder => Droom::Event.human_attribute_name("venue_name"), :autocomplete => "off"
+          = f.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off"
           
     .description.wysihtml
       .toolbar#t1

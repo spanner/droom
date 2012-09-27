@@ -8,7 +8,7 @@
     - repeating = true 
     - brief = true
   - @seen_events[event_master_id] = true;
-  - cssclasses = ['event']
+  - cssclasses = ['event holder']
   - cssclasses << 'repeat' if repeating
   - cssclasses << 'private' if event.private?
   - cssclasses << 'public' if event.public?
@@ -27,9 +27,12 @@
         %span.year= event.start.strftime('%Y')
 
     .summary
-      %h2.name
+      %h2.name<
         = link_to event.name, event_url(event)
-        = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
+        - if admin?
+          = link_to t(:edit_event), edit_event_url(event), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay", :type => "html"}
+        - else
+          = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
 
       - unless brief
         - if event.documents.any?

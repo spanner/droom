@@ -29,8 +29,12 @@ jQuery ($) ->
     @find('.venuepicker').venue_picker()
     @find('.datepicker').date_picker()
     @find('.timepicker').time_picker()
-    @find('a.popup').popup_remote_content()
-    @find('a.append').append_remote_content()
+
+    @find('[data-action="popup"]').popup_remote_content()
+    @find('[data-action="toggle"]').toggle()
+    @find('[data-action="prepend"]').prepend_remote_content()
+    @find('[data-action="overlay"]').overlay_remote_content()
+
     @find('#minicalendar').calendar()
     @find('table.sortable').table_sort
       sort: "name"

@@ -3,7 +3,7 @@ module Droom
     require "uri"
     require "ri_cal"
     respond_to :json, :rss, :ics, :html, :js
-    layout :normal_unless_pjax
+    layout :no_layout_if_pjax
   
     before_filter :authenticate_user!  
     before_filter :numerical_parameters
@@ -54,14 +54,6 @@ module Droom
     end
     
   protected
-  
-    def normal_unless_pjax
-      if request.headers['X-PJAX']
-        false
-      else
-        "application"
-      end
-    end
     
     def get_person
       @person = Droom::Person.find(params[:person_id]) unless params[:person_id].blank?

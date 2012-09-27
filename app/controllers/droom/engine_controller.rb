@@ -9,5 +9,13 @@ module Droom
       render :text => 'bang'
     end
     
+    def no_layout_if_pjax
+      if request.headers['X-PJAX']
+        false
+      else
+        Droom.layout
+      end
+    end
+    
   end
 end

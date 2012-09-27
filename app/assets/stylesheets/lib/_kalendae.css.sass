@@ -17,26 +17,40 @@
     display: none
   .k-calendar
     display: inline-block
+    overflow: hidden
   .k-title
     text-align: center
     white-space: nowrap
     position: relative
     height: 32px
-    +bold
+    +heading
     font-size: 18px
     line-height: 32px
   .k-btn-previous-month, .k-btn-next-month
+    display: block
+    position: absolute
     width: 32px
     height: 32px
+    overflow: hidden
+    text-indent: 50px
     cursor: pointer
-    position: absolute
     top: 0
+    background:
+      position: -5px 5px
+      repeat: no-repeat
+      image: image-url('droom/minimonth.png')
   .k-btn-previous-year, .k-btn-next-year
     display: none
   .k-btn-previous-month
     left: 0
+    background-position: 0 -91px
+    &:hover
+      background-position: 0 -139px
   .k-btn-next-month
     right: 0
+    background-position: 0 5px
+    &:hover
+      background-position: 0 -43px
   .k-btn-previous-month:after
     content: "\2039"
   .k-btn-next-month:after
@@ -65,7 +79,7 @@
     width: 22px
     padding: 5px 5px 5px 3px
   .k-header span
-    +bold
+    +heading
     text-align: center
     color: $pale
   .k-days span

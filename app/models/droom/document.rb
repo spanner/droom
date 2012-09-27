@@ -52,7 +52,11 @@ module Droom
     end
     
     def file_extension
-      File.extname(file_file_name).sub(/^\./, '')
+      if file_file_name
+        File.extname(file_file_name).sub(/^\./, '')
+      else
+        ""
+      end
     end
     
   protected
