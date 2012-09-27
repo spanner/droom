@@ -10,4 +10,14 @@ require 'paperclip/io_adapters/url_adapter'
 
 module Droom
   class DroomError < StandardError; end
+  
+  class << self
+    def user_class=(klass)
+      @@user_class = klass.to_s
+    end
+  
+    def user_class
+      (@@user_class || "User").constantize
+    end
+  end
 end

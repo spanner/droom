@@ -19,7 +19,8 @@ module Droom
     # The `user` is this person's administrative account for logging in and out and forgetting her password.
     # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
     # without having a person.
-    belongs_to :user, :class_name => "::User", :dependent => :destroy
+    belongs_to :user, :class_name => Droom.user_class.to_s, :dependent => :destroy
+    
     before_save :update_user
 
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
@@ -105,11 +106,11 @@ module Droom
 
 
     def invite_to(event)
-      invitations.find_or_create_by_event_id(event.id)
+      invitations.find_or_create_by_event_id(event.id) if event
     end
     
     def admit_to(group)
-      memberships.find_or_create_by_group_id(group.id)
+      memberships.find_or_create_by_group_id(group.id) if group
     end
     
     
