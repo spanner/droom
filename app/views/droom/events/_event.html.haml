@@ -66,8 +66,8 @@
       .documents
         - if admin?
           %p
-            = link_to t(:add_document), droom.new_event_document_url(event), :class => "add", :remote => true, :data => {:action => "prepend", :target => ".new_event_form", :type => "html"}
-            .new_event_form
+            = link_to t(:add_document), droom.new_event_document_url(event), :class => "add", :remote => true, :data => {:action => "prepend", :target => ".new_document_form", :type => "html"}
+            .new_document_form
 
         %h2
           = t :attachments
