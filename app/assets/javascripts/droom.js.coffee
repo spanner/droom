@@ -29,6 +29,7 @@ jQuery ($) ->
     @find('.venuepicker').venue_picker()
     @find('.datepicker').date_picker()
     @find('.timepicker').time_picker()
+    @find('.filepicker').file_picker()
 
     @find('[data-action="popup"]').popup_remote_content()
     @find('[data-action="toggle"]').toggle()

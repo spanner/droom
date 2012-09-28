@@ -67,8 +67,9 @@ a.download
 a.ical
   +smallicon('droom/ical.png')
 
-div
-  // border: 1px dotted green
+.unavailable
+  +small
+  +pale
 
 .datemark
   float: left
@@ -105,7 +106,7 @@ div
     a, a:visited
       color: $dark
 
-#events
+#events, #dashboard
   h2.quiet
     margin-left: $datemark_width + $datemark_margin
   > .documents
@@ -123,7 +124,12 @@ form.event, form.document
   position: relative
   padding-left: $datemark_width + $datemark_margin
   width: 600px    
-    
+
+form.person
+  position: relative
+  padding-left: $datemark_width + $datemark_margin
+  width: 900px
+
 div.event, form.event
   .summary
     p.name
@@ -180,6 +186,8 @@ form.document
     width: $datemark_width
     margin-right: $datemark_margin
     margin-left: - $datemark_width - $datemark_margin
+    input[type="file"]
+      display: none
   p.name, p.description
     margin: 0
   input.name
@@ -197,7 +205,21 @@ form.document
     height: 100px
     margin-top: -4px
     margin-left: -2px
-  
+
+form.person
+  position: relative
+  p
+    float: left
+    margin-right: 10px
+  input[type="text"], input[type="email"]
+    font-size: 1em
+    width: 150px
+  input.title
+    width: 40px
+  span.buttons
+    display: inline-block
+    margin-top: 1em
+
 h2.name
   +heading
   font-size: 3em
@@ -276,32 +298,33 @@ table.main
           color: $link
           background-position: right -32px
   td, th
-    padding: 0.5em 2em 0.5em 0
+    padding: 0.5em 1em 0 0
     vertical-align: top
-    line-height: 25px
+    h3, p
+      margin: 0
     &.minor
       max-width: 150px
   td
     &.name
       +bold
+      padding-left: 28px
+      background:
+        position: -3px -48px
+        repeat: no-repeat
+        image: image-url('droom/object_icons.png')
     &.minor
       span
         display: block
         padding: 12px 0
+    p.unavailable
+      line-height: 28px
     a.event
       display: block
       padding: 8px 0
       min-height: 22px
       line-height: 22px
     a.vcard
-      p
-        border: none
-        height: 22px
-        width: 22px
-        background:
-          position: -1px -48px
-          repeat: no-repeat
-          image: image-url("droom/download.png")
+      +icon("droom/vcard.png")          
 
 .eventline
   font-size: 80%
@@ -797,3 +820,4 @@ ul.setup
 
 #map
   height: 700px
+

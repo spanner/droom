@@ -1,7 +1,5 @@
 - person ||= @person
 %tr.person
-  %td
-    .icon
   %td.name
     %h3
       = person.name
@@ -24,4 +22,3 @@
         no address
   %td
     %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
-      %p

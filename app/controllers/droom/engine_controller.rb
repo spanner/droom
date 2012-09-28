@@ -1,12 +1,26 @@
 module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
-    rescue_from "Droom::DroomErrorFound", :with => :rescue_bang
-  
+    rescue_from "ActiveRecord::RecordNotFound", :with => :rescue_not_found
+    rescue_from "Droom::PermissionDenied", :with => :rescue_not_allowed
+    rescue_from "Droom::DroomError", :with => :rescue_bang
   protected
 
+    def require_admin!
+      raise Droom::PermissionDenied unless current_user && current_user.admin?
+    end
+    
+    def rescue_not_found
+      render :template => 'droom/errors/not_found', :status => :not_found
+    end
+
+    def rescue_not_allowed
+      render :template => 'droom/errors/not_allowed', :status => :permission_denied
+    end
+    
+
     def rescue_bang
-      render :text => 'bang'
+      render :template => 'droom/errors/bang', :status => 500
     end
     
     def no_layout_if_pjax

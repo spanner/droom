@@ -3,7 +3,8 @@ module Droom
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
   
-    before_filter :authenticate_user!  
+    before_filter :authenticate_user!
+    before_filter :require_admin!, :except => [:index, :show]
     before_filter :find_documents, :only => [:index]
     before_filter :get_document, :only => [:show, :edit, :update]
     before_filter :build_document, :only => [:new, :create]
@@ -24,14 +25,9 @@ module Droom
       render :nothing => true
     end
     
-    def edit
-      
-    end
-      
   protected
     
     def build_document
-      params[:document] ||= {}
       @document = Droom::Document.new(params[:document])
     end
 

@@ -1,7 +1,7 @@
-- @seen_events = {}
+= render :partial => "droom/shared/admin"
 
 #events
-  %h1.quiet
+  %h2.quiet
     = @pagetitle
     
   = render :partial => 'event', :collection => @events

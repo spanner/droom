@@ -3,7 +3,8 @@ require 'vcard'
 module Droom
   class Person < ActiveRecord::Base
     attr_accessible :name, :email, :phone, :description, :user
-  
+    attr_accessor :invite_on_creation
+    
     ### Associations
     #
     has_many :memberships, :dependent => :destroy
@@ -22,6 +23,7 @@ module Droom
     belongs_to :user, :class_name => Droom.user_class.to_s, :dependent => :destroy
     
     before_save :update_user
+    after_save :create_user_if_instructed
 
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
     validates :name, :presence => true
@@ -184,7 +186,11 @@ module Droom
     end
     
   private
-
+    
+    def create_user_if_instructed
+      create_user if invite_on_creation
+    end
+    
     # ### Administration & callbacks
     #
     # At some point we may want to create a user to log in and look after this person. 

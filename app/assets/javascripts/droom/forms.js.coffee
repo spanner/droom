@@ -171,9 +171,10 @@ jQuery ($) ->
       @_toolbar = @_container.find('.toolbar')
       @_toolbar.attr('id', $.makeGuid()) unless @_toolbar.attr('id')?
       @_textarea.attr('id', $.makeGuid()) unless @_textarea.attr('id')?
-      @_stylesheets = ["/assets/application.css", "http://fast.fonts.com/cssapi/bca9b200-3c71-403e-a64f-7192988f33be.css"]
+      stylesheets = $("link").map ->
+        $(@).attr('href')
       @_editor = new wysihtml5.Editor @_textarea.attr('id'),
-        stylesheets: @_stylesheets,
+        stylesheets: stylesheets,
         toolbar: @_toolbar.attr('id'),
         parserRules: wysihtml5ParserRules
         useLineBreaks: false
@@ -399,3 +400,24 @@ jQuery ($) ->
     @each ->
       new TimePicker(@)
       
+
+
+
+
+  $.fn.file_picker = () ->
+    @each ->
+      link = $(@).find('a.ul')
+      filefield = link.siblings('input[type="file"]').first()
+      link.click_proxy(filefield)
+      filefield.bind 'change', () ->
+        fakepath = filefield.val()
+        filename = fakepath.split(/[\/\\]/).pop()
+        ext = filename.split('.').pop()
+        link.addClass(ext) if ext in ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
+        $('input.name').val(filename)
+
+  $.fn.click_proxy = (target_selector) ->
+    this.bind "click", (e) ->
+      e.preventDefault()
+      $(target_selector).click()
+  

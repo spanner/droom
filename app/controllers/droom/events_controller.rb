@@ -6,6 +6,7 @@ module Droom
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!  
+    before_filter :require_admin!, :except => [:index, :show]
     before_filter :numerical_parameters
     before_filter :get_person
     before_filter :get_event, :only => [:show, :edit]

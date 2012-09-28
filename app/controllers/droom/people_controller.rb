@@ -1,9 +1,12 @@
 module Droom
   class PeopleController < Droom::EngineController
     respond_to :json, :html, :js, :vcf
+    layout :no_layout_if_pjax
+    
     before_filter :authenticate_user!  
     before_filter :find_people, :only => :index
-    before_filter :get_person, :only => [:show, :feed]
+    before_filter :get_person, :only => [:show, :edit, :update]
+    before_filter :build_person, :only => [:new, :create]
     before_filter :confine_to_self, :except => [:index, :show]
     
     def index
@@ -16,6 +19,10 @@ module Droom
     
   protected
     
+    def build_person
+      @person = Droom::Person.new(params[:person])
+    end
+
     def get_person
       @person = Person.find(params[:id])
     end

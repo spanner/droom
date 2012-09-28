@@ -12,6 +12,7 @@ module Droom
   mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root
   
   class DroomError < StandardError; end
+  class PermissionDenied < DroomError; end
   
   class << self
     def user_class=(klass)
