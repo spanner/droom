@@ -35,7 +35,7 @@ jQuery ($) ->
     @find('[data-action="prepend"]').prepend_remote_content()
     @find('[data-action="overlay"]').overlay_remote_content()
 
-    @find('#minicalendar').calendar()
+    
     @find('table.sortable').table_sort
       sort: "name"
       order: "ASC"
@@ -43,6 +43,7 @@ jQuery ($) ->
       
 $ ->
   $('body').activate()
+  $('#minicalendar').calendar()
   $('form#searchform').captive
     replacing: '.search_results'
     fast: true

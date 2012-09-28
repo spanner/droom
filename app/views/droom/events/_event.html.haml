@@ -23,10 +23,11 @@
 
   %div{:class => cssclasses.join(' ')}
     .datemark
-      %span.mon= event.start.strftime('%b')
-      %span.dom= event.start.strftime('%d')
-      - if event.start.year != Date.today.year
-        %span.year= event.start.strftime('%Y')
+      %a{:href => event_url(event)}
+        %span.mon= event.start.strftime('%b')
+        %span.dom= event.start.strftime('%d')
+        - if event.start.year != Date.today.year
+          %span.year= event.start.strftime('%Y')
 
     .summary
       %h2.name<
