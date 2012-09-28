@@ -399,22 +399,33 @@ jQuery ($) ->
   $.fn.time_picker = () ->
     @each ->
       new TimePicker(@)
+
+
+
+
+
+  class FilePicker
+    constructor: (element) ->
+      @_container = $(element)
+      @_link = @_container.find('a.ul')
+      @_filefield = @_container.find('input[type="file"]')
+      @_link.click_proxy(@_filefield)
+      @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
+      @_filefield.bind 'change', @pick
       
-
-
+    pick: () =>
+      fakepath = @_filefield.val()
+      filename = fakepath.split(/[\/\\]/).pop()
+      ext = filename.split('.').pop()
+      @_link.removeClass(@_extensions.join(' '))
+      @_link.addClass(ext) if ext in @_extensions
+      $('input.name').val(filename)
 
 
   $.fn.file_picker = () ->
     @each ->
-      link = $(@).find('a.ul')
-      filefield = link.siblings('input[type="file"]').first()
-      link.click_proxy(filefield)
-      filefield.bind 'change', () ->
-        fakepath = filefield.val()
-        filename = fakepath.split(/[\/\\]/).pop()
-        ext = filename.split('.').pop()
-        link.addClass(ext) if ext in ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
-        $('input.name').val(filename)
+      new FilePicker(@)
+
 
   $.fn.click_proxy = (target_selector) ->
     this.bind "click", (e) ->
