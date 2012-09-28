@@ -39,7 +39,7 @@ module Droom
     end
     
     def active_dashboard_modules
-      @@active_dashboard_modules ||= %w{admin my_future_events my_past_events my_group_documents}
+      @@active_dashboard_modules ||= %w{my_future_events my_past_events my_group_documents}
     end
     
     def dav_root

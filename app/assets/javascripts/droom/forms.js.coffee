@@ -11,7 +11,7 @@ jQuery ($) ->
 
   $.urlParam = (name) ->
     results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
-    return 0  unless results
+    return false unless results
     results[1] or 0
     
 
@@ -83,19 +83,19 @@ jQuery ($) ->
       @_prompt = @_form.find("input[type=\"text\"]")
       @_request = null
       @_original_content = $(@_options.replacing).clone()
-      @_original_term = decodeURIComponent($.urlParam("p")) unless decodeURIComponent($.urlParam("p")) is "0"
+      @_original_term = decodeURIComponent $.urlParam("q") if $.urlParam("q")
       if @_original_term
         @_prompt.val(@_original_term)
         @submit() unless @_prompt.val() is ""
       else
         @revert()
-      @_form.submit @submit
       if @_options.fast
         @_form.find("input[type=\"text\"]").keyup @keyed
         @_form.find("input[type=\"radio\"]").click @submit
         @_form.find("input[type=\"checkbox\"]").click @submit
       if Modernizr.history
         $(window).bind 'popstate', @restoreState
+      @_form.submit @submit
       
     keyed: (e) =>
       k = e.which
@@ -126,7 +126,7 @@ jQuery ($) ->
       results ?= @_original_content.html()
       term = @_prompt.val()
       if term
-        url = window.location.pathname + '?p=' + encodeURIComponent(term)
+        url = window.location.pathname + '?q=' + encodeURIComponent(term)
       else
         url = window.location.pathname
       state = 
@@ -207,6 +207,9 @@ jQuery ($) ->
       
 
 
+
+
+
   class TemporaryOverlay
     constructor: (content, container) ->
       @_content = $(content)
@@ -235,6 +238,9 @@ jQuery ($) ->
     @each ->
       $(@).remote_link (response) =>
         new TemporaryOverlay response, $(@).parents('.holder')
+
+
+
 
 
 

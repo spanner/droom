@@ -73,6 +73,7 @@ div
 .datemark
   float: left
   width: $datemark_width
+  margin-left: - $datemark_width - $datemark_margin
   margin-right: $datemark_margin
   text-align: right
   color: $mid
@@ -101,13 +102,45 @@ div
     a, a:visited
       color: $dark
 
-div.event, form.event, div.document, form.document
-  position: relative
-  margin-left: - $datemark_width - $datemark_margin
-  margin-bottom: 20px
-  .wrapper
+#events
+  h2.quiet
     margin-left: $datemark_width + $datemark_margin
+  > .documents
+    margin-left: $datemark_width + $datemark_margin
+
+div.event, div.document
+  position: relative
+  margin-bottom: 20px
+  padding-left: $datemark_width + $datemark_margin
+  width: 600px
+  .wrapper
     width: 100%
+
+form.event, form.document
+  position: relative
+  padding-left: $datemark_width + $datemark_margin
+  width: 600px    
+    
+div.event, form.event
+  .summary
+    p.name
+      margin: 0
+    p.practicalities
+      margin: 0
+      color: $mid
+      time
+        +bold
+    p.description
+      margin-top: 0
+    div.documents
+      float: right
+      margin-left: 20px
+      h3
+        a
+          +icon_with_text("droom/download.png")
+          color: $dark
+          +hover
+    
 
 form.event
   p.name
@@ -143,6 +176,7 @@ form.document
     float: left
     width: $datemark_width
     margin-right: $datemark_margin
+    margin-left: - $datemark_width - $datemark_margin
   p.name, p.description
     margin: 0
   input.name
@@ -172,27 +206,6 @@ h2.name
 h2.quiet
   font-size: 1.25em
 
-div.event, form.event
-  .summary
-    overflow: hidden
-    p.name
-      margin: 0
-    p.practicalities
-      margin: 0
-      color: $mid
-      time
-        +bold
-    p.description
-      margin-top: 0
-    div.documents
-      float: right
-      margin-left: 20px
-      h3
-        a
-          +icon_with_text("droom/download.png")
-          color: $dark
-          +hover
-    
 
 a.dl, a.ul
   display: inline-block
@@ -219,16 +232,15 @@ div.document
   h2.name
     font-size: 2em
     line-height: 1
+    margin-left: -$datemark_width - $datemark_margin
     + p
       margin-top: -15px
   p.attachment
     margin: 0
-    margin-left: $datemark_width + $datemark_margin
     color: $mid
     
   p.description
     margin-top: 0
-    margin-left: $datemark_width + $datemark_margin
 
  
 table.main
@@ -387,7 +399,7 @@ span.erratic
         repeat: no-repeat
 
 p.admin
-  margin-left: -26px
+  margin-left: $datemark_width + $datemark_margin
   
 a.add, a.edit
   display: inline-block
