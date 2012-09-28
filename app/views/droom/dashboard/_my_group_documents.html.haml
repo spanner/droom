@@ -1,4 +1,4 @@
-- if current_user.person
+- if current_user.person && current_user.person.groups.any?
   - documents = current_user.person.group_documents
   - if documents.any?
     %h2.quiet
