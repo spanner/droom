@@ -248,7 +248,8 @@ jQuery ($) ->
         @activate()
         #todo: make sure we get error markers displaying nicely here
       else
-        @_options.on_complete?()
+        console.log "calling on_complete:", @_options.on_complete
+        @_options.on_complete?(replacement)
         
     cancel: (e) =>
       console.log "RemoteForm.cancel"
@@ -270,13 +271,19 @@ jQuery ($) ->
 
 
   $.fn.overlay_remote_form = (container) ->
-    container ?= $(@).parents('.holder')
     @each ->
       $(@).remote_link (response) =>
+        container ?= $(@).parents('.holder')
+        console.log "overlay container", container
         f = $(response)
         ov = new Overlay f, container
         new RemoteForm f, 
           on_cancel: ov.remove
+          on_complete: (response) =>
+            console.log "overlay_remote_form on_complete", container
+            ov.remove()
+            container.replaceWith(response)
+            response.activate()
 
 
   $.fn.remote_link = (callback) ->

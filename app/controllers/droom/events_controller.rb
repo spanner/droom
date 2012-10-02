@@ -9,7 +9,7 @@ module Droom
     before_filter :require_admin!, :except => [:index, :show]
     before_filter :numerical_parameters
     before_filter :get_person
-    before_filter :get_event, :only => [:show, :edit]
+    before_filter :get_event, :only => [:show, :edit, :update]
     before_filter :build_event, :only => [:new, :create]
     before_filter :find_events, :only => [:index]
     
@@ -51,7 +51,12 @@ module Droom
     end
     
     def update
-      
+      @event.update_attributes(params[:event])
+      if @event.save
+        render :partial => "event"
+      else
+        respond_with @event
+      end
     end
     
   protected
