@@ -5,26 +5,26 @@
     - if @person.new_record?
       %br
       = f.check_box :invite_on_creation, :class => 'invite'
-      = f.label :invite_on_creation
-      %br
-      %span.buttons
-        = f.submit t(:save_person)
-        = t :or
-        = link_to t(:cancel), "/", :class => 'cancel'
-      
+      = f.label :invite_on_creation      
   %p.email
     = f.email_field :email, :class => 'email', :placeholder => t(:person_email)
   %p.phone
     = f.text_field :phone, :class => 'phone', :placeholder => t(:person_phone)
-  %p.address
-    = f.text_field :post_line1, :class => 'post_line1', :placeholder => t(:person_post_line1)
-    %br
-    = f.text_field :post_line2, :class => 'post_line2', :placeholder => t(:person_post_line2)
-    %br
-    = f.text_field :post_city, :class => 'post_city', :placeholder => t(:person_post_city)
-    %br
-    = f.text_field :post_region, :class => 'post_region', :placeholder => t(:person_post_region)
-    %br
-    = f.text_field :post_country, :class => 'post_country', :placeholder => t(:person_post_country)
-    %br
-    = f.text_field :post_code, :class => 'post_code', :placeholder => t(:person_post_code)
+  - unless @person.new_record?
+    %p.address
+      = f.text_field :post_line1, :class => 'post_line1', :placeholder => t(:person_post_line1)
+      %br
+      = f.text_field :post_line2, :class => 'post_line2', :placeholder => t(:person_post_line2)
+      %br
+      = f.text_field :post_city, :class => 'post_city', :placeholder => t(:person_post_city)
+      %br
+      = f.text_field :post_region, :class => 'post_region', :placeholder => t(:person_post_region)
+      %br
+      = f.text_field :post_country, :class => 'post_country', :placeholder => t(:person_post_country)
+      %br
+      = f.text_field :post_code, :class => 'post_code', :placeholder => t(:person_post_code)
+  .buttons
+    = f.submit t(:save_person)
+    = t :or
+    = link_to t(:cancel), "/", :class => 'cancel'
+  

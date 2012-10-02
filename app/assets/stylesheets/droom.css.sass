@@ -119,7 +119,7 @@ div.event, div.document
   margin-bottom: 20px
   padding-left: $datemark_width + $datemark_margin
   width: 600px
-  .wrapper
+  .overlay
     width: 100%
 
 form.event, form.document
@@ -210,9 +210,8 @@ form.person
     width: 150px
   input.title
     width: 40px
-  span.buttons
-    display: inline-block
-    margin-top: 1em
+  .buttons
+    clear: left
 
 h2.name
   +heading
@@ -390,7 +389,10 @@ p.twister
   
     
 
-
+p.confirmation
+  margin-left: $datemark_width + $datemark_margin
+  color: $green
+  +icon_with_text("droom/tick.png")
 
 
 span.erratic
@@ -413,7 +415,7 @@ span.erratic
       margin-right: 2px
       +text-hidden
       background: 
-        image: image-url('crosses.png')
+        image: image-url('droom/crosses.png')
         color: transparent
         position: 3px -58px
         repeat: no-repeat
@@ -604,7 +606,7 @@ li.more
   display: none
   z-index: 15
 
-.wrapper
+.overlay
   position: absolute
   top: 0
   left: 0

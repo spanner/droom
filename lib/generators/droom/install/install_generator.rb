@@ -7,6 +7,7 @@ module Droom
     end
     
     def rake_db
+      rake("droom:install:migrations")
       rake("db:migrate")
     end
     

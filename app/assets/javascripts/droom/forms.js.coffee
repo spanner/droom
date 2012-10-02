@@ -211,35 +211,85 @@ jQuery ($) ->
 
 
 
-  class TemporaryOverlay
-    constructor: (content, container) ->
-      @_content = $(content)
-      @_holder = $(container)
-      @_container = $('<div class="wrapper" />')
-      @_mask = $('#mask')
-      @_holder.append @_container
-      @_container.hide().append(@_content).activate()
-      @_content.find('a.cancel').click @hide
-      @show()
 
-    show: (e) =>
+  class RemoteForm
+    constructor: (element, opts) ->
+      @_form = $(element)
+      @_options = $.extend {}, opts
+      @_form.on 'ajax:beforeSend', @pend
+      @_form.on 'ajax:error', @fail
+      @_form.on 'ajax:success', @receive
+      @activate()
+      
+    activate: () => 
+      console.log "RemoteForm activate"
+      @_form.find('a.cancel').click @cancel
+      @_form.activate()
+      @_options.on_prepare?()
+
+    pend: (event, xhr, settings) =>
+      console.log "RemoteForm.pend"
+      xhr.setRequestHeader('X-PJAX', 'true')
+      @_form.addClass('waiting')
+      @_options.on_submit?()
+
+    fail: (event, xhr, status) ->
+      console.log "RemoteForm error:", status
+      @_form.removeClass('waiting').addClass('erratic')
+      @_options.on_error?()
+  
+    receive: (event, response, status) =>
+      console.log "RemoteForm.receive", response
+      replacement = $(response)
+      @_form.after(replacement)
+      @_form.remove()
+      if replacement.is('form')
+        @_form = replacement
+        @activate()
+        #todo: make sure we get error markers displaying nicely here
+      else
+        @_options.on_complete?()
+        
+    cancel: (e) =>
+      console.log "RemoteForm.cancel"
       e.preventDefault() if e
-      @_mask.bind "click", @hide
-      @_mask.fadeTo 'fast', 0.8
-      @_container.fadeIn 'fast'
-
-    hide: (e) =>
-      e.preventDefault() if e
-      @_mask.fadeOut('slow')
-      @_mask.unbind "click", @hide
-      @_container.fadeOut('slow')
+      if @_options.on_cancel?
+        @_options.on_cancel()
+      else
+        @_form.remove()
 
 
-  $.fn.overlay_remote_content = () ->
+  $.fn.append_remote_form = (target) ->
+    target ?= $(@).parent()
     @each ->
       $(@).remote_link (response) =>
-        new TemporaryOverlay response, $(@).parents('.holder')
+        f = $(response)
+        ij = new Interjection f, target, 'after'
+        new RemoteForm f, 
+          on_cancel: ij.remove
 
+
+  $.fn.overlay_remote_form = (container) ->
+    container ?= $(@).parents('.holder')
+    @each ->
+      $(@).remote_link (response) =>
+        f = $(response)
+        ov = new Overlay f, container
+        new RemoteForm f, 
+          on_cancel: ov.remove
+
+
+  $.fn.remote_link = (callback) ->
+    @
+      .on 'ajax:beforeSend', (event, xhr, settings) ->
+        $(@).addClass('waiting')
+        xhr.setRequestHeader('X-PJAX', 'true')
+      .on 'ajax:error', (event, xhr, status) ->
+        console.log "remote_link error:", status
+        $(@).removeClass('waiting').addClass('erratic')
+      .on 'ajax:success', (event, response, status) ->
+        $(@).removeClass('waiting')
+        callback(response)
 
 
 
@@ -253,32 +303,71 @@ jQuery ($) ->
       @_target = $(target)
       @_container = $('<div class="interjected" />')
       switch @_position
-        when "prepend" then @_container.prependTo(@_target)
-        when "append" then @_container.appendTo(@_target)
+        when "insert" then @_container.prependTo(@_target)
         when "before" then @_container.insertBefore(@_target)
         when "after" then @_container.insertAfter(@_target)
-        else throw "bad interjection"
-
+        else throw "interjection overruled"
       @_container.hide().append(@_content)
-      @_content.activate()
-      @_content.find('a.cancel').click @hide
       @show()
       
     show: (e) =>
       e.preventDefault() if e
-      @_mask.fadeTo('fast', 0.8)
-      @_container.slideDown('fast')
+      @_container.slideDown 'slow'
+
+    hide: (e) =>
+      e.preventDefault() if e
+      @_container.slideUp 'slow'
+
+    remove: (e) =>
+      e.preventDefault() if e
+      @_container.slideUp 'fast', () ->
+        $(@).remove()
+
+
+  $.fn.interject = (target, position) ->
+    position ?= 'after'
+    @each ->
+      new Interjection @, target, position
+
+
+
+
+  class Overlay
+    constructor: (content, holder) ->
+      @_content = $(content)
+      @_holder = $(holder)
+      @_container = $('<div class="overlay" />')
+      @_mask = $('#mask')
+      @_holder.append @_container
+      @_container.hide().append(@_content)
+      @show()
+
+    show: (e) =>
+      e.preventDefault() if e
+      @_mask.bind "click", @hide
+      @_mask.fadeTo 'fast', 0.8
+      @_container.fadeIn 'fast'
 
     hide: (e) =>
       e.preventDefault() if e
       @_mask.fadeOut('slow')
-      @_container.slideUp('slow')
-
-  $.fn.prepend_remote_content = (target) ->
+      @_mask.unbind "click", @hide
+      @_container.fadeOut('slow')
+    
+    remove: (e) =>
+      @_mask.fadeOut('fast')
+      @_mask.unbind "click", @hide
+      @_container.fadeOut 'slow', () ->
+        $(@).remove()
+      
+      
+  $.fn.overlay = (container) ->
+    container ?= $(@).parents('.holder')
     @each ->
-      target ?= $(@).attr('data-target')
       $(@).remote_link (response) =>
-        new Interjection response, target, 'prepend'
+        new Overlay response, container
+
+
 
 
   class Popup
@@ -311,17 +400,8 @@ jQuery ($) ->
 
 
 
-  $.fn.remote_link = (callback) ->
-    @
-      .on 'ajax:beforeSend', (event, xhr, settings) ->
-        $(@).addClass('waiting')
-        xhr.setRequestHeader('X-PJAX', 'true')
-      .on 'ajax:error', (event, xhr, status) ->
-        console.log "remote_link error:", status
-        $(@).removeClass('waiting').addClass('erratic')
-      .on 'ajax:success', (event, response, status) ->
-        $(@).removeClass('waiting')
-        callback(response)
+
+
 
 
 
@@ -336,10 +416,13 @@ jQuery ($) ->
       @_dom = @_container.find('span.dom')
       @_year = @_container.find('span.year')
       @_kal = new Kalendae @_holder[0]
+      console.log "kalendae", @_kal, @_holder[0]
       @_holder.hide()
       @_trigger.click @toggle
       @_kal.subscribe 'change', () =>
         @hide()
+        console.log "set date field", @_field, @_kal.getSelected()
+        @_field.val(@_kal.getSelected())
         [year, month, day] = @_kal.getSelected().split('-')
         @_year.text(year)
         @_dom.text(day)
@@ -352,8 +435,10 @@ jQuery ($) ->
     show: () =>
       @_holder.fadeIn "fast", () =>
         @_container.addClass('editing')
-
+        # $(document).bind "click", @hide
+              
     hide: () =>
+      # $(document).unbind "click", @hide
       @_container.removeClass('editing')
       @_holder.fadeOut("fast")
 

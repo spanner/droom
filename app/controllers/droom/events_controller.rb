@@ -40,9 +40,9 @@ module Droom
     
     def create
       if @event.save
-        render :show
+        render :partial => "created"
       else
-        render :new
+        respond_with @event
       end
     end
     
