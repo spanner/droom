@@ -1,6 +1,6 @@
 - if current_user.admin?
   %p.admin
-    = link_to t(:add_event), droom.new_event_url, :class => "add", :remote => true, :data => {:action => "prepend", :target => "#admin_form", :type => "html"}
-    = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "prepend", :target => "#admin_form", :type => "html"}
-    = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "prepend", :target => "#admin_form", :type => "html"}
+    = link_to t(:add_event), droom.new_event_url, :class => "add", :remote => true, :data => {:action => "append_form", :target => "#admin_form", :type => "html"}
+    = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "append_form", :target => "#admin_form", :type => "html"}
+    = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "append_form", :target => "#admin_form", :type => "html"}
   #admin_form

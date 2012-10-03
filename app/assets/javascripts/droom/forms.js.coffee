@@ -504,15 +504,85 @@ jQuery ($) ->
       @_link.click_proxy(@_filefield)
       @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
       @_filefield.bind 'change', @pick
+      @_file = null
+      @_others = @_container.siblings('.other')
+      @dfd = $.Deferred()
       
     pick: () =>
-      fakepath = @_filefield.val()
-      filename = fakepath.split(/[\/\\]/).pop()
-      ext = filename.split('.').pop()
       @_link.removeClass(@_extensions.join(' '))
+      $('input.name').val("")
+      if files = @_filefield[0].files
+        @_file = files.item(0)
+        @showSelection()
+        @submit()
+
+    submit: (file) =>
+      # show spinner somewhere
+      @_others.slideUp()
+      @uploadFile(@_file)
+      
+    showSelection: () =>
+      filename = @_file.name.split(/[\/\\]/).pop()
+      ext = filename.split('.').pop()
       @_link.addClass(ext) if ext in @_extensions
       $('input.name').val(filename)
+    
+    uploadFile: (file) =>
+      @reader().readAsBinaryString(file)
 
+    reader: () =>
+      @_reader ?= new FileReader()
+      @_reader.onload = @send
+      @_reader
+    
+    sender: () =>
+      # @ctrl = createThrobber(@_container)
+      xhr = new XMLHttpRequest()
+      xhr.upload.addEventListener "progress", @progress
+      xhr.upload.addEventListener "load", @finish
+      xhr
+
+    send: (e) =>
+      if @sender().sendAsBinary  # Firefox 4 - 5
+        @sender().sendAsBinary @_file
+      else if Uint8Array  # File API, Chrome / Firefox 6.
+        body = e.target.result
+        len = i = body.length
+        
+          # for item in ["BlobBuilder", "WebKitBlobBuilder", "MozBlobBuilder"]
+          #   return new item if item of window
+        arrb = new Array len
+        console.log arrb
+        ui8a = new Uint8Array arrb, (i - 1)
+        console.log ui8a
+        while i -= 1
+          ui8a[i] = body.charCodeAt(i) & 0xff
+        blob = new Blob arrb
+        console.log blob
+        # blob.append arrb
+        @sender.open()
+        @sender().send blob
+      
+      
+      # if !XMLHttpRequest.prototype.sendAsBinary
+      #   XMLHttpRequest.prototype.sendAsBinary = (datastr) ->
+      #     byteValue = (x) ->
+      #       x.charCodeAt(0) & 0xff
+      #     ords = Array.prototype.map.call(datastr, byteValue)
+      #     ui8a = new Uint8Array ords
+      #     @send ui8a
+      # @sender().sendAsBinary(e.target.result)
+      
+    progress: (e) =>
+      if e.lengthComputable
+        percentage = Math.round((e.loaded * 100) / e.total)
+        # @ctrl.update percentage
+      
+    finish: (e) =>
+      # @ctrl.update 100
+      # canvas = @ctrl.ctx.canvas
+      # canvas.parentNode.removeChild canvas
+      
 
   $.fn.file_picker = () ->
     @each ->
