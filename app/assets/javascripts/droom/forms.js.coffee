@@ -13,8 +13,6 @@ jQuery ($) ->
     results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
     return false unless results
     results[1] or 0
-    
-
 
   class Toggle
     constructor: (element, selector) ->
@@ -44,8 +42,6 @@ jQuery ($) ->
   $.fn.toggle = () ->
     @each ->
       new Toggle(@, $(@).attr('data-affected'))
-    
-
 
   class Twister
     constructor: (element) ->
@@ -73,7 +69,6 @@ jQuery ($) ->
   $.fn.twister = ->
     @each ->
       new Twister(@)
-      
 
   # A captive form submits via an ajax request and pushes its results into the present page.
 
@@ -153,7 +148,6 @@ jQuery ($) ->
       $(@_options.replacing).find('a.popup').popup_remote_content()
       $(@_options.replacing).find('a.cancel').click @revert
 
-
   $.fn.captive = (options) ->
     options = $.extend(
       replacing: "#results"
@@ -162,7 +156,6 @@ jQuery ($) ->
     @each ->
       new CaptiveForm @, options
     @
-
 
   class Editor
     constructor: (element) ->
@@ -201,16 +194,9 @@ jQuery ($) ->
       @_hovered = false
       @_toolbar.fadeTo(1000, 0.2)
 
- 
   $.fn.html_editable = ()->
     @each ->
       new Editor(@)
-      
-
-
-
-
-
 
   class RemoteForm
     constructor: (element, opts) ->
@@ -259,7 +245,6 @@ jQuery ($) ->
       else
         @_form.remove()
 
-
   $.fn.append_remote_form = (target) ->
     target ?= $(@).parent()
     @each ->
@@ -268,7 +253,6 @@ jQuery ($) ->
         ij = new Interjection f, target, 'after'
         new RemoteForm f, 
           on_cancel: ij.remove
-
 
   $.fn.overlay_remote_form = (container) ->
     @each ->
@@ -285,7 +269,6 @@ jQuery ($) ->
             container.replaceWith(response)
             response.activate()
 
-
   $.fn.remote_link = (callback) ->
     @
       .on 'ajax:beforeSend', (event, xhr, settings) ->
@@ -297,10 +280,6 @@ jQuery ($) ->
       .on 'ajax:success', (event, response, status) ->
         $(@).removeClass('waiting')
         callback(response)
-
-
-
-
 
   class Interjection
     constructor: (content, target, @_position) ->
@@ -330,14 +309,10 @@ jQuery ($) ->
       @_container.slideUp 'fast', () ->
         $(@).remove()
 
-
   $.fn.interject = (target, position) ->
     position ?= 'after'
     @each ->
       new Interjection @, target, position
-
-
-
 
   class Overlay
     constructor: (content, holder) ->
@@ -367,15 +342,11 @@ jQuery ($) ->
       @_container.fadeOut 'slow', () ->
         $(@).remove()
       
-      
   $.fn.overlay = (container) ->
     container ?= $(@).parents('.holder')
     @each ->
       $(@).remote_link (response) =>
         new Overlay response, container
-
-
-
 
   class Popup
     constructor: (content) ->
@@ -399,19 +370,9 @@ jQuery ($) ->
       @_mask.fadeOut('fast')
       @_mask.unbind "click", @hide
 
-
   $.fn.popup_remote_content = () ->
     @remote_link (response) ->
       new Popup(response)
-
-
-
-
-
-
-
-
-
 
   class DatePicker
     constructor: (element) ->
@@ -449,14 +410,10 @@ jQuery ($) ->
       @_container.removeClass('editing')
       @_holder.fadeOut("fast")
 
-
   $.fn.date_picker = () ->
     @each ->
       new DatePicker(@)
     @
-
-
-
 
   class TimePicker
     constructor: (element) ->
@@ -492,13 +449,12 @@ jQuery ($) ->
     @each ->
       new TimePicker(@)
 
-
-
-
-
   class FilePicker
     constructor: (element) ->
       @_container = $(element)
+      @_form = @_container.parent()
+      @_holder = @_form.parent()
+      @_submitter = @_form.find('a.submit')
       @_link = @_container.find('a.ul')
       @_filefield = @_container.find('input[type="file"]')
       @_link.click_proxy(@_filefield)
@@ -506,7 +462,7 @@ jQuery ($) ->
       @_filefield.bind 'change', @pick
       @_file = null
       @_others = @_container.siblings('.other')
-      @dfd = $.Deferred()
+      @_submitter.click @submit
       
     pick: () =>
       @_link.removeClass(@_extensions.join(' '))
@@ -514,12 +470,12 @@ jQuery ($) ->
       if files = @_filefield[0].files
         @_file = files.item(0)
         @showSelection()
-        @submit()
 
-    submit: (file) =>
-      # show spinner somewhere
-      @_others.slideUp()
-      @uploadFile(@_file)
+    submit: () =>
+      @_others.hide()
+      @_progress_bar = $('<div id="progress"></div>').appendTo @_form
+      @_bar = $('<div class="bar"></div>').appendTo @_progress_bar
+      @send()
       
     showSelection: () =>
       filename = @_file.name.split(/[\/\\]/).pop()
@@ -527,70 +483,38 @@ jQuery ($) ->
       @_link.addClass(ext) if ext in @_extensions
       $('input.name').val(filename)
     
-    uploadFile: (file) =>
-      @reader().readAsBinaryString(file)
+    send: () =>
+      formData = new FormData @_form.get(0)
+      @xhr = new XMLHttpRequest()
+      @xhr.onreadystatechange = @update
+      @xhr.upload.onprogress = @progress
+      @xhr.upload.onloadend = @finish
+      url = @_form.attr('action')
+      @xhr.open 'POST', url, true
+      @xhr.send formData
 
-    reader: () =>
-      @_reader ?= new FileReader()
-      @_reader.onload = @send
-      @_reader
-    
-    sender: () =>
-      # @ctrl = createThrobber(@_container)
-      xhr = new XMLHttpRequest()
-      xhr.upload.addEventListener "progress", @progress
-      xhr.upload.addEventListener "load", @finish
-      xhr
-
-    send: (e) =>
-      if @sender().sendAsBinary  # Firefox 4 - 5
-        @sender().sendAsBinary @_file
-      else if Uint8Array  # File API, Chrome / Firefox 6.
-        body = e.target.result
-        len = i = body.length
-        
-          # for item in ["BlobBuilder", "WebKitBlobBuilder", "MozBlobBuilder"]
-          #   return new item if item of window
-        arrb = new Array len
-        console.log arrb
-        ui8a = new Uint8Array arrb, (i - 1)
-        console.log ui8a
-        while i -= 1
-          ui8a[i] = body.charCodeAt(i) & 0xff
-        blob = new Blob arrb
-        console.log blob
-        # blob.append arrb
-        @sender.open()
-        @sender().send blob
-      
-      
-      # if !XMLHttpRequest.prototype.sendAsBinary
-      #   XMLHttpRequest.prototype.sendAsBinary = (datastr) ->
-      #     byteValue = (x) ->
-      #       x.charCodeAt(0) & 0xff
-      #     ords = Array.prototype.map.call(datastr, byteValue)
-      #     ui8a = new Uint8Array ords
-      #     @send ui8a
-      # @sender().sendAsBinary(e.target.result)
-      
     progress: (e) =>
       if e.lengthComputable
-        percentage = Math.round((e.loaded * 100) / e.total)
-        # @ctrl.update percentage
+        full_width = @_progress_bar.width()
+        progress_width = Math.round(full_width * e.loaded / e.total)
+        @_bar.width progress_width
       
+    update: () =>
+      if @xhr.readyState == 4
+        if @xhr.status == 200
+          @_form.remove()
+          @_holder.append(@xhr.responseText)
+          $('[data-tag="update_on_insert"]').trigger("insert")
+    
     finish: (e) =>
-      # @ctrl.update 100
-      # canvas = @ctrl.ctx.canvas
-      # canvas.parentNode.removeChild canvas
-      
+      @_bar.css
+        "background-color": "green"
 
   $.fn.file_picker = () ->
     @each ->
       new FilePicker(@)
 
-
   $.fn.click_proxy = (target_selector) ->
     this.bind "click", (e) ->
       e.preventDefault()
       $(target_selector).click()
-  

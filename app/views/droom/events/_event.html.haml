@@ -62,20 +62,21 @@
         = simple_format event.description, :class => "description"
 
   - if full_attachments
-    - if event.document_attachments.any?
-      .documents
-        - if admin?
-          %p
-            = link_to t(:add_document), droom.new_event_document_url(event), :class => "add", :remote => true, :data => {:action => "prepend", :target => ".new_document_form", :type => "html"}
-            .new_document_form
-
-        %h2
-          = t :attachments
-        = render :partial => "droom/events/attachment_list", :object => event.document_attachments.unfiled, :locals => {:limit => 100}
-        
-        - event.agenda_sections.each do |asec|
-          - if asec.document_attachments.any?
-            %h3
-              = asec.name
-            = render :partial => "droom/events/attachment_list", :object => asec.document_attachments, :locals => {:limit => 100}
+    = render :partial => 'droom/documents/documents_list', :object => event
+    / - if event.document_attachments.any?
+    /   .documents
+    /     - if admin?
+    /       %p
+    /         = link_to t(:add_document), droom.new_event_document_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :target => ".new_document_form", :type => "html"}
+    /         .new_document_form
+    / 
+    /     %h2
+    /       = t :attachments
+    /     = render :partial => "droom/events/attachment_list", :object => event.document_attachments.unfiled, :locals => {:limit => 100}
+    /     
+    /     - event.agenda_sections.each do |asec|
+    /       - if asec.document_attachments.any?
+    /         %h3
+    /           = asec.name
+    /         = render :partial => "droom/events/attachment_list", :object => asec.document_attachments, :locals => {:limit => 100}
   

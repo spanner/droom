@@ -30,7 +30,7 @@ jQuery ($) ->
     @find('.datepicker').date_picker()
     @find('.timepicker').time_picker()
     @find('.filepicker').file_picker()
-
+    
     @find('[data-action="popup"]').popup_remote_content()
     @find('[data-action="toggle"]').toggle()
     # @find('[data-action="insert"]').insert_remote_content()
@@ -46,6 +46,8 @@ jQuery ($) ->
       sort: "name"
       order: "ASC"
     @find('#map').init_map()
+    
+    @find('[data-refreshable]').refresher()
       
 $ ->
   $('body').activate()

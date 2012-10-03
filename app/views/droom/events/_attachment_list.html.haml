@@ -1,4 +1,4 @@
 - if attachment_list && attachment_list.any?
-  %ul.downloads
+  %ul.downloads{ :"data-tag" => "update_on_insert" }
     = render :partial => "droom/events/attachment", :collection => attachment_list
   

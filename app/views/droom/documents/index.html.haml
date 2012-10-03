@@ -1,7 +1,7 @@
 = render :partial => "droom/shared/admin"
 
 #documents
-  %table.main.sortable
+  %table.main.sortable{ :"data-tag" => "update_on_insert" }
     %thead
       %tr
         %th

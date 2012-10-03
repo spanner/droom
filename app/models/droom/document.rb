@@ -38,7 +38,7 @@ module Droom
       select('droom_documents.*, droom_agenda_sections.name AS agenda_section_name, droom_events.id AS event_id, droom_events.name AS event_name')
         .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id 
                 LEFT OUTER JOIN droom_agenda_sections ON droom_document_attachments.agenda_section_id = droom_agenda_sections.id
-                INNER JOIN droom_events ON droom_document_attachments.attachee_id = droom_events.id AND droom_document_attachments.attachee_type = "Droom::Event"')
+                LEFT OUTER JOIN droom_events ON droom_document_attachments.attachee_id = droom_events.id AND droom_document_attachments.attachee_type = "Droom::Event"')
         .group('droom_documents.id')
 
     def identifier

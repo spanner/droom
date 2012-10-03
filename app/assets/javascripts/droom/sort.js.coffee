@@ -18,10 +18,24 @@ jQuery ($) ->
         header = new SortLink header, @
         $.headers.push header
       @activate()
+      @table.bind "insert", @insert
       @resort @sort, @order
       if Modernizr.history
         $(window).bind 'popstate', @restoreState
       
+    insert: () =>
+      @body.fadeTo('fast', 0.2)
+      $.ajax
+        url: "/documents.js?sort=#{@sort}&order=#{@order}"
+        dataType: "html"
+        success: @insert_refresh
+      
+    insert_refresh: (data, textStatus, jqXHR) =>
+      @clear()
+      $(data).appendTo(@body)
+      @body.fadeTo('fast', 1)
+      @activate()
+    
     resort: (sort, order) =>
       sort ?= "name"
       order ?= "ASC"
@@ -108,3 +122,22 @@ jQuery ($) ->
       url = $(@).attr('href')
       table.get(url)
     @
+
+  class Refresher
+    constructor: (element) ->
+      @_container = $(element)
+      @_url = @_container.attr 'data-url'
+      @_container.bind "insert", @insert
+      
+    insert: () =>
+      $.ajax @_url,
+        dataType: "html"
+        success: @replace
+    
+    replace: (data, textStatus, jqXHR) =>
+      @_container.replaceWith(data, textStatus, jqXHR)
+      
+      
+  $.fn.refresher = () ->
+    @each ->
+      new Refresher @

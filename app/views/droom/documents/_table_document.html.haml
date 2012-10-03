@@ -11,7 +11,8 @@
     %span.note
       = l document.created_at.to_date, :format => :natural_with_year
   %td.event
-    = link_to document.event_name, event_url(Droom::Event.find(document.event_id), :format => :js), :class => "event popup", :remote => true, :data => {:type => "html"}
+    - if document.event_name
+      = link_to document.event_name, event_url(Droom::Event.find(document.event_id), :format => :js), :class => "event popup", :remote => true, :data => {:type => "html"}
   %td.agenda_section.minor
     %span.note
       = truncate(document.agenda_section_name, :length => 24, :separator => " ")

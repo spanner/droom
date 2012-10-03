@@ -11,7 +11,13 @@ module Droom
     
     def index
       respond_with @documents do |format|
-        format.js { render :partial => 'documents_table' }
+        format.js { 
+          if @event
+            render :partial => 'documents_list'
+          else
+            render :partial => 'documents_table'
+          end
+        }
       end
     end
   
@@ -25,10 +31,29 @@ module Droom
       render :nothing => true
     end
     
+    def new
+      if @event
+        render :partial => "event_document_form"
+      else
+        render :partial => "form"
+      end
+    end
+    
+    def create
+      @event.save! if @event
+      @document.save!
+      render :partial => 'created'
+    end
+    
   protected
     
     def build_document
-      @document = Droom::Document.new(params[:document])
+      if params[:event_id]
+        @event = Droom::Event.find(params[:event_id])
+        @document = @event.documents.new(params[:document])
+      else
+        @document = Droom::Document.new(params[:document])
+      end        
     end
 
     def get_document
@@ -36,6 +61,7 @@ module Droom
     end
 
     def find_documents
+      @event = Droom::Event.find(params[:event_id]) if params[:event_id]
       sort_orders = {
         'ASC' => "ASC",
         'DESC' => "DESC"
