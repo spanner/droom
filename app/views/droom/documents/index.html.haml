@@ -1,4 +1,6 @@
-= render :partial => "droom/shared/admin"
+- if current_user.admin?
+  %p.admin
+    = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html"}
 
 #documents
   %table.main.sortable{ :"data-tag" => "update_on_insert" }

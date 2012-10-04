@@ -264,7 +264,6 @@ jQuery ($) ->
         new RemoteForm f, 
           on_cancel: ov.remove
           on_complete: (response) =>
-            console.log "overlay_remote_form on_complete", container
             ov.remove()
             container.replaceWith(response)
             response.activate()
@@ -449,30 +448,33 @@ jQuery ($) ->
     @each ->
       new TimePicker(@)
 
+
+
+
   class FilePicker
     constructor: (element) ->
       @_container = $(element)
       @_form = @_container.parent()
       @_holder = @_form.parent()
-      @_submitter = @_form.find('a.submit')
       @_link = @_container.find('a.ul')
       @_filefield = @_container.find('input[type="file"]')
       @_link.click_proxy(@_filefield)
       @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
       @_filefield.bind 'change', @pick
       @_file = null
-      @_others = @_container.siblings('.other')
-      @_submitter.click @submit
+      @_fields = @_container.siblings('.metadata')
+      @_form.submit @submit
       
-    pick: () =>
+    pick: (e) =>
       @_link.removeClass(@_extensions.join(' '))
       $('input.name').val("")
       if files = @_filefield[0].files
         @_file = files.item(0)
         @showSelection()
 
-    submit: () =>
-      @_others.hide()
+    submit: (e) =>
+      e.preventDefault() if e
+      @_fields.hide()
       @_progress_bar = $('<div id="progress"></div>').appendTo @_form
       @_bar = $('<div class="bar"></div>').appendTo @_progress_bar
       @send()
@@ -503,12 +505,14 @@ jQuery ($) ->
       if @xhr.readyState == 4
         if @xhr.status == 200
           @_form.remove()
-          @_holder.append(@xhr.responseText)
+          @_holder.append(@xhr.responseText).delay(2000).slideUp()
           $('[data-tag="update_on_insert"]').trigger("insert")
     
     finish: (e) =>
       @_bar.css
         "background-color": "green"
+
+
 
   $.fn.file_picker = () ->
     @each ->

@@ -32,11 +32,7 @@ module Droom
     end
     
     def new
-      if @event
-        render :partial => "event_document_form"
-      else
-        render :partial => "form"
-      end
+      render :partial => "form"
     end
     
     def create

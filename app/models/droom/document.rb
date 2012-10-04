@@ -11,7 +11,7 @@ module Droom
     has_attached_file :file
     before_save :set_version
     validates :file, :presence => true
-    # default_scope order('updated_at DESC, created_at DESC')
+    default_scope order('droom_documents.created_at DESC')
 
     scope :all_private, where("private = 1 OR private = 't'")
     scope :not_private, where("NOT(private = 1 OR private = 't')")

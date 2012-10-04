@@ -33,14 +33,8 @@ jQuery ($) ->
     
     @find('[data-action="popup"]').popup_remote_content()
     @find('[data-action="toggle"]').toggle()
-    # @find('[data-action="insert"]').insert_remote_content()
-    # @find('[data-action="append"]').append_remote_content()
-    # @find('[data-action="prepend"]').prepend_remote_content()
-    # @find('[data-action="overlay"]').overlay_remote_content()
-
     @find('[data-action="append_form"]').append_remote_form()
     @find('[data-action="overlay_form"]').overlay_remote_form()
-
     
     @find('table.sortable').table_sort
       sort: "name"

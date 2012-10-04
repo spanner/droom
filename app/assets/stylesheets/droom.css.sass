@@ -300,11 +300,7 @@ table.main
   td
     &.name
       +bold
-      padding-left: 28px
-      background:
-        position: -3px -48px
-        repeat: no-repeat
-        image: image-url('droom/object_icons.png')
+      
     &.minor
       span
         display: block
@@ -318,6 +314,15 @@ table.main
       line-height: 22px
     a.vcard
       +icon("droom/vcard.png")          
+      
+#people
+  td.name
+    padding-left: 28px
+    background:
+      position: -3px -48px
+      repeat: no-repeat
+      image: image-url('droom/object_icons.png')
+  
 
 .eventline
   font-size: 80%
@@ -818,11 +823,11 @@ ul.setup
   height: 700px
 
 #progress
-  height: 40px
-  width: 100%
+  height: 10px
+  width: 100px
   border: 1px solid #dee
   .bar
     background: blue
-    height: 40px
+    height: 10px
     width: 0
   
