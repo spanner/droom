@@ -114,6 +114,9 @@ a.ical
     .new_document_form
       margin-left: - $datemark_width - $datemark_margin
 
+#documents
+  margin-left: $datemark_width + $datemark_margin
+
 div.event, div.document
   position: relative
   margin-bottom: 20px
@@ -188,6 +191,11 @@ form.document
     margin-left: - $datemark_width - $datemark_margin
     input[type="file"]
       display: none
+    p.tip
+      font-size: 0.65em
+      line-height: 1.1
+      color: $pale
+      margin: 0 5px
   p.name, p.description
     margin: 0
   input.name
@@ -446,7 +454,7 @@ a.add, a.edit
     color: $active
   &.waiting
     color: $pale
-    background-image: image-url('smallspinner.gif')
+    background-image: image-url('droom/smallspinner.gif')
   &.minimal
     width: 24px
     line-height: 100px
@@ -822,12 +830,20 @@ ul.setup
 #map
   height: 700px
 
-#progress
+.progress
   height: 10px
-  width: 100px
-  border: 1px solid #dee
+  width: 300px
+  border: 1px solid $pale
+  +border-radius(5px)
   .bar
-    background: blue
+    float: left
+    background: $mid
+    +border-radius(5px)
     height: 10px
     width: 0
+  .status
+    float: left
+    +heading
+    color: $mid
+    
   

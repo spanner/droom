@@ -4,6 +4,8 @@
   .filepicker
     = link_to "choose file", "#", :class => "ul minimal #{@document.file_extension}"
     = f.file_field :file, :class => "file"
+    %p.tip
+      = t :click_to_choose_file
   .metadata
     %p.name
       = f.text_field :name, :class => 'name', :placeholder => t(:document_name)

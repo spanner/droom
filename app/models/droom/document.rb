@@ -9,6 +9,7 @@ module Droom
     accepts_nested_attributes_for :document_attachments
     
     has_attached_file :file
+    
     before_save :set_version
     validates :file, :presence => true
     default_scope order('droom_documents.created_at DESC')

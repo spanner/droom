@@ -23,6 +23,7 @@ en:
   hello: "Hello world"
   sign_in: "Sign in"
   clear_search: "Clear search"
+  click_to_choose_file: "Click to choose a file"
   document_agenda_section: "Filed under"
   document_name: "Name"
   document_filename: "Filename"

@@ -458,10 +458,13 @@ jQuery ($) ->
       @_holder = @_form.parent()
       @_link = @_container.find('a.ul')
       @_filefield = @_container.find('input[type="file"]')
+      @_tip = @_container.find('p.tip')
       @_link.click_proxy(@_filefield)
       @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
       @_filefield.bind 'change', @pick
       @_file = null
+      @_filename = ""
+      @_ext = ""
       @_fields = @_container.siblings('.metadata')
       @_form.submit @submit
       
@@ -470,21 +473,26 @@ jQuery ($) ->
       $('input.name').val("")
       if files = @_filefield[0].files
         @_file = files.item(0)
+        @_tip.hide()
         @showSelection()
 
     submit: (e) =>
       e.preventDefault() if e
       @_fields.hide()
-      @_progress_bar = $('<div id="progress"></div>').appendTo @_form
-      @_bar = $('<div class="bar"></div>').appendTo @_progress_bar
+      @_notifier = $('<div class="notifier"></div>').appendTo @_form
+      @_label = $('<h2 class="filename"></div>').appendTo @_notifier
+      @_progress = $('<div class="progress"></div>').appendTo @_notifier
+      @_bar = $('<div class="bar"></div>').appendTo @_progress
+      @_status = $('<div class="status"></div>').appendTo @_notifier
+      @_label.text(@_filename)
       @send()
       
     showSelection: () =>
-      filename = @_file.name.split(/[\/\\]/).pop()
-      ext = filename.split('.').pop()
-      @_link.addClass(ext) if ext in @_extensions
-      $('input.name').val(filename)
-    
+      @_filename = @_file.name.split(/[\/\\]/).pop()
+      @_ext = @_filename.split('.').pop()
+      @_link.addClass(@_ext) if @_ext in @_extensions
+      $('input.name').val(@_filename)
+
     send: () =>
       formData = new FormData @_form.get(0)
       @xhr = new XMLHttpRequest()
@@ -496,8 +504,9 @@ jQuery ($) ->
       @xhr.send formData
 
     progress: (e) =>
+      @_status.text("Uploading")
       if e.lengthComputable
-        full_width = @_progress_bar.width()
+        full_width = @_progress.width()
         progress_width = Math.round(full_width * e.loaded / e.total)
         @_bar.width progress_width
       
@@ -505,10 +514,11 @@ jQuery ($) ->
       if @xhr.readyState == 4
         if @xhr.status == 200
           @_form.remove()
-          @_holder.append(@xhr.responseText).delay(2000).slideUp()
+          @_holder.append(@xhr.responseText).delay(5000).slideUp()
           $('[data-tag="update_on_insert"]').trigger("insert")
     
     finish: (e) =>
+      @_status.text("Processing")
       @_bar.css
         "background-color": "green"
 
