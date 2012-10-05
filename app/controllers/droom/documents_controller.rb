@@ -62,7 +62,7 @@ module Droom
         'ASC' => "ASC",
         'DESC' => "DESC"
       }
-      params[:order] = 'ASC' unless sort_orders[params[:order]]
+      params[:order] = 'DESC' unless sort_orders[params[:order]]
 
       sort_parameters = {
         'name' => 'droom_documents.name',
@@ -71,7 +71,7 @@ module Droom
         'event' => 'event_name',
         'section' => 'case when agenda_section_name is null then 1 else 0 end, agenda_section_name'
       }
-      params[:sort] = 'name' unless sort_parameters[params[:sort]]
+      params[:sort] = 'created' unless sort_parameters[params[:sort]]
 
       @by = sort_parameters[params[:sort]]
       @order = sort_orders[params[:order]]

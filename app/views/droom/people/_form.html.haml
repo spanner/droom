@@ -1,30 +1,34 @@
-= form_for @person, :html => {:class => 'edit person'} do |f|
-  %p.title
-    = f.text_field :title, :class => 'title', :placeholder => t(:person_title)
-    = f.text_field :name, :class => 'name', :placeholder => t(:person_name)
-    - if @person.new_record?
-      %br
-      = f.check_box :invite_on_creation, :class => 'invite'
-      = f.label :invite_on_creation      
-  %p.email
-    = f.email_field :email, :class => 'email', :placeholder => t(:person_email)
-  %p.phone
-    = f.text_field :phone, :class => 'phone', :placeholder => t(:person_phone)
-  - unless @person.new_record?
-    %p.address
-      = f.text_field :post_line1, :class => 'post_line1', :placeholder => t(:person_post_line1)
-      %br
-      = f.text_field :post_line2, :class => 'post_line2', :placeholder => t(:person_post_line2)
-      %br
-      = f.text_field :post_city, :class => 'post_city', :placeholder => t(:person_post_city)
-      %br
-      = f.text_field :post_region, :class => 'post_region', :placeholder => t(:person_post_region)
-      %br
-      = f.text_field :post_country, :class => 'post_country', :placeholder => t(:person_post_country)
-      %br
-      = f.text_field :post_code, :class => 'post_code', :placeholder => t(:person_post_code)
-  .buttons
-    = f.submit t(:save_person)
-    = t :or
-    = link_to t(:cancel), "/", :class => 'cancel'
+= form_for @person, :html => {:class => 'edit person', :remote => true, :data => {:type => :html}} do |f|
+  %table.main.people
+    %tr.person
+      %td.icon
+        %span
+      %th.name
+        = f.text_field :title, :class => 'title', :placeholder => t(:person_title)
+        = f.text_field :name, :class => 'name', :placeholder => t(:person_name)
+        - if @person.new_record?
+          %br
+          = f.check_box :invite_on_creation, :class => 'invite'
+          = f.label :invite_on_creation      
+    
+      %td.email
+        = f.email_field :email, :class => 'email', :placeholder => t(:person_email)
+      %td.phone
+        = f.text_field :phone, :class => 'phone', :placeholder => t(:person_phone)
+      / %td.address
+      /   = f.text_field :post_line1, :class => 'post_line1', :placeholder => t(:person_post_line1)
+      /   %br
+      /   = f.text_field :post_line2, :class => 'post_line2', :placeholder => t(:person_post_line2)
+      /   %br
+      /   = f.text_field :post_city, :class => 'post_city', :placeholder => t(:person_post_city)
+      /   %br
+      /   = f.text_field :post_region, :class => 'post_region', :placeholder => t(:person_post_region)
+      /   %br
+      /   = f.text_field :post_country, :class => 'post_country', :placeholder => t(:person_post_country)
+      /   %br
+      /   = f.text_field :post_code, :class => 'post_code', :placeholder => t(:person_post_code)
+      %td.buttons
+        = f.submit t(:save)
+        = t :or
+        = link_to t(:cancel), "/", :class => 'cancel'
   

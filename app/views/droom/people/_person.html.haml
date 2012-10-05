@@ -1,8 +1,12 @@
 - person ||= @person
-%tr.person
-  %td.name
-    %h3
-      = person.name
+%tr.person.holder{:id => "person_#{person.id}"}
+  %td.icon
+    %span.placeholder
+    
+  %th.name
+    = person.title
+    = person.name
+      
   %td.email
     %p
       = mail_to person.email
@@ -13,12 +17,14 @@
     - else
       %p.unavailable
         no phone
-  %td.address
-    - if person.address?
-      %p
-        = person.address
-    - else
-      %p.unavailable
-        no address
-  %td
+  / %td.address
+  /   - if person.address?
+  /     %p
+  /       = person.address
+  /   - else
+  /     %p.unavailable
+  /       no address
+  %td.buttons
     %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
+    - if admin?
+      = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}

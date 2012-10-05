@@ -54,6 +54,8 @@ en:
   person_post_region: "Region"
   person_post_country: "Country"
   person_post_code: "Post code"
+  has_been_created: "has been added to the system"
+  and_invited: "and invited to log in."
   
   preferences: "Preferences"
   profile: "Profile"
@@ -75,6 +77,7 @@ en:
   personal_calendar_feed: "Personal calendar subscription"
   general_calendar_feed: "General calendar subscription"
   search: Search
+  save: "Save"
   save_event: "Save event"
   save_document: "Save document"
   save_person: "Save person"

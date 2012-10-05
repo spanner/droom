@@ -11,8 +11,8 @@ jQuery ($) ->
       @table = $(element)
       @body = @table.find('tbody')
       @_original_content = @body.children()
-      @sort = $.params("sort") unless $.params("sort") is "0"
-      @order = $.params("order") unless $.params("order") is "0"
+      @sort = $.params("sort")
+      @order = $.params("order")
       @headers = @table.find('th a')
       $.each @headers, (i, header) =>
         header = new SortLink header, @

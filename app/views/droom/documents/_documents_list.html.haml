@@ -1,11 +1,13 @@
 - event ||= @event
-- if event.document_attachments.any?
-  .documents{ :"data-url" => "#{event_documents_path(event)}.js", :"data-refreshable" => true}
-    - if admin?
-      %p
-        = link_to t(:add_document), droom.new_event_document_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :target => ".new_document_form", :type => "html"}
-        .new_document_form
 
+- if admin?
+  %p.admin
+    = link_to t(:add_document), droom.new_event_document_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :target => ".new_document_form", :type => "html", :affected => ""}
+    .new_document_form
+
+.documents{ :"data-url" => "#{event_documents_path(event)}.js", :"data-refreshable" => true}
+
+  - if event.document_attachments.any?
     %h2
       = t :attachments
     = render :partial => "droom/events/attachment_list", :object => event.document_attachments.unfiled, :locals => {:limit => 100}

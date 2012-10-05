@@ -17,6 +17,24 @@ module Droom
       respond_with @person
     end
     
+    def create
+      if @person.save
+        render :partial => "created"
+      else
+        respond_with @person
+      end
+    end
+
+    def update
+      @person.update_attributes(params[:person])
+      if @person.save
+        render :partial => "person"
+      else
+        respond_with @person
+      end
+    end
+    
+    
   protected
     
     def build_person

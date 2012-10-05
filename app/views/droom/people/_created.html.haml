@@ -1,0 +1,6 @@
+%p.confirmation
+  %strong
+    = @person.formal_name
+  = t :has_been_created
+  - if @person.user
+    = t :and_invited

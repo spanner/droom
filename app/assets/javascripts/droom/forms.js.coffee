@@ -28,13 +28,11 @@ jQuery ($) ->
       if @_showing then @hide() else @show()
 
     show: =>
-      console.log "showing toggle", @_container, @_showing_text
       @_affected.show()
       @_container.text(@_showing_text)
       @_showing = true
       
     hide: =>
-      console.log "hiding toggle", @_container, @_hiding_text
       @_affected.hide()
       @_container.text(@_hiding_text)
       @_showing = false
@@ -52,17 +50,14 @@ jQuery ($) ->
       @close() if @_twister.hasClass('closed')
 
     toggle: (e) =>
-      console.log "toggle", @_twisted
       e.preventDefault() if e
       if @_twisted.is(':visible') then @close() else @open()
       
     open: () =>
-      console.log "open"
       @_twister.removeClass("closed")
       @_twisted.slideDown "slow"
 
     close: () =>
-      console.log "close"
       @_twisted.slideUp "slow", () =>
         @_twister.addClass("closed")
   
@@ -208,24 +203,20 @@ jQuery ($) ->
       @activate()
       
     activate: () => 
-      console.log "RemoteForm activate"
       @_form.find('a.cancel').click @cancel
       @_form.activate()
       @_options.on_prepare?()
 
     pend: (event, xhr, settings) =>
-      console.log "RemoteForm.pend"
       xhr.setRequestHeader('X-PJAX', 'true')
       @_form.addClass('waiting')
       @_options.on_submit?()
 
     fail: (event, xhr, status) ->
-      console.log "RemoteForm error:", status
       @_form.removeClass('waiting').addClass('erratic')
       @_options.on_error?()
   
     receive: (event, response, status) =>
-      console.log "RemoteForm.receive", response
       replacement = $(response)
       @_form.after(replacement)
       @_form.remove()
@@ -234,39 +225,15 @@ jQuery ($) ->
         @activate()
         #todo: make sure we get error markers displaying nicely here
       else
-        console.log "calling on_complete:", @_options.on_complete
         @_options.on_complete?(replacement)
         
     cancel: (e) =>
-      console.log "RemoteForm.cancel"
       e.preventDefault() if e
       if @_options.on_cancel?
         @_options.on_cancel()
       else
         @_form.remove()
 
-  $.fn.append_remote_form = (target) ->
-    target ?= $(@).parent()
-    @each ->
-      $(@).remote_link (response) =>
-        f = $(response)
-        ij = new Interjection f, target, 'after'
-        new RemoteForm f, 
-          on_cancel: ij.remove
-
-  $.fn.overlay_remote_form = (container) ->
-    @each ->
-      $(@).remote_link (response) =>
-        container ?= $(@).parents('.holder')
-        console.log "overlay container", container
-        f = $(response)
-        ov = new Overlay f, container
-        new RemoteForm f, 
-          on_cancel: ov.remove
-          on_complete: (response) =>
-            ov.remove()
-            container.replaceWith(response)
-            response.activate()
 
   $.fn.remote_link = (callback) ->
     @
@@ -279,6 +246,34 @@ jQuery ($) ->
       .on 'ajax:success', (event, response, status) ->
         $(@).removeClass('waiting')
         callback(response)
+
+
+  class Replacement
+    constructor: (content, container) ->
+      @_container = $(container)
+      @_content = $(content)
+      @_mask = $('#mask')
+      @_original_content = @_container.html()
+      @_container.html(@_content)
+
+    revert: (e) =>
+      @_container.html(@_original_content)
+      @_container.signal_cancellation()
+
+  $.fn.replace_with_remote_form = (container) ->
+    @each ->
+      container ?= $(@).parents('.holder')
+      $(@).remote_link (response) =>
+        f = $(response)
+        rp = new Replacement f, container
+        new RemoteForm f, 
+          on_cancel: rp.revert
+          on_complete: (response) =>
+            container.replaceWith(response)
+            response.activate()
+            response.signal_confirmation()
+
+
 
   class Interjection
     constructor: (content, target, @_position) ->
@@ -313,15 +308,32 @@ jQuery ($) ->
     @each ->
       new Interjection @, target, position
 
+  $.fn.append_remote_form = (target) ->
+    @each ->
+      target ?= $(@).parent()
+      $(@).remote_link (response) =>
+        f = $(response)
+        ij = new Interjection f, target, 'after'
+        new RemoteForm f, 
+          on_cancel: ij.remove
+
+
+
+
   class Overlay
-    constructor: (content, holder) ->
+    constructor: (content, marker) ->
       @_content = $(content)
-      @_holder = $(holder)
+      @_marker = $(marker)
       @_container = $('<div class="overlay" />')
       @_mask = $('#mask')
-      @_holder.append @_container
+      @_marker.offsetParent().append(@_container)
       @_container.hide().append(@_content)
+      position = 
+        top: @_marker.position().top
+        left: @_marker.position().left
+      @_container.css position
       @show()
+      
 
     show: (e) =>
       e.preventDefault() if e
@@ -341,11 +353,21 @@ jQuery ($) ->
       @_container.fadeOut 'slow', () ->
         $(@).remove()
       
-  $.fn.overlay = (container) ->
-    container ?= $(@).parents('.holder')
+
+  $.fn.overlay_remote_form = () ->
     @each ->
       $(@).remote_link (response) =>
-        new Overlay response, container
+        marker = $(@).parents('.holder')
+        f = $(response)
+        ov = new Overlay f, marker
+        new RemoteForm f, 
+          on_cancel: ov.remove
+          on_complete: (response) =>
+            ov.remove()
+            container.replaceWith(response)
+            response.activate()
+            response.signal_confirmation()
+
 
   class Popup
     constructor: (content) ->
@@ -383,12 +405,10 @@ jQuery ($) ->
       @_dom = @_container.find('span.dom')
       @_year = @_container.find('span.year')
       @_kal = new Kalendae @_holder[0]
-      console.log "kalendae", @_kal, @_holder[0]
       @_holder.hide()
       @_trigger.click @toggle
       @_kal.subscribe 'change', () =>
         @hide()
-        console.log "set date field", @_field, @_kal.getSelected()
         @_field.val(@_kal.getSelected())
         [year, month, day] = @_kal.getSelected().split('-')
         @_year.text(year)

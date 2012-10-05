@@ -2,7 +2,7 @@
 require 'vcard'
 module Droom
   class Person < ActiveRecord::Base
-    attr_accessible :name, :email, :phone, :description, :user
+    attr_accessible :name, :email, :phone, :description, :user, :title, :invite_on_creation
     attr_accessor :invite_on_creation
     
     ### Associations
@@ -23,7 +23,7 @@ module Droom
     belongs_to :user, :class_name => Droom.user_class.to_s, :dependent => :destroy
     
     before_save :update_user
-    after_save :create_user_if_instructed
+    after_save :invite_if_instructed
 
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
     validates :name, :presence => true
@@ -50,6 +50,10 @@ module Droom
   
     def identifier
       'person'
+    end
+    
+    def formal_name
+      [self.title, self.name].join(' ')
     end
 
     # I don't think we're using this anywhere at the moment, but a JSON API will grow here. Other classes already make more use of 
@@ -187,7 +191,7 @@ module Droom
     
   private
     
-    def create_user_if_instructed
+    def invite_if_instructed
       create_user if invite_on_creation
     end
     
@@ -199,7 +203,7 @@ module Droom
     def create_user
       unless self.user
         if self.name? && self.email?
-          self.build_user(:name => [self.title, self.name].join(' '), :email => self.email).save(:validation => false)
+          self.build_user(:name => formal_name, :email => self.email).save(:validation => false)
         end
       end
     end
