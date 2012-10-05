@@ -22,7 +22,6 @@ jQuery ($) ->
       @_table.find('a.next, a.previous').calendar_changer()
       @_table.find('a.day').day_search()
       @_table.find('a.month').month_search()
-      console.log "init", @_table
       
     cache: (year, month, table) =>
       @_cache[year] ?= {}

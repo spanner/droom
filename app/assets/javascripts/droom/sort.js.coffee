@@ -41,7 +41,6 @@ jQuery ($) ->
       order ?= "ASC"
       @sort = sort
       @order = order
-      console.log "resort", sort, order
       @get("/documents.js?sort=#{sort}&order=#{order}")
     
     get: (url) =>
