@@ -4,3 +4,6 @@
     %h2.quiet
       = t :my_future_events
     = render :partial => "droom/events/event", :collection => events
+  - else
+    - events = Droom::Event.future_and_current
+    

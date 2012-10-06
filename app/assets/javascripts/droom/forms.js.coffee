@@ -258,9 +258,12 @@ jQuery ($) ->
   $.fn.removes = (selector) ->
     selector ?= '.holder'
     @each ->
+      affected = $(@).attr('data-affected')
       $(@).remote_link (response) =>
         $(@).parents(selector).first().fadeOut 'fast', () ->
           $(@).remove()
+          console.log 'triggering refresh on', $(affected)
+          $(affected).trigger "refresh"
 
 
 
