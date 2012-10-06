@@ -8,6 +8,7 @@ Droom::Engine.routes.draw do
   ), :anchor => false, :constraints => { :subdomain => "dav" }
 
   resources :events do
+    get "calendar", :on => :collection
     resources :documents
     collection do
       match "feed/:auth_token.:format" => "events#feed", :as => :feed

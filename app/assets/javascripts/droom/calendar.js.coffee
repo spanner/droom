@@ -38,7 +38,7 @@ jQuery ($) ->
         @_request = $.ajax
           type: "GET"
           dataType: "html"
-          url: "/calendar.js?month=#{encodeURIComponent(month)}&year=#{encodeURIComponent(year)}"
+          url: "/events/calendar.js?month=#{encodeURIComponent(month)}&year=#{encodeURIComponent(year)}"
           success: (response) =>
             @update(response, year, month)
 

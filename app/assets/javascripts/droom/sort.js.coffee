@@ -18,23 +18,10 @@ jQuery ($) ->
         header = new SortLink header, @
         $.headers.push header
       @activate()
-      @table.bind "insert", @insert
+      @table.bind "refresh", @refresh_without_history
       @resort @sort, @order
       if Modernizr.history
         $(window).bind 'popstate', @restoreState
-      
-    insert: () =>
-      @body.fadeTo('fast', 0.2)
-      $.ajax
-        url: "/documents.js?sort=#{@sort}&order=#{@order}"
-        dataType: "html"
-        success: @insert_refresh
-      
-    insert_refresh: (data, textStatus, jqXHR) =>
-      @clear()
-      $(data).appendTo(@body)
-      @body.fadeTo('fast', 1)
-      @activate()
     
     resort: (sort, order) =>
       sort ?= "name"
@@ -43,16 +30,26 @@ jQuery ($) ->
       @order = order
       @get("/documents.js?sort=#{sort}&order=#{order}")
     
+    reload: () =>
+      @body.fadeTo('fast', 0.2)
+      $.ajax
+        url: "/documents.js?sort=#{@sort}&order=#{@order}"
+        dataType: "html"
+        success: @display
+
     get: (url) =>
       @body.fadeTo('fast', 0.2)
       $.ajax
         url: (url)
         dataType: "html"
         success: @refresh
-    
+
     refresh: (data, textStatus, jqXHR) =>
       @clear()
       @saveState(data) if Modernizr.history
+      @display(data)
+      
+    display: (data) =>
       $(data).appendTo(@body)
       @body.fadeTo('fast', 1)
       @activate()
@@ -122,21 +119,5 @@ jQuery ($) ->
       table.get(url)
     @
 
-  class Refresher
-    constructor: (element) ->
-      @_container = $(element)
-      @_url = @_container.attr 'data-url'
-      @_container.bind "insert", @insert
-      
-    insert: () =>
-      $.ajax @_url,
-        dataType: "html"
-        success: @replace
-    
-    replace: (data, textStatus, jqXHR) =>
-      @_container.replaceWith(data, textStatus, jqXHR)
-      
-      
-  $.fn.refresher = () ->
-    @each ->
-      new Refresher @
+
+

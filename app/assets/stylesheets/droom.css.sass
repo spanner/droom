@@ -463,7 +463,7 @@ span.erratic
 p.admin
   margin-left: $datemark_width + $datemark_margin
   
-a.add, a.edit
+a.add, a.edit, a.delete
   display: inline-block
   +heading
   text-indent: 26px
@@ -486,6 +486,7 @@ a.add, a.edit
     width: 24px
     line-height: 100px
     overflow: hidden
+    margin-right: 2px
 
 a.add
   background-position: 0 -48px
@@ -507,8 +508,15 @@ a.edit
   &:active
     background-position: 0 -768px
   
-
-a.edit
+a.delete
+  background-position: 0 -504px
+  color: $mid
+  &:visited
+    color: $mid
+  &:hover
+    background-position: 0 -528px
+  &:active
+    background-position: 0 -576px
 
 
 ul.suggestions

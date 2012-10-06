@@ -1,9 +1,6 @@
 #people
   - if current_user.admin?
     %p.admin
-      = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html"}
-  %table.main.people{ :"data-url" => "#{people_path}.js", :"data-refreshable" => true}
-    %tbody
-      - @people.each do |p|
-        = render :partial => 'person', :object => p
-  
+      = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => "table.people"}
+
+  = render :partial => "people"

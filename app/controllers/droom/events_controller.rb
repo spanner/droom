@@ -9,14 +9,22 @@ module Droom
     before_filter :require_admin!, :except => [:index, :show]
     before_filter :numerical_parameters
     before_filter :get_person
-    before_filter :get_event, :only => [:show, :edit, :update]
+    before_filter :get_event, :only => [:show, :edit, :update, :destroy]
     before_filter :build_event, :only => [:new, :create]
-    before_filter :find_events, :only => [:index]
+    before_filter :find_events, :only => [:index, :calendar]
     
     def index
       respond_with @events do |format|
         format.js {
-          render :partial => 'droom/events/minicalendar'
+          render :partial => 'droom/events/events'
+        }
+      end
+    end
+    
+    def calendar
+      respond_with @events do |format|
+        format.js {
+          render :partial => 'droom/events/calendar'
         }
       end
     end
@@ -59,6 +67,11 @@ module Droom
       end
     end
     
+    def destroy
+      @event.destroy
+      head :ok
+    end
+    
   protected
     
     def get_person
@@ -95,6 +108,7 @@ module Droom
         @pagetitle = I18n.t(:events_in, :period => I18n.l(datemarker, :format => :year))
 
       else
+        @events = @events.future_and_current
         @pagetitle = I18n.t(:future_events)
       end
       

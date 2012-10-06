@@ -1,0 +1,4 @@
+%table.main.people{:data => {:refreshable => true, :url => "#{people_path}.js"}}
+  %tbody
+    - @people.each do |p|
+      = render :partial => 'person', :object => p

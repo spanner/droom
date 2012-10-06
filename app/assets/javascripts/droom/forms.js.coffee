@@ -14,32 +14,36 @@ jQuery ($) ->
     return false unless results
     results[1] or 0
 
+
+
   class Toggle
-    constructor: (element, selector) ->
+    constructor: (element, @_selector) ->
       @_container = $(element)
-      @_affected = $(selector)
       @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide')
       @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show')
       @_container.click @toggle
-      @_showing = @_affected.is(":visible")
+      @_showing = $(@_selector).is(":visible")
       
     toggle: (e) =>
       e.preventDefault() if e
       if @_showing then @hide() else @show()
 
     show: =>
-      @_affected.show()
+      $(@_selector).fadeIn()
       @_container.text(@_showing_text)
       @_showing = true
       
     hide: =>
-      @_affected.hide()
+      $(@_selector).fadeOut()
       @_container.text(@_hiding_text)
       @_showing = false
 
   $.fn.toggle = () ->
     @each ->
       new Toggle(@, $(@).attr('data-affected'))
+
+
+
 
   class Twister
     constructor: (element) ->
@@ -193,6 +197,8 @@ jQuery ($) ->
     @each ->
       new Editor(@)
 
+
+
   class RemoteForm
     constructor: (element, opts) ->
       @_form = $(element)
@@ -248,6 +254,16 @@ jQuery ($) ->
         callback(response)
 
 
+
+  $.fn.removes = (selector) ->
+    selector ?= '.holder'
+    @each ->
+      $(@).remote_link (response) =>
+        $(@).parents(selector).first().fadeOut 'fast', () ->
+          $(@).remove()
+
+
+
   class Replacement
     constructor: (content, container) ->
       @_container = $(container)
@@ -263,6 +279,7 @@ jQuery ($) ->
   $.fn.replace_with_remote_form = (container) ->
     @each ->
       container ?= $(@).parents('.holder')
+      affected = $(@).attr('data-affected')
       $(@).remote_link (response) =>
         f = $(response)
         rp = new Replacement f, container
@@ -272,6 +289,7 @@ jQuery ($) ->
             container.replaceWith(response)
             response.activate()
             response.signal_confirmation()
+            $(affected).trigger "refresh"
 
 
 
@@ -311,11 +329,15 @@ jQuery ($) ->
   $.fn.append_remote_form = (target) ->
     @each ->
       target ?= $(@).parent()
+      affected = $(@).attr('data-affected')
+      
       $(@).remote_link (response) =>
         f = $(response)
         ij = new Interjection f, target, 'after'
         new RemoteForm f, 
           on_cancel: ij.remove
+          on_complete: () =>
+            $(affected).trigger "refresh"
 
 
 
@@ -358,15 +380,17 @@ jQuery ($) ->
     @each ->
       $(@).remote_link (response) =>
         marker = $(@).parents('.holder')
+        affected = $(@).attr('data-affected')
         f = $(response)
         ov = new Overlay f, marker
         new RemoteForm f, 
           on_cancel: ov.remove
           on_complete: (response) =>
             ov.remove()
-            container.replaceWith(response)
+            marker.replaceWith(response)
             response.activate()
             response.signal_confirmation()
+            $(affected).trigger "refresh"
 
 
   class Popup
@@ -394,6 +418,32 @@ jQuery ($) ->
   $.fn.popup_remote_content = () ->
     @remote_link (response) ->
       new Popup(response)
+
+
+  class Refresher
+    constructor: (element) ->
+      @_container = $(element)
+      @_url = @_container.attr 'data-url'
+      @_container.bind "refresh", @refresh
+      
+    refresh: () =>
+      $.ajax @_url,
+        dataType: "html"
+        success: @replace
+    
+    replace: (data, textStatus, jqXHR) =>
+      replacement = $(data)
+      @_container.fadeOut 'fast', () =>
+        replacement.hide().insertAfter(@_container)
+        @_container.remove()
+        @_container = replacement
+        @_container.activate().fadeIn('fast')
+      
+  $.fn.refresher = () ->
+    @each ->
+      new Refresher @
+
+
 
   class DatePicker
     constructor: (element) ->
@@ -535,7 +585,7 @@ jQuery ($) ->
         if @xhr.status == 200
           @_form.remove()
           @_holder.append(@xhr.responseText).delay(5000).slideUp()
-          $('[data-tag="update_on_insert"]').trigger("insert")
+          $('[data-tag="update_on_insert"]').trigger("refresh")
     
     finish: (e) =>
       @_status.text("Processing")

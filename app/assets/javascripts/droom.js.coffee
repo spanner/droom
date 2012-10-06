@@ -30,35 +30,39 @@ jQuery ($) ->
       $(@).css('backgroundColor', color).animate({'backgroundColor': '#ffffff'}, duration)
       
   $.fn.signal_confirmation = ->
-    @notify('#8dd169')
+    @signal('#c7ebb4')
 
   $.fn.signal_error = ->
-    @notify('#e55a51')
+    @signal('#e55a51')
 
   $.fn.signal_cancellation = ->
-    @notify('#a2a3a3')
+    @signal('#a2a3a3')
+
+  $.fn.find_including_self = (selector) ->
+    selection = @.find(selector)
+    selection.push @ if @is(selector)
+    selection
 
   $.fn.activate = () ->
-    @find('#flashes p:parent').flash()
-    @find('.twister').twister()
-    @find('.wysihtml').html_editable()
-    @find('.venuepicker').venue_picker()
-    @find('.datepicker').date_picker()
-    @find('.timepicker').time_picker()
-    @find('.filepicker').file_picker()
-    
-    @find('[data-action="popup"]').popup_remote_content()
-    @find('[data-action="toggle"]').toggle()
-    @find('[data-action="append_form"]').append_remote_form()
-    @find('[data-action="overlay_form"]').overlay_remote_form()
-    @find('[data-action="replace_with_form"]').replace_with_remote_form()
-    
-    @find('table.sortable').table_sort
+    @find_including_self('#flashes p:parent').flash()
+    @find_including_self('.twister').twister()
+    @find_including_self('.wysihtml').html_editable()
+    @find_including_self('.venuepicker').venue_picker()
+    @find_including_self('.datepicker').date_picker()
+    @find_including_self('.timepicker').time_picker()
+    @find_including_self('.filepicker').file_picker()
+    @find_including_self('a.delete').removes('.holder')
+    @find_including_self('[data-action="popup"]').popup_remote_content()
+    @find_including_self('[data-action="toggle"]').toggle()
+    @find_including_self('[data-action="append_form"]').append_remote_form()
+    @find_including_self('[data-action="overlay_form"]').overlay_remote_form()
+    @find_including_self('[data-action="replace_with_form"]').replace_with_remote_form()
+    @find_including_self('[data-refreshable]').refresher()
+    @find_including_self('table.sortable').table_sort
       sort: "created"
       order: "DESC"
-    @find('#map').init_map()
-    
-    @find('[data-refreshable]').refresher()
+    @find_including_self('#map').init_map()
+    @
       
 $ ->
   $('body').activate()

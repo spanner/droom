@@ -32,7 +32,9 @@
       %h2.name<
         = link_to event.name, event_url(event)
         - if admin?
-          = link_to t(:edit_event), edit_event_url(event), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
+          %span.admin<
+            = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
+            = link_to t(:remove), event_url(event), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_event, :name => event.name)}
         - else
           = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
 

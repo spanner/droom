@@ -6,7 +6,7 @@ module Droom
     before_filter :authenticate_user!
     before_filter :require_admin!, :except => [:index, :show]
     before_filter :find_documents, :only => [:index]
-    before_filter :get_document, :only => [:show, :edit, :update]
+    before_filter :get_document, :only => [:show, :edit, :update, :destroy]
     before_filter :build_document, :only => [:new, :create]
     
     def index
@@ -40,6 +40,12 @@ module Droom
       @document.save!
       render :partial => 'created'
     end
+    
+    def destroy
+      @document.destroy
+      head :ok
+    end
+    
     
   protected
     
