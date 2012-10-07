@@ -33,7 +33,6 @@ jQuery ($) ->
       @_cache[year][month]
     
     refresh_in_place: () =>
-      console.log "refreshing minimonth"
       @_request = $.ajax
         type: "GET"
         dataType: "html"

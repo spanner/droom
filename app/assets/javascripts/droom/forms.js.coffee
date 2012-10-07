@@ -262,7 +262,6 @@ jQuery ($) ->
       $(@).remote_link (response) =>
         $(@).parents(selector).first().fadeOut 'fast', () ->
           $(@).remove()
-          console.log 'triggering refresh on', $(affected)
           $(affected).trigger "refresh"
 
 
@@ -543,11 +542,10 @@ jQuery ($) ->
       
     pick: (e) =>
       @_link.removeClass(@_extensions.join(' '))
-      $('input.name').val("")
       if files = @_filefield[0].files
         @_file = files.item(0)
         @_tip.hide()
-        @showSelection()
+        @showSelection() if @_file
 
     submit: (e) =>
       e.preventDefault() if e
@@ -564,7 +562,7 @@ jQuery ($) ->
       @_filename = @_file.name.split(/[\/\\]/).pop()
       @_ext = @_filename.split('.').pop()
       @_link.addClass(@_ext) if @_ext in @_extensions
-      $('input.name').val(@_filename)
+      $('input.name').val(@_filename) if $('input.name').val() is ""
 
     send: () =>
       formData = new FormData @_form.get(0)
