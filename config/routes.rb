@@ -8,6 +8,7 @@ Droom::Engine.routes.draw do
   ), :anchor => false, :constraints => { :subdomain => "dav" }
 
   resources :events do
+    get "calendar", :on => :collection
     resources :documents
     collection do
       match "feed/:auth_token.:format" => "events#feed", :as => :feed
@@ -28,12 +29,12 @@ Droom::Engine.routes.draw do
   
   match "/library" => 'documents#index', :as => :library
   match "/directory" => 'people#index', :as => :directory
-  match "/calendar" => 'events#index', :as => :calendar
   match "/map" => 'venues#index', :as => :map
+  match "/me" => 'dashboard#index', :as => :dashboard
   
   match '/suggestions', :to => 'suggestions#index', :as => "suggestions"
   match '/suggestions/:type', :to => 'suggestions#index'
   
-  root :to => 'dashboard#index'
+  root :to => 'events#index', :as => :calendar
   
 end

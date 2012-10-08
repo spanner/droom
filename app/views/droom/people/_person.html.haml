@@ -28,3 +28,5 @@
     %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
     - if admin?
       = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
+    - if current_user.admin?
+      = link_to t(:remove), person_url(person), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_person, :name => person.name)}

@@ -189,10 +189,10 @@ module Droom
       people.map(&:vcf).join("\n")
     end
     
-  private
+  protected
     
     def invite_if_instructed
-      create_user if invite_on_creation
+      invite_user if invite_on_creation
     end
     
     # ### Administration & callbacks
@@ -200,10 +200,10 @@ module Droom
     # At some point we may want to create a user to log in and look after this person. 
     # This usually has the side effect of sending out a login invitation.
     #
-    def create_user
+    def invite_user
       unless self.user
         if self.name? && self.email?
-          self.build_user(:name => formal_name, :email => self.email).save(:validation => false)
+          self.create_user(:name => formal_name, :email => email)
         end
       end
     end

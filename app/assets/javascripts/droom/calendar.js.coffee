@@ -12,6 +12,7 @@ jQuery ($) ->
       @_incoming = {}
       @_width = @_container.width()
       $.calendar = @
+      @_container.bind "refresh", @refresh_in_place
       @init()
 
     init: () =>
@@ -22,7 +23,6 @@ jQuery ($) ->
       @_table.find('a.next, a.previous').calendar_changer()
       @_table.find('a.day').day_search()
       @_table.find('a.month').month_search()
-      console.log "init", @_table
       
     cache: (year, month, table) =>
       @_cache[year] ?= {}
@@ -31,6 +31,19 @@ jQuery ($) ->
     cached:  (year, month) =>
       @_cache[year] ?= {}
       @_cache[year][month]
+    
+    refresh_in_place: () =>
+      @_request = $.ajax
+        type: "GET"
+        dataType: "html"
+        url: "/events/calendar.js?month=#{encodeURIComponent(@_month)}&year=#{encodeURIComponent(@_year)}"
+        success: @update_quietly
+      
+    update_quietly: (response) =>
+      @_container.find('a').removeClass('waiting')
+      @_scroller.find('table').remove()
+      @_scroller.append(response)
+      @init()
       
     show: (year, month) =>
       if cached = @cached(year, month)
@@ -39,15 +52,15 @@ jQuery ($) ->
         @_request = $.ajax
           type: "GET"
           dataType: "html"
-          url: "/calendar.js?month=#{encodeURIComponent(month)}&year=#{encodeURIComponent(year)}"
+          url: "/events/calendar.js?month=#{encodeURIComponent(month)}&year=#{encodeURIComponent(year)}"
           success: (response) =>
             @update(response, year, month)
-
+    
     update: (response, year, month) =>
       @_container.find('a').removeClass('waiting')
       direction = "left" if ((year * 12) + month) > ((@_year * 12) + @_month)
       @sweep response, direction
-      
+    
     sweep: (table, direction) =>
       old = @_scroller.find('table')
       if direction == 'left'

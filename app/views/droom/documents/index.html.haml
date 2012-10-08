@@ -1,7 +1,7 @@
 #documents
   - if current_user.admin?
     %p.admin
-      = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html"}
+      = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => "table.documents"}
 
   %table.main.documents.sortable
     %thead
