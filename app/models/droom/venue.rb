@@ -76,18 +76,31 @@ module Droom
       self.as_ri_cal_calendar.to_s
     end
 
-  private
-
-    #todo this should give priority to postcodes, then addresses, then names
+    # We only go back to google for a new map location if there has been a change of address, but there are many places in which that could happen.
     #
-    def geocode_location
-    
+    def address_changed?
+      name_changed? || post_line1_changed? || post_line2_changed? || post_city_changed? || post_region_changed?  || post_code_changed? || post_country_changed?
     end
 
-    # *geocode* will try all the possible geocode bases in order until it gets a result. If a block is given, it is passed through.
+  private
+
+    # This is the main geocoding routine, called before validation on every save. If there has been a significant change, 
+    # it will trigger the goecoding mechanism with a block that updates our address when a match is found. 
+    # It's fairly uncritical and probably needs to be more careful about overriding user-entered data.
     #
-    def geocode(&block)
-      geocode_with(:name, &block) || geocode_with(:postal_address, &block)
+    def geocode_and_get_address(options={})
+      unless Rails.env.test?
+        if new_record? || address_changed? || options[:force]
+          geocode_with(:name) do |geo|
+            self.post_line1 = geo.street_address
+            self.post_city = geo.city
+            self.post_region = geo.province
+            self.post_country = geo.country
+            self.post_code = geo.zip
+            sleep(options[:delay].seconds) if options[:delay]
+          end
+        end
+      end
     end
 
     # *geocode_with* does the actual lookup, passing the value of the specified column to the google geocoder service (with help from Geokit)
