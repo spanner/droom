@@ -6,8 +6,11 @@
       %th.name
         = f.text_field :title, :class => 'title', :placeholder => t(:person_title)
         = f.text_field :name, :class => 'name', :placeholder => t(:person_name)
+        %br
+        - if current_user.admin?
+          = f.check_box :admin
+          = f.label :admin      
         - if @person.new_record?
-          %br
           = f.check_box :invite_on_creation, :class => 'invite'
           = f.label :invite_on_creation      
     
