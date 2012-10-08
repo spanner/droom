@@ -226,6 +226,7 @@ jQuery ($) ->
         #todo: make sure we get error markers displaying nicely here
       else
         @_options.on_complete?(replacement)
+      $('[data-refreshable]').trigger("insert")
         
     cancel: (e) =>
       e.preventDefault() if e
@@ -246,7 +247,6 @@ jQuery ($) ->
       .on 'ajax:success', (event, response, status) ->
         $(@).removeClass('waiting')
         callback(response)
-
 
   class Replacement
     constructor: (content, container) ->
@@ -535,7 +535,7 @@ jQuery ($) ->
         if @xhr.status == 200
           @_form.remove()
           @_holder.append(@xhr.responseText).delay(5000).slideUp()
-          $('[data-tag="update_on_insert"]').trigger("insert")
+          $('[data-refreshable]').trigger("insert")
     
     finish: (e) =>
       @_status.text("Processing")

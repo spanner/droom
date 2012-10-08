@@ -3,7 +3,7 @@
     %p.admin
       = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html"}
 
-  %table.main.documents.sortable{ :"data-tag" => "update_on_insert" }
+  %table.main.documents.sortable
     %thead
       %tr
         %th
@@ -21,5 +21,4 @@
         %th.minor
           %a.sorter{:href => "#", :"data-sort" => "section"}
             = t :document_agenda_section
-    %tbody
-      = render :partial => 'documents_table'
+    = render :partial => 'documents_table'

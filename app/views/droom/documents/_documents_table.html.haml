@@ -1,5 +1,6 @@
-= render :partial => 'table_document', :collection => @documents
-%tr
-  %td{:colspan => 6}
-    .pagination
-      = paginate @documents, :params => {:format => :js}
+%tbody{:"data-url" => "#{documents_path}.js", :"data-refreshable" => true }
+  = render :partial => 'table_document', :collection => @documents
+  %tr
+    %td{:colspan => 6}
+      .pagination
+        = paginate @documents, :params => {:format => :js}

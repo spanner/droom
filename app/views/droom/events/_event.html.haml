@@ -62,4 +62,10 @@
         = simple_format event.description, :class => "description"
 
   - if full_attachments
+  
+    - if admin?
+      %p.admin
+        = link_to t(:add_document), droom.new_event_document_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :target => ".new_document_form", :type => "html", :affected => ""}
+        .new_document_form
+
     = render :partial => 'droom/documents/documents_list', :event => event

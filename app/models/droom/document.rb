@@ -49,8 +49,8 @@ module Droom
       file.exists?
     end
     
-    def attach_to(attachee)
-      document_attachments.create(:attachee => attachee)
+    def attach_to(attachee, attributes={})
+      document_attachments.create(attributes.merge(:attachee => attachee))
     end
     
     def file_extension

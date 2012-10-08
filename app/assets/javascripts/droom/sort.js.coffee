@@ -32,7 +32,7 @@ jQuery ($) ->
       
     insert_refresh: (data, textStatus, jqXHR) =>
       @clear()
-      $(data).appendTo(@body)
+      $(data).appendTo(@table)
       @body.fadeTo('fast', 1)
       @activate()
     
@@ -54,13 +54,14 @@ jQuery ($) ->
     refresh: (data, textStatus, jqXHR) =>
       @clear()
       @saveState(data) if Modernizr.history
-      $(data).appendTo(@body)
+      $(data).appendTo(@table)
       @body.fadeTo('fast', 1)
       @activate()
 
     activate: () =>
       @body.find('a.popup').popup_remote_content()
       @body.find('.pagination').find('a').retable(@)
+      @body.refresher()
       
     clear: () =>
       @body.children().remove()
@@ -79,7 +80,7 @@ jQuery ($) ->
         @clear()
         @order = event.state.order
         @sort = event.state.sort
-        $(event.state.html).appendTo(@body)
+        $(event.state.html).appendTo(@table)
         $.each $.headers, (i, header) =>
           header.check()
         @activate()
@@ -126,10 +127,12 @@ jQuery ($) ->
   class Refresher
     constructor: (element) ->
       @_container = $(element)
+      console.log @_container
       @_url = @_container.attr 'data-url'
       @_container.bind "insert", @insert
       
     insert: () =>
+      console.log "insert"
       $.ajax @_url,
         dataType: "html"
         success: @replace

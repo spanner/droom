@@ -10,7 +10,9 @@ module Droom
     before_filter :confine_to_self, :except => [:index, :show]
     
     def index
-      respond_with @people
+      respond_with @people do |format|
+        format.js { render :partial => 'people'}
+      end
     end
     
     def show
