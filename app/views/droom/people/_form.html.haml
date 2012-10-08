@@ -6,10 +6,12 @@
       %th.name
         = f.text_field :title, :class => 'title', :placeholder => t(:person_title)
         = f.text_field :name, :class => 'name', :placeholder => t(:person_name)
+        %br
         - if @person.new_record?
-          %br
           = f.check_box :invite_on_creation, :class => 'invite'
           = f.label :invite_on_creation      
+          = f.check_box :admin_user
+          = f.label :admin_user
     
       %td.email
         = f.email_field :email, :class => 'email', :placeholder => t(:person_email)

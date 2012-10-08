@@ -344,7 +344,6 @@ jQuery ($) ->
 
 
 
-
   class Overlay
     constructor: (content, marker) ->
       @_content = $(content)

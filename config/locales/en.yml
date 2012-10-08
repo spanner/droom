@@ -10,6 +10,9 @@ en:
           venue_name: "Choose or add a location"
           start_time: "Time"
           start_date: "Date"
+        person:
+          invite_on_creation: "Invite on creation"
+          admin_user: "as admin user"
   attachments: "Attachments"
   cancel: "cancel"
   mon: "MON"
