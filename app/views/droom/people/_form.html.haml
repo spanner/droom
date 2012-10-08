@@ -10,8 +10,8 @@
         - if @person.new_record?
           = f.check_box :invite_on_creation, :class => 'invite'
           = f.label :invite_on_creation      
-          = f.check_box :admin
-          = f.label :admin      
+          = f.check_box :admin_user
+          = f.label :admin_user
     
       %td.email
         = f.email_field :email, :class => 'email', :placeholder => t(:person_email)

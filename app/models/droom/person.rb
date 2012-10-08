@@ -3,7 +3,7 @@ require 'vcard'
 module Droom
   class Person < ActiveRecord::Base
     attr_accessible :name, :email, :phone, :description, :user, :title, :invite_on_creation
-    attr_accessor :invite_on_creation
+    attr_accessor :invite_on_creation, :admin_user
     
     ### Associations
     #
@@ -203,7 +203,7 @@ module Droom
     def invite_user
       unless self.user
         if self.name? && self.email?
-          self.create_user(:name => formal_name, :email => email)
+          self.create_user(:name => formal_name, :email => email, :admin => :admin_user)
         end
       end
     end
