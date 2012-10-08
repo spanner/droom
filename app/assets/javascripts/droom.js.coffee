@@ -62,6 +62,7 @@ jQuery ($) ->
       sort: "created"
       order: "DESC"
     @find_including_self('#map').init_map()
+    @find_including_self('input.password').password_field()
     @
       
 $ ->

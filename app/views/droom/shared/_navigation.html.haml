@@ -1,7 +1,7 @@
 - if current_user
   %nav<
-    = nav_link_to t(:your_page), "/"
-    = nav_link_to t(:calendar), "/calendar"
-    = nav_link_to t(:library), "/library"
-    = nav_link_to t(:directory), "/directory"
-    = nav_link_to t(:map), "/map"
+    = nav_link_to t(:your_page), droom.dashboard_path
+    = nav_link_to t(:calendar), droom.calendar_path
+    = nav_link_to t(:library), droom.library_path
+    = nav_link_to t(:directory), droom.directory_path
+    = nav_link_to t(:map), droom.map_path

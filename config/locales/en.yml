@@ -19,9 +19,12 @@ en:
   add_document: "Add a document"
   add_person: "Add a person"
   add_group: "Add a group"
+  continue: "Continue"
   dashboard: "Dashboard"
   hello: "Hello world"
   sign_in: "Sign in"
+  can_still_log_in: 'Your password has not changed until you complete this process, <br />so if you remember the old one you can still <a href="%{url}">log in</a>'
+  choose_new_password: "Choose a new password"
   clear_search: "Clear search"
   click_to_choose_file: "Click to choose a file"
   confirm_delete_document: "Are you sure you want to delete the document '%{name}'? This cannot be undone."
@@ -45,6 +48,12 @@ en:
   event_created: "Event '%{name}' created"
   calendar: "Calendar"
   library: "Library" 
+  preferences: "Preferences"
+  set_preferences: "Account preferences"
+  user_preferences: "User preferences"
+  user_updated: "Preferences for %{name} have been updated."
+  your_preferences_saved: "Your preferences have been updated"
+  
   directory: "Directory" 
   
   person_title: "Title"
@@ -75,10 +84,16 @@ en:
   other_future_events: "Here is a general list of events coming up."
   click_to_download_zipfile: "Click to download all attached documents as a zipfile"
   click_to_download: "Click to download %{name}"
+  forgot_password: "Forgotten your password?"
   your_personal_documents: "Your personal documents"
   other_documents: "Other available documents"
   personal_calendar_feed: "Personal calendar subscription"
   general_calendar_feed: "General calendar subscription"
+  password_confirmation_instructions: "Please confirm your password."
+  password_instructions: "Please choose a password of at least six letters."
+  password_leave_same: "Leave this field blank to keep your existing password."
+  password_confirmation_requirements: "We will not be able to remind you of your password but you can always set a new one if you forget it."
+  password_requirements: "Ideally your password should include numbers and punctuation, and should not resemble a dictionary word."
   search: Search
   save: "Save"
   save_event: "Save event"
@@ -115,4 +130,15 @@ en:
       year: "%Y"
       month: "%B %Y"
       
+  errors:
+    attributes:
+      name: 
+        blank: "Please enter your full name"
+      email:
+        blank: "Please give an email address on which we can contact you"
+        invalid: "This does not appear to be a valid email address"
+        uniqueness: "This email address is already in use here"
+      password:
+        confirmation: "The password and its confirmation do not match"
+        too_short: "Your password must have at least 6 letters"
       

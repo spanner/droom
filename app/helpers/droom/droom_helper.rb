@@ -1,6 +1,13 @@
 module Droom
   module DroomHelper
     
+    def nav_link_to(name, url, options={})
+      options[:class] ||= ""
+      Rails.logger.warn ">>> nav_link_to: request.path is #{request.path} and url #{url}"
+      options[:class] << "here" if (request.path == url) || (request.path =~ /^#{url}/ && url != "/")
+      link_to name, url, options
+    end
+
     def month_header_for(date)
       content_tag('h3', l(date, :format => :month_header))
     end

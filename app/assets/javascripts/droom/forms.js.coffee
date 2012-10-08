@@ -603,3 +603,103 @@ jQuery ($) ->
     this.bind "click", (e) ->
       e.preventDefault()
       $(target_selector).click()
+
+
+
+
+
+
+
+  class PasswordField
+    constructor: (element, opts) ->
+      @options = $.extend
+        length: 6
+      , opts
+      @field = $(element)
+      @_notice = $('.notice')
+      @form = @field.parents('form')
+      @submit = @form.find('.submit')
+      @confirmation = $("#" + @field.attr("id") + "_confirmation")
+      @confirmation_holder = @confirmation.parents("p")
+      @mock_password = 'password'
+      @required = @field.attr('required')
+      @field.focus @wake
+      @field.blur @sleep
+      @field.keyup @check
+      @confirmation.keyup @check
+      @form.submit @stumbit
+      # to set up initial state
+      @check()
+      @sleep()
+
+    wake: () =>
+      if @field.val() is @mock_password
+        @field.removeClass "empty"
+        @field.val ""
+
+    sleep: () =>
+      v = @field.val()
+      if v is @mock_password or v is ""
+        @field.val @mock_password
+        @field.addClass("empty")
+        # if we're not required, then both-empty is also a submittable condition
+        if @confirmation.val() is "" and not @required
+          @submittable()
+
+    check: () =>
+      if @empty() and !@required
+        @field.removeClass("ok notok").addClass("empty")
+        @confirmation_holder.hide()
+        @submittable()
+        @notify ""
+      else if @valid()
+        @field.addClass("ok").removeClass "notok"
+        @confirmation_holder.show()
+        @notify "You must confirm your password before you can proceed."
+        if @matching()
+          @notify "Passwords match.", "successful"
+          @confirmation.addClass("ok").removeClass("notok")
+          @submittable()
+        else
+          @notify "The confirmation does not match your password.", "erratic"
+          @confirmation.addClass("notok").removeClass("ok")
+          @unsubmittable()
+      else
+        @confirmation_holder.hide()
+        @confirmation.val ""
+        @unsubmittable()
+        @field.addClass("notok").removeClass("ok")
+        @confirmation.addClass("notok").removeClass("ok")
+        @notify "Please enter password of at least six letters.", "erratic"
+    
+    notify: (message, cssclass) =>
+      @_notice.removeClass('erratic successful').addClass(cssclass).text(message)
+      
+    submittable: () =>
+      @submit.removeClass("unavailable")
+      @blocked = false
+
+    unsubmittable: () =>
+      @submit.addClass("unavailable")
+      @blocked = true
+
+    empty: () =>
+      !@field.val() || @field.val().length == 0
+      
+    valid: () =>
+      v = @field.val()
+      v.length >= @options.length and (!@options.validator? or @options.validator.test(v))
+
+    matching: () =>
+      @confirmation.val() is @field.val()
+
+    stumbit: (e) =>
+      if @blocked
+        e.preventDefault()
+      else
+        @field.val("") if @field.val() is @mock_password
+
+
+  $.fn.password_field = ->
+    @each ->
+      new PasswordField(@)
