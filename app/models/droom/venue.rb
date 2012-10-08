@@ -60,7 +60,8 @@ module Droom
         :name => name,
         :postcode => post_code,
         :lat => lat,
-        :lng => lng
+        :lng => lng,
+        :events => events.as_json({})
       }
     end
 
