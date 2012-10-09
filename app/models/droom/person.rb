@@ -53,7 +53,7 @@ module Droom
     end
     
     def formal_name
-      [self.title, self.name].join(' ')
+      [title, forename, name].compact.join(' ').strip
     end
     
     def informal_name
@@ -73,10 +73,6 @@ module Droom
         :name => name,
         :title => title
       }
-    end
-
-    def formal_name
-      [title, name].join(' ')
     end
       
     # *for_selection* returns a list of people in options_for_select format with which to populate a select box.
