@@ -34,6 +34,10 @@ module Droom
       where('droom_people.name like ?', fragment)
     }
 
+    scope :not_in_group, lambda { |group|
+      
+    }
+
     ### Images
     #
     # The treatment here is very basic compared to the yearbook's uploader, but we might bring that across

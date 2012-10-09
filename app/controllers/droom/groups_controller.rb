@@ -1,6 +1,7 @@
 module Droom
   class GroupsController < Droom::EngineController
-    respond_to :html
+    respond_to :html, :js
+    layout :no_layout_if_pjax
 
     before_filter :build_group, :only => [:new, :create]
     before_filter :get_group, :only => [:show, :edit, :update, :destroy]
@@ -19,7 +20,11 @@ module Droom
     end
 
     def show
-      respond_with @group
+      respond_with @group do |format|
+        format.js {
+          render :partial => 'droom/memberships/memberships'
+        }
+      end
     end
 
     def edit
@@ -33,7 +38,7 @@ module Droom
 
     def create
       if @group.save
-        render :partial => "group"
+        render :partial => "created"
       else
         respond_with @group
       end

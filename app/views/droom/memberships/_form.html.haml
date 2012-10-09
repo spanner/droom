@@ -1,7 +1,5 @@
 = form_for [@group, @membership], :html => {:remote => true, :data => {:type => :html}} do |f|
-  %p
-    = f.select :person_id, Droom::Person.all.collect {|p| [ p.name, p.id ] }
-  = f.submit
-  = t :or
+  %input.person_picker{:type => "text", :placeholder => t(:person_name), :autocomplete => "off"}
+  = f.hidden_field :person_id, :class => "person_picker_target"
   = link_to t(:cancel), "/", :class => 'cancel'
   

@@ -26,6 +26,23 @@ jQuery ($) ->
       new Suggester(@, options)
     @
 
+  $.fn.person_picker = (options) ->
+    options = $.extend(
+      submit_form: true
+      threshold: 1
+      type: 'person'
+    , options)
+    @each ->
+      target = $(@).siblings('.person_picker_target')
+      $(@).bind "keyup", () =>
+        target.val null
+      suggester = new Suggester(@, options)
+      suggester.options.afterSelect = () ->
+        id = JSON.parse(suggester.request.responseText)[0].id
+        target.val id
+        suggester.form.submit()
+    @
+
   class Suggester
     constructor: (element, options) ->
       @prompt = $(element)
@@ -193,5 +210,3 @@ jQuery ($) ->
         blank_re = new RegExp("(" + @blanks.join("|") + ")")
         return blank_re.test(query)
       false
-
-

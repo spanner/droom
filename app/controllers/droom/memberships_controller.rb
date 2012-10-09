@@ -6,17 +6,29 @@ module Droom
     before_filter :get_membership, :only => :destroy
 
     def destroy
+      @membership = Membership.find(params[:id])
+      @group = @membership.group
+      @person = @membership.person
       @membership.destroy
-      head :ok
+      render :partial => "button"
     end
         
     def new
-      render :partial => "form"
+      if params[:person_id]
+        @group = Droom::Group.find(params[:group_id])
+        @person = Droom::Person.find(params[:person_id])
+        @membership = @group.memberships.create!(:person_id => @person.id, :group_id => @group.id)
+        render :partial => "button"
+      else
+        render :partial => "form"
+      end
     end
     
     def create
       if @membership.save
-        render :partial => 'member'
+        render :partial => "created"
+      else
+        respond_with @membership
       end
     end
 

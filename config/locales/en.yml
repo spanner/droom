@@ -22,6 +22,7 @@ en:
   add_document: "Add a document"
   add_person: "Add a person"
   add_group: "Add a group"
+  added_to: "has been added to '%{group}'."
   continue: "Continue"
   dashboard: "Dashboard"
   hello: "Hello world"
@@ -51,6 +52,7 @@ en:
   events_in: "Events in %{period}"
   events_on: "Events on %{day}"
   event_created: "Event '%{name}' created"
+  group_created: "Group '%{name}' created"
   calendar: "Calendar"
   library: "Library" 
   preferences: "Preferences"
@@ -60,6 +62,9 @@ en:
   your_preferences_saved: "Your preferences have been updated"
   
   directory: "Directory" 
+  
+  group_name: "Name"
+  group_description: "Description"
   
   person_title: "Title"
   person_name: "Name"

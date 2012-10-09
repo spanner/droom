@@ -30,4 +30,4 @@
     / - if admin?
     /   = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
     - if current_user.admin?
-      = link_to t(:remove), membership_url(Droom::Membership.find_by_group_id_and_person_id(@group.id, person.id)), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_remove_member, :name => person.name, :group => @group.name)}
+      = link_to t(:remove), group_membership_url(@group, Droom::Membership.find_by_group_id_and_person_id(@group.id, person.id)), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_remove_member, :name => person.name, :group => @group.name)}

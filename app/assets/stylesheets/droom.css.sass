@@ -6,6 +6,7 @@ $tool_button_width: 32px
 @import definitions
 @import lib/toolbar
 @import lib/kalendae
+@import compass/css3/transform
 
 =icon($url)
   display: inline-block
@@ -157,7 +158,9 @@ div.event, form.event
           +icon_with_text("droom/download.png")
           color: $dark
           +hover
-    
+
+.person_picker
+  font-size: 1.8em
 
 form.event
   p.name
@@ -344,10 +347,51 @@ table.people
     width: 160px
     input
       width: 150px
+  th.group
+    width: 15px
+    padding-right: 2px
+    .rotate
+      +rotate(-75deg)
+  td.group
+    padding-right: 2px
+    width: 20px
+    .holder
+      a.toggle_active
+        .a_member, .not_a_member
+          height: 20px
+          background: url('droom/minisymbols.png') no-repeat
+        .a_member
+          background-position: 0 -384px
+          &:hover
+            background-position: 0 -528px
+        .not_a_member
+          background-position: 0 -600px
+          &:hover
+            background-position: 0 -360px
   td.buttons
     width: 80px
 
-
+table.groups
+  margin-bottom: 25px
+  th, td
+    line-height: 32px
+    white-space: nowrap
+  th.name
+    +heading
+    vertical-align: top
+    width: 200px
+    input.name
+      width: 190px
+      +heading
+  td.description
+    width: 250px
+    input
+      width: 240px
+  td.count
+    width: 15px
+  td.buttons
+    width: 80px
+  
 form.person
   position: relative
   p

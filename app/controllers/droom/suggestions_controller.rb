@@ -22,7 +22,8 @@ module Droom
         format.json {
           render :json => @suggestions.map { |suggestion| {
             :type => suggestion.identifier,
-            :text => suggestion.name
+            :text => suggestion.name,
+            :id => suggestion.id
           }}.to_json
         }
         format.js {

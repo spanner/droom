@@ -24,8 +24,13 @@
   /   - else
   /     %p.unavailable
   /       no address
+  - if admin?
+    - @groups.each do |group|
+      %td.group
+        = render :partial => 'droom/memberships/button', :locals => {:group => group, :person => person}
   %td.buttons
-    %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
+    - unless admin?
+      %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
     - if admin?
       = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
     - if current_user.admin?
