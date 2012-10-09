@@ -34,6 +34,10 @@ module Droom
     def new
       render :partial => "form"
     end
+
+    def edit
+      render :partial => "form"
+    end
     
     def create
       @event.save! if @event
@@ -73,6 +77,7 @@ module Droom
       sort_parameters = {
         'name' => 'droom_documents.name',
         'filename' => 'droom_documents.file_file_name',
+        'filesize' => 'droom_documents.file_file_size',
         'created' => 'droom_documents.created_at',
         'event' => 'event_name',
         'section' => 'case when agenda_section_name is null then 1 else 0 end, agenda_section_name'

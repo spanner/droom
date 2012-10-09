@@ -219,7 +219,7 @@ jQuery ($) ->
       @_options.on_submit?()
 
     fail: (event, xhr, status) ->
-      @_form.removeClass('waiting').addClass('erratic')
+      @_form?.removeClass('waiting').addClass('erratic')
       @_options.on_error?()
   
     receive: (event, response, status) =>
@@ -244,6 +244,7 @@ jQuery ($) ->
   $.fn.remote_link = (callback) ->
     @
       .on 'ajax:beforeSend', (event, xhr, settings) ->
+        console.log "remote_link.beforeSend"
         $(@).addClass('waiting')
         xhr.setRequestHeader('X-PJAX', 'true')
       .on 'ajax:error', (event, xhr, status) ->
@@ -542,15 +543,16 @@ jQuery ($) ->
         @showSelection() if @_file
 
     submit: (e) =>
-      e.preventDefault() if e
-      @_fields.hide()
-      @_notifier = $('<div class="notifier"></div>').appendTo @_form
-      @_label = $('<h2 class="filename"></div>').appendTo @_notifier
-      @_progress = $('<div class="progress"></div>').appendTo @_notifier
-      @_bar = $('<div class="bar"></div>').appendTo @_progress
-      @_status = $('<div class="status"></div>').appendTo @_notifier
-      @_label.text(@_filename)
-      @send()
+      if @_file
+        e.preventDefault() if e
+        @_fields.hide()
+        @_notifier = $('<div class="notifier"></div>').appendTo @_form
+        @_label = $('<h2 class="filename"></div>').appendTo @_notifier
+        @_progress = $('<div class="progress"></div>').appendTo @_notifier
+        @_bar = $('<div class="bar"></div>').appendTo @_progress
+        @_status = $('<div class="status"></div>').appendTo @_notifier
+        @_label.text(@_filename)
+        @send()
       
     showSelection: () =>
       @_filename = @_file.name.split(/[\/\\]/).pop()
