@@ -1,23 +1,28 @@
 - document ||= table_document
-- flip = false
 
-%tr{:class => flip ? "document odd holder" : "document even holder" }
-  %td.name
-    = link_to document.name, document.file.url, :class => "#{document.file_extension} document", :title => t(:click_to_download, :name => document.file_file_name)
+%tr.document.holder
+  %th.name
+    = link_to truncate(document.name, :length => 24), document.file.url, :class => "#{document.file_extension} document", :title => t(:click_to_download, :name => document.file_file_name)
   %td.filename.minor
     %span.note
-      = document.file_file_name
+      = truncate(document.file_file_name, :length => 18)
+  %td.filesize.minor
+    %span.note
+      = number_to_human_size(document.file_file_size)
   %td.created.minor
     %span.note
-      = l document.created_at.to_date, :format => :natural_with_year
-  %td.event
+      = l document.created_at.to_date, :format => :minimal_with_year
+  %td.event.minor
     - if document.event_name
-      = link_to document.event_name, event_url(Droom::Event.find(document.event_id), :format => :js), :class => "event popup", :remote => true, :data => {:type => "html"}
+      = link_to truncate(document.event_name, :length => 18), event_url(Droom::Event.find(document.event_id)), :class => "event note"
   %td.agenda_section.minor
     %span.note
-      = truncate(document.agenda_section_name, :length => 24, :separator => " ")
+      = truncate(document.agenda_section_name, :length => 18, :separator => " ")
   - if current_user.admin?
     %td.admin<
       = link_to t(:edit), edit_document_url(document), :class => 'edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
       = link_to t(:remove), document_url(document), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_document, :name => document.name)}
-    
+%tr
+  %td.description{:colspan => 6}
+    %p
+      = document.description

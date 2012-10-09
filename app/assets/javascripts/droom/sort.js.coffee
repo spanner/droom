@@ -19,9 +19,8 @@ jQuery ($) ->
         $.headers.push header
       @activate()
       @table.bind "refresh", @update
-      @resort @sort, @order
       if Modernizr.history
-        $(window).bind 'popstate', @redisplay
+        $(window).bind 'popstate', @restoreState
     
     resort: (sort, order) =>
       sort ?= "name"
@@ -55,6 +54,7 @@ jQuery ($) ->
       @body.remove()
       @body = replacement
       @body.fadeTo('fast', 1)
+      @body.activate()
       @activate()
 
     activate: () =>
@@ -79,10 +79,9 @@ jQuery ($) ->
         @clear()
         @order = event.state.order
         @sort = event.state.sort
-        $(event.state.html).appendTo(@table)
+        @display(event.state.html)
         $.each $.headers, (i, header) =>
           header.check()
-        @activate()
         
 
   class SortLink

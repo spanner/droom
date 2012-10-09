@@ -34,13 +34,27 @@ module Droom
     def new
       render :partial => "form"
     end
-    
+
     def create
-      @event.save! if @event
-      @document.save!
+      if @event
+        # document is instantiated as an associate of event
+        @event.save!
+      else
+        @document.save!
+      end
       render :partial => 'created'
     end
     
+    def edit
+      render :partial => "form"
+    end
+    
+    def update
+      @document.update_attributes(params[:document])
+      @document.save!
+      render :partial => 'table_document', :object => @document.with_event
+    end
+
     def destroy
       @document.destroy
       head :ok
@@ -73,6 +87,7 @@ module Droom
       sort_parameters = {
         'name' => 'droom_documents.name',
         'filename' => 'droom_documents.file_file_name',
+        'filesize' => 'droom_documents.file_file_size',
         'created' => 'droom_documents.created_at',
         'event' => 'event_name',
         'section' => 'case when agenda_section_name is null then 1 else 0 end, agenda_section_name'

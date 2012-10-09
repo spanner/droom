@@ -2,7 +2,7 @@
 require 'vcard'
 module Droom
   class Person < ActiveRecord::Base
-    attr_accessible :name, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user
+    attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user
     attr_accessor :invite_on_creation, :admin_user
     
     ### Associations
@@ -57,7 +57,15 @@ module Droom
     end
     
     def formal_name
-      [self.title, self.name].join(' ')
+      [title, forename, name].compact.join(' ').strip
+    end
+    
+    def informal_name
+      if Droom.use_forenames
+        forename
+      else
+        name
+      end
     end
 
     # I don't think we're using this anywhere at the moment, but a JSON API will grow here. Other classes already make more use of 
@@ -69,10 +77,6 @@ module Droom
         :name => name,
         :title => title
       }
-    end
-
-    def formal_name
-      [title, name].join(' ')
     end
       
     # *for_selection* returns a list of people in options_for_select format with which to populate a select box.
@@ -207,7 +211,7 @@ module Droom
     def invite_user
       unless self.user
         if self.name? && self.email?
-          self.create_user(:name => formal_name, :email => email, :admin => :admin_user)
+          self.create_user(:forename => forename, :name => name, :email => email, :admin => admin_user)
         end
       end
     end
@@ -217,9 +221,10 @@ module Droom
     # want to set the user address when the person gets one.
   
     def update_user
-      if self.user && !self.user.email
-        self.user.update_person_email = false
-        self.user.update_column(:email, self.email)
+      if self.user
+        self.user.update_column(:email, self.email) if email_changed?
+        self.user.update_column(:name, self.name) if name_changed?
+        self.user.update_column(:forename, self.forename) if forename_changed?
       end
     end
         

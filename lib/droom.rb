@@ -9,7 +9,7 @@ require "droom/dav_resource"
 require 'paperclip/io_adapters/url_adapter'
 
 module Droom
-  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root
+  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root, :use_forenames
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -45,6 +45,10 @@ module Droom
     
     def dav_root
       @@dav_root ||= "webdav"
+    end
+    
+    def use_forenamnes
+      !!@@use_forenames
     end
 
   end

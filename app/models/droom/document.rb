@@ -41,6 +41,13 @@ module Droom
                 LEFT OUTER JOIN droom_events ON droom_document_attachments.attachee_id = droom_events.id AND droom_document_attachments.attachee_type = "Droom::Event"')
         .group('droom_documents.id')
 
+    # so that we can apply the joined finders above to an existing object
+    #
+    scope :this_document, lambda { |doc|
+      where(["droom_documents.id = ?", doc.id])
+    }
+        
+
     def identifier
       'document'
     end
@@ -59,6 +66,10 @@ module Droom
       else
         ""
       end
+    end
+    
+    def with_event
+      self.class.this_document(self).with_latest_event.first
     end
     
   protected

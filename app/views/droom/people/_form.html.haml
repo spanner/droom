@@ -5,7 +5,11 @@
         %span
       %th.name
         = f.text_field :title, :class => 'title', :placeholder => t(:person_title)
-        = f.text_field :name, :class => 'name', :placeholder => t(:person_name)
+        - if Droom.use_forenames
+          = f.text_field :forename, :class => 'forename', :placeholder => t(:person_forename)
+          = f.text_field :name, :class => 'name', :placeholder => t(:person_surname)
+        - else
+          = f.text_field :name, :class => 'name', :placeholder => t(:person_name)
         %br
         - if @person.new_record?
           = f.check_box :invite_on_creation, :class => 'invite'

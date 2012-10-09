@@ -1,5 +1,5 @@
 %p.controls
-  = t(:signed_in_as, :name => current_user.name).html_safe
+  = t(:signed_in_as, :name => current_user.full_name).html_safe
   = link_to t(:setup), "/setup"
   = link_to t(:preferences), "/users/#{current_user.id}/edit"
   = link_to t(:help), '/help'
