@@ -36,7 +36,12 @@ module Droom
     end
 
     def create
-      @document.save!
+      if @event
+        # document is instantiated as an associate of event
+        @event.save!
+      else
+        @document.save!
+      end
       render :partial => 'created'
     end
     
