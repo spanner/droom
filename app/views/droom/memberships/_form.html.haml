@@ -1,0 +1,7 @@
+= form_for [@group, @membership], :html => {:remote => true, :data => {:type => :html}} do |f|
+  %p
+    = f.select :person_id, Droom::Person.all.collect {|p| [ p.name, p.id ] }
+  = f.submit
+  = t :or
+  = link_to t(:cancel), "/", :class => 'cancel'
+  

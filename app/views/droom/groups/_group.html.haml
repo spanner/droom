@@ -1,0 +1,8 @@
+- group ||= @group
+%tr.group.holder{:id => "group_#{group.id}"}
+  %td= link_to group.name, group
+  %td= group.description
+  %td= group.people.count
+  %td.buttons
+    - if current_user.admin?
+      = link_to t(:remove), group_url(group), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_group, :name => group.name)}

@@ -1,0 +1,8 @@
+= form_for @group, :html => {:remote => true, :data => {:type => :html}} do |f|
+  %p
+    = f.text_field :name
+  %p
+    = f.text_area :description
+  = f.submit
+  = t :or
+  = link_to t(:cancel), "/", :class => 'cancel'

@@ -1,0 +1,33 @@
+- membership ||= @membership
+- person = membership.person
+%tr.person.holder{:id => "person_#{person.id}"}
+  %td.icon
+    %span.placeholder
+    
+  %th.name
+    = person.title
+    = person.name
+      
+  %td.email
+    %p
+      = mail_to person.email
+  %td.phone
+    - if person.phone
+      %p
+        = person.phone
+    - else
+      %p.unavailable
+        no phone
+  / %td.address
+  /   - if person.address?
+  /     %p
+  /       = person.address
+  /   - else
+  /     %p.unavailable
+  /       no address
+  %td.buttons
+    %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
+    / - if admin?
+    /   = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
+    - if current_user.admin?
+      = link_to t(:remove), membership_url(Droom::Membership.find_by_group_id_and_person_id(@group.id, person.id)), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_remove_member, :name => person.name, :group => @group.name)}

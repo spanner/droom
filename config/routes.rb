@@ -24,7 +24,9 @@ Droom::Engine.routes.draw do
   end
   
   resources :documents
-  resources :groups
+  resources :groups do
+    resources :memberships
+  end
   resources :venues
   
   match "/library" => 'documents#index', :as => :library
