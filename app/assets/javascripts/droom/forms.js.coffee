@@ -585,7 +585,7 @@ jQuery ($) ->
           @_holder.append(@xhr.responseText).delay(5000).slideUp()
           #todo: remove this nasty shortcut and integrate with RemoteForm and jquery_ujs
           #(which will require us to prevent form serialization in some way)
-          $('table.documents').trigger("refresh")
+          $('.documents').trigger("refresh")
     
     finish: (e) =>
       @_status.text("Processing")

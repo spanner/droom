@@ -14,8 +14,9 @@ module Droom
 
     has_many :document_attachments, :as => :attachee, :dependent => :destroy
     has_many :documents, :through => :document_attachments
-  
-    has_many :agenda_sections
+
+    has_many :agenda_categories, :dependent => :destroy
+    has_many :categories, :through => :agenda_categories
   
     belongs_to :venue
     accepts_nested_attributes_for :venue
@@ -236,10 +237,29 @@ module Droom
       self.venue = Droom::Venue.find_or_create_by_name(name)
     end
 
-
-
-
-
+    # Agenda sections are global, and we don't want to have to manage the extra workload of associating a section with an event.
+    # This call retrieves all the agenda sections that are associated with any of our document attachments, and is suitable for looping
+    # on a template to display attachments per section.
+    #
+    def agenda_sections
+      Droom::AgendaSection.associated_with_event(self)
+    end
+    
+    # and this sorts our attachment list into agenda section buckets so that we don't have to go back to the database for each section.
+    def attachments_by_category
+      document_attachments.each_with_object({}) do |att, hash|
+        key = att.category_name
+        hash[key] ||= []
+        hash[key].push(att)
+      end
+    end
+    
+    def categories_for_selection
+      cats = categories.map{|c| [c.name, c.id] }
+      cats.unshift(['', ''])
+      cats
+    end
+    
     def visible_to?(user_or_person)
       return true if self.public?
       return false unless user_or_person

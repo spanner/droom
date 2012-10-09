@@ -37,7 +37,6 @@ module Droom
 
     def create
       if @event
-        # document is instantiated as an associate of event
         @event.save!
       else
         @document.save!

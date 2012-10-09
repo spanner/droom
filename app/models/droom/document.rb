@@ -1,7 +1,10 @@
 module Droom
   class Document < ActiveRecord::Base
-    attr_accessible :name, :file, :description
-    attr_accessor :old_version
+    attr_accessible :name, :file, :description, :document_attachments_attributes, :attachment_category
+
+    # attachment_category and event_id are used on document creation to create an associated attachment
+    # this is a temporary shortcut 
+    attr_accessor :old_version, :attachment_category, :event_id
 
     belongs_to :created_by, :class_name => 'User'
     has_many :document_attachments, :dependent => :destroy
@@ -46,7 +49,6 @@ module Droom
     scope :this_document, lambda { |doc|
       where(["droom_documents.id = ?", doc.id])
     }
-        
 
     def identifier
       'document'
@@ -56,6 +58,10 @@ module Droom
       file.exists?
     end
     
+    def attachment_category=(id)
+      
+    end
+
     def attach_to(attachee, attributes={})
       document_attachments.create(attributes.merge(:attachee => attachee))
     end

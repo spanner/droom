@@ -7,8 +7,9 @@
       = t :attachments
     = render :partial => "droom/events/attachment_list", :object => event.document_attachments.unfiled, :locals => {:limit => 100}
   
-    - event.agenda_sections.each do |asec|
-      - if asec.document_attachments.any?
-        %h3
-          = asec.name
-        = render :partial => "droom/events/attachment_list", :object => asec.document_attachments, :locals => {:limit => 100}
+    - event.attachments_by_category.each_pair do |cat_name, atts|
+      - if atts.any?
+        - unless cat_name == "uncategorised"
+          %h3
+            = cat_name
+          = render :partial => "droom/events/attachment_list", :object => atts, :locals => {:limit => 100}

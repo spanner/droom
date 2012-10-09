@@ -1,14 +1,14 @@
 module Droom
   class DocumentAttachment < ActiveRecord::Base
-    attr_accessible :attachee, :document, :agenda_section
+    attr_accessible :attachee, :document, :agenda_section, :agenda_section_id
     
     belongs_to :document
     belongs_to :attachee, :polymorphic => true
-    belongs_to :agenda_section
+    belongs_to :category
     belongs_to :created_by, :class_name => "User"
     has_many :personal_documents, :dependent => :destroy
     
-    default_scope order("(CASE WHEN droom_document_attachments.agenda_section_id IS NULL THEN 0 ELSE 1 END)").includes(:document)
+    default_scope order("(CASE WHEN droom_document_attachments.category_id IS NULL THEN 0 ELSE 1 END), droom_documents.name").includes(:document)
     
     scope :not_personal_for, lambda {|person|
       select("droom_document_attachments.*")
@@ -18,7 +18,11 @@ module Droom
         .having("COUNT(droom_personal_documents.id) = 0")
     }
     
-    scope :unfiled, where("agenda_section_id IS NULL")
+    scope :attached_to_event, lambda {|event| 
+      where(["droom_document_attachments.attachee_type = 'Droom::Event' AND droom_document_attachments.attachee_id = ?", event.id])
+    }
+    
+    scope :unfiled, where("category_id IS NULL")
     
     def slug
       if attachee 
@@ -34,6 +38,10 @@ module Droom
       else 
         personal_documents.create(:person => person)
       end
+    end
+    
+    def category_name
+      category ? category.name : "uncategorised"
     end
   
   end

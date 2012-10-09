@@ -1,20 +1,23 @@
-- addressing = @event ? [@event, @document] : @document
+= form_for @document, :html => { :multipart => true, :class => 'edit document', :remote => true, :data => {:type => :html}} do |f|
 
-= form_for addressing, :html => { :multipart => true, :class => 'edit document', :remote => true, :data => {:type => :html}} do |f|
+  - if @event
+    = f.hidden_field :event_id, @event.id
+
+  - if @category
+    = f.hidden_field :attachment_category, @category.id
+
   .filepicker
     = link_to "choose file", "#", :class => "ul minimal #{@document.file_extension}"
     = f.file_field :file, :class => "file"
     %p.tip
       = t :click_to_choose_file
+
   .metadata
     %p.name
       = f.text_field :name, :class => 'name', :placeholder => t(:document_name)
     %p.description
       = f.text_area :description, :class => 'description', :placeholder => t(:document_description)
-    - if @event
-      - document_attachment = @document.document_attachments.build({:attachee => @event})
-      = f.fields_for :document_attachments, document_attachment do |daf|
-        = daf.select :agenda_section_id, @event.agenda_sections.all.collect {|a| [a.name, a.id]}, { :include_blank => true }
+
     .buttons
       = f.submit t(:save_document)
       = t :or
