@@ -35,16 +35,21 @@ module Droom
       render :partial => "form"
     end
 
-    def edit
-      render :partial => "form"
-    end
-    
     def create
-      @event.save! if @event
       @document.save!
       render :partial => 'created'
     end
     
+    def edit
+      render :partial => "form"
+    end
+    
+    def update
+      @document.update_attributes(params[:document])
+      @document.save!
+      render :partial => 'table_document', :object => @document.with_event
+    end
+
     def destroy
       @document.destroy
       head :ok

@@ -562,6 +562,7 @@ jQuery ($) ->
 
     send: () =>
       formData = new FormData @_form.get(0)
+      console.log "formdata!", formData
       @xhr = new XMLHttpRequest()
       @xhr.onreadystatechange = @update
       @xhr.upload.onprogress = @progress

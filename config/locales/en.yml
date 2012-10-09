@@ -132,6 +132,7 @@ en:
       month_header: "%B %Y"
       natural: "%d %B"
       natural_with_year: "%d %B %Y"
+      minimal_with_year: "%d %b %Y"
       minicalendar_title: "%B %Y"
       minicalendar_month: "%B"
       year: "%Y"

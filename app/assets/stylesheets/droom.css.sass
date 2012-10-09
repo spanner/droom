@@ -289,8 +289,8 @@ table.main
           color: $link
           background-position: right -32px
   td, th
-    padding: 0.5em 1em 0 0
     vertical-align: top
+    padding-right: 5px
     h3, p
       margin: 0
     &.minor
@@ -302,14 +302,13 @@ table.main
     &.minor
       span
         display: block
-        padding: 12px 0
+        padding-top: 8px
     p.unavailable
       line-height: 28px
     a.event
       display: block
-      padding: 8px 0
+      padding-top: 8px
       min-height: 22px
-      line-height: 22px
     a.vcard
       +icon("droom/vcard.png")
 
@@ -317,8 +316,15 @@ table.documents
   margin-bottom: 25px
   th
     white-space: nowrap
+    &.name
+      font-size: 120%
   td.admin
     min-width: 55px
+  td.description
+    p
+      margin: 0 0 10px 28px
+      +small
+      color: $mid
 
 table.people
   margin-bottom: 25px
@@ -904,3 +910,9 @@ ul.setup
   .window_venue_events
     max-height: 120px
     overflow: auto
+
+
+
+.note, .formnote
+  font-size: 0.8em
+  color: $mid
