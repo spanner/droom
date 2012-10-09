@@ -702,3 +702,10 @@ jQuery ($) ->
   $.fn.password_field = ->
     @each ->
       new PasswordField(@)
+
+
+  $.fn.submitter = ->
+    @click (e) ->
+      $(@).addClass('waiting').text('Please wait').bind "click", (e) =>
+        e.preventDefault() if e
+      

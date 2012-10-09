@@ -63,6 +63,7 @@ jQuery ($) ->
       order: "DESC"
     @find_including_self('#map').init_map()
     @find_including_self('input.password').password_field()
+    @find_including_self('input[type="submit"]').submitter()
     @
       
 $ ->
