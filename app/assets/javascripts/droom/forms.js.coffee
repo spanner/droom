@@ -604,10 +604,21 @@ jQuery ($) ->
       $(target_selector).click()
 
 
-
-
-
-
+  $.fn.replace_with_remote_toggle = () ->
+    @
+      .on 'ajax:beforeSend', (event, xhr, settings) ->
+        $(@).addClass('waiting')
+        $(@).children().addClass('waiting')
+        xhr.setRequestHeader('X-PJAX', 'true')
+      .on 'ajax:error', (event, xhr, status) ->
+        $(@).removeClass('waiting').addClass('erratic')
+      .on 'ajax:success', (event, response, status) ->
+        if response? && response != " "
+          self = $(@)
+          container = $(@).parents('.holder').first()
+          replacement = $(response)
+          self.removeClass('waiting')
+          container.replaceWith(replacement.activate())
 
   class PasswordField
     constructor: (element, opts) ->

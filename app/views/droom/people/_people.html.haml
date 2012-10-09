@@ -1,4 +1,14 @@
 %table.main.people{:data => {:refreshable => true, :url => "#{people_path}.js"}}
+  %thead
+    %tr
+      %th
+      %th
+      %th
+      %th
+      - @groups.each do |group|
+        %th.group
+          .rotate
+            = group.name
   %tbody
     - @people.each do |p|
       = render :partial => 'person', :object => p

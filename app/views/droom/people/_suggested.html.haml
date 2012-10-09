@@ -1,7 +1,7 @@
 - person ||= suggested
 
 %li.person
-  = link_to person.name, person_url(person), :class => 'popup', :remote => true
+  = link_to person.name, person_url(person)
   %span.note
     = person.phone
     = t :or

@@ -1,0 +1,4 @@
+%table.main.people{:data => {:refreshable => true, :url => "#{group_path}.js"}}
+  %tbody
+    - @group.memberships.each do |membership|
+      = render :partial => 'droom/memberships/member', :locals => {:membership => membership}

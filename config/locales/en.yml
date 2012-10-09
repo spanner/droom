@@ -22,6 +22,7 @@ en:
   add_document: "Add a document"
   add_person: "Add a person"
   add_group: "Add a group"
+  added_to: "has been added to '%{group}'."
   continue: "Continue"
   dashboard: "Dashboard"
   hello: "Hello world"
@@ -32,7 +33,9 @@ en:
   click_to_choose_file: "Click to choose a file"
   confirm_delete_document: "Are you sure you want to delete the document '%{name}'? This cannot be undone."
   confirm_delete_event: "Are you sure you want to delete the event '%{name}'? This cannot be undone."
+  confirm_delete_group: "Are you sure you want to delete the group '%{name}'? This cannot be undone."
   confirm_delete_person: "Are you sure you want to delete the person '%{name}'? This cannot be undone."
+  confirm_remove_member: "Are you sure you want to remove '%{name}' from '%{group}'?"
   document_agenda_section: "Filed under"
   document_name: "Name"
   document_filename: "Filename"
@@ -51,6 +54,7 @@ en:
   events_in: "Events in %{period}"
   events_on: "Events on %{day}"
   event_created: "Event '%{name}' created"
+  group_created: "Group '%{name}' created"
   calendar: "Calendar"
   library: "Library" 
   preferences: "Preferences"
@@ -60,6 +64,9 @@ en:
   your_preferences_saved: "Your preferences have been updated"
   
   directory: "Directory" 
+  
+  group_name: "Name"
+  group_description: "Description"
   
   person_title: "Title"
   person_forename: "Forename"

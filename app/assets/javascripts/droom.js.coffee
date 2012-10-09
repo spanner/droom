@@ -44,6 +44,7 @@ jQuery ($) ->
     selection
 
   $.fn.activate = () ->
+    @find_including_self('a.toggle_active').replace_with_remote_toggle()
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('.twister').twister()
     @find_including_self('.wysihtml').html_editable()
@@ -64,6 +65,7 @@ jQuery ($) ->
     @find_including_self('#map').init_map()
     @find_including_self('input.password').password_field()
     @find_including_self('input[type="submit"]').submitter()
+    @find_including_self('input.person_picker').person_picker()
     @
       
 $ ->
