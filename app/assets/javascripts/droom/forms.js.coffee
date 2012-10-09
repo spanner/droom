@@ -232,6 +232,7 @@ jQuery ($) ->
         #todo: make sure we get error markers displaying nicely here
       else
         @_options.on_complete?(replacement)
+      $('[data-refreshable]').trigger("insert")
         
     cancel: (e) =>
       e.preventDefault() if e

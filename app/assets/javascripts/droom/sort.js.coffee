@@ -57,6 +57,7 @@ jQuery ($) ->
     activate: () =>
       @body.find('a.popup').popup_remote_content()
       @body.find('.pagination').find('a').retable(@)
+      @body.refresher()
       
     clear: () =>
       @body.children().remove()
@@ -75,7 +76,7 @@ jQuery ($) ->
         @clear()
         @order = event.state.order
         @sort = event.state.sort
-        $(event.state.html).appendTo(@body)
+        $(event.state.html).appendTo(@table)
         $.each $.headers, (i, header) =>
           header.check()
         @activate()

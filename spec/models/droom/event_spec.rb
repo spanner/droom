@@ -127,7 +127,7 @@ describe Droom::Event do
     
     it "should return all the events falling before a date" do
       
-      p "before beg: #{Droom::Event.before(@beg).map(&:name).join(',')}"
+      # p "before beg: #{Droom::Event.before(@beg).map(&:name).join(',')}"
       
       Droom::Event.before(@beg).count.should == 5
       Droom::Event.before(@end).count.should == 15
