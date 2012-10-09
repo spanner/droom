@@ -62,7 +62,9 @@ en:
   directory: "Directory" 
   
   person_title: "Title"
+  person_forename: "Forename"
   person_name: "Name"
+  person_surname: "Surname"
   person_email: "Email"
   person_phone: "Phone"
   person_post_line1: "Address"
