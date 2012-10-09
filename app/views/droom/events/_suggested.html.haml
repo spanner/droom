@@ -2,7 +2,7 @@
 - date_format = event.start.year == Date.today.year ? :natural : :natural_with_year
 
 %li.event
-  = link_to event.name, event_url(event, :format => :js), :remote => true, :data => {:type => "html"}
+  = link_to event.name, event_url(event)
   %span.note
     = l event.start_time, :format => :natural
     = t :on

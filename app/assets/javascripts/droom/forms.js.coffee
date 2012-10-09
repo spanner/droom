@@ -232,7 +232,6 @@ jQuery ($) ->
         #todo: make sure we get error markers displaying nicely here
       else
         @_options.on_complete?(replacement)
-      $('[data-refreshable]').trigger("insert")
         
     cancel: (e) =>
       e.preventDefault() if e
@@ -324,22 +323,17 @@ jQuery ($) ->
       @_container.slideUp 'fast', () ->
         $(@).remove()
 
-  $.fn.interject = (target, position) ->
-    position ?= 'after'
-    @each ->
-      new Interjection @, target, position
 
   $.fn.append_remote_form = (target) ->
     @each ->
       target ?= $(@).parent()
       affected = $(@).attr('data-affected')
-      
       $(@).remote_link (response) =>
         f = $(response)
         ij = new Interjection f, target, 'after'
         new RemoteForm f, 
           on_cancel: ij.remove
-          on_complete: () =>
+          on_complete: (response) =>
             $(affected).trigger "refresh"
 
 
@@ -586,7 +580,9 @@ jQuery ($) ->
         if @xhr.status == 200
           @_form.remove()
           @_holder.append(@xhr.responseText).delay(5000).slideUp()
-          $('[data-tag="update_on_insert"]').trigger("refresh")
+          #todo: remove this nasty shortcut and integrate with RemoteForm and jquery_ujs
+          #(which will require us to prevent form serialization in some way)
+          $('table.documents').trigger("refresh")
     
     finish: (e) =>
       @_status.text("Processing")
@@ -597,7 +593,7 @@ jQuery ($) ->
 
   $.fn.file_picker = () ->
     @each ->
-      new FilePicker(@)
+      new FilePicker @
 
   $.fn.click_proxy = (target_selector) ->
     this.bind "click", (e) ->
