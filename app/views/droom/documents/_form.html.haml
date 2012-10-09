@@ -1,6 +1,6 @@
 - addressing = @event ? [@event, @document] : @document
 
-= form_for addressing, :html => { :multipart => true, :class => 'edit document'} do |f|
+= form_for addressing, :html => { :multipart => true, :class => 'edit document', :remote => true, :data => {:type => :html}} do |f|
   .filepicker
     = link_to "choose file", "#", :class => "ul minimal #{@document.file_extension}"
     = f.file_field :file, :class => "file"

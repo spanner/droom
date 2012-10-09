@@ -9,7 +9,7 @@ module Droom
     acts_as_mappable
 
     default_scope :order => 'name asc'
-    before_validation :geocode_location
+    before_validation :geocode_and_get_address
 
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"

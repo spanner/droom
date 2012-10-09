@@ -18,10 +18,10 @@ jQuery ($) ->
         header = new SortLink header, @
         $.headers.push header
       @activate()
-      @table.bind "refresh", @refresh_without_history
+      @table.bind "refresh", @update
       @resort @sort, @order
       if Modernizr.history
-        $(window).bind 'popstate', @restoreState
+        $(window).bind 'popstate', @redisplay
     
     resort: (sort, order) =>
       sort ?= "name"
@@ -30,7 +30,7 @@ jQuery ($) ->
       @order = order
       @get("/documents.js?sort=#{sort}&order=#{order}")
     
-    reload: () =>
+    update: () =>
       @body.fadeTo('fast', 0.2)
       $.ajax
         url: "/documents.js?sort=#{@sort}&order=#{@order}"
@@ -50,7 +50,10 @@ jQuery ($) ->
       @display(data)
       
     display: (data) =>
-      $(data).appendTo(@body)
+      replacement = $(data)
+      @body.after(replacement)
+      @body.remove()
+      @body = replacement
       @body.fadeTo('fast', 1)
       @activate()
 
