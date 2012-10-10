@@ -1,7 +1,13 @@
 #people
-  - if current_user.admin?
-    %p.admin
-      = link_to t(:add_member), droom.new_group_membership_url(@group), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => "table.people"}
+
   %h1= @group.name
-  %p= @group.description
+
+  %p
+    = @group.description
+
   = render :partial => 'droom/memberships/memberships'
+
+  - if current_user.admin?
+    .holder
+      %p.admin
+        = link_to t(:add_member), droom.new_group_membership_url(@group), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => "table.people"}

@@ -83,6 +83,8 @@ en:
   has_been_created: "has been added to the system"
   and_invited: "and invited to log in."
   
+  new_membership_instructions: "Start typing a name here and a list of possible matches will appear. Click on someone to add them to the %{name} group."
+  
   preferences: "Preferences"
   profile: "Profile"
   search: "Search"

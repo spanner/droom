@@ -2,4 +2,6 @@
   %input.person_picker{:type => "text", :placeholder => t(:person_name), :autocomplete => "off"}
   = f.hidden_field :person_id, :class => "person_picker_target"
   = link_to t(:cancel), "/", :class => 'cancel'
+  %p.formnote
+    =t :new_membership_instructions, :name => @group.name
   
