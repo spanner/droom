@@ -686,10 +686,12 @@ jQuery ($) ->
       @_notice.removeClass('erratic successful').addClass(cssclass).text(message)
       
     submittable: () =>
+      console.log "√ submittable"
       @submit.removeClass("unavailable")
       @blocked = false
 
     unsubmittable: () =>
+      console.log "x unsubmittable"
       @submit.addClass("unavailable")
       @blocked = true
 
@@ -704,10 +706,9 @@ jQuery ($) ->
       @confirmation.val() is @field.val()
 
     stumbit: (e) =>
+      console.log "Stumbit!", @blocked
       if @blocked
         e.preventDefault()
-      else
-        @field.val("") if @field.val() is @mock_password
 
 
   $.fn.password_field = ->

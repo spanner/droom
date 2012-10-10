@@ -64,7 +64,7 @@ en:
   set_preferences: "Account preferences"
   user_preferences: "User preferences"
   user_updated: "Preferences for %{name} have been updated."
-  your_preferences_saved: "Your preferences have been updated"
+  your_preferences_saved: "Thank you. Your preferences have been updated"
   
   directory: "Directory" 
   

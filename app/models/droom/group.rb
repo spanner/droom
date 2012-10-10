@@ -14,7 +14,7 @@ module Droom
     before_save :check_slug
   
     def admit(person)
-      self.readers << reader
+      self.people << person
     end
 
     def membership_for(person)

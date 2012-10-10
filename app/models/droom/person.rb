@@ -225,6 +225,7 @@ module Droom
       unless self.user
         if self.name? && self.email?
           self.create_user(:forename => forename, :name => name, :email => email, :admin => admin_user)
+          self.save
         end
       end
     end
