@@ -303,8 +303,17 @@ module Droom
       self.recurrence_rules << Droom::RecurrenceRule.from(rule)
     end
 
-    def document_set
-      # create zipfile
+    def documents_zipped
+      if self.documents.any?
+        tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")
+        Zip::ZipOutputStream.open(tempfile.path) do |z|
+          self.documents.each do |doc|
+            z.put_next_entry(doc.file_file_name)
+            z.print IO.read(doc.file.path)
+          end
+        end
+        tempfile
+      end
     end
 
     def to_rical
