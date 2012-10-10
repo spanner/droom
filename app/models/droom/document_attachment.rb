@@ -1,6 +1,6 @@
 module Droom
   class DocumentAttachment < ActiveRecord::Base
-    attr_accessible :attachee, :document, :agenda_section, :agenda_section_id
+    attr_accessible :attachee, :document, :agenda_section, :category_id
     
     belongs_to :document
     belongs_to :attachee, :polymorphic => true
