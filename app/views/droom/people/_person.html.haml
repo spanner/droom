@@ -2,7 +2,7 @@
 - cssclass = "placeholder"
 - cssclass << " invited" if person.has_invited_user?
 - cssclass << " active" if person.has_active_user?
-- cssclass << " admin" if person.has_admin_user?
+- cssclass << " administrator" if person.has_admin_user?
 
 %tr.person.holder{:id => "person_#{person.id}"}
   %td.icon
@@ -23,7 +23,7 @@
         no phone
   - if admin?
     - @groups.each do |group|
-      %td.group
+      %td.group.admin
         = render :partial => 'droom/memberships/button', :locals => {:group => group, :person => person}
   - unless admin?
     %td.buttons

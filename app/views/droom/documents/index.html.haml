@@ -1,6 +1,6 @@
 #documents
-  .holder
-    - if current_user.admin?
+  - if current_user.admin?
+    .holder
       %p.admin
         = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => "table.documents"}
 

@@ -7,7 +7,7 @@
       %th
       - if current_user.admin?
         - @groups.each do |group|
-          %th.group
+          %th.group.admin
             .rotate
               = truncate(group.name, :length => 12)
         %th.admin
