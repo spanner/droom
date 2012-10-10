@@ -2,6 +2,6 @@
   - if current_user.admin?
     %p.admin
       = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => "table.people"}
-      = link_to t(:manage_groups), droom.groups_url
+      = link_to t(:manage_groups), droom.groups_url, :class => "edit"
 
   = render :partial => "people"

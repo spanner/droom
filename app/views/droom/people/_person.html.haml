@@ -1,7 +1,12 @@
 - person ||= @person
+- cssclass = "placeholder"
+- cssclass << " invited" if person.has_invited_user?
+- cssclass << " active" if person.has_active_user?
+- cssclass << " admin" if person.has_admin_user?
+
 %tr.person.holder{:id => "person_#{person.id}"}
   %td.icon
-    %span{:class => person.has_active_user? ? "placeholder active" : "placeholder"}
+    %span{:class => cssclass}
     
   %th.name
     = person.formal_name
@@ -16,21 +21,15 @@
     - else
       %p.unavailable
         no phone
-  / %td.address
-  /   - if person.address?
-  /     %p
-  /       = person.address
-  /   - else
-  /     %p.unavailable
-  /       no address
   - if admin?
     - @groups.each do |group|
       %td.group
         = render :partial => 'droom/memberships/button', :locals => {:group => group, :person => person}
-  %td.buttons
-    - unless admin?
+  - unless admin?
+    %td.buttons
       %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
-    - if admin?
+  - if admin?
+    %td.admin
       = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
-    - if current_user.admin?
+    %td.admin
       = link_to t(:remove), person_url(person), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_person, :name => person.name)}
