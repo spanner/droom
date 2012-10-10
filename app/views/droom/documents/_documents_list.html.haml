@@ -10,9 +10,10 @@
           = link_to t(:add_document), droom.new_event_document_url(event), :class => "add minimal admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}
       
       = render :partial => "droom/events/attachment_list", :object => event.document_attachments.unfiled, :locals => {:limit => 100}
-  
-    - event.attachments_by_category.each_pair do |cat_name, atts|
-      - if atts.any?
+
+    - attachments = event.attachments_by_category
+    - attachments.each_pair do |cat_name, category_attachments|
+      - if category_attachments.any?
         - unless cat_name == "uncategorised"
           %section.holder
             %h3
@@ -20,4 +21,4 @@
               - if admin?
                 = link_to t(:add_document), droom.new_event_document_url(event, :category_name => cat_name), :class => "add minimal admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}
 
-            = render :partial => "droom/events/attachment_list", :object => atts, :locals => {:limit => 100}
+            = render :partial => "droom/events/attachment_list", :object => category_attachments, :locals => {:limit => 100}

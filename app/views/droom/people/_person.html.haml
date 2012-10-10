@@ -1,7 +1,7 @@
 - person ||= @person
-%tr{:id => "person_#{person.id}", :class => person.activated? ? "person holder" : "person holder inactive"}
+%tr.person.holder{:id => "person_#{person.id}"}
   %td.icon
-    %span.placeholder
+    %span{:class => person.has_active_user? ? "placeholder active" : "placeholder"}
     
   %th.name
     = person.formal_name
