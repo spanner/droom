@@ -50,9 +50,7 @@ module Droom
       where(["droom_documents.id = ?", doc.id])
     }
 
-    scope :by_date, lambda { |doc|
-      order("droom_documents.updated_at ASC, droom_documents.created_at ASC")
-    }
+    scope :by_date, order("droom_documents.updated_at ASC, droom_documents.created_at ASC")
 
     def identifier
       'document'
