@@ -257,7 +257,6 @@ module Droom
         key = category.name
         cats[key] ||= []
       end
-      ap cats
     end
     
     def categories_for_selection

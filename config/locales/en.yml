@@ -13,6 +13,7 @@ en:
         person:
           invite_on_creation: "Invite on creation"
           admin_user: "as admin user"
+  admin: "Admin"
   attachments: "Attachments"
   cancel: "cancel"
   mon: "MON"
