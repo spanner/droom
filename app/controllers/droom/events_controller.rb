@@ -2,7 +2,7 @@ module Droom
   class EventsController < Droom::EngineController
     require "uri"
     require "ri_cal"
-    respond_to :json, :rss, :ics, :html, :js
+    respond_to :json, :rss, :ics, :html, :js, :zip
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!  
@@ -36,8 +36,11 @@ module Droom
     
     def show
       respond_with @event do |format|
-        format.js {
-          render :partial => 'droom/events/event'
+        format.js { 
+          render :partial => 'droom/events/event' 
+        }
+        format.zip { 
+          send_file @event.documents_zipped.path, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@event.slug}.zip"
         }
       end
     end
