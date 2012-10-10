@@ -125,6 +125,10 @@ en:
     zero: "No events coming up"
     one: "One event coming up"
     other: "%{count} events coming up"
+  group_members:
+    zero: "No members"
+    one: "One member"
+    other: "%{count} members"
   more_documents_count:
     zero: "No more documents"
     one: "and one more document..."

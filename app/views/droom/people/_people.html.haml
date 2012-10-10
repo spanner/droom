@@ -8,7 +8,7 @@
       - @groups.each do |group|
         %th.group
           .rotate
-            = group.name
+            = truncate(group.name, :length => 12)
   %tbody
     - @people.each do |p|
       = render :partial => 'person', :object => p

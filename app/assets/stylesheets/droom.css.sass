@@ -159,6 +159,9 @@ div.event, form.event
           color: $dark
           +hover
 
+.interjected
+  margin: 10px 0
+
 .person_picker
   font-size: 1.8em
 
@@ -331,6 +334,9 @@ table.documents
 
 table.people
   margin-bottom: 25px
+  margin-top: -20px
+  tr.inactive
+    +opacity(0.5)
   th, td
     line-height: 32px
     white-space: nowrap
@@ -369,7 +375,9 @@ table.people
     input
       width: 150px
   th.group
-    width: 15px
+    max-width: 24px
+    height: 30px
+    
     padding-right: 2px
     .rotate
       +rotate(-75deg)

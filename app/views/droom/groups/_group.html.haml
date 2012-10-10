@@ -1,8 +1,9 @@
 - group ||= @group
 %tr.group.holder{:id => "group_#{group.id}"}
-  %th.name= link_to group.name, group
+  %th.name
+    = link_to group.name, group
   %td.description= group.description
-  %td.count= group.people.count
+  %td.count= t(:group_members, :count => group.people.count)
   %td.buttons
     - if admin?
       = link_to t(:edit_group), edit_group_url(group), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}

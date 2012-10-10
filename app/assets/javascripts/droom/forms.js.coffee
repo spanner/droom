@@ -327,11 +327,11 @@ jQuery ($) ->
 
   $.fn.append_remote_form = (target) ->
     @each ->
-      target ?= $(@).parent()
+      container = target ? $(@).parents('.holder').first()
       affected = $(@).attr('data-affected')
       $(@).remote_link (response) =>
         f = $(response)
-        ij = new Interjection f, target, 'after'
+        ij = new Interjection f, container, 'after'
         new RemoteForm f, 
           on_cancel: ij.remove
           on_complete: (response) =>

@@ -1,15 +1,15 @@
 module Droom
   class Document < ActiveRecord::Base
-    attr_accessible :name, :file, :description, :document_attachments_attributes, :attachment_category
+    attr_accessible :name, :file, :description, :attachment_category_id, :event_id
 
     # attachment_category and event_id are used on document creation to create an associated attachment
     # this is a temporary shortcut 
     attr_accessor :old_version, :attachment_category, :event_id
 
     belongs_to :created_by, :class_name => 'User'
+
     has_many :document_attachments, :dependent => :destroy
     has_many :personal_documents, :through => :document_attachments
-    accepts_nested_attributes_for :document_attachments
     
     has_attached_file :file
     
