@@ -42,7 +42,7 @@
         - if event.documents.any?
           .documents
             %h3 
-              = link_to t(:attachments), event_url(event, :format => :zip), :title => t(:click_to_download_zipfile)
+              = t(:attachments)
             %ul.downloads
               = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
               - if event.documents.count > 3

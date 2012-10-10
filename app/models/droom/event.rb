@@ -1,3 +1,4 @@
+require 'open-uri'
 require 'zip/zip'
 require 'uuidtools'
 require 'chronic'
@@ -308,8 +309,7 @@ module Droom
         tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")
         Zip::ZipOutputStream.open(tempfile.path) do |z|
           self.documents.each do |doc|
-            z.put_next_entry(doc.file_file_name)
-            z.print IO.read(doc.file.path)
+            z.add(doc.file_file_name, open(doc.file.url))
           end
         end
         tempfile
