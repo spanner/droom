@@ -3,8 +3,8 @@
 .documents{ :"data-url" => "#{event_documents_path(event)}.js", :"data-refreshable" => true}
 
   - if event.document_attachments.any?
-    %p
-      = link_to t(:download_attachments_as_zipfile), event_url(event, :format => :zip), :class => "download"
+    / %p
+    /   = link_to t(:download_attachments_as_zipfile), event_url(event, :format => :zip), :class => "download"
 
     %section.holder
       %h2
