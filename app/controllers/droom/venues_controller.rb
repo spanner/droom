@@ -2,7 +2,8 @@ module Droom
   class VenuesController < Droom::EngineController
     respond_to :json, :html
   
-    before_filter :get_venues
+    before_filter :get_venues, :only => ["index"]
+    before_filter :get_venue, :only => ["show"]
 
     def index
       respond_with @venues
@@ -18,7 +19,7 @@ module Droom
       @venues = Venue.all
     end
 
-    def get_venues
+    def get_venue
       @venue = Venue.find(params[:id])
       @events = @venue.events.future_and_current
     end
