@@ -63,12 +63,11 @@ module Droom
   protected
     
     def build_document
-      if params[:event_id]
-        @event = Droom::Event.find(params[:event_id])
+      params[:document] ||= {}
+      if params[:event_id] || params[:document][:event_id]
+        @event = Droom::Event.find(params[:event_id] || params[:document][:event_id])
         @document = @event.documents.new(params[:document])
-        if params[:category_name]
-          @category = @event.categories.find_by_name(params[:category_name])
-        end
+        @category = @event.categories.find_by_name(params[:category_name]) if params[:category_name]
       else
         @document = Droom::Document.new(params[:document])
       end
