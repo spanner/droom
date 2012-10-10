@@ -563,7 +563,7 @@ span.erratic
 
 p.admin
   margin-left: $datemark_width + $datemark_margin
-  
+
 a.add, a.edit, a.delete
   display: inline-block
   +heading
@@ -710,26 +710,44 @@ ul.downloads
   padding: 0
   list-style: none
 
-li.document a, a.document
-  display: block
-  padding: 8px 0 0 28px
-  min-height: 22px
-  line-height: 22px
-  background: 
-    repeat: no-repeat
-    position: 0 0
-    image: image-url('droom/icons.png')
-  &.pdf
-    background-position: 0 -48px
-  &.doc, &.docx
-    background-position: 0 -96px
-    color: #1683ab
-    +hover
-  &.xls, &.xlsx
-    background-position: 0 -144px
-    color: #369620
-    +hover
-
+li.document
+  &:hover
+    .delete
+      display: inline-block
+  .delete
+    display: none
+    height: 20px
+    line-height: 20px
+    padding: 0
+    margin-left: 10px
+    background:
+      image: image-url('droom/minisymbols.png')
+      repeat: no-repeat
+      position: 0 -504px
+    &:hover
+      background-position: 0 -528px
+    &:active
+      background-position: 0 -576px
+  a, a.document
+    display: inline-block
+    padding: 8px 0 0 28px
+    min-height: 22px
+    line-height: 22px
+    background: 
+      repeat: no-repeat
+      position: 0 0
+      image: image-url('droom/icons.png')
+    &.pdf
+      background-position: 0 -48px
+    &.doc, &.docx
+      background-position: 0 -96px
+      color: #1683ab
+      +hover
+    &.xls, &.xlsx
+      background-position: 0 -144px
+      color: #369620
+      +hover
+    
 li.more
   +pale
   a

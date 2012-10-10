@@ -36,6 +36,7 @@ en:
   confirm_delete_event: "Are you sure you want to delete the event '%{name}'? This cannot be undone."
   confirm_delete_group: "Are you sure you want to delete the group '%{name}'? This cannot be undone."
   confirm_delete_person: "Are you sure you want to delete the person '%{name}'? This cannot be undone."
+  confirm_remove_document: "Are you sure you want to remove the document '%{name}' from the event '%{event_name}?"
   confirm_remove_member: "Are you sure you want to remove '%{name}' from '%{group}'?"
   document_category: "Category"
   document_name: "Name"
