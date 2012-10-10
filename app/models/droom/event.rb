@@ -247,11 +247,17 @@ module Droom
     
     # and this sorts our attachment list into agenda section buckets so that we don't have to go back to the database for each section.
     def attachments_by_category
+      cats = {}
       document_attachments.each_with_object({}) do |att, hash|
         key = att.category_name
-        hash[key] ||= []
-        hash[key].push(att)
+        cats[key] ||= []
+        cats[key].push(att)
       end
+      categories.each do |category|
+        key = category.name
+        cats[key] ||= []
+      end
+      ap cats
     end
     
     def categories_for_selection

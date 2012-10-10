@@ -13,7 +13,7 @@
 
     - attachments = event.attachments_by_category
     - attachments.each_pair do |cat_name, category_attachments|
-      - if category_attachments.any?
+      - if admin? || category_attachments.any?
         - unless cat_name == "uncategorised"
           %section.holder
             %h3

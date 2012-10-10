@@ -4,7 +4,7 @@ module Droom
 
     # attachment_category and event_id are used on document creation to create an associated attachment
     # this is a temporary shortcut 
-    attr_accessor :old_version, :attachment_category, :event_id
+    attr_accessor :old_version, :attachment_category_id, :event_id
 
     belongs_to :created_by, :class_name => 'User'
 
@@ -21,7 +21,7 @@ module Droom
     scope :all_public, where("public = 1 OR public = 't'")
     scope :not_public, where("NOT(public = 1 OR public = 't')")
     
-    scope :name_matching, lambda { |fragment| 
+    scope :name_matching, lambda { |fragment|
       fragment = "%#{fragment}%"
       where('droom_documents.name like ?', fragment)
     }
@@ -37,7 +37,7 @@ module Droom
         .where(["droom_document_attachments.attachee_id IN(#{placeholders})", groups.map(&:id)])
     }
     
-    scope :with_latest_event, 
+    scope :with_latest_event,
       select('droom_documents.*, droom_agenda_sections.name AS agenda_section_name, droom_events.id AS event_id, droom_events.name AS event_name')
         .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id 
                 LEFT OUTER JOIN droom_agenda_sections ON droom_document_attachments.agenda_section_id = droom_agenda_sections.id
@@ -58,8 +58,9 @@ module Droom
       file.exists?
     end
     
-    def attachment_category=(id)
-      
+    def attachment_category_id=(id)
+      save!
+      attach_to(Droom::Event.find(event_id), {:category_id => id})
     end
 
     def attach_to(attachee, attributes={})
