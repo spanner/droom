@@ -8,7 +8,7 @@ module Droom
     belongs_to :created_by, :class_name => "User"
     has_many :personal_documents, :dependent => :destroy
     
-    default_scope order("(CASE WHEN droom_document_attachments.category_id IS NULL THEN 0 ELSE 1 END), droom_documents.updated ASC, droom_documents.created_at ASC").includes(:document)
+    default_scope order("(CASE WHEN droom_document_attachments.category_id IS NULL THEN 0 ELSE 1 END), droom_documents.updated_at ASC, droom_documents.created_at ASC").includes(:document)
     
     scope :not_personal_for, lambda {|person|
       select("droom_document_attachments.*")
