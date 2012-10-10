@@ -20,6 +20,12 @@ module Droom
     def membership_for(person)
       self.memberships.for(person).first
     end
+    
+    def invite_to(event)
+      people.each do |person|
+        person.invite_to(event)
+      end
+    end
   
   protected
   
