@@ -23,7 +23,9 @@ Droom::Engine.routes.draw do
     end
   end
   
-  resources :documents
+  resources :documents do
+    resources :document_attachments
+  end
   resources :groups do
     resources :memberships
   end
