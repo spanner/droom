@@ -95,27 +95,7 @@ module Droom
       mday = params[:mday] || today.mday
       datemarker = Date.civil(year, month, mday)
       
-      if !params[:mday].blank?
-        @events = @events.on_day(year, month, mday)
-        @pagetitle = I18n.t(:events_on, :day => I18n.l(datemarker, :format => :natural))
-
-      elsif !params[:month].blank?
-        @events = @events.in_month(year, month)
-        @pagetitle = I18n.t(:events_in, :period => I18n.l(datemarker, :format => :month))
-
-      elsif !params[:year].blank?
-        @events = @events.in_year(year)
-        @pagetitle = I18n.t(:events_in, :period => I18n.l(datemarker, :format => :year))
-
-      else
-        @events = @events.future_and_current
-        @pagetitle = I18n.t(:future_events)
-      end
-      
-      unless params[:q].blank?
-        @events = @events.name_matching(params[:q])
-        @pagetitle << I18n.t(:matching, :term => params[:q])
-      end
+      @events = @events.future_and_current
       
       @show = params[:show] || 10
       @page = params[:page] || 1

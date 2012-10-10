@@ -1,0 +1,8 @@
+#error
+  %h1
+    Something is missing
+  %pre
+    = @exception.inspect
+  %pre
+    %code
+      = @exception.backtrace.join("\n")

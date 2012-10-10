@@ -5,10 +5,18 @@
       %th
       %th
       %th
-      - @groups.each do |group|
-        %th.group
+      - if current_user.admin?
+        - @groups.each do |group|
+          %th.group.admin
+            .rotate
+              = truncate(group.name, :length => 12)
+        %th.admin
           .rotate
-            = truncate(group.name, :length => 12)
+            = t :edit
+        %th.admin
+          .rotate
+            = t :delete
+
   %tbody
     - @people.each do |p|
       = render :partial => 'person', :object => p

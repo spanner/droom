@@ -10,16 +10,18 @@ module Droom
       raise Droom::PermissionDenied unless current_user && current_user.admin?
     end
     
-    def rescue_not_found
+    def rescue_not_found(exception)
+      @exception = exception
       render :template => 'droom/errors/not_found', :status => :not_found
     end
 
-    def rescue_not_allowed
+    def rescue_not_allowed(exception)
+      @exception = exception
       render :template => 'droom/errors/not_allowed', :status => :permission_denied
     end
     
-
-    def rescue_bang
+    def rescue_bang(exception)
+      @exception = exception
       render :template => 'droom/errors/bang', :status => 500
     end
     

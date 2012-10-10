@@ -1,0 +1,12 @@
+#venues
+  %h1
+    = @venue.name
+  %p
+    = @venue.address
+    
+#events
+  %h2.quiet
+    = t(:future_events)
+  
+  = render :partial => "droom/events/events"
+    

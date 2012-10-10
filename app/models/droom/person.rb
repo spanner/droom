@@ -161,6 +161,15 @@ module Droom
       user && user.activated?
     end
     
+    def has_invited_user?
+      user && user.invited?
+    end
+    
+    def has_admin_user?
+      user && user.admin?
+    end
+    
+    
     # Snail is a library that abstracts away - as far as possible - the vagaries of international address formats. Here we map our data columns onto Snail's abstract representations so that they can be rendered into the correct format for their country.
     def address
       Snail.new(
