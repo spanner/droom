@@ -89,7 +89,7 @@ module Droom
         'filesize' => 'droom_documents.file_file_size',
         'created' => 'droom_documents.created_at',
         'event' => 'event_name',
-        'section' => 'case when agenda_section_name is null then 1 else 0 end, agenda_section_name'
+        'category' => 'case when category_name is null then 1 else 0 end, category_name'
       }
       params[:sort] = 'created' unless sort_parameters[params[:sort]]
 

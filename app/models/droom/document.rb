@@ -38,9 +38,9 @@ module Droom
     }
     
     scope :with_latest_event, 
-      select('droom_documents.*, droom_agenda_sections.name AS agenda_section_name, droom_events.id AS event_id, droom_events.name AS event_name')
+      select('droom_documents.*, droom_categories.name AS category_name, droom_events.id AS latest_event_id, droom_events.name AS latest_event_name')
         .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id 
-                LEFT OUTER JOIN droom_agenda_sections ON droom_document_attachments.agenda_section_id = droom_agenda_sections.id
+                LEFT OUTER JOIN droom_categories ON droom_document_attachments.category_id = droom_categories.id
                 LEFT OUTER JOIN droom_events ON droom_document_attachments.attachee_id = droom_events.id AND droom_document_attachments.attachee_type = "Droom::Event"')
         .group('droom_documents.id')
 

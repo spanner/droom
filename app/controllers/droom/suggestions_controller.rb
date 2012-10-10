@@ -48,7 +48,7 @@ module Droom
       {
         "event" => "Droom::Event", 
         "person" => "Droom::Person", 
-        "document" => "Droom::Document", 
+        "document" => "Droom::Document",
         "venue" => "Droom::Venue"
       }
     end

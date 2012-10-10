@@ -57,9 +57,12 @@
             = t(:at)
             - if event.venue.url
               = link_to event.venue.proper_name, event.venue.url
-            - else
+            - elsif Droom.show_venue_map
               = link_to event.venue.proper_name, venues_url(:id => event.venue.id)
-              
+            - else
+              %strong
+                = event.venue.proper_name
+                
       - unless brief
         = simple_format event.description, :class => "description"
 
