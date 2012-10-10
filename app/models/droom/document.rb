@@ -61,11 +61,11 @@ module Droom
     end
     
     def attachment_category_id=(id)
-      save!
       attach_to(Droom::Event.find(event_id), {:category_id => id})
     end
 
     def attach_to(attachee, attributes={})
+      save!
       document_attachments.create(attributes.merge(:attachee => attachee))
     end
     

@@ -38,9 +38,8 @@ module Droom
     def create
       if @event
         @event.save!
-      else
-        @document.save!
       end
+      @document.save!
       render :partial => 'created'
     end
     
