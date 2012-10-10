@@ -48,6 +48,7 @@ en:
   document_description: "Document description"
   download_ical: "Download event"
   downloads: "Downloads"
+  download_attachments_as_zipfile: "Download all attachments as a zipfile"
   edit: "Edit"
   edit_event: "Edit event"
   events: "Events"

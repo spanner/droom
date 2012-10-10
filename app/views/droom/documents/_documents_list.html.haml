@@ -3,6 +3,9 @@
 .documents{ :"data-url" => "#{event_documents_path(event)}.js", :"data-refreshable" => true}
 
   - if event.document_attachments.any?
+    %p
+      = link_to t(:download_attachments_as_zipfile), event_url(event, :format => :zip), :class => "download"
+
     %section.holder
       %h2
         = t :attachments
@@ -10,7 +13,7 @@
           = link_to t(:add_document), droom.new_event_document_url(event), :class => "add minimal admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}
       
       = render :partial => "droom/events/attachment_list", :object => event.document_attachments.unfiled, :locals => {:limit => 100}
-
+      
     - attachments = event.attachments_by_category
     - attachments.each_pair do |cat_name, category_attachments|
       - if admin? || category_attachments.any?
@@ -22,3 +25,4 @@
                 = link_to t(:add_document), droom.new_event_document_url(event, :category_name => cat_name), :class => "add minimal admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}
 
             = render :partial => "droom/events/attachment_list", :object => category_attachments, :locals => {:limit => 100}
+
