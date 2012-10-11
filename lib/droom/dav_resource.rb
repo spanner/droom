@@ -11,6 +11,7 @@ module Droom
   class DavResource < DAV4Rack::FileResource
     
     # The _DAV_ prefix is a way to evade the callback mechanism.
+    # Prepare is only called by our fork of Dav4Rack, at the moment.
     # 
     def prepare
       @person = user.person if user
@@ -21,6 +22,7 @@ module Droom
       end
       # All requests for the document root trigger an update 
       # (which will also create all the PDs if they don't already exist)
+      # Other requests are assumed to come later so we don't refresh again.
       @person.gather_and_update_documents if path.blank?
     end
 

@@ -97,7 +97,6 @@ module Droom
     def gather_and_update_documents
       # first we force the creation of all relevant subfolders, so that the initial directory view is populated.
       create_and_update_dav_directories
-
       # then we create, or if relevant update, all of this person's documents. #todo: This will be a delayed job.
       attachments = Droom::DocumentAttachment.to_groups(groups) + Droom::DocumentAttachment.to_events(events)
       attachments.each do |att|

@@ -64,7 +64,6 @@ module Droom
   protected
   
     def clone_file
-      # this will end up as a delayed job
       self.version = document.version
       self.file = document.file
     end
