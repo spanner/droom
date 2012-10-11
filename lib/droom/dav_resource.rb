@@ -29,15 +29,12 @@ module Droom
     end
 
     def root
-      Rails.logger.warn ">>> in root for #{self}: user is #{user} and person is #{person}"
       @dav_root
     end
   
     def authenticate(email, password)
       self.user = User.find_by_email(email)
-      if user.try(:valid_password?, password)
-        self.person = user.person
-      end
+      user.try(:valid_password?, password)
     end
 
   end
