@@ -5,12 +5,14 @@
 # This has the great advantage of detaching DAV logic from the rest of the data room.
 # If people choose to add, delete or annotate files that's ok. 
 #
-# Later we may move to S3-based storage, if we can give it similar simplicity.
+# Later we may move to proxied S3 storage.
 #
 module Droom
   class DavResource < DAV4Rack::FileResource
 
     def root
+      raise ActiveRecord::RecordNotFound unless user && @person = user.person
+      @person.gather_and_update_documents
       unless @dav_root
         @dav_root = Rails.root + "webdav/#{@person.id}"
         Dir.mkdir(@dav_root) unless File.exist?(@dav_root)
@@ -23,8 +25,6 @@ module Droom
      def authenticate(email, password)
        self.user = User.find_by_email(email)
        user.try(:valid_password?, password)
-       raise ActiveRecord::RecordNotFound unless @person = user.person
-       @person.refresh_personal_documents
      end
 
   end

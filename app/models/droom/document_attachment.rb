@@ -26,6 +26,18 @@ module Droom
     
     scope :unfiled, where("category_id IS NULL")
     
+    scope :to_groups, lambda { |groups| 
+      placeholders = groups.map{'?'}.join(',')
+      ids = groups.map(&:id)
+      where(["droom_document_attachments.attachee_type = 'Droom::Group' AND droom_document_attachments.attachee_id IN (#{placeholders})", *ids])
+    }
+
+    scope :to_events, lambda { |events| 
+      placeholders = events.map{'?'}.join(',')
+      ids = events.map(&:id)
+      where(["droom_document_attachments.attachee_type = 'Droom::Event' AND droom_document_attachments.attachee_id IN (#{placeholders})", *ids])
+    }
+    
     def slug
       if attachee 
         attachee.slug
@@ -35,10 +47,18 @@ module Droom
     end
     
     def create_or_update_personal_document_for(person)
-      if pd = personal_documents.belonging_to(person)
-        pd.reclone_if_changed
-      else 
-        personal_documents.create(:person => person)
+      Rails.logger.warn ">>> create_or_update_personal_document_for(#{person.name}): #{self.document.name}"
+      pd = personal_documents.belonging_to(person)
+      begin
+        if pd.any?
+          Rails.logger.warn ">>> updating personal document"
+          pd.first.reclone_if_changed
+        else 
+          Rails.logger.warn ">>> creating personal document"
+          personal_documents.create(:person => person)
+        end
+      rescue Errno::ENOENT => e
+        Rails.logger.warn "!! Missing file: #{e.message}"
       end
     end
     

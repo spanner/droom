@@ -12,7 +12,12 @@ module Droom
     has_many :documents, :through => :document_attachments
   
     before_save :check_slug
-  
+
+    scope :with_documents, 
+      select("droom_groups.*")
+        .joins("INNER JOIN droom_document_attachments ON droom_groups.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Group'")
+        .group("droom_groups.id")
+
     def admit(person)
       self.people << person
     end

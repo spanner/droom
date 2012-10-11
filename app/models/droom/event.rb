@@ -93,6 +93,12 @@ module Droom
         .having("COUNT(droom_invitations.id) = 0")
     }
     
+    scope :with_documents, 
+      select("droom_events.*")
+        .joins("INNER JOIN droom_document_attachments ON droom_events.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Event'")
+        .group("droom_events.id")
+      
+    
     scope :all_private, where("private = 1 OR private = 't'")
     scope :not_private, where("private = 0 OR private = 'f'")
     scope :all_public, where("public = 1 OR public = 't'")
