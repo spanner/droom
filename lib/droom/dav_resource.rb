@@ -16,17 +16,14 @@ module Droom
     def prepare
       @person = user.person if user
       raise Dav4Rack::Unauthorized unless @person
-      unless @dav_root
-        @dav_root = Rails.root + "webdav/#{@person.id}"
-        FileUtils.mkdir_p(@dav_root) unless File.exist?(@dav_root)
-      end
-      # All requests for the document root trigger an update 
-      # (which will also create all the PDs if they don't already exist)
-      # Other requests are assumed to come later so we don't refresh again.
       @person.gather_and_update_documents if path.blank?
     end
 
     def root
+      unless @dav_root
+        @dav_root = Rails.root + "#{Droom.dav_root}/#{@person.id}"
+        FileUtils.mkdir_p(@dav_root) unless File.exist?(@dav_root)
+      end
       @dav_root
     end
   
