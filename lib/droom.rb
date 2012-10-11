@@ -9,7 +9,7 @@ require "droom/dav_resource"
 require 'paperclip/io_adapters/url_adapter'
 
 module Droom
-  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root, :use_forenames, :show_venue_map
+  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -38,15 +38,21 @@ module Droom
     def root_path
       @@root_path ||= "dashboard#index"
     end
-    
+
     def active_dashboard_modules
       @@active_dashboard_modules ||= %w{my_future_events my_past_events my_group_documents}
     end
     
+    # base path of DAV directory tree, relative to rails root.
     def dav_root
       @@dav_root ||= "webdav"
     end
     
+    # subdomain constraint applied when routing to dav.
+    def dav_subdomain
+      @@dav_subdomain ||= /dav/
+    end
+
     def use_forenamnes
       !!@@use_forenames
     end
