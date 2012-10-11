@@ -2,7 +2,6 @@
 - cssclass = "placeholder"
 - cssclass << " invited" if person.has_invited_user?
 - cssclass << " active" if person.has_active_user?
-- cssclass << " administrator" if person.has_admin_user?
 
 %tr.person.holder{:id => "person_#{person.id}"}
   %td.icon

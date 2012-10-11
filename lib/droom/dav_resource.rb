@@ -9,23 +9,29 @@
 #
 module Droom
   class DavResource < DAV4Rack::FileResource
-
-    def root
-      raise ActiveRecord::RecordNotFound unless user && @person = user.person
-      @person.gather_and_update_documents
+    
+    # The _DAV_ prefix is a way to evade the callback mechanism.
+    # 
+    def prepare
+      @person = user.person if user
+      raise Dav4Rack::Unauthorized unless @person
       unless @dav_root
         @dav_root = Rails.root + "webdav/#{@person.id}"
-        Dir.mkdir(@dav_root) unless File.exist?(@dav_root)
+        FileUtils.mkdir_p(@dav_root) unless File.exist?(@dav_root)
       end
+      # All requests for the document root trigger an update 
+      # (which will also create all the PDs if they don't already exist)
+      @person.gather_and_update_documents if path.blank?
+    end
+
+    def root
       @dav_root
     end
   
-  private
-
-     def authenticate(email, password)
-       self.user = User.find_by_email(email)
-       user.try(:valid_password?, password)
-     end
+    def authenticate(email, password)
+      self.user = User.find_by_email(email)
+      user.try(:valid_password?, password)
+    end
 
   end
 end
