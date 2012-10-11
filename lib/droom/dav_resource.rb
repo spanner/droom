@@ -24,6 +24,7 @@ module Droom
         @dav_root = Rails.root + "#{Droom.dav_root}/#{@person.id}"
         FileUtils.mkdir_p(@dav_root) unless File.exist?(@dav_root)
       end
+      Rails.logger.warn "dav_root: #{@dav_root}"
       @dav_root
     end
   
