@@ -15,21 +15,16 @@ module Droom
     # 
     def prepare
       raise Dav4Rack::Unauthorized unless person
-      unless @dav_root
-        @dav_root = Rails.root + "#{Droom.dav_root}/#{person.id}"
-        FileUtils.mkdir_p(@dav_root) unless File.exist?(@dav_root)
-      end
-      if path.blank?  # any request for the root resource
-        person.gather_and_update_documents
-      end
+      FileUtils.mkdir_p(root) unless File.exist?(root)
+      person.gather_and_update_documents if path.blank?  # any request for the root resource
     end
     
     def person
       user.person
     end
-
+    
     def root
-      @dav_root
+      Rails.root + "#{Droom.dav_root}/#{person.id}"
     end
   
     def authenticate(email, password)
