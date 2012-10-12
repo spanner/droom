@@ -49,6 +49,10 @@ module Droom
       
     end
     
+    def url
+      file.url if file
+    end
+    
     def slug
       document_attachment.slug
     end
