@@ -36,16 +36,24 @@ jQuery ($) ->
 
     toggle: (e) =>
       e.preventDefault() if e
-      if @_showing then @hide() else @show()
+      if @_showing then @fadeOut() else @fadeIn()
+
+    fadeIn: =>
+      $(@_selector).fadeIn () =>
+        @show()
 
     show: =>
-      $(@_selector).fadeIn()
+      $(@_selector).show()
       @_container.text(@_showing_text)
       @_showing = true
       @store()
+    
+    fadeOut: =>
+      $(@_selector).fadeOut () =>
+        @hide()
       
     hide: =>
-      $(@_selector).fadeOut()
+      $(@_selector).hide()
       @_container.text(@_hiding_text)
       @_showing = false
       @store()
