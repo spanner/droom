@@ -1,49 +1,61 @@
-class PagesController < ApplicationController
-  respond_to :html
-  before_filter :require_admin!, :except => [:index, :show]
-  before_filter :get_pages, :only => [:show, :index, :admin]
-  before_filter :get_page, :only => [:show, :edit, :update, :destroy]
-  before_filter :build_page, :only => [:new, :create]
+module Droom
+  class PagesController < Droom::EngineController
+    respond_to :html
+    before_filter :require_admin!, :except => [:index, :show]
+    before_filter :get_pages
+    before_filter :get_page, :only => [:show, :edit, :update, :destroy]
+    before_filter :build_page, :only => [:new, :create]
+    layout :no_layout_if_pjax
   
-  def index
-    respond_with(@pages)
-  end
+    def index
+      respond_with(@pages) do |format|
+        format.js {
+          render :partial => 'droom/pages/pages'
+        }
+      end
+    end
 
-  def show
-    respond_with(@page)
-  end
+    def show
+      respond_with(@page)
+    end
 
-  def new
-    respond_with(@page)
-  end
+    def new
+      respond_with(@page)
+    end
 
-  def create
-    @page.update_attributes(params[:page])
-    respond_with(@page)
-  end
+    def create
+      if @event.save
+        render :partial => "created"
+      else
+        respond_with @event
+      end
+    end
+    
+    def edit
+      
+    end
 
-  def edit
-    respond_with(@page)
-  end
+    def update
+      @page.update_attributes(params[:event])
+      if @page.save
+        render :partial => "full_page"
+      else
+        respond_with @page
+      end
+    end
 
-  def update
-    @page.update_attributes(params[:page])
-    respond_with(@page)
-  end
+  protected
 
-protected
-
-  def get_pages
-    @show = params[:show] || 20
-    @p = params[:page] || 1
-    @pages = Page.page(@p).per(@show) unless @show == 'all'
-  end
+    def get_pages
+      @pages = Page.all
+    end
   
-  def get_page
-    @page = Page.find_by_slug(params[:slug]) || Page.find(params[:id])
-  end
+    def get_page
+      @page = Page.find_by_slug(params[:slug]) || Page.find(params[:id])
+    end
 
-  def build_page
-    @page = Page.new
+    def build_page
+      @page = Page.new(params[:page])
+    end
   end
 end

@@ -1,14 +1,5 @@
-%h1.pagetitle
-  = @page.title
-
-#help_page
-  
-  .video
-    - if @page.video_id?
-      %iframe{:width => 640, :height => 480, :src => "http://www.youtube-nocookie.com/embed/#{@page.video_id}?rel=0", :frameborder => 0, :allowfullscreen => true}
-
-  .body
-    = @page.rendered_body.html_safe
+#help_page.holder
+  = render :partial => "full_page"
 
 #marginalia
   = render :partial => "contents"

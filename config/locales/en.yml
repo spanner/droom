@@ -22,6 +22,7 @@ en:
   year: "YEAR"
   add_event: "Add an event"
   add_document: "Add a document"
+  add_page: "Add a page"
   add_person: "Add a person"
   add_group: "Add a group"
   added_to: "has been added to '%{group}'."
@@ -36,6 +37,7 @@ en:
   confirm_delete_document: "Are you sure you want to delete the document '%{name}'? This cannot be undone."
   confirm_delete_event: "Are you sure you want to delete the event '%{name}'? This cannot be undone."
   confirm_delete_group: "Are you sure you want to delete the group '%{name}'? This cannot be undone."
+  confirm_delete_page: "Are you sure you want to delete the page '%{title}'? This cannot be undone."
   confirm_delete_person: "Are you sure you want to delete the person '%{name}'? This cannot be undone."
   confirm_remove_document: "Are you sure you want to remove the document '%{name}' from the event '%{event_name}? If it has no other attachments, the document will also be deleted." 
   confirm_remove_member: "Are you sure you want to remove '%{name}' from '%{group}'?"
@@ -69,10 +71,22 @@ en:
   user_updated: "Preferences for %{name} have been updated."
   your_preferences_saved: "Thank you. Your preferences have been updated"
   
-  directory: "Directory" 
+  directory: "Directory"
   
   group_name: "Name"
   group_description: "Description"
+  
+  help: "Help"
+  help_pages: "Help pages"
+  
+  page_title: "Page title"
+  page_slug: "Slug"
+  page_video_id: "Youtube video id"
+  page_summary: "Page summary"
+  page_body: "Page body (in markdown format, please)"
+  page_slug_explanation: "The 'slug' is a unique identifier that we use to build an address for this page. Users will find the page at /help/slug. If you leave this field blank we will derive a slug automatically from the page title."
+  page_summary_explanation: "The page summary is a two- or three-line description that we use whenever this page appears in a list. You would normally see it on the help index page."
+  page_youtube_explanation: "Soon there will be a little video-finding gadget here, but to start with please paste in a video id. The embedding will be handled automatically. Omit if not relevant."
   
   person_title: "Title"
   person_forename: "Forename"

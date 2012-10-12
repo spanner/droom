@@ -2,6 +2,7 @@
   %p.controls
     = t(:signed_in_as, :name => current_user.full_name).html_safe
     = link_to t(:preferences), "/users/#{current_user.id}/edit"
+    = link_to t(:help_pages), "/pages"
     = link_to t(:sign_out), Droom.sign_out_path, :method => :delete
     - if admin?
       = link_to t(:hide_admin), '#', :data => {:action => 'toggle', :affected => '.admin'}

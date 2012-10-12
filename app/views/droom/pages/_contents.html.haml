@@ -5,6 +5,6 @@
     - @pages.each do |page|
       %li
         %strong
-          = link_to_unless_current page.title, help_page_url(page.slug)
+          = link_to_unless_current page.title, droom.help_page_url(page.slug)
         %br
         = page.summary

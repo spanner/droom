@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency "chronic"
   s.add_dependency "dynamic_form"
   s.add_dependency "acts_as_list"
+  s.add_dependency 'rdiscount'
   
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

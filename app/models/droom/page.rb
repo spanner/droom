@@ -16,6 +16,7 @@ module Droom
     end
   
     def render_body
+      Rails.logger.warn ">>> rendering body: #{self.body.inspect}"
       markdown = RDiscount.new(self.body)
       self.rendered_body = markdown.to_html
     end

@@ -1,36 +1,35 @@
 = form_for @page, :html => {:class => 'edit page'} do |f|
-  #form
-    %p
-      = f.text_field :title, :placeholder => Page.human_attribute_name("title"), :class => 'title'
+  %p
+    = f.text_field :title, :placeholder => t(:page_title), :class => 'pagetitle'
 
-    %p
-      = f.text_area :body, :placeholder => Page.human_attribute_name("body"), :class => 'large'
-
-    %p.explanatory
-      = t :page_youtube_explanation
-
-    %p
-      = f.text_field :video_id, :placeholder => Page.human_attribute_name("video_id"), :class => 'youtube'
-
-    %p.explanatory
+  %p
+    = f.text_field :slug, :placeholder => t(:page_slug), :class => 'slug'
+    %br
+    %span.formnote
       = t :page_slug_explanation
 
-    %p
-      = f.text_field :slug, :placeholder => Page.human_attribute_name("slug"), :class => 'slug'
-
-    %p.explanatory
+  %p
+    = f.text_area :summary, :placeholder => t(:page_summary), :class => 'small'
+    %br
+    %span.formnote
       = t :page_summary_explanation
 
-    %p
-      = f.text_area :summary, :placeholder => Page.human_attribute_name("summary"), :class => 'small'
+  %p
+    = f.text_area :body, :placeholder => t(:page_body), :class => 'large'
 
-    .controls
-      .save.button
-        = f.submit t(:save), :class => "submit"
-        / = link_to t(:save), '#', :class => 'submit'
-      .cancel.button
-        - if @page.new_record?
-          = link_to t(:cancel_edit), admin_pages_url
-        - else
-          = link_to t(:cancel_edit), help_page_url(@page.slug)
-    
+  %p
+    = f.text_field :video_id, :placeholder => t(:page_video_id), :class => 'youtube'
+    %br
+    %span.formnote
+      = t :page_youtube_explanation
+
+  .controls
+    .save.button
+      = f.submit t(:save), :class => "submit"
+      / = link_to t(:save), '#', :class => 'submit'
+    .cancel.button
+      - if @page.new_record?
+        = link_to t(:cancel), pages_url
+      - else
+        = link_to t(:cancel), droom.help_page_url(@page.slug)
+  

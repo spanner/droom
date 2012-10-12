@@ -125,7 +125,38 @@ a.ical
     margin-left: 0
   form.document
     margin-left: - $datemark_width - $datemark_margin
-    
+
+#help_pages
+  h2
+    margin-bottom: 0
+  p
+    margin-top: 0.1em
+  
+#help_page
+  position: relative
+  margin-left: 10px
+  .controls
+    width: 640px
+    margin-left: 0
+  .video
+    width: 640px
+    overflow: hidden
+  .body
+    width: 640px
+    overflow: hidden
+    *:first-child
+      margin-top: 0
+
+.contents
+  h3
+    margin-top: 0
+  ul
+    padding-left: 0
+    list-style: none
+    li
+      margin-bottom: 1em
+
+
 div.event, div.document
   position: relative
   clear: both
@@ -219,6 +250,29 @@ form.document
     width: 600px
     font-size: 1em
     height: 60px
+
+form.page
+  width: 600px
+  margin-left: $datemark_width + $datemark_margin
+  input[type="text"], input[type="email"], input[type="password"], select, textarea
+    width: 600px
+    font-size: 1.2em
+  input.pagetitle
+    width: 600px
+    font-size: 4em
+  textarea.large
+    height: 600px
+    font-size: 1.1em
+  textarea.small
+    height: 100px
+    font-size: 1.1em
+  label
+    +bold
+  p.explanatory
+    width: 50%
+    color: $mid
+
+
 
 h2.name
   +heading

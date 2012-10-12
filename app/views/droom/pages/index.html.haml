@@ -1,8 +1,13 @@
-%h1.pagetitle
-  =t(:help_pages)
+- if current_user.admin?
+  .holder
+    %p.admin
+      = link_to t(:add_page), droom.new_page_url, :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".page_list"}
 
 #help_pages
-  = render :partial => 'page', :collection => @pages
+  %h1.pagetitle
+    =t(:help_pages)
+
+  = render :partial => "pages"
 
   .pagination
     = paginate @pages
