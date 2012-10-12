@@ -9,7 +9,7 @@ module Droom
     has_attached_file :file, {
       :storage => :filesystem,
       :path => ":rails_root/:dav_root/:person/:slug/:filename",
-      :url => "/personal_documents/:person/:slug/:filename",
+      :url => "/:dav_root/:person/:slug/:filename",
     }
     
     scope :derived_from, lambda { |document|
