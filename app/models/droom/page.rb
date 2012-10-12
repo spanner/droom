@@ -3,6 +3,8 @@
 #
 module Droom
   class Page < ActiveRecord::Base
+    attr_accessible :title, :slug, :summary, :body, :video_id
+    
     before_validation :check_slug
     before_save :render_body
     validates :slug, :uniqueness => true, :presence => true
