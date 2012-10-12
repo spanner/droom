@@ -7,7 +7,7 @@
       - if admin?
         = link_to t(:invite_group), droom.new_event_group_invitation_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".groups"}
   
-  = render :partial => 'droom/group_invitations/attending_groups'
+  = render :partial => 'droom/group_invitations/attending_groups', :locals => {:event => event}
   
         
   .holder
@@ -15,5 +15,5 @@
       - if admin?
         = link_to t(:invite_person), droom.new_event_invitation_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".people"}
   
-  = render :partial => 'droom/invitations/attending_people'
+  = render :partial => 'droom/invitations/attending_people', :locals => {:event => event}
   
