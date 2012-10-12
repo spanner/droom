@@ -24,11 +24,16 @@ jQuery ($) ->
       @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show')
       @_container.click @toggle
       if cookie = $.cookie(@_name)
-        @_showing = true if cookie is "showing"
+        @_showing = cookie is "showing"
+        @apply()
       else
         @_showing = $(@_selector).is(":visible")
         @store()
       
+    apply: (e) =>
+      e.preventDefault() if e
+      if @_showing then @show() else @hide()
+
     toggle: (e) =>
       e.preventDefault() if e
       if @_showing then @hide() else @show()
