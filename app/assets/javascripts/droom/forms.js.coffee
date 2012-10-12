@@ -270,7 +270,6 @@ jQuery ($) ->
   $.fn.remote_link = (callback) ->
     @
       .on 'ajax:beforeSend', (event, xhr, settings) ->
-        console.log "remote_link.beforeSend"
         $(@).addClass('waiting')
         xhr.setRequestHeader('X-PJAX', 'true')
       .on 'ajax:error', (event, xhr, status) ->
@@ -588,7 +587,6 @@ jQuery ($) ->
 
     send: () =>
       formData = new FormData @_form.get(0)
-      console.log "formdata!", formData
       @xhr = new XMLHttpRequest()
       @xhr.onreadystatechange = @update
       @xhr.upload.onprogress = @progress
@@ -712,12 +710,10 @@ jQuery ($) ->
       @_notice.removeClass('erratic successful').addClass(cssclass).text(message)
       
     submittable: () =>
-      console.log "√ submittable"
       @submit.removeClass("unavailable")
       @blocked = false
 
     unsubmittable: () =>
-      console.log "x unsubmittable"
       @submit.addClass("unavailable")
       @blocked = true
 
@@ -732,7 +728,6 @@ jQuery ($) ->
       @confirmation.val() is @field.val()
 
     stumbit: (e) =>
-      console.log "Stumbit!", @blocked
       if @blocked
         e.preventDefault()
 
