@@ -2,5 +2,7 @@
 
 .people{ :"data-url" => "#{event_invitations_path(event)}.js", :"data-refreshable" => true}
   - Droom::Person.personally_invited_to_event(event).each do |person|
-    %li.person
+    %li.person.holder
       = link_to person.name, person_url(person)
+      - if admin?
+        = link_to t(:remove), event_invitation_path(event, event.invitations.find_by_person_id(person.id)), :remote => true, :method => "delete", :class => 'admin delete minimal', :data => {:confirm => t(:confirm_uninvite_person, :name => person.name, :event_name => @event.name)}

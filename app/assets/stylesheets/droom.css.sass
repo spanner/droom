@@ -491,6 +491,25 @@ p.twister
 
 #attendants
   li
+    &:hover
+      .delete
+        display: inline-block
+    .delete
+      position: absolute
+      right: -5px
+      display: none
+      height: 20px
+      line-height: 20px
+      padding: 0
+      margin-left: 10px
+      background:
+        image: image-url('droom/minisymbols.png')
+        repeat: no-repeat
+        position: 0 -504px
+      &:hover
+        background-position: 0 -528px
+      &:active
+        background-position: 0 -576px
     list-style: none
     padding-left: 24px
     background:
@@ -504,8 +523,12 @@ p.twister
     &.person
       background-position: 0 0
   .interjected
-    width: 120px
-
+    width: 132px
+    .suggestions
+      li
+        padding-left: 0
+    .notification
+      margin: 0
 
 .pagination
   position: relative

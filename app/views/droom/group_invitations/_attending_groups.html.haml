@@ -2,5 +2,7 @@
 
 .groups{ :"data-url" => "#{event_group_invitations_path(event)}.js", :"data-refreshable" => true}
   - event.groups.each do |group|
-    %li.group
+    %li.group.holder
       = link_to group.name, group_url(group)
+      - if admin?
+        = link_to t(:remove), event_group_invitation_path(event, event.group_invitations.find_by_group_id(group.id)), :remote => true, :method => "delete", :class => 'admin delete minimal', :data => {:confirm => t(:confirm_uninvite_group, :name => group.name, :event_name => @event.name)}
