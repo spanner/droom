@@ -51,7 +51,7 @@ module Droom
       begin
         if pd.any?
           pd.first.reclone_if_changed
-        else 
+        else
           personal_documents.create(:person => person)
         end
       rescue Errno::ENOENT => e

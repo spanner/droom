@@ -1,0 +1,24 @@
+- content_for :pagetitle do
+  = t :manage_pages
+
+#pagetitle
+  %h1
+    = t :fellows_and_scholars
+    %span.addendum
+      = t :manage_pages
+      
+.localnav
+  = render :partial => 'people/admin_nav', :locals => {:login => true}
+
+#admin.pages
+  %p
+    = t :manage_pages_introduction
+    
+  %h3
+    = link_to t(:add_page), new_page_url
+
+  = render :partial => 'page', :collection => @pages, :locals => {:show_admin => true}
+
+  .pagination
+    = paginate @pages
+

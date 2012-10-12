@@ -1,0 +1,12 @@
+- show_admin ||= false
+
+%h2
+  = link_to_unless_current page.title, help_page_url(page.slug)
+  - if show_admin && admin?
+    %span.addendum
+      = link_to t("edit"), edit_page_url(page)
+      \|
+      = link_to t("remove"), page_url(page), :method => :delete, :remote => true, :confirm => t(:confirm_delete_page, :title => page.title)
+
+%p
+  = page.summary

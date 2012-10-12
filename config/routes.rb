@@ -28,10 +28,14 @@ Droom::Engine.routes.draw do
   resources :documents do
     resources :document_attachments
   end
+  
   resources :groups do
     resources :memberships
   end
+  
   resources :venues
+  resources :pages
+  
   
   match "/library" => 'documents#index', :as => :library
   match "/directory" => 'people#index', :as => :directory

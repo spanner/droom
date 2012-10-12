@@ -18,7 +18,7 @@ Paperclip.interpolates :category do |attachment, style|
 end
 
 Paperclip.interpolates :category_and_slug do |attachment, style|
-  path = attachment.instance.slug
-  path << "/#{attachment.instance.category.name.parameterize}" if attachment.instance.category
-  path
+  fragment = attachment.instance.slug
+  fragment << "/#{attachment.instance.category.slug}" if attachment.instance.category
+  fragment
 end
