@@ -19,12 +19,12 @@ jQuery ($) ->
   class Toggle
     constructor: (element, @_selector, @_name) ->
       @_container = $(element)
-      @_name ?= @_selector
+      @_name ?= "droom_#{@_selector}_state"
       @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide')
       @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show')
       @_container.click @toggle
       if cookie = $.cookie(@_name)
-        @_showing = cookie is "showing"
+        @_showing = true if cookie is "showing"
       else
         @_showing = $(@_selector).is(":visible")
         @store()
