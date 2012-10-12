@@ -66,7 +66,7 @@ module Droom
       if params[:event_id] || params[:document][:event_id]
         @event = Droom::Event.find(params[:event_id] || params[:document][:event_id])
         @document = @event.documents.new(params[:document])
-        @category = @event.categories.find_by_name(params[:category_name]) if params[:category_name]
+        @category = @event.categories.find(params[:category_name]) if params[:category_name]
       else
         @document = Droom::Document.new(params[:document])
       end

@@ -1,12 +1,13 @@
 module Droom
   class InvitationsController < Droom::EngineController
     respond_to :js, :html
+    layout :no_layout_if_pjax
     
     before_filter :build_invitation, :only => [:new, :create]
     before_filter :get_invitation, :only => :destroy
 
     def destroy
-      @invitation.destroy!
+      @invitation.destroy
       head :ok
     end
     

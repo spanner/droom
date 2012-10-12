@@ -39,6 +39,8 @@ en:
   confirm_delete_person: "Are you sure you want to delete the person '%{name}'? This cannot be undone."
   confirm_remove_document: "Are you sure you want to remove the document '%{name}' from the event '%{event_name}? If it has no other attachments, the document will also be deleted." 
   confirm_remove_member: "Are you sure you want to remove '%{name}' from '%{group}'?"
+  confirm_uninvite_group: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
+  confirm_uninvite_person: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   document_category: "Category"
   document_name: "Name"
   document_filename: "Filename"
@@ -114,6 +116,7 @@ en:
   password_leave_same: "Leave this field blank to keep your existing password."
   password_confirmation_requirements: "We will not be able to remind you of your password but you can always set a new one if you forget it."
   password_requirements: "Ideally your password should include numbers and punctuation, and should not resemble a dictionary word."
+  remove: "remove"
   search: Search
   save: "Save"
   save_event: "Save event"

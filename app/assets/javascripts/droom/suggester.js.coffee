@@ -50,7 +50,6 @@ jQuery ($) ->
       type: 'group'
     , options)
     @each ->
-      console.log @
       target = $(@).siblings('.group_picker_target')
       $(@).bind "keyup", () =>
         target.val null
