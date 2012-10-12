@@ -1,0 +1,6 @@
+- event ||= @event
+
+.people{ :"data-url" => "#{event_invitations_path(event)}.js", :"data-refreshable" => true}
+  - Droom::Person.personally_invited_to_event(event).each do |person|
+    %li.person
+      = link_to person.name, person_url(person)

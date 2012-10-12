@@ -112,6 +112,10 @@ a.ical
     margin-left: $datemark_width + $datemark_margin
   > .documents
     margin-left: $datemark_width + $datemark_margin
+  > #attendants
+    position: absolute
+    right: 0
+    margin-top: -1em
     #new_document
       margin-left: - $datemark_width - $datemark_margin
 
@@ -163,8 +167,9 @@ div.event, form.event
 .interjected
   margin: 10px 0
 
-.person_picker
-  font-size: 1.8em
+.people
+  .person_picker
+    font-size: 1.8em
 
 form.event
   p.name
@@ -484,11 +489,22 @@ p.twister
         background-position: 0 -30px
 
 
-
-
-
-
-
+#attendants
+  li
+    list-style: none
+    padding-left: 24px
+    background:
+      repeat: no-repeat
+      position: 0 0
+      image: image-url('droom/people_icons.png')
+      size: 20px
+    &.group
+      +bold
+      background-position: 0 0
+    &.person
+      background-position: 0 0
+  .interjected
+    width: 120px
 
 
 .pagination
@@ -726,25 +742,26 @@ li.document
       background-position: 0 -528px
     &:active
       background-position: 0 -576px
-  a, a.document
-    display: inline-block
-    padding: 8px 0 0 28px
-    min-height: 22px
-    line-height: 22px
-    background: 
-      repeat: no-repeat
-      position: 0 0
-      image: image-url('droom/icons.png')
-    &.pdf
-      background-position: 0 -48px
-    &.doc, &.docx
-      background-position: 0 -96px
-      color: #1683ab
-      +hover
-    &.xls, &.xlsx
-      background-position: 0 -144px
-      color: #369620
-      +hover
+      
+li.document a, a.document
+  display: inline-block
+  padding: 8px 0 0 28px
+  min-height: 22px
+  line-height: 22px
+  background: 
+    repeat: no-repeat
+    position: 0 0
+    image: image-url('droom/icons.png')
+  &.pdf
+    background-position: 0 -48px
+  &.doc, &.docx
+    background-position: 0 -96px
+    color: #1683ab
+    +hover
+  &.xls, &.xlsx
+    background-position: 0 -144px
+    color: #369620
+    +hover
     
 li.more
   +pale
@@ -985,6 +1002,9 @@ ul.setup
 
 #map
   height: 700px
+  &.small
+    height: 225px
+    width: 225px
 
 .progress
   height: 10px
@@ -1001,14 +1021,13 @@ ul.setup
     float: left
     +heading
     color: $mid
+    
 .window
+  overflow: auto
   h2
     margin: 5px 0 0
   .window_venue_events
     max-height: 120px
-    overflow: auto
-
-
 
 .note, .formnote
   font-size: 0.8em

@@ -69,6 +69,8 @@
                 
       - unless brief
         = simple_format event.description, :class => "description"
+  - if full_attachments
+    = render :partial => 'droom/events/invitations', :locals => {:event => event}
 
   - if full_attachments
     = render :partial => 'droom/documents/documents_list', :event => event

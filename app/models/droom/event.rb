@@ -13,6 +13,9 @@ module Droom
     has_many :invitations, :dependent => :destroy
     has_many :people, :through => :invitations
 
+    has_many :group_invitations, :dependent => :destroy
+    has_many :groups, :through => :group_invitations
+
     has_many :document_attachments, :as => :attachee, :dependent => :destroy
     has_many :documents, :through => :document_attachments
 
@@ -233,8 +236,6 @@ module Droom
         0
       end
     end
-    
-
 
     def venue_name
       venue.name if venue
@@ -309,7 +310,7 @@ module Droom
     def add_recurrence(rule)
       self.recurrence_rules << Droom::RecurrenceRule.from(rule)
     end
-
+    
     def documents_zipped
       if self.documents.any?
         tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")

@@ -5,6 +5,9 @@ module Droom
     belongs_to :created_by, :class_name => 'User'
     belongs_to :leader, :class_name => 'Person'
 
+    has_many :group_invitations, :dependent => :destroy, :uniq => true
+    has_many :events, :through => :group_invitations
+
     has_many :memberships, :dependent => :destroy
     has_many :people, :through => :memberships, :uniq => true
   
@@ -18,6 +21,16 @@ module Droom
         .joins("INNER JOIN droom_document_attachments ON droom_groups.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Group'")
         .group("droom_groups.id")
 
+  
+    scope :name_matching, lambda { |fragment| 
+      fragment = "%#{fragment}%"
+      where('droom_groups.name like ?', fragment)
+    }
+    
+    def identifier
+      'group'
+    end
+  
     def admit(person)
       self.people << person
     end
@@ -27,11 +40,17 @@ module Droom
     end
     
     def invite_to(event)
-      people.each do |person|
-        person.invite_to(event)
-      end
+      group_invitations.find_or_create_by_event_id(event.id)
     end
-  
+    
+    def uninvite_from(event)
+      group_invitation = group_invitations.find_by_event_id(event.id)
+      group_invitation.invitations.to_event(event).each do |invitation|
+        invitation.destroy!
+      end
+      group_invitation.destroy!
+    end
+    
   protected
   
     def check_slug

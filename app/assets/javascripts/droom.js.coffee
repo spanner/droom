@@ -66,6 +66,7 @@ jQuery ($) ->
     @find_including_self('input.password').password_field()
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('input.person_picker').person_picker()
+    @find_including_self('input.group_picker').group_picker()
     @
       
 $ ->

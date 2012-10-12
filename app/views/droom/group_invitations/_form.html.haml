@@ -1,0 +1,4 @@
+= form_for [@event, @group_invitation], :html => {:remote => true, :data => {:type => :html}} do |f|
+  %input.group_picker{:type => "text", :placeholder => t(:group_name), :autocomplete => "off"}
+  = f.hidden_field :group_id, :class => "group_picker_target"
+  = link_to t(:cancel), "/", :class => 'cancel'

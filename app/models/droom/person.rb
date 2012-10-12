@@ -37,6 +37,10 @@ module Droom
     scope :not_in_group, lambda { |group|
       
     }
+    
+    scope :personally_invited_to_event, lambda { |event|
+      joins('LEFT OUTER JOIN droom_invitations on droom_people.id = droom_invitations.person_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
+    }
 
     ### Images
     #

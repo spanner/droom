@@ -1,8 +1,8 @@
+= content_for :head do
+  = javascript_include_tag "http://maps.google.com/maps/api/js?sensor=false"
 #venues
   %h1
     = @venue.name
-  %p
-    = @venue.address
     
 #events
   %h2.quiet
@@ -10,3 +10,8 @@
   
   = render :partial => "droom/events/events"
     
+#marginalia
+  #map.small{:"data-url" => venue_url(@venue)}
+  %p
+    = @venue.address
+  
