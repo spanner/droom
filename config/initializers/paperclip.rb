@@ -12,3 +12,11 @@ end
 Paperclip.interpolates :slug do |attachment, style|
   attachment.instance.slug
 end
+
+Paperclip.interpolates :category do |attachment, style|
+  attachment.instance.category
+end
+
+Paperclip.interpolates :category_and_slug do |attachment, style|
+  [attachment.instance.slug, attachment.instance.category].compact.join('/')
+end

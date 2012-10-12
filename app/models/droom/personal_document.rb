@@ -52,6 +52,10 @@ module Droom
     def slug
       document_attachment.slug
     end
+
+    def category
+      document_attachment.category
+    end
     
     def file_extension
       File.extname(file_file_name).sub(/^\./, '')

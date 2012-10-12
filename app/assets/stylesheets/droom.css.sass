@@ -493,25 +493,6 @@ p.twister
 
 #attendants
   li
-    &:hover
-      .delete
-        display: inline-block
-    .delete
-      position: absolute
-      right: -5px
-      display: none
-      height: 20px
-      line-height: 20px
-      padding: 0
-      margin-left: 10px
-      background:
-        image: image-url('droom/minisymbols.png')
-        repeat: no-repeat
-        position: 0 -504px
-      &:hover
-        background-position: 0 -528px
-      &:active
-        background-position: 0 -576px
     list-style: none
     padding-left: 24px
     background:
@@ -519,6 +500,17 @@ p.twister
       position: 0 0
       image: image-url('droom/people_icons.png')
       size: 20px
+    a.delete
+      position: absolute
+      display: none
+      right: -5px
+      height: 20px
+      line-height: 20px
+      padding: 0
+      margin-left: 10px
+    &.holder:hover 
+      a.delete
+        display: inline-block
     &.group
       +bold
       background-position: 0 0
@@ -659,6 +651,13 @@ a.delete
     background-position: 0 -528px
   &:active
     background-position: 0 -576px
+
+// a.edit, a.delete
+//   display: none
+//   
+// .holder:hover 
+//   a.edit, a.delete
+//     display: inline-block
 
 
 ul.suggestions
