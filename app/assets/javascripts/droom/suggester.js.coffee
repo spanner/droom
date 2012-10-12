@@ -43,6 +43,25 @@ jQuery ($) ->
         suggester.form.submit()
     @
 
+  $.fn.group_picker = (options) ->
+    options = $.extend(
+      submit_form: true
+      threshold: 1
+      type: 'group'
+    , options)
+    @each ->
+      console.log @
+      target = $(@).siblings('.group_picker_target')
+      $(@).bind "keyup", () =>
+        target.val null
+      suggester = new Suggester(@, options)
+      suggester.options.afterSelect = () ->
+        id = JSON.parse(suggester.request.responseText)[0].id
+        target.val id
+        suggester.form.submit()
+    @
+
+
   class Suggester
     constructor: (element, options) ->
       @prompt = $(element)

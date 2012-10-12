@@ -8,6 +8,8 @@ Droom::Engine.routes.draw do
   ), :anchor => false, :constraints => { :subdomain => "dav" }
 
   resources :events do
+    resources :invitations
+    resources :group_invitations
     get "calendar", :on => :collection
     resources :documents
     collection do

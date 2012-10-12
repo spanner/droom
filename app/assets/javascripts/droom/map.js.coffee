@@ -29,9 +29,7 @@ jQuery ($) ->
       @_marker = new google.maps.Marker
         position: new google.maps.LatLng @_lat, @_lng
         map: @_map
-        icon: $.set_icon("inactive")
-      if @_events.length > 0
-        @_marker.setIcon $.set_icon("busy")
+        icon: $.set_icon(@_events.length)
       @infowindow()
       google.maps.event.addListener @_marker, "click", @click
       @_infowindow.open(@_map) if parseInt($.urlParam("id"), 10) == @id
@@ -50,11 +48,14 @@ jQuery ($) ->
       $.each $.infowindows, (i, iw) =>
         iw.close()
       @_infowindow.open(@_map)
-      
+            
   $.fn.init_map = () ->
     @each ->
       $.gmap = new Map(@).getMap()
-      $(@).show_venues()
+      if $(@).attr('class') == "small"
+        $(@).show_venue()
+      else
+        $(@).show_venues()
   
   $.fn.show_venues = () ->
     @each ->
@@ -69,19 +70,31 @@ jQuery ($) ->
 
           map.fitBounds bounds
 
+  $.fn.show_venue = () ->
+    @each ->
+      map = $.gmap
+      if src = $(@).attr("data-url")
+        $.getJSON src, (venue) =>
+          latlng = new google.maps.LatLng venue.lat, venue.lng
+          marker = new google.maps.Marker
+            position: latlng
+            map: map
+            icon: $.set_icon(venue.events.length)
+          map.setCenter(latlng)
+
+
   $.urlParam = (name) ->
     results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
     return 0  unless results
     results[1] or 0
 
-  $.set_icon = (icon, size) ->
-    console.log "hello"
-    if icon and icon == "busy"
+  $.set_icon = (size) ->
+    if size > 0
       name = "pinkblob"
-      size ?= 14
+      size = 14 if size < 14
     else
       name = "blueblob"
-      size ?= 12
+      size = 12
 
     new google.maps.MarkerImage "/assets/droom/#{name}.png", new google.maps.Size(size, size), new google.maps.Point(0, 0), new google.maps.Point(size/2, size/2), new google.maps.Size(size, size)
   

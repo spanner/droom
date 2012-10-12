@@ -13,7 +13,7 @@ jQuery ($) ->
       @_original_content = @body.children()
       @sort = $.params("sort")
       @order = $.params("order")
-      @headers = @table.find('th a')
+      @headers = @table.find('th a.sorter')
       $.each @headers, (i, header) =>
         header = new SortLink header, @
         $.headers.push header

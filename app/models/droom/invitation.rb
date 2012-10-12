@@ -4,6 +4,7 @@ module Droom
     
     belongs_to :person
     belongs_to :event
+    belongs_to :group_invitation
     belongs_to :created_by, :class_name => "User"
 
   end
