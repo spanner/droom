@@ -36,7 +36,7 @@ module Droom
     end
 
     def update
-      @page.update_attributes(params[:event])
+      @page.update_attributes(params[:page])
       if @page.save
         render :partial => "full_page"
       else
