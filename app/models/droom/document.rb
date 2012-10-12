@@ -65,7 +65,7 @@ module Droom
     end
 
     def attach_to(attachee, attributes={})
-      save!
+      save! if changed?
       document_attachments.create(attributes.merge(:attachee => attachee))
     end
     

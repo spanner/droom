@@ -26,3 +26,7 @@
 
           = render :partial => "droom/events/attachment_list", :object => category_attachments, :locals => {:limit => 100}
 
+  - else
+    - if admin?
+      .holder
+        = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}

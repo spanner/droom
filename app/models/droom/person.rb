@@ -101,17 +101,15 @@ module Droom
     def gather_and_update_documents
       # first we force the creation of all relevant subfolders, so that the initial directory view is populated.
       create_and_update_dav_directories
-
       # then we create, or if relevant update, all of this person's documents. #todo: This will be a delayed job.
-      attachments = Droom::Attachment.to_groups(groups) + Droom::Attachment.to_events(events)
+      attachments = Droom::DocumentAttachment.to_groups(groups) + Droom::DocumentAttachment.to_events(events)
       attachments.each do |att|
         att.create_or_update_personal_document_for(self)
       end
     end
     
     def create_and_update_dav_directories
-      create_dav_directory('Unattached')
-      (events + groups).each do |associate|
+      (events.with_documents + groups.with_documents).each do |associate|
         create_dav_directory(associate.slug)
       end
     end

@@ -15,12 +15,7 @@ module Droom
     has_many :documents, :through => :document_attachments
   
     before_save :check_slug
-
-    scope :with_documents, 
-      select("droom_groups.*")
-        .joins("INNER JOIN droom_document_attachments ON droom_groups.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Group'")
-        .group("droom_groups.id")
-
+<<<<<<< HEAD
   
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
@@ -31,6 +26,14 @@ module Droom
       'group'
     end
   
+=======
+
+    scope :with_documents, 
+      select("droom_groups.*")
+        .joins("INNER JOIN droom_document_attachments ON droom_groups.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Group'")
+        .group("droom_groups.id")
+
+>>>>>>> f87b4cf0bc8515c4b8bdfe78184ff4d22bbefa89
     def admit(person)
       self.people << person
     end

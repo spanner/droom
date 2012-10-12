@@ -5,27 +5,32 @@
 # This has the great advantage of detaching DAV logic from the rest of the data room.
 # If people choose to add, delete or annotate files that's ok. 
 #
-# Later we may move to S3-based storage, if we can give it similar simplicity.
+# Later we may move to proxied S3 storage.
 #
 module Droom
   class DavResource < DAV4Rack::FileResource
-
+    
+    # The _DAV_ prefix is a way to evade the callback mechanism.
+    # Prepare is only called by our fork of Dav4Rack, at the moment.
+    # 
+    def prepare
+      raise Dav4Rack::Unauthorized unless person
+      FileUtils.mkdir_p(root) unless File.exist?(root)
+      person.gather_and_update_documents if path.blank?  # any request for the root resource
+    end
+    
+    def person
+      user.person
+    end
+    
     def root
-      unless @dav_root
-        @dav_root = Rails.root + "webdav/#{@person.id}"
-        Dir.mkdir(@dav_root) unless File.exist?(@dav_root)
-      end
-      @dav_root
+      Rails.root + "#{Droom.dav_root}/#{person.id}"
     end
   
-  private
-
-     def authenticate(email, password)
-       self.user = User.find_by_email(email)
-       user.try(:valid_password?, password)
-       raise ActiveRecord::RecordNotFound unless @person = user.person
-       @person.refresh_personal_documents
-     end
+    def authenticate(email, password)
+      self.user = User.find_by_email(email)
+      user.try(:valid_password?, password)
+    end
 
   end
 end

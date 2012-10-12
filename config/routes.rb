@@ -5,7 +5,7 @@ Droom::Engine.routes.draw do
     :root_uri_path => '/',
     :resource_class => Droom::DavResource,
     :log_to => [(Rails.root + 'log/dav.log').to_s, Logger::DEBUG]
-  ), :anchor => false, :constraints => { :subdomain => "dav" }
+  ), :anchor => false, :constraints => { :subdomain => Droom.dav_subdomain }
 
   resources :events do
     resources :invitations
