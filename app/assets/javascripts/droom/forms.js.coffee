@@ -19,10 +19,15 @@ jQuery ($) ->
   class Toggle
     constructor: (element, @_selector, @_name) ->
       @_container = $(element)
+      @_name ?= @_selector
       @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide')
       @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show')
       @_container.click @toggle
-      @_showing = $(@_selector).is(":visible")
+      if cookie = $.cookie(@_name)
+        @_showing = cookie is "showing"
+      else
+        @_showing = $(@_selector).is(":visible")
+        @store()
       
     toggle: (e) =>
       e.preventDefault() if e
@@ -32,15 +37,19 @@ jQuery ($) ->
       $(@_selector).fadeIn()
       @_container.text(@_showing_text)
       @_showing = true
+      @store()
       
     hide: =>
       $(@_selector).fadeOut()
       @_container.text(@_hiding_text)
       @_showing = false
+      @store()
       
     store: () =>
-      if @_name?
-        
+      value = if @_showing then "showing" else "hidden"
+      $.cookie @_name, value,
+         path: '/'
+
 
   $.fn.toggle = () ->
     @each ->

@@ -3,6 +3,7 @@
 #= require jquery
 #= require jquery_ujs
 #= require droom/lib/jquery.animate-colors
+#= require droom/lib/jquery.cookie
 #= require droom/lib/kalendae
 #= require droom/lib/wysihtml5
 #= require droom/lib/parser_rules/advanced
