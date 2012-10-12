@@ -19,6 +19,7 @@ gem "snail"
 gem "vcard"
 gem "chronic"
 gem "dynamic_form"
+gem 'acts_as_list'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

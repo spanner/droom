@@ -31,12 +31,19 @@ module Droom
     end
 
     def update
+      Rails.logger.warn params[:person]
       @person.update_attributes(params[:person])
-      if @person.save
-        render :partial => "person"
-      else
-        respond_with @person
+      @person.save!
+      respond_with @person do |format|
+        format.json {
+          render
+        }
       end
+      # if @person.save
+      #   render :partial => "person"
+      # else
+      #   respond_with @person
+      # end
     end
     
     def destroy
