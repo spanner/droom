@@ -17,7 +17,7 @@ jQuery ($) ->
 
 
   class Toggle
-    constructor: (element, @_selector) ->
+    constructor: (element, @_selector, @_name) ->
       @_container = $(element)
       @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide')
       @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show')
@@ -37,6 +37,10 @@ jQuery ($) ->
       $(@_selector).fadeOut()
       @_container.text(@_hiding_text)
       @_showing = false
+      
+    store: () =>
+      if @_name?
+        
 
   $.fn.toggle = () ->
     @each ->
