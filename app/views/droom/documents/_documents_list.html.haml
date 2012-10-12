@@ -3,20 +3,19 @@
 .documents{ :"data-url" => "#{event_documents_path(event)}.js", :"data-refreshable" => true}
 
   %section.holder
-    %h2
-      = t :attachments
-      - if event.document_attachments.any?
-        = link_to t(:add_document), droom.new_event_document_url(event), :class => "add minimal admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}
 
     - if event.document_attachments.any?
+      %h2
+        = t :attachments
+        = link_to t(:add_document), droom.new_event_document_url(event), :class => "add minimal admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}
       / %p
       /   = link_to t(:download_attachments_as_zipfile), event_url(event, :format => :zip), :class => "download"
       
       = render :partial => "droom/events/attachment_list", :object => event.document_attachments.unfiled, :locals => {:limit => 100}
-    - else
-      - if admin?
-        .holder
-          = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}
+
+    - elsif admin?
+      .holder
+        = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".documents"}
       
   - attachments = event.attachments_by_category
   - attachments.each_pair do |cat_name, category_attachments|
