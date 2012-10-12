@@ -1,10 +1,8 @@
 - document ||= listing
-- if current_user.person
-  - personal_or_generic_document = current_user.person.personal_or_generic_version_of(document)
 
 %li.document.holder
-  = link_to document.name, personal_or_generic_document.file.url, :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
+  = link_to document.name, document_url(document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
   - if admin? && @event
     - d_a = @event.document_attachments.find_by_document_id(document)
-    = link_to t(:remove), document_document_attachment_path(document, d_a), :method => :delete, :remote => true, :class => 'admin delete minimal', :data => {:confirm => t(:confirm_remove_document, :name => document.name, :event_name => @event.name)}
+    = link_to t(:remove), document_document_attachment_path(document, d_a), :method => :delete, :remote => true, :class => 'delete minimal', :data => {:confirm => t(:confirm_remove_document, :name => document.name, :event_name => @event.name)}
 

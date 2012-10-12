@@ -27,6 +27,8 @@ module Droom
       where('droom_groups.name like ?', fragment)
     }
     
+    default_scope order("droom_groups.created_at ASC")
+    
     def identifier
       'group'
     end

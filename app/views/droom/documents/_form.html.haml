@@ -1,8 +1,6 @@
 = form_for @document, :html => { :multipart => true, :class => 'edit document', :remote => true, :data => {:type => :html}} do |f|
-
   - if @event
     = f.hidden_field :event_id, :value => @event.id
-  = @category.inspect
   - if @category
     = f.hidden_field :attachment_category_id, :value =>  @category.id
 

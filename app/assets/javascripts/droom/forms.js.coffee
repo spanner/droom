@@ -17,26 +17,52 @@ jQuery ($) ->
 
 
   class Toggle
-    constructor: (element, @_selector) ->
+    constructor: (element, @_selector, @_name) ->
       @_container = $(element)
+      @_name ?= "droom_#{@_selector}_state"
       @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide')
       @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show')
       @_container.click @toggle
-      @_showing = $(@_selector).is(":visible")
+      if cookie = $.cookie(@_name)
+        @_showing = cookie is "showing"
+        @apply()
+      else
+        @_showing = $(@_selector).is(":visible")
+        @store()
       
+    apply: (e) =>
+      e.preventDefault() if e
+      if @_showing then @show() else @hide()
+
     toggle: (e) =>
       e.preventDefault() if e
-      if @_showing then @hide() else @show()
+      if @_showing then @fadeOut() else @fadeIn()
+
+    fadeIn: =>
+      $(@_selector).fadeIn () =>
+        @show()
 
     show: =>
-      $(@_selector).fadeIn()
+      $(@_selector).show()
       @_container.text(@_showing_text)
       @_showing = true
+      @store()
+    
+    fadeOut: =>
+      $(@_selector).fadeOut () =>
+        @hide()
       
     hide: =>
-      $(@_selector).fadeOut()
+      $(@_selector).hide()
       @_container.text(@_hiding_text)
       @_showing = false
+      @store()
+      
+    store: () =>
+      value = if @_showing then "showing" else "hidden"
+      $.cookie @_name, value,
+         path: '/'
+
 
   $.fn.toggle = () ->
     @each ->
@@ -244,7 +270,6 @@ jQuery ($) ->
   $.fn.remote_link = (callback) ->
     @
       .on 'ajax:beforeSend', (event, xhr, settings) ->
-        console.log "remote_link.beforeSend"
         $(@).addClass('waiting')
         xhr.setRequestHeader('X-PJAX', 'true')
       .on 'ajax:error', (event, xhr, status) ->
@@ -562,7 +587,6 @@ jQuery ($) ->
 
     send: () =>
       formData = new FormData @_form.get(0)
-      console.log "formdata!", formData
       @xhr = new XMLHttpRequest()
       @xhr.onreadystatechange = @update
       @xhr.upload.onprogress = @progress
@@ -686,12 +710,10 @@ jQuery ($) ->
       @_notice.removeClass('erratic successful').addClass(cssclass).text(message)
       
     submittable: () =>
-      console.log "√ submittable"
       @submit.removeClass("unavailable")
       @blocked = false
 
     unsubmittable: () =>
-      console.log "x unsubmittable"
       @submit.addClass("unavailable")
       @blocked = true
 
@@ -706,7 +728,6 @@ jQuery ($) ->
       @confirmation.val() is @field.val()
 
     stumbit: (e) =>
-      console.log "Stumbit!", @blocked
       if @blocked
         e.preventDefault()
 

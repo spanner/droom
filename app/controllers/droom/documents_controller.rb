@@ -22,13 +22,15 @@ module Droom
     end
   
     def show
-      @download = Droom::Document.find(params[:id])
-      # raise ReaderError::AccessDenied, t("downloads_extension.permission_denied") unless @download.visible_to?(current_reader)
-      response.headers['X-Accel-Redirect'] = @download.document.url
-      response.headers["Content-Type"] = @download.document_content_type
-      response.headers['Content-Disposition'] = "attachment; filename=#{@download.document_file_name}" 
-      response.headers['Content-Length'] = @download.document_file_size
-      render :nothing => true
+      if current_user.person && @document.file
+        if personal_document = current_user.person.personal_version_of(@document)
+          # personal documents are stored outside the web root so this is an internal-only redirect in nginx.
+          redirect_to personal_document.url
+        else
+          # master documents are stored in private S3 buckets accessible only through signed urls with a lifespan of only two minutes.
+          redirect_to @document.file.expiring_url(Time.now + 120)
+        end
+      end
     end
     
     def new
