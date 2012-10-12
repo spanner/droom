@@ -27,7 +27,6 @@ module Droom
 
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
     validates :name, :presence => true
-    validates :email, :presence => true
     
     default_scope order("droom_people.position")
 

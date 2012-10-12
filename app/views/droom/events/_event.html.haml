@@ -74,5 +74,4 @@
 
   - if full_attachments
     = render :partial => 'droom/events/invitations', :locals => {:event => event}
-    - if admin?
-      = render :partial => 'droom/documents/documents_list', :locals => {:event => event}
+    = render :partial => 'droom/documents/documents_list', :locals => {:event => event}

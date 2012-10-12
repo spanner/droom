@@ -1,19 +1,20 @@
 - event ||= @event
-#attendants
-  %h2
-    = t :attending
-  .holder
-    .admin
-      - if admin?
-        = link_to t(:invite_group), droom.new_event_group_invitation_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".groups"}
+- if admin?
+  #attendants.admin
+    %h2
+      = t :attending
+    .holder
+      .admin
+        - if admin?
+          = link_to t(:invite_group), droom.new_event_group_invitation_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".groups"}
   
-  = render :partial => 'droom/group_invitations/attending_groups', :locals => {:event => event}
+    = render :partial => 'droom/group_invitations/attending_groups', :locals => {:event => event}
   
         
-  .holder
-    .admin
-      - if admin?
-        = link_to t(:invite_person), droom.new_event_invitation_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".people"}
+    .holder
+      .admin
+        - if admin?
+          = link_to t(:invite_person), droom.new_event_invitation_url(event), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => ".people"}
   
-  = render :partial => 'droom/invitations/attending_people', :locals => {:event => event}
+    = render :partial => 'droom/invitations/attending_people', :locals => {:event => event}
   
