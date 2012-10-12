@@ -3,6 +3,7 @@
 #= require jquery
 #= require jquery_ujs
 #= require droom/lib/jquery.animate-colors
+#= require droom/lib/jquery.sortable
 #= require droom/lib/kalendae
 #= require droom/lib/wysihtml5
 #= require droom/lib/parser_rules/advanced
@@ -11,6 +12,7 @@
 #= require droom/calendar
 #= require droom/sort
 #= require droom/map
+#= require droom/drag_sort
 #= require_self
 
 jQuery ($) ->
@@ -67,6 +69,7 @@ jQuery ($) ->
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('input.person_picker').person_picker()
     @find_including_self('input.group_picker').group_picker()
+    @find_including_self('.drag_sort').drag_sort()
     @
       
 $ ->

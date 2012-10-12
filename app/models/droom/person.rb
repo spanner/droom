@@ -2,9 +2,9 @@
 require 'vcard'
 module Droom
   class Person < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user
+    attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user, :position
     attr_accessor :invite_on_creation, :admin_user
-    
+    acts_as_list
     ### Associations
     #
     has_many :memberships, :dependent => :destroy
@@ -28,6 +28,8 @@ module Droom
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
     validates :name, :presence => true
     validates :email, :presence => true
+    
+    default_scope order("droom_people.position")
 
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
