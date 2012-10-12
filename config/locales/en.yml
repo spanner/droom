@@ -15,6 +15,7 @@ en:
           admin_user: "as admin user"
   admin: "Admin"
   attachments: "Attachments"
+  attending: "Attending"
   cancel: "cancel"
   mon: "MON"
   dom: "00"

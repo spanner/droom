@@ -39,16 +39,21 @@
           = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
 
       - unless brief || full_attachments
-        - if event.documents.any?
+        - if admin? || event.documents.any?
           .documents
-            %h3 
-              = t(:attachments)
-            %ul.downloads
-              = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
-              - if event.documents.count > 3
-                %li.more
-                  = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
-      
+            - if event.documents.any?
+              %h3 
+                = t(:attachments)
+            - if admin?
+              = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "append_form", :type => "html"}
+            - if event.documents.any?
+              %ul.downloads
+                = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
+                - if event.documents.count > 3
+                  %li.more
+                    = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
+              
+              
       %p.practicalities
         %time
           = l(event.start_time, :format => :natural)
@@ -65,8 +70,7 @@
                 
       - unless brief
         = simple_format event.description, :class => "description"
-  - if full_attachments
-    = render :partial => 'droom/events/invitations', :locals => {:event => event}
 
   - if full_attachments
-    = render :partial => 'droom/documents/documents_list', :event => event
+    = render :partial => 'droom/events/invitations', :locals => {:event => event}
+    = render :partial => 'droom/documents/documents_list', :locals => {:event => event}
