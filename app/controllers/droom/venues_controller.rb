@@ -3,13 +3,18 @@ module Droom
     respond_to :json, :html
   
     before_filter :get_venues, :only => ["index"]
-    before_filter :get_venue, :only => ["show"]
+    before_filter :get_venue, :only => [:show, :update]
 
     def index
       respond_with @venues
     end
     
     def show
+      respond_with @venue
+    end
+    
+    def update
+      @venue.update_attributes(params[:venue])
       respond_with @venue
     end
     

@@ -14,7 +14,8 @@
   = render :partial => "droom/events/events"
     
 #marginalia
-  #map.small{:"data-url" => venue_url(@venue)}
+  - cssclass = admin? ? "small editable" : "small"
+  #map{:"data-url" => venue_url(@venue), :class => cssclass}
   %p
     = @venue.address
   

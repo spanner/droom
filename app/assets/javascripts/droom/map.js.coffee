@@ -27,13 +27,18 @@ jQuery ($) ->
       @id = point.id
       @_name = point.name
       @_address = point.address
+      @_editable = $.ed
       @_marker = new google.maps.Marker
         position: new google.maps.LatLng @_lat, @_lng
         map: @_map
         icon: $.set_icon(@_events.length)
+        draggable: $.map_editable
       @infowindow()
       google.maps.event.addListener @_marker, "click", @click
+      google.maps.event.addListener @_marker, "dragstart", @dragstart
+      google.maps.event.addListener @_marker, "dragend", @dragend
       @_infowindow.open(@_map) if parseInt($.urlParam("id"), 10) == @id
+      
       
     infowindow: () =>
       content = $("<div class='window'><h2>#{@_name}</h2>#{@_address.replace(/\n/g, ",")}<div class='window_venue_events'></div></div>")
@@ -45,18 +50,34 @@ jQuery ($) ->
         marker: @_marker
       $.infowindows.push @_infowindow
 
-    click: () =>
+    click: (e) =>
       $.each $.infowindows, (i, iw) =>
         iw.close()
       @_infowindow.open(@_map)
       
-      
-      
-            
+    dragstart: (e) =>
+      @_infowindow?.close()
+
+    dragend: (e) =>
+      position = @_marker.getPosition()
+      $.ajax 
+        type: 'POST'
+        url: "/venues/#{@id}",
+        data: 
+          _method: "PUT"
+          venue:
+            lat: position.lat()
+            lng: position.lng()
+        dataType: 'json'
+        success: () ->
+          console.log "venue updated"
+        
+
   $.fn.init_map = () ->
     @each ->
       $.gmap = new Map(@).getMap()
-      if $(@).attr('class') == "small"
+      $.map_editable = $(@).hasClass('editable')
+      if $(@).hasClass('small')
         $(@).show_venue()
       else
         $(@).show_venues()
