@@ -21,7 +21,7 @@
   / %td.address
   /   - if person.address?
   /     %p
-  /       = person.address
+  /       = person.address.to_html
   /   - else
   /     %p.unavailable
   /       no address

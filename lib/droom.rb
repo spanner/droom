@@ -6,7 +6,8 @@ require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
 require "droom/dav_resource"
-require 'paperclip/io_adapters/url_adapter'
+require "paperclip/io_adapters/url_adapter"
+require "snail"
 
 module Droom
   mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map
@@ -37,6 +38,10 @@ module Droom
 
     def root_path
       @@root_path ||= "dashboard#index"
+    end
+    
+    def home_country
+      Snail.home_country = @@home_country ||= 'gb'
     end
 
     def active_dashboard_modules

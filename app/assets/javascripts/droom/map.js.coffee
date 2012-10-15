@@ -26,6 +26,7 @@ jQuery ($) ->
       @_postcode = point.postcode      
       @id = point.id
       @_name = point.name
+      @_address = point.address
       @_marker = new google.maps.Marker
         position: new google.maps.LatLng @_lat, @_lng
         map: @_map
@@ -35,9 +36,9 @@ jQuery ($) ->
       @_infowindow.open(@_map) if parseInt($.urlParam("id"), 10) == @id
       
     infowindow: () =>
-      content = $("<div class='window'><h2>#{@_name}</h2><div class='window_venue_events'></div></div>")
+      content = $("<div class='window'><h2>#{@_name}</h2>#{@_address.replace(/\n/g, ",")}<div class='window_venue_events'></div></div>")
       $.each @_events, (i, evt) =>
-        content.find('.window_venue_events').append "<li><a href='/events/#{evt.id}'>#{evt.name}</a></li>"
+        content.find('.window_venue_events').append "<li><a href='/events/#{evt.id}'>#{evt.name}</a> <span class='pale'>#{evt.datestring}</span></li>"
       @_infowindow = new google.maps.InfoWindow
         position: new google.maps.LatLng @_lat, @_lng
         content: content.prop('outerHTML')
@@ -48,6 +49,9 @@ jQuery ($) ->
       $.each $.infowindows, (i, iw) =>
         iw.close()
       @_infowindow.open(@_map)
+      
+      
+      
             
   $.fn.init_map = () ->
     @each ->
@@ -67,6 +71,10 @@ jQuery ($) ->
             latlng = new google.maps.LatLng venue.lat, venue.lng
             bounds.extend latlng
             venue = new Point venue, map
+          
+          temporary_zoom_limiter = google.maps.event.addListener map, 'bounds_changed', ->
+            map.setZoom(17) if map.getZoom() > 17
+            google.maps.event.removeListener(temporary_zoom_limiter);
 
           map.fitBounds bounds
 
@@ -89,12 +97,6 @@ jQuery ($) ->
     results[1] or 0
 
   $.set_icon = (size) ->
-    if size > 0
-      name = "pinkblob"
-      size = 14 if size < 14
-    else
-      name = "blueblob"
-      size = 12
-
-    new google.maps.MarkerImage "/assets/droom/#{name}.png", new google.maps.Size(size, size), new google.maps.Point(0, 0), new google.maps.Point(size/2, size/2), new google.maps.Size(size, size)
+    name = if size > 0 then "place_busy" else "place_quiet"
+    new google.maps.MarkerImage "/assets/droom/#{name}.png", new google.maps.Size(36, 36), new google.maps.Point(0, 0), new google.maps.Point(18, 18)
   

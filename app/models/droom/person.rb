@@ -182,7 +182,7 @@ module Droom
         :region => post_region,
         :postal_code => post_code,
         :country => post_country
-      ).to_s
+      )
     end
     
     def address?

@@ -339,6 +339,12 @@ module Droom
     def to_ics
       to_rical.to_s
     end
+    
+    def as_json(options={})
+      json = super
+      json[:datestring] = I18n.l start, :format => :natural_with_date
+      json
+    end
 
   protected
   

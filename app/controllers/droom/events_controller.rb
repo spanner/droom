@@ -2,7 +2,7 @@ module Droom
   class EventsController < Droom::EngineController
     require "uri"
     require "ri_cal"
-    respond_to :json, :rss, :ics, :html, :js, :zip
+    respond_to :html, :json, :rss, :ics, :js, :zip
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!  

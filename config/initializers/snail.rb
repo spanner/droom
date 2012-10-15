@@ -1,2 +1,2 @@
 require 'snail'
-Snail.home_country = "hk"
+Snail.home_country = Droom.home_country

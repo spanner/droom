@@ -46,19 +46,19 @@ module Droom
         :region => post_region,
         :postal_code => post_code,
         :country => post_country
-      ).to_s
+      )
     end
 
     def address?
       post_line1? && post_city
     end
 
-    
     def as_json(options={})
       json = {
         :id => id,
         :name => name,
         :postcode => post_code,
+        :address => address.to_s,
         :lat => lat,
         :lng => lng,
         :events => events.as_json({})
@@ -111,7 +111,7 @@ module Droom
       value = send(attribute)
       found = false
       unless value.blank?
-        geo = Geokit::Geocoders::GoogleGeocoder3.geocode(value, :bias => 'hk', :language => 'en')
+        geo = Geokit::Geocoders::GoogleGeocoder3.geocode(value, :bias => Droom.geocode_bias, :language => 'en')
         if geo.success
           self.lat, self.lng = geo.lat, geo.lng
           yield geo if block_given?

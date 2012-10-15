@@ -4,6 +4,9 @@
   %h1
     = @venue.name
     
+  %p
+    = @venue.address.to_html
+    
 #events
   %h2.quiet
     = t(:future_events)

@@ -1,0 +1,36 @@
+!!!
+%html{:lang => 'en'}
+  %head
+    %title
+      - if content_for?(:pagetitle)
+        = yield :pagetitle
+        \|
+      = t(:data_room)
+
+    = stylesheet_link_tag "droom"
+    = javascript_include_tag "droom"
+    = content_for :head
+    = csrf_meta_tags
+
+%body
+  #header
+    #pagehead
+      #nav
+        %h2
+          = t(:data_room)
+          
+        = render :partial => "droom/shared/navigation"
+    
+  - if user_signed_in?
+    #controls
+      = render :partial => "droom/shared/controls"
+
+  #page
+    #content
+      = yield
+
+  #flashes
+    %p.notice= notice
+    %p.alert= alert
+
+  #mask
