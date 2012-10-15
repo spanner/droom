@@ -6,7 +6,6 @@ require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
 require "droom/dav_resource"
-require "paperclip/io_adapters/url_adapter"
 require "snail"
 
 module Droom
