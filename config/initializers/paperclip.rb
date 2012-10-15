@@ -21,6 +21,6 @@ end
 
 Paperclip.interpolates :category_and_slug do |attachment, style|
   fragment = attachment.instance.slug
-  fragment << "/#{attachment.instance.category.slug}" if attachment.instance.category
+  fragment = "#{fragment}/#{attachment.instance.category.slug}" if attachment.instance.category
   fragment
 end
