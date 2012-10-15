@@ -1,3 +1,5 @@
+require 'paperclip'
+
 Paperclip.interpolates :dav_root do |attachment, style|
   Droom.dav_root
 end
