@@ -13,9 +13,15 @@ module Droom
     has_many :invitations, :dependent => :destroy
     has_many :events, :through => :invitations
 
-    has_many :personal_documents, :dependent => :destroy
-    # has_many :attachments, :through => :personal_documents
-    # has_many :documents, :through => :attachments
+    # document_links is an automatically maintained index that we use to make easier the task of retrieving
+    # the documents this person is allowed to see.
+    has_many :document_links, :dependent => :destroy
+    has_many :document_attachments, :through => :document_links
+    has_many :documents, :through => :document_attachments
+    
+    # personal documents are the document clones created when a user logs to her DAV folder.
+    # they are spun off the document links
+    has_many :personal_documents, :through => :document_links
 
     # The `user` is this person's administrative account for logging in and out and forgetting her password.
     # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
@@ -90,7 +96,20 @@ module Droom
       self.published.map{|p| [p.name, p.id] }
     end
     
+    # This will rebuild the document_link index for this person.
+    # The index is purely passive: it has no function other than to remember that a person can see a document.
+    #
+    def repair_document_links
+      self.document_links.destroy_all
+      group_and_event_attachments.each do |da|
+        document_links.create(:document_attachment => da)
+      end
+    end
     
+    def group_and_event_attachments
+      Droom::DocumentAttachment.to_groups(groups) + Droom::DocumentAttachment.to_events(events)
+    end
+
     # We defer the creation and updating of personal documents until the person actually logs in over DAV. At that stage a call 
     # goes to person.gather_and_update_documents and the copying begins. It's not really ideal from a responsiveness point of view
     # but it saves a great deal of update hassle (and storage space).
@@ -100,13 +119,8 @@ module Droom
     # constantly recreated.
     #
     def gather_and_update_documents
-      # first we force the creation of all relevant subfolders, so that the initial directory view is populated.
       create_and_update_dav_directories
-      # then we create, or if relevant update, all of this person's documents. #todo: This will be a delayed job.
-      attachments = Droom::DocumentAttachment.to_groups(groups) + Droom::DocumentAttachment.to_events(events)
-      attachments.each do |att|
-        att.create_or_update_personal_document_for(self)
-      end
+      document_links.each { |dl| dl.ensure_personal_document }
     end
     
     def create_and_update_dav_directories
@@ -137,7 +151,6 @@ module Droom
     def group_documents
       groups.any? ? Droom::Document.attached_to_these_groups(groups) : []
     end
-    
 
 
 

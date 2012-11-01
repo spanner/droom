@@ -9,7 +9,8 @@ module Droom
     belongs_to :created_by, :class_name => 'User'
 
     has_many :document_attachments, :dependent => :destroy
-    has_many :personal_documents, :through => :document_attachments
+    has_many :document_links, :through => :document_attachments
+    has_many :people, :through => :document_links
     
     has_attached_file :file
     
@@ -21,13 +22,17 @@ module Droom
     scope :all_public, where("public = 1 OR public = 't'")
     scope :not_public, where("NOT(public = 1 OR public = 't')")
     
+    scope :visible_to, lambda { |person|
+      select('droom_documents.*')
+        .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id')
+        .joins('LEFT OUTER JOIN droom_document_links ON droom_document_attachments.id = droom_document_links.document_attachment_id')
+        .where(["droom_documents.public = 1 OR droom_documents.public = 't' OR droom_document_links.person_id = ?", person.id])
+        .group('droom_documents.id')
+    }
+    
     scope :name_matching, lambda { |fragment|
       fragment = "%#{fragment}%"
       where('droom_documents.name like ?', fragment)
-    }
-    
-    scope :personal_and_public, lambda { |person|
-      
     }
     
     scope :attached_to_these_groups, lambda { |groups|

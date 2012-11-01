@@ -6,5 +6,18 @@ module Droom
     belongs_to :group
     belongs_to :created_by, :class_name => "User"
 
+    after_create :link_documents
+    after_destroy :remove_document_links
+
+  protected
+  
+    def link_documents
+      person.documents << group.documents if person
+    end
+    
+    def remove_document_links
+      person.documents -= group.documents if person
+    end
+
   end
 end

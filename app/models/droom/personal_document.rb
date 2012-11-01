@@ -2,8 +2,9 @@ module Droom
   class PersonalDocument < ActiveRecord::Base
     attr_accessible :document_attachment, :person
 
-    belongs_to :document_attachment
-    belongs_to :person
+    belongs_to :document_link
+    belongs_to :document_attachment, :through => :document_link
+    
     before_create :clone_file
 
     has_attached_file :file, {
@@ -14,7 +15,7 @@ module Droom
     
     scope :derived_from, lambda { |document|
       select("droom_personal_documents.*")
-        .joins("INNER JOIN droom_document_attachments on droom_personal_documents.document_attachment_id = droom_document_attachments.id")
+        .joins("INNER JOIN droom_document_links on droom_personal_documents.document_link_id = droom_document_links.id INNER JOIN droom_document_attachments on droom_document_links.document_attachment_id = droom_document_attachments.id")
         .where(["droom_document_attachments.document_id = ?", document.id])
     }
 
@@ -23,13 +24,9 @@ module Droom
     }
     
     def document
-      document_attachment.document
+      document_link.document
     end
-    
-    def document=(doc)
-      document_attachment = Droom::DocumentAttachment.create(:document => doc)
-    end
-    
+
     def name
       document.name
     end

@@ -100,7 +100,13 @@ module Droom
       @order = sort_orders[params[:order]]
       @show = params[:show] || 20
       @page = params[:page] || 1
-      @documents = Droom::Document.with_latest_event
+      
+      if current_user.person
+        @documents = Droom::Document.visible_to(current_user.person).with_latest_event
+      else
+        @documents = Droom::Document.all_public
+      end
+      
       @documents = @documents.name_matching(params[:q]) unless params[:q].blank?
       @documents = @documents.order("#{@by} #{@order}").page(@page).per(@show)
     end
