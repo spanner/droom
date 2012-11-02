@@ -17,10 +17,10 @@ module Droom
     before_save :set_version
     validates :file, :presence => true
 
-    scope :all_private, where("private = 1 OR private = 't'")
-    scope :not_private, where("NOT(private = 1 OR private = 't')")
-    scope :all_public, where("public = 1 OR public = 't'")
-    scope :not_public, where("NOT(public = 1 OR public = 't')")
+    scope :all_private, where("secret = 1")
+    scope :not_private, where("secret <> 1")
+    scope :all_public, where("public = 1 AND secret <> 1")
+    scope :not_public, where("public <> 1 OR secret = 1)")
     
     scope :visible_to, lambda { |person|
       select('droom_documents.*')
@@ -44,9 +44,9 @@ module Droom
     
     scope :with_latest_event, 
       select('droom_documents.*, droom_categories.name AS category_name, droom_events.id AS latest_event_id, droom_events.name AS latest_event_name')
-        .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id 
-                LEFT OUTER JOIN droom_categories ON droom_document_attachments.category_id = droom_categories.id
-                LEFT OUTER JOIN droom_events ON droom_document_attachments.attachee_id = droom_events.id AND droom_document_attachments.attachee_type = "Droom::Event"')
+        .joins('LEFT OUTER JOIN droom_document_attachments AS dda ON droom_documents.id = dda.document_id 
+                LEFT OUTER JOIN droom_categories ON dda.category_id = droom_categories.id
+                LEFT OUTER JOIN droom_events ON dda.attachee_id = droom_events.id AND dda.attachee_type = "Droom::Event"')
         .group('droom_documents.id')
 
     # so that we can apply the joined finders above to an existing object

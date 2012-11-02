@@ -37,6 +37,11 @@ module Droom
     
     default_scope order("droom_people.#{Droom.people_sort}")
 
+    scope :all_private, where("shy = 1")
+    scope :not_private, where("shy <> 1")
+    scope :all_public, where("public = 1 AND shy <> 1")
+    scope :not_public, where("public <> 1 OR shy = 1)")
+
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_people.name like ?', fragment)
@@ -188,6 +193,14 @@ module Droom
       memberships.of_group(group).destroy_all
     end
     
+    def member_of?(group)
+      group && memberships.of_group(group).any?
+    end
+
+    def invited_to?(event)
+      group && invitations.to_event(event).any?
+    end
+    
     # some magic glue to allow slightly indiscriminate use of user and person objects.
     
     def person
@@ -271,12 +284,8 @@ module Droom
       end
     end
   
-    # For most purposes the user email address is left alone in case people have a public and a private address,
-    # but it can happen that the user is created before the person record has an email address. In that case we 
-    # want to set the user address when the person gets one.
-  
     def update_user
-      if self.user
+      if self.user && self.user.persisted?
         self.user.update_column(:email, self.email) if email_changed?
         self.user.update_column(:name, self.name) if name_changed?
         self.user.update_column(:forename, self.forename) if forename_changed?

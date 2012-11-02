@@ -1,6 +1,13 @@
 %tbody{:"data-url" => "#{documents_path}.js", :"data-refreshable" => true }
-  = render :partial => 'table_document', :collection => @documents
-  %tr
-    %td{:colspan => 6}
-      .pagination
-        = paginate @documents, :params => {:format => :js}
+  - if @documents.any?
+    = render :partial => 'table_document', :collection => @documents
+    %tr
+      %td{:colspan => 6}
+        .pagination
+          = paginate @documents, :params => {:format => :js}
+  - else
+    %tr
+      %td{:colspan => 6}
+        %p.nothing_to_see
+          = t :no_documents
+        

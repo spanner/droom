@@ -145,6 +145,8 @@ en:
   future_events: "Events coming up"
   event_name: "Event name"
   venue_name: "Venue name"
+  no_documents: "Sorry: there are no documents accessible by your account."
+  no_people: "Sorry: there are no directory entries accessible by your account."
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

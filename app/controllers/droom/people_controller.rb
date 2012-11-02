@@ -66,7 +66,13 @@ module Droom
     end
     
     def find_people
-      @people = Person.scoped({})
+      if current_user.admin?
+        @people = Person.all
+      elsif current_user.person
+        @people = Person.visible_to(current_user.person)
+      else
+        @people = Person.all_public
+      end
       
       if params[:group_id]
         @people = @people.not_in_group(Droom::Group.find(params[:group_id]))
@@ -77,9 +83,7 @@ module Droom
         @people = @people.name_matching(params[:q])
       end
       
-      @show = params[:show] || 10
-      @page = params[:page] || 1
-      @people.page(@page).per(@show)
+      @people
     end
  
     def confine_to_self
