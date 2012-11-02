@@ -44,7 +44,7 @@ module Droom
 
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
-      where('droom_people.name like ?', fragment)
+      where('droom_people.name LIKE :f OR droom_people.forename LIKE :f', :f => fragment)
     }
     
     # warning! won't work in SQLite.
