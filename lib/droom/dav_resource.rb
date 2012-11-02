@@ -16,7 +16,7 @@ module Droom
     def prepare
       raise Dav4Rack::Unauthorized unless person
       FileUtils.mkdir_p(root) unless File.exist?(root)
-      person.gather_and_update_documents if path.blank?  # any request for the root resource
+      person.create_personal_documents if path.blank?  # any request for the root resource
     end
     
     def person

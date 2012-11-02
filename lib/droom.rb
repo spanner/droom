@@ -9,7 +9,7 @@ require "droom/dav_resource"
 require "snail"
 
 module Droom
-  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map
+  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map, :people_sort
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -37,6 +37,10 @@ module Droom
 
     def root_path
       @@root_path ||= "dashboard#index"
+    end
+
+    def people_sort
+      @@people_sort ||= "position ASC"
     end
     
     def home_country

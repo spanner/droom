@@ -101,7 +101,9 @@ module Droom
       @show = params[:show] || 20
       @page = params[:page] || 1
       
-      if current_user.person
+      if current_user.admin?
+        @documents = Droom::Document.with_latest_event
+      elsif current_user.person
         @documents = Droom::Document.visible_to(current_user.person).with_latest_event
       else
         @documents = Droom::Document.all_public

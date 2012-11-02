@@ -8,18 +8,22 @@ module Droom
     belongs_to :created_by, :class_name => "User"
 
     after_create :link_documents
-    after_destroy :remove_document_links
+    after_destroy :unlink_documents
 
     validates_uniqueness_of :person_id, :scope => [:event_id, :group_invitation_id]
+
+    scope :to_event, lambda { |event|
+      where(["event_id = ?", event.id])
+    }
 
   protected
   
     def link_documents
-      person.documents << event.documents
+      person.document_attachments << event.document_attachments
     end
     
-    def remove_document_links
-      person.documents -= event.documents
+    def unlink_documents
+      person.document_attachments -= event.document_attachments
     end
 
   end

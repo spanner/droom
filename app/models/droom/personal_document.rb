@@ -1,17 +1,16 @@
 module Droom
   class PersonalDocument < ActiveRecord::Base
-    attr_accessible :document_attachment, :person
+    attr_accessible :document_link, :person
 
     belongs_to :document_link
-    belongs_to :document_attachment, :through => :document_link
-    
-    before_create :clone_file
 
     has_attached_file :file, {
       :storage => :filesystem,
       :path => ":rails_root/:dav_root/:person/:category_and_slug/:filename",
       :url => "/:dav_root/:person/:category_and_slug/:filename",
     }
+    
+    before_create :clone_file
     
     scope :derived_from, lambda { |document|
       select("droom_personal_documents.*")
@@ -23,6 +22,16 @@ module Droom
       where(["person_id = ?", person.id])
     }
     
+    # document properties we have to retrieve across quite a long chain, 
+    # but it should be possible to rely on its existence. If not, we have
+    # other problems.
+    
+    delegate :slug, :category, :person_id, :to => :document_link
+    
+    def person
+      document_link.person
+    end
+
     def document
       document_link.document
     end
@@ -49,14 +58,6 @@ module Droom
     
     def url
       file.url if file
-    end
-    
-    def slug
-      document_attachment.slug
-    end
-
-    def category
-      document_attachment.category
     end
     
     def file_extension

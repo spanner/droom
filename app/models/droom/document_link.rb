@@ -7,9 +7,19 @@ module Droom
     belongs_to :person
     belongs_to :document_attachment
     has_one :personal_document, :dependent => :destroy
-        
+    
+    delegate :slug, :category, :to => :document_attachment
+
+    def document
+      document_attachment.document
+    end
+    
+    def document=(doc)
+      create_document_attachment(:document => doc)
+    end
+    
     def ensure_personal_document
-      create_personal_document unless personal_document?
+      create_personal_document unless personal_document
     end
     
     def self.repair

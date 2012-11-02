@@ -17,7 +17,8 @@ module Droom
     # the documents this person is allowed to see.
     has_many :document_links, :dependent => :destroy
     has_many :document_attachments, :through => :document_links
-    has_many :documents, :through => :document_attachments
+    # is this association really needed? We always retrieve the document list using the visible_to scope, so as to get public docs too.
+    has_many :documents, :through => :document_attachments, :uniq => true
     
     # personal documents are the document clones created when a user logs to her DAV folder.
     # they are spun off the document links
@@ -34,15 +35,19 @@ module Droom
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
     validates :name, :presence => true
     
-    default_scope order("droom_people.position")
+    default_scope order("droom_people.#{Droom.people_sort}")
 
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_people.name like ?', fragment)
     }
-
-    scope :not_in_group, lambda { |group|
-      
+    
+    scope :visible_to, lambda { |person|
+      select('droom_people.*')
+        .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
+        .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
+        .where(['droom_people.public = 1 OR droom_people.public = "t" OR dm2.person_id = ?', person.id])
+        .group('droom_people.id')
     }
     
     scope :personally_invited_to_event, lambda { |event|
@@ -95,11 +100,15 @@ module Droom
     def self.for_selection
       self.published.map{|p| [p.name, p.id] }
     end
-    
+
+    # Document links function as a lookup table to speed up the process of working out what this person can see.
+    # They are created when an attachment, invitation or membership confers access, and destroyed when a link in  
+    # that chain is removed.
+    #
     # This will rebuild the document_link index for this person.
-    # The index is purely passive: it has no function other than to remember that a person can see a document.
     #
     def repair_document_links
+      # NB this will also destroy all our personal documents. Very much a last resort.
       self.document_links.destroy_all
       group_and_event_attachments.each do |da|
         document_links.create(:document_attachment => da)
@@ -111,14 +120,14 @@ module Droom
     end
 
     # We defer the creation and updating of personal documents until the person actually logs in over DAV. At that stage a call 
-    # goes to person.gather_and_update_documents and the copying begins. It's not really ideal from a responsiveness point of view
+    # goes to person.create_personal_documents and the copying begins. It's not really ideal from a responsiveness point of view
     # but it saves a great deal of update hassle (and storage space).
     #
     # NB this will not recreate deleted files: we only look as far as the PersonalDocument object, not the file 
     # it would usually have. This is to allow people to delete files they don't want, without having them 
     # constantly recreated.
     #
-    def gather_and_update_documents
+    def create_personal_documents
       create_and_update_dav_directories
       document_links.each { |dl| dl.ensure_personal_document }
     end
@@ -158,10 +167,18 @@ module Droom
       invitations.find_or_create_by_event_id(event.id) if event
     end
     
+    def uninvite_from(event)
+      p "-> destroying invitations: #{invitations.to_event(event).inspect}"
+      invitations.to_event(event).destroy_all
+    end
+    
     def admit_to(group)
       memberships.find_or_create_by_group_id(group.id) if group
     end
     
+    def expel_from(group)
+      memberships.of_group(group).destroy_all
+    end
     
     # some magic glue to allow slightly indiscriminate use of user and person objects.
     

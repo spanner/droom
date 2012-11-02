@@ -5,9 +5,12 @@ FactoryGirl.define do
     file Rack::Test::UploadedFile.new('/private/var/www/gems/droom/spec/fixtures/images/rat.png', 'image/png')
     
     factory :grouped do
-      name "grouped"
+      name "Grouped Document"
     end
-            
+
+    factory :public_document do
+      name "Public Document"
+      public true
+    end
   end
-  
 end

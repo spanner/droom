@@ -7,16 +7,20 @@ module Droom
     belongs_to :created_by, :class_name => "User"
 
     after_create :link_documents
-    after_destroy :remove_document_links
+    after_destroy :unlink_documents
+
+    scope :of_group, lambda { |group|
+      where(["group_id = ?", group.id])
+    }
 
   protected
   
     def link_documents
-      person.documents << group.documents if person
+      person.document_attachments << group.document_attachments
     end
-    
-    def remove_document_links
-      person.documents -= group.documents if person
+  
+    def unlink_documents
+      person.document_attachments -= group.document_attachments
     end
 
   end

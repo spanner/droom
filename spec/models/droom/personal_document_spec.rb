@@ -4,13 +4,16 @@ describe Droom::PersonalDocument do
   
   before :each do
     @document = FactoryGirl.create(:document)
-    @da = @document.document_attachments.create()
     @person = FactoryGirl.create(:person)
-    @pd = FactoryGirl.create(:personal_document, :document_attachment => @da, :person => @person)
+    @group = FactoryGirl.create(:group)
+    @person.admit_to(@group)
+    @document.attach_to(@group)
+    @person.create_personal_documents
+    @pd = @person.personal_documents.first
   end
   
-  it "should have a document_attachment association" do
-    Droom::PersonalDocument.reflect_on_association(:document_attachment).macro.should == :belongs_to
+  it "should have a document_link association" do
+    Droom::PersonalDocument.reflect_on_association(:document_link).macro.should == :belongs_to
   end
 
   describe "on creation" do
@@ -26,7 +29,7 @@ describe Droom::PersonalDocument do
       @pd.file_changed?.should_not be_true
     end
     it "should save its file within the webdav folder of its person" do
-      @pd.file.path.should == "#{Rails.root()}/webdav/#{@person.id}/#{@da.slug}/#{@pd.file_file_name}"
+      @pd.file.path.should == "#{Rails.root()}/webdav/#{@person.id}/#{@pd.slug}/#{@pd.file_file_name}"
     end
     it "should save its file to a subfolder named by its attachment to event or group"
   end

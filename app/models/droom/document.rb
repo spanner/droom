@@ -74,6 +74,10 @@ module Droom
       document_attachments.create(attributes.merge(:attachee => attachee))
     end
     
+    def detach_from(attachee)
+      document_attachments.attached_to(attachee).destroy_all
+    end
+    
     def file_extension
       if file_file_name
         File.extname(file_file_name).sub(/^\./, '')
