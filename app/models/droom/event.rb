@@ -160,6 +160,14 @@ module Droom
 
     ## Instance methods
     #
+    def invite(person)
+      self.people << person
+    end
+    
+    def attach(doc)
+      self.documents << doc
+    end
+    
     def identifier
       'event'
     end

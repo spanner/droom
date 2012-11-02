@@ -7,5 +7,10 @@ FactoryGirl.define do
       name "Public Person"
       public true
     end
+
+    factory :shy_person do
+      name "Shy Person"
+      shy true
+    end
   end  
 end

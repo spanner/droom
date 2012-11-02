@@ -26,7 +26,7 @@ module Droom
       select('droom_documents.*')
         .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id')
         .joins('LEFT OUTER JOIN droom_document_links ON droom_document_attachments.id = droom_document_links.document_attachment_id')
-        .where(["droom_documents.public = 1 OR droom_documents.public = 't' OR droom_document_links.person_id = ?", person.id])
+        .where(["(droom_documents.public = 1 OR droom_document_links.person_id = ?)", person.id])
         .group('droom_documents.id')
     }
     

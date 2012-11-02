@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121102064853) do
+ActiveRecord::Schema.define(:version => 20121102095927) do
 
   create_table "droom_agenda_categories", :force => true do |t|
     t.integer  "event_id"
@@ -62,10 +62,10 @@ ActiveRecord::Schema.define(:version => 20121102064853) do
     t.datetime "file_updated_at"
     t.string   "file_fingerprint"
     t.integer  "created_by_id"
-    t.boolean  "public"
-    t.boolean  "private"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.boolean  "public",            :default => false
+    t.boolean  "secret",            :default => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
   end
 
   create_table "droom_event_sets", :force => true do |t|
@@ -160,8 +160,8 @@ ActiveRecord::Schema.define(:version => 20121102064853) do
     t.datetime "image_updated_at"
     t.integer  "user_id"
     t.integer  "created_by_id"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.string   "post_line1"
     t.string   "post_line2"
     t.string   "post_city"
@@ -170,8 +170,8 @@ ActiveRecord::Schema.define(:version => 20121102064853) do
     t.string   "post_code"
     t.string   "forename"
     t.integer  "position",           :default => 1
-    t.boolean  "public"
-    t.boolean  "private"
+    t.boolean  "public",             :default => false
+    t.boolean  "shy",                :default => false
   end
 
   add_index "droom_people", ["email"], :name => "index_droom_people_on_email"

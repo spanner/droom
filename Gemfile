@@ -31,6 +31,7 @@ group :assets do
 end
 
 group :test, :development do
+  gem 'mysql2'
   gem 'haml'
   gem 'paperclip', "~> 3.1.0"
   gem "capybara"

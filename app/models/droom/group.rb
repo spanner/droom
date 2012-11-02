@@ -36,6 +36,10 @@ module Droom
     def admit(person)
       self.people << person
     end
+    
+    def attach(doc)
+      self.documents << doc
+    end
 
     def membership_for(person)
       self.memberships.for(person).first

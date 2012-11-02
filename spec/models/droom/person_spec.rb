@@ -16,12 +16,22 @@ describe Droom::Person do
     it "should be able to create folders for all of its events and groups" do
       event = FactoryGirl.create(:simple_event, :name => "Event something")
       group = FactoryGirl.create(:group, :name => "Group something")
+      
+      group.attach(FactoryGirl.create(:document, :name => "Attached to group"))
+      event.attach(FactoryGirl.create(:document, :name => "Attached to event"))
+      
       @person.invite_to(event)
       @person.admit_to(group)
       @person.create_and_update_dav_directories
-      File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/unattached").should be_true
       File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/#{event.slug}").should be_true
       File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/#{group.slug}").should be_true
+    end
+
+    it "should be able to create a folder for directly-attached documents" do
+      document = FactoryGirl.create(:document, :name => "Loose Document")
+      @person.attach(document)
+      @person.create_and_update_dav_directories
+      File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/Unattached").should be_true
     end
   end
   
@@ -30,9 +40,11 @@ describe Droom::Person do
       @friend = FactoryGirl.create(:person, :name => "Friend")
       @stranger = FactoryGirl.create(:person, :name => "Stranger")
       @publicist = FactoryGirl.create(:public_person, :name => "Public figure")
+      @elvis = FactoryGirl.create(:shy_person, :name => "Elvis")
       @group = FactoryGirl.create(:group)
       @person.admit_to(@group)
       @friend.admit_to(@group)
+      @elvis.admit_to(@group)
     end
     
     it "should be able to see people with whom groups are shared" do
@@ -45,8 +57,12 @@ describe Droom::Person do
       Droom::Person.visible_to(@person).should_not include(@friend)
     end
 
-    it "should be able to see public people" do
+    it "should always be able to see public people" do
       Droom::Person.visible_to(@person).should include(@publicist)
+    end
+
+    it "should never be able to see shy people" do
+      Droom::Person.visible_to(@person).should_not include(@elvis)
     end
   end
   

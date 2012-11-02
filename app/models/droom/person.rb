@@ -42,11 +42,12 @@ module Droom
       where('droom_people.name like ?', fragment)
     }
     
+    # warning! won't work in SQLite.
     scope :visible_to, lambda { |person|
       select('droom_people.*')
         .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
         .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
-        .where(['droom_people.public = 1 OR droom_people.public = "t" OR dm2.person_id = ?', person.id])
+        .where(['(droom_people.public = 1 OR dm2.person_id = ?) AND (droom_people.shy IS NULL OR droom_people.shy <> 1)', person.id])
         .group('droom_people.id')
     }
     
@@ -133,8 +134,9 @@ module Droom
     end
     
     def create_and_update_dav_directories
-      (events.with_documents + groups.with_documents).each do |associate|
-        create_dav_directory(associate.slug)
+      document_links.each do |dl|
+        p "-> creating DAV directory #{dl.slug}"
+        create_dav_directory(dl.slug)
       end
     end
     
@@ -160,7 +162,13 @@ module Droom
     def group_documents
       groups.any? ? Droom::Document.attached_to_these_groups(groups) : []
     end
-
+    
+    # It is possible to give us a document by creating an attachment that has no attachee
+    # but which links to this person.
+    #
+    def attach(doc)
+      document_attachments.create(:document => doc)
+    end
 
 
     def invite_to(event)
