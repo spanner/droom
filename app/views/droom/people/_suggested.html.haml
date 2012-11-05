@@ -1,7 +1,8 @@
 - person ||= suggested
 
 %li.person
-  = link_to person.name, person_url(person)
+  %strong
+    = person.formal_name
   %span.note
     = person.phone
     = t :or
