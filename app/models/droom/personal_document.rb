@@ -14,8 +14,9 @@ module Droom
     
     scope :derived_from, lambda { |document|
       select("droom_personal_documents.*")
-        .joins("INNER JOIN droom_document_links on droom_personal_documents.document_link_id = droom_document_links.id INNER JOIN droom_document_attachments on droom_document_links.document_attachment_id = droom_document_attachments.id")
-        .where(["droom_document_attachments.document_id = ?", document.id])
+        .joins("INNER JOIN droom_document_links AS ddl ON droom_personal_documents.document_link_id = ddl.id")
+        .joins("INNER JOIN droom_document_attachments AS dda ON ddl.document_attachment_id = dda.id")
+        .where(["dda.document_id = ?", document.id])
     }
 
     scope :belonging_to, lambda { |person|
