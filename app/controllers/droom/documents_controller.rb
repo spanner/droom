@@ -5,7 +5,7 @@ module Droom
   
     before_filter :authenticate_user!
     before_filter :require_admin!, :except => [:index, :show]
-    before_filter :get_person
+    before_filter :get_current_person
     before_filter :find_documents, :only => [:index]
     before_filter :get_document, :only => [:show, :edit, :update, :destroy]
     before_filter :build_document, :only => [:new, :create]
