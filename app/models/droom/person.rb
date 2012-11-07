@@ -169,7 +169,7 @@ module Droom
     # These documents will not show up in the calendar (since they are not attached to an event) so it's often a useful list.
     #
     def group_documents
-      groups.any? ? Droom::Document.attached_to_these_groups(groups) : []
+      groups.any? ? Droom::Document.attached_to_these_groups(groups).by_date : []
     end
     
     # It is possible to give us a document by creating an attachment that has no attachee
