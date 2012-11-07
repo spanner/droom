@@ -60,14 +60,9 @@ module Droom
         :postcode => post_code,
         :address => address.to_s,
         :lat => lat,
-        :lng => lng
+        :lng => lng,
+        :events => events.visible_to(options[:person]).as_json(options)
       }
-      if options[:person]
-        json[:events] = events.visible_to(options[:person]).as_json(options)
-      else
-        json[:events] = events.all_public.as_json(options)
-      end
-      json
     end
 
     def as_ri_cal_calendar

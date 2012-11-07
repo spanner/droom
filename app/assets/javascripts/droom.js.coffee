@@ -40,6 +40,12 @@ jQuery ($) ->
 
   $.fn.signal_cancellation = ->
     @signal('#a2a3a3')
+    
+  $.fn.back_button = ->
+    @click (e) ->
+      e.preventDefault() if e
+      history.back()
+      true
 
   $.fn.find_including_self = (selector) ->
     selection = @.find(selector)
@@ -71,6 +77,7 @@ jQuery ($) ->
     @find_including_self('input.person_picker').person_picker()
     @find_including_self('input.group_picker').group_picker()
     @find_including_self('.drag_sort').drag_sort()
+    @find_including_self('.back').back_button()
     @
       
 $ ->

@@ -13,9 +13,8 @@ module Droom
     
     def index
       respond_with @people do |format|
-        format.js {
-          render :partial => 'droom/people/people'
-        }
+        format.js { render :partial => 'droom/people/people' }
+        format.vcf { render :vcf => @people.map(&:to_vcf) }
       end
     end
     

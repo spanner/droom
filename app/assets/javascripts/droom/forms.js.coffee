@@ -730,7 +730,9 @@ jQuery ($) ->
     stumbit: (e) =>
       if @blocked
         e.preventDefault()
-
+      else
+        @field.val("") if @field.val() is @mock_password
+        
 
   $.fn.password_field = ->
     @each ->

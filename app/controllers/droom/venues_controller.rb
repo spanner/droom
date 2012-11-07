@@ -12,6 +12,7 @@ module Droom
         format.json {
           render :json => @venues.to_json(:person => @person)
         }
+      end
     end
     
     def show
