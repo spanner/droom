@@ -49,11 +49,15 @@ module Droom
     
     # warning! won't work in SQLite.
     scope :visible_to, lambda { |person|
-      select('droom_people.*')
-        .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
-        .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
-        .where(['(droom_people.public = 1 OR dm2.person_id = ?) AND (droom_people.shy IS NULL OR droom_people.shy <> 1)', person.id])
-        .group('droom_people.id')
+      if person
+        select('droom_people.*')
+          .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
+          .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
+          .where(['(droom_people.public = 1 OR dm2.person_id = ?) AND (droom_people.shy IS NULL OR droom_people.shy <> 1)', person.id])
+          .group('droom_people.id')
+      else
+        all_public
+      end
     }
     
     scope :personally_invited_to_event, lambda { |event|

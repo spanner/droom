@@ -5,6 +5,7 @@ module Droom
   
     before_filter :authenticate_user!
     before_filter :require_admin!, :except => [:index, :show]
+    before_filter :get_person
     before_filter :find_documents, :only => [:index]
     before_filter :get_document, :only => [:show, :edit, :update, :destroy]
     before_filter :build_document, :only => [:new, :create]
@@ -103,12 +104,10 @@ module Droom
       
       if current_user.admin?
         @documents = Droom::Document.with_latest_event
-      elsif current_user.person
-        @documents = Droom::Document.visible_to(current_user.person).with_latest_event
       else
-        @documents = Droom::Document.all_public
+        @documents = Droom::Document.visible_to(@current_person).with_latest_event
       end
-      
+
       @documents = @documents.name_matching(params[:q]) unless params[:q].blank?
       @documents = @documents.order("#{@by} #{@order}").page(@page).per(@show)
     end

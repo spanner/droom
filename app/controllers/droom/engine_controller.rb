@@ -24,13 +24,19 @@ module Droom
       @exception = exception
       render :template => 'droom/errors/bang', :status => 500
     end
-    
+
+  protected
+
     def no_layout_if_pjax
       if request.headers['X-PJAX']
         false
       else
         Droom.layout
       end
+    end
+    
+    def get_current_person
+      @current_person = current_user.person if current_user
     end
     
   end

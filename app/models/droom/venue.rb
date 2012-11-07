@@ -62,8 +62,8 @@ module Droom
         :lat => lat,
         :lng => lng
       }
-      if options[person]
-        json[:events] = events.visible_to(options.person).as_json(options)
+      if options[:person]
+        json[:events] = events.visible_to(options[:person]).as_json(options)
       else
         json[:events] = events.all_public.as_json(options)
       end

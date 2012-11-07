@@ -2,6 +2,7 @@ module Droom
   class SuggestionsController < Droom::EngineController
     respond_to :json, :js
     before_filter :authenticate_user!
+    before_filter :get_current_person
     before_filter :get_classes
 
     def index
@@ -9,13 +10,12 @@ module Droom
       max = params[:limit] || 10
 
       if @types.include?('event') && span = Chronic.parse(fragment, :guess => false)
-        @suggestions = Droom::Event.falling_within(span)
-      
+        @suggestions = Droom::Event.falling_within(span).visible_to(@current_person)
+
       else
         @suggestions = @klasses.collect {|klass| 
-          klass.constantize.name_matching(fragment).limit(max) 
+          klass.constantize.visible_to(@current_person).name_matching(fragment).limit(max)
         }.flatten.sort_by(&:name).slice(0, max)
-        
       end
             
       respond_with @suggestions do |format|

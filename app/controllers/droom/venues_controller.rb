@@ -2,11 +2,16 @@ module Droom
   class VenuesController < Droom::EngineController
     respond_to :json, :html
   
+    before_filter :authenticate_user!  
+    before_filter :get_current_person
     before_filter :get_venues, :only => ["index"]
     before_filter :get_venue, :only => [:show, :update]
 
     def index
-      respond_with @venues
+      respond_with @venues do |format|
+        format.json {
+          render :json => @venues.to_json(:person => @person)
+        }
     end
     
     def show
@@ -26,11 +31,7 @@ module Droom
 
     def get_venue
       @venue = Venue.find(params[:id])
-      if @person
-        @events = @venue.events.visible_to(@person).future_and_current
-      else
-        @events = @venue.events.all_public.future_and_current
-      end
+      @events = @venue.events.visible_to(@current_person).future_and_current
     end
 
   end

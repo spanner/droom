@@ -3,7 +3,8 @@ module Droom
     respond_to :json, :html, :js, :vcf
     layout :no_layout_if_pjax
     
-    before_filter :authenticate_user!  
+    before_filter :authenticate_user! 
+    before_filter :get_current_person
     before_filter :find_people, :only => :index
     before_filter :get_groups, :only => :index
     before_filter :get_person, :only => [:show, :edit, :update, :destroy]
@@ -68,10 +69,8 @@ module Droom
     def find_people
       if current_user.admin?
         @people = Person.all
-      elsif current_user.person
-        @people = Person.visible_to(current_user.person)
       else
-        @people = Person.all_public
+        @people = Person.visible_to(@current_person)
       end
       
       if params[:group_id]

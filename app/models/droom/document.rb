@@ -23,11 +23,15 @@ module Droom
     scope :not_public, where("public <> 1 OR secret = 1)")
     
     scope :visible_to, lambda { |person|
-      select('droom_documents.*')
-        .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id')
-        .joins('LEFT OUTER JOIN droom_document_links ON droom_document_attachments.id = droom_document_links.document_attachment_id')
-        .where(["(droom_documents.public = 1 OR droom_document_links.person_id = ?)", person.id])
-        .group('droom_documents.id')
+      if person
+        select('droom_documents.*')
+          .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id')
+          .joins('LEFT OUTER JOIN droom_document_links ON droom_document_attachments.id = droom_document_links.document_attachment_id')
+          .where(["(droom_documents.public = 1 OR droom_document_links.person_id = ?)", person.id])
+          .group('droom_documents.id')
+      else
+        all_public
+      end
     }
     
     scope :name_matching, lambda { |fragment|
