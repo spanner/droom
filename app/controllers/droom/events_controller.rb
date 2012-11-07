@@ -91,7 +91,7 @@ module Droom
     end
     
     def find_events
-      @events = @person ? @person.events : Event.scoped({})  #todo: visible or personal scope
+      @events = @person ? Event.visible_to(@person) : Event.all_public  #todo: visible or personal scope
       today = Date.today
       year = params[:year] || today.year
       month = params[:month] || today.month

@@ -48,8 +48,13 @@ module Droom
   
     ## Event retrieval in various ways
     #
-    # All of these methods return scopes.
-    #
+    scope :visible_to, lambda { |person|
+      select('droom_events.*')
+        .joins('LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id')
+        .where(["(droom_events.public = 1 OR droom_invitations.person_id = ?)", person.id])
+        .group('droom_events.id')
+    }
+
     scope :after, lambda { |datetime| # datetime. eg calendar.occurrences.after(Time.now)
       where(['start > ?', datetime])
     }
@@ -112,6 +117,8 @@ module Droom
       where('droom_events.name like ?', fragment)
     }
 
+    # All of these class methods also return scopes.
+    #
     def self.in_the_last(period)           # seconds. eg calendar.occurrences.in_the_last(1.week)
       finish = Time.now
       start = finish - period
