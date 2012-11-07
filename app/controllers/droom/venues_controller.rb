@@ -26,7 +26,11 @@ module Droom
 
     def get_venue
       @venue = Venue.find(params[:id])
-      @events = @venue.events.future_and_current
+      if @person
+        @events = @venue.events.visible_to(@person).future_and_current
+      else
+        @events = @venue.events.all_public.future_and_current
+      end
     end
 
   end
