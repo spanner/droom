@@ -69,6 +69,10 @@ module Droom
       file.exists?
     end
     
+    def changed_since_creation?
+      file_updated_at > created_at
+    end
+    
     def attachment_category_id=(id)
       attach_to(Droom::Event.find(event_id), {:category_id => id})
     end
