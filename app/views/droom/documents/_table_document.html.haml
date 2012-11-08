@@ -1,8 +1,11 @@
 - document ||= table_document
+- cssclasses = ["document"]
+- cssclasses << document.file_extension
+- cssclasses << 'changed' if document.changed_since_creation?
 
 %tr.document.holder
   %th.name
-    = link_to truncate(document.name, :length => 24), document_url(document), :class => "#{document.file_extension} #{' changed' if document.changed_since_creation? }document", :title => t(:click_to_download, :name => document.file_file_name)
+    = link_to truncate(document.name, :length => 24), document_url(document), :class => cssclasses.join(' '), :title => t(:click_to_download, :name => document.file_file_name)
   %td.filename.minor
     %span.note
       = truncate(document.file_file_name, :length => 18)

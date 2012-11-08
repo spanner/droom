@@ -107,6 +107,10 @@ a.ical
     a, a:visited
       color: $dark
 
+a.changed
+  color: $green
+  +hover
+  
 #events, #dashboard
   h2.quiet
     clear: both
@@ -289,8 +293,11 @@ h2.name
     color: $dark
     +hover
     &.changed
-      color: $link
+      color: $green
     +hover
+
+p.description.changed
+  color: $green
 
 h2.quiet
   font-size: 1.25em

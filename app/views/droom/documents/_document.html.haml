@@ -1,9 +1,14 @@
+- cssclasses = ["dl"]
+- cssclasses << document.file_extension
+- cssclasses << 'changed' if document.changed_since_creation?
+
 %div.document.holder
   %h2.name<
-    = link_to truncate(document.name, :length => 33), document_url(document), :class => "dl #{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
+    = link_to truncate(document.name, :length => 33), document_url(document), :class => cssclasses, :title => t(:click_to_download, :name => document.file_file_name)
     - if admin?
       = link_to t(:edit_document), edit_document_url(document), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay", :type => "html"}
 
   - if document.description
-    %p.description
+    - cssclasses = document.changed_since_creation? ? "description changed" : "description"
+    %p{:class => cssclasses}
       = document.description
