@@ -64,9 +64,6 @@ jQuery ($) ->
     @find_including_self('a.delete').removes('.holder')
     @find_including_self('[data-action="popup"]').popup_remote_content()
     @find_including_self('[data-action="toggle"]').toggle()
-    @find_including_self('[data-action="append_form"]').append_remote_form()
-    @find_including_self('[data-action="overlay_form"]').overlay_remote_form()
-    @find_including_self('[data-action="replace_with_form"]').replace_with_remote_form()
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('table.sortable').table_sort
       sort: "created"

@@ -225,6 +225,8 @@ jQuery ($) ->
 
 
 
+
+
   class RemoteForm
     constructor: (element, opts) ->
       @_form = $(element)
@@ -266,180 +268,117 @@ jQuery ($) ->
       else
         @_form.remove()
 
+  $.fn.remote_form = (opts) ->
+    @each ->
+      new RemoteForm @, opts 
 
-  $.fn.remote_link = (callback) ->
-    @
-      .on 'ajax:beforeSend', (event, xhr, settings) ->
-        $(@).addClass('waiting')
-        xhr.setRequestHeader('X-PJAX', 'true')
-      .on 'ajax:error', (event, xhr, status) ->
-        console.log "remote_link error:", status
-        $(@).removeClass('waiting').addClass('erratic')
-      .on 'ajax:success', (event, response, status) ->
-        $(@).removeClass('waiting')
-        callback(response)
 
+  class RemoteLink
+    constructor: (element, opts) ->
+      @_link = $(element)
+      @_options = $.extend {}, opts
+      @_link.on 'ajax:beforeSend', @pend
+      @_link.on 'ajax:error', @fail
+      @_link.on 'ajax:success', @receive
+
+    pend: (event, xhr, settings) =>
+      xhr.setRequestHeader('X-PJAX', 'true')
+      @_link.addClass('waiting')
+      @_options.on_request?()
+
+    fail: (event, xhr, status) ->
+      @_form?.removeClass('waiting').addClass('erratic')
+      @_options.on_error?()
+  
+    receive: (event, response, status) =>
+      @_link.removeClass('waiting')
+      @_options.on_complete?(response)
+
+      
+  $.fn.remote_link = (opts) ->
+    @each ->
+      new RemoteLink @, opts 
 
 
   $.fn.removes = (selector) ->
     selector ?= '.holder'
     @each ->
       affected = $(@).attr('data-affected')
-      $(@).remote_link (response) =>
-        $(@).parents(selector).first().fadeOut 'fast', () ->
-          $(@).remove()
-          $(affected).trigger "refresh"
-
-
-
-  class Replacement
-    constructor: (content, container) ->
-      @_container = $(container)
-      @_content = $(content)
-      @_mask = $('#mask')
-      @_original_content = @_container.html()
-      @_container.html(@_content)
-
-    revert: (e) =>
-      @_container.html(@_original_content)
-      @_container.signal_cancellation()
-
-  $.fn.replace_with_remote_form = (container) ->
-    @each ->
-      container ?= $(@).parents('.holder')
-      affected = $(@).attr('data-affected')
-      $(@).remote_link (response) =>
-        f = $(response)
-        rp = new Replacement f, container
-        new RemoteForm f, 
-          on_cancel: rp.revert
-          on_complete: (response) =>
-            container.replaceWith(response)
-            response.activate()
-            response.signal_confirmation()
+      $(@).remote_link 
+        on_complete: (response) =>
+          $(@).parents(selector).first().fadeOut 'fast', () ->
+            $(@).remove()
             $(affected).trigger "refresh"
 
 
-
-  class Interjection
-    constructor: (content, target, @_position) ->
-      @_options = $.extend {position: 'after'}, @_opts
-      @_content = $(content)
-      @_mask = $('#mask')
-      @_target = $(target)
-      @_container = $('<div class="interjected" />')
-      switch @_position
-        when "insert" then @_container.prependTo(@_target)
-        when "before" then @_container.insertBefore(@_target)
-        when "after" then @_container.insertAfter(@_target)
-        else throw "interjection overruled"
-      @_container.hide().append(@_content)
-      @show()
-      
-    show: (e) =>
-      e.preventDefault() if e
-      @_container.slideDown 'slow'
-
-    hide: (e) =>
-      e.preventDefault() if e
-      @_container.slideUp 'slow'
-
-    remove: (e) =>
-      e.preventDefault() if e
-      @_container.slideUp 'fast', () ->
-        $(@).remove()
-
-
-  $.fn.append_remote_form = (target) ->
-    @each ->
-      container = target ? $(@).parents('.holder').first()
-      affected = $(@).attr('data-affected')
-      $(@).remote_link (response) =>
-        f = $(response)
-        ij = new Interjection f, container, 'after'
-        new RemoteForm f, 
-          on_cancel: ij.remove
-          on_complete: (response) =>
-            $(affected).trigger "refresh"
-
-
-
-  class Overlay
-    constructor: (content, marker) ->
-      @_content = $(content)
-      @_marker = $(marker)
-      @_container = $('<div class="overlay" />')
-      @_mask = $('#mask')
-      @_marker.offsetParent().append(@_container)
-      @_container.hide().append(@_content)
-      position = 
-        top: @_marker.position().top
-        left: @_marker.position().left
-      @_container.css position
-      @show()
-      
-
-    show: (e) =>
-      e.preventDefault() if e
-      @_mask.bind "click", @hide
-      @_mask.fadeTo 'fast', 0.8
-      @_container.fadeIn 'fast'
-
-    hide: (e) =>
-      e.preventDefault() if e
-      @_mask.fadeOut('slow')
-      @_mask.unbind "click", @hide
-      @_container.fadeOut('slow')
-    
-    remove: (e) =>
-      @_mask.fadeOut('fast')
-      @_mask.unbind "click", @hide
-      @_container.fadeOut 'slow', () ->
-        $(@).remove()
-      
-
-  $.fn.overlay_remote_form = () ->
-    @each ->
-      $(@).remote_link (response) =>
-        marker = $(@).parents('.holder')
-        affected = $(@).attr('data-affected')
-        f = $(response)
-        ov = new Overlay f, marker
-        new RemoteForm f, 
-          on_cancel: ov.remove
-          on_complete: (response) =>
-            ov.remove()
-            marker.replaceWith(response)
-            response.activate()
-            response.signal_confirmation()
-            $(affected).trigger "refresh"
 
 
   class Popup
-    constructor: (content) ->
+    constructor: (content, marker) ->
       @_content = $(content)
+      @_marker = $(marker) if marker
+      @_header = @_content.find('h2')
+      @_closer = $('<a href="#" class="close">close</a>').appendTo(@_header)
       @_mask = $('#mask')
       @_container = $('<div class="popup" />')
       @_container.insertAfter(@_mask).hide().append(@_content)
-      @_content.find('a.cancel').click @hide
       @_content.activate()
+      @_closer.click(@hide)
+      @place()
       @show()
+      
+    place: (e) =>
+      if @_marker?
+        pos = @_marker.offset()
+        placement = 
+          left: pos.left - 30
+          top: pos.top - 10
+      else
+        w = $(window)
+        placement = 
+          left: (w.width() - @_container.width()) / 2
+          top: w.scrollTop() + (w.height() - @_container.height()) / 4
+      console.log "placement", placement
+      @_container.css placement
 
     show: (e) =>
       e.preventDefault() if e
       @_container.fadeTo('fast', 1)
       @_mask.fadeTo('fast', 0.8)
       @_mask.bind "click", @hide
+      $(window).bind "resize", @place
 
     hide: (e) =>
       e.preventDefault() if e
       @_container.fadeOut('fast')
       @_mask.fadeOut('fast')
       @_mask.unbind "click", @hide
+      $(window).unbind "resize", @place
+
 
   $.fn.popup_remote_content = () ->
-    @remote_link (response) ->
-      new Popup(response)
+    @each ->
+      popup = null
+      $(@).attr('data-type', 'html')
+      $(@).remote_link 
+        on_request: (e) =>
+          console.log "popup request: popup is", popup
+          if popup
+            $(@).removeClass('waiting')
+            popup.show()
+            return false
+        on_complete: (r) =>
+          marker = $(@).parents('.holder')
+          affected = $(@).attr('data-affected')
+          response = $(r)
+          popup = new Popup response, marker
+          response.find('form').remote_form
+            on_cancel: popup.hide
+            on_complete: (response) =>
+              popup.hide()
+              $(affected).trigger "refresh"
+
+
 
 
   class Refresher
