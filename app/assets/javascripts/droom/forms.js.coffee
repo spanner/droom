@@ -231,6 +231,8 @@ jQuery ($) ->
     constructor: (element, opts) ->
       @_form = $(element)
       @_options = $.extend {}, opts
+      @_form.attr('data-remote', true)
+      @_form.attr('data-type', 'html')
       @_form.on 'ajax:beforeSend', @pend
       @_form.on 'ajax:error', @fail
       @_form.on 'ajax:success', @receive
