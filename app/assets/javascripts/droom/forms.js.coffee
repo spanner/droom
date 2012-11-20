@@ -378,7 +378,9 @@ jQuery ($) ->
             on_cancel: popup.hide
             on_complete: (response) =>
               popup.hide()
+              popup = null
               $(affected).trigger "refresh"
+              
 
 
 
