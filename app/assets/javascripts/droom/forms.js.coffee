@@ -318,7 +318,7 @@ jQuery ($) ->
       @_content = $(content)
       @_marker = $(marker) if marker
       @_header = @_content.find('h2')
-      @_closer = $('<a href="#" class="close">close</a>').appendTo(@_header)
+      @_closer = $('<a href="#" class="closer">close</a>').appendTo(@_header)
       @_mask = $('#mask')
       @_container = $('<div class="popup" />')
       @_container.insertAfter(@_mask).hide().append(@_content)

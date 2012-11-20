@@ -61,6 +61,11 @@ $tool_button_width: 32px
 =blurred($color: $pale)
   text-shadow: $color 0 0 3px
   
+=text-hidden($indent: 500px)
+  overflow: hidden
+  text-indent: $indent
+
+
 
 a.download
   +icon_with_text('droom/download.png')
@@ -916,6 +921,22 @@ div.popup
     margin-left: -20px
     width: 550px
     +border-top-radius
+    a.closer
+      display: block
+      float: right
+      width: 16px
+      height: 16px
+      margin-left: 10px
+      margin-right: -8px
+      margin-top: 2px
+      +text-hidden
+      background: 
+        image: image-url('droom/crosses.png')
+        color: transparent
+        position: 0 0
+        repeat: no-repeat
+      &:hover
+        background-position: 0 -32px
     
 
 div.interjected
