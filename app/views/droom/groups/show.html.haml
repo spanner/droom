@@ -10,4 +10,4 @@
   - if current_user.admin?
     .holder
       %p.admin
-        = link_to t(:add_member), droom.new_group_membership_url(@group), :class => "add", :remote => true, :data => {:action => "append_form", :type => "html", :affected => "table.people"}
+        = link_to t(:add_member), droom.new_group_membership_url(@group), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}

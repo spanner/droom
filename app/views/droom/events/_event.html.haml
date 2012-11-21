@@ -21,7 +21,7 @@
       %p.note
         = @event_header = header
 
-  %div{:class => cssclasses.join(' ')}
+  %div{:class => cssclasses.join(' '), :id => "event_#{event.id}"}
     .datemark
       %span.mon= event.start.strftime('%b')
       %span.dom= event.start.strftime('%d')
@@ -33,7 +33,7 @@
         = link_to event.name, event_url(event)
         - if admin?
           %span.admin<
-            = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
+            = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :replaced => "#event_#{event.id}", :affected => ".minimonth"}
             = link_to t(:remove), event_url(event), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_event, :name => event.name), :affected => ".minimonth"}
         - else
           = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
@@ -45,14 +45,14 @@
               %h3 
                 = t(:attachments)
                 - if admin?
-                  = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin minimal", :remote => true, :data => {:action => "append_form", :type => "html"}
+                  = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin minimal", :remote => true, :data => {:action => "popup", :type => "html"}
               %ul.downloads
                 = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
                 - if event.documents.count > 3
                   %li.more
                     = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
             - elsif admin?
-              = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "append_form", :type => "html"}
+              = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html"}
               
               
       %p.practicalities

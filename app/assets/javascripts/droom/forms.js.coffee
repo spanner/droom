@@ -168,10 +168,10 @@ jQuery ($) ->
       @saveState()
       
     display: (results) =>
-      $(@_options.replacing).replaceWith results
+      replacement = $(results)
+      $(@_options.replacing).replaceWith replacement
       $(@_options.clearing).val "" if @_options.clearing?
-      $(@_options.replacing).find('a.popup').popup_remote_content()
-      $(@_options.replacing).find('a.cancel').click @revert
+      replacement.find('a.cancel').click @revert
 
   $.fn.captive = (options) ->
     options = $.extend(
@@ -364,7 +364,6 @@ jQuery ($) ->
       $(@).attr('data-type', 'html')
       $(@).remote_link 
         on_request: (e) =>
-          console.log "popup request: popup is", popup
           if popup
             $(@).removeClass('waiting')
             popup.show()
@@ -372,14 +371,19 @@ jQuery ($) ->
         on_complete: (r) =>
           marker = $(@).parents('.holder')
           affected = $(@).attr('data-affected')
+          replaced = $(@).attr('data-replaced')
           response = $(r)
           popup = new Popup response, marker
           response.find('form').remote_form
             on_cancel: popup.hide
             on_complete: (response) =>
+              replacement = $(response)
               popup.hide()
               popup = null
               $(affected).trigger "refresh"
+              if replaced
+                $(replaced).replaceWith replacement
+                replacement.activate().signal_confirmation()
               
 
 

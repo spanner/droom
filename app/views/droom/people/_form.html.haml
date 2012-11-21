@@ -1,40 +1,42 @@
-= form_for @person, :html => {:class => 'edit person', :remote => true, :data => {:type => :html}} do |f|
-  %table.main.people
-    %tr.person
-      %td.icon
-        %span
-      %th.name
-        = f.text_field :title, :class => 'title', :placeholder => t(:person_title)
-        - if Droom.use_forenames
-          = f.text_field :forename, :class => 'forename', :placeholder => t(:person_forename)
-          = f.text_field :name, :class => 'name', :placeholder => t(:person_surname)
-        - else
-          = f.text_field :name, :class => 'name', :placeholder => t(:person_name)
+= form_for @person, :html => {:class => 'edit person'} do |f|
+  .primary
+    - if Droom.use_forenames
+      %p
+        = f.label :forename
         %br
-        - if @person.new_record?
-          = f.check_box :invite_on_creation, :class => 'invite'
-          = f.label :invite_on_creation      
-          = f.check_box :admin_user
-          = f.label :admin_user
+        = f.text_field :forename, :required => true
     
-      %td.email
-        = f.email_field :email, :class => 'email', :placeholder => t(:person_email)
-      %td.phone
-        = f.text_field :phone, :class => 'phone', :placeholder => t(:person_phone)
-      / %td.address
-      /   = f.text_field :post_line1, :class => 'post_line1', :placeholder => t(:person_post_line1)
-      /   %br
-      /   = f.text_field :post_line2, :class => 'post_line2', :placeholder => t(:person_post_line2)
-      /   %br
-      /   = f.text_field :post_city, :class => 'post_city', :placeholder => t(:person_post_city)
-      /   %br
-      /   = f.text_field :post_region, :class => 'post_region', :placeholder => t(:person_post_region)
-      /   %br
-      /   = f.text_field :post_country, :class => 'post_country', :placeholder => t(:person_post_country)
-      /   %br
-      /   = f.text_field :post_code, :class => 'post_code', :placeholder => t(:person_post_code)
-      %td.buttons
-        = f.submit t(:save)
-        = t :or
-        = link_to t(:cancel), "/", :class => 'cancel'
+    %p
+      = f.label :name
+      %br
+      = f.text_field :name, :required => true
+
+    %p
+      = f.label :email
+      %br
+      = f.text_field :email, :required => true
+
+    - if @person.new_record?
+      %p
+        = f.check_box :invite_on_creation, :class => 'invite'
+        = f.label :invite_on_creation      
+        = f.check_box :admin_user
+        = f.label :admin_user
+      
+  .secondary
+    %p
+      = f.label :title, :class => "optional"
+      %br
+      = f.text_field :title
+
+    %p
+      = f.label :phone, :class => "optional"
+      %br
+      = f.text_field :phone
+
+
+  .buttons
+    = f.submit t(:save_person)
+    = t :or
+    = link_to t(:cancel), '#', :class => 'cancel'
   

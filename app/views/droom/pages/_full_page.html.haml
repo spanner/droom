@@ -5,7 +5,7 @@
     = page.title
     - if admin?
       %span.admin<
-        = link_to t(:edit_page), edit_page_url(page), :class => 'edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
+        = link_to t(:edit_page), edit_page_url(page), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html"}
         = link_to t(:remove), page_url(page), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_page, :title => page.title), :affected => ".contents"}
 
   - if page.video_id?

@@ -3,7 +3,7 @@
 - cssclasses << document.file_extension
 - cssclasses << 'changed' if document.changed_since_creation?
 
-%tr.document.holder
+%tr.document.holder{:id => "document_#{document.id}"}
   %th.name
     = link_to truncate(document.name, :length => 24), document_url(document), :class => cssclasses.join(' '), :title => t(:click_to_download, :name => document.file_file_name)
   %td.filename.minor
@@ -23,7 +23,7 @@
       = truncate(document.category_name, :length => 18, :separator => " ")
   - if current_user.admin?
     %td.admin<
-      = link_to t(:edit), edit_document_url(document), :class => 'edit minimal', :remote => true, :data => {:action => "overlay_form", :type => "html"}
+      = link_to t(:edit), edit_document_url(document), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :replaced => "#document_#{document.id}"}
       = link_to t(:remove), document_url(document), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_document, :name => document.name)}
 %tr
   %td.description{:colspan => 6}

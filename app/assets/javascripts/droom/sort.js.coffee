@@ -17,14 +17,13 @@ jQuery ($) ->
 
       @sort = $.params("sort") ? @options.sort
       @order = $.params("order") ? @options.order
-      @query = null
+      @query = ""
       
       @headers = @table.find('th a.sorter')
       $.each @headers, (i, header) =>
         header = new SortLink header, @
         $.headers.push header
       
-      @activate()
       @table.bind "refresh", @update
       @search.bind "keyup", @setQuery
       

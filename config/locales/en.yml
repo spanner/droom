@@ -13,6 +13,12 @@ en:
         person:
           invite_on_creation: "Invite on creation"
           admin_user: "as admin user"
+          post_line1: "Address"
+          post_line2: ""
+          post_city: "City"
+          post_region: "Region"
+          post_country: "Country"
+          post_code: "Postcode"
   admin: "Admin"
   attachments: "Attachments"
   attending: "Attending"
@@ -147,6 +153,7 @@ en:
   venue_name: "Venue name"
   no_documents: "Sorry: there are no documents accessible by your account."
   no_people: "Sorry: there are no directory entries accessible by your account."
+  search_still_dumb: "This is a very basic title search. Full-text coming soon."
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

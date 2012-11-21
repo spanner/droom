@@ -35,7 +35,7 @@ module Droom
     end
     
     def new
-      render :partial => "form"
+      render 
     end
 
     def create
@@ -47,7 +47,7 @@ module Droom
     end
     
     def edit
-      render :partial => "form"
+      render 
     end
     
     def update
@@ -82,23 +82,21 @@ module Droom
     def find_documents
       @event = Droom::Event.find(params[:event_id]) if params[:event_id]
       sort_orders = {
-        'ASC' => "ASC",
-        'DESC' => "DESC"
+        'asc' => "ASC",
+        'desc' => "DESC"
       }
-      params[:order] = 'DESC' unless sort_orders[params[:order]]
+      @order = sort_orders[params[:order]] || "DESC"
 
       sort_parameters = {
-        'name' => 'droom_documents.name',
-        'filename' => 'droom_documents.file_file_name',
-        'filesize' => 'droom_documents.file_file_size',
-        'created' => 'droom_documents.created_at',
-        'event' => 'event_name',
-        'category' => 'case when category_name is null then 1 else 0 end, category_name'
+        'name' => "droom_documents.name #{@order}",
+        'filename' => "droom_documents.file_file_name #{@order}",
+        'filesize' => "droom_documents.file_file_size #{@order}",
+        'created' => "droom_documents.created_at #{@order}",
+        'event' => "event_name #{@order}",
+        'category' => "case when category_name is null then 1 else 0 end #{@order}, category_name #{@order}"
       }
       params[:sort] = 'created' unless sort_parameters[params[:sort]]
-
-      @by = sort_parameters[params[:sort]]
-      @order = sort_orders[params[:order]]
+      @sort = sort_parameters[params[:sort]]
       @show = params[:show] || 20
       @page = params[:page] || 1
       
@@ -109,7 +107,7 @@ module Droom
       end
 
       @documents = @documents.name_matching(params[:q]) unless params[:q].blank?
-      @documents = @documents.order("#{@by} #{@order}").page(@page).per(@show)
+      @documents = @documents.order(@sort).page(@page).per(@show)
     end
     
   end

@@ -188,7 +188,7 @@ div.event, div.document
 form.event, form.document
   position: relative
   padding-left: $datemark_width + $datemark_margin
-  width: 600px    
+  width: 495px    
 
 form.person
   position: relative
@@ -226,7 +226,7 @@ form.event
     color: $input
   input.name
     +heading
-    width: 600px
+    width: 470px
     font-size: 3em
   p.practicalities
     margin: 0 0.5em
@@ -241,7 +241,7 @@ form.event
   .description
     margin-top: 0.5em
     textarea
-      width: 600px
+      width: 470px
       font-size: 1em
       height: 250px
 
@@ -252,6 +252,7 @@ form.document
     width: $datemark_width
     margin-right: $datemark_margin
     margin-left: - $datemark_width - $datemark_margin
+    margin-top: 5px
     input[type="file"]
       display: none
     p.tip
@@ -263,11 +264,11 @@ form.document
     margin: 0
   input.name
     +heading
-    width: 600px
+    width: 480px
     font-size: 2em
   textarea
     +book
-    width: 600px
+    width: 480px
     font-size: 1em
     height: 60px
 
@@ -528,9 +529,6 @@ table.groups
   
 form.person
   position: relative
-  p
-    float: left
-    margin-right: 10px
   input[type="text"], input[type="email"]
     font-size: 1em
   input.title
@@ -904,7 +902,6 @@ div.popup
   padding: 20px
   z-index: 50
   min-height: 200px
-  max-height: 400px
   overflow: auto
   background-color: white
   +box_shadow(1px 3px 8px #52555f)
@@ -912,6 +909,7 @@ div.popup
   h2
     +light
     margin: 0
+    margin-bottom: 15px
     padding: 10px 20px
     background-color: $dark
     color: white
