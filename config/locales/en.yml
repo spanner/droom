@@ -164,6 +164,7 @@ en:
       natural: "%l:%M%P"
       natural_with_date: "%l:%M%P, %d %B %Y"
       precise: "%H:%M"
+      month_and_year: "%B %Y"
   date:
     formats:
       dashed_short_date_format: "%d-%m-%Y"

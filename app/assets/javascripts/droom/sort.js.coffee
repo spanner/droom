@@ -5,34 +5,41 @@ jQuery ($) ->
     decodeURIComponent $.urlParam(name)
     
   class TableSort
-    constructor: (element, options) ->
-      @order = options.order
-      @sort = options.sort
+    constructor: (element, opts) ->
       @table = $(element)
+      @options = $.extend {}, opts
+      @options.url ?= @table.attr("data-url") ? "/documents.js"
+      @options.sort ?= @table.attr("data-sort") ? "created"
+      @options.order ?= @table.attr("data-order") ? "desc"
+
+      console.log "table sorter with url", @options.url, "and sort #{@options.sort} #{@options.order}"
+
       @body = @table.find('tbody')
       @_original_content = @body.children()
-      @sort = $.params("sort")
-      @order = $.params("order")
+      @sort = $.params("sort") ? @options.sort
+      @order = $.params("order") ? @options.order
+      
       @headers = @table.find('th a.sorter')
       $.each @headers, (i, header) =>
         header = new SortLink header, @
         $.headers.push header
       @activate()
+      
       @table.bind "refresh", @update
       if Modernizr.history
         $(window).bind 'popstate', @restoreState
     
     resort: (sort, order) =>
       sort ?= "name"
-      order ?= "ASC"
+      order ?= "asc"
       @sort = sort
       @order = order
-      @get("/documents.js?sort=#{sort}&order=#{order}")
+      @get("#{@options.url}?sort=#{sort}&order=#{order}")
     
     update: () =>
       @body.fadeTo('fast', 0.2)
       $.ajax
-        url: "/documents.js?sort=#{@sort}&order=#{@order}"
+        url: "#{@options.url}?sort=#{@sort}&order=#{@order}"
         dataType: "html"
         success: @display
 
@@ -58,7 +65,7 @@ jQuery ($) ->
       @activate()
 
     activate: () =>
-      @body.find('a.popup').popup_remote_content()
+      @body.activate()
       @body.find('.pagination').find('a').retable(@)
       @body.refresher()
       
@@ -101,12 +108,12 @@ jQuery ($) ->
     click: (e) =>
       e.preventDefault()
       @table.headers.removeAttr('data-order')
-      if @_order == "ASC"
-        @_link.attr('data-order', 'DESC')
-        @_order = "DESC"
+      if @_order == "asc"
+        @_link.attr('data-order', 'desc')
+        @_order = "desc"
       else
-        @_link.attr('data-order', 'ASC')
-        @_order = "ASC"
+        @_link.attr('data-order', 'asc')
+        @_order = "asc"
       @table.resort(@_sort, @_order)
       
 

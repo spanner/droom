@@ -12,6 +12,7 @@
 #= require droom/suggester
 #= require droom/calendar
 #= require droom/sort
+#= require droom/stars
 #= require droom/map
 #= require droom/drag_sort
 #= require_self
@@ -65,9 +66,7 @@ jQuery ($) ->
     @find_including_self('[data-action="popup"]').popup_remote_content()
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-refreshable]').refresher()
-    @find_including_self('table.sortable').table_sort
-      sort: "created"
-      order: "DESC"
+    @find_including_self('table.sortable').table_sort()
     @find_including_self('#map').init_map()
     @find_including_self('input.password').password_field()
     @find_including_self('input[type="submit"]').submitter()
@@ -75,6 +74,8 @@ jQuery ($) ->
     @find_including_self('input.group_picker').group_picker()
     @find_including_self('.drag_sort').drag_sort()
     @find_including_self('.back').back_button()
+    @find_including_self('input.score').score_picker()
+    @find_including_self('div.stars').star_rating()
     @
       
 $ ->
