@@ -8,21 +8,27 @@ jQuery ($) ->
     constructor: (element, opts) ->
       @table = $(element)
       @body = @table.find('tbody')
+      @search = $('input#q')
+      
       @options = $.extend {}, opts
       @options.url ?= @body.attr("data-url") ? "/documents.js"
       @options.sort ?= @table.attr("data-sort") ? "created"
       @options.order ?= @table.attr("data-order") ? "desc"
-      @_original_content = @body.children()
+
       @sort = $.params("sort") ? @options.sort
       @order = $.params("order") ? @options.order
+      @query = null
       
       @headers = @table.find('th a.sorter')
       $.each @headers, (i, header) =>
         header = new SortLink header, @
         $.headers.push header
-      @activate()
       
+      @activate()
       @table.bind "refresh", @update
+      @search.bind "keyup", @setQuery
+      
+      @_original_content = @body.children()
       if Modernizr.history
         $(window).bind 'popstate', @restoreState
     
@@ -31,12 +37,12 @@ jQuery ($) ->
       order ?= "asc"
       @sort = sort
       @order = order
-      @get("#{@options.url}?sort=#{sort}&order=#{order}")
-    
+      @get("#{@options.url}?sort=#{sort}&order=#{order}&q=#{@query}")
+      
     update: () =>
       @body.fadeTo('fast', 0.2)
       $.ajax
-        url: "#{@options.url}?sort=#{@sort}&order=#{@order}"
+        url: "#{@options.url}?sort=#{@sort}&order=#{@order}&q=#{@query}"
         dataType: "html"
         success: @display
 
@@ -86,7 +92,17 @@ jQuery ($) ->
         @display(event.state.html)
         $.each $.headers, (i, header) =>
           header.check()
-        
+
+    setQuery: (e) =>
+      kc = e.which
+      console.log "setQuery", kc
+      
+      #   delete,     backspace,    alphanumerics,    number pad,        punctuation
+      if (kc is 8) or (kc is 46) or (47 < kc < 91) or (96 < kc < 112) or (kc > 145)
+        @query = @search.val()
+        @update()
+
+      
 
   class SortLink
     constructor: (element, table) ->
