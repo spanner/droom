@@ -1,4 +1,4 @@
-%tbody{:"data-url" => "#{documents_path}.js", :"data-refreshable" => true }
+%tbody{:"data-url" => "#{documents_path}.js"}
   - if @documents.any?
     = render :partial => 'table_document', :collection => @documents
     %tr

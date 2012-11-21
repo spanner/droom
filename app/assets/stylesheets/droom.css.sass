@@ -351,7 +351,6 @@ table.main
   th
     text-align: left
     vertical-align: bottom
-    +heading
     a.sorter
       position: relative
       display: inline-block
@@ -382,10 +381,12 @@ table.main
     h3, p
       margin: 0
     p.note
-      margin-top: -10px
-      margin-bottom: 10px
+      margin-top: 0
+      margin-bottom: 15px
     &.minor
       max-width: 150px
+  th:first-child
+    +heading
   td
     &.name
       +bold
@@ -394,8 +395,6 @@ table.main
       span
         display: block
         padding-top: 8px
-    p.unavailable
-      line-height: 28px
     a.event
       display: block
       padding-top: 8px

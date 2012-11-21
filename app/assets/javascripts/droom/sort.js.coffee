@@ -7,14 +7,11 @@ jQuery ($) ->
   class TableSort
     constructor: (element, opts) ->
       @table = $(element)
+      @body = @table.find('tbody')
       @options = $.extend {}, opts
-      @options.url ?= @table.attr("data-url") ? "/documents.js"
+      @options.url ?= @body.attr("data-url") ? "/documents.js"
       @options.sort ?= @table.attr("data-sort") ? "created"
       @options.order ?= @table.attr("data-order") ? "desc"
-
-      console.log "table sorter with url", @options.url, "and sort #{@options.sort} #{@options.order}"
-
-      @body = @table.find('tbody')
       @_original_content = @body.children()
       @sort = $.params("sort") ? @options.sort
       @order = $.params("order") ? @options.order
