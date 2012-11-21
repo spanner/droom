@@ -4,7 +4,7 @@
       %p.admin
         = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "popup", :affected => "table.documents"}
 
-  %table.main.documents.sortable{:'data-url' => documents_url}
+  %table.main.documents.sortable{:'data-sort' => @sort, :'data-order' => @order}
     %thead
       %tr
         %th
