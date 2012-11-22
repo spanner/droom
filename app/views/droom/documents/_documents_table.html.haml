@@ -1,13 +1,28 @@
-%tbody{:"data-url" => "#{documents_path}.js"}
+%table.main.documents.sortable{:data => {:sort => @sort, :order => @order, :url => "#{documents_path}.js"}}
+  %thead
+    %tr
+      - %w{name filename filesize created event category}.each do |col|
+        %th
+          - if @sort == col 
+            - order = @order.downcase == 'desc' ? 'asc' : 'desc'
+            - cssclass = "sorter #{@order.downcase}"
+          - else
+            - order = "asc"
+            - cssclass = 'sorter'
+          = link_to t(:"activerecord.attributes.droom.document.#{col}"), documents_path(:sort => col, :order => order, :format => :js), :class => cssclass, :remote => true
+
+
   - if @documents.any?
     = render :partial => 'table_document', :collection => @documents
-    %tr
-      %td{:colspan => 6}
-        .pagination
-          = paginate @documents, :params => {:format => :js}
+    %tbody
+      %tr
+        %td{:colspan => 6}
+          .pagination
+            = paginate @documents, :params => {:format => :js}
   - else
-    %tr
-      %td{:colspan => 6}
-        %p.nothing_to_see
-          = t :no_documents
-        
+    %tbody
+      %tr
+        %td{:colspan => 6}
+          %p.nothing_to_see
+            = t :no_documents
+      

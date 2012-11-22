@@ -14,26 +14,5 @@
       %p.admin
         = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "popup", :affected => "table.documents"}
 
-  %table.main.documents.sortable{:'data-sort' => @sort, :'data-order' => @order}
-    %thead
-      %tr
-        %th
-          %a.sorter{:href => "#", :"data-sort" => "name"}
-            = t :document_name
-        %th.minor
-          %a.sorter{:href => "#", :"data-sort" => "filename"}
-            = t :document_filename
-        %th.minor
-          %a.sorter{:href => "#", :"data-sort" => "filesize"}
-            = t :document_filesize
-        %th.minor
-          %a.sorter{:href => "#", :"data-sort" => "created"}
-            = t :document_created_at
-        %th
-          %a.sorter{:href => "#", :"data-sort" => "event"}
-            = t :document_attached_to
-        %th.minor
-          %a.sorter{:href => "#", :"data-sort" => "category"}
-            = t :document_category
 
-    = render :partial => 'documents_table'
+  = render :partial => 'documents_table'

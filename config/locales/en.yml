@@ -5,6 +5,15 @@ en:
   activerecord:
     attributes:
       droom:
+        document:
+          category: "Category"
+          name: "Name"
+          filename: "Filename"
+          filesize: "Size"
+          created_at: "Created"
+          attached_to: "Attached to"
+          name: "Document name"
+          description: "Document description"
         event:
           name: "Event name"
           venue_name: "Choose or add a location"
@@ -34,6 +43,7 @@ en:
   added_to: "has been added to '%{group}'."
   continue: "Continue"
   dashboard: "Dashboard"
+  document_created: "Document '%{name}' created"
   hello: "Hello world"
   sign_in: "Sign in"
   can_still_log_in: 'Your password has not changed until you complete this process, <br />so if you remember the old one you can still <a href="%{url}">log in</a>'
@@ -49,15 +59,6 @@ en:
   confirm_remove_member: "Are you sure you want to remove '%{name}' from '%{group}'?"
   confirm_uninvite_group: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   confirm_uninvite_person: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
-  document_category: "Category"
-  document_name: "Name"
-  document_filename: "Filename"
-  document_filesize: "Size"
-  document_created: "Document '%{name}' created"
-  document_created_at: "Created"
-  document_attached_to: "Attached to"
-  document_name: "Document name"
-  document_description: "Document description"
   download_ical: "Download event"
   downloads: "Downloads"
   download_attachments_as_zipfile: "Download all attachments as a zipfile"

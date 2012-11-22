@@ -96,7 +96,7 @@ module Droom
         'category' => "case when category_name is null then 1 else 0 end #{@order}, category_name #{@order}"
       }
       params[:sort] = 'created' unless sort_parameters[params[:sort]]
-      @sort = sort_parameters[params[:sort]]
+      @sort = params[:sort]
       @show = params[:show] || 20
       @page = params[:page] || 1
       
@@ -107,7 +107,7 @@ module Droom
       end
 
       @documents = @documents.name_matching(params[:q]) unless params[:q].blank?
-      @documents = @documents.order(@sort).page(@page).per(@show)
+      @documents = @documents.order(sort_parameters[@sort]).page(@page).per(@show)
     end
     
   end
