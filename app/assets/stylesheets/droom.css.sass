@@ -364,13 +364,13 @@ table.main
       &:hover
         color: $link
         background-position: right -32px
-      &[data-order="asc"]
+      &.asc
         color: $dark
         background-position: right -96px
         &:hover
           color: $link
           background-position: right -64px
-      &[data-order="desc"]
+      &.desc
         color: $dark
         background-position: right -160px
         &:hover
@@ -669,13 +669,15 @@ p.admin
 
 a.add, a.edit, a.delete
   display: inline-block
-  text-indent: 26px
+  text-indent: 18px
   margin-right: 10px
-  height: 24px
-  line-height: 20px
+  height: 16px
+  line-height: 14px
+  font-size: 0.8em
+  +bold
   background:
-    image: image-url('droom/minisymbols.png')
-    position: 0 -48px
+    image: image-url('droom/tinysymbols.png')
+    position: 0 -32px
     repeat: no-repeat
     scroll: scroll
   &:hover
@@ -687,42 +689,42 @@ a.add, a.edit, a.delete
     background-image: image-url('droom/spinner.gif')
     background-position: top left
   &.minimal
-    width: 24px
+    width: 16px
     line-height: 100px
     overflow: hidden
     margin-right: 2px
 
 a.add
-  background-position: 0 -48px
+  background-position: 0 -32px
   color: $green
   &:visited
     color: $green
     +hover
   &:hover
-    background-position: 0 -72px
+    background-position: 0 -48px
   &:active
     background-position: 0 -96px
 
 a.edit
-  background-position: 0 -720px
+  background-position: 0 -480px
   color: $blue
   &:visited
     color: $blue
     +hover
   &:hover
-    background-position: 0 -744px
+    background-position: 0 -496px
   &:active
-    background-position: 0 -768px
+    background-position: 0 -512px
   
 a.delete
-  background-position: 0 -504px
+  background-position: 0 -336px
   color: $mid
   &:visited
     color: $mid
   &:hover
-    background-position: 0 -528px
+    background-position: 0 -352px
   &:active
-    background-position: 0 -576px
+    background-position: 0 -384px
 
 // a.edit, a.delete
 //   display: none

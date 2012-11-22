@@ -279,6 +279,7 @@ jQuery ($) ->
     constructor: (element, opts) ->
       @_link = $(element)
       @_options = $.extend {}, opts
+      @_link.attr('data-type', 'html')
       @_link.on 'ajax:beforeSend', @pend
       @_link.on 'ajax:error', @fail
       @_link.on 'ajax:success', @receive
@@ -369,10 +370,11 @@ jQuery ($) ->
             popup.show()
             return false
         on_complete: (r) =>
-          marker = $(@).parents('.holder')
-          affected = $(@).attr('data-affected')
-          replaced = $(@).attr('data-replaced')
+          link = $(@)
           response = $(r)
+          marker = link.parents('.holder')
+          affected = link.attr('data-affected')
+          replaced = link.attr('data-replaced')
           popup = new Popup response, marker
           response.find('form').remote_form
             on_cancel: popup.hide
