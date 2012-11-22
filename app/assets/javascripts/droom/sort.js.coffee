@@ -8,7 +8,7 @@ jQuery ($) ->
     constructor: (element, opts) ->
       @table = $(element)
       @search = $('input#q')
-      @url ?= @table.attr("data-url") ? "/documents.js"
+      @url ?= @table.attr("data-url") ? "/documents"
       @query = ""
       @sort = null
       @order = null

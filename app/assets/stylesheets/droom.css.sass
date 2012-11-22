@@ -54,6 +54,21 @@ $tool_button_width: 32px
   &:hover
     background-position: 0 -48px
 
+=smallicon_with_text($url)
+  display: inline-block
+  text-indent: 18px
+  height: 16px
+  line-height: 16px
+  margin: 0 0 18px -8px
+  white-space: nowrap
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($url)
+  &:hover
+    background-position: 0 -16px
+
 =hover
   &:hover
     color: $hover
@@ -312,7 +327,15 @@ p.description.changed
 h2.quiet
   font-size: 1.25em
 
-
+a.twisty
+  +smallicon_with_text('droom/twisty.png')
+  color: $dark
+  &.showing
+    background-position: 0 -32px
+    &:hover
+      background-position: 0 -48px
+    
+  
 a.dl, a.ul
   display: inline-block
   min-height: 50px

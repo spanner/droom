@@ -36,24 +36,27 @@ jQuery ($) ->
 
     toggle: (e) =>
       e.preventDefault() if e
-      if @_showing then @fadeOut() else @fadeIn()
+      if @_showing then @slideUp() else @slideDown()
 
-    fadeIn: =>
-      $(@_selector).fadeIn () =>
+    slideDown: =>
+      @_container.addClass('showing')
+      $(@_selector).slideDown () =>
         @show()
 
     show: =>
       $(@_selector).show()
+      @_container.addClass('showing')
       @_container.text(@_showing_text)
       @_showing = true
       @store()
     
-    fadeOut: =>
-      $(@_selector).fadeOut () =>
+    slideUp: =>
+      $(@_selector).slideUp () =>
         @hide()
       
     hide: =>
       $(@_selector).hide()
+      @_container.removeClass('showing')
       @_container.text(@_hiding_text)
       @_showing = false
       @store()
@@ -244,15 +247,18 @@ jQuery ($) ->
       @_options.on_prepare?()
 
     pend: (event, xhr, settings) =>
+      event.stopPropagation()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_form.addClass('waiting')
       @_options.on_submit?()
 
     fail: (event, xhr, status) ->
+      event.stopPropagation()
       @_form?.removeClass('waiting').addClass('erratic')
       @_options.on_error?()
   
     receive: (event, response, status) =>
+      event.stopPropagation()
       replacement = $(response)
       @_form.after(replacement)
       @_form.remove()
@@ -285,15 +291,18 @@ jQuery ($) ->
       @_link.on 'ajax:success', @receive
 
     pend: (event, xhr, settings) =>
+      event.stopPropagation()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_link.addClass('waiting')
       @_options.on_request?()
 
     fail: (event, xhr, status) ->
+      event.stopPropagation()
       @_form?.removeClass('waiting').addClass('erratic')
       @_options.on_error?()
   
     receive: (event, response, status) =>
+      event.stopPropagation()
       @_link.removeClass('waiting')
       @_options.on_complete?(response)
 
@@ -321,17 +330,16 @@ jQuery ($) ->
       @_content = $(content)
       @_marker = $(marker) if marker
       @_header = @_content.find('h2')
-      @_closer = $('<a href="#" class="closer">close</a>').appendTo(@_header)
-      @_mask = $('#mask')
+      @_mask = $('<div class="mask" />').appendTo($('body'))
       @_container = $('<div class="popup" />')
       @_container.insertAfter(@_mask).hide().append(@_content)
-      @_content.activate()
+      @_closer = $('<a href="#" class="closer">close</a>').appendTo(@_header)
       @_closer.click(@hide)
       @place()
       @show()
       
     place: (e) =>
-      if @_marker?
+      if @_marker? && @_marker.get(0)
         pos = @_marker.offset()
         placement = 
           left: pos.left - 30
@@ -341,7 +349,6 @@ jQuery ($) ->
         placement = 
           left: (w.width() - @_container.width()) / 2
           top: w.scrollTop() + (w.height() - @_container.height()) / 4
-      console.log "placement", placement
       @_container.css placement
 
     show: (e) =>
@@ -362,24 +369,28 @@ jQuery ($) ->
   $.fn.popup_remote_content = () ->
     @each ->
       popup = null
-      $(@).attr('data-type', 'html')
-      $(@).remote_link 
-        on_request: (e) =>
+      link = $(@)
+      marker = link.parents('.holder')
+      affected = link.attr('data-affected')
+      replaced = link.attr('data-replaced')
+      
+      link.attr('data-type', 'html')
+      link.remote_link
+        on_request: (e) ->
+          console.log "requesting"
           if popup
-            $(@).removeClass('waiting')
+            link.removeClass('waiting')
             popup.show()
             return false
-        on_complete: (r) =>
-          link = $(@)
+
+        on_complete: (r) ->
           response = $(r)
-          marker = link.parents('.holder')
-          affected = link.attr('data-affected')
-          replaced = link.attr('data-replaced')
           popup = new Popup response, marker
           response.find('form').remote_form
             on_cancel: popup.hide
-            on_complete: (response) =>
-              replacement = $(response)
+            on_complete: (form_response) ->
+              console.log "completing remote form", @
+              replacement = $(form_response)
               popup.hide()
               popup = null
               $(affected).trigger "refresh"
