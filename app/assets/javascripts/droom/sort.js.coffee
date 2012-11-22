@@ -8,15 +8,10 @@ jQuery ($) ->
     constructor: (element, opts) ->
       @table = $(element)
       @search = $('input#q')
-      
-      @options = $.extend {}, opts
-      @options.url ?= @table.attr("data-url") ? "/documents"
-      @options.sort ?= @table.attr("data-sort")
-      @options.order ?= @table.attr("data-order")
-
-      @sort = $.params("sort") ? @options.sort
-      @order = $.params("order") ? @options.order
+      @url ?= @table.attr("data-url") ? "/documents.js"
       @query = ""
+      @sort = null
+      @order = null
       
       @table.bind "refresh", @get
       @search.bind "keyup", @setQuery
@@ -35,6 +30,7 @@ jQuery ($) ->
       @table.fadeTo('fast', 1)
       
     get: (url) =>
+      url ?= @url + '?sort=' + encodeURIComponent(@sort) + '&order=' + encodeURIComponent(@order)+ '&q=' + encodeURIComponent(@query)
       @wait()
       $.ajax
         url: url
@@ -52,6 +48,8 @@ jQuery ($) ->
 
     activate: () =>
       @table.refresher()
+      @sort ?= @table.attr("data-sort")
+      @order ?= @table.attr("data-order")
       @table.find('a.sorter, .pagination a').click (e) =>
         e.preventDefault() if e
         if url = $(e.target).attr('href')
