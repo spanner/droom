@@ -323,8 +323,6 @@ jQuery ($) ->
             $(affected).trigger "refresh"
 
 
-
-
   class Popup
     constructor: (content, marker) ->
       @_content = $(content)
@@ -334,23 +332,38 @@ jQuery ($) ->
       @_container = $('<div class="popup" />')
       @_container.insertAfter(@_mask).hide().append(@_content)
       @_closer = $('<a href="#" class="closer">close</a>').appendTo(@_header)
+      @_container.find('a[data-action="column_toggle"]').column_expander(@)
+      @_container.find('.hidden').find('input, select, textarea').attr('disabled', true)
       @_closer.click(@hide)
       @place()
       @show()
       
     place: (e) =>
-      if @_marker? && @_marker.get(0)
-        pos = @_marker.offset()
-        placement = 
-          left: pos.left - 30
-          top: pos.top - 10
+      cols = @_container.find("div.column").not('.hidden').length
+      width = (cols * 280) - 20
+      w = $(window)
+      height_limit = w.height() - 80
+      height = [@_container.height(), height_limit].min()      
+      placement = 
+        left: parseInt((w.width() - width) / 2)
+        top: parseInt(w.scrollTop() + (w.height() - height) / 3)
+        width: width
+        "max-height": height_limit
+      
+      if @_container.is(":visible")
+        @_container.animate placement
       else
-        w = $(window)
-        placement = 
-          left: (w.width() - @_container.width()) / 2
-          top: w.scrollTop() + (w.height() - @_container.height()) / 4
-      @_container.css placement
-
+        @_container.css placement
+    
+    toggle_column: (selector) =>
+      @_container.find(selector).each (i, col) =>
+        if $(col).is(":visible")
+          $(col).addClass('hidden').find('input, select, textarea').attr('disabled', true)
+        else
+          $(col).removeClass('hidden').find('input, select, textarea').removeAttr('disabled')
+      @place()
+          
+      
     show: (e) =>
       e.preventDefault() if e
       @_container.fadeTo('fast', 1)
@@ -399,6 +412,19 @@ jQuery ($) ->
                 replacement.activate().signal_confirmation()
               
 
+  $.fn.column_expander = (popup) ->
+    @click (e) ->
+      e.preventDefault() if e
+      link = $(@)
+      if affected = link.attr('data-affected')
+        text = link.text()
+        alt = link.attr('data-alt')
+        link.text(alt).attr('data-alt', text)
+        if link.hasClass('left')
+          link.addClass('right').removeClass('left')
+        else
+          link.addClass('left').removeClass('right')
+        popup.toggle_column(affected)
 
 
 

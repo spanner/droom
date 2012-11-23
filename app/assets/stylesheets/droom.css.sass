@@ -328,13 +328,27 @@ h2.quiet
   font-size: 1.25em
 
 a.twisty
-  +smallicon_with_text('droom/twisty.png')
+  +smallicon_with_text("droom/twisty.png")
   color: $dark
   &.showing
     background-position: 0 -32px
     &:hover
       background-position: 0 -48px
-    
+
+a.expander
+  display: inline-block
+  color: $green
+  background: 
+    repeat: no-repeat
+    image: image-url("droom/expand.png")
+  &.right
+    padding-right: 18px
+    background:
+      position: right 0
+  &.left
+    padding-left: 18px
+    background:
+      position: left -24px
   
 a.dl, a.ul
   display: inline-block
@@ -928,6 +942,7 @@ div.popup
   z-index: 50
   min-height: 200px
   overflow: auto
+  overflow-x: hidden
   background-color: white
   +box_shadow(1px 3px 8px #52555f)
   +border-radius
@@ -941,7 +956,7 @@ div.popup
     font-size: 1em
     margin-top: -20px
     margin-left: -20px
-    width: 550px
+    width: 100%
     +border-top-radius
     a.closer
       display: block
