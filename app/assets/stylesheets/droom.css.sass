@@ -1207,6 +1207,55 @@ p.nothing_to_see
   padding: 100px 0
 
 
+div.starpicker
+  position: relative
+  display: inline-block
+  width: 160px
+  height: 32px
+  span.star
+    position: relative
+    display: inline-block
+    width: 32px
+    height: 32px
+    margin: 0
+    overflow: hidden
+    background: 
+      position: 0 0
+      repeat: no-repeat
+      image: image-url('stars.png')
+    &.selected
+      background-position: 0 -32px
+    &.hovered
+      background-position: 0 -64px
+
+div.stars
+  position: relative
+  width: 80px
+  height: 16px
+  overflow: hidden
+  +text-hidden
+  background-color: $coolgrey0
+  .starmask, .starbar
+    position: absolute
+    top: 0
+    left: 0
+    height: 16px
+    overflow: hidden
+  .starmask
+    width: 80px
+    background:
+      position: 0 0
+      repeat: no-repeat
+      image: image-url('star_mask.png')
+  .starbar
+    width: 0
+    background-color: $dark
+  &.mid
+    .starbar
+      background-color: $mid
+      
+
+
 /* -------- map infowindows -------- */
 
 .window
