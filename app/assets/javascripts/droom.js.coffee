@@ -12,9 +12,9 @@
 #= require droom/suggester
 #= require droom/calendar
 #= require droom/sort
-#= require droom/stars
 #= require droom/map
 #= require droom/drag_sort
+#= require droom/fieldset
 #= require_self
 
 jQuery ($) ->
@@ -77,6 +77,7 @@ jQuery ($) ->
     @find_including_self('.back').back_button()
     @find_including_self('input.score').score_picker()
     @find_including_self('div.stars').star_rating()
+    @find_including_self('fieldset.application').application_fieldset()
     @
       
 $ ->
