@@ -6,6 +6,7 @@ require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
 require "droom/dav_resource"
+require "droom/searchability"
 require "snail"
 
 module Droom
