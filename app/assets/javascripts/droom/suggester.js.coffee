@@ -60,6 +60,15 @@ jQuery ($) ->
         suggester.form.submit()
     @
 
+  $.fn.application_suggester = (options) ->
+    options = $.extend(
+      submit_form: true
+      threshold: 1
+      type: 'application'
+    , options)
+    @each ->
+      new Suggester(@, options)
+    @
 
   class Suggester
     constructor: (element, options) ->
