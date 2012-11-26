@@ -54,7 +54,6 @@ jQuery ($) ->
     selection
 
   $.fn.activate = () ->
-    console.log "activate", @get(0)
     @find_including_self('a.toggle_active').replace_with_remote_toggle()
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('.twister').twister()
