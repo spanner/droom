@@ -798,5 +798,5 @@ jQuery ($) ->
     @click (e) ->
       $(@).addClass('waiting').text('Please wait').bind "click", (e) =>
         # e.preventDefault() if e
-      
-
+    
+    

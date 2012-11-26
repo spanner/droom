@@ -53,8 +53,19 @@ jQuery ($) ->
     selection.push @ if @is(selector)
     selection
 
+  $.activations = []
+  
+  $.activate_with = (fn) ->
+    $.activations.push fn
+  
   $.fn.activate = () ->
     console.log "activate", @get(0)
+    $.each $.activations, (i, fn) =>
+      fn.apply(@)
+    @
+      
+$ ->
+  $.activate_with () -> 
     @find_including_self('a.toggle_active').replace_with_remote_toggle()
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('.twister').twister()
@@ -78,9 +89,9 @@ jQuery ($) ->
     @find_including_self('input.score').score_picker()
     @find_including_self('div.stars').star_rating()
     @find_including_self('fieldset.application').application_fieldset()
-    @
-      
-$ ->
+  
+
+
   $('body').activate()
   $('#minicalendar').calendar()
   $('form#searchform').captive
