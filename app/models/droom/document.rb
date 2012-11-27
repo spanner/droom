@@ -61,10 +61,6 @@ module Droom
 
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
 
-    def identifier
-      'document'
-    end
-
     def file_ok?
       file.exists?
     end
@@ -96,6 +92,15 @@ module Droom
     
     def with_event
       self.class.this_document(self).with_latest_event.first
+    end
+    
+    def as_suggestion
+      {
+        :type => 'document',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
     end
     
   protected

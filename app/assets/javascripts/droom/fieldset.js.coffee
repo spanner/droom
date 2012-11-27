@@ -8,15 +8,19 @@ jQuery ($) ->
         @_fields[field] = @_container.find("input[data-attribute=\"#{field}\"]")
       @_request = null
       @_cache = {}
-      @_fields.ref.application_suggester()
-      @_fields.ref.bind "keyup", @change
+      @_suggester = @_fields.ref.application_suggester()
+      @_fields.ref.bind "keyup", @keyup
+      @_fields.ref.bind "suggester.change", @change
       console.log "fieldset", @_fields
 
-    change: (e) =>
+    keyup: (e) =>
       kc = e.which
       #   delete,     backspace,    alphanumerics,    number pad,        punctuation
       if (kc is 8) or (kc is 46) or (47 < kc < 91) or (96 < kc < 112) or (kc > 145)
         @get @_fields.ref.val()
+
+    change: (e) =>
+      @get @_fields.ref.val()
 
     get: (term) =>
       @_request.abort() if @_request
@@ -31,6 +35,7 @@ jQuery ($) ->
       if @_cache[term] is "null"
         @unmatch(term)
       else
+        # @_suggester?.hide()
         for field in ['id', 'year', 'applicant', 'title']
           @_fields[field].val(@_cache[term][field]).addClass('automatic')
           @_container.find("p.#{field} label").addClass('automatic')

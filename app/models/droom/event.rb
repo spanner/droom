@@ -179,10 +179,6 @@ module Droom
       self.documents << doc
     end
     
-    def identifier
-      'event'
-    end
-    
     # We store the start and end points of the event as a single DateTime value to make comparison simple.
     # The setters for date and time are overridden to pass strings through chronic's natural language parser
     # and to treat numbers as epoch seconds. These should all work as you'd expect:
@@ -363,6 +359,15 @@ module Droom
       json = super
       json[:datestring] = I18n.l start, :format => :natural_with_date
       json
+    end
+
+    def as_suggestion
+      {
+        :type => 'event',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
     end
 
   protected

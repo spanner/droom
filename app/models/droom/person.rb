@@ -268,6 +268,15 @@ module Droom
       people.map(&:vcf).join("\n")
     end
     
+    def as_suggestion
+      {
+        :type => 'person',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
+    end
+
   protected
     
     def invite_if_instructed

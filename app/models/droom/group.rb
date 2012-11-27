@@ -29,10 +29,6 @@ module Droom
     
     default_scope order("droom_groups.created_at ASC")
     
-    def identifier
-      'group'
-    end
-  
     def admit(person)
       self.people << person
     end
@@ -55,6 +51,15 @@ module Droom
         invitation.destroy!
       end
       group_invitation.destroy!
+    end
+    
+    def as_suggestion
+      {
+        :type => 'group',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
     end
     
   protected

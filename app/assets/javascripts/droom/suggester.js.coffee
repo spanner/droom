@@ -62,8 +62,9 @@ jQuery ($) ->
 
   $.fn.application_suggester = (options) ->
     options = $.extend(
-      submit_form: true
+      submit_form: false
       threshold: 1
+      limit: 5
       type: 'application'
     , options)
     @each ->
@@ -85,6 +86,7 @@ jQuery ($) ->
         empty_field: false
         submit_form: false
         threshold: 2
+        limit: 10
         afterSuggest: null
         afterSelect: null
       , options)
@@ -128,9 +130,9 @@ jQuery ($) ->
           @suggest []
         else
           @request.abort()  if @request
-          @request = $.getJSON(@options.url, "term=" + encodeURIComponent(query), (suggestions) =>
+          @request = $.getJSON(@options.url, "term=" + encodeURIComponent(query) + "&limit=" + @options.limit, (suggestions) =>
             @cache[query] = suggestions
-            @blanks.push query  if suggestions.length is 0
+            @blanks.push query if suggestions.length is 0
             @suggest suggestions
           )
       else
@@ -141,11 +143,12 @@ jQuery ($) ->
       @show()
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
-          link = $("<a href=\"#\">#{suggestion.text}</a>")
+          link = $("<a href=\"#\">#{suggestion.prompt}</a>")
+          value = suggestion.value || suggestion.prompt
           link.hover () =>
             @hover(link)
             link.click (e) =>
-              @select(e, link)
+              @select(e, link, value)
           $("<li></li>").addClass(suggestion.type).append(link).appendTo @container
 
         @suggestions = @container.find("a")
@@ -153,15 +156,17 @@ jQuery ($) ->
         @hide()
       @options.afterSuggest.call @, suggestions  if @options.afterSuggest
 
-    select: (e, selection) =>
-      e.preventDefault()  if e
+    select: (e, selection, value) =>
+      e.preventDefault() if e
       selection ?= $(@suggestions.get(@suggestion))
-      value = selection.text()
-      if @options.fill_field
+      if @options.fill_field?
         @prompt.val value
-      else @prompt.val ""  if @options.empty_field
-      @form.submit()  if @options.submit_form
-      @options.afterSelect.call @, value  if @options.afterSelect
+        @prompt.trigger 'suggester.change'
+      else if @options.empty_field?
+        @prompt.val "" 
+      if @options.submit_form?
+        @form.submit()
+      @options.afterSelect.call(@, value) if @options.afterSelect
       @hide()
 
     show: () =>

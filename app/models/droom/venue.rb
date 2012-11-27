@@ -65,6 +65,15 @@ module Droom
       }
     end
 
+    def as_suggestion
+      {
+        :type => 'venue',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
+    end
+
     def as_ri_cal_calendar
       RiCal.Calendar do |cal|
         events.primary.each do |event|

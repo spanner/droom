@@ -69,6 +69,24 @@ module Droom
     def show_venue_map
       !!@@show_venue_map
     end
+    
+    def suggestible_classes=(hash)
+      @@suggestible_classes = hash
+    end
 
+    def suggestible_classes
+      @@suggestible_classes ||= {
+        "event" => "Droom::Event", 
+        "person" => "Droom::Person", 
+        "document" => "Droom::Document",
+        "group" => "Droom::Group",
+        "venue" => "Droom::Venue"
+      }
+    end
+
+    def add_suggestible_class(label, klass=nil)
+      klass ||= label.titlecase
+      suggestible_classes[label] = klass.to_s
+    end
   end
 end
