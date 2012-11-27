@@ -77,9 +77,9 @@ jQuery ($) ->
       @type = @prompt.attr('data-type')
       @form = @prompt.parents("form")
       if options.type
-        @url = "/suggestions/#{options.type}"
+        @url = "/suggestions/#{options.type}.json"
       else
-        @url = "/suggestions"
+        @url = "/suggestions.json"
       @options = $.extend(
         url: @url
         fill_field: true

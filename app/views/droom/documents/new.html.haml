@@ -1,5 +1,8 @@
 #new_document
   %h2
-    = t :add_document
-
+    - if @event
+      = t :add_document_to, :name => @event.name
+    - else
+      = t :add_document
+      
   = render :partial => 'form'

@@ -45,7 +45,7 @@ Droom::Engine.routes.draw do
   match '/help/:slug', :to => 'pages#show', :as => 'help_page'
   match '/help', :to => 'pages#index', :as => 'help'
   
-  match '/suggestions', :to => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}, :constraints => {:format => /json/}
-  match '/suggestions/:type', :to => 'suggestions#index', :defaults => {:format => 'json'}, :constraints => {:format => /json/}
+  match '/suggestions.:format', :to => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}
+  match '/suggestions/:type.:format', :to => 'suggestions#index', :defaults => {:format => 'json'}
   
 end

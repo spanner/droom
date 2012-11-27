@@ -11,9 +11,8 @@ module Droom
       if @types.include?('event') && span = Chronic.parse(fragment, :guess => false)
         @suggestions = Droom::Event.falling_within(span).visible_to(@current_person)
       else
-        logger.warn ">>> suggestion types: #{@types.inspect}"
-        logger.warn ">>> suggestion klasses: #{@klasses.inspect}"
         @suggestions = @klasses.collect {|klass|
+          logger.warn ">>> getting suggestions for #{klass}"
           klass.constantize.visible_to(@current_person).name_matching(fragment).limit(max.to_i)
         }.flatten.sort_by(&:name).slice(0, max.to_i)
       end

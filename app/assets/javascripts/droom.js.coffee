@@ -89,8 +89,6 @@ $ ->
     @find_including_self('input.score').score_picker()
     @find_including_self('div.stars').star_rating()
     @find_including_self('fieldset.application').application_fieldset()
-  
-
 
   $('body').activate()
   $('#minicalendar').calendar()

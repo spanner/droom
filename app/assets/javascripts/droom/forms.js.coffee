@@ -136,7 +136,7 @@ jQuery ($) ->
       @_request = $.ajax
         type: "GET"
         dataType: "html"
-        url: @_form.attr("action") + ".js"
+        url: @_form.attr("action")
         data: @_form.serialize()
         success: @update
     
@@ -339,7 +339,10 @@ jQuery ($) ->
       
     place: (e) =>
       cols = @_container.find("div.column").not('.hidden').length
-      width = (cols * 280) - 20
+      if cols
+        width = (cols * 280) - 20
+      else 
+        width = 540
       w = $(window)
       height_limit = w.height() - 80
       height = [@_container.height(), height_limit].min()

@@ -12,9 +12,9 @@
 
   .metadata
     %p.name
-      = f.text_field :name, :class => 'name', :placeholder => t(:document_name)
+      = f.text_field :name, :class => 'name', :placeholder => t(:"activerecord.attributes.droom.document.name")
     %p.description
-      = f.text_area :description, :class => 'description', :placeholder => t(:document_description)
+      = f.text_area :description, :class => 'description', :placeholder => t(:"activerecord.attributes.droom.document.description")
 
     .buttons
       = f.submit t(:save_document)

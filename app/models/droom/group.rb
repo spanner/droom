@@ -16,6 +16,17 @@ module Droom
   
     before_save :check_slug
 
+    scope :visible_to, lambda { |person|
+      if person
+        select('droom_groups.*')
+          .joins('INNER JOIN droom_memberships as dm on droom_groups.id = dm.group_id')
+          .where(['dm.person_id = ?', person.id])
+          .group('droom_groups.id')
+      else
+        where("1=0")
+      end
+    }
+
     scope :with_documents, 
       select("droom_groups.*")
         .joins("INNER JOIN droom_document_attachments ON droom_groups.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Group'")

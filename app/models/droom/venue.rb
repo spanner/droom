@@ -16,6 +16,10 @@ module Droom
       where('droom_venues.name like ?', fragment)
     }
 
+    def self.visible_to(person=nil)
+      self.scoped({})
+    end
+
     # *for_selection* returns a set of [name, id] pairs suitable for use as select options.
     def self.for_selection
       self.all.map{|v| [v.proper_name, v.id] }

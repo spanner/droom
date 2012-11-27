@@ -37,6 +37,7 @@ en:
   year: "YEAR"
   add_event: "Add an event"
   add_document: "Add a document"
+  add_document_to: "Add a document to %{name}"
   add_page: "Add a page"
   add_person: "Add a person"
   add_group: "Add a group"
