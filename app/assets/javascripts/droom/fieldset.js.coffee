@@ -8,7 +8,7 @@ jQuery ($) ->
         @_fields[field] = @_container.find("input[data-attribute=\"#{field}\"]")
       @_request = null
       @_cache = {}
-      # @_fields.ref.application_suggester()
+      @_fields.ref.application_suggester()
       @_fields.ref.bind "keyup", @change
       console.log "fieldset", @_fields
 

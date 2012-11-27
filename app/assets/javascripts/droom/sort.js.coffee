@@ -12,6 +12,9 @@ jQuery ($) ->
       @query = ""
       @sort = null
       @order = null
+      @_request = null
+      @_cache = {}
+      @_request = null
       
       @table.bind "refresh", @get
       @search.bind "keyup", @setQuery
@@ -31,20 +34,27 @@ jQuery ($) ->
       
     get: (url) =>
       url ?= @url + '?sort=' + encodeURIComponent(@sort) + '&order=' + encodeURIComponent(@order)+ '&q=' + encodeURIComponent(@query)
+      @_request.abort() if @_request
       @wait()
-      $.ajax
-        url: url
-        dataType: "html"
-        success: (data) =>
-          @saveState(data, url) if Modernizr.history
-          @display(data)
+      if @_cache[url]
+        @display @_cache[url], url
+      else
+        @_request = $.ajax
+          url: url
+          dataType: "html"
+          success: (data) =>
+            @_cache[url] = data
+            @display(data, url)
 
-    display: (data) =>
+    display: (data, url) =>
+      console.log "display", url
       replacement = $(data).insertAfter(@table).hide()
       @table.remove()
       @table = replacement
-      @table.activate().fadeTo('fast', 1)
+      @table.children().activate()
+      @table.fadeTo('fast', 1)
       @activate()
+      @saveState(data, url) if url and Modernizr.history
 
     activate: () =>
       @table.refresher()
@@ -63,7 +73,6 @@ jQuery ($) ->
         @get()
     
     saveState: (data, url) =>
-      console.log "saveState", url
       state = 
         html: data
       history.pushState state, "Reviewers", url.replace(".js", "")  #hack!

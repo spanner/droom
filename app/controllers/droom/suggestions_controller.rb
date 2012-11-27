@@ -18,12 +18,10 @@ module Droom
     def index
       fragment = params[:term]
       max = params[:limit] || 10
-
       if @types.include?('event') && span = Chronic.parse(fragment, :guess => false)
         @suggestions = Droom::Event.falling_within(span).visible_to(@current_person)
-
       else
-        @suggestions = @klasses.collect {|klass| 
+        @suggestions = @klasses.collect {|klass|
           klass.constantize.visible_to(@current_person).name_matching(fragment).limit(max)
         }.flatten.sort_by(&:name).slice(0, max)
       end
