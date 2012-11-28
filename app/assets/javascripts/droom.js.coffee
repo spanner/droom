@@ -14,7 +14,6 @@
 #= require droom/sort
 #= require droom/map
 #= require droom/drag_sort
-#= require droom/fieldset
 #= require_self
 
 jQuery ($) ->
@@ -59,13 +58,11 @@ jQuery ($) ->
     $.activations.push fn
   
   $.fn.activate = () ->
-    console.log "activate", @get(0)
     $.each $.activations, (i, fn) =>
       fn.apply(@)
     @
-      
-$ ->
-  $.activate_with () -> 
+
+  $.activate_with () ->
     @find_including_self('a.toggle_active').replace_with_remote_toggle()
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('.twister').twister()
@@ -86,12 +83,8 @@ $ ->
     @find_including_self('input.group_picker').group_picker()
     @find_including_self('.drag_sort').drag_sort()
     @find_including_self('.back').back_button()
-    @find_including_self('input.score').score_picker()
-    @find_including_self('div.stars').star_rating()
-    @find_including_self('fieldset.application').application_fieldset()
+    @find_including_self('#minicalendar').calendar()
+    @find_including_self('form#searchform').captive
+      replacing: '.search_results'
+      fast: true
 
-  $('body').activate()
-  $('#minicalendar').calendar()
-  $('form#searchform').captive
-    replacing: '.search_results'
-    fast: true

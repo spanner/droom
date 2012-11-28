@@ -47,7 +47,6 @@ jQuery ($) ->
             @display(data, url)
 
     display: (data, url) =>
-      console.log "display", url
       replacement = $(data).insertAfter(@table).hide()
       @table.remove()
       @table = replacement

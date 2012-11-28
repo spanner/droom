@@ -59,7 +59,7 @@ $tool_button_width: 32px
   text-indent: 18px
   height: 16px
   line-height: 16px
-  margin: 0 0 18px -8px
+  margin: 0 0 5px -8px
   white-space: nowrap
   background:
     color: transparent
@@ -327,14 +327,18 @@ p.description.changed
 h2.quiet
   font-size: 1.25em
 
-a.twisty
-  +smallicon_with_text("droom/twisty.png")
-  color: $dark
+.twister
+  a.twisty
+    +smallicon_with_text("droom/twisty.png")
+    color: $dark
+    +hover
   &.showing
-    background-position: 0 -32px
-    &:hover
-      background-position: 0 -48px
-
+    a.twisty
+      background-position: 0 -32px
+      &:hover
+        background-position: 0 -48px
+        color: $hover
+        
 a.expander
   display: inline-block
   color: $green
@@ -420,7 +424,7 @@ table.main
       margin: 0
     p.note
       margin-top: 0
-      margin-bottom: 15px
+      margin-bottom: 5px
     &.minor
       max-width: 150px
   th:first-child
@@ -917,7 +921,7 @@ li.more
   z-index: 25
 
 .mask
-  position: absolute
+  position: fixed
   top: 0
   left: 0
   height: 100%
@@ -1207,53 +1211,6 @@ p.nothing_to_see
   padding: 100px 0
 
 
-div.starpicker
-  position: relative
-  display: inline-block
-  width: 160px
-  height: 32px
-  span.star
-    position: relative
-    display: inline-block
-    width: 32px
-    height: 32px
-    margin: 0
-    overflow: hidden
-    background: 
-      position: 0 0
-      repeat: no-repeat
-      image: image-url('stars.png')
-    &.selected
-      background-position: 0 -32px
-    &.hovered
-      background-position: 0 -64px
-
-div.stars
-  position: relative
-  width: 80px
-  height: 16px
-  overflow: hidden
-  +text-hidden
-  background-color: $coolgrey0
-  .starmask, .starbar
-    position: absolute
-    top: 0
-    left: 0
-    height: 16px
-    overflow: hidden
-  .starmask
-    width: 80px
-    background:
-      position: 0 0
-      repeat: no-repeat
-      image: image-url('star_mask.png')
-  .starbar
-    width: 0
-    background-color: $dark
-  &.mid
-    .starbar
-      background-color: $mid
-      
 
 
 /* -------- map infowindows -------- */

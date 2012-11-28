@@ -78,25 +78,27 @@ jQuery ($) ->
     constructor: (element) ->
       @_twister = $(element)
       @_twisted = @_twister.siblings('.twisted')
-      @_toggle = @_twister.find('a')
+      @_toggle = @_twister.find('a.twisty')
       @_toggle.click @toggle
-      @close() if @_twister.hasClass('closed')
+      @close() unless @_twister.hasClass('showing')
 
     toggle: (e) =>
       e.preventDefault() if e
       if @_twisted.is(':visible') then @close() else @open()
       
     open: () =>
-      @_twister.removeClass("closed")
-      @_twisted.slideDown "slow"
+      @_twister.addClass("showing")
+      @_twisted.show()
 
     close: () =>
-      @_twisted.slideUp "slow", () =>
-        @_twister.addClass("closed")
+      @_twister.removeClass("showing")
+      @_twisted.hide()
   
   $.fn.twister = ->
     @each ->
       new Twister(@)
+
+
 
   # A captive form submits via an ajax request and pushes its results into the present page.
 
@@ -243,7 +245,7 @@ jQuery ($) ->
       
     activate: () => 
       @_form.find('a.cancel').click @cancel
-      @_form.activate()
+      # @_form.activate()
       @_options.on_prepare?()
 
     pend: (event, xhr, settings) =>
@@ -320,7 +322,7 @@ jQuery ($) ->
         on_complete: (response) =>
           $(@).parents(selector).first().fadeOut 'fast', () ->
             $(@).remove()
-            $(affected).trigger "refresh"
+          $(affected).trigger "refresh"
 
 
   class Popup
@@ -332,6 +334,7 @@ jQuery ($) ->
       @_container = $('<div class="popup" />')
       @_container.insertAfter(@_mask).hide().append(@_content)
       @_closer = $('<a href="#" class="closer">close</a>').appendTo(@_header)
+      @_container.activate()
       @_container.find('a[data-action="column_toggle"]').column_expander(@)
       @_container.find('.hidden').find('input, select, textarea').attr('disabled', true)
       @_closer.click(@hide)
@@ -395,7 +398,6 @@ jQuery ($) ->
       link.attr('data-type', 'html')
       link.remote_link
         on_request: (e) ->
-          console.log "requesting"
           if popup
             link.removeClass('waiting')
             popup.show()
@@ -407,7 +409,6 @@ jQuery ($) ->
           response.find('form').remote_form
             on_cancel: popup.hide
             on_complete: (form_response) ->
-              console.log "completing remote form", @
               replacement = $(form_response)
               popup.hide()
               popup = null
@@ -439,7 +440,9 @@ jQuery ($) ->
       @_url = @_container.attr 'data-url'
       @_container.bind "refresh", @refresh
       
-    refresh: () =>
+    refresh: (e) =>
+      e.stopPropagation()
+      e.preventDefault()
       $.ajax @_url,
         dataType: "html"
         success: @replace
