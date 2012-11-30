@@ -43,6 +43,7 @@ en:
   add_group: "Add a group"
   added_to: "has been added to '%{group}'."
   continue: "Continue"
+  copy: "copy"
   dashboard: "Dashboard"
   document_created: "Document '%{name}' created"
   hello: "Hello world"

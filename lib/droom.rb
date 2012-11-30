@@ -7,6 +7,7 @@ require "droom/engine"
 require "droom/validators"
 require "droom/dav_resource"
 require "droom/searchability"
+require "droom/tagging"
 require "snail"
 
 module Droom
@@ -69,7 +70,7 @@ module Droom
     def show_venue_map
       !!@@show_venue_map
     end
-    
+
     def suggestible_classes=(hash)
       @@suggestible_classes = hash
     end

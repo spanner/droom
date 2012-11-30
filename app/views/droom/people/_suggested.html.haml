@@ -1,8 +1,7 @@
 - person ||= suggested
 
 %li.person
-  %strong
-    = person.formal_name
+  = mail_to person.email, person.formal_name
   %span.note
     = person.phone
     = t :or

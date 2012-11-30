@@ -805,3 +805,46 @@ jQuery ($) ->
       $(@).addClass('waiting').text('Please wait').bind "click", (e) =>
         # e.preventDefault() if e
 
+
+
+  class Copier
+    constructor: (element) ->
+      @_link = $(element)
+      @_link.click @failed
+      @_link.wrap $('<div class="copyholder" />')
+      @_container = @_link.parents('.copyholder')
+      @_selector = @_link.attr('data-selector')
+      @_clip = new ZeroClipboard.Client()
+      @_clip.setHandCursor true
+      # @_clip.glue @_link.get(0), @_container.get(0)
+      
+      [w, h] = [@_link.width() || 60, @_link.height() || 15]
+      @_clip_element = @_clip.getHTML(w, h+5)
+      $(@_clip_element).appendTo @_container
+      
+      @_clip.addEventListener 'onMouseDown', @collect
+      @_clip.addEventListener 'complete', @complete
+      @_clip.addEventListener 'onMouseOver', @hover
+      @_clip.addEventListener 'onMouseOut', @unHover
+      
+    collect: (e) =>
+      @_clip.setText($(@_selector).text())
+    
+    hover: (e) =>
+      @_link.addClass('hover')
+
+    unHover: (e) =>
+      @_link.removeClass('hover')
+      
+    complete: (client, text) =>
+      @_link.signal_confirmation()
+      console.log "copied", text
+
+    failed: (e) =>
+      e.preventDefault()
+      console.log "you missed"
+      
+  $.fn.copier = ->
+    ZeroClipboard.setMoviePath( '/assets/droom/lib/ZeroClipboard.swf' );
+    @each ->
+      new Copier @

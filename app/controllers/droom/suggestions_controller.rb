@@ -8,11 +8,10 @@ module Droom
     def index
       fragment = params[:term]
       max = params[:limit] || 10
-      if @types.include?('event') && span = Chronic.parse(fragment, :guess => false)
+      if @types.include?('event') && fragment.length > 6 && span = Chronic.parse(fragment, :guess => false)
         @suggestions = Droom::Event.falling_within(span).visible_to(@current_person)
       else
         @suggestions = @klasses.collect {|klass|
-          logger.warn ">>> getting suggestions for #{klass}"
           klass.constantize.visible_to(@current_person).name_matching(fragment).limit(max.to_i)
         }.flatten.sort_by(&:name).slice(0, max.to_i)
       end
@@ -31,16 +30,15 @@ module Droom
 
     def get_classes
       suggestible_classes = Droom.suggestible_classes
-      logger.warn ">>> searchable types: #{suggestible_classes.keys.inspect}"
-      logger.warn ">>> type: #{params[:type].inspect}"
+      requested_types = [params[:type]].flatten.compact.uniq
+      requested_types = %w{event person document group venue} if requested_types.empty?
+
+      logger.warn ">>> requested_types is #{requested_types.inspect}"
       
-      if params[:type].blank?
-        @types = suggestible_classes.keys
-        @klasses = suggestible_classes.values
-      else
-        @types = suggestible_classes.keys & [params[:type]].flatten
-        @klasses = suggestible_classes.values_at(*@types)
-      end
+      @types = suggestible_classes.keys & requested_types
+      logger.warn ">>> @types is #{@types.inspect}"
+
+      @klasses = suggestible_classes.values_at(*@types)
     end
 
   end

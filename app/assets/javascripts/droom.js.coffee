@@ -2,6 +2,7 @@
 #= require droom/lib/extensions
 #= require jquery
 #= require jquery_ujs
+#= require droom/lib/ZeroClipboard
 #= require droom/lib/jquery.animate-colors
 #= require droom/lib/jquery.sortable
 #= require droom/lib/jquery.cookie
@@ -72,6 +73,7 @@ jQuery ($) ->
     @find_including_self('.timepicker').time_picker()
     @find_including_self('.filepicker').file_picker()
     @find_including_self('a.delete').removes('.holder')
+    @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="popup"]').popup_remote_content()
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-refreshable]').refresher()

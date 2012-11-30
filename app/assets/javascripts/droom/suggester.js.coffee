@@ -100,7 +100,7 @@ jQuery ($) ->
       @cache = {}
       @blanks = []
       
-      @prompt.keyup @key
+      @prompt.keyup @keyed
       @form.submit @hide
       @
       
@@ -179,18 +179,18 @@ jQuery ($) ->
         @container.fadeOut "fast"
         @visible = false
 
-    key: (e) =>
+    keyed: (e) =>
       key_code = e.which
-      if @movement(key_code)
+      if action = @movementKey(key_code)
         @show() if @suggestions.length > 0
         if @visible
-          @movement(key_code).call @, e
+          action.call @, e
           e.preventDefault()
           e.stopPropagation()
-      else
+      else if @inputKey(key_code)
         @get e
 
-    movement: (key_code) =>
+    movementKey: (key_code) =>
       switch key_code
         when 27 # escape
           @hide
@@ -207,6 +207,10 @@ jQuery ($) ->
         when 13 # enter
           @select
 
+    inputKey: (key_code) =>
+      #delete,     backspace,    alphanumerics,    number pad,        punctuation
+      (kc is 8) or (kc is 46) or (47 < kc < 91) or (96 < kc < 112) or (kc > 145)
+      
     next: (e) =>
       if @suggestion is null or @suggestion >= @suggestions.length - 1
         @first()
