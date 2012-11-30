@@ -22,7 +22,23 @@ module Droom
     # that offers both tags and institutions. In that situation we only want to display tags that will give
     # give results, so we limit the suggestions to only those tags that have been applied to a person.
     #
-    scope :in_use, joins("INNER JOIN taggings ON taggings.tag_id = tags.id").group('tags.id').having('count(taggings.tag_id) > 0')
+    scope :in_use, 
+      joins("INNER JOIN taggings ON taggings.tag_id = tags.id")
+      .group('tags.id')
+      .having('count(taggings.tag_id) > 0')
+
+    # This returns a list of all the tags attached to any of a given set of objects.
+    # In future it will support cloud-weighting. 
+    #
+    scope :attached_to_any_of, lambda {|these|
+      these = [these].flatten
+      type = these.first.class.to_s
+      placeholders = these.map{"?"}.join(',')
+      select("droom_tags.*, count(droom_taggings.id) as use_count")
+        .joins("INNER JOIN droom_taggings ON droom_taggings.tag_id = droom_tags.id")
+        .where(["droom_taggings.taggee_type = ? and droom_taggings.taggee_id IN (#{placeholders})", *these.map(&:id).unshift(type)])
+        .group('droom_tags.id')
+    }
 
     # Suggestions are returned in a minimal format and need only contain name and (for the public search
     # where there are more possibilities) the type of suggestion.
