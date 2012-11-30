@@ -59,7 +59,7 @@ $tool_button_width: 32px
   text-indent: 18px
   height: 16px
   line-height: 16px
-  margin: 0 0 5px -8px
+  margin: 0 0 5px 0
   white-space: nowrap
   background:
     color: transparent
@@ -80,6 +80,12 @@ $tool_button_width: 32px
   overflow: hidden
   text-indent: $indent
 
+=waitable
+  &.waiting
+    color: $pale
+    background-image: image-url('droom/spinner.gif')
+    background-position: 0 0
+  
 
 
 a.download
@@ -332,6 +338,8 @@ h2.quiet
     +smallicon_with_text("droom/twisty.png")
     color: $dark
     +hover
+    +waitable
+
   &.showing
     a.twisty
       background-position: 0 -32px
@@ -723,7 +731,6 @@ a.add, a.edit, a.delete, a.copy, a.email, a.web
   margin-right: 10px
   height: 16px
   line-height: 14px
-  font-size: 0.8em
   background:
     image: image-url('droom/symbols.png')
     position: 0 -32px
@@ -733,10 +740,7 @@ a.add, a.edit, a.delete, a.copy, a.email, a.web
     color: $hover
   &:active
     color: $active
-  &.waiting
-    color: $pale
-    background-image: image-url('droom/spinner.gif')
-    background-position: top left
+  +waitable
   &.minimal
     width: 16px
     line-height: 100px
@@ -1251,7 +1255,15 @@ p.nothing_to_see
   padding: 100px 0
 
 
+ul.tags
+  padding: 0
+  li
+    display: inline-block
+    
 
+.twisted
+  display: none
+  
 
 /* -------- map infowindows -------- */
 

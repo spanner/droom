@@ -64,9 +64,7 @@ jQuery ($) ->
     @
 
   $.activate_with () ->
-    @find_including_self('a.toggle_active').replace_with_remote_toggle()
     @find_including_self('#flashes p:parent').flash()
-    @find_including_self('.twister').twister()
     @find_including_self('.wysihtml').html_editable()
     @find_including_self('.venuepicker').venue_picker()
     @find_including_self('.datepicker').date_picker()
@@ -76,6 +74,8 @@ jQuery ($) ->
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="popup"]').popup_remote_content()
     @find_including_self('[data-action="toggle"]').toggle()
+    @find_including_self('[data-action="reveal"]').replace_with_remote_content()
+    @find_including_self('[data-action="twister"]').twister()
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('table.sortable').table_sort()
     @find_including_self('#map').init_map()
@@ -86,7 +86,8 @@ jQuery ($) ->
     @find_including_self('.drag_sort').drag_sort()
     @find_including_self('.back').back_button()
     @find_including_self('#minicalendar').calendar()
+    @find_including_self('a.toggle_active').replace_with_remote_content('.holder')
     @find_including_self('form#searchform').captive
       replacing: '.search_results'
       fast: true
-
+    @

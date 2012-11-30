@@ -34,6 +34,12 @@ unless Array.prototype.empty?
   Array.prototype.empty = ()->
     @length == 0
 
+# Removes one instance of the supplied thing from an array
+
+unless Array.prototype.remove?
+  Array.prototype.remove = (thing)->
+    @splice(@indexOf(thing), 1)
+
 # Return this array as a sentence in the form "x, y and z".
 
 unless Array.prototype.toSentence?

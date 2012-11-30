@@ -75,28 +75,51 @@ jQuery ($) ->
 
 
   class Twister
+    @currently_open: []
     constructor: (element) ->
       @_twister = $(element)
-      @_twisted = @_twister.siblings('.twisted')
-      @_toggle = @_twister.find('a.twisty')
-      @_toggle.click @toggle
-      @close() unless @_twister.hasClass('showing')
+      @_twisted = @_twister.find('.twisted')
+      @_toggles = @_twister.find('a.twisty')
+      @_toggles.click @toggle
+      @_open = @_twister.hasClass("showing")
+      @set()
 
+    set: () =>
+      if @_open then @open() else @close()
+      
     toggle: (e) =>
       e.preventDefault() if e
-      if @_twisted.is(':visible') then @close() else @open()
+      if @_open then @close() else @open()
       
     open: () =>
       @_twister.addClass("showing")
       @_twisted.show()
-
+      @_open = true
+      Twister.currently_open.push(@_id)
+      
     close: () =>
       @_twister.removeClass("showing")
       @_twisted.hide()
-  
+      @_open = false
+      Twister.currently_open.remove(@_id)  # remove is defined in lib/extensions
+
   $.fn.twister = ->
     @each ->
       new Twister(@)
+
+
+
+  $.fn.replace_with_remote_content = (selector) ->
+    selector ?= '.reviewer'
+    @each ->
+      $(@).remote_link
+        on_complete: (r) =>
+          replaced = $(@).parents(selector)
+          replacement = $(r).insertAfter(replaced)
+          replaced.remove()
+          replacement.activate()
+
+
 
 
 
@@ -296,12 +319,12 @@ jQuery ($) ->
       event.stopPropagation()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_link.addClass('waiting')
-      @_options.on_request?()
+      @_options.on_request?(event, xhr, settings)
 
     fail: (event, xhr, status) ->
       event.stopPropagation()
       @_form?.removeClass('waiting').addClass('erratic')
-      @_options.on_error?()
+      @_options.on_error?(event, xhr, status)
   
     receive: (event, response, status) =>
       event.stopPropagation()
@@ -397,7 +420,7 @@ jQuery ($) ->
       
       link.attr('data-type', 'html')
       link.remote_link
-        on_request: (e) ->
+        on_request: () ->
           if popup
             link.removeClass('waiting')
             popup.show()
@@ -680,31 +703,6 @@ jQuery ($) ->
       new ScoreShower @
 
 
-
-
-
-  $.fn.replace_with_remote_toggle = () ->
-    @
-      .on 'ajax:beforeSend', (event, xhr, settings) ->
-        $(@).addClass('waiting')
-        $(@).children().addClass('waiting')
-        xhr.setRequestHeader('X-PJAX', 'true')
-      .on 'ajax:error', (event, xhr, status) ->
-        $(@).removeClass('waiting').addClass('erratic')
-      .on 'ajax:success', (event, response, status) ->
-        if response? && response != " "
-          self = $(@)
-          container = $(@).parents('.holder').first()
-          replacement = $(response)
-          self.removeClass('waiting')
-          container.replaceWith(replacement.activate())
-
-
-
-
-
-
-
   class PasswordField
     constructor: (element, opts) ->
       @options = $.extend
@@ -816,7 +814,6 @@ jQuery ($) ->
       @_selector = @_link.attr('data-selector')
       @_clip = new ZeroClipboard.Client()
       @_clip.setHandCursor true
-      # @_clip.glue @_link.get(0), @_container.get(0)
       
       [w, h] = [@_link.width() || 60, @_link.height() || 15]
       @_clip_element = @_clip.getHTML(w, h+5)
@@ -838,11 +835,9 @@ jQuery ($) ->
       
     complete: (client, text) =>
       @_link.signal_confirmation()
-      console.log "copied", text
 
     failed: (e) =>
       e.preventDefault()
-      console.log "you missed"
       
   $.fn.copier = ->
     ZeroClipboard.setMoviePath( '/assets/droom/lib/ZeroClipboard.swf' );
