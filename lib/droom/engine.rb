@@ -3,6 +3,7 @@ module Droom
     isolate_namespace Droom
     initializer "droom.integration" do
       ActiveRecord::Base.send :include, Droom::Helpers
+      ActiveRecord::Base.send :include, Droom::Taggability
     end
   end
 end

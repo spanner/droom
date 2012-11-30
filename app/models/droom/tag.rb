@@ -7,7 +7,7 @@ module Droom
     #
     has_many :taggings
     has_many :taggees, :through => :taggings
-  
+
     ## Suggestions
     #
     # There is a tag-suggesting mechanism in the front end to encourage tag reuse and consistency.
@@ -35,6 +35,33 @@ module Droom
       }
     end
 
+    ## Keyword lists
+    #
+    # Sometimes we want the interface to present a simple comma-separated list.
+    # These methods help to move to and from that form.
+    #
+    def self.from_list(list=[], or_create=true)
+      list = list.split(/[,;]\s*/) if String === list
+      list.uniq.map{|t| self.for(t, or_create) }.compact if list && list.any?
+    end
+
+    # Renders a set of tags as a comma-separated list.
+    #
+    def self.to_list(tags=[])
+      tags.uniq.map(&:name).join(', ')
+    end
+
+    # Finds or creates a tag with the supplied title
+    #
+    def self.for(name, or_create=true)
+      if or_create
+        find_or_create_by_name(name)
+      else
+        find_by_name(name)
+      end
+    end
+
+
     ## Clouds
     #
     # The administrative interface offers a big tag cloud and drag and drop tag-merging. Tag size in the
@@ -60,7 +87,6 @@ module Droom
     end
   
     ## Admin
-    #
     # 
     def assimilate(tag)
       self.taggees << tag.taggees

@@ -7,7 +7,7 @@ require "droom/engine"
 require "droom/validators"
 require "droom/dav_resource"
 require "droom/searchability"
-require "droom/tagging"
+require "droom/taggability"
 require "snail"
 
 module Droom
