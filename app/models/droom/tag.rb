@@ -7,7 +7,8 @@ module Droom
     #
     has_many :taggings
     has_many :taggees, :through => :taggings
-
+    before_save :downcase
+    
     ## Suggestions
     #
     # There is a tag-suggesting mechanism in the front end to encourage tag reuse and consistency.
@@ -111,7 +112,9 @@ module Droom
 
   protected
   
-
+    def downcase
+      self.name = self.name.downcase
+    end
 
   end
 end
