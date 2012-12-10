@@ -190,8 +190,8 @@ jQuery ($) ->
       else if @inputKey(key_code)
         @get e
 
-    movementKey: (key_code) =>
-      switch key_code
+    movementKey: (kc) =>
+      switch kc
         when 27 # escape
           @hide
         when 33 # page up
@@ -207,7 +207,7 @@ jQuery ($) ->
         when 13 # enter
           @select
 
-    inputKey: (key_code) =>
+    inputKey: (kc) =>
       #delete,     backspace,    alphanumerics,    number pad,        punctuation
       (kc is 8) or (kc is 46) or (47 < kc < 91) or (96 < kc < 112) or (kc > 145)
       
