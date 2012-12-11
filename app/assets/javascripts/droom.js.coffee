@@ -49,7 +49,7 @@ jQuery ($) ->
       true
 
   $.fn.find_including_self = (selector) ->
-    selection = @.find(selector)
+    selection = @find(selector)
     selection.push @ if @is(selector)
     selection
 
