@@ -6,10 +6,12 @@ module Droom
     
     belongs_to :created_by, :class_name => 'User'
     has_many :events, :dependent => :nullify
-    acts_as_mappable
 
     default_scope :order => 'name asc'
-    before_validation :geocode_and_get_address
+
+    # geocoded_by :postal_address, :latitude  => :lat, :longitude => :lng
+    # reverse_geocoded_by :lat, :lng
+    # before_validation :geocode_and_get_address
 
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
