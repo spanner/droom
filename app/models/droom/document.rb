@@ -25,9 +25,9 @@ module Droom
     scope :visible_to, lambda { |person|
       if person
         select('droom_documents.*')
-          .joins('LEFT OUTER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id')
-          .joins('LEFT OUTER JOIN droom_document_links ON droom_document_attachments.id = droom_document_links.document_attachment_id')
-          .where(["(droom_documents.public = 1 OR droom_document_links.person_id = ?)", person.id])
+          .joins('LEFT OUTER JOIN droom_document_attachments AS dda ON droom_documents.id = dda.document_id')
+          .joins('LEFT OUTER JOIN droom_document_links AS ddl ON dda.id = ddl.document_attachment_id')
+          .where(["(droom_documents.public = 1 OR ddl.person_id = ?)", person.id])
           .group('droom_documents.id')
       else
         all_public

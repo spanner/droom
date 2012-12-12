@@ -97,7 +97,7 @@ module Droom
       }
       params[:sort] = 'created' unless sort_parameters[params[:sort]]
       @sort = params[:sort]
-      @show = params[:show] || 20
+      @show = params[:show] || 50
       @page = params[:page] || 1
       
       if current_user.admin?

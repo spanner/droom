@@ -654,10 +654,10 @@ p.twister
     .notification
       margin: 0
 
-.pagination
+div.pag
   position: relative
   clear: left
-  margin: 40px 0
+  margin: 16px 0
   height: 40px
   span
     display: block
@@ -666,20 +666,20 @@ p.twister
     a
       display: block
       background-color: $pale
-      color: $dark
+      color: white
       padding: 5px 10px
       min-width: 16px
       text-align: center
       +border-radius(20px)
       &:hover
-        background-color: $link
+        background-color: $hover
         color: white
       &:visited
         color: $dark
     &.current
       +bold
-      background-color: $verypale
-      color: $mid
+      background-color: $mid
+      color: white
       padding: 5px 10px
       min-width: 16px
       text-align: center
@@ -690,9 +690,11 @@ p.twister
       min-width: 16px
       text-align: center
       color: $dark
-  
+    &.note
+      display: block
+      clear: left
+      margin-top: 10px
     
-
 p.notification
   margin-left: $datemark_width + $datemark_margin
   color: $green
@@ -1074,7 +1076,7 @@ div.timepicker
   position: relative
   overflow: hidden
   width: 222px
-  height: 260px
+  height: 280px
   .scroller
     width: 500px
     height: 260px
@@ -1167,40 +1169,6 @@ table.minimonth
   td.p
 
 
-.pagination
-  position: relative
-  clear: left
-  margin: 40px 0
-  height: 40px
-  span
-    display: block
-    float: left
-    margin-right: 5px
-    a
-      display: block
-      background-color: $pale
-      color: $dark
-      padding: 5px 10px
-      min-width: 16px
-      text-align: center
-      &:hover
-        background-color: $link
-        color: white !important
-      &:visited
-        color: $dark
-    &.current
-      +bold
-      background-color: $verypale
-      color: $mid
-      padding: 5px 10px
-      min-width: 16px
-      text-align: center
-    &.gap
-      border: 1px solid white
-      padding: 5px 10px
-      min-width: 16px
-      text-align: center
-      color: $dark
 
 h3.setup
   padding-left: 22px

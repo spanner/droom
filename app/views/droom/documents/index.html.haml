@@ -2,9 +2,7 @@
 
   %form.search{:action => documents_url, :id => "document_search"}
     %p.input
-      = text_field_tag :q, params[:q], :name => 'q', :class => 'search', :placeholder => t(:search)
-    %p.formnote
-      = t :search_still_dumb
+      = text_field_tag :q, params[:q], :name => 'q', :class => 'search', :placeholder => t(:search), :data => {:action => "filter"}
       
   %h1
     = t :documents

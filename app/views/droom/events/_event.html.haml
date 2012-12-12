@@ -39,9 +39,10 @@
           = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
 
       - unless brief || full_attachments
-        - if admin? || event.documents.any?
+        - documents = event.documents.visible_to(@current_person)
+        - if admin? || documents.any?
           .documents
-            - if event.documents.any?
+            - if documents.any?
               %h3 
                 = t(:attachments)
                 - if admin?

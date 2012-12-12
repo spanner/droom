@@ -1,0 +1,8 @@
+- with_info ||= false
+
+.pag
+  = paginate @documents, :params => {:format => :js}
+  - if with_info
+    %br
+    %span.note
+      =page_entries_info @documents

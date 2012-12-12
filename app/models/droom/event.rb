@@ -48,11 +48,14 @@ module Droom
   
     ## Event retrieval in various ways
     #
+    # Events differ from other models in that they are visible to all unless marked 'private'.
+    # The documents attached to them are only visible to all if marked 'public'.
+    #
     scope :visible_to, lambda { |person|
       if person
         select('droom_events.*')
           .joins('LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id')
-          .where(["(droom_events.public = 1 OR droom_invitations.person_id = ?)", person.id])
+          .where(["(NOT(droom_events.private = 1) OR droom_invitations.person_id = ?)", person.id])
           .group('droom_events.id')
       else
         all_public

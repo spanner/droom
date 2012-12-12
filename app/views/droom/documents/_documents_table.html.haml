@@ -1,4 +1,9 @@
 %table.main.documents.sortable{:data => {:sort => @sort, :order => @order, :url => "#{documents_path}.js"}}
+  - if @documents.current_page > 1
+    %thead
+      %tr
+        %td{:colspan => 6}
+          = render :partial => 'pagination', :locals => {:with_info => false}
   %thead
     %tr
       - %w{name filename filesize created event category}.each do |col|
@@ -17,8 +22,7 @@
     %tbody
       %tr
         %td{:colspan => 6}
-          .pagination
-            = paginate @documents, :params => {:format => :js}
+          = render :partial => 'pagination', :locals => {:with_info => true}
   - else
     %tbody
       %tr
