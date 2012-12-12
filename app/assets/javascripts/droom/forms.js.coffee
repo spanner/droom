@@ -839,3 +839,5 @@ jQuery ($) ->
     ZeroClipboard.setMoviePath( '/assets/droom/lib/ZeroClipboard.swf' );
     @each ->
       new Copier @
+
+

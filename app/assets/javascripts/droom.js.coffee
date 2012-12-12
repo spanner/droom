@@ -9,6 +9,7 @@
 #= require droom/lib/kalendae
 #= require droom/lib/wysihtml5
 #= require droom/lib/parser_rules/advanced
+#= require droom/utilities
 #= require droom/forms
 #= require droom/suggester
 #= require droom/calendar
@@ -18,51 +19,6 @@
 #= require_self
 
 jQuery ($) ->
-  $.fn.flash = ->
-    @each ->
-      container = $(this)
-      container.fadeIn "fast"
-      $("<a href=\"#\" class=\"closer\">close</a>").prependTo(container)
-      container.bind "click", (e) ->
-        e.preventDefault()
-        container.fadeOut "fast"
-
-  $.fn.signal = (color, duration) ->
-    color ?= "#f7f283"
-    duration ?= 1000
-    @each ->
-      $(@).css('backgroundColor', color).animate({'backgroundColor': '#ffffff'}, duration)
-      
-  $.fn.signal_confirmation = ->
-    @signal('#c7ebb4')
-
-  $.fn.signal_error = ->
-    @signal('#e55a51')
-
-  $.fn.signal_cancellation = ->
-    @signal('#a2a3a3')
-    
-  $.fn.back_button = ->
-    @click (e) ->
-      e.preventDefault() if e
-      history.back()
-      true
-
-  $.fn.find_including_self = (selector) ->
-    selection = @find(selector)
-    selection.push @ if @is(selector)
-    selection
-
-  $.activations = []
-  
-  $.activate_with = (fn) ->
-    $.activations.push fn
-  
-  $.fn.activate = () ->
-    $.each $.activations, (i, fn) =>
-      fn.apply(@)
-    @
-
   $.activate_with () ->
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('.wysihtml').html_editable()
@@ -90,4 +46,5 @@ jQuery ($) ->
     @find_including_self('form#searchform').captive
       replacing: '.search_results'
       fast: true
+    @find_including_self('[data-focus]').focus()
     @

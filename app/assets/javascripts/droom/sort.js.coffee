@@ -10,6 +10,7 @@ jQuery ($) ->
       @search = $('input[data-action="filter"]')
       @defilter = $('<a href="#" class="defilter" />').insertAfter(@search)
       @url ?= @table.attr("data-url") ? "/documents"
+      @_affected = $(@table.attr('data-affected'))
       @query = ""
       @sort = null
       @order = null
@@ -50,6 +51,7 @@ jQuery ($) ->
             @display(data, url)
 
     display: (data, url) =>
+      @_affected.trigger('refresh', @query)
       replacement = $(data).insertAfter(@table).hide()
       @table.remove()
       @table = replacement
@@ -106,3 +108,5 @@ jQuery ($) ->
 
 
 
+  $.namespace "Droom", (target, top) ->
+    target.TableSort = TableSort

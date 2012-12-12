@@ -8,7 +8,7 @@ gemspec
 # jquery-rails is used by the dummy application
 gem "jquery-rails"
 gem "haml"
-gem "geokit-rails3"
+gem "geocoder"
 gem "paperclip", '~> 3.1.0'
 gem "debugger"
 gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"

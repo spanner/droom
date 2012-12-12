@@ -119,3 +119,5 @@ jQuery ($) ->
   
       
       
+  $.namespace "Droom", (target, top) ->
+    target.Calendar = Calendar

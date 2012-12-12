@@ -246,3 +246,7 @@ jQuery ($) ->
         blank_re = new RegExp("(" + @blanks.join("|") + ")")
         return blank_re.test(query)
       false
+
+
+  $.namespace "Droom", (target, top) ->
+    target.Suggester = Suggester

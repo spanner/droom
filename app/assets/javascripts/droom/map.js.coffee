@@ -3,42 +3,100 @@ jQuery ($) ->
   
   class Map
     constructor: (element) ->
-      @container = $(element)
-      lat = @container.attr('data-lat') || 22.280147
-      lng = @container.attr('data-lng') || 114.158302
-      zoom = @container.attr('data-zoom') || 12
-      @map = new google.maps.Map element,
+      @_container = $(element)
+      @_editable = @_container.hasClass('editable')
+      @_infowindows = []
+      lat = @_container.attr('data-lat') || 22.280147
+      lng = @_container.attr('data-lng') || 114.158302
+      zoom = @_container.attr('data-zoom') || 12
+      @_bounds = new google.maps.LatLngBounds()
+      @_map = new google.maps.Map element,
         center: new google.maps.LatLng lat, lng
         zoom: parseInt(zoom)
         mapTypeId: google.maps.MapTypeId.ROADMAP
         mapTypeControlOptions: 
           style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-
     getMap: () =>
-      @map  
-  
-  class Point
-    constructor: (point, map) ->
+      @_map
+
+    isEditable: () =>
+      @_editable
+      
+    getBounds: () =>
+      @_bounds
+      
+    setBounds: (things) =>
+      @_bounds = new google.maps.LatLngBounds()
+      for thing in things
+        if pos = thing.getPosition()
+          @_bounds.extend(pos) 
+      @showBounds()
+
+    extendBounds: (position) =>
+      if position
+        @_bounds.extend(position)
+        @showBounds()
+    
+    showBounds: () =>
+      @_zoom_limiter = google.maps.event.addListener @_map, 'bounds_changed', =>
+        @_map.setZoom(17) if @_map.getZoom() > 17
+        google.maps.event.removeListener(@_zoom_limiter);
+      @_map.fitBounds @_bounds
+
+    rememberInfowindow: (iw) =>
+      @_infowindows.push(iw)
+
+    closeInfowindows: (iw) =>
+      iw.close() for iw in @_infowindows
+
+
+  class VenueMap extends Map
+    constructor: (element) ->
+      super
+      @_venues = []
+      if @container.hasClass('small')
+        @get_one_venue()
+      else
+        @get_venues()
+    
+    get_one_venue: () =>
+      if src = @container.attr("data-url")
+        $.getJSON src, @show_venue
+      
+    get_venues: () =>
+      if src = @container.attr("data-url")
+        $.getJSON src, @show_venues
+
+    show_venues: (response) =>
+      @show_venue(venue) for venue in response
+
+    show_venue: (response) =>
+      latlng = new google.maps.LatLng response.lat, response.lng
+      venue = new Venue response, @
+      @_venues.push venue
+      @extendBounds(venue)
+
+
+
+
+  class Venue
+    constructor: (point, @_map) ->
       @_lat = point.lat
       @_lng = point.lng
-      @_map = map
       @_events = point.events
-      @_postcode = point.postcode      
+      @_postcode = point.postcode
       @id = point.id
       @_name = point.name
       @_address = point.address
-      @_editable = $.ed
       @_marker = new google.maps.Marker
         position: new google.maps.LatLng @_lat, @_lng
         map: @_map
-        icon: $.set_icon(@_events.length)
-        draggable: $.map_editable
+        draggable: @_map.isEditable()
       @infowindow()
       google.maps.event.addListener @_marker, "click", @click
       google.maps.event.addListener @_marker, "dragstart", @dragstart
       google.maps.event.addListener @_marker, "dragend", @dragend
       @_infowindow.open(@_map) if parseInt($.urlParam("id"), 10) == @id
-      
       
     infowindow: () =>
       content = $("<div class='window'><h2>#{@_name}</h2>#{@_address.replace(/\n/g, ",")}<div class='window_venue_events'></div></div>")
@@ -75,49 +133,16 @@ jQuery ($) ->
 
   $.fn.init_map = () ->
     @each ->
-      $.gmap = new Map(@).getMap()
-      $.map_editable = $(@).hasClass('editable')
-      if $(@).hasClass('small')
-        $(@).show_venue()
-      else
-        $(@).show_venues()
-  
-  $.fn.show_venues = () ->
-    @each ->
-      map = $.gmap
-      if src = $(@).attr("data-url")
-        $.getJSON src, (response) =>
-          bounds = new google.maps.LatLngBounds()
-          $.each response, (i, venue) =>
-            latlng = new google.maps.LatLng venue.lat, venue.lng
-            bounds.extend latlng
-            venue = new Point venue, map
-          
-          temporary_zoom_limiter = google.maps.event.addListener map, 'bounds_changed', ->
-            map.setZoom(17) if map.getZoom() > 17
-            google.maps.event.removeListener(temporary_zoom_limiter);
+      $.gmap = new VenueMap(@).getMap()
+    @
 
-          map.fitBounds bounds
-
-  $.fn.show_venue = () ->
-    @each ->
-      map = $.gmap
-      if src = $(@).attr("data-url")
-        $.getJSON src, (venue) =>
-          latlng = new google.maps.LatLng venue.lat, venue.lng
-          marker = new google.maps.Marker
-            position: latlng
-            map: map
-            icon: $.set_icon(venue.events.length)
-          map.setCenter(latlng)
-
-
-  $.urlParam = (name) ->
-    results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
-    return 0  unless results
-    results[1] or 0
 
   $.set_icon = (size) ->
     name = if size > 0 then "place_busy" else "place_quiet"
     new google.maps.MarkerImage "/assets/droom/#{name}.png", new google.maps.Size(36, 36), new google.maps.Point(0, 0), new google.maps.Point(18, 18)
   
+  
+  $.namespace "Droom", (target, top) ->
+    target.Map = Map
+    target.VenueMap = VenueMap
+    target.Venue = Venue

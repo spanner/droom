@@ -98,41 +98,6 @@ module Droom
 
   private
 
-    # This is the main geocoding routine, called before validation on every save. If there has been a significant change, 
-    # it will trigger the goecoding mechanism with a block that updates our address when a match is found. 
-    # It's fairly uncritical and probably needs to be more careful about overriding user-entered data.
-    #
-    def geocode_and_get_address(options={})
-      unless Rails.env.test?
-        if new_record? || address_changed? || options[:force]
-          geocode_with(:name) do |geo|
-            self.post_line1 = geo.street_address
-            self.post_city = geo.city
-            self.post_region = geo.province
-            self.post_country = geo.country
-            self.post_code = geo.zip
-            sleep(options[:delay].seconds) if options[:delay]
-          end
-        end
-      end
-    end
-
-    # *geocode_with* does the actual lookup, passing the value of the specified column to the google geocoder service (with help from Geokit)
-    # and yielding to the supplied block as soon as a match is found.
-    #
-    def geocode_with(attribute, &block)
-      value = send(attribute)
-      found = false
-      unless value.blank?
-        geo = Geokit::Geocoders::GoogleGeocoder3.geocode(value, :bias => Droom.geocode_bias, :language => 'en')
-        if geo.success
-          self.lat, self.lng = geo.lat, geo.lng
-          yield geo if block_given?
-          found = true
-        end
-      end
-      found
-    end
 
   end
 end
