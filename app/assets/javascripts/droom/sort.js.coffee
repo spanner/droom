@@ -7,7 +7,8 @@ jQuery ($) ->
   class TableSort
     constructor: (element, opts) ->
       @table = $(element)
-      @search = $('input#q')
+      @search = $('input[data-action="filter"]')
+      @defilter = $('<a href="#" class="defilter" />').insertAfter(@search)
       @url ?= @table.attr("data-url") ? "/documents"
       @query = ""
       @sort = null
@@ -18,6 +19,8 @@ jQuery ($) ->
       
       @table.bind "refresh", @get
       @search.bind "keyup", @setQuery
+      @defilter.bind "click", @clearQuery
+      @setDefilter()
       
       @_original_content = @table.clone()
       if Modernizr.history
@@ -70,7 +73,21 @@ jQuery ($) ->
       if (kc is 8) or (kc is 46) or (47 < kc < 91) or (96 < kc < 112) or (kc > 145)
         @query = @search.val()
         @get()
+        @setDefilter()
     
+    clearQuery: (e) =>
+      e.preventDefault() if e
+      @search.val("")
+      @query = ""
+      @get()
+      @setDefilter()
+    
+    setDefilter: () =>
+      if @search.val()
+        @defilter.show()
+      else
+        @defilter.hide()
+      
     saveState: (data, url) =>
       state = 
         html: data

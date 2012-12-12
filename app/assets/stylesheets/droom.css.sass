@@ -670,6 +670,7 @@ p.twister
       padding: 5px 10px
       min-width: 16px
       text-align: center
+      +border-radius(20px)
       &:hover
         background-color: $link
         color: white
@@ -682,6 +683,7 @@ p.twister
       padding: 5px 10px
       min-width: 16px
       text-align: center
+      +border-radius(20px)
     &.gap
       border: 1px solid white
       padding: 5px 10px
@@ -1263,7 +1265,30 @@ ul.tags
 
 .twisted
   display: none
-  
+
+.search
+  position: relative
+  float: right
+  width: 342px
+  margin: 5px
+  p.input
+    margin: 0
+  p.controls
+    clear: left
+  input[type="text"]
+    position:relative
+    font-size: 1.5em
+    width: 275px
+    float: left
+    +border-radius(100px)
+    padding: 10px 30px
+  a.defilter
+    display: block
+    position: absolute
+    top: 15px
+    right: 10px
+    +icon("droom/defilter.png")
+
 
 /* -------- map infowindows -------- */
 
