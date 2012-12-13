@@ -291,7 +291,7 @@ module Droom
     def invite_user
       unless self.user
         if self.name? && self.email?
-          self.create_user(:forename => forename, :name => name, :email => email, :phone => phone, :admin => admin_user)
+          self.create_user(:forename => forename, :name => name, :email => email, :admin => admin_user)
           self.save
         end
       end
@@ -300,7 +300,6 @@ module Droom
     def update_user
       if self.user && self.user.persisted?
         self.user.update_column(:email, self.email) if email_changed?
-        self.user.update_column(:phone, self.phone) if phone_changed?
         self.user.update_column(:name, self.name) if name_changed?
         self.user.update_column(:forename, self.forename) if forename_changed?
       end
