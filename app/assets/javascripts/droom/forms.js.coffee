@@ -397,7 +397,8 @@ jQuery ($) ->
     show: (e) =>
       e.preventDefault() if e
       @place()
-      @_container.fadeTo('fast', 1)
+      @_container.fadeTo 'fast', 1, () =>
+        @_container.find('[data-focus]').focus()
       @_mask.fadeTo('fast', 0.8)
       @_mask.bind "click", @hide
       $(window).bind "resize", @place

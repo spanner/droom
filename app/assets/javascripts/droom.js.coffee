@@ -47,5 +47,4 @@ jQuery ($) ->
     @find_including_self('form#searchform').captive
       replacing: '.search_results'
       fast: true
-    @find_including_self('[data-focus]').focus()
     @
