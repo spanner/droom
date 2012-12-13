@@ -16,13 +16,6 @@
         = f.label :email
         %br
         = f.text_field :email, :required => true
-
-      - if @person.new_record?
-        %p
-          = f.check_box :invite_on_creation, :class => 'invite'
-          = f.label :invite_on_creation      
-          = f.check_box :admin_user
-          = f.label :admin_user
       
     .column
       %p
@@ -35,7 +28,14 @@
         %br
         = f.text_field :phone
 
-
+  .fullwidth
+    - if @person.new_record?
+      %p
+        = f.check_box :invite_on_creation, :class => 'invite'
+        = f.label :invite_on_creation      
+        = f.check_box :admin_user
+        = f.label :admin_user
+    
   .buttons
     = f.submit t(:save_person)
     = t :or

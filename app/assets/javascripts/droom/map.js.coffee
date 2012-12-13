@@ -56,17 +56,17 @@ jQuery ($) ->
     constructor: (element) ->
       super
       @_venues = []
-      if @container.hasClass('small')
+      if @_container.hasClass('small')
         @get_one_venue()
       else
         @get_venues()
     
     get_one_venue: () =>
-      if src = @container.attr("data-url")
+      if src = @_container.attr("data-url")
         $.getJSON src, @show_venue
       
     get_venues: () =>
-      if src = @container.attr("data-url")
+      if src = @_container.attr("data-url")
         $.getJSON src, @show_venues
 
     show_venues: (response) =>
@@ -76,49 +76,55 @@ jQuery ($) ->
       latlng = new google.maps.LatLng response.lat, response.lng
       venue = new Venue response, @
       @_venues.push venue
-      @extendBounds(venue)
-
-
 
 
   class Venue
-    constructor: (point, @_map) ->
-      @_lat = point.lat
-      @_lng = point.lng
-      @_events = point.events
-      @_postcode = point.postcode
-      @id = point.id
-      @_name = point.name
-      @_address = point.address
+    constructor: (data, @_mapper) ->
+      @_map = @_mapper.getMap()
+      @id = data.id
+      @_name = data.name
+      @_address = data.address
+      @_events = data.events
+      @_postcode = data.postcode
       @_marker = new google.maps.Marker
-        position: new google.maps.LatLng @_lat, @_lng
         map: @_map
-        draggable: @_map.isEditable()
-      @infowindow()
-      google.maps.event.addListener @_marker, "click", @click
-      google.maps.event.addListener @_marker, "dragstart", @dragstart
-      google.maps.event.addListener @_marker, "dragend", @dragend
-      @_infowindow.open(@_map) if parseInt($.urlParam("id"), 10) == @id
-      
-    infowindow: () =>
-      content = $("<div class='window'><h2>#{@_name}</h2>#{@_address.replace(/\n/g, ",")}<div class='window_venue_events'></div></div>")
-      $.each @_events, (i, evt) =>
-        content.find('.window_venue_events').append "<li><a href='/events/#{evt.id}'>#{evt.name}</a> <span class='pale'>#{evt.datestring}</span></li>"
-      @_infowindow = new google.maps.InfoWindow
-        position: new google.maps.LatLng @_lat, @_lng
-        content: content.prop('outerHTML')
-        marker: @_marker
-      $.infowindows.push @_infowindow
+        draggable: @_mapper.isEditable()
+      if data.lat? and data.lng?
+        @_position = new google.maps.LatLng(data.lat, data.lng)
+        @placeMarker()
+      google.maps.event.addListener @_marker, "click", @show
+      google.maps.event.addListener @_marker, "dragstart", @pickup
+      google.maps.event.addListener @_marker, "dragend", @drop
 
-    click: (e) =>
-      $.each $.infowindows, (i, iw) =>
-        iw.close()
-      @_infowindow.open(@_map)
-      
-    dragstart: (e) =>
+    placeMarker: () =>
+      @_marker.setPosition(@_position)
+      @_mapper.extendBounds(@_position)
+
+    getPosition: () =>
+      @_position
+
+    show: () =>
+      @_mapper.closeInfowindows()
+      @infowindow().open(@_map, @_marker)
+    
+    update: (e) =>
+      console.log "update", e.latLng
+
+    infowindow: () =>
+      unless @_infowindow?
+        content = $("<div class='window'><h2>#{@_name}</h2>#{@_address.replace(/\n/g, ",")}<div class='window_venue_events'></div></div>")
+        for evt in @_events
+          content.find('.window_venue_events').append "<li><a href='/events/#{evt.id}'>#{evt.name}</a> <span class='pale'>#{evt.datestring}</span></li>"
+        @_infowindow = new google.maps.InfoWindow
+          content: content.prop('outerHTML')
+          maxWidth: 300
+        @_mapper.rememberInfowindow(@_infowindow)
+      @_infowindow
+
+    pickup: (e) =>
       @_infowindow?.close()
 
-    dragend: (e) =>
+    drop: (e) =>
       position = @_marker.getPosition()
       $.ajax 
         type: 'POST'
@@ -132,12 +138,17 @@ jQuery ($) ->
         success: () ->
           console.log "venue updated"
         
+    remove: (e) =>
+      e.preventDefault() if e
+      @_infowindow?.close()
+      @_marker.setMap(null)
+
+
 
   $.fn.init_map = () ->
     @each ->
       $.gmap = new VenueMap(@).getMap()
     @
-
 
   $.set_icon = (size) ->
     name = if size > 0 then "place_busy" else "place_quiet"

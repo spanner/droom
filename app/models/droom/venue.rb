@@ -9,9 +9,9 @@ module Droom
 
     default_scope :order => 'name asc'
 
-    # geocoded_by :postal_address, :latitude  => :lat, :longitude => :lng
+    geocoded_by :full_address, :latitude  => :lat, :longitude => :lng
+    before_validation :geocode
     # reverse_geocoded_by :lat, :lng
-    # before_validation :geocode_and_get_address
 
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
@@ -53,6 +53,10 @@ module Droom
         :postal_code => post_code,
         :country => post_country
       )
+    end
+    
+    def full_address
+      [name, address].map(&:to_s).join("\n")
     end
 
     def address?
