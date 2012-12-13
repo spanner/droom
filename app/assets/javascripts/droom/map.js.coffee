@@ -6,6 +6,7 @@ jQuery ($) ->
       @_container = $(element)
       @_editable = @_container.hasClass('editable')
       @_infowindows = []
+      @_affected = @_container.attr('data-affected')
       lat = @_container.attr('data-lat') || 22.280147
       lng = @_container.attr('data-lng') || 114.158302
       zoom = @_container.attr('data-zoom') || 12
@@ -16,6 +17,7 @@ jQuery ($) ->
         mapTypeId: google.maps.MapTypeId.ROADMAP
         mapTypeControlOptions: 
           style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+      
     getMap: () =>
       @_map
 
