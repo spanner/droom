@@ -1,5 +1,5 @@
 require 'dav4rack'
-require 'dav4rack/file_resource'
+require 'dav4rack/resources/file_resource'
 require "droom/monkeys"
 require "droom/helpers"
 require "droom/renderers"

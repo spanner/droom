@@ -1,49 +1,49 @@
 # Return the last item in an array.
 
-unless Array.prototype.last?
-  Array.prototype.last = () ->
+unless Array::last?
+  Array::last = () ->
     @[@.length - 1]
 
 # Return the first item in an array.
 
-unless Array.prototype.first?
-  Array.prototype.first = () ->
+unless Array::first?
+  Array::first = () ->
     @[0]
 
 # Return the (mathematically) greatest item in an array.
 
-unless Array.prototype.max?
-  Array.prototype.max = () ->
+unless Array::max?
+  Array::max = () ->
     Math.max.apply Math, this      
 
 # Return the (mathematically) least item in an array.
 
-unless Array.prototype.min?
-  Array.prototype.min = () ->
+unless Array::min?
+  Array::min = () ->
     Math.min.apply Math, this
 
 # Return true if this array contains any items
 
-unless Array.prototype.any?
-  Array.prototype.any = ()->
+unless Array::any?
+  Array::any = ()->
     @length > 0
 
 # Return true unless this array contains any items
 
-unless Array.prototype.empty?
-  Array.prototype.empty = ()->
+unless Array::empty?
+  Array::empty = ()->
     @length == 0
 
 # Removes one instance of the supplied thing from an array
 
-unless Array.prototype.remove?
-  Array.prototype.remove = (thing)->
+unless Array::remove?
+  Array::remove = (thing)->
     @splice(@indexOf(thing), 1)
 
 # Return this array as a sentence in the form "x, y and z".
 
-unless Array.prototype.toSentence?
-  Array.prototype.toSentence = ()->
+unless Array::toSentence?
+  Array::toSentence = ()->
     @join(", ").replace(/,\s([^,]+)$/, ' and $1')
 
 # Truncate a string to the specified number of characters. Add an ellipsis if shortening actually happens.
