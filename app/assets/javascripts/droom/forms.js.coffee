@@ -130,13 +130,14 @@ jQuery ($) ->
       @_form = $(element)
       @_prompt = @_form.find("input[type=\"text\"]")
       @_request = null
-      @_original_content = $(@_options.replacing).clone()
+      @_original_content = $(@_options.replacing)
+      @_placed_content = null
       @_original_term = decodeURIComponent $.urlParam("q") if $.urlParam("q")
       if @_original_term
         @_prompt.val(@_original_term)
         @submit() unless @_prompt.val() is ""
       else
-        @revert()
+        # @revert()
       if @_options.fast
         @_form.find("input[type=\"text\"]").keyup @keyed
         @_form.find("input[type=\"radio\"]").click @submit
@@ -190,16 +191,19 @@ jQuery ($) ->
       
     revert: (e) =>
       e.preventDefault() if e
-      @display @_original_content
-      @_original_content.fadeTo "fast", 1
+      @_placed_content?.remove()
+      @_original_content?.fadeTo "fast", 1
       @_prompt.val("")
       @saveState()
       
     display: (results) =>
       replacement = $(results)
-      $(@_options.replacing).replaceWith replacement
+      @_placed_content?.remove()
+      @_original_content?.hide()
+      @_original_content?.before(replacement)
       $(@_options.clearing).val "" if @_options.clearing?
       replacement.find('a.cancel').click @revert
+      @_placed_content = replacement
 
   $.fn.captive = (options) ->
     options = $.extend(
@@ -599,7 +603,7 @@ jQuery ($) ->
       @_filename = @_file.name.split(/[\/\\]/).pop()
       @_ext = @_filename.split('.').pop()
       @_link.addClass(@_ext) if @_ext in @_extensions
-      $('input.name').val(@_filename) if $('input.name').val() is ""
+      $('input.name').val(@_filename)# if $('input.name').val() is ""
 
     send: () =>
       formData = new FormData @_form.get(0)

@@ -9,4 +9,8 @@
   
   = render :partial => 'events'
 
-= render :partial => 'droom/dashboard/marginalia'
+- content_for :title do
+  = t :calendar
+
+- content_for :default_margin do
+  = render :partial => 'droom/dashboard/marginalia'

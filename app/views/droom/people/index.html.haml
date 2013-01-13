@@ -9,3 +9,7 @@
     = link_to "Download this list to your address book", directory_url(:format => :vcf), :class => 'vcard download'
 
   = render :partial => "people"
+
+
+- content_for :title do 
+  = t :directory

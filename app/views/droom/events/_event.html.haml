@@ -29,49 +29,49 @@
         %span.year= event.start.strftime('%Y')
 
     .summary
-      %h2.name<
-        = link_to event.name, event_url(event)
-        - if admin?
-          %span.admin<
-            = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :replaced => "#event_#{event.id}", :affected => ".minimonth"}
-            = link_to t(:remove), event_url(event), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_event, :name => event.name), :affected => ".minimonth"}
-        - else
-          = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
+      .heading
+        %h2.name<
+          = link_to event.name, event_url(event)
+          - if admin?
+            %span.admin<
+              = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :replaced => "#event_#{event.id}", :affected => ".minimonth"}
+              = link_to t(:remove), event_url(event), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_event, :name => event.name), :affected => ".minimonth"}
+          - else
+            = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
 
-      - unless brief || full_attachments
-        - documents = event.documents.visible_to(@current_person)
-        - if admin? || documents.any?
-          .documents
-            - if documents.any?
-              %h3 
-                = t(:attachments)
-                - if admin?
-                  = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin minimal", :remote => true, :data => {:action => "popup", :type => "html"}
-              %ul.downloads
-                = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
-                - if event.documents.count > 3
-                  %li.more
-                    = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
-            - elsif admin?
-              = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html"}
-              
-              
-      %p.practicalities
-        %time
-          = l(event.start_time, :format => :natural)
-        - if event.venue
-          %span.location
-            = t(:at)
-            - if event.venue.url
-              = link_to event.venue.proper_name, event.venue.url
-            - elsif Droom.show_venue_map
-              = link_to event.venue.proper_name, venues_url(:id => event.venue.id)
-            - else
-              %strong
+        %p.practicalities
+          %time
+            = l(event.start_time, :format => :natural)
+          - if event.venue
+            %span.location
+              = t(:at)
+              - if event.venue.url
+                = link_to event.venue.proper_name, event.venue.url
+              - elsif Droom.show_venue_map
+                = link_to event.venue.proper_name, venues_url(:id => event.venue.id)
+              - else
                 = event.venue.proper_name
+
+      .detail
+        - unless brief || full_attachments
+          - documents = event.documents.visible_to(@current_person)
+          - if admin? || documents.any?
+            .documents
+              - if documents.any?
+                %h3 
+                  = t(:attachments)
+                  - if admin?
+                    = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin minimal", :remote => true, :data => {:action => "popup", :type => "html"}
+                %ul.downloads
+                  = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
+                  - if event.documents.count > 3
+                    %li.more
+                      = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
+              - elsif admin?
+                = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html"}
                 
-      - unless brief
-        = simple_format event.description, :class => "description"
+        - unless brief
+          = simple_format event.description, :class => "description"
 
   - if full_attachments
     = render :partial => 'droom/events/invitations', :locals => {:event => event}

@@ -4,8 +4,6 @@
     %p.input
       = text_field_tag :q, params[:q], :name => 'q', :class => 'search', :placeholder => t(:search), :data => {:action => "filter"}
       
-  %h1
-    = t :documents
 
   - if current_user.admin?
     .holder
@@ -14,3 +12,8 @@
 
 
   = render :partial => 'documents_table'
+
+  
+- content_for :title do 
+  = t :library
+  

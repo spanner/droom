@@ -36,7 +36,6 @@ Droom::Engine.routes.draw do
   resources :venues
   resources :pages
   
-  
   match "/library" => 'documents#index', :as => :library
   match "/directory" => 'people#index', :as => :directory
   match "/calendar" => 'events#index', :as => :calendar

@@ -86,7 +86,13 @@ $tool_button_width: 32px
     background-image: image-url('droom/spinner.gif')
     background-position: 0 0
   
-
+=outset
+  position: relative
+  float: left
+  width: $datemark_width
+  margin-left: - $datemark_width - $datemark_margin
+  margin-right: $datemark_margin
+  
 
 a.download
   +icon_with_text('droom/download.png')
@@ -103,10 +109,7 @@ a.cancel, a.cancel:visited
   +pale
 
 .datemark
-  float: left
-  width: $datemark_width
-  margin-left: - $datemark_width - $datemark_margin
-  margin-right: $datemark_margin
+  +outset
   text-align: right
   color: $mid
   line-height: 3em
@@ -141,25 +144,13 @@ a.changed
   color: $green
   +hover
   
-#events, #dashboard
+#events
   h2.quiet
     clear: both
-    margin-left: $datemark_width + $datemark_margin
-  > .documents
-    margin-left: $datemark_width + $datemark_margin
   > #attendants
     position: absolute
     right: 0
     margin-top: -1em
-    #new_document
-      margin-left: - $datemark_width - $datemark_margin
-
-#documents, #people, #group, #groups
-  margin-left: $datemark_width + $datemark_margin
-  p.admin, p.notification
-    margin-left: 0
-  form.document
-    margin-left: - $datemark_width - $datemark_margin
 
 #help_pages
   h2
@@ -201,15 +192,11 @@ div.event, div.document
   position: relative
   clear: both
   margin-bottom: 20px
-  padding-left: $datemark_width + $datemark_margin
-  width: 600px
-  .overlay
-    width: 100%
 
 form.event, form.document
   position: relative
-  padding-left: $datemark_width + $datemark_margin
-  width: 495px    
+  width: 495px
+  margin-left: 55px
 
 form.person
   position: relative
@@ -217,21 +204,21 @@ form.person
 
 div.event, form.event
   .summary
-    p.name
-      margin: 0
-    p.practicalities
-      margin: 0
-      margin-top: -6px
-      color: $mid
-      time
-        +bold
-    p.description
-      margin-top: 0
-    div.documents
-      float: right
-      margin-left: 20px
-      margin-bottom: 10px
-      width: 200px
+    .heading
+      p.name
+        margin: 0
+      p.practicalities
+        margin: 0
+        margin-top: -6px
+        color: $mid
+    .detail
+      p.description
+        margin-top: 0
+      div.documents
+        float: right
+        margin-left: 20px
+        margin-bottom: 10px
+        width: 200px
 
 .interjected
   margin: 10px 0
@@ -268,11 +255,7 @@ form.event
 
 form.document
   .filepicker
-    position: relative
-    float: left
-    width: $datemark_width
-    margin-right: $datemark_margin
-    margin-left: - $datemark_width - $datemark_margin
+    +outset
     margin-top: 5px
     input[type="file"]
       display: none
@@ -295,7 +278,6 @@ form.document
 
 form.page
   width: 600px
-  margin-left: $datemark_width + $datemark_margin
   input[type="text"], input[type="email"], input[type="password"], select, textarea
     width: 600px
     font-size: 1.2em
@@ -365,7 +347,6 @@ a.expander
 a.dl, a.ul
   display: inline-block
   min-height: 50px
-  text-indent: $datemark_width + $datemark_margin
   padding-top: 4px
   background:
     position: 0 -10px
@@ -378,10 +359,11 @@ a.dl, a.ul
   &.xls, &.xlsx
     background-position: 0 -310px
   &.minimal
+    width: 50px
     height: 50px
-    width: $datemark_width
+    text-indent: 60px
+    line-height: 50px
     overflow: hidden
-    line-height: 100px
 
 span.icon
   display: block
@@ -407,7 +389,6 @@ div.document
   h2.name
     font-size: 1.75em
     line-height: 1
-    margin-left: -$datemark_width - $datemark_margin
     + p.description
       margin-top: -20px
   p.attachment
@@ -696,7 +677,6 @@ div.pag
       margin-top: 10px
     
 p.notification
-  margin-left: $datemark_width + $datemark_margin
   color: $green
   +icon_with_text("droom/tick.png")
 
@@ -725,9 +705,6 @@ span.erratic
         color: transparent
         position: 3px -58px
         repeat: no-repeat
-
-p.admin
-  margin-left: $datemark_width + $datemark_margin
 
 a.add, a.edit, a.delete, a.copy, a.email, a.web
   display: inline-block
