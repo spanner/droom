@@ -3,7 +3,7 @@
 - show_header ||= false
 - event ||= @event
 - full_attachments ||= false
-- open ||= false
+- open ||= event == @event
 
 - if event
   - event_master_id = event.master_id || event.id
@@ -22,7 +22,7 @@
       %p.note
         = @event_header = header
 
-  %div{:class => cssclasses.join(' '), :id => "event_#{event.id}"}
+  %div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:refreshable => true, :url => event_path(event, :format => :js)} }
     .datemark
       %span.mon= event.start.strftime('%b')
       %span.dom= event.start.strftime('%d')
@@ -62,14 +62,14 @@
                 %h3 
                   = t(:attachments)
                   - if admin?
-                    = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin minimal", :remote => true, :data => {:action => "popup", :type => "html"}
+                    = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin minimal", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
                 %ul.downloads
                   = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
                   - if event.documents.count > 3
                     %li.more
                       = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
               - elsif admin?
-                = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html"}
+                = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
                 
         - unless brief
           = simple_format event.description, :class => "description"
