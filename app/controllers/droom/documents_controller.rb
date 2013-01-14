@@ -24,13 +24,13 @@ module Droom
   
     def show
       if @document.file
-        if personal_document = current_user.person.personal_version_of(@document)
-          # personal documents are stored outside the web root so this is an internal-only redirect in nginx.
-          redirect_to personal_document.url
-        else
-          # master documents are stored in private S3 buckets accessible only through signed urls with a lifespan of only two minutes.
-          redirect_to @document.file.expiring_url(Time.now + 120)
-        end
+        # if current_user.person && (personal_document = current_user.person.personal_version_of(@document))
+        #   # personal documents are stored outside the web root so this is an internal-only redirect in nginx.
+        #   redirect_to personal_document.url
+        # else
+        #   # master documents are stored in private S3 buckets accessible only through signed urls with a lifespan of only two minutes.
+        redirect_to @document.file.expiring_url(Time.now + 120)
+        # end
       end
     end
     
