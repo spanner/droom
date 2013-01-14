@@ -23,7 +23,7 @@ module Droom
     end
   
     def show
-      if current_user.person && @document.file
+      if @document.file
         if personal_document = current_user.person.personal_version_of(@document)
           # personal documents are stored outside the web root so this is an internal-only redirect in nginx.
           redirect_to personal_document.url
