@@ -4,6 +4,7 @@
 - event ||= @event
 - full_attachments ||= false
 - open ||= event == @event
+- open = true if request.path =~ /\/calendar/
 
 - if event
   - event_master_id = event.master_id || event.id
@@ -32,7 +33,7 @@
     .summary
       .heading
         %h2.name<
-          = link_to event.name, event_url(event)
+          = link_to event.name, event_url(event), :class => open ? "name open" : "name"
           - if admin?
             %span.admin<
               = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :replaced => "#event_#{event.id}", :affected => ".minimonth"}

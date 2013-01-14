@@ -59,11 +59,11 @@ module Droom
     end
     
     def url_for_month(date)
-      calendar_url(:year => date.year, :month => date.month)
+      droom.calendar_url(:year => date.year, :month => date.month)
     end
 
     def url_for_date(date)
-      calendar_url(:year => date.year, :month => date.month, :mday => date.day)      
+      droom.calendar_url(:year => date.year, :month => date.month, :mday => date.day)      
     end
     
     def day_names
