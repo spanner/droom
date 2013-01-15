@@ -167,8 +167,8 @@ en:
     other: "%{count} members"
   more_documents_count:
     zero: "No more documents"
-    one: "and one more document..."
-    other: "and %{count} more documents..."
+    one: "and one more document"
+    other: "and %{count} more documents"
   time:
     formats:
       natural: "%l:%M%P"
