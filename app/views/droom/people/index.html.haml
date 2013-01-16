@@ -1,14 +1,20 @@
-#people
+#main.people
   - if current_user.admin?
     .holder
       %p.admin
         = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
         = link_to t(:manage_groups), droom.groups_url, :class => "edit"
-
   %p
-    = link_to "Download this list to your address book", directory_url(:format => :vcf), :class => 'vcard download'
+    = link_to t(:download_vcards), directory_url(:format => :vcf), :class => 'vcard download'
 
   = render :partial => "people"
+
+
+
+- content_for :filter do
+  %form.search{:action => people_url, :id => "person_search"}
+    %p.input
+      = text_field_tag :q, params[:q], :name => 'q', :class => 'search', :placeholder => t(:search), :data => {:action => "filter"}
 
 
 - content_for :title do 

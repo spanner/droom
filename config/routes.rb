@@ -40,7 +40,7 @@ Droom::Engine.routes.draw do
   match "/directory" => 'people#index', :as => :directory
   match "/calendar" => 'events#index', :as => :calendar
   match "/map" => 'venues#index', :as => :map
-  match "/me" => 'dashboard#index', :as => :dashboard
+
   match '/help/:slug', :to => 'pages#show', :as => 'help_page'
   match '/help', :to => 'pages#index', :as => 'help'
   

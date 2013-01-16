@@ -64,3 +64,4 @@ unless String::truncate?
 unless String::trim?
   String::trim = (length, separator, ellipsis)->
     String(@).replace(/^\s+|\s+$/g, '')
+    

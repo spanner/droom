@@ -2,3 +2,4 @@
   %form#searchform{:action => droom.suggestions_url(:format => :js)}<
     = text_field_tag :term, params[:term], :placeholder => t(:quick_search), :autocomplete => "off"
     = submit_tag "go"
+  .search_results

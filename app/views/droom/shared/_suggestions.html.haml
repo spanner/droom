@@ -1,11 +1,14 @@
-%ul.search_results
-  - if @suggestions.any?
-    - @suggestions.each do |sugg|
-      = render :partial => "#{sugg.class.to_s.pluralize.underscore}/suggested", :object => sugg
+#search_results
+  %h2.quiet
+    Search Results
+  %ul.search_results
+    - if @suggestions.any?
+      - @suggestions.each do |sugg|
+        = render :partial => "#{sugg.class.to_s.pluralize.underscore}/suggested", :object => sugg
   
-  - else
-    %li.error
-      = t :no_results
+    - else
+      %li.error
+        = t :no_results
   
-  %li.cancel
-    = link_to t(:clear_search), '#', :class => "cancel"
+    %li.cancel
+      = link_to t(:clear_search), '#', :class => "cancel"

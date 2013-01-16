@@ -11,7 +11,7 @@ require "droom/taggability"
 require "snail"
 
 module Droom
-  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map, :people_sort, :default_document_private, :default_event_private
+  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :main_dashboard_modules, :margin_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map, :people_sort, :default_document_private, :default_event_private
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -49,8 +49,12 @@ module Droom
       Snail.home_country = @@home_country ||= 'gb'
     end
 
-    def active_dashboard_modules
-      @@active_dashboard_modules ||= %w{my_future_events my_past_events my_group_documents}
+    def main_dashboard_modules
+      @@main_dashboard_modules ||= %w{my_future_events my_past_events my_group_documents}
+    end
+
+    def margin_dashboard_modules
+      @@margin_dashboard_modules ||= []
     end
     
     # base path of DAV directory tree, relative to rails root.

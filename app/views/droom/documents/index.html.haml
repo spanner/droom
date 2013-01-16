@@ -1,19 +1,18 @@
-#documents
-
-  %form.search{:action => documents_url, :id => "document_search"}
-    %p.input
-      = text_field_tag :q, params[:q], :name => 'q', :class => 'search', :placeholder => t(:search), :data => {:action => "filter"}
-      
-
+#main.documents{:data => {:panel => false}}
   - if current_user.admin?
     .holder
       %p.admin
         = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "popup", :affected => "table.documents"}
-
-
   = render :partial => 'documents_table'
 
-  
+
+
+
+- content_for :filter do
+  %form.search{:action => documents_url, :id => "document_search"}
+    %p.input
+      = text_field_tag :q, params[:q], :name => 'q', :class => 'search', :placeholder => t(:search), :data => {:action => "filter"}
+
 - content_for :title do 
   = t :library
   
