@@ -10,6 +10,7 @@ module Droom
       max = params[:limit] || 10
       if @types.include?('event') && fragment.length > 6 && span = Chronic.parse(fragment, :guess => false)
         @suggestions = Droom::Event.falling_within(span).visible_to(@current_person)
+        @title = span.width > 86400 ? "Events in #{fragment}" : "Events on #{fragment}"
       else
         @suggestions = @klasses.collect {|klass|
           klass.constantize.visible_to(@current_person).name_matching(fragment).limit(max.to_i)

@@ -1,6 +1,7 @@
 #search_results
   %h2.quiet
-    Search Results
+    = @title || "Search Results"
+    
   %ul.search_results
     - if @suggestions.any?
       - @suggestions.each do |sugg|
