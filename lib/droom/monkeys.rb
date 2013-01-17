@@ -1,5 +1,4 @@
 class Array
-  
   def to_ics
     to_rical.to_s
   end
@@ -11,5 +10,4 @@ class Array
       end
     end
   end
-  
 end

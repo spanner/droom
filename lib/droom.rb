@@ -11,7 +11,7 @@ require "droom/taggability"
 require "snail"
 
 module Droom
-  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :main_dashboard_modules, :margin_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map, :people_sort, :default_document_private, :default_event_private
+  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :main_dashboard_modules, :margin_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map, :people_sort, :default_document_private, :default_event_private, :dropbox_app_key, :dropbox_app_secret
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end

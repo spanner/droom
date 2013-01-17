@@ -35,6 +35,10 @@ Droom::Engine.routes.draw do
   
   resources :venues
   resources :pages
+
+  resources :dropbox_tokens do
+    get "/register", :on => :collection, :action => :create
+  end
   
   match "/library" => 'documents#index', :as => :library
   match "/directory" => 'people#index', :as => :directory

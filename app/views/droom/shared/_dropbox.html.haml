@@ -1,0 +1,9 @@
+- if current_user.dropbox_access_token
+  %p
+    It looks like you have dropbox access
+
+- else
+  %p
+    = t :dropbox_instructions
+  %p
+    = link_to "Connect to your dropbox", dropbox_auth_url, :class => "dropbox"

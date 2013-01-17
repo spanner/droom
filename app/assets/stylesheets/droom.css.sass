@@ -96,11 +96,19 @@ $tool_button_width: 32px
 .outset
   +outset
 
+a.dropbox
+  +icon_with_text("droom/dropbox.png")
+  color: #4ea1ea
+  &:visited
+    color: #4ea1ea
+  &:hover
+    color: $hover
+
 a.download
-  +icon_with_text('droom/download.png')
+  +icon_with_text("droom/download.png")
   
 a.ical
-  +smallicon('droom/ical.png')
+  +smallicon("droom/ical.png")
 
 a.cancel, a.cancel:visited
   +pale

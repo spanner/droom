@@ -1,6 +1,24 @@
+require 'dropbox_sdk'
+
 module Droom
   module DroomHelper
     
+    def dropbox_auth_url
+      dbs = dropbox_session
+      # get an auth link address, with our register action as the callback
+      authorization_url = dbs.get_authorize_url(droom.register_dropbox_tokens_url)
+      # store the requesting dropbox session, serialized, in our user's session cookie
+      # if the oauth confirmation is successful, we will need it.
+      session[:dropbox_session] = dbs.serialize
+      authorization_url
+    end
+    
+    def dropbox_session
+      # note that here we never want to pick up the existing dropbox session. That happens in the dropbox_tokens_controller
+      # when we register an access token. In the view, any existing session has probably expired and we're better off with a new one.
+      DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
+    end
+
     def nav_link_to(name, url, options={})
       options[:class] ||= ""
       options[:class] << "here" if (request.path == url) || (request.path =~ /^#{url}/ && url != "/")
