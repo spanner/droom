@@ -6,8 +6,8 @@ module Droom
     belongs_to :group
     belongs_to :created_by, :class_name => "User"
 
-    after_create :link_documents
-    after_destroy :unlink_documents
+    after_create :link_folder
+    after_destroy :unlink_folder
 
     scope :of_group, lambda { |group|
       where(["group_id = ?", group.id])
@@ -15,13 +15,13 @@ module Droom
 
   protected
   
-    def link_documents
-      person.document_attachments << group.document_attachments
-    end
+  def link_folder
+    person.add_personal_folders(group.folders)
+  end
   
-    def unlink_documents
-      person.document_attachments -= group.document_attachments
-    end
+  def unlink_folder
+    person.remove_personal_folders(group.folders)
+  end
 
   end
 end

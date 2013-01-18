@@ -8,6 +8,7 @@ require "droom/validators"
 require "droom/dav_resource"
 require "droom/searchability"
 require "droom/taggability"
+require "droom/folders"
 require "snail"
 
 module Droom

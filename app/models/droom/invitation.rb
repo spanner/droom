@@ -7,8 +7,8 @@ module Droom
     belongs_to :group_invitation
     belongs_to :created_by, :class_name => "User"
 
-    after_create :link_documents
-    after_destroy :unlink_documents
+    after_create :link_folder
+    after_destroy :unlink_folder
 
     validates_uniqueness_of :person_id, :scope => [:event_id, :group_invitation_id]
 
@@ -18,12 +18,12 @@ module Droom
 
   protected
   
-    def link_documents
-      person.document_attachments << event.document_attachments
+    def link_folder
+      person.add_personal_folders(event.folder)
     end
     
-    def unlink_documents
-      person.document_attachments -= event.document_attachments
+    def unlink_folder
+      person.remove_personal_folders(event.folder)
     end
 
   end

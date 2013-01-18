@@ -3,6 +3,7 @@ module Droom
     attr_accessible :document_link, :person
 
     belongs_to :document_link
+    belongs_to :personal_folder
 
     has_attached_file :file, {
       :storage => :filesystem,
