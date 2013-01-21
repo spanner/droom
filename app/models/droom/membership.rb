@@ -14,11 +14,11 @@ module Droom
     }
 
     def link_folder
-      person.add_personal_folders(group.folders)
+      person.add_personal_folders(group.folder)
     end
   
     def unlink_folder
-      person.remove_personal_folders(group.folders)
+      person.remove_personal_folders(group.folder)
     end
 
   end

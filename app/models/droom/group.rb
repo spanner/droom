@@ -5,7 +5,7 @@ module Droom
     belongs_to :created_by, :class_name => Droom.user_class
     belongs_to :leader, :class_name => 'Person'
 
-    has_folder #... and subfolders, soon
+    has_folder
 
     has_many :group_invitations, :dependent => :destroy, :uniq => true
     has_many :events, :through => :group_invitations

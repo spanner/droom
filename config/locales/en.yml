@@ -132,6 +132,7 @@ en:
   click_to_download: "Click to download %{name}"
   forgot_password: "Forgotten your password?"
   your_personal_documents: "Your personal documents"
+  library_introduction: "The library is organised into folders. Each of your events or groups will usually have a folder, and there may also be some public folders that everyone can see."
   other_documents: "Other available documents"
   personal_calendar_feed: "Personal calendar subscription"
   general_calendar_feed: "General calendar subscription"

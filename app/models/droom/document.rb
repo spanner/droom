@@ -1,24 +1,19 @@
 module Droom
   class Document < ActiveRecord::Base
-    attr_accessible :name, :file, :description, :attachment_category_id, :event_id
-
-    # attachment_category and event_id are used on document creation to create an associated attachment
-    # this is a temporary shortcut 
-    attr_accessor :old_version, :attachment_category_id, :event_id
+    attr_accessible :name, :file, :description, :folder
 
     belongs_to :created_by, :class_name => Droom.user_class
-
-    has_many :document_attachments, :dependent => :destroy
-    has_many :document_links, :through => :document_attachments
-    has_many :people, :through => :document_links
-    
+    belongs_to :folder
     has_attached_file :file
     
     before_save :set_version
     after_destroy :destroy_folder_if_empty
     
     validates :file, :presence => true
-
+    # At the mmoent we are allowing a document that's not in any folder.
+    # validates :folder, :presence => true
+    
+    # These are going to be Droom.* configurable
     scope :all_private, where("secret = 1")
     scope :not_private, where("secret <> 1")
     scope :all_public, where("public = 1 AND secret <> 1")
@@ -41,27 +36,15 @@ module Droom
       where('droom_documents.name like ?', fragment)
     }
     
-    scope :attached_to_these_groups, lambda { |groups|
-      placeholders = groups.map{'?'}.join(',')
-      select('droom_documents.*')
-        .joins('INNER JOIN droom_document_attachments ON droom_documents.id = droom_document_attachments.document_id AND droom_document_attachments.attachee_type = "Droom::Group"')
-        .where(["droom_document_attachments.attachee_id IN(#{placeholders})", *groups.map(&:id)])
-    }
-    
-    scope :with_latest_event, 
-      select('droom_documents.*, droom_categories.name AS category_name, droom_events.id AS latest_event_id, droom_events.name AS latest_event_name')
-        .joins('LEFT OUTER JOIN droom_document_attachments AS dda ON droom_documents.id = dda.document_id 
-                LEFT OUTER JOIN droom_categories ON dda.category_id = droom_categories.id
-                LEFT OUTER JOIN droom_events ON dda.attachee_id = droom_events.id AND dda.attachee_type = "Droom::Event"')
-        .group('droom_documents.id')
-
-    # so that we can apply the joined finders above to an existing object
-    #
-    scope :this_document, lambda { |doc|
-      where(["droom_documents.id = ?", doc.id])
-    }
-
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
+
+    def attach_to(holder)
+      self.folder = holder.folder
+    end
+
+    def detach_from(holder)
+      self.folder = nil if self.folder == holder.folder
+    end
 
     def file_ok?
       file.exists?
@@ -70,30 +53,13 @@ module Droom
     def changed_since_creation?
       file_updated_at > created_at
     end
-    
-    def attachment_category_id=(id)
-      attach_to(Droom::Event.find(event_id), {:category_id => id})
-    end
 
-    def attach_to(attachee, attributes={})
-      save!
-      document_attachments.create(attributes.merge(:attachee => attachee))
-    end
-    
-    def detach_from(attachee)
-      document_attachments.attached_to(attachee).destroy_all
-    end
-    
     def file_extension
       if file_file_name
         File.extname(file_file_name).sub(/^\./, '')
       else
         ""
       end
-    end
-    
-    def with_event
-      self.class.this_document(self).with_latest_event.first
     end
     
     def as_suggestion

@@ -25,6 +25,8 @@ Droom::Engine.routes.draw do
     end
   end
   
+  resources :folders
+
   resources :documents do
     resources :document_attachments
   end
@@ -40,7 +42,7 @@ Droom::Engine.routes.draw do
     get "/register", :on => :collection, :action => :create
   end
   
-  match "/library" => 'documents#index', :as => :library
+  match "/library" => 'folders#index', :as => :library
   match "/directory" => 'people#index', :as => :directory
   match "/calendar" => 'events#index', :as => :calendar
   match "/map" => 'venues#index', :as => :map
@@ -50,5 +52,6 @@ Droom::Engine.routes.draw do
   
   match '/suggestions.:format', :to => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}
   match '/suggestions/:type.:format', :to => 'suggestions#index', :defaults => {:format => 'json'}
-  
+
+  root :to => "droom/dashboard#index", :as => :dashboard
 end
