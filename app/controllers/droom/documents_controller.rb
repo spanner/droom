@@ -6,6 +6,7 @@ module Droom
     before_filter :authenticate_user!
     before_filter :require_admin!, :except => [:index, :show]
     before_filter :get_current_person
+    before_filter :get_folder
     before_filter :find_documents, :only => [:index]
     before_filter :get_document, :only => [:show, :edit, :update, :destroy]
     before_filter :build_document, :only => [:new, :create]
@@ -39,9 +40,7 @@ module Droom
     end
 
     def create
-      if @event
-        @event.save!
-      end
+      @document.update_attributes(params[:document])
       @document.save!
       render :partial => 'created'
     end
@@ -53,7 +52,7 @@ module Droom
     def update
       @document.update_attributes(params[:document])
       @document.save!
-      render :partial => 'table_document', :object => @document.with_event
+      render :partial => 'listing', :object => @document.with_event
     end
 
     def destroy
@@ -63,20 +62,16 @@ module Droom
     
     
   protected
+    def get_folder
+      @folder = Droom::Folder.find(params[:folder_id])
+    end
     
     def build_document
-      params[:document] ||= {}
-      if params[:event_id] || params[:document][:event_id]
-        @event = Droom::Event.find(params[:event_id] || params[:document][:event_id])
-        @document = @event.documents.new(params[:document])
-        @category = @event.categories.find(params[:category_name]) if params[:category_name]
-      else
-        @document = Droom::Document.new(params[:document])
-      end
+      @document = @folder.documents.build(params[:document])
     end
 
     def get_document
-      @document = Droom::Document.find(params[:id])
+      @document = @folder.documents.find(params[:id])
     end
 
     def find_documents

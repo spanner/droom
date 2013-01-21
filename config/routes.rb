@@ -17,18 +17,17 @@ Droom::Engine.routes.draw do
     end
   end
   
+  resources :documents, :only => [:index]
+  resources :folders do
+    resources :documents
+  end
+  
   resources :people do
     resources :events do
       collection do
         match "feed/:auth_token.:format" => "events#feed", :as => :feed
       end
     end
-  end
-  
-  resources :folders
-
-  resources :documents do
-    resources :document_attachments
   end
   
   resources :groups do
@@ -50,8 +49,9 @@ Droom::Engine.routes.draw do
   match '/help/:slug', :to => 'pages#show', :as => 'help_page'
   match '/help', :to => 'pages#index', :as => 'help'
   
+  match '/search', :to => 'search#index', :as => "search"
   match '/suggestions.:format', :to => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}
   match '/suggestions/:type.:format', :to => 'suggestions#index', :defaults => {:format => 'json'}
 
-  root :to => "droom/dashboard#index", :as => :dashboard
+  root :to => "dashboard#index", :as => :dashboard
 end

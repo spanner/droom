@@ -1,0 +1,7 @@
+%h1.pagetitle
+  Search
+
+%form{:action => droom.search_url}
+  %input.search_box{:type => "text", :name => "term"}
+
+= render :partial => 'droom/shared/search_results'

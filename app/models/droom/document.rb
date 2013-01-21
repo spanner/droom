@@ -1,24 +1,31 @@
 module Droom
+  require 'iconv'
   class Document < ActiveRecord::Base
     attr_accessible :name, :file, :description, :folder
 
     belongs_to :created_by, :class_name => Droom.user_class
     belongs_to :folder
-    has_attached_file :file
+
+    has_attached_file :file, :styles => { :text => { :fake => 'variable' } }, :processors => [:text], :whiny => true, :log => true
+    before_post_process :halt_unless_pdf
+    after_post_process :extract_text
     
     before_save :set_version
     after_destroy :destroy_folder_if_empty
     
     validates :file, :presence => true
-    # At the mmoent we are allowing a document that's not in any folder.
-    # validates :folder, :presence => true
-    
-    # These are going to be Droom.* configurable
+
+    searchable do
+      text :name, :boost => 10
+      text :description, :boost => 2
+      text :extracted_text
+    end
+
     scope :all_private, where("secret = 1")
     scope :not_private, where("secret <> 1")
     scope :all_public, where("public = 1 AND secret <> 1")
     scope :not_public, where("public <> 1 OR secret = 1)")
-    
+
     scope :visible_to, lambda { |person|
       if person
         select('droom_documents.*')
@@ -30,7 +37,7 @@ module Droom
         all_public
       end
     }
-    
+
     scope :name_matching, lambda { |fragment|
       fragment = "%#{fragment}%"
       where('droom_documents.name like ?', fragment)
@@ -49,7 +56,7 @@ module Droom
     def file_ok?
       file.exists?
     end
-    
+
     def changed_since_creation?
       file_updated_at > created_at
     end
@@ -70,9 +77,22 @@ module Droom
         :id => id
       }
     end
-    
+
+    def as_search_result
+      {
+        :type => 'document',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
+    end
+
   protected
-    
+
+    def index
+      Sunspot.index!(self)
+    end
+
     def set_version
       if file.dirty?
         self.version = (version || 0) + 1
@@ -83,5 +103,19 @@ module Droom
       self.folder.destroy if self.folder.empty?
     end
 
+    def halt_unless_pdf
+      false unless file_extension == 'pdf'
+    end
+
+    def extract_text
+      if file_extension == 'pdf'
+        pdf = File.open("#{file.queued_for_write[:text].path}","r")
+        plain_text = ""
+        while (line = pdf.gets)
+          plain_text << Iconv.conv('ASCII//IGNORE', 'UTF-8', line)
+        end
+        self.extracted_text = plain_text #text column to hold the extracted text for searching
+      end
+     end
   end
 end

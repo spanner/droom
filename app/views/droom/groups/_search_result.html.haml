@@ -1,0 +1,7 @@
+- group ||= search_result
+
+%li.group
+  = link_to group.name, group_url(group)
+  %span.note
+    = t :group_members, :count => group.people.count
+    

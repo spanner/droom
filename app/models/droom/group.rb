@@ -18,6 +18,11 @@ module Droom
   
     before_save :ensure_slug
 
+    searchable do
+      text :name, :boost => 10
+      text :description
+    end
+
     scope :visible_to, lambda { |person|
       if person
         select('droom_groups.*')
@@ -77,7 +82,11 @@ module Droom
     
   protected
   
-    def ensure_slug
+    def index
+      Sunspot.index!(self)
+    end
+  
+    def check_slug
       ensure_presence_and_uniqueness_of(:slug, name.parameterize)
     end
   end

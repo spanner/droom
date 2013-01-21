@@ -592,7 +592,7 @@ jQuery ($) ->
         e.preventDefault() if e
         @_fields.hide()
         @_notifier = $('<div class="notifier"></div>').appendTo @_form
-        @_label = $('<h2 class="filename"></div>').appendTo @_notifier
+        @_label = $('<h3 class="filename"></h3>').appendTo @_notifier
         @_progress = $('<div class="progress"></div>').appendTo @_notifier
         @_bar = $('<div class="bar"></div>').appendTo @_progress
         @_status = $('<div class="status"></div>').appendTo @_notifier

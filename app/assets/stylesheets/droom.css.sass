@@ -103,6 +103,9 @@ a.dropbox
     color: #4ea1ea
   &:hover
     color: $hover
+  &.revoke
+    background-position: 0 -48px
+    color: $hover
 
 a.download
   +icon_with_text("droom/download.png")
@@ -222,7 +225,7 @@ div.event, form.event
         margin-top: -6px
         color: $mid
     .detail
-      p.description
+      p
         margin-top: 0
       div.documents
         float: right
@@ -1243,15 +1246,21 @@ ul.filing
   padding-left: 0
   li
     list-style: none
+  li.folder
+    margin-top: 20px
   ul.filing
     padding-left: 40px
-  li.folder
-    a
-      +icon_with_text("droom/folder.png")
-      color: $text
-      +bold
-      +hover
-      
+  a.folder
+    +icon_with_text("droom/folder.png")
+    color: $text
+    +bold
+    +hover
+
+input.search_box
+  font-size: 2em
+  padding: 10px
+  
+
       
   
 

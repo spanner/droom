@@ -124,6 +124,11 @@ module Droom
     scope :all_public, where("public = 1 AND shy <> 1")
     scope :not_public, where("public <> 1 OR shy = 1)")
 
+    searchable do
+      text :name, :boost => 10
+      text :description
+    end
+
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_people.name LIKE :f OR droom_people.forename LIKE :f', :f => fragment)
@@ -234,6 +239,10 @@ module Droom
     
 
   protected
+    
+    def index
+      Sunspot.index!(self)
+    end
     
     def invite_if_instructed
       invite_user if invite_on_creation

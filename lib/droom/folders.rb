@@ -16,13 +16,12 @@ module Droom
         false
       end
       
-      # => 
-      #
       def has_folder( options={} )
         return if has_folder?
 
-        has_one :folder, :as => :holder
-        has_many :documents, :through => :folder
+        has_one :folder, :as => :holder, :class_name => "Droom::Folder"
+        has_many :documents, :through => :folder, :class_name => "Droom::Document"
+        after_save :update_folder
         
         # This will be an association name. If set, our folder will be created as a child of that folder.
         class_variable_set(:"@@parent_folder_holder", options[:within])
@@ -49,19 +48,16 @@ module Droom
         end
       end
       
-      def lazy_load_folder
-        unless fld = self.folder 
-          fld = self.create_folder(:parent => get_parent_folder)
-        end
-        fld
-      end
-      
-      def add_document(params)
-        lazy_load_folder.documents.create(params)
+      def add_document(attributes)
+        documents.create(attributes)
       end
 
       def receive_document(doc)
-        lazy_load_folder.documents << doc
+        documents << doc
+      end
+      
+      def update_folder
+        self.folder ||= self.create_folder(:parent => get_parent_folder)
       end
       
     end

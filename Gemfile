@@ -23,6 +23,8 @@ gem 'acts_as_list'
 gem 'rdiscount'
 gem 'ancestry'
 gem 'dropbox-sdk'
+gem 'sunspot_rails'
+gem 'sunspot_solr'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

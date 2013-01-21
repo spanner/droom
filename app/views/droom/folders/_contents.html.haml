@@ -1,0 +1,6 @@
+%ul.filing
+  - if admin?
+    %li
+      = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html", :affected => "folder_#{folder.id}"}
+  = render :partial => 'droom/folders/folder', :collection => folder.children.populated
+  = render :partial => 'droom/documents/listing', :collection => folder.documents
