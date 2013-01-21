@@ -21,13 +21,13 @@ module Droom
 
     has_many :agenda_categories, :dependent => :destroy
     has_many :categories, :through => :agenda_categories
-  
+
     belongs_to :venue
     accepts_nested_attributes_for :venue
 
     belongs_to :event_set
     accepts_nested_attributes_for :event_set
-  
+
     belongs_to :master, :class_name => 'Event'
     has_many :occurrences, :class_name => 'Event', :foreign_key => 'master_id', :dependent => :destroy
     has_many :recurrence_rules, :dependent => :destroy, :conditions => {:active => true}
@@ -41,11 +41,17 @@ module Droom
     before_validation :set_uuid
     before_save :check_slug
     after_save :update_occurrences
-  
+    after_save :index
+
     scope :primary, where("master_id IS NULL")
     scope :recurrent, where(:conditions => "master_id IS NOT NULL")
     default_scope order('start ASC').includes(:venue)
-  
+
+    searchable do
+      text :name, :boost => 10
+      text :description
+    end
+
     ## Event retrieval in various ways
     #
     # Events differ from other models in that they are visible to all unless marked 'private'.
@@ -372,6 +378,15 @@ module Droom
         :id => id
       }
     end
+    
+    def as_search_result
+      {
+        :type => 'event',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
+    end
 
   protected
   
@@ -400,6 +415,10 @@ module Droom
           }) unless occ.dtstart == self.start
         end
       end
+    end
+
+    def index
+      Sunspot.index!(self)
     end
 
     def parse_date(value)

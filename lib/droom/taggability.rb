@@ -38,7 +38,7 @@ module Droom
         self.tags.delete(tag) if tag
       end
     
-      def keywords 
+      def keywords
         self.tags.map {|t| t.name}.join(', ')
       end
 

@@ -1,0 +1,10 @@
+%ul.search_results
+  - if @results.any?
+    - @results.each do |result|
+      = render :partial => "#{result.class.to_s.pluralize.underscore}/search_result", :object => result
+  
+  - else
+    %li.error
+      = t :no_results
+      - with_info ||= false
+

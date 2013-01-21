@@ -21,6 +21,8 @@ gem "chronic"
 gem "dynamic_form"
 gem 'acts_as_list'
 gem 'rdiscount'
+gem 'sunspot_rails'
+gem 'sunspot_solr'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

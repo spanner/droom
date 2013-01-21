@@ -14,6 +14,12 @@ module Droom
         @suggestions = @klasses.collect {|klass|
           klass.constantize.visible_to(@current_person).name_matching(fragment).limit(max.to_i)
         }.flatten.sort_by(&:name).slice(0, max.to_i)
+        # @suggestions = @klasses.collect {|klass|
+        #   klass.constantize.visible_to(@current_person).search{
+        #     fulltext fragment
+        #     order_by :score, :desc
+        #   }.results
+        # }.flatten.slice(0, max.to_i)
       end
 
       respond_with @suggestions do |format|

@@ -16,7 +16,7 @@ module Droom
     def check_slug
       ensure_presence_and_uniqueness_of(:slug, title.parameterize)
     end
-  
+
     def render_body
       Rails.logger.warn ">>> rendering body: #{self.body.inspect}"
       markdown = RDiscount.new(self.body)
