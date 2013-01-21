@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121102095927) do
+ActiveRecord::Schema.define(:version => 20130121122354) do
 
   create_table "droom_agenda_categories", :force => true do |t|
     t.integer  "event_id"
@@ -66,6 +66,16 @@ ActiveRecord::Schema.define(:version => 20121102095927) do
     t.boolean  "secret",            :default => false
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
+    t.integer  "folder_id"
+  end
+
+  add_index "droom_documents", ["folder_id"], :name => "index_droom_documents_on_folder_id"
+
+  create_table "droom_dropbox_tokens", :force => true do |t|
+    t.integer  "created_by_id"
+    t.string   "access_token"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "droom_event_sets", :force => true do |t|
@@ -97,6 +107,18 @@ ActiveRecord::Schema.define(:version => 20121102095927) do
   add_index "droom_events", ["event_set_id"], :name => "index_droom_events_on_event_set_id"
   add_index "droom_events", ["master_id"], :name => "index_droom_events_on_master_id"
   add_index "droom_events", ["public"], :name => "index_droom_events_on_public"
+
+  create_table "droom_folders", :force => true do |t|
+    t.string   "slug"
+    t.string   "holder_type"
+    t.string   "holder_id"
+    t.string   "ancestry"
+    t.integer  "created_by_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "droom_folders", ["ancestry"], :name => "index_droom_folders_on_ancestry"
 
   create_table "droom_group_invitations", :force => true do |t|
     t.integer "group_id"
@@ -190,11 +212,20 @@ ActiveRecord::Schema.define(:version => 20121102095927) do
     t.datetime "created_at",             :null => false
     t.datetime "updated_at",             :null => false
     t.integer  "document_link_id"
+    t.integer  "personal_folder_id"
   end
 
   add_index "droom_personal_documents", ["document_attachment_id"], :name => "index_droom_personal_documents_on_document_attachment_id"
   add_index "droom_personal_documents", ["document_link_id"], :name => "index_droom_personal_documents_on_document_link_id"
   add_index "droom_personal_documents", ["person_id"], :name => "index_droom_personal_documents_on_person_id"
+  add_index "droom_personal_documents", ["personal_folder_id"], :name => "index_droom_personal_documents_on_personal_folder_id"
+
+  create_table "droom_personal_folders", :force => true do |t|
+    t.integer  "folder_id"
+    t.integer  "person_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "droom_recurrence_rules", :force => true do |t|
     t.integer  "event_id"
@@ -210,6 +241,23 @@ ActiveRecord::Schema.define(:version => 20121102095927) do
   end
 
   add_index "droom_recurrence_rules", ["event_id"], :name => "index_droom_recurrence_rules_on_event_id"
+
+  create_table "droom_taggings", :force => true do |t|
+    t.integer  "tag_id"
+    t.integer  "taggee_id"
+    t.string   "taggee_type"
+    t.integer  "created_by_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "droom_tags", :force => true do |t|
+    t.string   "name"
+    t.integer  "parent_id"
+    t.integer  "created_by_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "droom_venues", :force => true do |t|
     t.string   "name"

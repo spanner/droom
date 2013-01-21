@@ -8,7 +8,6 @@ module Droom
     validates :person, :presence => true
     validates :folder, :presence => true
     
-    delegate :name, :path, :to => :folder
-
+    delegate :name, :path, :documents, :to => :folder
   end
 end

@@ -15,8 +15,6 @@ module Droom
     scope :to_event, lambda { |event|
       where(["event_id = ?", event.id])
     }
-
-  protected
   
     def link_folder
       person.add_personal_folders(event.folder)

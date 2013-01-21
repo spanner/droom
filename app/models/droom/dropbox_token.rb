@@ -1,7 +1,7 @@
 module Droom
   class DropboxToken < ActiveRecord::Base
     attr_accessible :access_token, :created_by
-    belongs_to :created_by, :class_name => 'User'
+    belongs_to :created_by, :class_name => Droom.user_class
     after_create :delete_previous
     
     scope :by_date, order("created_at DESC")

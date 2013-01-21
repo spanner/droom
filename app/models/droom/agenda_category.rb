@@ -4,6 +4,11 @@ module Droom
     belongs_to :category
     belongs_to :event
     belongs_to :created_by, :class_name => Droom.user_class
-    has_folder
+    has_folder :within => :event
+    
+    validates :event, :presence => true
+    validates :category, :presence => true
+    
+    delegate :slug, :to => :category
   end
 end

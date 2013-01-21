@@ -13,15 +13,13 @@ module Droom
       where(["group_id = ?", group.id])
     }
 
-  protected
+    def link_folder
+      person.add_personal_folders(group.folders)
+    end
   
-  def link_folder
-    person.add_personal_folders(group.folders)
-  end
-  
-  def unlink_folder
-    person.remove_personal_folders(group.folders)
-  end
+    def unlink_folder
+      person.remove_personal_folders(group.folders)
+    end
 
   end
 end

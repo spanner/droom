@@ -6,7 +6,7 @@ module Droom
     # this is a temporary shortcut 
     attr_accessor :old_version, :attachment_category_id, :event_id
 
-    belongs_to :created_by, :class_name => 'User'
+    belongs_to :created_by, :class_name => Droom.user_class
 
     has_many :document_attachments, :dependent => :destroy
     has_many :document_links, :through => :document_attachments
@@ -15,6 +15,8 @@ module Droom
     has_attached_file :file
     
     before_save :set_version
+    after_destroy :destroy_folder_if_empty
+    
     validates :file, :presence => true
 
     scope :all_private, where("secret = 1")
@@ -25,9 +27,9 @@ module Droom
     scope :visible_to, lambda { |person|
       if person
         select('droom_documents.*')
-          .joins('LEFT OUTER JOIN droom_document_attachments AS dda ON droom_documents.id = dda.document_id')
-          .joins('LEFT OUTER JOIN droom_document_links AS ddl ON dda.id = ddl.document_attachment_id')
-          .where(["(droom_documents.public = 1 OR ddl.person_id = ?)", person.id])
+          .joins('LEFT OUTER JOIN droom_folders AS df ON droom_documents.folder_id = df.id')
+          .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON df.id = dpf.folder_id')
+          .where(["(droom_documents.public = 1 OR dpf.person_id = ?)", person.id])
           .group('droom_documents.id')
       else
         all_public
@@ -109,6 +111,10 @@ module Droom
       if file.dirty?
         self.version = (version || 0) + 1
       end
+    end
+
+    def destroy_folder_if_empty
+      self.folder.destroy if self.folder.empty?
     end
 
   end

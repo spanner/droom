@@ -19,7 +19,12 @@ module Droom
     has_many :document_attachments, :through => :document_links
     # is this association really needed? We always retrieve the document list using the visible_to scope, so as to get public docs too.
     has_many :documents, :through => :document_attachments, :uniq => true
-    
+
+
+    has_many :personal_folders
+    has_many :folders, :through => :personal_folders
+    # has_many :personal_documents, :through => :personal_folders
+
     # personal documents are the document clones created when a user logs to her DAV folder.
     # they are spun off the document links
     has_many :personal_documents, :through => :document_links
@@ -276,6 +281,15 @@ module Droom
         :id => id
       }
     end
+    
+    def add_personal_folders(folders)
+      self.folders << folders
+    end
+    
+    def remove_personal_folders(folders)
+      self.folders.delete(folders)
+    end
+    
 
   protected
     

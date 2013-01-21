@@ -2,7 +2,7 @@ module Droom
   class Group < ActiveRecord::Base
     attr_accessible :name, :leader_id, :description
 
-    belongs_to :created_by, :class_name => 'User'
+    belongs_to :created_by, :class_name => Droom.user_class
     belongs_to :leader, :class_name => 'Person'
 
     has_folder #... and subfolders, soon
@@ -16,7 +16,7 @@ module Droom
     has_many :document_attachments, :as => :attachee, :dependent => :destroy
     has_many :documents, :through => :document_attachments
   
-    before_save :check_slug
+    before_save :ensure_slug
 
     scope :visible_to, lambda { |person|
       if person
@@ -77,7 +77,7 @@ module Droom
     
   protected
   
-    def check_slug
+    def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, name.parameterize)
     end
   end

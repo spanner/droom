@@ -4,7 +4,7 @@ module Droom
   class Venue < ActiveRecord::Base
     attr_accessible :name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code
     
-    belongs_to :created_by, :class_name => 'User'
+    belongs_to :created_by, :class_name => Droom.user_class
     has_many :events, :dependent => :nullify
 
     default_scope :order => 'name asc'

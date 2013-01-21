@@ -3,3 +3,4 @@ class PresenceUnlessRecurrenceValidator < ActiveModel::EachValidator
     record.errors.add(attribute, :blank) if attribute.blank? && !master_id?
   end
 end
+

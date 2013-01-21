@@ -1,3 +1,4 @@
+# This migration comes from droom (originally 20130118103540)
 class Folders < ActiveRecord::Migration
   def change
     create_table :droom_folders do |t|

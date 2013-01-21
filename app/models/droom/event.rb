@@ -8,7 +8,7 @@ module Droom
   class Event < ActiveRecord::Base
     attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :private, :public, :venue_name
 
-    belongs_to :created_by, :class_name => 'User'
+    belongs_to :created_by, :class_name => Droom.user_class
     
     has_folder #... and subfolders via agenda_categories
 
@@ -41,7 +41,7 @@ module Droom
     validates :name, :presence => true
 
     before_validation :set_uuid
-    before_save :check_slug
+    before_save :ensure_slug
     after_save :update_occurrences
   
     scope :primary, where("master_id IS NULL")
@@ -265,29 +265,10 @@ module Droom
       self.venue = Droom::Venue.find_or_create_by_name(name)
     end
 
-    # Agenda sections are global, and we don't want to have to manage the extra workload of associating a section with an event.
-    # This call retrieves all the agenda sections that are associated with any of our document attachments, and is suitable for looping
-    # on a template to display attachments per section.
-    #
-    def agenda_sections
-      Droom::AgendaSection.associated_with_event(self)
+    def find_or_create_agenda_category(category)
+      agenda_categories.find_or_create_by_category_id(category.id)
     end
-    
-    # and this sorts our attachment list into agenda section buckets so that we don't have to go back to the database for each section.
-    def attachments_by_category
-      cats = {}
-      document_attachments.each_with_object({}) do |att, hash|
-        key = att.category_name
-        cats[key] ||= []
-        cats[key].push(att)
-      end
-      categories.each do |category|
-        key = category.name
-        cats[key] ||= []
-      end
-      cats
-    end
-    
+        
     def categories_for_selection
       cats = categories.map{|c| [c.name, c.id] }
       cats.unshift(['', ''])
@@ -377,7 +358,7 @@ module Droom
 
   protected
   
-    def check_slug
+    def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, "#{start.strftime("%Y %m %d")} #{name}".parameterize)
     end
     

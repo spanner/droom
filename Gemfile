@@ -21,6 +21,7 @@ gem "chronic"
 gem "dynamic_form"
 gem 'acts_as_list'
 gem 'rdiscount'
+gem 'ancestry'
 gem 'dropbox-sdk'
 
 group :assets do

@@ -5,7 +5,7 @@ module Droom
   class Page < ActiveRecord::Base
     attr_accessible :title, :slug, :summary, :body, :video_id
     
-    before_validation :check_slug
+    before_validation :ensure_slug
     before_save :render_body
     validates :slug, :uniqueness => true, :presence => true
     validates :title, :presence => true
@@ -13,7 +13,7 @@ module Droom
   
   protected
 
-    def check_slug
+    def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, title.parameterize)
     end
   
