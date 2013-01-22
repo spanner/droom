@@ -124,8 +124,6 @@ module Droom
     def extract_text
       pdf = File.open("#{file.queued_for_write[:text].path}","r")
       
-      Rails.logger.warn ">>> text file ok? => #{File.size?(file.queued_for_write[:text].path).inspect}"
-      
       plain_text = ""
       while (line = pdf.gets)
         plain_text << Iconv.conv('ASCII//IGNORE', 'UTF-8', line)

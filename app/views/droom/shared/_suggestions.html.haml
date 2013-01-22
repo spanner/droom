@@ -6,6 +6,7 @@
   - else
     %li.error
       = t :no_results
-  
+  / %li.more
+  /   = link_to "More results...", search_url, :class => 'more'
   %li.cancel
     = link_to t(:clear_search), '#', :class => "cancel"
