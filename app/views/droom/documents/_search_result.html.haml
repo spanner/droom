@@ -1,6 +1,6 @@
 - document ||= search_result
 
 %li.document
-  = link_to document.name, document_url(document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
+  = link_to document.name, folder_document_url(document.folder, document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
   %span.note
     excerpted text will appear here with matches highlighted.

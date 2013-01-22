@@ -717,7 +717,7 @@ span.erratic
         position: 3px -58px
         repeat: no-repeat
 
-a.add, a.edit, a.delete, a.copy, a.email, a.web
+a.add, a.edit, a.delete, a.revert, a.copy, a.email, a.web
   display: inline-block
   text-indent: 16px
   margin-right: 10px
@@ -761,6 +761,16 @@ a.edit
   &:active
     background-position: 0 -48px
   
+a.revert
+  background-position: 0 -144px
+  color: $mid
+  &:visited
+    color: $mid
+  &:hover
+    background-position: 0 -168px
+  &:active
+    background-position: 0 -192px
+
 a.delete
   background-position: 0 -144px
   color: $mid

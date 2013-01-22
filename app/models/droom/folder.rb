@@ -31,6 +31,10 @@ module Droom
       .having('count(dd.id) > 0')
       .group('droom_folders.id')
     
+    scope :latest, lambda {|limit|  
+      order("updated_at DESC, created_at DESC").limit(limit)
+    } 
+    
     # These are going to be Droom.* configurable
     scope :all_private, where("secret = 1")
     scope :not_private, where("secret <> 1")
