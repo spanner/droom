@@ -1283,3 +1283,27 @@ input.search_box
 .sortable-placeholder
   height: 40px
   background: #def
+
+
+
+
+
+form
+  .columns
+    width: 900px
+    .column
+      position: relative
+      overflow: hidden
+      width: 260px
+      float: left
+      margin-right: 25px
+      p:first-child
+        margin-top: 0
+      &.hidden
+        display: none
+  .fullwidth
+    clear: left
+    input[type="text"], input[type="email"], input[type="password"], select, textarea
+      width: 97%
+  .buttons
+    clear: left
