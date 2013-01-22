@@ -6,6 +6,8 @@ module Droom
     before_filter :authenticate_user!  
     
     def index
+      @panel = session[:panel] || "search"
+      session[:panel] = nil
       render
     end
     

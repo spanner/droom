@@ -37,6 +37,10 @@ module Droom
     scope :all_public, where("public = 1 AND secret <> 1")
     scope :not_public, where("public <> 1 OR secret = 1)")
 
+    def name
+      holder.name if holder
+    end
+
     def descent
       path.join('/')
     end
