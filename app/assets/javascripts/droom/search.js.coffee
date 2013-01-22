@@ -4,7 +4,6 @@ jQuery ($) ->
       @search_box = $(element)
       @container = $(".search_results")
       @search_box.on "keyup", @submit
-      console.log @search_box
 
     submit: =>
       $.ajax

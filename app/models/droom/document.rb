@@ -1,25 +1,25 @@
 module Droom
   require 'iconv'
+  require 'yomu'
   class Document < ActiveRecord::Base
     attr_accessible :name, :file, :description, :folder
 
     belongs_to :created_by, :class_name => Droom.user_class
     belongs_to :folder
 
-    has_attached_file :file, :styles => { :text => { :fake => 'variable' } }, :processors => [:text], :whiny => true, :log => true
-    before_post_process :halt_unless_pdf
+    has_attached_file :file
     after_post_process :extract_text
-    
+
     before_save :set_version
     after_destroy :destroy_folder_if_empty
     
     validates :file, :presence => true
 
-    searchable do
-      text :name, :boost => 10
-      text :description, :boost => 2
-      text :extracted_text
-    end
+    # searchable do
+    #   text :name, :boost => 10
+    #   text :description, :boost => 2
+    #   text :extracted_text
+    # end
 
     scope :all_private, where("secret = 1")
     scope :not_private, where("secret <> 1")
@@ -68,7 +68,7 @@ module Droom
         ""
       end
     end
-    
+
     def as_suggestion
       {
         :type => 'document',
@@ -87,11 +87,11 @@ module Droom
       }
     end
 
-  protected
-
     def index
       Sunspot.index!(self)
     end
+
+  protected
 
     def set_version
       if file.dirty?
@@ -108,14 +108,11 @@ module Droom
     end
 
     def extract_text
-      if file_extension == 'pdf'
-        pdf = File.open("#{file.queued_for_write[:text].path}","r")
-        plain_text = ""
-        while (line = pdf.gets)
-          plain_text << Iconv.conv('ASCII//IGNORE', 'UTF-8', line)
-        end
-        self.extracted_text = plain_text #text column to hold the extracted text for searching
-      end
-     end
+      data = File.read "#{file.queued_for_write[:original].path}"
+      plain_text = Yomu.read :text, data
+      metadata = Yomu.read :metadata, data
+      # Rails.logger.warn ">>> metadata => #{metadata}"
+      self.extracted_text = plain_text #text column to hold the extracted text for searching
+    end
   end
 end

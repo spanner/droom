@@ -25,6 +25,7 @@ gem 'ancestry'
 gem 'dropbox-sdk'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
+gem 'yomu'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
