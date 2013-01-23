@@ -1,7 +1,6 @@
 %h1.pagetitle
   Search
 
-%form{:action => droom.search_url}
-  %input.search_box{:type => "text", :name => "term"}
-
+%form.search_form{:action => droom.search_url}
+  = text_field_tag :term, params[:term], :placeholder => t(:quick_search), :autocomplete => "off", :class => "search_box"
 = render :partial => 'droom/shared/search_results'

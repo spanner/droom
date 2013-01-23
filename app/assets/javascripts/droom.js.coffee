@@ -46,7 +46,7 @@ jQuery ($) ->
     @find_including_self('.back').back_button()
     @find_including_self('#minicalendar').calendar()
     @find_including_self('a.toggle_active').replace_with_remote_content('.holder')
-    @find_including_self('input.search_box').search()
+    @find_including_self('form.search_form').search()
     @find_including_self('form#searchform').captive
       replacing: '.search_results'
       fast: true
