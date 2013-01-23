@@ -874,3 +874,33 @@ jQuery ($) ->
       
       
       
+  class Folder
+    constructor: (element) ->
+      @_container = $(element)
+      @_list = @_container.find('ul.filing')
+      @_container.find('a.folder').click @toggle
+      @set()
+      console.log "Folder", @
+      
+    set: (e) =>
+      e.preventDefault() if e
+      if @_container.hasClass('open') then @show() else @hide()
+
+    toggle: (e) =>
+      e.preventDefault() if e
+      if @_container.hasClass('open') then @hide() else @show()
+
+    show: (e) =>
+      e.preventDefault() if e
+      @_container.addClass('open')
+      @_list.stop().slideDown()
+      
+    hide: (e) =>
+      e.preventDefault() if e
+      @_container.removeClass('open')
+      @_list.stop().slideUp()
+      
+  $.fn.folder = ->
+    @each ->
+      new Folder(@)
+      

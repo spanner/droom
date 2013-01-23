@@ -65,6 +65,14 @@ module Droom
       end
     end
     
+    def populated?
+      children.any? || documents.any?
+    end
+    
+    def empty?
+      !populated?
+    end
+    
   protected
   
     def set_slug
@@ -73,8 +81,7 @@ module Droom
     end
     
     def set_properties
-      self.public = !self.holder
-      true
+      self.public = !holder && (!parent || parent.public?)
     end
     
   end

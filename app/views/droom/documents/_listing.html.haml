@@ -1,7 +1,6 @@
 - document ||= listing
 
 %li.document.holder
-  = link_to document.name, droom.folder_document_url(document.folder, document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
+  = link_to truncate(document.name, :length => 24), droom.folder_document_url(document.folder, document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
   - if admin?
     = link_to t(:remove), droom.folder_document_url(document.folder, document), :method => :delete, :remote => true, :class => 'delete minimal', :data => {:confirm => t(:confirm_remove_document, :name => document.name)}
-

@@ -227,11 +227,19 @@ div.event, form.event
     .detail
       p
         margin-top: 0
-      div.documents
-        float: right
-        margin-left: 20px
-        margin-bottom: 10px
-        width: 200px
+
+div.documents
+  float: right
+  margin-left: 20px
+  margin-bottom: 10px
+  width: 200px
+  h3
+    a
+      color: $text
+  ul.filing
+    margin: 0
+    padding: 0
+    list-style: none
 
 .interjected
   margin: 10px 0
@@ -1252,19 +1260,23 @@ ul.tags
     +icon("droom/defilter.png")
 
 
-ul.filing
-  padding-left: 0
+#folders
   li
     list-style: none
-  li.folder
-    margin-top: 20px
-  ul.filing
-    padding-left: 40px
-  a.folder
-    +icon_with_text("droom/folder.png")
-    color: $text
-    +bold
-    +hover
+  div.folder
+    ul.filing
+      padding-left: 40px
+      margin-top: 0
+    a.folder
+      +icon_with_text("droom/folder.png")
+      color: $text
+      +bold
+      +hover
+    &.open
+      a.folder
+        background-position: 0 -144px
+        &:hover
+          background-position: 0 -192px
 
 input.search_box
   font-size: 2em

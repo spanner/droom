@@ -1,6 +1,17 @@
 - folder ||= @folder
+- title ||= folder.slug
+- open ||= false
+- cssclass = open ? "folder holder open" : "folder holder"
 
-%li.folder.holder{:id => "folder_#{folder.id}", :data => {:refreshable => true, :url => folder_path(folder, :format => :js)} }
-  = link_to folder.slug, "#", :class => "folder"
-  = render :partial => 'droom/folders/contents', :locals => {:folder => folder}
-      
+%div{:class => cssclass, :id => "folder_#{folder.id}", :data => {:refreshable => true, :url => droom.folder_path(folder, :format => :js)} }
+  - if folder.populated?
+    %h3
+      = link_to title, "#", :class => "folder"
+      - if admin?
+        = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add admin minimal", :remote => true, :data => {:action => "popup", :type => "html", :affected => "folder_#{folder.id}"}
+    %ul.filing
+      = render :partial => 'droom/folders/folder', :collection => folder.children.populated
+      = render :partial => 'droom/documents/listing', :collection => folder.documents
+
+  - elsif admin?
+    = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}

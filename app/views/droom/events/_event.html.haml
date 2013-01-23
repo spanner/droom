@@ -56,27 +56,14 @@
 
       .detail
         - unless brief || full_attachments
-
-
-          - documents = event.documents
-          - if admin? || documents.any?
-            .documents
-              - if documents.any?
-                %h3 
-                  = t(:attachments)
-                  - if admin?
-                    = link_to t(:add_document), droom.new_folder_document_url(event.folder), :class => "add admin minimal", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
-                %ul.downloads
-                  = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
-                  - if event.documents.count > 3
-                    %li.more
-                      = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
-              - elsif admin?
-                = link_to t(:add_document), droom.new_folder_document_url(event.folder), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
+          .documents
+            = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true}
                 
         - unless brief
           = event.description.html_safe
 
   - if full_attachments
-    = render :partial => 'droom/events/invitations', :locals => {:event => event}
-    = render :partial => 'droom/documents/documents_list', :locals => {:event => event}
+    .invitations
+      = render :partial => 'droom/events/invitations', :locals => {:event => event}
+    .invitations
+      = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true}
