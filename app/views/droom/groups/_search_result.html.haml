@@ -1,7 +1,12 @@
 - group ||= search_result
-
+- result = group[:result]
+- hit = group[:hit]
 %li.group
-  = link_to group.name, group_url(group)
+  = link_to result.name, group_url(result)
   %span.note
-    = t :group_members, :count => group.people.count
-    
+    = t :group_members, :count => result.people.count
+  %span.description
+    - hit.highlights.each do |highlight|
+      - description = highlight.format{|word| "<b>#{word}</b>"}
+      = description.html_safe
+

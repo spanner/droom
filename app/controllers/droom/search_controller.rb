@@ -7,17 +7,28 @@ module Droom
 
     def index
       if @fragment = params[:term]
-        max = params[:limit] || 10
-        @results = @klasses.collect {|klass|
-          search = klass.constantize.visible_to(@current_person).search{
-            fulltext @fragment
-          }.results
-          # search.each do |hit|
-          #   hit.highlights.each do |highlight|
-          #     highlight.format {|word| "<b>#{word}</b>"}
-          #   end
-          # end          
-        }.flatten.slice(0, max.to_i)
+        frag = @fragment.force_encoding("US-ASCII")
+        unless frag == ""
+          max = params[:limit] || 10
+          @results = @klasses.collect {|klass|
+            search = klass.constantize.visible_to(@current_person).search do
+              fulltext frag do
+                highlight :description
+              end
+            end
+            results = []
+            search.each_hit_with_result do |hit, result|
+              object = {
+                hit: hit,
+                result: result
+              }
+              results.push object
+            end
+            results
+          }.flatten.slice(0, max.to_i)
+        else
+          @results = []
+        end
       end
       respond_with @results do |format|
         format.html {
@@ -37,7 +48,7 @@ module Droom
     def get_classes
       searchable_classes = Droom.searchable_classes
       requested_types = [params[:type]].flatten.compact.uniq
-      requested_types = %w{event person document group venue} if requested_types.empty?
+      requested_types = %w{event document group venue} if requested_types.empty?
 
       logger.warn ">>> requested_types is #{requested_types.inspect}"
 

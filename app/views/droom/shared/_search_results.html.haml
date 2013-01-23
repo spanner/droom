@@ -1,7 +1,7 @@
 %ul.search_results
   - if @results && @results.any?
     - @results.each do |result|
-      = render :partial => "#{result.class.to_s.pluralize.underscore}/search_result", :object => result
+      = render :partial => "#{result[:result].class.to_s.pluralize.underscore}/search_result", :object => result
   
   - elsif @fragment
     %li.error

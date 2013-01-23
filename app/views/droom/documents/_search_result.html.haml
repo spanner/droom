@@ -1,6 +1,11 @@
 - document ||= search_result
+- result = document[:result]
+- hit = document[:hit]
 
 %li.document
-  = link_to document.name, folder_document_url(document.folder, document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
+  = link_to result.name, folder_document_url(result.folder, result), :class => result.file_extension, :title => t(:click_to_download, :name => result.file_file_name)
   %span.note
-    excerpted text will appear here with matches highlighted.
+    - hit.highlights(:description).each do |highlight|
+      - description = highlight.format{|word| "<b>#{word}</b>"}
+      = description.html_safe
+

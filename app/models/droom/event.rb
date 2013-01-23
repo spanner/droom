@@ -175,13 +175,13 @@ module Droom
     def self.past
       before(Time.now)
     end
-    
+
     ## Instance methods
     #
     def invite(person)
       self.people << person
     end
-    
+
     def attach(doc)
       self.documents << doc
     end

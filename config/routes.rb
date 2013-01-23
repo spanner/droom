@@ -17,7 +17,7 @@ Droom::Engine.routes.draw do
     end
   end
   
-  resources :documents, :only => [:index]
+  resources :documents#, :only => [:index, :show]
   resources :folders do
     resources :documents
   end
