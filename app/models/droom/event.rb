@@ -47,7 +47,7 @@ module Droom
 
     searchable do
       text :name, :boost => 10
-      text :description
+      text :description, :stored => true
     end
 
     ## Event retrieval in various ways
@@ -181,7 +181,7 @@ module Droom
     def invite(person)
       self.people << person
     end
-    
+
     def attach(doc)
       self.documents << doc
     end
@@ -356,7 +356,7 @@ module Droom
     end
 
   protected
-  
+
     def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, "#{start.strftime("%Y %m %d")} #{name}".parameterize)
     end

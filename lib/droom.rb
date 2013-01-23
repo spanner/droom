@@ -90,6 +90,15 @@ module Droom
       }
     end
 
+    def searchable_classes
+      @@searchable_classes ||= {
+        "event" => "Droom::Event",
+        "document" => "Droom::Document",
+        "group" => "Droom::Group",
+        "venue" => "Droom::Venue"
+      }
+    end
+
     def add_suggestible_class(label, klass=nil)
       klass ||= label.titlecase
       suggestible_classes[label] = klass.to_s

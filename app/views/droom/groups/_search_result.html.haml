@@ -1,7 +1,9 @@
 - group ||= search_result
-
+- hit = group.hit
 %li.group
   = link_to group.name, group_url(group)
   %span.note
     = t :group_members, :count => group.people.count
-    
+  %span.excerpt
+    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+

@@ -1,6 +1,7 @@
 - document ||= search_result
-
+- hit = document.hit
 %li.document
   = link_to document.name, folder_document_url(document.folder, document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
-  %span.note
-    excerpted text will appear here with matches highlighted.
+  %span.excerpt
+    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+

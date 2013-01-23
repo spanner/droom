@@ -104,6 +104,6 @@ module Droom
       @documents = @documents.name_matching(params[:q]) unless params[:q].blank?
       @documents = @documents.order(sort_parameters[@sort]).page(@page).per(@show)
     end
-    
+
   end
 end

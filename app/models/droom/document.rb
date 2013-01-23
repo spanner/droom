@@ -1,6 +1,5 @@
 module Droom
   require 'iconv'
-  require 'yomu'
   class Document < ActiveRecord::Base
     attr_accessible :name, :file, :description, :folder
 
@@ -15,11 +14,11 @@ module Droom
     
     validates :file, :presence => true
 
-    # searchable do
-    #   text :name, :boost => 10
-    #   text :description, :boost => 2
-    #   text :extracted_text
-    # end
+    searchable do
+      text :name, :boost => 10
+      text :description, :stored => true
+      text :extracted_text, :stored => true
+    end
 
     scope :all_private, where("secret = 1")
     scope :not_private, where("secret <> 1")
@@ -108,6 +107,7 @@ module Droom
     end
 
     def extract_text
+      require 'yomu'
       data = File.read "#{file.queued_for_write[:original].path}"
       plain_text = Yomu.read :text, data
       metadata = Yomu.read :metadata, data

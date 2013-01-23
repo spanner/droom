@@ -1,12 +1,6 @@
 - event ||= search_result
-- date_format = event.start.year == Date.today.year ? :natural : :natural_with_year
-
+- hit = event.hit
 %li.event
   = link_to event.name, event_url(event)
-  %span.note
-    = l event.start_time, :format => :natural
-    = t :on
-    = l event.start_date, :format => date_format
-    - if event.venue
-      = t :at
-      = event.venue.proper_name
+  %span.excerpt
+    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }

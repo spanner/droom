@@ -1,0 +1,6 @@
+- venue ||= search_result
+- hit = venue.hit
+%li.venue
+  = link_to venue.name, venue_url(venue)
+  %span.excerpt
+    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }

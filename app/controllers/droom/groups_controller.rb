@@ -58,10 +58,10 @@ module Droom
     def get_group
       @group = Droom::Group.find(params[:id])
     end
-    
+
     def get_groups
       @groups = Droom::Group.all
     end
-  
+
   end
 end

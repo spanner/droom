@@ -20,7 +20,7 @@ module Droom
 
     searchable do
       text :name, :boost => 10
-      text :description
+      text :description, :stored => true
     end
 
     scope :visible_to, lambda { |person|
@@ -46,7 +46,7 @@ module Droom
     }
     
     default_scope order("droom_groups.created_at ASC")
-    
+
     def admit(person)
       self.people << person
     end
