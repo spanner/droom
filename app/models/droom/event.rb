@@ -176,15 +176,6 @@ module Droom
       before(Time.now)
     end
     
-    def self.sun_search(fragment)
-      search = visible_to(@current_person).search do
-        fulltext fragment do
-          highlight :description
-        end
-      end
-      search
-    end
-
     ## Instance methods
     #
     def invite(person)

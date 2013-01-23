@@ -36,15 +36,6 @@ module Droom
       self.all.map{|v| [v.proper_name, v.id] }
     end
 
-    def self.sun_search(fragment)
-      search = visible_to(@current_person).search do
-        fulltext fragment do
-          highlight :description
-        end
-      end
-      search
-    end
-
     def proper_name
       if prepend_article?
         "the #{name}"

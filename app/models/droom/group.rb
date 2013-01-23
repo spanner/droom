@@ -47,15 +47,6 @@ module Droom
     
     default_scope order("droom_groups.created_at ASC")
 
-    def self.sun_search(fragment)
-      search = visible_to(@current_person).search do
-        fulltext fragment do
-          highlight :description
-        end
-      end
-      search
-    end
-
     def admit(person)
       self.people << person
     end

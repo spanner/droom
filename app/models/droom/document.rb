@@ -44,15 +44,6 @@ module Droom
     
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
 
-    def self.sun_search(fragment)
-      search = visible_to(@current_person).search do
-        fulltext fragment do
-          highlight :description
-        end
-      end
-      search
-    end
-
     def attach_to(holder)
       self.folder = holder.folder
     end
