@@ -3,7 +3,7 @@ require 'snail'
 module Droom
   class Venue < ActiveRecord::Base
     attr_accessible :name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code
-    
+
     belongs_to :created_by, :class_name => Droom.user_class
     has_many :events, :dependent => :nullify
 
@@ -15,7 +15,7 @@ module Droom
 
     searchable do
       text :name, :boost => 10
-      text :description
+      text :description, :stored => true
       text :post_line2
       text :post_city
       text :post_region
@@ -36,6 +36,15 @@ module Droom
       self.all.map{|v| [v.proper_name, v.id] }
     end
 
+    def self.sun_search(fragment)
+      search = visible_to(@current_person).search do
+        fulltext fragment do
+          highlight :description
+        end
+      end
+      search
+    end
+
     def proper_name
       if prepend_article?
         "the #{name}"
@@ -47,11 +56,11 @@ module Droom
     def to_s
       name
     end
-    
+
     def identifier
       'venue'
     end
-    
+
     # Snail is a library that abstracts away - as far as possible - the vagaries of international address formats. Here we map our data columns onto Snail's abstract representations so that they can be rendered into the correct format for their country.
     def address
       Snail.new(
@@ -63,7 +72,7 @@ module Droom
         :country => post_country
       )
     end
-    
+
     def full_address
       [name, address].map(&:to_s).join("\n")
     end

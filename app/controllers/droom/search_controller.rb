@@ -9,10 +9,14 @@ module Droom
       if @fragment = params[:term]
         max = params[:limit] || 10
         @results = @klasses.collect {|klass|
-          klass.constantize.visible_to(@current_person).search{
+          search = klass.constantize.visible_to(@current_person).search{
             fulltext @fragment
-            order_by :score, :desc
           }.results
+          # search.each do |hit|
+          #   hit.highlights.each do |highlight|
+          #     highlight.format {|word| "<b>#{word}</b>"}
+          #   end
+          # end          
         }.flatten.slice(0, max.to_i)
       end
       respond_with @results do |format|
@@ -31,16 +35,16 @@ module Droom
   protected
 
     def get_classes
-      suggestible_classes = Droom.suggestible_classes
+      searchable_classes = Droom.searchable_classes
       requested_types = [params[:type]].flatten.compact.uniq
       requested_types = %w{event person document group venue} if requested_types.empty?
 
       logger.warn ">>> requested_types is #{requested_types.inspect}"
 
-      @types = suggestible_classes.keys & requested_types
+      @types = searchable_classes.keys & requested_types
       logger.warn ">>> @types is #{@types.inspect}"
 
-      @klasses = suggestible_classes.values_at(*@types)
+      @klasses = searchable_classes.values_at(*@types)
     end
 
   end

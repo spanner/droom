@@ -11,6 +11,7 @@ jQuery ($) ->
         type: "GET"
         dataType: "script"
         complete: (data) =>
+          console.log data.responseText
           @container.replaceWith data.responseText
           @container = $(".search_results")
 

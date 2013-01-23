@@ -47,7 +47,7 @@ module Droom
 
     searchable do
       text :name, :boost => 10
-      text :description
+      text :description, :stored => true
     end
 
     ## Event retrieval in various ways
@@ -174,6 +174,15 @@ module Droom
 
     def self.past
       before(Time.now)
+    end
+    
+    def self.sun_search(fragment)
+      search = visible_to(@current_person).search do
+        fulltext fragment do
+          highlight :description
+        end
+      end
+      search
     end
 
     ## Instance methods
@@ -356,7 +365,7 @@ module Droom
     end
 
   protected
-  
+
     def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, "#{start.strftime("%Y %m %d")} #{name}".parameterize)
     end
