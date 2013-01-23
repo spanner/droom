@@ -51,7 +51,7 @@ module Droom
     end
 
     def main_dashboard_modules
-      @@main_dashboard_modules ||= %w{my_future_events my_past_events my_group_documents}
+      @@main_dashboard_modules ||= %w{my_future_events my_folders}
     end
 
     def margin_dashboard_modules

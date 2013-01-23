@@ -34,6 +34,7 @@ jQuery ($) ->
     @find_including_self('[data-action="reveal"]').replace_with_remote_content()
     @find_including_self('[data-action="twister"]').twister()
     @find_including_self('[data-action="filter"]').search_filter()
+    @find_including_self('[data-alternate]').alternator()
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('table.sortable').table_sort()
     @find_including_self('#map').init_map()

@@ -846,3 +846,31 @@ jQuery ($) ->
       new Copier @
 
 
+
+  class Alternator
+    constructor: (element) ->
+      @_container = $(element)
+      @_selector = @_container.attr("data-alternate")
+      @_alternate = @_container.siblings(@_selector)
+      @revert()
+
+    flip: (e) =>
+      e.preventDefault() if e
+      console.log "Alternator flip to", @_alternate
+      @_container.after(@_alternate)
+      @_container.remove()
+      @_alternate.find('a').click @revert
+      
+    revert: (e) =>
+      e.preventDefault() if e
+      console.log "Alternator revert to", @_container
+      @_alternate.before(@_container)
+      @_alternate.remove()
+      @_container.find('a').click @flip
+      
+  $.fn.alternator = ->
+    @each ->
+      new Alternator(@)
+      
+      
+      

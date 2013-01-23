@@ -95,7 +95,7 @@ module Droom
       Sunspot.index!(self)
     end
   
-    def check_slug
+    def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, name.parameterize)
     end
   end

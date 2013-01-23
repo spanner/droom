@@ -2,7 +2,6 @@
 
 %li.document.holder
   = link_to document.name, droom.folder_document_url(document.folder, document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
-  - if admin? && @event
-    - d_a = @event.document_attachments.find_by_document_id(document)
-    = link_to t(:remove), droom.folder_document_url(document.folder, document), :method => :delete, :remote => true, :class => 'delete minimal', :data => {:confirm => t(:confirm_remove_document, :name => document.name, :event_name => @event.name)}
+  - if admin?
+    = link_to t(:remove), droom.folder_document_url(document.folder, document), :method => :delete, :remote => true, :class => 'delete minimal', :data => {:confirm => t(:confirm_remove_document, :name => document.name)}
 
