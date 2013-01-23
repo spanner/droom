@@ -121,6 +121,15 @@ a.cancel, a.cancel:visited
   +small
   +pale
 
+
+*
+  > span.admin
+    visibility: hidden
+  &:hover
+    > span.admin
+      visibility: visible
+    
+
 .datemark
   +outset
   text-align: right
@@ -232,8 +241,9 @@ div.documents
   float: right
   margin-left: 20px
   margin-bottom: 10px
-  width: 200px
+  width: 240px
   h3
+    min-height: 18px
     a
       color: $text
   ul.filing
@@ -316,8 +326,6 @@ form.page
   p.explanatory
     width: 50%
     color: $mid
-
-
 
 h2.name
   +heading
@@ -416,7 +424,7 @@ div.document
   p.description
     margin-top: 0
 
- 
+
 table.main
   th
     text-align: left
@@ -725,7 +733,7 @@ span.erratic
         position: 3px -58px
         repeat: no-repeat
 
-a.add, a.edit, a.delete, a.revert, a.copy, a.email, a.web
+a.add, a.edit, a.delete, a.revert, a.copy, a.email, a.web, a.drop
   display: inline-block
   text-indent: 16px
   margin-right: 10px
@@ -808,6 +816,11 @@ a.email
 a.web
   background-position: 0 -360px
   text-indent: 20px
+
+a.drop
+  background-position: 0 -432px
+  &:hover
+    background-position: 0 -456px
 
 
 // a.edit, a.delete
@@ -920,20 +933,8 @@ li.document
       display: inline-block
   .delete
     display: none
-    height: 20px
-    line-height: 20px
-    padding: 0
-    margin-left: 10px
-    background:
-      image: image-url('droom/minisymbols.png')
-      repeat: no-repeat
-      position: 0 -504px
-    &:hover
-      background-position: 0 -528px
-    &:active
-      background-position: 0 -576px
       
-li.document a, a.document
+li.document a.document
   display: inline-block
   padding: 8px 0 0 28px
   min-height: 22px

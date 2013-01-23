@@ -73,6 +73,14 @@ module Droom
       !populated?
     end
     
+    def copy_to_dropbox
+      Rails.logger.warn ">>> copy folder #{@folder.inspect} to dropbox"
+    end
+
+    def copy_to_dav
+      Rails.logger.warn ">>> copy folder #{@folder.inspect} to DAV"
+    end
+    
   protected
   
     def set_slug

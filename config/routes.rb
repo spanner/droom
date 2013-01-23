@@ -19,6 +19,7 @@ Droom::Engine.routes.draw do
   
   resources :documents, :only => [:index]
   resources :folders do
+    get "dropbox", :on => :member, :as => :dropbox
     resources :documents
   end
   
