@@ -205,7 +205,7 @@ module Droom
     end
     
     def to_vcf
-      @vcard ||= Vpim::Vcard::Maker.make2 do |maker|
+      @vcard ||= Vcard::Vcard::Maker.make2 do |maker|
         maker.add_name do |n|
           n.given = name || ""
         end
