@@ -1,12 +1,9 @@
 - group ||= search_result
-- result = group[:result]
-- hit = group[:hit]
+- hit = group.hit
 %li.group
-  = link_to result.name, group_url(result)
+  = link_to group.name, group_url(group)
   %span.note
-    = t :group_members, :count => result.people.count
-  %span.description
-    - hit.highlights.each do |highlight|
-      - description = highlight.format{|word| "<b>#{word}</b>"}
-      = description.html_safe
+    = t :group_members, :count => group.people.count
+  %span.excerpt
+    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
 

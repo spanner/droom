@@ -8,24 +8,22 @@ module Droom
     def index
       if @fragment = params[:term]
         frag = @fragment.force_encoding("US-ASCII")
+        # if the search box isn't empty
+        @results = []
         unless frag == ""
           max = params[:limit] || 10
-          @results = @klasses.collect {|klass|
-            search = klass.constantize.visible_to(@current_person).search do
-              fulltext frag do
-                highlight :description
-              end
+          classes = @klasses.collect {|klass| klass.constantize}
+          search = Sunspot.search classes do
+            fulltext frag do
+              highlight :description
+              highlight :extracted_text
             end
-            results = []
-            search.each_hit_with_result do |hit, result|
-              object = {
-                hit: hit,
-                result: result
-              }
-              results.push object
-            end
-            results
-          }.flatten.slice(0, max.to_i)
+          end
+          search.each_hit_with_result do |hit, result|
+            result[:hit] = hit
+            @results.push result
+          end
+          
         else
           @results = []
         end

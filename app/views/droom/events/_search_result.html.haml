@@ -1,9 +1,6 @@
 - event ||= search_result
-- result = event[:result]
-- hit = event[:hit]
+- hit = event.hit
 %li.event
-  = link_to result.name, event_url(result)
-  %span.description
-    - hit.highlights(:description).each do |highlight|
-      - description = highlight.format{|word| "<b>#{word}</b>"}
-      = description.html_safe
+  = link_to event.name, event_url(event)
+  %span.excerpt
+    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }

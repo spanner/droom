@@ -1,9 +1,6 @@
 - venue ||= search_result
-- result = venue[:result]
-- hit = venue[:hit]
+- hit = venue.hit
 %li.venue
-  = link_to result.name, venue_url(result)
-  %span.description
-    - hit.highlights.each do |highlight|
-      - description = highlight.format{|word| "<b>#{word}</b>"}
-      = description.html_safe
+  = link_to venue.name, venue_url(venue)
+  %span.excerpt
+    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }

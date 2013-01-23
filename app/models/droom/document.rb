@@ -16,7 +16,7 @@ module Droom
 
     searchable do
       text :name, :boost => 10
-      text :description, :boost => 2, :stored => true
+      text :description, :stored => true
       text :extracted_text, :stored => true
     end
 
@@ -43,10 +43,6 @@ module Droom
     }
     
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
-
-    def self.highlight
-      highlight :extracted_text
-    end
 
     def attach_to(holder)
       self.folder = holder.folder

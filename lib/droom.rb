@@ -92,7 +92,7 @@ module Droom
 
     def searchable_classes
       @@searchable_classes ||= {
-        "event" => "Droom::Event", 
+        "event" => "Droom::Event",
         "document" => "Droom::Document",
         "group" => "Droom::Group",
         "venue" => "Droom::Venue"

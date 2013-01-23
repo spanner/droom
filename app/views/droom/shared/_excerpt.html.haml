@@ -1,0 +1,4 @@
+- hit.highlights.each do |highlight|
+  - description = highlight.format{|word| "<b>#{word}</b>"}
+  = description.html_safe
+
