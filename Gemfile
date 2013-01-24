@@ -26,6 +26,7 @@ gem 'dropbox-sdk'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'yomu'
+# gem 'osgb'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -48,3 +49,4 @@ group :test, :development do
   gem 'shoulda-matchers'
   gem 'awesome_print'
 end
+

@@ -5,7 +5,7 @@ require 'ri_cal'
 
 module Droom
   class Event < ActiveRecord::Base
-    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :private, :public, :venue_name
+    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :private, :public, :venue_name, :venue_post_code
 
     belongs_to :created_by, :class_name => Droom.user_class
     
@@ -262,9 +262,22 @@ module Droom
     def venue_name
       venue.name if venue
     end
-    
+
+    def venue_post_code
+      venue.post_code if venue
+    end
+
     def venue_name=(name)
       self.venue = Droom::Venue.find_or_create_by_name(name)
+    end
+
+    def venue_post_code=(post_code)
+      # if post_code.is_gridref?
+      #   latlng = post_code.to_latlng
+      #   self.venue = Droom::Venue.find_or_create_by_lat_and_lng(latlng[0], latlng[1])
+      # else
+      #   self.venue = Droom::Venue.find_or_create_by_post_code(post_code)
+      # end
     end
 
     def find_or_create_agenda_category(category)
