@@ -7,17 +7,17 @@
   - if folder.populated?
     %h3
       = link_to title, "#", :class => "folder"
-      - if editable?(folder)
-        %span.admin
-          = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add minimal", :remote => true, :data => {:action => "popup", :type => "html", :affected => "folder_#{folder.id}"}
 
     %ul.filing
       = render :partial => 'droom/folders/folder', :collection => folder.children.populated
       = render :partial => 'droom/documents/listing', :collection => folder.documents
 
-      - if dropbox?
-        %li
-          = link_to t(:copy_to_dropbox), dropbox_folder_url(folder, :format => :js), :class => "dropbox", :remote => true
+    - if dropbox?
+      %span.admin
+        - if editable?(folder)
+          = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}
+          %br
+        = link_to t(:copy_to_dropbox), dropbox_folder_url(folder, :format => :js), :class => "dropbox", :remote => true
 
   - elsif editable?(folder)
     = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}
