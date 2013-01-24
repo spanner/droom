@@ -65,6 +65,22 @@ module Droom
       end
     end
     
+    def populated?
+      children.any? || documents.any?
+    end
+    
+    def empty?
+      !populated?
+    end
+    
+    def copy_to_dropbox
+      Rails.logger.warn ">>> copy folder #{@folder.inspect} to dropbox"
+    end
+
+    def copy_to_dav
+      Rails.logger.warn ">>> copy folder #{@folder.inspect} to DAV"
+    end
+    
   protected
   
     def set_slug
@@ -73,8 +89,7 @@ module Droom
     end
     
     def set_properties
-      self.public = !self.holder
-      true
+      self.public = !holder && (!parent || parent.public?)
     end
     
   end

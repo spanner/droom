@@ -12,20 +12,31 @@ require "droom/folders"
 require "snail"
 
 module Droom
-  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :main_dashboard_modules, :margin_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map, :people_sort, :default_document_private, :default_event_private, :dropbox_app_key, :dropbox_app_secret
+  # Droom configuration is handled by accessors on the Droom base module.
+  
+  mattr_accessor :user_class, 
+                 :layout, 
+                 :sign_in_path, 
+                 :sign_out_path, 
+                 :user_class, 
+                 :root_path, 
+                 :main_dashboard_modules, 
+                 :margin_dashboard_modules, 
+                 :dav_root, 
+                 :dav_subdomain, 
+                 :use_forenames, 
+                 :show_venue_map, 
+                 :people_sort, 
+                 :default_document_private, 
+                 :default_event_private, 
+                 :dropbox_app_key, 
+                 :dropbox_app_secret
+                 :defaults
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
   
   class << self
-    def user_class=(klass)
-      @@user_class = klass.to_s
-    end
-  
-    def user_class
-      (@@user_class ||= "User").constantize
-    end
-
     def layout
       @@layout ||= "application"
     end
@@ -102,6 +113,45 @@ module Droom
     def add_suggestible_class(label, klass=nil)
       klass ||= label.titlecase
       suggestible_classes[label] = klass.to_s
+    end
+    
+    # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
+    # doesn't exist you just get back the default value, or nil if there isn't one. This is where you
+    # set the defaults.
+    #
+    def user_defaults
+      @@defaults ||= {
+        :email =>  {
+          :enabled => true,
+          :digest => false,
+          :invitations => false
+        },
+        :dropbox => {
+          :everything => false,
+          :events => true,
+          :topics => false
+        },
+        :dav => {
+          :everything => false,
+          :events => false,
+          :topics => false
+        }
+      }
+    end
+    
+    # Here we are overriding droom settings in a host app initializer.
+    # key should be colon-separated and string-like:
+    #
+    #   Droom.set_default('email:digest', true)
+    #
+    # Hash#deep_set is a setter that can take compound keys and set nested values. It's defined in lib/monkeys.rb.
+    #
+    def set_user_default(key, value)
+      defaults.deep_set(key, value)
+    end
+    
+    def user_default(key)
+      defaults[key.to_sym]
     end
   end
 end

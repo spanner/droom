@@ -4,7 +4,7 @@ This is a minimal system for secure document and event distribution. It provides
 
 ## Status
 
-Brand new. In progress. Avoid!
+Brand new. In progress. Little bit volatile, perhaps.
 
 ## Installation
 
@@ -16,7 +16,7 @@ To migrate:
 
     rake droom:install:migrations
     rake db:migrate
-
+    
 
 ## Copyright
 

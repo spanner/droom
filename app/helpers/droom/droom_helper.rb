@@ -3,6 +3,10 @@ require 'dropbox_sdk'
 module Droom
   module DroomHelper
     
+    def dropbox?
+      !!current_user.dropbox_access_token
+    end
+    
     def dropbox_auth_url
       dbs = dropbox_session
       # get an auth link address, with our register action as the callback
@@ -17,6 +21,10 @@ module Droom
       # note that here we never want to pick up the existing dropbox session. That happens in the dropbox_tokens_controller
       # when we register an access token. In the view, any existing session has probably expired and we're better off with a new one.
       DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
+    end
+
+    def editable?(thing)
+      current_user.admin?
     end
 
     def nav_link_to(name, url, options={})
