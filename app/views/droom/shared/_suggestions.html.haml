@@ -7,9 +7,19 @@
       - @suggestions.each do |sugg|
         = render :partial => "#{sugg.class.to_s.pluralize.underscore}/suggested", :object => sugg
   
+<<<<<<< HEAD
     - else
       %li.error
         = t :no_results
   
     %li.cancel
       = link_to t(:clear_search), '#', :class => "cancel"
+=======
+  - else
+    %li.error
+      = t :no_results
+  / %li.more
+  /   = link_to "More results...", search_url, :class => 'more'
+  %li.cancel
+    = link_to t(:clear_search), '#', :class => "cancel"
+>>>>>>> 7237e4dfe6bc48d37cc9da54c6bea51bc9c4b7d7
