@@ -962,6 +962,52 @@ li.more
     padding: 5px 0
     min-height: 22px
 
+input[type="text"], input[type="password"], input[type="email"], select, textarea
+  color: $input
+  padding: 5px
+  border: 1px solid $pale
+  &.strong
+    +bold
+  &.destination
+    color: $blue
+  &.empty
+    color: $pale
+  &[disabled]
+    color: $pale
+    background-color: #fff
+    border-color: $verypale
+
+input[type="submit"]
+  display: inline-block
+  background: 
+    color: $submit 
+    image: image-url('droom/small_go.png') 
+    repeat: no-repeat 
+    position: 8px 14px
+  padding: 5px 12px 5px 24px
+  text-align: left
+  color: white
+  height: 39px
+  border: none
+  font-size: 1em
+  line-height: 2
+  +border-radius(3px)
+  &:hover
+    background-color: $hover
+  &.unavailable
+    background-color: $mid
+    +opacity(0.5)
+    &:hover
+      background-color: $mid
+  &.waiting
+    background:
+      color: $pale
+      image: image-url('droom/smallspinner.gif')
+      position: 5px 11px
+    &:hover
+      background-color: $pale
+
+
 #account
   position: relative
   margin: 5px
@@ -1313,7 +1359,37 @@ input.search_box
   padding: 10px
   
 
-      
+#flashes
+  position: absolute
+  top: 20px
+  right: 50px
+  width: 300px
+  p
+    display: none
+    padding: 10px
+    color: white
+    +shadowed
+    +bordered
+    &.notice
+      background-color: $green
+      border-color: darken($green, 10%)
+    &.alert
+      background-color: $rubine
+      border-color: darken($rubine, 10%)
+    a.closer
+      display: block
+      float: right
+      width: 16px
+      height: 16px
+      margin-left: 10px
+      margin-right: -5px
+      +text-hidden
+      background: 
+        image: image-url('crosses.png')
+        color: transparent
+        position: 0 -96px
+        repeat: no-repeat
+
   
 
 

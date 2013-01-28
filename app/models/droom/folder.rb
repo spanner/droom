@@ -90,6 +90,7 @@ module Droom
     
     def set_properties
       self.public = !holder && (!parent || parent.public?)
+      true
     end
     
   end
