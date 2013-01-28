@@ -21,6 +21,7 @@ module Droom
     #
     def get(path)
       key, subkeys = split_path(path)
+      p "get #{path} -> #{key}, #{subkeys.join(',')}"
       if subkeys.any?
         self[key.to_sym].get(subkeys)
       else
@@ -37,7 +38,7 @@ module Droom
     def set(path, value)
       key, subkeys = split_path(path)
       if subkeys.any?
-        self[key] ||= LazyHash.new({})
+        self[key] ||= PreferencesHash.new({})
         self[key].set(subkeys, value)
       else
         if self[key].is_a? Droom::Preference
@@ -82,6 +83,7 @@ module Droom
     # unnecessary but there you go.
     #
     def method_missing(method_name, *args, &blk)
+      p "method_missing #{method_name}"
       return self.get(method_name, &blk) if has_path?(method_name)
       match = method_name.to_s.match(/(.*?)([?=]?)$/)
       case match[2]
@@ -120,7 +122,7 @@ module Droom
       #
       def has_preferences( options={} )
         return if has_preferences?
-        has_many :preferences, :class_name => "Droom::Preference"
+        has_many :preferences, :class_name => "Droom::Preference", :foreign_key => "created_by_id"
         
         class_eval {
           extend Droom::Preferences::PreferringClassMethods
@@ -147,7 +149,7 @@ module Droom
       #
       def prefs
         unless @prefs
-          @prefs = Droom::LazyHash.new(Droom.user_defaults)
+          @prefs = Droom::PreferencesHash.new(Droom.user_defaults)
           preferences.each do |p|
             @prefs.set(p.key, p.value)
           end

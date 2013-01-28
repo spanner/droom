@@ -2,7 +2,7 @@ module Droom
   class Category < ActiveRecord::Base
     attr_accessible :name, :description, :slug
     
-    belongs_to :created_by, :class_name => Droom.user_class
+    belongs_to :created_by, :class_name => "Droom::User"
     has_many :document_attachments
     
     before_validation :ensure_slug
