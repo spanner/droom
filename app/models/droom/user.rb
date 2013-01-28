@@ -3,6 +3,7 @@ module Droom
     attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email
     has_one :person
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
+    has_many :preferences, :foreign_key => "created_by_id"
   
     devise :database_authenticatable,
            :encryptable,
@@ -12,8 +13,6 @@ module Droom
            :validatable,
            :token_authenticatable,
            :encryptor => :sha512
-
-    has_preferences
   
     before_create :ensure_authentication_token
     after_create :send_invitation
@@ -92,6 +91,37 @@ module Droom
         dt.access_token
       end
     end
+    
+    
+    
+    
+    ## Preferences
+    #
+    # User settings are held as an association with Preference objects, which are simple key:value pairs.
+    # The keys are usually colon:separated for namespacing purposes, eg:
+    #
+    #   current_user.pref("email:enabled")
+    #   current_user.pref("dropbox:enabled")
+    #
+    # Default settings are defined in Droom.user_defaults and can be defined in an initializer if the default droom
+    # defaults are not right for your application.
+    #
+    def pref(key)
+      if pref = preferences.find_by_key(key)
+        pref.value
+      else
+        Droom.user_default(key)
+      end
+    end
+    
+    # Preferences are set in a simple key:value way, where key is usually a compound namespace designator:
+    #
+    #   current_user.set_pref("email:enabled", true)
+    #
+    def set_pref(key, value)
+      preferences.find_or_create_by_key(key).set(value)
+    end
+    
 
   protected
 

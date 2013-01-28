@@ -11,5 +11,9 @@ module Droom
       self.save if changed?
     end
     
+    def get
+      value
+    end
+    
   end
 end
