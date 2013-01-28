@@ -14,6 +14,19 @@ module Droom
   #
   class PreferencesHash < Hash
     
+    # PreferencesHash.new() takes as (optional) argument a hash that will be treated as defaults.
+    #
+    def initialize(*args)
+      super
+      args.extract_options!.each_pair do |k,v|
+        self[k] = v.is_a?(Hash) ? Droom::PreferencesHash.new(v) : v
+      end
+    end
+
+    def inspect
+      "PreferencesHash: #{super}"
+    end
+
     # *get* will return the value in the named bucket. The bucket is designated
     # by a key that can either be simple or the colon:separated path to a nested hash. 
     # If there happens to be a preference held in that bucket, we return its value. 
@@ -21,9 +34,15 @@ module Droom
     #
     def get(path)
       key, subkeys = split_path(path)
-      p "!!! get #{path} -> #{key}, #{subkeys.join(',')}"
+      p "!!! get #{path}"
+      p "key: #{key}"
+      p "subkeys: #{subkeys.inspect}"
       if subkeys.any?
-        self[key.to_sym].get(subkeys)
+        if self[key].is_a?(Droom::PreferencesHash)
+          self[key].get(subkeys)
+        else
+          nil
+        end
       else
         if self[key].is_a? Droom::Preference
           self[key].value
@@ -38,7 +57,7 @@ module Droom
     def set(path, value)
       key, subkeys = split_path(path)
       if subkeys.any?
-        self[key] ||= PreferencesHash.new({})
+        self[key] ||= Droom::PreferencesHash.new({})
         self[key].set(subkeys, value)
       else
         if self[key].is_a? Droom::Preference
@@ -77,7 +96,7 @@ module Droom
     #
     def split_path(key)
       keys = key.is_a?(Array) ? key : key.to_s.split(':')
-      [keys.shift, keys]
+      keys.any? ? [keys.shift.to_sym, keys] : [nil, []]
     end
     
     # nb. this will support both prefs.something.something and prefs.something:something, which is a bit
