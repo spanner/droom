@@ -3,7 +3,7 @@
 module Droom
   class Preference < ActiveRecord::Base
     attr_accessible :key, :value
-    belongs_to :created_by, :class_name => Droom.user_class
+    belongs_to :created_by, :class_name => "Droom::User"
     validates :key, :presence => true, :uniqueness => true
     
     def set(value)

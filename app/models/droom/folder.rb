@@ -4,7 +4,7 @@ module Droom
   class Folder < ActiveRecord::Base
     attr_accessible :slug, :parent
 
-    belongs_to :created_by, :class_name => Droom.user_class
+    belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
     has_many :documents
     has_many :personal_folders

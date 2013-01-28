@@ -3,7 +3,7 @@ module Droom
   class Document < ActiveRecord::Base
     attr_accessible :name, :file, :description, :folder
 
-    belongs_to :created_by, :class_name => Droom.user_class
+    belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
 
     has_attached_file :file

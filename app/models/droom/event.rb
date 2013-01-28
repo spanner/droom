@@ -7,7 +7,7 @@ module Droom
   class Event < ActiveRecord::Base
     attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :private, :public, :venue_name, :venue_post_code
 
-    belongs_to :created_by, :class_name => Droom.user_class
+    belongs_to :created_by, :class_name => "Droom::User"
     
     has_folder #... and subfolders via agenda_categories
 

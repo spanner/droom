@@ -1,7 +1,7 @@
 module Droom
   class RecurrenceRule < ActiveRecord::Base
   
-    belongs_to :created_by, :class_name => Droom.user_class
+    belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :event
     
     attr_accessible :period, :interval, :basis, :limiting_count, :limiting_date

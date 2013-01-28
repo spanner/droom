@@ -74,7 +74,7 @@ module Droom
     # The `user` is this person's administrative account for logging in and out and forgetting her password.
     # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
     # without having a person.
-    belongs_to :user, :class_name => Droom.user_class.to_s, :dependent => :destroy
+    belongs_to :user, :class_name => "Droom::User".to_s, :dependent => :destroy
     
     before_save :update_user
     after_save :invite_if_instructed
