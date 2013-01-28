@@ -1,0 +1,29 @@
+Dear <%= @user.name %>,
+
+You are cordially invited to test the Foundation's new secure data room.
+
+This has been commissioned by the Foundation for use by trustees, committee members and staff. The objectives are to keep confidential data secure, to provide instant access to working papers, and to help maintain the quality of our records. This preliminary version of the site contains the agenda papers for the investment committee and audit committee meetings to be held on 15th October 2012. The site is compatible with mobile applications including Goodreader.
+
+An account has been created for you and all that remains is to activate it and choose a password. Please visit this address to begin:
+
+  <%= welcome_user_url(@user, :auth_token => @user.authentication_token) %>
+  
+Later versions of the site will include a searchable archive of agenda papers of past meetings and information on public events funded by the Foundation.
+
+As always your comments and suggestions will be very welcome.
+  
+Best wishes,
+
+David
+
+
+
+David Foster
+Director
+Croucher Foundation
+501 Nine Queen's Road Central
+Hong Kong
+
+Tel: +852 2736 6337
+Fax: +852 2730 0742
+www.croucher.org.hk

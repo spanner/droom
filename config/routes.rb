@@ -7,6 +7,11 @@ Droom::Engine.routes.draw do
     :log_to => [(Rails.root + 'log/dav.log').to_s, Logger::DEBUG]
   ), :anchor => false, :constraints => { :subdomain => Droom.dav_subdomain }
 
+  devise_for :users, :class_name => 'Droom::User', :module => :devise
+  resources :users, :only => [:edit, :update] do
+    get 'welcome/:auth_token', :action => :welcome, :on => :member, :as => :welcome
+  end
+
   resources :events do
     resources :invitations
     resources :group_invitations

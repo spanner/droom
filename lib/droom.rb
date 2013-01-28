@@ -9,54 +9,57 @@ require "droom/dav_resource"
 require "droom/searchability"
 require "droom/taggability"
 require "droom/folders"
+require "droom/preferences"
 require "snail"
 
 module Droom
   # Droom configuration is handled by accessors on the Droom base module.
   
-  mattr_accessor :user_class, 
-                 :layout, 
-                 :sign_in_path, 
-                 :sign_out_path, 
-                 :user_class, 
-                 :root_path, 
-                 :main_dashboard_modules, 
-                 :margin_dashboard_modules, 
-                 :dav_root, 
-                 :dav_subdomain, 
-                 :use_forenames, 
-                 :show_venue_map, 
-                 :people_sort, 
-                 :default_document_private, 
-                 :default_event_private, 
-                 :dropbox_app_key, 
+  mattr_accessor :root_path,
+                 :layout,
+                 :email_layout,
+                 :email_host,
+                 :email_from,
+                 :email_return_path,
+                 :main_dashboard_modules,
+                 :margin_dashboard_modules,
+                 :dav_root,
+                 :dav_subdomain,
+                 :use_forenames,
+                 :show_venue_map,
+                 :default_document_private,
+                 :default_event_private,
+                 :dropbox_app_key,
                  :dropbox_app_secret
-                 :defaults
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
   
   class << self
     def layout
-      @@layout ||= "application"
+      @@layout ||= "droom/application"
+    end
+    
+    def email_host
+      @@email_host ||= "please-change-email-host-in-droom-initializer.example.com"
     end
 
-    def sign_in_path
-      @@sign_in_path ||= "/users/sign_in"
+    def email_layout
+      @@email_layout ||= "droom/email"
     end
 
-    def sign_out_path
-      @@sign_out_path ||= "/users/sign_out"
+    def email_from
+      @@email_from ||= "please-change-email-from-in-droom-initializer@example.com"
+    end
+    
+    def email_return_path
+      @@email_return_path ||= email_from
     end
 
     def root_path
       @@root_path ||= "dashboard#index"
     end
 
-    def people_sort
-      @@people_sort ||= "position ASC"
-    end
-    
     def home_country
       Snail.home_country = @@home_country ||= 'gb'
     end
@@ -122,19 +125,19 @@ module Droom
     def user_defaults
       @@defaults ||= {
         :email =>  {
-          :enabled => true,
-          :digest => false,
-          :invitations => false
+          :enabled? => true,
+          :digest? => false,
+          :invitations? => false
         },
         :dropbox => {
-          :everything => false,
-          :events => true,
-          :topics => false
+          :everything? => false,
+          :events? => true,
+          :topics? => false
         },
         :dav => {
-          :everything => false,
-          :events => false,
-          :topics => false
+          :everything? => false,
+          :events? => false,
+          :topics? => false
         }
       }
     end
@@ -147,11 +150,11 @@ module Droom
     # Hash#deep_set is a setter that can take compound keys and set nested values. It's defined in lib/monkeys.rb.
     #
     def set_user_default(key, value)
-      defaults.deep_set(key, value)
+      defaults.set(key, value)
     end
     
     def user_default(key)
-      defaults[key.to_sym]
+      defaults.get(key)
     end
   end
 end

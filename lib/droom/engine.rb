@@ -5,6 +5,7 @@ module Droom
       ActiveRecord::Base.send :include, Droom::Helpers
       ActiveRecord::Base.send :include, Droom::Taggability
       ActiveRecord::Base.send :include, Droom::Folders
+      ActiveRecord::Base.send :include, Droom::Preferences
     end
   end
 end

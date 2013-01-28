@@ -962,6 +962,34 @@ li.more
     padding: 5px 0
     min-height: 22px
 
+#account
+  position: relative
+  margin: 5px
+  clear: both
+  width: 600px
+  label
+    +bold
+    color: $dark
+    font-size: 1.1em
+    &.minor
+      font-size: 0.9em
+      +book
+  input[type="text"], input[type="password"], input[type="email"]
+    width: 590px
+    padding: 4px
+    &.login
+      font-size: 2em
+    &.preferences
+      font-size: 2em
+    &.ok
+      border-color: $match
+    &.notok
+      border-color: $error
+  p.confirmation
+    display: none
+  span.reminder
+    float: right
+    +pale
 
 
 #mask
