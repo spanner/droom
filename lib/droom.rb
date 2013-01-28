@@ -31,15 +31,15 @@ module Droom
                  :default_event_private,
                  :dropbox_app_key,
                  :dropbox_app_secret
-  
+
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
-  
+
   class << self
     def layout
       @@layout ||= "droom/application"
     end
-    
+
     def email_host
       @@email_host ||= "please-change-email-host-in-droom-initializer.example.com"
     end
@@ -51,9 +51,17 @@ module Droom
     def email_from
       @@email_from ||= "please-change-email-from-in-droom-initializer@example.com"
     end
-    
+
     def email_return_path
       @@email_return_path ||= email_from
+    end
+
+    def people_sort
+      @@people_sort ||= "position ASC"
+    end
+
+    def sign_out_path
+      @@sign_out_path ||= "/users/sign_out"
     end
 
     def root_path
@@ -71,12 +79,12 @@ module Droom
     def margin_dashboard_modules
       @@margin_dashboard_modules ||= []
     end
-    
+
     # base path of DAV directory tree, relative to rails root.
     def dav_root
       @@dav_root ||= "webdav"
     end
-    
+
     # subdomain constraint applied when routing to dav.
     def dav_subdomain
       @@dav_subdomain ||= /dav/

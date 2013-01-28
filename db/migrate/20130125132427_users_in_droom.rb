@@ -2,7 +2,7 @@ class UsersInDroom < ActiveRecord::Migration
   def change
     if ActiveRecord::Base.connection.table_exists? 'users'
       rename_table :users, :droom_users
-      
+
     else
       create_table(:droom_users) do |t|
         t.string :name
@@ -52,7 +52,7 @@ class UsersInDroom < ActiveRecord::Migration
       end
       add_index :droom_users, :email,                :unique => true
       add_index :droom_users, :reset_password_token, :unique => true
-      
+
     end
   end
 end

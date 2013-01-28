@@ -86,21 +86,6 @@ module Droom
       }
     end
 
-<<<<<<< HEAD
-=======
-    def extract_text
-      pdf = File.open("#{file.queued_for_write[:text].path}","r")
-      
-      plain_text = ""
-      while (line = pdf.gets)
-        plain_text << Iconv.conv('ASCII//IGNORE', 'UTF-8', line)
-      end
-      self.extracted_text = plain_text #text column to hold the extracted text for searching
-     end
-
-  protected
-
->>>>>>> 7237e4dfe6bc48d37cc9da54c6bea51bc9c4b7d7
     def index
       Sunspot.index!(self)
     end
