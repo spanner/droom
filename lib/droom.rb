@@ -1,7 +1,8 @@
 require 'dav4rack'
 require 'dav4rack/resources/file_resource'
 require "droom/monkeys"
-require "droom/helpers"
+require "droom/lazy_hash"
+require "droom/model_helpers"
 require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
@@ -9,7 +10,6 @@ require "droom/dav_resource"
 require "droom/searchability"
 require "droom/taggability"
 require "droom/folders"
-require "droom/preferences"
 require "snail"
 
 module Droom
@@ -30,7 +30,8 @@ module Droom
                  :default_document_private,
                  :default_event_private,
                  :dropbox_app_key,
-                 :dropbox_app_secret
+                 :dropbox_app_secret,
+                 :user_defaults
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -123,7 +124,7 @@ module Droom
     # set the defaults.
     #
     def user_defaults
-      @@defaults ||= {
+      @@user_defaults ||= Droom::LazyHash.new({
         :email =>  {
           :enabled => true,
           :digest => false,
@@ -139,22 +140,22 @@ module Droom
           :events => false,
           :topics => false
         }
-      }
+      })
     end
     
-    # Here we are overriding droom settings in a host app initializer.
+    # Here we are overriding droom default settings in a host app initializer to create local default settings.
     # key should be colon-separated and string-like:
     #
     #   Droom.set_default('email:digest', true)
     #
-    # Hash#deep_set is a setter that can take compound keys and set nested values. It's defined in lib/monkeys.rb.
+    # LazyHash#deep_set is a setter that can take compound keys and set nested values. It's defined in lib/lazy_hash.rb.
     #
     def set_user_default(key, value)
-      defaults.set(key, value)
+      user_defaults.set(key, value)
     end
     
     def user_default(key)
-      defaults.get(key)
+      user_defaults.get(key)
     end
   end
 end

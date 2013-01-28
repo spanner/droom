@@ -1,5 +1,5 @@
 module Droom
-  module Helpers
+  module ModelHelpers
     def self.included(base)
       base.extend Droom::ClassMethods
       base.send :include, Droom::InstanceMethods
