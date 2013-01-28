@@ -21,7 +21,7 @@ module Droom
     #
     def get(path)
       key, subkeys = split_path(path)
-      p "get #{path} -> #{key}, #{subkeys.join(',')}"
+      p "!!! get #{path} -> #{key}, #{subkeys.join(',')}"
       if subkeys.any?
         self[key.to_sym].get(subkeys)
       else
@@ -53,6 +53,7 @@ module Droom
     # has_path? returns true if there is anything (either default or preference) in the named bucket.
     #
     def has_path?(path)
+      p "has_path? #{path}}"
       key, subkeys = split_path(path)
       if subkeys.any?
         self[key].has_path?(subkeys)
@@ -75,7 +76,7 @@ module Droom
     #
     #
     def split_path(key)
-      keys = path.is_a?(Array) ? path : path.to_s.split(':')
+      keys = key.is_a?(Array) ? key : key.to_s.split(':')
       [keys.shift, keys]
     end
     
@@ -83,7 +84,7 @@ module Droom
     # unnecessary but there you go.
     #
     def method_missing(method_name, *args, &blk)
-      p "method_missing #{method_name}"
+      p "method_missing `#{method_name}`"
       return self.get(method_name, &blk) if has_path?(method_name)
       match = method_name.to_s.match(/(.*?)([?=]?)$/)
       case match[2]
