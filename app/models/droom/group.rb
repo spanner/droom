@@ -16,11 +16,6 @@ module Droom
   
     before_save :check_slug
 
-    searchable do
-      text :name, :boost => 10
-      text :description
-    end
-
     scope :visible_to, lambda { |person|
       if person
         select('droom_groups.*')

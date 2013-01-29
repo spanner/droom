@@ -20,12 +20,6 @@ module Droom
     before_save :set_version
     validates :file, :presence => true
 
-    searchable do
-      text :name, :boost => 10
-      text :description, :boost => 2
-      text :extracted_text
-    end
-
     scope :all_private, where("secret = 1")
     scope :not_private, where("secret <> 1")
     scope :all_public, where("public = 1 AND secret <> 1")

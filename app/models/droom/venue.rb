@@ -13,15 +13,6 @@ module Droom
     before_validation :geocode
     # reverse_geocoded_by :lat, :lng
 
-    searchable do
-      text :name, :boost => 10
-      text :description
-      text :post_line2
-      text :post_city
-      text :post_region
-      text :post_country
-    end
-
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_venues.name like ?', fragment)

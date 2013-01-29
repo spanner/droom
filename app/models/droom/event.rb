@@ -47,11 +47,6 @@ module Droom
     scope :recurrent, where(:conditions => "master_id IS NOT NULL")
     default_scope order('start ASC').includes(:venue)
 
-    searchable do
-      text :name, :boost => 10
-      text :description
-    end
-
     ## Event retrieval in various ways
     #
     # Events differ from other models in that they are visible to all unless marked 'private'.
