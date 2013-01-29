@@ -28,8 +28,16 @@ module Droom
           # personal documents are stored outside the web root so this is an internal-only redirect in nginx.
           redirect_to personal_document.url
         else
-          # master documents are stored in private S3 buckets accessible only through signed urls with a lifespan of only two minutes.
-          redirect_to @document.file.expiring_url(Time.now + 120)
+          # master documents are stored in private S3 buckets
+          # To keep the documents secure, we: 
+          # * publish them only through this controller (so no S3 links appear on the page)
+          # * deliver them only to authenticated users
+          # * delivery by redirecting to a URL that expires in an hour
+          #
+          # We could channel all file delivery through this controller and may do so in future but for now the
+          # redirect approach seems more robust and the expiring URLs sufficiently secure.
+          #
+          redirect_to @document.file.expiring_url(Time.now + 3600)
         end
       end
     end
