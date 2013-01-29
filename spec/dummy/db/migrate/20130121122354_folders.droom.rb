@@ -6,6 +6,7 @@ class Folders < ActiveRecord::Migration
       t.string :holder_type
       t.string :holder_id
       t.string :ancestry
+      t.boolean :public, :default => 0
       t.integer :created_by_id
       t.timestamps
     end
@@ -36,12 +37,12 @@ class Folders < ActiveRecord::Migration
     end
     
     #   trigger the creation of personal folders from invitations and memberships
-
+    
     Droom::Invitation.all.map(&:link_folder)
     Droom::Membership.all.map(&:link_folder)
 
-    # drop_table :document_links
-    # drop_table :document_attachments
+    drop_table :droom_document_links
+    drop_table :droom_document_attachments
   end
   
 end

@@ -1,9 +1,9 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 require 'awesome_print'
-describe Droom::Event do
+describe Droom::Event, :solr => true do
         
   describe "A simple event" do
-    before do
+    before :each do
       @event = FactoryGirl.create(:simple_event)
     end
     
@@ -52,7 +52,7 @@ describe Droom::Event do
   end
 
   describe "A spanning event" do
-    before do 
+    before :each do 
       @event = FactoryGirl.create(:spanning_event)
     end
     
@@ -66,7 +66,7 @@ describe Droom::Event do
   end
 
   describe "A repeating event" do
-    before do 
+    before :each do 
       @event = FactoryGirl.create(:repeating_event)
       @event.send :update_occurrences
     end
@@ -115,7 +115,7 @@ describe Droom::Event do
   end
 
   describe "retrieval" do
-    before do
+    before :each do
       base = Time.new(2013, 1, 1, 9, 0, 0)
       40.times { |i| FactoryGirl.create(:closed_event, :start => base + i.days, :finish => base + i.days + 1.hour) }
       FactoryGirl.create(:closed_event, :start => base + 28.days, :finish => base + 32.days)

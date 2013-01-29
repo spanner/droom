@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130121122354) do
+ActiveRecord::Schema.define(:version => 20130129113346) do
 
   create_table "droom_agenda_categories", :force => true do |t|
     t.integer  "event_id"
@@ -30,28 +30,6 @@ ActiveRecord::Schema.define(:version => 20130121122354) do
     t.string   "slug"
   end
 
-  create_table "droom_document_attachments", :force => true do |t|
-    t.integer  "document_id"
-    t.string   "attachee_type"
-    t.integer  "attachee_id"
-    t.integer  "created_by_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-    t.integer  "category_id"
-  end
-
-  add_index "droom_document_attachments", ["attachee_type", "attachee_id"], :name => "attachee"
-
-  create_table "droom_document_links", :force => true do |t|
-    t.integer  "person_id"
-    t.integer  "document_attachment_id"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
-  end
-
-  add_index "droom_document_links", ["document_attachment_id"], :name => "index_droom_document_links_on_document_attachment_id"
-  add_index "droom_document_links", ["person_id"], :name => "index_droom_document_links_on_person_id"
-
   create_table "droom_documents", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -67,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20130121122354) do
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
     t.integer  "folder_id"
+    t.text     "extracted_text"
   end
 
   add_index "droom_documents", ["folder_id"], :name => "index_droom_documents_on_folder_id"
@@ -113,9 +92,10 @@ ActiveRecord::Schema.define(:version => 20130121122354) do
     t.string   "holder_type"
     t.string   "holder_id"
     t.string   "ancestry"
+    t.boolean  "public",        :default => false
     t.integer  "created_by_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
   add_index "droom_folders", ["ancestry"], :name => "index_droom_folders_on_ancestry"
@@ -154,6 +134,7 @@ ActiveRecord::Schema.define(:version => 20130121122354) do
     t.integer  "created_by_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.datetime "expires"
   end
 
   add_index "droom_memberships", ["group_id"], :name => "index_droom_memberships_on_group_id"
@@ -227,6 +208,14 @@ ActiveRecord::Schema.define(:version => 20130121122354) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "droom_preferences", :force => true do |t|
+    t.integer  "created_by_id"
+    t.string   "key"
+    t.string   "value"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "droom_recurrence_rules", :force => true do |t|
     t.integer  "event_id"
     t.boolean  "active",         :default => false
@@ -258,6 +247,33 @@ ActiveRecord::Schema.define(:version => 20130121122354) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
+
+  create_table "droom_users", :force => true do |t|
+    t.string   "name"
+    t.string   "forename"
+    t.boolean  "admin",                  :default => false
+    t.datetime "activated_at"
+    t.datetime "invited_at"
+    t.datetime "invited_by_id"
+    t.datetime "reminded_at"
+    t.string   "email",                  :default => "",    :null => false
+    t.string   "encrypted_password",     :default => "",    :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "authentication_token"
+    t.string   "password_salt"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "droom_users", ["email"], :name => "index_droom_users_on_email", :unique => true
+  add_index "droom_users", ["reset_password_token"], :name => "index_droom_users_on_reset_password_token", :unique => true
 
   create_table "droom_venues", :force => true do |t|
     t.string   "name"

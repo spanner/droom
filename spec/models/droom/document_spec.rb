@@ -1,11 +1,10 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-describe Droom::Document do
-  
+require 'awesome_print'
+describe Droom::Document, :solr => true do
+
   context "Housekeeping:" do
     before :each do
       @document = FactoryGirl.create(:document)
-      @dl = FactoryGirl.create(:document_link, :document => @document)
-      @pd = FactoryGirl.create(:personal_document, :document_link => @dl)
     end
 
     describe "on creation" do
@@ -13,7 +12,7 @@ describe Droom::Document do
         @document.version.should == 1
       end
     end
-  
+
     describe "on update" do
       describe "if its file has changed" do
         it "should trigger a version update" do
@@ -22,7 +21,7 @@ describe Droom::Document do
           @document.version.should == 2
         end
       end
-    
+
       describe "if its file has not changed" do
         it "should not trigger a version update" do
           @document.name = "something else"
@@ -32,7 +31,7 @@ describe Droom::Document do
       end
     end
   end
-  
+
   context "Visibility:" do
     before :each do
       @document = FactoryGirl.create(:document)
@@ -56,7 +55,7 @@ describe Droom::Document do
         @document.attach_to(@event)
         @invitation = @person.invite_to(@event)
       end
-      
+
       it "should be visible to linked people" do
         Droom::Document.visible_to(@person).should include(@document)
       end
@@ -71,6 +70,6 @@ describe Droom::Document do
         Droom::Document.visible_to(@person).should_not include(@document)
       end
     end
-    
+
   end
 end

@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Droom::Person do
+describe Droom::Person, :solr => true do
   
   before :each do
     @person = FactoryGirl.create(:person, :name => "Tester")
   end
   
   describe "DAV storage" do
-    it "should be able to create a single DAV folder" do
+    it "should be able to create a single DAV folder", :solr => true do
       filename = rand(36**12).to_s(36)
       @person.create_dav_directory("just_testing")
       File.exist?(Rails.root + "#{Droom.dav_root}/#{@person.id}/just_testing").should be_true

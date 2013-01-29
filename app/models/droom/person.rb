@@ -5,10 +5,10 @@ module Droom
     attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user, :position
     attr_accessor :invite_on_creation, :admin_user
     acts_as_list
-    
+
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
     validates :name, :presence => true
-    
+
     ### Group memberships
     #
     has_many :memberships, :dependent => :destroy

@@ -1,5 +1,6 @@
 module Droom
-  require 'iconv'
+  # require 'iconv'
+  require 'awesome_print'
   class Document < ActiveRecord::Base
     attr_accessible :name, :file, :description, :folder
 

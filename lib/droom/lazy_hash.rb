@@ -30,6 +30,7 @@ module Droom
     # by a key that can either be simple or the colon:separated path to a nested hash. 
     #
     def get(path)
+      key, subkeys = split_path(path)
       if subkeys.any?
         if self[key].is_a?(Droom::LazyHash)
           self[key].get(subkeys)

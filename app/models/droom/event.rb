@@ -8,7 +8,7 @@ module Droom
     attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :private, :public, :venue_name, :venue_post_code
 
     belongs_to :created_by, :class_name => "Droom::User"
-    
+
     has_folder #... and subfolders via agenda_categories
 
     has_many :invitations, :dependent => :destroy
@@ -69,25 +69,25 @@ module Droom
     scope :after, lambda { |datetime| # datetime. eg calendar.occurrences.after(Time.now)
       where(['start > ?', datetime])
     }
-  
+
     scope :before, lambda { |datetime| # datetime. eg calendar.occurrences.before(Time.now)
       where(['start < :date AND (finish IS NULL or finish < :date)', :date => datetime])
     }
-  
+
     scope :between, lambda { |start, finish| # datetimable objects. eg. Event.between(reader.last_login, Time.now)
       where(['start > :start AND start < :finish AND (finish IS NULL or finish < :finish)', :start => start, :finish => finish])
     }
-  
+
     scope :future_and_current, lambda {
       where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now])
     }
-  
+
     scope :unfinished, lambda { |start| # datetimable object.
       where(['start < :start AND finish > :start', :start => start])
     }
-    
+
     scope :by_finish, order("finish ASC")
-  
+
     scope :coincident_with, lambda { |start, finish| # datetimable objects.
       where(['(start < :finish AND finish > :start) OR (finish IS NULL AND start > :start AND start < :finish)', {:start => start, :finish => finish}])
     }
@@ -95,29 +95,28 @@ module Droom
     scope :limited_to, lambda { |limit|
       limit(limit)
     }
-  
+
     scope :at_venue, lambda { |venue| # EventVenue object
       where(["venue_id = ?", venue.id])
     }
-  
+
     scope :except_these_uuids, lambda { |uuids| # array of uuid strings
       placeholders = uuids.map{'?'}.join(',')
       where(["uuid NOT IN (#{placeholders})", *uuids])
     }
-    
+
     scope :without_invitations_to, lambda { |person| # Person object
       select("droom_events.*")
         .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.person_id = #{sanitize(person.id)}")
         .group("droom_events.id")
         .having("COUNT(droom_invitations.id) = 0")
     }
-    
+
     scope :with_documents, 
       select("droom_events.*")
         .joins("INNER JOIN droom_document_attachments ON droom_events.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Event'")
         .group("droom_events.id")
-      
-    
+
     scope :all_private, where("private = 1 OR private = 't'")
     scope :not_private, where("private = 0 OR private = 'f'")
     scope :all_public, where("public = 1 OR public = 't'")
