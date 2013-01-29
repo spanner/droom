@@ -13,17 +13,6 @@ module Droom
       where(["group_id = ?", group.id])
     }
 
-  def current?
-    expires == nil or expires > Time.now
-  end
-  
-  def set_expiry(date)
-    unless expires and expires > date
-      self.expires = date
-      save!
-    end
-  end
-
   protected
 
     def link_documents
