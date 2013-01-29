@@ -26,16 +26,12 @@ module Droom
 
   protected
 
-    def link_documents
-      person.document_attachments << group.document_attachments
-    end
-    
     def link_folder
       person.add_personal_folders(group.folder)
     end
 
-    def unlink_documents
-      person.document_attachments -= group.document_attachments
+    def unlink_folder
+      person.remove_personal_folders(group.folder)
     end
 
   end

@@ -114,7 +114,7 @@ jQuery ($) ->
     @each ->
       $(@).remote_link
         on_complete: (r) =>
-          replaced = $(@).parents(selector)
+          replaced = $(@).parents(selector).first()
           replacement = $(r).insertAfter(replaced)
           replaced.remove()
           replacement.activate()

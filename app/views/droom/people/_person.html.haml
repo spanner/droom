@@ -29,6 +29,6 @@
       %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
   - if admin?
     %td.admin
-      = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "popup", :type => "html"}
+      = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :affected => "#person_#{person.id}"}
     %td.admin
       = link_to t(:remove), person_url(person), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_person, :name => person.name)}
