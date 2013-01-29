@@ -14,7 +14,7 @@ module Droom
     }
 
     def current?
-      expires == nil or expires > Time.now
+      expires && expires > Time.now
     end
   
     def set_expiry(date)
