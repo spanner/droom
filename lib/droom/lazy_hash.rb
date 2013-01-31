@@ -20,10 +20,15 @@ module Droom
   class LazyHash < Hash
     
     def initialize(*args)
+      hash = args.extract_options!
       super
-      args.extract_options!.each_pair do |k,v|
+      hash.each_pair do |k,v|
         self[k] = v.is_a?(Hash) ? Droom::LazyHash.new(v) : v
       end
+    end
+  
+    def inspect
+      "lazyhash: #{super}"
     end
 
     # *get* will return the value in the named bucket. The bucket is designated
@@ -54,7 +59,7 @@ module Droom
         self[key] ||= Droom::LazyHash.new({})
         self[key].set(subkeys, value)
       else
-        self[key].set(value)
+        self[key] = value
       end
     end
     

@@ -134,19 +134,19 @@ module Droom
     def user_defaults
       @@user_defaults ||= Droom::LazyHash.new({
         :email =>  {
-          :enabled => true,
-          :digest => false,
-          :invitations => false
+          :enabled? => true,
+          :digest? => false,
+          :invitations? => false
         },
         :dropbox => {
-          :everything => false,
-          :events => true,
-          :topics => false
+          :everything? => false,
+          :events? => true,
+          :topics? => false
         },
         :dav => {
-          :everything => false,
-          :events => false,
-          :topics => false
+          :everything? => false,
+          :events? => false,
+          :topics? => false
         }
       })
     end

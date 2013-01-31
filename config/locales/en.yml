@@ -152,6 +152,7 @@ en:
   save_event: "Save event"
   save_document: "Save document"
   save_person: "Save person"
+  send_reset_instructions: "Send reset instructions"
   manage_groups: "Manage groups"
   map: "Map"
   my_future_events: "Your invitations"

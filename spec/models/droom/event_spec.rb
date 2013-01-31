@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require 'awesome_print'
+
 describe Droom::Event, :solr => true do
         
   describe "A simple event" do

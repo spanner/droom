@@ -237,15 +237,15 @@ module Droom
     def start_time=(value)
       self.start = (start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
     end
-    
+
     def start_date=(value)
       self.start = parse_date(value).to_date# + start_time
     end
-  
+
     def finish_time=(value)
       self.finish = (finish_date || start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
     end
-    
+
     def finish_date=(value)
       self.finish = parse_date(value).to_date# + finish_time
     end
@@ -288,7 +288,7 @@ module Droom
       cats.unshift(['', ''])
       cats
     end
-    
+
     def visible_to?(user_or_person)
       return true if self.public?
       return false unless user_or_person
@@ -301,11 +301,11 @@ module Droom
     def one_day?
       all_day? && within_day?
     end
-  
+
     def within_day?
       (!finish || start.to.jd == finish.to.jd || finish == start + 1.day)
     end
-  
+
     def continuing?
       finish && start < Time.now && finish > Time.now
     end
@@ -313,15 +313,15 @@ module Droom
     def finished?
       start < Time.now && (!finish || finish < Time.now)
     end
-  
+
     def recurs?
       master || occurrences.any?
     end
-  
+
     def recurrence
       recurrence_rules.first.to_s
     end
-  
+
     def add_recurrence(rule)
       self.recurrence_rules << Droom::RecurrenceRule.from(rule)
     end
@@ -338,11 +338,11 @@ module Droom
         cal_event.location = venue.name if venue
       end
     end
-  
+
     def to_ics
       to_rical.to_s
     end
-    
+
     def as_json(options={})
       json = super
       json[:datestring] = I18n.l start, :format => :natural_with_date
@@ -357,7 +357,7 @@ module Droom
         :id => id
       }
     end
-    
+
     def as_search_result
       {
         :type => 'event',
@@ -372,7 +372,7 @@ module Droom
     def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, "#{start.strftime("%Y %m %d")} #{name}".parameterize)
     end
-    
+
     def set_uuid
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
     end
@@ -410,6 +410,6 @@ module Droom
         value
       end
     end
-  
+
   end
 end

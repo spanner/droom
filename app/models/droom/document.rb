@@ -1,6 +1,4 @@
 module Droom
-  # require 'iconv'
-  require 'awesome_print'
   class Document < ActiveRecord::Base
     attr_accessible :name, :file, :description, :folder
 
@@ -42,7 +40,7 @@ module Droom
       fragment = "%#{fragment}%"
       where('droom_documents.name like ?', fragment)
     }
-    
+
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
 
     def attach_to(holder)

@@ -9,6 +9,8 @@ gemspec
 gem "jquery-rails"
 gem "haml"
 gem "geocoder"
+gem 'devise'
+gem 'devise-encryptable'
 gem "paperclip", '~> 3.1.0'
 gem "debugger"
 gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
@@ -53,5 +55,6 @@ group :test, :development do
   gem 'devise'
   gem 'devise-encryptable'
   gem 'sunspot-rails-tester'
+  gem 'acts_as_fu'
 end
 

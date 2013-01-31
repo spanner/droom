@@ -57,7 +57,6 @@ module Droom
     has_many :folders, :through => :personal_folders
 
     def add_personal_folders(folders=[])
-      p "<< adding folders #{folders.inspect}"
       self.folders << folders if folders
     end
     

@@ -16,6 +16,8 @@ Spork.prefork do
   require 'database_cleaner'
   require 'awesome_print'
   require 'sunspot-rails-tester'
+  require 'shoulda-matchers'
+  require 'acts_as_fu'
 
   ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
 
@@ -62,7 +64,8 @@ Spork.prefork do
     config.after(:each) do
       DatabaseCleaner.clean
     end
-
+    
+    config.include ActsAsFu
     # If true, the base class of anonymous controllers will be inferred
     # automatically. This will be the default behavior in future versions of
     # rspec-rails.

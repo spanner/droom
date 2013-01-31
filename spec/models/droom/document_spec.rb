@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require 'awesome_print'
+
 describe Droom::Document, :solr => true do
 
   context "Housekeeping:" do
@@ -57,6 +57,7 @@ describe Droom::Document, :solr => true do
       end
 
       it "should be visible to linked people" do
+        pending "change to rules on who can see what"
         Droom::Document.visible_to(@person).should include(@document)
       end
 

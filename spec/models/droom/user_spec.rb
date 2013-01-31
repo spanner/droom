@@ -11,7 +11,7 @@ describe Droom::User do
     @user.pref("email").should_not eq nil
   end
   it "should return the right default preference where it is expected" do
-    @user.pref('dropbox:everything').should eq false
+    @user.pref('dropbox:everything').should be_false
   end
   it "should create a Preference object when you set a preference with user.set_pref" do
     @user.preferences.count.should eq 0
@@ -22,6 +22,6 @@ describe Droom::User do
     @user.set_pref("email:digest", true)
     @user.preferences.count.should eq 1
     @user.reload
-    @user.pref("email:digest").should eq true
+    @user.pref("email:digest").should be_true
   end
 end

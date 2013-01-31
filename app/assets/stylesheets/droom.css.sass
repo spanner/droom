@@ -3,95 +3,11 @@ $datemark_margin: 5px
 $tool_button_height: 32px
 $tool_button_width: 32px
 
+@import compass/css3
 @import definitions
 @import lib/toolbar
 @import lib/kalendae
-@import compass/css3/transform
-
-=icon($url)
-  display: inline-block
-  text-indent: 34px
-  height: 32px
-  width: 32px
-  line-height: 32px
-  overflow: hidden
-  background:
-    color: transparent
-    position: 0 0
-    repeat: no-repeat
-    image: image-url($url)
-  &:hover
-    background-position: 0 -32px
-  
-=smallicon($url)
-  display: inline-block
-  text-indent: 50px
-  height: 16px
-  width: 16px
-  line-height: 16px
-  overflow: hidden
-  margin: 0 0 18px -8px
-  white-space: nowrap
-  background:
-    color: transparent
-    position: 0 0
-    repeat: no-repeat
-    image: image-url($url)
-  &:hover
-    background-position: 0 -16px
-  
-=icon_with_text($url)
-  display: inline-block
-  text-indent: 26px
-  margin-top: 0
-  line-height: 30px
-  min-height: 30px
-  background:
-    color: transparent
-    position: 0 0
-    repeat: no-repeat
-    image: image-url($url)
-  &:hover
-    background-position: 0 -48px
-
-=smallicon_with_text($url)
-  display: inline-block
-  text-indent: 18px
-  height: 16px
-  line-height: 16px
-  margin: 0 0 5px 0
-  white-space: nowrap
-  background:
-    color: transparent
-    position: 0 0
-    repeat: no-repeat
-    image: image-url($url)
-  &:hover
-    background-position: 0 -16px
-
-=hover
-  &:hover
-    color: $hover
-
-=blurred($color: $pale)
-  text-shadow: $color 0 0 3px
-  
-=text-hidden($indent: 500px)
-  overflow: hidden
-  text-indent: $indent
-
-=waitable
-  &.waiting
-    color: $pale
-    background-image: image-url('droom/spinner.gif')
-    background-position: 0 0
-  
-=outset
-  position: relative
-  float: left
-  width: $datemark_width
-  margin-left: - $datemark_width - $datemark_margin
-  margin-right: $datemark_margin
+@import fonts
 
 .outset
   +outset
@@ -145,17 +61,14 @@ a.cancel, a.cancel:visited
     line-height: 1
     text-align: center
   span.mon
-    +heading
     text-transform: uppercase
     font-size: 1em
   span.dom
-    +heading
     font-size: 2em
     letter-spacing: -0.1em
     margin-left: -4px
     margin-top: -2px
   span.year
-    +heading
     font-size: 1em
     margin-top: -2px
   &.editing
@@ -265,13 +178,12 @@ form.event
   a.datepicker
     color: $input
   input.name
-    +heading
     width: 470px
     font-size: 3em
   p.practicalities
     margin: 0 0.5em
   input.timepicker
-    +bold
+    font-weight: bold
     font-size: 1.2em
     width: 50px
   input.venuepicker
@@ -299,7 +211,6 @@ form.document
   p.name, p.description
     margin: 0
   input.name
-    +heading
     width: 480px
     font-size: 2em
   textarea
@@ -323,13 +234,12 @@ form.page
     height: 100px
     font-size: 1.1em
   label
-    +bold
+    font-weight: bold
   p.explanatory
     width: 50%
     color: $mid
 
 h2.name
-  +heading
   font-size: 3em
   margin: 0
   a
@@ -465,10 +375,9 @@ table.main
     &.minor
       max-width: 150px
   th:first-child
-    +heading
   td
     &.name
-      +bold
+      font-weight: bold
       
     &.minor
       span
@@ -512,21 +421,16 @@ table.people
     line-height: 32px
     white-space: nowrap
   th.name
-    +heading
     vertical-align: top
     width: 225px
     input.title
       width: 35px
-      +heading
     input.forename
       width: 80px
-      +heading
     input.name
       width: 160px
-      +heading
     input.forename
       width: 80px
-      +heading
       + input.surname
         width: 80px
     label
@@ -579,12 +483,10 @@ table.groups
   input[type="text"]
     font-size: 1em
   th.name
-    +heading
     vertical-align: top
     width: 200px
     input.name
       width: 190px
-      +heading
   td.description
     width: 250px
     input
@@ -651,7 +553,7 @@ p.twister
       a.delete
         display: inline-block
     &.group
-      +bold
+      font-weight: bold
       background-position: 0 0
     &.person
       background-position: 0 0
@@ -686,7 +588,7 @@ div.pag
       &:visited
         color: $dark
     &.current
-      +bold
+      font-weight: bold
       background-color: $mid
       color: white
       padding: 5px 10px
@@ -720,7 +622,7 @@ span.erratic
   .error_message
     color: $error
     display: block
-    +bold
+    font-weight: bold
     a.closer
       display: block
       float: left
@@ -962,13 +864,59 @@ li.more
     padding: 5px 0
     min-height: 22px
 
+input[type="text"], input[type="password"], input[type="email"], select, textarea
+  color: $input
+  padding: 5px
+  border: 1px solid $pale
+  &.strong
+    font-weight: bold
+  &.destination
+    color: $blue
+  &.empty
+    color: $pale
+  &[disabled]
+    color: $pale
+    background-color: #fff
+    border-color: $verypale
+
+input[type="submit"]
+  display: inline-block
+  background: 
+    color: $submit 
+    image: image-url('droom/small_go.png') 
+    repeat: no-repeat 
+    position: 8px 14px
+  padding: 5px 12px 5px 24px
+  text-align: left
+  color: white
+  height: 39px
+  border: none
+  font-size: 1em
+  line-height: 2
+  +border-radius(3px)
+  &:hover
+    background-color: $hover
+  &.unavailable
+    background-color: $mid
+    +opacity(0.5)
+    &:hover
+      background-color: $mid
+  &.waiting
+    background:
+      color: $pale
+      image: image-url('droom/smallspinner.gif')
+      position: 5px 11px
+    &:hover
+      background-color: $pale
+
+
 #account
   position: relative
   margin: 5px
   clear: both
   width: 600px
   label
-    +bold
+    font-weight: bold
     color: $dark
     font-size: 1.1em
     &.minor
@@ -1097,7 +1045,7 @@ div.timepicker
     &.selected
       background: $rubine
       color: #fff
-      +bold
+      font-weight: bold
     &:hover
       background: $verypale
     &:active
@@ -1140,7 +1088,6 @@ table.minimonth
     font-weight: lighter
     text-decoration: none
   th
-    +heading
   th, td
     font-weight: normal
     border:
@@ -1234,7 +1181,6 @@ ul.setup
     width: 0
   .status
     float: left
-    +heading
     color: $mid
     
 .window
@@ -1300,7 +1246,7 @@ ul.tags
     a.folder
       +icon_with_text("droom/folder.png")
       color: $text
-      +bold
+      font-weight: bold
       +hover
     &.open
       a.folder
@@ -1313,7 +1259,37 @@ input.search_box
   padding: 10px
   
 
-      
+#flashes
+  position: absolute
+  top: 20px
+  right: 50px
+  width: 300px
+  p
+    display: none
+    padding: 10px
+    color: white
+    +shadowed
+    +bordered
+    &.notice
+      background-color: $green
+      border-color: darken($green, 10%)
+    &.alert
+      background-color: $rubine
+      border-color: darken($rubine, 10%)
+    a.closer
+      display: block
+      float: right
+      width: 16px
+      height: 16px
+      margin-left: 10px
+      margin-right: -5px
+      +text-hidden
+      background: 
+        image: image-url('crosses.png')
+        color: transparent
+        position: 0 -96px
+        repeat: no-repeat
+
   
 
 

@@ -22,7 +22,6 @@
     white-space: nowrap
     position: relative
     height: 32px
-    +heading
     font-size: 18px
     line-height: 32px
   .k-btn-previous-month, .k-btn-next-month
@@ -78,7 +77,6 @@
     width: 22px
     padding: 5px 5px 5px 3px
   .k-header span
-    +heading
     text-align: center
     color: $pale
   .k-days span
@@ -87,7 +85,7 @@
     line-height: 1em
     color: #999
   .k-today
-    +bold
+    font-weight: bold
   .k-days span
     &.k-active
       background-color: #fff
@@ -97,7 +95,7 @@
         background: $verypale
     &.k-selected
       background-color: $rubine
-      +bold
+      font-weight: bold
       color: white
     &.k-range
       background: none

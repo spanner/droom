@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130129113346) do
+ActiveRecord::Schema.define(:version => 20130130120631) do
 
   create_table "droom_agenda_categories", :force => true do |t|
     t.integer  "event_id"
@@ -91,14 +91,14 @@ ActiveRecord::Schema.define(:version => 20130129113346) do
     t.string   "slug"
     t.string   "holder_type"
     t.string   "holder_id"
-    t.string   "ancestry"
+    t.integer  "parent_id"
     t.boolean  "public",        :default => false
     t.integer  "created_by_id"
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
   end
 
-  add_index "droom_folders", ["ancestry"], :name => "index_droom_folders_on_ancestry"
+  add_index "droom_folders", ["parent_id"], :name => "index_droom_folders_on_ancestry"
 
   create_table "droom_group_invitations", :force => true do |t|
     t.integer "group_id"
