@@ -12,10 +12,10 @@ module Droom
 
     has_many :memberships, :dependent => :destroy
     has_many :people, :through => :memberships, :uniq => true
-  
-    has_many :document_attachments, :as => :attachee, :dependent => :destroy
-    has_many :documents, :through => :document_attachments
-  
+
+    # has_many :document_attachments, :as => :attachee, :dependent => :destroy
+    # has_many :documents, :through => :document_attachments
+
     before_save :ensure_slug
 
     searchable do
@@ -39,7 +39,6 @@ module Droom
         .joins("INNER JOIN droom_document_attachments ON droom_groups.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Group'")
         .group("droom_groups.id")
 
-  
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_groups.name like ?', fragment)
@@ -50,19 +49,19 @@ module Droom
     def admit(person)
       self.people << person
     end
-    
+
     def attach(doc)
-      self.documents << doc
+      # self.documents << doc
     end
 
     def membership_for(person)
       self.memberships.for(person).first
     end
-    
+
     def invite_to(event)
       group_invitations.find_or_create_by_event_id(event.id)
     end
-    
+
     def uninvite_from(event)
       group_invitation = group_invitations.find_by_event_id(event.id)
       group_invitation.invitations.to_event(event).each do |invitation|
@@ -70,7 +69,7 @@ module Droom
       end
       group_invitation.destroy!
     end
-    
+
     def as_suggestion
       {
         :type => 'group',
@@ -79,13 +78,13 @@ module Droom
         :id => id
       }
     end
-    
+
   protected
-  
+
     def index
       Sunspot.index!(self)
     end
-  
+
     def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, name.parameterize)
     end

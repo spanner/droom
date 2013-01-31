@@ -14,9 +14,9 @@ module Droom
     }
 
     def current?
-      expires && expires > Time.now
+      expires and expires > Time.now
     end
-  
+
     def set_expiry(date)
       unless expires and expires > date
         self.expires = date
@@ -28,6 +28,10 @@ module Droom
 
     def link_folder
       person.add_personal_folders(group.folder)
+    end
+
+    def unlink_folder
+      person.remove_personal_folders(group.folder)
     end
 
     def unlink_folder

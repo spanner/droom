@@ -8,7 +8,7 @@
 # 
 module Droom
   module Folders
-  
+
     def self.included(base)
       base.extend FolderClassMethods
     end
@@ -17,7 +17,7 @@ module Droom
       def has_folder?
         false
       end
-      
+
       # In most cases all you need is a `has_folder` line in the model class definition.
       #
       #   class Thing < ActiveRecord::Base
@@ -40,7 +40,6 @@ module Droom
       #
       def has_folder( options={} )
         return if has_folder?
-
         has_one :folder, :as => :holder, :class_name => "Droom::Folder"
         has_many :documents, :through => :folder, :class_name => "Droom::Document"
         # The :within option is stored as a class variable that will be consulted when the folder is created.
@@ -56,12 +55,12 @@ module Droom
 
     module FolderedClassMethods
       # The has_folder? method is used to prevent multiple calls to has_folder, but might possibly be useful elsewhere.
-      
+
       def has_folder?
         true
       end
     end
-  
+
     module FolderedInstanceMethods
       #
       # Folders are lazy-created. That is, when we need it, we make it. This is achieved by chaining the `:folder` 
@@ -71,7 +70,7 @@ module Droom
       def folder_with_lazy_load
         folder_without_lazy_load || self.create_folder(:parent => get_parent_folder)
       end
-      
+
       #
       # Here we refer to the class variable defined during `has_folder` configuration. If it exists, we will put our folder 
       # inside that of the named associate. The containing folder might be created as a side effect.
@@ -83,19 +82,19 @@ module Droom
           end
         end
       end
-      
+
       # Create a new document in our folder, with the supplied properties.
       #
       def add_document(attributes)
-        documents.create(attributes)
+        folder.documents.create(attributes)
       end
-      
+
       # Move an existing document into our folder.
       #
       def receive_document(doc)
-        documents << doc
+        folder.documents << doc
       end
-      
+
     end
   end
 

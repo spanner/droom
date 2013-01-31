@@ -5,10 +5,10 @@ module Droom
     attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user, :position, :post_line1, :post_line2, :post_city, :post_region, :post_code, :mobile, :dob
     attr_accessor :invite_on_creation, :admin_user
     acts_as_list
-    
+
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
     validates :name, :presence => true
-    
+
     ### Group memberships
     #
     has_many :memberships, :dependent => :destroy
@@ -57,7 +57,6 @@ module Droom
     has_many :folders, :through => :personal_folders
 
     def add_personal_folders(folders=[])
-      p "<< adding folders #{folders.inspect}"
       self.folders << folders if folders
     end
     

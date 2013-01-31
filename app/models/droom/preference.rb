@@ -23,7 +23,7 @@ module Droom
       end
     end
     
-    def boolean
+    def boolean?
       key.last == "?"
     end
   end

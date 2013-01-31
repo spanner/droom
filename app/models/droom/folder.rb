@@ -8,10 +8,11 @@ module Droom
     belongs_to :holder, :polymorphic => true
     has_many :documents
     has_many :personal_folders
-    has_ancestry
-    
-    validates :slug, :presence => true, :uniqueness_among_siblings => true
-    
+    has_many :folders
+    belongs_to :parent, :class_name => "Droom::Folder"
+
+    validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
+
     before_validation :set_slug
     before_save :set_properties
 
@@ -25,16 +26,16 @@ module Droom
         all_public
       end
     }
-    
+
     scope :populated, select('droom_folders.*')
       .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id')
       .having('count(dd.id) > 0')
       .group('droom_folders.id')
-    
-    scope :latest, lambda {|limit|  
+
+    scope :latest, lambda {|limit|
       order("updated_at DESC, created_at DESC").limit(limit)
-    } 
-    
+    }
+
     # These are going to be Droom.* configurable
     scope :all_private, where("secret = 1")
     scope :not_private, where("secret <> 1")
@@ -48,11 +49,11 @@ module Droom
     def descent
       path.join('/')
     end
-    
+
     def empty?
       documents.empty?
     end
-    
+
     def documents_zipped
       if self.documents.any?
         tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")
@@ -64,15 +65,15 @@ module Droom
         tempfile
       end
     end
-    
+
     def populated?
       children.any? || documents.any?
     end
-    
+
     def empty?
       !populated?
     end
-    
+
     def copy_to_dropbox
       Rails.logger.warn ">>> copy folder #{@folder.inspect} to dropbox"
     end
@@ -80,18 +81,18 @@ module Droom
     def copy_to_dav
       Rails.logger.warn ">>> copy folder #{@folder.inspect} to DAV"
     end
-    
+
   protected
-  
+
     def set_slug
       self.slug = holder.slug if holder
       true
     end
-    
+
     def set_properties
       self.public = !holder && (!parent || parent.public?)
       true
     end
-    
+
   end
 end

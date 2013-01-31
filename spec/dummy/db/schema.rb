@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130128142905) do
+ActiveRecord::Schema.define(:version => 20130130120631) do
 
   create_table "droom_agenda_categories", :force => true do |t|
     t.integer  "event_id"
@@ -29,28 +29,6 @@ ActiveRecord::Schema.define(:version => 20130128142905) do
     t.datetime "updated_at",    :null => false
     t.string   "slug"
   end
-
-  create_table "droom_document_attachments", :force => true do |t|
-    t.integer  "document_id"
-    t.string   "attachee_type"
-    t.integer  "attachee_id"
-    t.integer  "created_by_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-    t.integer  "category_id"
-  end
-
-  add_index "droom_document_attachments", ["attachee_type", "attachee_id"], :name => "attachee"
-
-  create_table "droom_document_links", :force => true do |t|
-    t.integer  "person_id"
-    t.integer  "document_attachment_id"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
-  end
-
-  add_index "droom_document_links", ["document_attachment_id"], :name => "index_droom_document_links_on_document_attachment_id"
-  add_index "droom_document_links", ["person_id"], :name => "index_droom_document_links_on_person_id"
 
   create_table "droom_documents", :force => true do |t|
     t.string   "name"
@@ -113,13 +91,14 @@ ActiveRecord::Schema.define(:version => 20130128142905) do
     t.string   "slug"
     t.string   "holder_type"
     t.string   "holder_id"
-    t.string   "ancestry"
+    t.integer  "parent_id"
+    t.boolean  "public",        :default => false
     t.integer  "created_by_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
-  add_index "droom_folders", ["ancestry"], :name => "index_droom_folders_on_ancestry"
+  add_index "droom_folders", ["parent_id"], :name => "index_droom_folders_on_ancestry"
 
   create_table "droom_group_invitations", :force => true do |t|
     t.integer "group_id"

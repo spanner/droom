@@ -28,7 +28,9 @@ gem 'dropbox-sdk'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'yomu'
-gem 'osgb', :path => "/var/www/gems/osgb"
+gem 'osgb', :git => 'git://github.com/spanner/osgb.git'#:path => "/var/www/gems/osgb"#
+gem 'devise'
+gem 'devise-encryptable'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -43,12 +45,16 @@ group :test, :development do
   gem 'haml'
   gem 'paperclip', "~> 3.1.0"
   gem "capybara"
-  gem "rspec-rails", "~> 2.0"
+  gem "rspec-rails", ">= 2.6.0"
   gem 'watchr'
   gem 'spork'
   gem 'factory_girl_rails'
   gem "database_cleaner"
   gem 'shoulda-matchers'
   gem 'awesome_print'
+  gem 'devise'
+  gem 'devise-encryptable'
+  gem 'sunspot-rails-tester'
+  gem 'acts_as_fu'
 end
 

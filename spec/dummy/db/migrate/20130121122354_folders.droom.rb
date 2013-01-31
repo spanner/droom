@@ -6,6 +6,7 @@ class Folders < ActiveRecord::Migration
       t.string :holder_type
       t.string :holder_id
       t.string :ancestry
+      t.boolean :public, :default => 0
       t.integer :created_by_id
       t.timestamps
     end
