@@ -29,6 +29,7 @@ module Droom
                  :use_separate_mobile_number,
                  :use_titles,
                  :enable_mailing_lists,
+                 :mailman_table_name,
                  :mailing_lists_active_by_default,
                  :mailing_lists_digest_by_default,
                  :show_venue_map,
@@ -110,6 +111,10 @@ module Droom
 
     def enable_mailing_lists?
       !!@@enable_mailing_lists
+    end
+
+    def mailman_table_name
+      @@mailman_table_name ||= 'mailman_mysql'
     end
 
     def mailing_lists_active_by_default?
