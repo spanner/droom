@@ -13,10 +13,6 @@ module Droom
     has_many :memberships, :dependent => :destroy
     has_many :people, :through => :memberships, :uniq => true
 
-    if Droom.enable_mailing_lists?
-      has_many :mailing_list_memberships, :primary_key => :mailing_list_name, :foreign_key => :listname, :dependent => :destroy
-    end
-    
     before_validation :ensure_slug
     before_validation :ensure_mailing_list_name
 

@@ -29,6 +29,15 @@
 # doesn't care. You probably also want to create a unique index on address/listname so that mailman
 # gets the benefit and sees the expected behaviour.
 #
+# ### A membership_id column
+#
+# We could (and used to) twist Activerecord out of shape by defining associations with address and 
+# listname primary keys to link mailing list memberships to people and groups, but again it's much
+# easier just to hang the mailing list membership off the group membership and have it created and
+# destroyed at the same time.
+#
+# Again, you probably want an index on that column. We're not going to try and migrate that for you.
+
 module Droom
   class MailingListMembership < ActiveRecord::Base
     attr_accessible :address, :listname, :digest, :not_metoo, :nomail, :plain, :ack
@@ -52,13 +61,14 @@ module Droom
     # configured to use mailing lists at all. The activity status of the created mlm depends on the
     # `Droom.mailing_lists_active_by_default` setting.
     #
-    belongs_to :person, :primary_key => :email, :foreign_key => :address
-    belongs_to :group, :primary_key => :mailing_list_name, :foreign_key => :listname
+    belongs_to :membership
     before_create :set_defaults
+    
+    validates :address, :uniqueness => {:scope => :listname}
   
     ## Translation
     #
-    # Mailman's boolean columns are held as Y/N so we override the usual accessors to translate.
+    # Mailman's boolean columns are held as Y/N so we intervene to translate.
     #
     [:digest, :not_metoo, :nomail, :plain, :ack].each do |col|
       define_method(col) do
@@ -81,12 +91,13 @@ module Droom
       self.bi_lastnotice = 0
       self.bi_date = 0
       self.ack = true
-      self.digest = Droom.mailing_lists_digest_by_default?
       self.nomail = !Droom.mailing_lists_active_by_default?
+      self.digest = Droom.mailing_lists_digest_by_default?
+      true
     end
 
     def to_yesno(value)
-      (value && value.to_i != 0) ? 'Y' : 'N'
+      (value && value != 0 && value != "0") ? 'Y' : 'N'
     end
   
   end
