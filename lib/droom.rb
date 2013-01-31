@@ -23,6 +23,7 @@ module Droom
                  :email_return_path,
                  :main_dashboard_modules,
                  :margin_dashboard_modules,
+                 :panels,
                  :dav_root,
                  :dav_subdomain,
                  :use_forenames,
@@ -85,6 +86,10 @@ module Droom
 
     def margin_dashboard_modules
       @@margin_dashboard_modules ||= []
+    end
+    
+    def panels
+      @@panels ||= %w{search dropbox rss email readers device networks preferences"}
     end
 
     # base path of DAV directory tree, relative to rails root.

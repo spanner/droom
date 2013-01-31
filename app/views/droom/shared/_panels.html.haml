@@ -1,9 +1,3 @@
 #panels
-  = render :partial => "droom/panels/search"
-  = render :partial => "droom/panels/dropbox"
-  = render :partial => "droom/panels/rss"
-  = render :partial => "droom/panels/email"
-  = render :partial => "droom/panels/readers"
-  = render :partial => "droom/panels/device"
-  = render :partial => "droom/panels/networks"
-  = render :partial => "droom/panels/preferences"
+  - Droom.panels.each do |panel|
+    = render :partial => "droom/panels/#{panel}"
