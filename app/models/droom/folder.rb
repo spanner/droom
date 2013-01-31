@@ -9,7 +9,7 @@ module Droom
     has_many :documents
     has_many :personal_folders
     has_many :folders
-    belongs_to :parent, :class_name => "Droom::Folder"
+    acts_as_tree
 
     validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
 

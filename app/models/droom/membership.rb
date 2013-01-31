@@ -29,6 +29,12 @@ module Droom
         save!
       end
     end
+    
+    # This is sometimes useful if a configuration change means we're looking at a different mailman table.
+    #
+    def self.repair_mailing_list_memberships
+      self.all.each { |m| m.send :make_mailing_list_membership }
+    end
 
   protected
 
@@ -45,9 +51,7 @@ module Droom
     end
     
     def make_mailing_list_membership
-      if Droom.enable_mailing_lists?
-        self.mailing_list_membership = Droom::MailingListMembership.find_or_create_by_address_and_listname(person.email, group.mailing_list_name)
-      end
+      self.mailing_list_membership = Droom::MailingListMembership.find_or_create_by_address_and_listname(person.email, group.mailing_list_name)
     end
 
   end

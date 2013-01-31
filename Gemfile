@@ -23,7 +23,7 @@ gem "chronic"
 gem "dynamic_form"
 gem 'acts_as_list'
 gem 'rdiscount'
-gem 'ancestry'
+gem 'acts_as_tree'
 gem 'dropbox-sdk'
 gem 'sunspot_rails'
 gem 'sunspot_solr'

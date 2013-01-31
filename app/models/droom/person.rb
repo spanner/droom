@@ -13,7 +13,7 @@ module Droom
     #
     has_many :memberships, :dependent => :destroy
     has_many :groups, :through => :memberships
-    has_many :mailing_list_memberships, :through => :memberships if Droom.enable_mailing_lists?
+    has_many :mailing_list_memberships, :through => :memberships
     
     has_many :preferences, :dependent => :destroy
     accepts_nested_attributes_for :preferences
