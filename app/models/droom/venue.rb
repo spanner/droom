@@ -2,7 +2,7 @@ require 'snail'
 
 module Droom
   class Venue < ActiveRecord::Base
-    attr_accessible :name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code
+    attr_accessible :name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code, :old_id
     
     belongs_to :created_by, :class_name => "Droom::User"
     has_many :events, :dependent => :nullify
@@ -10,6 +10,7 @@ module Droom
     default_scope :order => 'name asc'
 
     geocoded_by :full_address, :latitude  => :lat, :longitude => :lng
+    # before_validation :convert_gridref
     before_validation :geocode
     # reverse_geocoded_by :lat, :lng
 
@@ -116,7 +117,14 @@ module Droom
     def index
       Sunspot.index!(self)
     end
-
+    
+    def convert_gridref
+      if post_code_changed?
+        if post_code.is_gridref?
+          self.lat, self.lng = post_code.to_latlng
+        end
+      end
+    end
 
   end
 end

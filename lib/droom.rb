@@ -26,6 +26,8 @@ module Droom
                  :dav_root,
                  :dav_subdomain,
                  :use_forenames,
+                 :use_separate_mobile_number,
+                 :use_titles,
                  :show_venue_map,
                  :default_document_private,
                  :default_event_private,
@@ -93,6 +95,14 @@ module Droom
 
     def use_forenamnes
       !!@@use_forenames
+    end
+
+    def use_titles
+      !!@@use_titles
+    end
+
+    def use_separate_mobile_number
+      !!@@use_separate_mobile_number
     end
 
     def show_venue_map
