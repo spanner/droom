@@ -1,14 +1,12 @@
 #main.people
-  - if current_user.admin?
-    .holder
-      %p.admin
-        = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
-        = link_to t(:manage_groups), droom.groups_url, :class => "edit"
   %p
     = link_to t(:download_vcards), directory_url(:format => :vcf), :class => 'vcard download'
-
+    - if current_user.admin?
+      %span.admin
+        = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
+        = link_to t(:manage_groups), droom.groups_url, :class => "edit"
+    
   = render :partial => "people"
-
 
 
 - content_for :filter do

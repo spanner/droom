@@ -28,6 +28,7 @@ en:
           post_region: "Region"
           post_country: "Country"
           post_code: "Postcode"
+          dob: "Date of birth"
   admin: "Admin"
   attachments: "Attachments"
   attending: "Attending"
