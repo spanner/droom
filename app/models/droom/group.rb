@@ -13,10 +13,15 @@ module Droom
     has_many :memberships, :dependent => :destroy
     has_many :people, :through => :memberships, :uniq => true
 
-    # has_many :document_attachments, :as => :attachee, :dependent => :destroy
-    # has_many :documents, :through => :document_attachments
+    if Droom.enable_mailing_lists?
+      has_many :mailing_list_memberships, :primary_key => :mailing_list_name, :foreign_key => :listname, :dependent => :destroy
+    end
+    
+    before_validation :ensure_slug
+    before_validation :ensure_mailing_list_name
 
-    before_save :ensure_slug
+    validates :slug, :uniqueness => true, :presence => true
+    validates :mailing_list_name, :uniqueness => true, :presence => true
 
     searchable do
       text :name, :boost => 10
@@ -33,11 +38,6 @@ module Droom
         where("1=0")
       end
     }
-
-    scope :with_documents, 
-      select("droom_groups.*")
-        .joins("INNER JOIN droom_document_attachments ON droom_groups.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Group'")
-        .group("droom_groups.id")
 
     scope :name_matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
@@ -87,6 +87,10 @@ module Droom
 
     def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, name.parameterize)
+    end
+
+    def ensure_mailing_list_name
+      ensure_presence_and_uniqueness_of(:mailing_list_name, slug)
     end
   end
 end

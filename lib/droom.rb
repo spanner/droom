@@ -28,6 +28,9 @@ module Droom
                  :use_forenames,
                  :use_separate_mobile_number,
                  :use_titles,
+                 :enable_mailing_lists,
+                 :mailing_lists_active_by_default,
+                 :mailing_lists_digest_by_default,
                  :show_venue_map,
                  :default_document_private,
                  :default_event_private,
@@ -52,7 +55,7 @@ module Droom
     end
 
     def email_from
-      @@email_from ||= "please-change-email-from-in-droom-initializer@example.com"
+      @@email_from ||= "please-change-email_from-in-droom-initializer@example.com"
     end
 
     def email_return_path
@@ -93,19 +96,31 @@ module Droom
       @@dav_subdomain ||= /dav/
     end
 
-    def use_forenamnes
+    def use_forenames?
       !!@@use_forenames
     end
 
-    def use_titles
+    def use_titles?
       !!@@use_titles
     end
 
-    def use_separate_mobile_number
+    def use_separate_mobile_number?
       !!@@use_separate_mobile_number
     end
 
-    def show_venue_map
+    def enable_mailing_lists?
+      !!@@enable_mailing_lists
+    end
+
+    def mailing_lists_active_by_default?
+      !!@@mailing_lists_active_by_default
+    end
+
+    def mailing_lists_digest_by_default?
+      !!@@mailing_lists_digest_by_default
+    end
+
+    def show_venue_map?
       !!@@show_venue_map
     end
 
