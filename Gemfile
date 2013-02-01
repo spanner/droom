@@ -58,5 +58,6 @@ group :test, :development do
   gem 'sunspot-rails-tester'
   gem 'acts_as_fu'
   gem 'cucumber-rails'
+  gem "sunspot_test"
 end
 

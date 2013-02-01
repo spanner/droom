@@ -1,9 +1,9 @@
 Feature: Sign up
-As an applicant
-I want to signup
+As an invited user
+I want to activate my account
 So that I can login
 
   Scenario: user sign up
-    Given I am on the home page
-    When I sign up
+    Given an invited user
+    When I follow the invitation email link
     Then 

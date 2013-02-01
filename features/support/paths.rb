@@ -9,6 +9,10 @@ module NavigationHelpers
       new_user_session_path
     when /^the (?:logout|sign out) page$/
       destroy_user_session_path
+    when /^the preferences page$/
+      edit_user_path(@user)
+    when /^the welcome page$/
+      welcome_user_url(@user, :auth_token => @user.authentication_token)
     else
       dashboard_path
     end

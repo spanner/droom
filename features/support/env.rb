@@ -10,6 +10,7 @@ require 'cucumber/rails'
 require 'capybara/rails'
 require 'factory_girl_rails'
 require 'awesome_print'
+require 'sunspot_test/cucumber'
 ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
 Dir[File.join(ENGINE_RAILS_ROOT, "spec/factories/*.rb")].each {|f| require f }
 

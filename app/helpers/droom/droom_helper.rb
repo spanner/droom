@@ -2,7 +2,11 @@ require 'dropbox_sdk'
 
 module Droom
   module DroomHelper
-    
+
+    def admin?
+      current_user and current_user.admin?
+    end
+
     def dropbox?
       !!current_user.dropbox_access_token
     end
