@@ -77,9 +77,8 @@ module Droom
         establish_connection :"mailman_#{Rails.env}"
         set_table_name Droom.mailman_table_name
       end
-    rescue ActiveRecord::AdapterNotFound
-      # is this required?
-      establish_connection Rails.env
+    rescue ActiveRecord::AdapterNotSpecified
+      Rails.logger.warn "Droom: No mailman connection configured. Using #{Rails.env} database."
     end
 
     ## Associations
