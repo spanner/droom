@@ -1,34 +1,22 @@
-Given /^a user$/ do
-  @user ||= FactoryGirl.create(
-    :user,
-    :name => "Mike",
-    :email => "mike@spanner.org",
-    :password => "password",
-    :password_confirmation => "password"
-  )
-  @user.reload
-end
-
-Given /^an invited user$/ do
+Given /^I am an invited user$/ do
   step "a person"
-  ap @person
-  ap @person.user
   @user = @person.user
 end
 
 When /^I follow the invitation email link$/ do
-  step "I visit the welcome page"
-  save_and_open_page
+  visit @invitation_link
 end
 
-Given /^an active user$/ do
-  step "a user"
+Given /^I am an active user$/ do
+  step "I am an invited user"
   @user.activate!
+  @user.password = "password"
+  @user.save!
 end
 
-Given /^a (?:signed|logged) in user$/ do
-  step "an active user"
-  login
+Given /^I am a (?:signed|logged) in user$/ do
+  step "I am an active user"
+  step "I log in"
 end
 
 When /^I (?:sign|log) in$/ do
@@ -39,7 +27,7 @@ When /^I (?:sign|log) in$/ do
 end
 
 Then /^I should be (?:signed|logged) in$/ do
-  assert page.has_content?('Signed in As')
+  assert page.has_content?('Signed In As')
 end
 
 Given /^I (?:am on|go to|visit) (.*)$/ do |page_name|
@@ -48,16 +36,20 @@ end
 
 When /^I change my email$/ do
   step "I go to the preferences page"
-  save_and_open_page
-  pending
+  fill_in "user_email", :with => "not_mike@spanner.org"
+  click_button "Save changes"
 end
 
-Then /^my email should have changed$/ do
-  pending
-  # original different to current
+Then /^my (.*) should have changed$/ do |field|
+  step "my changes should have been saved"
 end
 
-When /^I sign up$/ do
-  step "I visit the sign up page"
-  pending
+When /^I fill in the welcome form$/ do
+  fill_in "user_password", :with => "password"
+  fill_in "user_password_confirmation", :with => "password"
+  click_button "Continue"
+end
+
+Then /^my changes should have been saved$/ do
+  assert page.has_content?('Thank you. Your preferences have been updated')
 end

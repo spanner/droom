@@ -3,16 +3,14 @@ module NavigationHelpers
     case page_name
     when /^the (?:home page|dashboard)$/
       dashboard_path
-    when /^the sign up page$/
-      pending ###
+    when /^the preferences page$/
+      edit_user_path(@user)
     when /^the (?:login|sign in|log in) page$/
       new_user_session_path
     when /^the (?:logout|sign out) page$/
       destroy_user_session_path
     when /^the preferences page$/
       edit_user_path(@user)
-    when /^the welcome page$/
-      welcome_user_url(@user, :auth_token => @user.authentication_token)
     else
       dashboard_path
     end

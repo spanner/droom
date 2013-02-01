@@ -5,7 +5,7 @@
 # This whole mechanism and its configuration requirements can safely be ignored unless you want to 
 # use it, in which case you should set `Droom.enable_mailing_lists` to true in an initializer and read on.
 #
-# If yuo don't set `enable_mailing_lists` then some database activity will still go on, but with no
+# If you don't set `enable_mailing_lists` then some database activity will still go on, but with no
 # consequence, and the mailing list interface controls will not appear.
 #
 ## Requirements
@@ -89,9 +89,9 @@ module Droom
     #
     belongs_to :membership
     before_create :set_defaults
-    
+
     validates :address, :uniqueness => {:scope => :listname}
-  
+
     ## Translation
     #
     # Mailman's boolean columns are held as Y/N so we intervene to translate.

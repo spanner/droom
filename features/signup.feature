@@ -4,6 +4,7 @@ I want to activate my account
 So that I can login
 
   Scenario: user sign up
-    Given an invited user
+    Given I am an invited user
     When I follow the invitation email link
-    Then 
+    And I fill in the welcome form
+    Then I should be logged in

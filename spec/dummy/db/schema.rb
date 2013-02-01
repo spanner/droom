@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130130120631) do
+ActiveRecord::Schema.define(:version => 20130201103738) do
 
   create_table "droom_agenda_categories", :force => true do |t|
     t.integer  "event_id"
@@ -111,9 +111,10 @@ ActiveRecord::Schema.define(:version => 20130130120631) do
     t.string   "slug"
     t.integer  "leader_id"
     t.integer  "created_by_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.text     "description"
+    t.string   "mailing_list_name"
   end
 
   create_table "droom_invitations", :force => true do |t|
@@ -127,6 +128,34 @@ ActiveRecord::Schema.define(:version => 20130130120631) do
 
   add_index "droom_invitations", ["event_id"], :name => "index_droom_invitations_on_event_id"
   add_index "droom_invitations", ["person_id"], :name => "index_droom_invitations_on_person_id"
+
+  create_table "droom_mailing_list_memberships", :force => true do |t|
+    t.integer  "membership_id"
+    t.string   "address"
+    t.string   "listname"
+    t.string   "hide"
+    t.string   "nomail"
+    t.string   "ack"
+    t.string   "not_metoo"
+    t.string   "digest"
+    t.string   "plain"
+    t.string   "one_last_digest"
+    t.string   "password"
+    t.string   "lang"
+    t.string   "name"
+    t.integer  "user_options"
+    t.integer  "delivery_status"
+    t.string   "topics_userinterest"
+    t.datetime "delivery_status_timestamp"
+    t.string   "bi_cookie"
+    t.string   "bi_score"
+    t.string   "bi_noticesleft"
+    t.date     "bi_lastnotice"
+    t.date     "bi_date"
+  end
+
+  add_index "droom_mailing_list_memberships", ["address", "listname"], :name => "index_droom_mailing_list_memberships_on_address_and_listname"
+  add_index "droom_mailing_list_memberships", ["membership_id"], :name => "index_droom_mailing_list_memberships_on_membership_id"
 
   create_table "droom_memberships", :force => true do |t|
     t.integer  "person_id"
@@ -175,6 +204,9 @@ ActiveRecord::Schema.define(:version => 20130130120631) do
     t.integer  "position",           :default => 1
     t.boolean  "public",             :default => false
     t.boolean  "shy",                :default => false
+    t.string   "mobile"
+    t.datetime "dob"
+    t.boolean  "female"
   end
 
   add_index "droom_people", ["email"], :name => "index_droom_people_on_email"
