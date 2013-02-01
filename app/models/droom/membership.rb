@@ -6,8 +6,14 @@ module Droom
     belongs_to :group
     belongs_to :created_by, :class_name => "User"
 
+    has_one :mailing_list_membership, :dependent => :destroy
+
     after_create :link_folder
+    after_create :make_mailing_list_membership
     after_destroy :unlink_folder
+    
+    validates :person, :presence => true
+    validates :group, :presence => true
 
     scope :of_group, lambda { |group|
       where(["group_id = ?", group.id])
@@ -23,23 +29,29 @@ module Droom
         save!
       end
     end
+    
+    # This is sometimes useful if a configuration change means we're looking at a different mailman table.
+    #
+    def self.repair_mailing_list_memberships
+      self.all.each { |m| m.send :make_mailing_list_membership }
+    end
 
   protected
-
-    def link_documents
-      person.document_attachments << group.document_attachments
-    end
 
     def link_folder
       person.add_personal_folders(group.folder)
     end
 
-    def unlink_documents
-      person.document_attachments -= group.document_attachments
+    def unlink_folder
+      person.remove_personal_folders(group.folder)
     end
 
     def unlink_folder
       person.remove_personal_folders(group.folder)
+    end
+    
+    def make_mailing_list_membership
+      self.mailing_list_membership = Droom::MailingListMembership.find_or_create_by_address_and_listname(person.email, group.mailing_list_name)
     end
 
   end

@@ -13,6 +13,10 @@ module Droom
     #
     has_many :memberships, :dependent => :destroy
     has_many :groups, :through => :memberships
+    has_many :mailing_list_memberships, :through => :memberships
+    
+    has_many :preferences, :dependent => :destroy
+    accepts_nested_attributes_for :preferences
 
     def admit_to(group)
       memberships.find_or_create_by_group_id(group.id) if group

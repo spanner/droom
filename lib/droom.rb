@@ -23,11 +23,16 @@ module Droom
                  :email_return_path,
                  :main_dashboard_modules,
                  :margin_dashboard_modules,
+                 :panels,
                  :dav_root,
                  :dav_subdomain,
                  :use_forenames,
                  :use_separate_mobile_number,
                  :use_titles,
+                 :enable_mailing_lists,
+                 :mailman_table_name,
+                 :mailing_lists_active_by_default,
+                 :mailing_lists_digest_by_default,
                  :show_venue_map,
                  :default_document_private,
                  :default_event_private,
@@ -52,7 +57,7 @@ module Droom
     end
 
     def email_from
-      @@email_from ||= "please-change-email-from-in-droom-initializer@example.com"
+      @@email_from ||= "please-change-email_from-in-droom-initializer@example.com"
     end
 
     def email_return_path
@@ -82,6 +87,10 @@ module Droom
     def margin_dashboard_modules
       @@margin_dashboard_modules ||= []
     end
+    
+    def panels
+      @@panels ||= %w{search dropbox rss email readers device networks preferences"}
+    end
 
     # base path of DAV directory tree, relative to rails root.
     def dav_root
@@ -93,19 +102,35 @@ module Droom
       @@dav_subdomain ||= /dav/
     end
 
-    def use_forenamnes
+    def use_forenames?
       !!@@use_forenames
     end
 
-    def use_titles
+    def use_titles?
       !!@@use_titles
     end
 
-    def use_separate_mobile_number
+    def use_separate_mobile_number?
       !!@@use_separate_mobile_number
     end
 
-    def show_venue_map
+    def enable_mailing_lists?
+      !!@@enable_mailing_lists
+    end
+
+    def mailman_table_name
+      @@mailman_table_name ||= 'mailman_mysql'
+    end
+
+    def mailing_lists_active_by_default?
+      !!@@mailing_lists_active_by_default
+    end
+
+    def mailing_lists_digest_by_default?
+      !!@@mailing_lists_digest_by_default
+    end
+
+    def show_venue_map?
       !!@@show_venue_map
     end
 

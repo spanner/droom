@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 3.2.11"
   s.add_dependency "jquery-rails"
   s.add_dependency 'paperclip'
+  s.add_dependency 'acts_as_tree'
   s.add_dependency 'enumerize'
   s.add_dependency 'geocoder'
   s.add_dependency 'chronic'

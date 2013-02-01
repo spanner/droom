@@ -6,7 +6,7 @@ module Droom
     before_filter :authenticate_user! 
     before_filter :get_current_person
     before_filter :find_people, :only => :index
-    before_filter :get_groups, :only => :index
+    before_filter :get_groups
     before_filter :get_person, :only => [:show, :edit, :update, :destroy]
     before_filter :build_person, :only => [:new, :create]
     before_filter :confine_to_self, :except => [:index, :show]
@@ -24,7 +24,7 @@ module Droom
     
     def create
       if @person.save
-        render :partial => "created"
+        render :partial => "person"
       else
         respond_with @person
       end
@@ -35,8 +35,8 @@ module Droom
       @person.update_attributes(params[:person])
       @person.save!
       respond_with @person do |format|
-        format.json {
-          render
+        format.js {
+          render :partial => "person"
         }
       end
       # if @person.save
