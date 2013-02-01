@@ -4,6 +4,7 @@ module Droom
     has_one :person
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :preferences, :foreign_key => "created_by_id"
+    accepts_nested_attributes_for :preferences, :allow_destroy => true
   
     devise :database_authenticatable,
            :encryptable,
@@ -59,8 +60,8 @@ module Droom
       activate!
     end
   
-    # Current user is pushed into here to make it available in models,
-    # most pertinently the UserActionObserver that sets ownership before save.
+    # Current user is pushed into here to make it available in models
+    # such as the UserActionObserver that sets ownership before save.
     #
     def self.current
       Thread.current[:user]
@@ -92,19 +93,22 @@ module Droom
       end
     end
     
-    
-    
-    
     ## Preferences
     #
     # User settings are held as an association with Preference objects, which are simple key:value pairs.
     # The keys are usually colon:separated for namespacing purposes, eg:
     #
-    #   current_user.pref("email:enabled")
-    #   current_user.pref("dropbox:enabled")
+    #   current_user.pref("email:enabled?")
+    #   current_user.pref("dropbox:enabled?")
     #
     # Default settings are defined in Droom.user_defaults and can be defined in an initializer if the default droom
     # defaults are not right for your application.
+    #
+    # `User#pref(key)` returns the **value** of the preference (whether set or default) for the given key. It is intended
+    # for use in views:
+    #
+    #   - if current_user.pref("dropbox:enabled?")
+    #     = link_to "copy to dropbox", dropbox_folder_url(folder)
     #
     def pref(key)
       if pref = preferences.find_by_key(key)
@@ -114,14 +118,25 @@ module Droom
       end
     end
     
-    # Preferences are set in a simple key:value way, where key is usually a compound namespace designator:
+    # `User#preference(key)` always returns a preference object and is used to build control panels. If no preference
+    # is saved for the given key, we return a new (unsaved) one with that key and the default value.
     #
-    #   current_user.set_pref("email:enabled", true)
+    def preference(key)
+      pref = preferences.find_or_initialize_by_key(key)
+      pref.value = Droom.user_default(key) unless pref.persisted?
+      pref
+    end
+    
+    # Setting preferences is normally handled either by the PreferencesController or by nesting preferences
+    # in a user form. `User#set_pref` is a convenient console method but not otherwise used much. 
+    #
+    # Preferences are set in a simple key:value way, where key usually includes some namespacing prefixes:
+    #
+    #   user.set_pref("email:enabled", true)
     #
     def set_pref(key, value)
       preferences.find_or_create_by_key(key).set(value)
     end
-    
 
   protected
 

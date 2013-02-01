@@ -3,25 +3,27 @@
     - if current_user.dropbox_access_token
       %h4
         = t :dropbox_preferences
-      %form
-        %p
-          = radio_button_tag :dropbox_level, "all"
-          = t :dropbox_copy_all
-          %br
-          = radio_button_tag :dropbox_level, "topics"
-          = t :dropbox_copy_topics
-          %br
-          = radio_button_tag :dropbox_level, "useful", true
-          = t :dropbox_copy_useful
-          %br
-          = radio_button_tag :dropbox_level, "selected"
-          = t :dropbox_copy_selected
-        %p
-          = link_to "revoke dropbox access", '#', :class => "dropbox revoke"
+        
+      = form_for current_user, :html => {:remote => true, :class => "fancy"} do |f|
+        = f.fields_for :preferences, current_user.preference('dropbox.strategy') do |pf|
+          = pf.hidden_field :key
+          %p
+            %span.preference
+              = pf.radio_button :value, "everything"
+              = pf.label :value_everything, "Sync everything"
+            %span.preference
+              = pf.radio_button :value, "selected", :data => {:reveals => ".subpreference"}
+              = pf.label :value_selected, "Sync these folders..."
+              %span.subpreference
+                = f.fields_for :preferences, current_user.preference('dropbox.events?') do |ef|
+                  = ef.check_box :value
+                  = ef.label :value, "Your events"
+              %span.subpreference
+                = f.fields_for :preferences, current_user.preference('dropbox.topics?') do |ef|
+                  = ef.check_box :value
+                  = ef.label :value, "Your topics"
+            %span.preference
+              = pf.radio_button :value, "clicked"
+              = pf.label :value_clicked, "Only when you click"
 
-
-    - else
-      %p
-        = t :dropbox_instructions
-      %p
-        = link_to "Connect to your dropbox", dropbox_auth_url, :class => "dropbox"
+            

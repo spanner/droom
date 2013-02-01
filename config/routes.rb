@@ -12,6 +12,8 @@ Droom::Engine.routes.draw do
     get 'welcome/:auth_token', :action => :welcome, :on => :member, :as => :welcome
   end
 
+  resources :preferences
+
   resources :events do
     resources :invitations
     resources :group_invitations

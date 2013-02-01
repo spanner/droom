@@ -89,7 +89,7 @@ module Droom
     end
     
     def panels
-      @@panels ||= %w{search dropbox rss email readers device networks preferences"}
+      @@panels ||= %w{search dropbox rss email readers device networks preferences}
     end
 
     # base path of DAV directory tree, relative to rails root.
@@ -174,7 +174,7 @@ module Droom
           :invitations? => false
         },
         :dropbox => {
-          :everything? => false,
+          :strategy => "clicked",
           :events? => true,
           :topics? => false
         },

@@ -810,6 +810,39 @@ jQuery ($) ->
 
 
 
+  class PreferenceToggle
+    constructor: (element) ->
+      @input = $(element)
+      @label = @input.siblings('label')
+
+  $.fn.preference_setter = ->
+    @each ->
+      new PreferenceSetter(@)
+
+
+
+  # class RadioButtonSet
+  #   constructor: (selector)
+
+
+  class RadioSet
+    @radiosets: {}
+    constructor: (name) ->
+      # fire change event mutually, but not directly: 
+      # trigger a custom event? Anyway, has to be loop-proof.
+
+  $.fn.revealer = ->
+    @each ->
+      input = $(@)
+      if revealed = input.attr('data-reveals')
+        input.siblings(revealed).hide()
+        input.change (e) ->
+          if input.is(":checked")
+            input.siblings(revealed).slideDown()
+          else
+            input.siblings(revealed).slideUp()
+
+
   class Copier
     constructor: (element) ->
       @_link = $(element)

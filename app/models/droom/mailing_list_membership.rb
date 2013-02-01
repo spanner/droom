@@ -73,10 +73,8 @@ module Droom
     # If no such connection is defined, we will use the local `droom_mailing_list_memberships` table.
     #
     begin
-      if Droom.enable_mailing_lists?
-        establish_connection :"mailman_#{Rails.env}"
-        set_table_name Droom.mailman_table_name
-      end
+      establish_connection :"mailman_#{Rails.env}"
+      set_table_name Droom.mailman_table_name
     rescue ActiveRecord::AdapterNotSpecified
       Rails.logger.warn "Droom: No mailman connection configured. Using #{Rails.env} database."
     end
