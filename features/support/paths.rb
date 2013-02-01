@@ -11,6 +11,10 @@ module NavigationHelpers
       destroy_user_session_path
     when /^the preferences page$/
       edit_user_path(@user)
+    when /^the new event page$/
+      new_event_path
+    when /^the new document page$/
+      new_document_path
     else
       dashboard_path
     end

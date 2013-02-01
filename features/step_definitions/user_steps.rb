@@ -3,7 +3,7 @@ Given /^I am an invited user$/ do
   @user = @person.user
 end
 
-When /^I follow the invitation email link$/ do
+When /^I (?:follow|click) the invitation email link$/ do
   visit @invitation_link
 end
 
@@ -52,4 +52,17 @@ end
 
 Then /^my changes should have been saved$/ do
   assert page.has_content?('Thank you. Your preferences have been updated')
+end
+
+Given /^I am a (?:signed|logged) in administrator$/ do
+  step "I am an active admin user"
+  step "I log in"
+end
+
+Given /^I am an active administrator$/ do
+  step "I am an invited user"
+  @user.activate!
+  @user.password = "password"
+  @user.admin = true
+  @user.save!
 end
