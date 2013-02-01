@@ -17,14 +17,15 @@ module Droom
     before_save :set_properties
 
     scope :visible_to, lambda { |person|
-      if person
-        select('droom_folders.*')
-          .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON droom_folders.id = dpf.folder_id')
-          .where(["(droom_folders.public = 1 OR dpf.person_id = ?)", person.id])
-          .group('droom_folders.id')
-      else
-        all_public
-      end
+      # if person
+      #   select('droom_folders.*')
+      #     .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON droom_folders.id = dpf.folder_id')
+      #     .where(["(droom_folders.public = 1 OR dpf.person_id = ?)", person.id])
+      #     .group('droom_folders.id')
+      # else
+      #   all_public
+      # end
+      not_private
     }
 
     scope :populated, select('droom_folders.*')

@@ -44,6 +44,7 @@ group :test, :development do
   gem 'mysql2'
   gem 'haml'
   gem 'paperclip', "~> 3.1.0"
+  gem "launchy"
   gem "capybara"
   gem "rspec-rails", ">= 2.6.0"
   gem 'watchr'
@@ -56,5 +57,6 @@ group :test, :development do
   gem 'devise-encryptable'
   gem 'sunspot-rails-tester'
   gem 'acts_as_fu'
+  gem 'cucumber-rails'
 end
 

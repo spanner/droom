@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount Droom::Engine => "/droom"
+  mount Droom::Engine => "/", :as => :droom
 end
