@@ -19,8 +19,19 @@ Given /^I am a (?:signed|logged) in user$/ do
   step "I log in"
 end
 
+Given /^I am an active administrator$/ do
+  step "I am an active user"
+  @user.admin = true
+  @user.save!
+end
+
+Given /^I am a (?:signed|logged) in administrator$/ do
+  step "I am an active administrator"
+  step "I log in"
+end
+
 When /^I (?:sign|log) in$/ do
-  step "I visit the login page"
+  step "I am on the dashboard"
   fill_in 'user_email', :with => @user.email
   fill_in 'user_password', :with => @user.password
   click_button "Sign in"
@@ -35,7 +46,8 @@ Given /^I (?:am on|go to|visit) (.*)$/ do |page_name|
 end
 
 When /^I change my email$/ do
-  step "I go to the preferences page"
+  step "I am on the dashboard"
+  click_link "Preferences"
   fill_in "user_email", :with => "not_mike@spanner.org"
   click_button "Save changes"
 end
@@ -54,15 +66,3 @@ Then /^my changes should have been saved$/ do
   assert page.has_content?('Thank you. Your preferences have been updated')
 end
 
-Given /^I am a (?:signed|logged) in administrator$/ do
-  step "I am an active admin user"
-  step "I log in"
-end
-
-Given /^I am an active administrator$/ do
-  step "I am an invited user"
-  @user.activate!
-  @user.password = "password"
-  @user.admin = true
-  @user.save!
-end

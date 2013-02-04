@@ -4,7 +4,7 @@ module Droom
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!
-    before_filter :require_admin!, :except => [:index, :show]
+    # before_filter :require_admin!, :except => [:index, :show]
     before_filter :get_current_person
     before_filter :get_folder
     before_filter :find_documents, :only => [:index]

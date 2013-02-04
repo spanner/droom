@@ -98,8 +98,6 @@ ActiveRecord::Schema.define(:version => 20130201103738) do
     t.datetime "updated_at",                       :null => false
   end
 
-  add_index "droom_folders", ["parent_id"], :name => "index_droom_folders_on_ancestry"
-
   create_table "droom_group_invitations", :force => true do |t|
     t.integer "group_id"
     t.integer "event_id"
