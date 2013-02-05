@@ -1,5 +1,34 @@
 jQuery ($) ->
 
+  ## Utilities
+  # **$.makeGuid** is a neat little rfc4122 generator cribbed from 
+  # http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+  #
+  $.makeGuid = ()->
+    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
+      r = Math.random()*16|0
+      v = if c is 'x' then r else r & 0x3 | 0x8
+      v.toString 16
+
+  # **$.urlParam** is a query string parser used to restore history from one or more query string parameters.
+  # It's regex based and deeply suspect. If you can populate and read a form field, do that instead.
+  #
+  $.urlParam = (name) ->
+    results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
+    return false unless results
+    results[1] or null
+
+
+  # Radio buttons don't fire a change event when deselected. Here we mimic that effect
+  # by firing it from any other input in that button set when it *is* selected. 
+  #
+  $.fn.trigger_change_on_deselect = ->
+    @each ->
+      input = $(@)
+      name = input.attr('name')
+      $("input[name='#{name}']:radio").not(input).change () ->
+        input.change() if $(@).is(":checked")
+
   $.easing.glide = (x, t, b, c, d) ->
     -c * ((t=t/d-1)*t*t*t - 1) + b
 
@@ -28,11 +57,6 @@ jQuery ($) ->
     console.log "...error!", jqXHR, textStatus, errorThrown
     trigger "error", textStatus, errorThrown
     return
-
-  $.urlParam = (name) ->
-    results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
-    return null unless results
-    results[1] or null
 
   $.fn.flash = ->
     @each ->

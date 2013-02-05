@@ -9,27 +9,27 @@
 #= require droom/lib/kalendae
 #= require droom/lib/wysihtml5
 #= require droom/lib/parser_rules/advanced
+#= require droom/extensions
 #= require droom/utilities
-#= require droom/forms
-#= require droom/search
-#= require droom/suggester
-#= require droom/calendar
-#= require droom/sort
+#= require droom/ajax
+#= require droom/actions
+#= require droom/widgets
 #= require droom/map
-#= require droom/drag_sort
 #= require_self
 
 jQuery ($) ->
   $.activate_with () ->
+    @find_including_self('input:radio').trigger_change_on_deselect()
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('.wysihtml').html_editable()
     @find_including_self('.venuepicker').venue_picker()
     @find_including_self('.datepicker').date_picker()
     @find_including_self('.timepicker').time_picker()
     @find_including_self('.filepicker').file_picker()
+    
     @find_including_self('a.delete').removes('.holder')
     @find_including_self('[data-action="copy"]').copier()
-    @find_including_self('[data-action="popup"]').popup_remote_content()
+    @find_including_self('[data-action="popup"]').popup()
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-action="reveal"]').replace_with_remote_content()
     @find_including_self('[data-action="twister"]').twister()
@@ -40,7 +40,6 @@ jQuery ($) ->
     @find_including_self('table.sortable').table_sort()
     @find_including_self('#map').init_map()
     @find_including_self('input.password').password_field()
-    # @find_including_self('input.preference').preference_setter()
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('input.person_picker').person_picker()
     @find_including_self('input.group_picker').group_picker()
@@ -50,6 +49,9 @@ jQuery ($) ->
     @find_including_self('a.toggle_active').replace_with_remote_content('.holder')
     @find_including_self('div.folder').folder()
     @find_including_self('form.search_form').search()
+    @find_including_self('form.fancy').captive
+      fast: true
+      replacing: ''
     @find_including_self('form#searchform').captive
       replacing: '.search_results'
       fast: true

@@ -14,16 +14,16 @@
             %span.preference
               = pf.radio_button :value, "selected", :data => {:reveals => ".subpreference"}
               = pf.label :value_selected, "Sync these folders..."
+
               %span.subpreference
-                = f.fields_for :preferences, current_user.preference('dropbox.events?') do |ef|
-                  = ef.check_box :value
-                  = ef.label :value, "Your events"
+                = preference_field 'dropbox.events?'
+
               %span.subpreference
                 = f.fields_for :preferences, current_user.preference('dropbox.topics?') do |ef|
                   = ef.check_box :value
                   = ef.label :value, "Your topics"
             %span.preference
               = pf.radio_button :value, "clicked"
-              = pf.label :value_clicked, "Only when you click"
+              = pf.label :value_clicked, "Copy on command only"
 
             

@@ -1,53 +1,67 @@
-closestPointOnALineBetween = (a, b, c) ->
-  a_x = a.lat
-  a_y = a.lng
-  b_x = b.lat
-  b_y = b.lng
-  c_x = c.lat
-  c_y = c.lng
-  u = ((a_x - b_x) * (c_x - b_x) + (a_y - b_y) * (c_y - b_y)) / (Math.pow((c_x - b_x), 2) + Math.pow((c_y - b_y), 2))
-  if u > 0.95
-    v = 1
-  else if u < 0.05
-    v = 0
-  else
-    v = u
-  t_x = b_x + v * (c_x - b_x)
-  t_y = b_y + v * (c_y - b_y)
-  {lat: t_x, lng: t_y}
+# Return the last item in an array.
 
-closestPointOnPolyline = (point, path) ->
-  len = path.length()
-  e_array = []
-  t_array = []
-  i = 0
-  while i < len - 1
-    b = p[i]
-    c = p[i+1]
-    t = closestPointOnALineBetween(point, b, c)
-    e = distanceToPoint(point, t)
-    e_array.push e
-    t_array.push t
-    i++
-  t_array.getAt e_array.indexOf(e_array.min())
+unless Array::last?
+  Array::last = () ->
+    @[@.length - 1]
 
-indexOfClosestPointOnPolyline = (point, path) ->
-  len = path.length()
-  e_array = []
-  i = 0
-  while i < len - 1
-    b = p[i]
-    c = p[i + 1]
-    t = closestPointOnALineBetween(point, b, c)
-    e = distanceToPoint(point, t)
-    e_array.push e
-    i++
-  e_array.indexOf(e_array.min()) + 1
+# Return the first item in an array.
 
-distanceToPoint = (a, t) ->
-  a_x = a.lat
-  a_y = a.lng
-  t_x = t.lat
-  t_y = t.lng
-  Math.pow (Math.pow((a_x - t_x), 2) + Math.pow((a_y - t_y), 2)), 0.5    
+unless Array::first?
+  Array::first = () ->
+    @[0]
 
+# Return the (mathematically) greatest item in an array.
+
+unless Array::max?
+  Array::max = () ->
+    Math.max.apply Math, this      
+
+# Return the (mathematically) least item in an array.
+
+unless Array::min?
+  Array::min = () ->
+    Math.min.apply Math, this
+
+# Return true if this array contains any items
+
+unless Array::any?
+  Array::any = ()->
+    @length > 0
+
+# Return true unless this array contains any items
+
+unless Array::empty?
+  Array::empty = ()->
+    @length == 0
+
+# Removes one instance of the supplied thing from an array
+
+unless Array::remove?
+  Array::remove = (thing)->
+    @splice(@indexOf(thing), 1)
+
+# Return this array as a sentence in the form "x, y and z".
+
+unless Array::toSentence?
+  Array::toSentence = ()->
+    @join(", ").replace(/,\s([^,]+)$/, ' and $1')
+
+# Truncate a string to the specified number of characters. Add an ellipsis if shortening actually happens.
+
+unless String::truncate?
+  String::truncate = (length, separator, ellipsis)->
+    length ?= 100
+    ellipsis ?='...'
+    if @length > length
+      trimmed = @substr 0, length - ellipsis.length
+      trimmed = trimmed.substr(0, trimmed.lastIndexOf(separator)) if separator? 
+      trimmed + '...'
+    else
+      @
+
+# Remove leading and trailing spaces from a string. Unavailable before JS1.5.
+
+unless String::trim?
+  String::trim = (length, separator, ellipsis)->
+    String(@).replace(/^\s+|\s+$/g, '')
+    

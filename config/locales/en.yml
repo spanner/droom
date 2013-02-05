@@ -29,6 +29,16 @@ en:
           post_country: "Country"
           post_code: "Postcode"
           dob: "Date of birth"
+
+  preferences:
+    dropbox:
+      strategy:
+        everything:
+        selected:
+        clicked:
+      events?: "Your events"
+      topics?: "Your topics"
+      
   admin: "Admin"
   attachments: "Attachments"
   attending: "Attending"
@@ -81,7 +91,6 @@ en:
   group_created: "Group '%{name}' created"
   calendar: "Calendar"
   library: "Library" 
-  preferences: "Preferences"
   set_preferences: "Account preferences"
   user_preferences: "User preferences"
   user_updated: "Preferences for %{name} have been updated."
@@ -121,7 +130,6 @@ en:
   
   new_membership_instructions: "Start typing a name here and a list of possible matches will appear. Click on someone to add them to the %{name} group."
   
-  preferences: "Preferences"
   profile: "Profile"
   search: "Search"
   "on": "on"
