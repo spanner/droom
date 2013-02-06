@@ -160,7 +160,7 @@ jQuery ($) ->
   class Alternator
     constructor: (element) ->
       @_container = $(element)
-      @_selector = @_container.attr("data-alternate")
+      @_selector = @_container.attr("data-selector")
       @_alternate = @_container.siblings(@_selector)
       @revert()
 
