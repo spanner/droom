@@ -1,10 +1,12 @@
-# This is a collection of interface elements. 
+# This is a collection of interface elements. They're all self-contained. Most are attached to a 
+# form element and cause its value to change, but there are also some standalone widgets that live
+# on the page and follow their own rules.
 
 jQuery ($) ->
 
-
-
   ## Form Widgets
+  #
+  # These attach to a form element and provide a nicer interface by which to update its content.
 
   class DatePicker
     constructor: (element) ->
@@ -170,6 +172,10 @@ jQuery ($) ->
 
 
 
+  $.fn.score_picker = () ->
+    @each ->
+      new ScorePicker @
+
   class ScorePicker
     constructor: (element) ->
       @_field = $(element)
@@ -208,25 +214,9 @@ jQuery ($) ->
       @_field.val(i)
 
 
-  $.fn.score_picker = () ->
+  $.fn.password_field = ->
     @each ->
-      new ScorePicker @
-    
-
-  class ScoreShower
-    constructor: (element) ->
-      @_container = $(element)
-      @_rating = parseFloat(@_container.text(), 10)
-      @_rating ||= 0
-      @_bar = $('<div class="starbar" />').appendTo(@_container)
-      @_mask = $('<div class="starmask" />').appendTo(@_container)
-      @_bar.css
-        width: @_rating/5 * 80
-
-  $.fn.star_rating = () ->
-    @each ->
-      new ScoreShower @
-
+      new PasswordField(@)
 
   class PasswordField
     constructor: (element, opts) ->
@@ -318,9 +308,80 @@ jQuery ($) ->
         @field.val("") if @field.val() is @mock_password
         
 
-  $.fn.password_field = ->
+
+  # The preferences block is a very minimal subcontent toggle. If the first contained radio or checkbox element
+  # is checked, anything `.subpreference` is revealed. If its state changes, we show or hide.
+  #
+  # Note that to make this work with radio buttons we have applied a small hack to make sure they fire a change event
+  # on deselection. See $.trigger_change_on_deselect in utilities.js.
+
+  $.fn.preference_block = ->
     @each ->
-      new PasswordField(@)
+      new PreferenceBlock(@)
+
+  class PreferenceBlock
+    constructor: (element) ->
+      @_container = $(element)
+      @_input = @_container.find("> input")
+      @_subprefs = @_container.find('span.subpreference')
+      if @_subprefs.length
+        @_input.change @set
+        @set()
+        
+    set: () =>
+      if @_input.is(":checked") then @show() else @hide()
+    show: () =>
+      @_subprefs.slideDown()
+    hide: () =>
+       @_subprefs.slideUp()
+
+
+  # HTML-editing support is provided by WysiHTML, which is an ugly but effective iframe-based solution.
+  # Any textarea with the 'data-editable' attribute will be handed over to WysiHTML for processing.
+  #
+  #todo: make this true
+  #
+  $.fn.html_editable = ()->
+    @each ->
+      new Editor(@)
+
+  class Editor
+    constructor: (element) ->
+      console.log "Editor", element
+      @_container = $(element)
+      @_textarea = @_container.find('textarea')
+      @_toolbar = @_container.find('.toolbar')
+      @_toolbar.attr('id', $.makeGuid()) unless @_toolbar.attr('id')?
+      @_textarea.attr('id', $.makeGuid()) unless @_textarea.attr('id')?
+      stylesheets = $("link").map ->
+        $(@).attr('href')
+      @_editor = new wysihtml5.Editor @_textarea.get(0),
+        stylesheets: stylesheets,
+        toolbar: @_toolbar.get(0),
+        parserRules: wysihtml5ParserRules
+        useLineBreaks: false
+      @_toolbar.show()
+      @_editor.on "load", () =>
+        @_iframe = @_editor.composer.iframe
+        $(@_editor.composer.doc).find('html').css
+          "height": 0
+        @resizeIframe()
+        @_textarea = @_editor.composer.element
+        @_textarea.addEventListener("keyup", @resizeIframe, false)
+        @_textarea.addEventListener("blur", @resizeIframe, false)
+        @_textarea.addEventListener("focus", @resizeIframe, false)
+        
+    resizeIframe: () =>
+      if $(@_iframe).height() != $(@_editor.composer.doc).height()
+        $(@_iframe).height(@_editor.composer.element.offsetHeight)
+    
+    showToolbar: () =>
+      @_hovered = true
+      @_toolbar.fadeTo(200, 1)
+
+    hideToolbar: () =>
+      @_hovered = false
+      @_toolbar.fadeTo(1000, 0.2)
 
 
   # The Calendar widget is a display of one calendar month in the usual tabular format.
@@ -355,6 +416,30 @@ jQuery ($) ->
     @click (e) ->
       e.preventDefault() if e
       $.calendar?.searchFor($(@).text())
+
+
+
+
+  ## Display Widgets
+  #
+  # These stand alone and usually encapsulate some interaction with the user.
+
+  class ScoreShower
+    constructor: (element) ->
+      @_container = $(element)
+      @_rating = parseFloat(@_container.text(), 10)
+      @_rating ||= 0
+      @_bar = $('<div class="starbar" />').appendTo(@_container)
+      @_mask = $('<div class="starmask" />').appendTo(@_container)
+      @_bar.css
+        width: @_rating/5 * 80
+
+  $.fn.star_rating = () ->
+    @each ->
+      new ScoreShower @
+
+
+
 
   class Calendar
     constructor: (element, options) ->
@@ -454,9 +539,11 @@ jQuery ($) ->
       
 
 
-  # The Suggester hooks us up to the same machinery as drives the main suggestions box, usually with some
+  # The Suggester hooks us up to the machinery that drives the main suggestions box, usually with some
   # restrictions to eg. a single type of object. It lets us provide typeahead boxes that work both for existing
   # and new objects.
+  #
+  # The suggestion box itself is just `suggestible`. Other inputs are generally more restricted.
   #  
   $.fn.suggestible = (options) ->
     options = $.extend(

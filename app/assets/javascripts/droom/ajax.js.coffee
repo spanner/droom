@@ -12,10 +12,10 @@
 # ### Callbacks
 #
 # * *on_prepare* is called when the remote control is first created. No arguments.
-# * *on_request* is called before the remote call. Arguments: [event, xhr, settings]
-# * *on_error* is called if the server returns an error. Arguments: [event, xhr, status]
-# * *on_success* is called if the request is successful. First argument is the server response.
-# * *on_complete* is called after the request, whether successful or not. No arguments. 
+# * *on_request* is called before the remote call. Arguments: [xhr]
+# * *on_error* is called if the server returns an error. Arguments: [xhr]
+# * *on_success* is called if the request is successful. Arguments: [response]
+# * *on_complete* is called after the request, whether successful or not. Arguments: [status]
 #
 jQuery ($) ->
   class Remote
@@ -37,13 +37,13 @@ jQuery ($) ->
       event.stopPropagation()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_control.addClass('waiting')
-      @_options.on_request?()
+      @_options.on_request?(xhr)
 
     fail: (event, xhr, status) ->
       event.stopPropagation()
       @_control.removeClass('waiting').addClass('erratic')
-      @_options.on_error?(event, xhr, status)
-      @_options.on_complete?()
+      @_options.on_error?(xhr)
+      @_options.on_complete?(status)
   
     # Note that there is no special provision here for a server side failure that results in a success response:
     # eg if validation fails and we get the form back again, this Remote will be considered successful and disappear.
@@ -55,12 +55,12 @@ jQuery ($) ->
       event.stopPropagation()
       @_control.removeClass('waiting')
       @_options.on_success?(response)
-      @_options.on_complete?()
+      @_options.on_complete?(status)
         
     cancel: (e) =>
       e.preventDefault() if e
-      @_options.on_cancel()
-      @_form.remove()
+      @_options.on_cancel?()
+      @_form?.remove()
 
   $.fn.remote = (opts) ->
     @each ->

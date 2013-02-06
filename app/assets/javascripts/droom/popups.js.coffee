@@ -28,9 +28,9 @@ jQuery ($) ->
       @_replaced = @_link.attr('data-replaced')
       @_link.remote
         on_request: @begin
-        on_complete: @receive
+        on_success: @receive
 
-    begin: (xhr, settings) =>
+    begin: (xhr) =>
       switch @_iteration
         when 0
           @prepare()
@@ -46,13 +46,14 @@ jQuery ($) ->
     prepare: () =>
       @_mask = $('<div class="mask" />').appendTo($('body'))
       @_container = $('<div class="popup" />')
+      @_container.bind "resize", @place
       @_container.insertAfter(@_mask).hide()
 
-    receive: (data, status, xhr) =>
-      if $(data).find('form').get(0)
-        @display(data)
+    receive: (response) =>
+      if $(response).find('form').length
+        @display(response)
       else
-        @conclude(data)
+        @conclude(response)
         
     display: (data) =>
       @_iteration++
@@ -65,7 +66,7 @@ jQuery ($) ->
       @_closer.click(@hide)
       @_content.find('form').remote
         on_cancel: @hide
-        on_complete: @receive
+        on_success: @receive
       @show()
       
     conclude: (data) =>
@@ -73,7 +74,7 @@ jQuery ($) ->
         $(@_affected).trigger "refresh"
       if @_replaced
         replacement = $(data)
-        $(@_replaced).replaceWith(data)
+        $(@_replaced).replaceWith(replacement)
         replacement.activate().signal_confirmation()
       @hide()
 
@@ -117,18 +118,26 @@ jQuery ($) ->
       
   # Popup forms will usually contain one or more .column divs. The columns are a standard width and
   # the number of columns determines the width of the popup. Columns can also be hidden, initially,
-  # then revealed if the user clicks a 'more' or 'detail' link. The expander action is defined here:
+  # then revealed if the user clicks a 'more' or 'detail' link. The expander action is defined here.
   #
   $.fn.column_expander = (popup) ->
     @click (e) ->
       e.preventDefault() if e
       link = $(@)
+      container = link.parents('popup').first()
       if affected = link.attr('data-affected')
+        # swap between text and the alt text held in data-alt
         text = link.text()
         alt = link.attr('data-alt')
         link.text(alt).attr('data-alt', text)
-        if link.hasClass('left')
-          link.addClass('right').removeClass('left')
-        else
-          link.addClass('left').removeClass('right')
-        popup.toggle_column(affected)
+        # Point in the other direction
+        if link.hasClass('left') then link.addClass('right').removeClass('left') else link.addClass('left').removeClass('right')
+        # Toggle visibility of the column.
+        # Contained form fields are disabled when hidden, detaching them from form submission.
+        container.find(affected).each (i, col) ->
+          if $(col).is(":visible")
+            $(col).addClass('hidden').find('input, select, textarea').attr('disabled', true)
+          else
+            $(col).removeClass('hidden').find('input, select, textarea').removeAttr('disabled')
+        # We finish by triggering a resize event on the popup container, which will trigger a place() on the popup..
+        container.trigger('resize')

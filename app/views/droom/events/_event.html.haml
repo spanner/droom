@@ -36,14 +36,17 @@
           = link_to event.name, event_url(event), :class => open ? "name open" : "name"
           - if admin?
             %span.admin<
-              = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :replaced => "#event_#{event.id}", :affected => ".minimonth"}
-              = link_to t(:remove), event_url(event), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_event, :name => event.name), :affected => ".minimonth"}
+              = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :data => {:action => "popup", :replaced => "#event_#{event.id}", :affected => ".minimonth"}
+              = link_to t(:remove), event_url(event), :method => 'delete', :class => 'delete minimal', :data => {:action => "remove", :affected => ".minimonth", :confirm => t(:confirm_delete_event, :name => event.name)}
           - else
             = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
 
         %p.practicalities
           %time
             = l(event.start_time, :format => :natural)
+          - if event.finish?
+            = t :to
+            = l(event.finish_time, :format => :natural)
           - if event.venue
             %span.location
               = t(:at)

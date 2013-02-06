@@ -65,15 +65,25 @@ jQuery ($) ->
   #
   # ...will (on success) remove the first containing '.holder' element and also refresh the mini calendar display.
   #
-  $.fn.removes = (selector) ->
-    selector ?= '.holder'
+  $.fn.removes = () ->
     @each ->
+      removed = $(@).attr('data-removed') || ".holder"
       affected = $(@).attr('data-affected')
-      $(@).remote 
+      $(@).remote
         on_success: (response) =>
-          $(@).parents(selector).first().fadeOut 'fast', () ->
+          $(@).parents(removed).first().fadeOut 'fast', () ->
             $(@).remove()
           $(affected).trigger "refresh"
+
+
+  # The submitter is a self-disabling submit button that can only be clicked once.
+  #
+  $.fn.submitter = ->
+    @each ->
+      button = $(@)
+      button.parents('form').bind "submit", (e) ->
+        button.addClass('waiting').text('Please wait').bind "click", (e) =>
+          e.preventDefault() if e
 
 
 
@@ -171,25 +181,79 @@ jQuery ($) ->
       new Alternator(@)
 
 
-  # This is a minimal toggle action that just shows or hides the designated elements. It is used in small cases like
-  # form elements that reveal one another.
-  #
-  #todo: it ought to be incorporated into the main toggle routine, but without persistence.
-  #
-  $.fn.reveals = ->
+  # The *folder* action is just a display convention that shows and hides the contents of a folder
+  # when its link is clicked. It should probably become a subclass of the generic toggle mechanism and benefit from its persistence.
+      
+  $.fn.folder = ->
     @each ->
-      input = $(@)
-      if revealed = input.attr('data-reveals')
-        input.siblings(revealed).hide()
-        input.change (e) ->
-          if input.is(":checked")
-            input.siblings(revealed).slideDown()
-          else
-            input.siblings(revealed).slideUp()
+      new Folder(@)
+      
+  class Folder
+    constructor: (element) ->
+      @_container = $(element)
+      @_list = @_container.find('ul.filing')
+      @_container.find('a.folder').click @toggle
+      @set()
+      
+    set: (e) =>
+      e.preventDefault() if e
+      if @_container.hasClass('open') then @show() else @hide()
+
+    toggle: (e) =>
+      e.preventDefault() if e
+      if @_container.hasClass('open') then @hide() else @show()
+
+    show: (e) =>
+      e.preventDefault() if e
+      @_container.addClass('open')
+      @_list.stop().slideDown()
+      
+    hide: (e) =>
+      e.preventDefault() if e
+      @_container.removeClass('open')
+      @_list.stop().slideUp()
+
+  # The *twister* is yet another show/hider, not currently in use since the library view has gone over to folders.
+
+  $.fn.twister = ->
+    @each ->
+      new Twister(@)
+  class Twister
+    @currently_open: []
+    constructor: (element) ->
+      @_twister = $(element)
+      @_twisted = @_twister.find('.twisted')
+      @_toggles = @_twister.find('a.twisty')
+      @_toggles.click @toggle
+      @_open = @_twister.hasClass("showing")
+      @set()
+
+    set: () =>
+      if @_open then @open() else @close()
+      
+    toggle: (e) =>
+      e.preventDefault() if e
+      if @_open then @close() else @open()
+      
+    open: () =>
+      @_twister.addClass("showing")
+      @_twisted.show()
+      @_open = true
+      Twister.currently_open.push(@_id)
+      
+    close: () =>
+      @_twister.removeClass("showing")
+      @_twisted.hide()
+      @_open = false
+      Twister.currently_open.remove(@_id)  # remove is defined in lib/extensions
+
+
 
 
   # A captive form submits via an ajax request and pushes its results into the present page in the place 
   # designated by its 'replacing' attribute.
+  #
+  # If options['fast'] is true, the form will submit on every change to a text, radio or checkbox input.
   #
   #todo: This is very old now. Tidy it up with a more standard action structure, and fewer options.
 
@@ -254,17 +318,17 @@ jQuery ($) ->
       @_prompt.val("")
       @saveState()
 
-  # The suggestions form is a captive form with history support based on a single prompt field. 
+  # The suggestions form is a fast captive with history support based on a single prompt field.
   #
   $.fn.suggestion_form = (options) ->
     options = $.extend(
-      replacing: "#results"
+      replacing: "#search_results"
       clearing: null
     , options)
     @each ->
-      new CaptiveForm @, options
+      new SuggestionForm @, options
     @
-
+  
   class SuggestionForm extends CaptiveForm
     constructor: (element, opts) ->
       super
@@ -298,51 +362,6 @@ jQuery ($) ->
         @_prompt.val(event.state.term)
 
 
-  # HTML-editing support is provided by WysiHTML, which is an ugly but effective iframe-based solution. 
-  # A textarea with the 'edit-html' action will be handed over to WysiHTML for processing.
-  #
-  #todo: make this true
-  #
-  $.fn.html_editable = ()->
-    @each ->
-      new Editor(@)
-
-  class Editor
-    constructor: (element) ->
-      @_container = $(element)
-      @_textarea = @_container.find('textarea')
-      @_toolbar = @_container.find('.toolbar')
-      @_toolbar.attr('id', $.makeGuid()) unless @_toolbar.attr('id')?
-      @_textarea.attr('id', $.makeGuid()) unless @_textarea.attr('id')?
-      stylesheets = $("link").map ->
-        $(@).attr('href')
-      @_editor = new wysihtml5.Editor @_textarea.attr('id'),
-        stylesheets: stylesheets,
-        toolbar: @_toolbar.attr('id'),
-        parserRules: wysihtml5ParserRules
-        useLineBreaks: false
-      @_toolbar.show()
-      @_editor.on "load", () =>
-        @_iframe = @_editor.composer.iframe
-        $(@_editor.composer.doc).find('html').css
-          "height": 0
-        @resizeIframe()
-        @_textarea = @_editor.composer.element
-        @_textarea.addEventListener("keyup", @resizeIframe, false)
-        @_textarea.addEventListener("blur", @resizeIframe, false)
-        @_textarea.addEventListener("focus", @resizeIframe, false)
-        
-    resizeIframe: () =>
-      if $(@_iframe).height() != $(@_editor.composer.doc).height()
-        $(@_iframe).height(@_editor.composer.element.offsetHeight)
-    
-    showToolbar: () =>
-      @_hovered = true
-      @_toolbar.fadeTo(200, 1)
-
-    hideToolbar: () =>
-      @_hovered = false
-      @_toolbar.fadeTo(1000, 0.2)
 
 
   # The *copier* action uses ZeroClipboard to put on the clipboard whatever is in our data-value attribute.
@@ -381,39 +400,6 @@ jQuery ($) ->
 
     failed: (e) =>
       e.preventDefault()
-      
-
-  # The *folder* action is just a display convention that shows and hides the contents of a folder
-  # when its link is clicked. It should probably become a subclass of the generic toggle mechanism and benefit from its persistence.
-      
-  $.fn.folder = ->
-    @each ->
-      new Folder(@)
-      
-  class Folder
-    constructor: (element) ->
-      @_container = $(element)
-      @_list = @_container.find('ul.filing')
-      @_container.find('a.folder').click @toggle
-      @set()
-      
-    set: (e) =>
-      e.preventDefault() if e
-      if @_container.hasClass('open') then @show() else @hide()
-
-    toggle: (e) =>
-      e.preventDefault() if e
-      if @_container.hasClass('open') then @hide() else @show()
-
-    show: (e) =>
-      e.preventDefault() if e
-      @_container.addClass('open')
-      @_list.stop().slideDown()
-      
-    hide: (e) =>
-      e.preventDefault() if e
-      @_container.removeClass('open')
-      @_list.stop().slideUp()
       
       
   # The main search page hasn't had much love yet.

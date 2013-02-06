@@ -71,6 +71,7 @@ module Droom
     end
 
     def destroy
+      Rails.logger.warn ">>> event.destroy"
       @event.destroy
       head :ok
     end

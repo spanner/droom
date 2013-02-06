@@ -12,12 +12,10 @@
               = pf.radio_button :value, "everything"
               = pf.label :value_everything, "Sync everything"
             %span.preference
-              = pf.radio_button :value, "selected", :data => {:reveals => ".subpreference"}
+              = pf.radio_button :value, "selected"
               = pf.label :value_selected, "Sync these folders..."
-
               %span.subpreference
                 = preference_field 'dropbox.events?'
-
               %span.subpreference
                 = f.fields_for :preferences, current_user.preference('dropbox.topics?') do |ef|
                   = ef.check_box :value
