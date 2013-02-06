@@ -31,7 +31,7 @@ gem 'yomu'
 gem 'osgb', :git => 'git://github.com/spanner/osgb.git'#:path => "/var/www/gems/osgb"#
 gem 'devise'
 gem 'devise-encryptable'
-
+gem 'kaminari'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
@@ -44,6 +44,7 @@ group :test, :development do
   gem 'mysql2'
   gem 'haml'
   gem 'paperclip', "~> 3.1.0"
+  gem "launchy"
   gem "capybara"
   gem "rspec-rails", ">= 2.6.0"
   gem 'watchr'
@@ -56,5 +57,7 @@ group :test, :development do
   gem 'devise-encryptable'
   gem 'sunspot-rails-tester'
   gem 'acts_as_fu'
+  gem 'cucumber-rails'
+  gem "sunspot_test"
 end
 

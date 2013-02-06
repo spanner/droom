@@ -3,3 +3,5 @@
 
 en:
   hello: "Hello world"
+  invitation_subject: "You've been invited"
+  save_changes: "Save changes"
