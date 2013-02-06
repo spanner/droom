@@ -462,8 +462,8 @@ jQuery ($) ->
       @_year = parseInt(@_table.attr('data-year'), 10)
       @cache(@_year, @_month, @_table)
       @_table.find('a.next, a.previous').calendar_changer()
-      @_table.find('a.day').day_search()
-      @_table.find('a.month').month_search()
+      @_table.find('a.day').click @searchForDay
+      @_table.find('a.month').click @searchForMonth
       
     cache: (year, month, table) =>
       @_cache[year] ?= {}
@@ -526,16 +526,21 @@ jQuery ($) ->
       
     searchForm: =>
       @_form ?= $('#searchform')
-      
-    searchFor: (day) =>
-      if day?
-        @search("#{@monthName()} #{day}, #{@_year}")
-      else
-        @search("#{@monthName()} #{@_year}")
+    
+    searchForDay: (e) =>
+      e.preventDefault() if e
+      day = $(e.target).text()
+      @search("#{day} #{@monthName()} #{@_year}")
 
+    searchForMonth: (e) =>
+      e.preventDefault() if e
+      @search("#{@monthName()} #{@_year}")
+      
     search: (term) =>
-      @searchForm().find('input#term').val(term)
-      @searchForm().submit()
+      console.log "setting", @searchForm()?.find('input#term'), "to", term
+      @searchForm()?.find('input#term').val(term).change()
+      # should trigger a change event, then we hit the cache if possible
+      # @searchForm()?.submit()
       
 
 

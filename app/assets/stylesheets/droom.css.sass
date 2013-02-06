@@ -22,6 +22,12 @@ a.dropbox
     background-position: 0 -48px
     color: $hover
 
+a.to_dropbox
+  +icon("droom/copy_to_dropbox.png")
+
+a.in_dropbox
+  +icon("droom/in_dropbox.png")
+
 a.download
   +icon_with_text("droom/download.png")
   
@@ -39,11 +45,11 @@ a.cancel, a.cancel:visited
 
 *
   > span.admin
-    visibility: hidden
+    display: none
     font-size: 0.9em
   &:hover
     > span.admin
-      visibility: visible
+      display: inline-block
 
 p.stretcher
   clear: left
@@ -167,6 +173,8 @@ div.documents
     margin: 0
     padding: 0
     list-style: none
+  span.admin
+    margin-top: 4px
 
 .interjected
   margin: 10px 0
@@ -640,7 +648,16 @@ span.erratic
         position: 3px -58px
         repeat: no-repeat
 
-a.add, a.edit, a.delete, a.revert, a.copy, a.email, a.web, a.drop
+a.add
+  +icon_with_text("droom/add.png")
+  font-size: 0.9em
+  color: $green
+  &:visited
+    color: $green
+  &:hover
+    color: $hover
+
+a.edit, a.delete, a.revert, a.copy, a.email, a.web, a.drop
   display: inline-block
   text-indent: 16px
   margin-right: 10px
@@ -661,17 +678,6 @@ a.add, a.edit, a.delete, a.revert, a.copy, a.email, a.web, a.drop
     line-height: 100px
     overflow: hidden
     margin-right: 2px
-
-a.add
-  background-position: 0 -216px
-  color: $green
-  &:visited
-    color: $green
-    +hover
-  &:hover
-    background-position: 0 -240px
-  &:active
-    background-position: 0 -264px
 
 a.edit
   background-position: 0 0
@@ -798,6 +804,9 @@ ul.search_results
   padding: 0
   list-style: none
   li
+    span.note
+      display: block
+      margin-left: 28px
     > a
       display: block
       padding: 8px 0 0 28px
@@ -822,12 +831,15 @@ ul.search_results
       a
         background-position: 0 -196px
     &.cancel
+      margin-top: 20px
       a
         color: $mid
         background-image: image-url('droom/minisymbols.png')
         background-position: 0 -598px
         padding: 0 0 0 24px
         margin-top: 6px
+        line-height: 28px
+        height: 24px
 
 ul.downloads
   margin: 0

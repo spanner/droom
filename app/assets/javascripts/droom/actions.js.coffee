@@ -277,17 +277,18 @@ jQuery ($) ->
       @_form.remote
         on_submit: @prepare
         on_cancel: @cancel
-        on_complete: @capture
+        on_success: @capture
         
       if @_options.fast
         @_form.find("input[type=\"text\"]").keyup @keyed
+        @_form.find("input[type=\"text\"]").change @submit
         @_form.find("input[type=\"radio\"]").click @submit
         @_form.find("input[type=\"checkbox\"]").click @submit
       
     keyed: (e) =>
       k = e.which
       if (k >= 32 and k <= 165) or k == 8
-        if @_prompt.val() == "" then @revert() else @update()
+        if @_prompt.val() == "" then @revert() else @submit()
     
     submit: (e) =>
       e.preventDefault() if e
@@ -304,6 +305,7 @@ jQuery ($) ->
     
     display: (results) =>
       replacement = $(results)
+      console.log ">>> replacing", @_original_content, "with", results
       replacement.find('a.cancel').click @revert
       @_placed_content?.remove()
       @_original_content?.hide()
@@ -322,8 +324,9 @@ jQuery ($) ->
   #
   $.fn.suggestion_form = (options) ->
     options = $.extend(
-      replacing: "#search_results"
+      fast: true
       clearing: null
+      replacing: ".search_results"
     , options)
     @each ->
       new SuggestionForm @, options
@@ -333,9 +336,9 @@ jQuery ($) ->
     constructor: (element, opts) ->
       super
       @_prompt = @_form.find("input[type=\"text\"]")
-      # if @_original_term = decodeURIComponent $.urlParam("q") if $.urlParam("q")
-        # @_prompt.val(@_original_term)
-        # @submit() unless @_prompt.val() is ""
+      if @_original_term = decodeURIComponent($.urlParam("q"))
+        @_prompt.val(@_original_term)
+        @submit() unless @_prompt.val() is ""
       if Modernizr.history
         $(window).bind 'popstate', @restoreState
 

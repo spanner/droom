@@ -7,6 +7,10 @@ module Droom
       current_user and current_user.admin?
     end
 
+    def preference_field(key, user=current_user)
+      render :partial => "droom/preferences/fields", :locals => {:key => key, :user => user}
+    end
+
     def dropbox?
       !!current_user.dropbox_access_token
     end

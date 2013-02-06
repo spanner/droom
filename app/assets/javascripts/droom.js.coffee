@@ -62,8 +62,7 @@ jQuery ($) ->
     @find_including_self('form.search_form').search()
     @find_including_self('form.fancy').captive
     @find_including_self('div.folder').folder()
-    @find_including_self('form#searchform').captive
+    @find_including_self('form#searchform').suggestion_form
       replacing: '.search_results'
       fast: true
-
     @
