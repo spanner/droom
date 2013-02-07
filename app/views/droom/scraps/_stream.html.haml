@@ -1,0 +1,5 @@
+#scraps.holder
+  = render :partial => "thumb", :collection => @scraps
+
+  .pagination
+    = paginate @scraps, :params => {:format => nil}

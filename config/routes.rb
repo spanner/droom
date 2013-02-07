@@ -14,6 +14,8 @@ Droom::Engine.routes.draw do
 
   resources :preferences
 
+  resources :scraps
+
   resources :events do
     resources :invitations
     resources :group_invitations

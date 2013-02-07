@@ -1,0 +1,7 @@
+#stream
+
+  %h2.quiet
+    = t :stream_title
+
+  #scraps.holder
+    = link_to t(:loading_stream), droom.scraps_url(:format => :js), :data => {:action => "autofetch"}

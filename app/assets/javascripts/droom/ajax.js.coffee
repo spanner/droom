@@ -69,13 +69,15 @@ jQuery ($) ->
   # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
   # result of their action.
   #
-  $.fn.replace_with_remote_content = (selector) ->
+  $.fn.replace_with_remote_content = (selector, opts) ->
     selector ?= '.reviewer'
+    options = $.extend { force: false }, opts
     @each ->
+      console.log ">> replace_with_remote_content", @, options
       $(@).remote
-        on_complete: (r) =>
+        on_success: (r) =>
           replaced = $(@).parents(selector).first()
           replacement = $(r).insertAfter(replaced)
           replaced.remove()
           replacement.activate()
-
+      $(@).click() if options['force']

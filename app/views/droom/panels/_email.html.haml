@@ -7,7 +7,7 @@
     %h4
       = t :email_preferences
       
-    = form_for current_user, :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
+    = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
       %p
         %span.preference
           = preference_checkbox 'email.enabled?'

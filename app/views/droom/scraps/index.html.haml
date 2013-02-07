@@ -1,0 +1,12 @@
+#stream
+  %h1.pagetitle
+    Stream
+    
+  - if @scraps.any?
+    = render :partial => "stream"
+    
+  - else
+    .nomatch
+      %h2
+        = t :no_scraps
+

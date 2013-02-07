@@ -156,6 +156,7 @@ en:
   forgot_password: "Forgotten your password?"
   your_personal_documents: "Your personal documents"
   library_introduction: "The library is organised into folders. Each of your events or groups will usually have a folder, and there may also be some public folders that everyone can see. The presentation of this page will get a lot nicer, by the way: during development it is useful to have a view of all the data."
+  loading_stream: "Loading stream: please wait."
   finish_time: "Finish"
   other_documents: "Other available documents"
   personal_calendar_feed: "Personal calendar subscription"

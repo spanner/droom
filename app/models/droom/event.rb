@@ -243,7 +243,10 @@ module Droom
     end
 
     def finish_time=(value)
-      self.finish = (finish_date || start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
+      if value && !value.blank?
+        time_portion = parse_date(value).seconds_since_midnight
+        self.finish = (finish_date || start_date || Date.today).to_time + time_portion
+      end
     end
 
     def finish_date=(value)

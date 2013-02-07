@@ -31,11 +31,13 @@ jQuery ($) ->
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="popup"]').popup()
     @find_including_self('[data-action="column_toggle"]').column_expander()
-    @find_including_self('[data-action="fetch"]').replace_with_remote_content()
     @find_including_self('[data-action="twister"]').twister()
     @find_including_self('[data-action="filter"]').search_filter()
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-action="alternate"]').alternator()
+    @find_including_self('[data-action="fetch"]').replace_with_remote_content()
+    @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder",
+      force: true
     
     # and some shortcuts for compatibility
     

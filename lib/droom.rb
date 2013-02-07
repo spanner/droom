@@ -14,6 +14,7 @@ require "snail"
 
 module Droom
   # Droom configuration is handled by accessors on the Droom base module.
+  # Boolean items also offer the interrogative form.
   
   mattr_accessor :root_path,
                  :layout,
@@ -24,6 +25,7 @@ module Droom
                  :main_dashboard_modules,
                  :margin_dashboard_modules,
                  :panels,
+                 :scrap_types,
                  :dav_root,
                  :dav_subdomain,
                  :use_forenames,
@@ -85,11 +87,15 @@ module Droom
     end
 
     def margin_dashboard_modules
-      @@margin_dashboard_modules ||= []
+      @@margin_dashboard_modules ||= %w{stream}
     end
     
     def panels
       @@panels ||= %w{dropbox email rss devices networks readers account search}
+    end
+    
+    def scrap_types
+      @@scrap_types ||= %w{image video text quote link}
     end
 
     # base path of DAV directory tree, relative to rails root.

@@ -52,6 +52,19 @@ a.cancel, a.cancel:visited
   +small
   +pale
 
+a.autofetch
+  display: inline-block
+  &.waiting
+    margin-left: -20px
+    padding-left: 20px
+    min-height: 30px
+    line-height: 20px
+    color: $mid
+    background:
+      color: transparent
+      position: 0 0
+      repeat: no-repeat
+      image: image-url('droom/spinner.gif')
 
 *
   > span.admin
