@@ -39,7 +39,7 @@ jQuery ($) ->
       @_control.addClass('waiting')
       @_options.on_request?(xhr)
 
-    fail: (event, xhr, status) ->
+    fail: (event, xhr, status) =>
       event.stopPropagation()
       @_control.removeClass('waiting').addClass('erratic')
       @_options.on_error?(xhr)

@@ -9,9 +9,9 @@ describe Droom::LazyHash do
     lazy_hash = Droom::LazyHash.new(hash)
     lazy_hash.should eq hash
   end
-  it "split_path, when given a colon-separated string, should turn this:that:other into [:this, ['that', 'other]]." do
+  it "split_path, when given a dot-separated string, should turn this:that:other into [:this, ['that', 'other]]." do
     lazy_hash = Droom::LazyHash.new()
-    array = lazy_hash.split_path("this:that:other")
+    array = lazy_hash.split_path("this.that.other")
     array[0].should eq :this
     array[1].should eq ["that", "other"]
   end
@@ -24,8 +24,8 @@ describe Droom::LazyHash do
       @lazy_hash.get("this").should eq "that"
     end
     it "long keys" do
-      @lazy_hash.set("this:that", "other")
-      @lazy_hash.get("this:that").should eq "other"
+      @lazy_hash.set("this.that", "other")
+      @lazy_hash.get("this.that").should eq "other"
       this = {:that => "other"}
       @lazy_hash.get("this").should eq this
     end

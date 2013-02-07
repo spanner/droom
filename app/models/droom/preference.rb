@@ -2,7 +2,7 @@
 
 module Droom
   class Preference < ActiveRecord::Base
-    attr_accessible :key, :value
+    attr_accessible :key, :value, :uuid
     belongs_to :created_by, :class_name => "Droom::User"
     validates :key, :presence => true, :uniqueness => true
     
@@ -26,5 +26,10 @@ module Droom
     def boolean?
       key.last == "?"
     end
+    
+    def uuid
+      self[:uuid] ||= SecureRandom.uuid
+    end
+  
   end
 end

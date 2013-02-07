@@ -23,6 +23,7 @@ jQuery ($) ->
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('.hidden').find('input, select, textarea').attr('disabled', true)
+    @find_including_self('.temporary').disappearAfter(1000)
     
     # link actions
     
@@ -52,7 +53,7 @@ jQuery ($) ->
     @find_including_self('.drag_sort').drag_sort()
     @find_including_self('input.password').password_field()
     @find_including_self('input[type="submit"]').submitter()
-    @find_including_self('span.preference').preference_block()
+    @find_including_self('form.preferences').preferences_form()
     
     # page widgets
     

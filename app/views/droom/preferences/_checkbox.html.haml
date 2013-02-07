@@ -1,0 +1,9 @@
+- user ||= current_user
+
+= fields_for user do |f|
+  - pref = user.preference(key)
+  = f.fields_for :preferences, pref, :child_index => pref.uuid do |pf|
+    = pf.hidden_field :key
+    = pf.hidden_field :uuid
+    = pf.check_box :value
+    = pf.label :value, t(:"preferences.#{key}")

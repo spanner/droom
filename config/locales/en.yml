@@ -33,12 +33,12 @@ en:
   preferences:
     dropbox:
       strategy:
-        everything:
-        selected:
-        clicked:
+        everything: "Sync everything"
+        selected: "Sync these folders..."
+        clicked: "Copy on command only"
       events?: "Your events"
       topics?: "Your topics"
-      
+      groups?: "Your groups"
   admin: "Admin"
   attachments: "Attachments"
   attending: "Attending"

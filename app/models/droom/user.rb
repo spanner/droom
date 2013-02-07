@@ -1,6 +1,6 @@
 module Droom
   class User < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email
+    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes
     has_one :person
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :preferences, :foreign_key => "created_by_id"
@@ -122,8 +122,13 @@ module Droom
     # is saved for the given key, we return a new (unsaved) one with that key and the default value.
     #
     def preference(key)
+      Rails.logger.warn ">>> preference(#{key})"
       pref = preferences.find_or_initialize_by_key(key)
+      Rails.logger.warn "    -> #{pref.inspect}"
       pref.value = Droom.user_default(key) unless pref.persisted?
+      Rails.logger.warn "    -> gets initial value #{pref.value}"
+      Rails.logger.warn "    -> should have been #{Droom.user_default(key)}"
+      Rails.logger.warn "    -> defaults are #{Droom.user_defaults}"
       pref
     end
     

@@ -67,6 +67,12 @@ jQuery ($) ->
         e.preventDefault()
         container.fadeOut "fast"
 
+  $.fn.disappearAfter = (interval) ->
+    console.log "disappearAfter", @, interval
+    interval ?= 1000
+    $(@).delay(interval).slideUp "slow", () ->
+      $(@).remove()
+    
   $.fn.signal = (color, duration) ->
     color ?= "#f7f283"
     duration ?= 1000

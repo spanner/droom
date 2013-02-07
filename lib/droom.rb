@@ -176,6 +176,7 @@ module Droom
         :dropbox => {
           :strategy => "clicked",
           :events? => true,
+          :groups? => true,
           :topics? => false
         },
         :dav => {
@@ -187,9 +188,9 @@ module Droom
     end
     
     # Here we are overriding droom default settings in a host app initializer to create local default settings.
-    # key should be colon-separated and string-like:
+    # key should be dot-separated and string-like:
     #
-    #   Droom.set_default('email:digest', true)
+    #   Droom.set_default('email.digest', true)
     #
     # LazyHash#deep_set is a setter that can take compound keys and set nested values. It's defined in lib/lazy_hash.rb.
     #

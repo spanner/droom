@@ -1,6 +1,7 @@
 module Droom
   class UsersController < ApplicationController
-    respond_to :html
+    respond_to :html, :js
+    layout :no_layout_if_pjax
     before_filter :authenticate_user!, :except => [:welcome]
     before_filter :remember_token_auth
     before_filter :get_user, :only => :edit
@@ -18,15 +19,25 @@ module Droom
       end
     end
   
+    # This has to handle small preference updates over js and large account-management forms over html.
+    #
     def update
       if @user.update_attributes(params[:user])
         sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session unless we refresh it with the new one
-        if current_user.admin?
-          flash[:notice] = t(:user_updated, :name => @user.name)
-        else
-          flash[:notice] = t(:your_preferences_saved)
+        respond_to do |format|
+          format.js { 
+            partial = params[:response_partial] || "confirmation"
+            render :partial => "droom/users/#{partial}"
+          }
+          format.html {
+            if current_user.admin? && @user != current_user
+              flash[:notice] = t(:user_updated, :name => @user.name)
+            else
+              flash[:notice] = t(:your_preferences_saved)
+            end
+            redirect_to droom.dashboard_url
+          }
         end
-        redirect_to droom.calendar_url
       else
         render :edit
       end

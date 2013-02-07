@@ -1,6 +1,0 @@
-- user ||= current_user
-
-= fields_for user do |f|
-  = f.fields_for :preferences, user.preference(key) do |pf|
-    = pf.check_box :value
-    = pf.label :value, t(:"preferences.#{key}")

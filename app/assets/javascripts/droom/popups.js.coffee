@@ -97,7 +97,6 @@ jQuery ($) ->
 
     place: (e) =>
       cols = @_container.find("div.column").not('.hidden').length
-      console.log "popup columns", cols
       if cols
         width = (cols * 280) - 20
       else 

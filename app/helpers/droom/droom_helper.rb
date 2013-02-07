@@ -7,8 +7,8 @@ module Droom
       current_user and current_user.admin?
     end
 
-    def preference_field(key, user=current_user)
-      render :partial => "droom/preferences/fields", :locals => {:key => key, :user => user}
+    def preference_checkbox(key, user=nil)
+      render :partial => "droom/preferences/checkbox", :locals => {:key => key, :user => user}
     end
 
     def dropbox?

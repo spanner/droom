@@ -309,13 +309,145 @@ jQuery ($) ->
         
 
 
+  # A captive form submits via an ajax request and pushes its results into the present page in the place 
+  # designated by its 'replacing' attribute.
+  #
+  # If options['fast'] is true, the form will submit on every change to a text, radio or checkbox input.
+  #
+  #todo: This is very old now. Tidy it up with a more standard action structure, and fewer options.
+
+  $.fn.captive = (options) ->
+    options = $.extend(
+      replacing: "#results"
+      clearing: null
+    , options)
+    @each ->
+      new CaptiveForm @, options
+    @
+
+  class CaptiveForm
+    constructor: (element, opts) ->
+      @_form = $(element)
+      @_prompt = @_form.find("input[type=\"text\"]")
+      @_options = $.extend {}, opts
+      @_request = null
+      @_placed_content = null
+      @_original_content = $(@_options.replacing)
+      @_form.remote
+        on_submit: @prepare
+        on_cancel: @cancel
+        on_success: @capture
+        
+      if @_options.fast
+        @_form.find("input[type=\"text\"]").keyup @keyed
+        @_form.find("input[type=\"text\"]").change @submit
+        @_form.find("input[type=\"radio\"]").click @clicked
+        @_form.find("input[type=\"checkbox\"]").click @clicked
+      
+    keyed: (e) =>
+      k = e.which
+      if (k >= 32 and k <= 165) or k == 8
+        if @_prompt.val() == "" then @revert() else @submit()
+
+    clicked: (e) =>
+      @submit()
+      
+    submit: (e) =>
+      @_form.submit()
+      
+    prepare: (xhr, settings) =>
+      $(@_options.replacing).fadeTo "fast", 0.2
+      @_request.abort() if @_request
+      @_request = xhr
+    
+    capture: (data, status, xhr) =>
+      @display(data)
+      @_request = null
+    
+    display: (results) =>
+      replacement = $(results)
+      replacement.find('a.cancel').click @revert
+      @_placed_content?.remove()
+      @_original_content?.hide()
+      @_original_content?.before(replacement)
+      $(@_options.clearing).val("")
+      @_placed_content = replacement
+      @_placed_content.activate()
+        
+    revert: (e) =>
+      e.preventDefault() if e
+      @_placed_content?.remove()
+      @_original_content?.fadeTo "fast", 1
+      @_prompt.val("")
+      @saveState()
+
+  # The suggestions form is a fast captive with history support based on a single prompt field.
+  #
+  $.fn.suggestion_form = (options) ->
+    options = $.extend(
+      fast: true
+      clearing: null
+      replacing: ".search_results"
+    , options)
+    @each ->
+      new SuggestionForm @, options
+    @
+  
+  class SuggestionForm extends CaptiveForm
+    constructor: (element, opts) ->
+      super
+      @_prompt = @_form.find("input[type=\"text\"]")
+      @_original_term = decodeURIComponent($.urlParam("q"))
+      if @_original_term and @_original_term isnt "false" and @_original_term isnt ""
+        @_prompt.val(@_original_term)
+        @submit() unless @_prompt.val()
+      if Modernizr.history
+        $(window).bind 'popstate', @restoreState
+
+    capture: (data, status, xhr) =>
+      @saveState(data) if Modernizr.history
+      super
+
+    saveState: (results) =>
+      results ?= @_original_content.html()
+      term = @_prompt.val()
+      if term
+        url = window.location.pathname + '?q=' + encodeURIComponent(term)
+      else
+        url = window.location.pathname
+      state = 
+        html: results
+        term: term
+      history.pushState state, "Search results", url
+    
+    restoreState: (e) =>
+      event = e.originalEvent
+      if event.state? && event.state.html?
+        @display event.state.html
+        @_prompt.val(event.state.term)
+
+  # The preferences form is a simple captive that just displays a confirmation message, with or without some control
+  # links (eg to copy or delete dropboxed folders). It may also include a number of preference blocks, which take care
+  # of showing and hiding subsidiary options.
+
+  $.fn.preferences_form = (options) ->
+    options = $.extend(
+      fast: true
+      clearing: null
+      replacing: ".confirmation"
+    , options)
+    @each ->
+      $(@).find('span.preference').preferences_block()
+      new CaptiveForm @, options
+      console.log "preferences form", @
+
   # The preferences block is a very minimal subcontent toggle. If the first contained radio or checkbox element
   # is checked, anything `.subpreference` is revealed. If its state changes, we show or hide.
   #
   # Note that to make this work with radio buttons we have applied a small hack to make sure they fire a change event
   # on deselection. See $.trigger_change_on_deselect in utilities.js.
 
-  $.fn.preference_block = ->
+  $.fn.preferences_block = ->
     @each ->
       new PreferenceBlock(@)
 
@@ -328,7 +460,8 @@ jQuery ($) ->
         @_input.change @set
         @set()
         
-    set: () =>
+    set: (e) =>
+      # let the event through...
       if @_input.is(":checked") then @show() else @hide()
     show: () =>
       @_subprefs.slideDown()

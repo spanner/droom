@@ -32,7 +32,7 @@ module Droom
     end
 
     # *get* will return the value in the named bucket. The bucket is designated
-    # by a key that can either be simple or the colon:separated path to a nested hash. 
+    # by a key that can either be simple or the dot.separated path to a nested hash. 
     #
     def get(path)
       key, subkeys = split_path(path)
@@ -50,7 +50,7 @@ module Droom
     end
     
     # *set* will set the value at the named bucket. Note that you should only ever do this from an 
-    # initializer or some other thread-global event that can be relied upon always to run. Never call
+    # initializer or some other thread-global event that can be relied upon always to have run. Never call
     # LazyHash#set at runtime unless what you want is a local, non-thread-global nested hash construction.
     #
     def set(path, value)
@@ -65,7 +65,7 @@ module Droom
     
     #
     def split_path(key)
-      keys = key.is_a?(Array) ? key : key.to_s.split(':')
+      keys = key.is_a?(Array) ? key : key.to_s.split('.')
       keys.any? ? [keys.shift.to_sym, keys] : [nil, []]
     end
 
