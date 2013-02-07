@@ -26,9 +26,18 @@
               = pf.radio_button :value, "clicked"
               = pf.label :value_clicked, t("preferences.dropbox.strategy.clicked")
 
+      %p
+        = link_to "revoke dropbox access", dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
+
       %p.confirmation
         
 
     - else
       %p
-        You can have document folders posted automatically to your dropbox.
+        We can copy document folders to your dropbox either automatically or in response to your selections. 
+        They will be placed within a new 'hkfx' folder.
+        To begin, please click the link below and log into your dropbox.
+      %p
+        = link_to "Connect to your dropbox", dropbox_auth_url, :class => "dropbox"
+        
+        

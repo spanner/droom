@@ -928,7 +928,6 @@ input[type="submit"]
 
 #account
   position: relative
-  margin: 5px
   clear: both
   width: 600px
   label
@@ -1306,7 +1305,40 @@ input.search_box
         position: 0 -96px
         repeat: no-repeat
 
-  
+nav.icons
+  position: relative
+  display: inline-block
+  a
+    display: inline-block
+    float: left
+  a.dropbox
+    +panel_icon("droom/integration_buttons.png", 0, 0)
+  a.rss                              
+    +panel_icon("droom/integration_buttons.png", -32px, 0)
+  a.email                            
+    +panel_icon("droom/integration_buttons.png", -64px, 0)
+  a.readers                          
+    +panel_icon("droom/integration_buttons.png", -96px, 0)
+  a.vcal                          
+    +panel_icon("droom/integration_buttons.png", -128px, 0)
+  a.account                            
+    +panel_icon("droom/integration_buttons.png", -160px, 0)
+  a.signout                          
+    +panel_icon("droom/integration_buttons.png", -192px, 0)
+  a.keywords
+    +panel_icon("droom/integration_buttons.png", -224px, 0)
+  a.search                          
+    +panel_icon("droom/integration_buttons.png", -256px, 0)
+  a.devices
+    +panel_icon("droom/integration_buttons.png", -288px, 0)
+  a.networks
+    +panel_icon("droom/integration_buttons.png", -320px, 0)
+  span.spacer
+    display: inline-block
+    float: left
+    width: 64px
+    height: 32px
+
 
 
 /* -------- map infowindows -------- */

@@ -1,0 +1,4 @@
+- if user_signed_in?
+  %nav.icons{:"data-selected" => session[:panel]}
+    - Droom.panels.each do |panel|
+      = link_to t(panel), "#", :class => panel, :"data-panel" => panel, :title => t(panel)

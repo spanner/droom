@@ -146,6 +146,24 @@ $default-box-shadow-blur: 3px
   &:hover
     background-position: 0 -16px
 
+=panel_icon($image: "droom/integration_buttons.png", $x: 0, $y: 0)
+  overflow: hidden
+  text-indent: 34px
+  line-height: 32px
+  width: 32px
+  height: 35px
+  margin: 0
+  margin-right: 3px
+  background: 
+    position: $x $y
+    repeat: no-repeat
+    image: image-url($image)
+  &:hover
+    background-position: $x $y - 32px
+  &.here
+    background-color: $verypale
+    background-position: $x $y - 64px
+
 =blurred($color: $pale)
   text-shadow: $color 0 0 3px
   

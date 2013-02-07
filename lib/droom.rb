@@ -89,7 +89,7 @@ module Droom
     end
     
     def panels
-      @@panels ||= %w{search dropbox rss email readers device networks preferences}
+      @@panels ||= %w{dropbox email rss devices networks readers account search}
     end
 
     # base path of DAV directory tree, relative to rails root.
@@ -170,8 +170,9 @@ module Droom
       @@user_defaults ||= Droom::LazyHash.new({
         :email =>  {
           :enabled? => true,
-          :digest? => false,
-          :invitations? => false
+          :mailing_lists? => true,
+          :event_invitations? => false,
+          :digest? => false
         },
         :dropbox => {
           :strategy => "clicked",

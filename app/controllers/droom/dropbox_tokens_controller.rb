@@ -35,7 +35,8 @@ module Droom
     
     def destroy
       @dropbox_token.destroy
-      head :ok
+      session[:panel] = 'dropbox'
+      redirect_to main_app.dashboard_url
     end
   
   protected

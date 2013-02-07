@@ -87,6 +87,10 @@ module Droom
       [forename, name].compact.join(' ').strip
     end
   
+    def dropbox_token
+      dropbox_tokens.by_date.last
+    end
+  
     def dropbox_access_token
       if dt = dropbox_tokens.by_date.last
         dt.access_token
@@ -122,13 +126,8 @@ module Droom
     # is saved for the given key, we return a new (unsaved) one with that key and the default value.
     #
     def preference(key)
-      Rails.logger.warn ">>> preference(#{key})"
       pref = preferences.find_or_initialize_by_key(key)
-      Rails.logger.warn "    -> #{pref.inspect}"
       pref.value = Droom.user_default(key) unless pref.persisted?
-      Rails.logger.warn "    -> gets initial value #{pref.value}"
-      Rails.logger.warn "    -> should have been #{Droom.user_default(key)}"
-      Rails.logger.warn "    -> defaults are #{Droom.user_defaults}"
       pref
     end
     
