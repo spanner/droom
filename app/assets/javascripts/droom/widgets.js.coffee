@@ -921,4 +921,23 @@ jQuery ($) ->
       false
 
 
+  $.fn.tabset = () ->
+    @each ->
+      new Tabset(@, options)
+    @
 
+  $.fn.tab = (tabset) ->
+    @each ->
+      new Tab(@, tabset)
+    @
+
+  class Tabset
+    constructor: (element) ->
+      @container = $(element)
+      @container.find('[action="tab"]').tab(@)
+
+  class Tab
+    constructor: (element, @_tabset) ->
+      @head = $(element)
+      @selector = @head.attr('data-selector')
+    

@@ -18,6 +18,10 @@ module Droom
       respond_with(@scrap)
     end
 
+    def new
+      respond_with(@scrap)
+    end
+
     def edit
       respond_with(@scrap)
     end
@@ -48,7 +52,8 @@ module Droom
     end
 
     def build_scrap
-      @scrap = Scrap.new
+      @scrap = Scrap.new(params[:scrap])
+      @scrap.scraptype ||= 'text'
     end
   
   end

@@ -1,0 +1,7 @@
+= link_to "", droom.scrap_url(scrap), :class => "icon quote"
+%p.caption
+  = link_to shorten(scrap.body, :length => 128 - scrap.note.length), droom.scrap_url(scrap), :class => "scrap"
+  %span.attribution
+    = scrap.note
+  = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+  

@@ -1,6 +1,5 @@
 - scrap ||= thumb
 - if Droom.scrap_types.include? scrap.scraptype
   .scrap{:id => "scrap_#{scrap.id}"}
-    = render :partial => "droom/scraps/#{scrap.scraptype}", :locals => {:scrap => scrap}
-    = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+    = render :partial => "droom/scraps/thumbs/#{scrap.scraptype}", :locals => {:scrap => scrap}
 

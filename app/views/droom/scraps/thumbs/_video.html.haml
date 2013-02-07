@@ -1,0 +1,4 @@
+= link_to scrap.name, droom.scrap_url(scrap), :class => "thumb playable", :style =>"background-image: url('#{scrap.image.url(:icon)}')"
+%p.caption
+  = link_to shorten(scrap.body), droom.scrap_url(scrap), :class => "scrap"
+  = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}

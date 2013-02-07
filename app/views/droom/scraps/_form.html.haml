@@ -1,0 +1,31 @@
+= form_for @scrap, :html => {:class => 'edit scrap'} do |f|
+
+  #scraptabs{:data => {:action => 'tabset'}}
+
+    - Droom.scrap_types.each do |type|
+      - cssclass = @scrap.scraptype == type ? "#{type} here" : type
+      %span{:class => cssclass, :data => {:action => 'tab', :selector => ".#{type}"}}
+        = f.radio_button :scraptype, type
+        = f.label :"scraptype_#{type}", type
+
+  .types
+    %p.text
+      = f.text_area :body, :placeholder => "Enter your text here", :class => 'body'
+
+    %p.quote
+      = f.text_area :body, :placeholder => "Quote text", :class => 'body'
+      = f.text_field :note, :placeholder => "Speaker", :class => 'note'
+
+    %p.link
+      = f.text_field :note, :placeholder => "Link destination", :class => 'note'
+      = f.text_area :body, :placeholder => "Caption or explanation", :class => 'body'
+
+    %p.video
+      = f.text_field :note, :placeholder => "Youtube id", :class => 'note'
+      = f.text_area :body, :placeholder => "Caption or explanation", :class => 'body'
+      
+
+  .buttons
+    = f.submit t(:save_event)
+    = t :or
+    = link_to t(:cancel), "/", :class => 'cancel'

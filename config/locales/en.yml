@@ -29,7 +29,14 @@ en:
           post_country: "Country"
           post_code: "Postcode"
           dob: "Date of birth"
-
+        scrap:
+          scraptype:
+            image: "Image"
+          scraptype_text: "Text"
+          scraptype_video: "Video"
+          scraptype_link: "Link"
+          scraptype_quote: "Quote"
+          
   preferences:
     dropbox:
       strategy:
@@ -59,6 +66,7 @@ en:
   add_page: "Add a page"
   add_person: "Add a person"
   add_group: "Add a group"
+  add_to_stream: "Add something..."
   added_to: "has been added to '%{group}'."
   continue: "Continue"
   copy: "copy"

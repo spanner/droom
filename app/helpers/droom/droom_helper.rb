@@ -11,6 +11,12 @@ module Droom
       render :partial => "droom/preferences/checkbox", :locals => {:key => key, :user => user}
     end
 
+    def shorten(text, options={})
+      options[:length] ||= 128
+      options[:separator] ||= ' '
+      truncate(strip_tags(text), options)
+    end
+
     def dropbox?
       !!current_user.dropbox_access_token
     end
