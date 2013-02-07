@@ -22,7 +22,7 @@ module Droom
       if params[:oauth_token]
         @dropbox_token = current_user.dropbox_tokens.create(:access_token => params[:oauth_token])
         session[:dropbox_session] = @dbsession.serialize
-        session[:panel] = 'dropbox'
+        flash[:panel] = 'dropbox'
         redirect_to main_app.dashboard_url
       else
         redirect_to new_dropbox_token_url
@@ -35,7 +35,8 @@ module Droom
     
     def destroy
       @dropbox_token.destroy
-      session[:panel] = 'dropbox'
+      flash[:panel] = 'dropbox'
+      flash[:notice] = t(:dropbox_access_revoked)
       redirect_to main_app.dashboard_url
     end
   
@@ -50,7 +51,7 @@ module Droom
     end
     
     def get_token
-      @dropbox_token = DropboxToken.get(params[:id])
+      @dropbox_token = DropboxToken.find(params[:id])
     end
     
   end

@@ -4,16 +4,11 @@
 - cssclass = open ? "folder holder open" : "folder holder"
 
 %div{:class => cssclass, :id => "folder_#{folder.id}", :data => {:refreshable => true, :url => droom.folder_path(folder, :format => :js)} }
-  - if folder.populated?
-    %h3
-      = link_to title, "#", :class => "folder"
-
-    %ul.filing
-      = render :partial => 'droom/folders/folder', :collection => folder.children.populated
-      = render :partial => 'droom/documents/listing', :collection => folder.documents
+  %h3
+    = link_to title, "#", :class => "folder"
     - if editable?(folder)
-      = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}
+      %span.admin
+        = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add minimal", :remote => true, :data => {:action => "popup", :type => "html", :affected => "folder_#{folder.id}"}
+    
+  = render :partial => "droom/folders/contents", :locals => {:folder => folder}
 
-
-  - elsif editable?(folder)
-    = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}

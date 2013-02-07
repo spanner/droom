@@ -26,8 +26,7 @@
               = pf.radio_button :value, "clicked"
               = pf.label :value_clicked, t("preferences.dropbox.strategy.clicked")
 
-      %p
-        = link_to "revoke dropbox access", dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
+      = button_to "revoke dropbox access", dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
 
       %p.confirmation
         

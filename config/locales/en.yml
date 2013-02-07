@@ -64,6 +64,7 @@ en:
   copy: "copy"
   dashboard: "Dashboard"
   document_created: "Document '%{name}' created"
+  dropbox_access_revoked: "Dropbox access has been revoked. If there is still an hkfx folder in your dropbox you can safely delete it."
   hello: "Hello world"
   sign_in: "Sign in"
   can_still_log_in: 'Your password has not changed until you complete this process, <br />so if you remember the old one you can still <a href="%{url}">log in</a>'

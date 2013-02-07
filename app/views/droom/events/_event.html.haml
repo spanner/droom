@@ -30,6 +30,14 @@
       - if event.start.year != Date.today.year
         %span.year= event.start.strftime('%Y')
 
+    - unless brief || full_attachments
+      - if event.folder.populated?
+        .documents
+          = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true}
+      - elsif editable?(event.folder)
+        %span.admin.documents
+          = link_to t(:add_document), droom.new_folder_document_url(event.folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
+
     .summary
       .heading
         %h2.name<
@@ -58,10 +66,6 @@
                 = event.venue.proper_name
 
       .detail
-        - unless brief || full_attachments
-          .documents
-            = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true}
-                
         - unless brief
           = event.description.html_safe
 

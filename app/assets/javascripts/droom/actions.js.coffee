@@ -347,7 +347,6 @@ jQuery ($) ->
       @_container.bind "keyup", @setQuery
       @_defilter.bind "click", @clearQuery
       # @announce()
-      console.log "Filter", @_container.get(0)
 
     setDefilter: () =>
       if @_container.val()

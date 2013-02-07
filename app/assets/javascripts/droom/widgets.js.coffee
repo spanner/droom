@@ -400,7 +400,7 @@ jQuery ($) ->
       @_original_term = decodeURIComponent($.urlParam("q"))
       if @_original_term and @_original_term isnt "false" and @_original_term isnt ""
         @_prompt.val(@_original_term)
-        @submit() unless @_prompt.val()
+        @submit()
       if Modernizr.history
         $(window).bind 'popstate', @restoreState
 
@@ -439,7 +439,6 @@ jQuery ($) ->
     @each ->
       $(@).find('span.preference').preferences_block()
       new CaptiveForm @, options
-      console.log "preferences form", @
 
   # The preferences block is a very minimal subcontent toggle. If the first contained radio or checkbox element
   # is checked, anything `.subpreference` is revealed. If its state changes, we show or hide.
@@ -480,7 +479,6 @@ jQuery ($) ->
 
   class Editor
     constructor: (element) ->
-      console.log "Editor", element
       @_container = $(element)
       @_textarea = @_container.find('textarea')
       @_toolbar = @_container.find('.toolbar')
@@ -670,7 +668,6 @@ jQuery ($) ->
       @search("#{@monthName()} #{@_year}")
       
     search: (term) =>
-      console.log "setting", @searchForm()?.find('input#term'), "to", term
       @searchForm()?.find('input#term').val(term).change()
       # should trigger a change event, then we hit the cache if possible
       # @searchForm()?.submit()

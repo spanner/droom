@@ -68,7 +68,6 @@ jQuery ($) ->
         container.fadeOut "fast"
 
   $.fn.disappearAfter = (interval) ->
-    console.log "disappearAfter", @, interval
     interval ?= 1000
     $(@).delay(interval).slideUp "slow", () ->
       $(@).remove()

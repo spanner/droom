@@ -56,7 +56,7 @@ module Droom
     def empty?
       documents.empty?
     end
-
+    
     def documents_zipped
       if self.documents.any?
         tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")

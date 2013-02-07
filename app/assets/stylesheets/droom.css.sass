@@ -28,6 +28,16 @@ a.to_dropbox
 a.in_dropbox
   +icon("droom/in_dropbox.png")
 
+input.dropbox.revoke[type="submit"]
+  +icon_with_text("droom/revoke.png")
+  background-color: none
+  color: $blue
+  padding: 0
+  height: auto
+  line-height: 1
+  &:hover
+    color: $hover
+
 a.download
   +icon_with_text("droom/download.png")
   
@@ -160,12 +170,17 @@ div.event, form.event
       p
         margin-top: 0
 
-div.documents
+div.documents, span.admin.documents
+  position: relative
+  overflow: hidden
   float: right
   margin-left: 20px
   margin-bottom: 10px
+  margin-top: 0.5em
   width: 240px
   h3
+    position: relative
+    overflow: hidden
     min-height: 18px
     a
       color: $text
@@ -173,8 +188,7 @@ div.documents
     margin: 0
     padding: 0
     list-style: none
-  span.admin
-    margin-top: 4px
+
 
 .interjected
   margin: 10px 0
@@ -656,7 +670,10 @@ a.add
     color: $green
   &:hover
     color: $hover
-
+  &.minimal
+    +smallicon("droom/smalladd.png")
+    min-height: 16px
+    
 a.edit, a.delete, a.revert, a.copy, a.email, a.web, a.drop
   display: inline-block
   text-indent: 16px
