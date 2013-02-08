@@ -62,6 +62,10 @@ module Droom
       open(self.file.url)
     end
 
+    def full_path
+      "#{folder.path}/#{file_file_name}"
+    end
+    
     def changed_since_creation?
       file_updated_at > created_at
     end
@@ -98,7 +102,7 @@ module Droom
     
     def copy_to_dropbox(user)
       if dbclient = user.dropbox_client
-        dbclient.put_file(path, original_file)
+        dbclient.put_file(full_path, original_file)
       end
     end
 
