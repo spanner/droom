@@ -1,4 +1,4 @@
-= link_to scrap.name, droom.scrap_url(scrap), :class => "icon text"
+= link_to scrap.name, droom.scrap_url(scrap), :class => "icon text scrap"
 %p.caption
   = link_to shorten(scrap.body), droom.scrap_url(scrap), :class => "scrap"
   = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
