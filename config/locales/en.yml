@@ -66,7 +66,7 @@ en:
   add_page: "Add a page"
   add_person: "Add a person"
   add_group: "Add a group"
-  add_to_stream: "Add something..."
+  add_to_stream: "Add to stream"
   added_to: "has been added to '%{group}'."
   continue: "Continue"
   copy: "copy"
