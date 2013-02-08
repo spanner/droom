@@ -63,7 +63,7 @@ module Droom
     end
 
     def full_path
-      "#{folder.path}/#{file_file_name}"
+      "#{folder.path if folder}/#{file_file_name}"
     end
     
     def changed_since_creation?

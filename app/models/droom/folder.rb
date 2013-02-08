@@ -28,7 +28,7 @@ module Droom
       not_private
     }
 
-    scope :roots, select('parent_id IS NULL')
+    scope :loose, select('parent_id IS NULL')
 
     scope :populated, select('droom_folders.*')
       .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id')
@@ -50,7 +50,7 @@ module Droom
     end
         
     def path
-      parent.path + "#{parent.path if parent}/#{slug}"
+      "#{parent.path if parent}/#{slug}"
     end
 
     def empty?
