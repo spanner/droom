@@ -4,6 +4,10 @@ module Droom
     rescue_from "ActiveRecord::RecordNotFound", :with => :rescue_not_found
     rescue_from "Droom::PermissionDenied", :with => :rescue_not_allowed
     rescue_from "Droom::DroomError", :with => :rescue_bang
+
+    before_filter :authenticate_user!
+    before_filter :note_current_user
+
   protected
 
     def require_admin!
@@ -35,6 +39,10 @@ module Droom
       end
     end
     
+    def note_current_user
+      User.current = current_user
+    end
+
     def get_current_person
       @current_person = current_user.person if current_user
     end

@@ -73,7 +73,6 @@ jQuery ($) ->
     selector ?= '.reviewer'
     options = $.extend { force: false }, opts
     @each ->
-      console.log ">> replace_with_remote_content", @, options
       $(@).remote
         on_success: (r) =>
           replaced = $(@).parents(selector).first()

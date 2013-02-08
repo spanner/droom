@@ -8,6 +8,7 @@
 #= require droom/lib/kalendae
 #= require droom/lib/wysihtml5
 #= require droom/lib/parser_rules/advanced
+#= require cropper
 #= require droom/extensions
 #= require droom/utilities
 #= require droom/ajax
@@ -19,7 +20,9 @@
 
 jQuery ($) ->
   $.activate_with () ->
-    @find_including_self('input:radio').trigger_change_on_deselect()
+    
+    console.log ">>> activate", @
+    
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('.hidden').find('input, select, textarea').attr('disabled', true)
@@ -38,7 +41,11 @@ jQuery ($) ->
     @find_including_self('[data-action="fetch"]').replace_with_remote_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder",
       force: true
-    
+    @find_including_self('[data-action="upload"]').uploader()
+    @find_including_self('[data-action="recrop"]').recropper()
+  
+    @find_including_self('a.scrap').popup()
+  
     # and some shortcuts for compatibility
     
     @find_including_self('a.inline, a.fetch').replace_with_remote_content()
@@ -56,6 +63,7 @@ jQuery ($) ->
     @find_including_self('input.password').password_field()
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('form.preferences').preferences_form()
+    @find_including_self('form.scrap').scrap_form()
     
     # page widgets
     

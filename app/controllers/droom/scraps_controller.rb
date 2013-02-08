@@ -4,6 +4,7 @@ module Droom
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!
+    before_filter :scale_image_params, :only => [:create, :update]
     before_filter :find_scraps, :only => [:index]
     before_filter :get_scrap, :only => [:show, :edit, :update, :destroy, :chart]
     before_filter :build_scrap, :only => [:new, :create]
@@ -27,10 +28,12 @@ module Droom
     end
 
     def update
+      @scrap.update_attributes(params[:scrap])
       respond_with(@scrap)
     end
 
     def create
+      @scrap.update_attributes(params[:scrap])
       respond_with(@scrap)
     end
   
@@ -54,6 +57,13 @@ module Droom
     def build_scrap
       @scrap = Scrap.new(params[:scrap])
       @scrap.scraptype ||= 'text'
+    end
+
+    def scale_image_params
+      multiplier = params[:multiplier] || 2
+      [:image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top].each do |p|
+        params[:scrap][p] = (params[:scrap][p].to_i * multiplier.to_i) unless params[:scrap][p].blank?
+      end
     end
   
   end

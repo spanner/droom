@@ -1,31 +1,36 @@
 = form_for @scrap, :html => {:class => 'edit scrap'} do |f|
 
-  #scraptabs{:data => {:action => 'tabset'}}
-
+  %ul.scraptypes
     - Droom.scrap_types.each do |type|
       - cssclass = @scrap.scraptype == type ? "#{type} here" : type
-      %span{:class => cssclass, :data => {:action => 'tab', :selector => ".#{type}"}}
+      %li{:data => {:action => 'tab', :selector => ".#{type}"}}
         = f.radio_button :scraptype, type
-        = f.label :"scraptype_#{type}", type
+        = f.label :"scraptype_#{type}", type, :class => cssclass
 
-  .types
-    %p.text
-      = f.text_area :body, :placeholder => "Enter your text here", :class => 'body'
+  %div{:class => "fields #{@scrap.scraptype}"}
+    .upload
+      - @scrap.build_image_upload unless @scrap.image_upload
+      = f.fields_for :image_upload do |iuf|
+        .uploadbox{:data => {:action => "upload", :url => cropper.uploads_path(:format => :js), :scale => 2}}
+          = iuf.file_field :file, :class => 'file_upload', :accept => "image"
+          .img
+            - if @scrap.image?
+              = link_to image_tag(@scrap.image.url(:cropped), :width => 260, :height => 260), cropper.edit_upload_url(@scrap.image_upload), :data => {:action => "recrop"}
+              = link_to t(:detach_upload), '#', :class => 'detach'
+            .prompt
+              = link_to t(:click_to_upload), cropper.new_upload_url, :class => 'picker'
+              .droppable
+                .note
+                  = t :drop_to_upload
 
-    %p.quote
-      = f.text_area :body, :placeholder => "Quote text", :class => 'body'
-      = f.text_field :note, :placeholder => "Speaker", :class => 'note'
+    %p.primary
+      = f.text_area :body, :placeholder => "Caption", :class => 'body'
+    %p.secondary
+      = f.text_field :note, :placeholder => "Note", :class => 'note'
 
-    %p.link
-      = f.text_field :note, :placeholder => "Link destination", :class => 'note'
-      = f.text_area :body, :placeholder => "Caption or explanation", :class => 'body'
-
-    %p.video
-      = f.text_field :note, :placeholder => "Youtube id", :class => 'note'
-      = f.text_area :body, :placeholder => "Caption or explanation", :class => 'body'
-      
+    
 
   .buttons
-    = f.submit t(:save_event)
+    = f.submit t(:save)
     = t :or
     = link_to t(:cancel), "/", :class => 'cancel'

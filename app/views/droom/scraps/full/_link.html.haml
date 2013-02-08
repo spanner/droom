@@ -1,0 +1,6 @@
+= link_to scrap.name, scrap.note, :class => "icon link"
+%p.caption
+  = link_to scrap.name, scrap.note
+  - if scrap.body?
+    = shorten(scrap.body, :length => 128 - scrap.name.length)
+  = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}

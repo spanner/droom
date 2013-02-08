@@ -40,7 +40,7 @@ jQuery ($) ->
           return false
         else
           # A popup that is on a second or later response will be considered abandoned and started again.
-          @_container.remove()
+          @reset()
           @prepare()
 
     prepare: () =>
@@ -50,7 +50,7 @@ jQuery ($) ->
       @_container.insertAfter(@_mask).hide()
 
     receive: (response) =>
-      if $(response).find('form').length
+      if @_iteration == 0 || $(response).find('form').length
         @display(response)
       else
         @conclude(response)
@@ -76,7 +76,7 @@ jQuery ($) ->
         replacement = $(data)
         $(@_replaced).replaceWith(replacement)
         replacement.activate().signal_confirmation()
-      @hide()
+      @reset()
 
     show: (e) =>
       e.preventDefault() if e
@@ -94,6 +94,11 @@ jQuery ($) ->
       @_mask.fadeOut('fast')
       @_mask.unbind "click", @hide
       $(window).unbind "resize", @place
+
+    reset: () =>
+      @hide()
+      @_container.remove()
+      @_iteration = 0
 
     place: (e) =>
       cols = @_container.find("div.column").not('.hidden').length

@@ -1,0 +1,6 @@
+#scrap
+  %h2
+    Scrap
+  .scrap{:id => "scrap_#{@scrap.id}"}
+    = render :partial => "droom/scraps/full/#{@scrap.scraptype}", :locals => {:scrap => @scrap}
+

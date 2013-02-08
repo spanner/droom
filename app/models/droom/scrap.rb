@@ -2,11 +2,11 @@ module Droom
   class Scrap < ActiveRecord::Base
     belongs_to :created_by, :class_name => "Droom::User"
     has_upload :image, 
-               :geometry => "720x720#",
+               :geometry => "520x520#",
                :styles => {
                  :icon => "32x32#",
                  :thumb => "120x120#",
-                 :precrop => "1600x1600^"
+                 :precrop => "1200x1200^"
                }
 
     attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by
@@ -14,8 +14,8 @@ module Droom
     default_scope order("droom_scraps.created_at desc")
     
     Droom.scrap_types.each do |t|
-      define_method(:"#{t}?") { type == t.to_s }
-      scope t.pluralize.to_sym, where(["type == ?", t])
+      define_method(:"#{t}?") { scraptype == t.to_s }
+      scope t.pluralize.to_sym, where(["scraptype == ?", t])
     end
 
     def wordiness
@@ -46,6 +46,6 @@ module Droom
         self.image = URI.parse("http://img.youtube.com/vi/#{note}/0.jpg")
       end
     end
-  
+    
   end
 end

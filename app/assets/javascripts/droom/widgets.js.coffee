@@ -456,6 +456,7 @@ jQuery ($) ->
       @_input = @_container.find("> input")
       @_subprefs = @_container.find('span.subpreference')
       if @_subprefs.length
+        @_input.trigger_change_on_deselect()
         @_input.change @set
         @set()
         
@@ -921,23 +922,63 @@ jQuery ($) ->
       false
 
 
-  $.fn.tabset = () ->
+  $.fn.scrap_form = () ->
     @each ->
-      new Tabset(@, options)
+      new ScrapForm(@)
     @
 
-  $.fn.tab = (tabset) ->
-    @each ->
-      new Tab(@, tabset)
-    @
+  $.fn.type_setter = (scrapform) ->
+    @change ->
+      console.log "change!", @
+      if $(@).is('checked')
+        scrapform.setType($(@).val())
 
-  class Tabset
+
+
+  class ScrapForm
     constructor: (element) ->
-      @container = $(element)
-      @container.find('[action="tab"]').tab(@)
-
-  class Tab
-    constructor: (element, @_tabset) ->
-      @head = $(element)
-      @selector = @head.attr('data-selector')
-    
+      @_container = $(element)
+      @_header = @_container.find('.scraptypes')
+      @_body = @_container.find('.fields')
+      @_header.find('input:radio').change @setType
+      @_primary = @_body.find('p.primary')
+      @_secondary = @_body.find('p.secondary')
+      @_uploader = @_body.find('.upload')
+      @setType()
+      
+    setType: () =>
+      scraptype = @_header.find('input:radio:checked').val()
+      @_body.attr("class", "fields #{scraptype}")
+      switch scraptype
+        when "text"
+          @_primary.find('textarea').attr("placeholder", "Your remarks")
+          @_primary.insertBefore @_secondary
+          @_uploader.find('input').prop('disabled', true);
+        when "quote"
+          @_primary.find('textarea').attr("placeholder", "Quote text")
+          @_secondary.find('input').attr("placeholder", "Speaker or source")
+          @_primary.insertBefore @_secondary
+          @_uploader.find('input').prop('disabled', true);
+        when "link"
+          @_primary.find('textarea').attr("placeholder", "Comment or explanation")
+          @_secondary.find('input').attr("placeholder", "Address to link to")
+          @_primary.insertAfter @_secondary
+          @_uploader.find('input').prop('disabled', true);
+        when "video"
+          @_primary.find('textarea').attr("placeholder", "Caption")
+          @_secondary.find('input').attr("placeholder", "Youtube ID")
+          @_primary.insertAfter @_secondary
+          @_uploader.find('input').prop('disabled', true);
+        when "image"
+          @_primary.find('textarea').attr("placeholder", "Caption")
+          @_uploader.find('input').prop('disabled', false);
+      
+      
+  
+      
+      
+      
+      
+      
+      
+      
