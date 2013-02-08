@@ -9,7 +9,7 @@ module Droom
     layout :no_layout_if_pjax
     before_filter :authenticate_user!
 
-    before_filter :get_session, :only => [:new, :create]
+    before_filter :get_dropbox_session, :only => [:new, :create]
     before_filter :get_token, :only => [:show, :destroy]
     
     def new
@@ -20,7 +20,9 @@ module Droom
     
     def create
       if params[:oauth_token]
-        @dropbox_token = current_user.dropbox_tokens.create(:access_token => params[:oauth_token])
+        response = @dbsession.get_access_token
+        Rails.logger.warn ">>> get_access_token: #{response.inspect}"
+        @dropbox_token = current_user.dropbox_tokens.create(:access_token => response.key, :access_token_secret => response.secret)
         session[:dropbox_session] = @dbsession.serialize
         flash[:panel] = 'dropbox'
         redirect_to main_app.dashboard_url
@@ -41,15 +43,7 @@ module Droom
     end
   
   protected
-  
-    def get_session
-      if session[:dropbox_session]
-        @dbsession = DropboxSession.deserialize(session[:dropbox_session])
-      else
-        @dbsession = DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
-      end
-    end
-    
+      
     def get_token
       @dropbox_token = DropboxToken.find(params[:id])
     end

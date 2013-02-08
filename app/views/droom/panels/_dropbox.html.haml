@@ -1,6 +1,6 @@
 #dropbox.panel
   .content
-    - if current_user.dropbox_access_token
+    - if dropbox?
       %h4
         = t :dropbox_preferences
         

@@ -25,6 +25,9 @@ a.dropbox
     background-position: 0 -48px
     color: $hover
 
+a.minidropbox
+  +smallicon("droom/to_dropbox.png")
+
 a.to_dropbox
   +icon("droom/copy_to_dropbox.png")
 
@@ -259,7 +262,6 @@ form.document
     width: 480px
     font-size: 2em
   textarea
-    +book
     width: 480px
     font-size: 1em
     height: 60px
@@ -479,14 +481,12 @@ table.people
       + input.surname
         width: 80px
     label
-      +book
       +pale
   td.email, td.phone, td.address
     width: 160px
     input
       width: 150px
   th.group, th.admin
-    +book
     max-width: 24px
     height: 30px
     padding-right: 2px
@@ -972,7 +972,6 @@ input[type="submit"]
     font-size: 1.1em
     &.minor
       font-size: 0.9em
-      +book
   input[type="text"], input[type="password"], input[type="email"]
     width: 590px
     padding: 4px

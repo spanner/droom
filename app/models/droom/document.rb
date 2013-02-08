@@ -1,3 +1,5 @@
+require 'open-uri'
+
 module Droom
   class Document < ActiveRecord::Base
     attr_accessible :name, :file, :description, :folder
@@ -53,6 +55,10 @@ module Droom
 
     def file_ok?
       file.exists?
+    end
+    
+    def original_file
+      open(self.file.url)
     end
 
     def changed_since_creation?

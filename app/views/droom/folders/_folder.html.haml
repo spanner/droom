@@ -9,6 +9,8 @@
     - if editable?(folder)
       %span.admin
         = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add minimal", :remote => true, :data => {:action => "popup", :type => "html", :affected => "folder_#{folder.id}"}
+        - if dropbox? && current_user.pref('dropbox.strategy') == "clicked"
+          = link_to " ", droom.dropbox_folder_url(folder), :class => "minidropbox", :remote => true, :data => {:action => "dropbox", :type => "html"}
     
   = render :partial => "droom/folders/contents", :locals => {:folder => folder}
 

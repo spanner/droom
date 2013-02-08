@@ -18,7 +18,7 @@ module Droom
     end
 
     def dropbox?
-      !!current_user.dropbox_access_token
+      current_user.dropbox_access_token && current_user.dropbox_access_token_secret
     end
     
     def dropbox_auth_url

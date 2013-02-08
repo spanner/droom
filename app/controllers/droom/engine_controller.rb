@@ -1,3 +1,5 @@
+require 'dropbox_sdk'
+
 module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
@@ -45,6 +47,14 @@ module Droom
 
     def get_current_person
       @current_person = current_user.person if current_user
+    end
+    
+    def get_dropbox_session
+      if session[:dropbox_session]
+        @dbsession = DropboxSession.deserialize(session[:dropbox_session])
+      else
+        @dbsession = DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
+      end
     end
     
   end

@@ -24,8 +24,8 @@ module Droom
     end
     
     def dropbox
-      @folder.copy_to_dropbox
-      respond_with @folder
+      @folder.copy_to_dropbox(current_user)
+      render :partial => "folder"
     end
 
     def dav

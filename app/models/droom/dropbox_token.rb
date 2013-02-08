@@ -1,6 +1,6 @@
 module Droom
   class DropboxToken < ActiveRecord::Base
-    attr_accessible :access_token, :created_by
+    attr_accessible :access_token, :access_token_secret, :created_by
     belongs_to :created_by, :class_name => "Droom::User"
     after_create :delete_previous
     
