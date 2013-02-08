@@ -90,18 +90,11 @@ module Droom
     def dropbox_token
       dropbox_tokens.by_date.last
     end
-  
-    def dropbox_access_token
-      if dt = dropbox_tokens.by_date.last
-        dt.access_token
-      end
-    end
 
-    def dropbox_access_token_secret
-      if dt = dropbox_tokens.by_date.last
-        dt.access_token_secret
-      end
+    def dropbox_client
+      dropbox_token.dropbox_client if dropbox_token
     end
+    
     
     ## Preferences
     #

@@ -1,5 +1,4 @@
 require 'zip/zip'
-require 'dropbox_sdk'
 
 module Droom
   class Folder < ActiveRecord::Base
@@ -51,11 +50,7 @@ module Droom
     end
         
     def path
-      if parent
-        parent.path + "/#{slug}"
-      else
-        "/#{slug}"
-      end
+      parent.path + "#{parent.path if parent}/#{slug}"
     end
 
     def empty?
@@ -83,16 +78,8 @@ module Droom
     end
 
     def copy_to_dropbox(user)
-      Rails.logger.warn ">>> creating dropbox folder"
-      if dt = user.dropbox_token
-        dbsession = DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
-        dbsession.set_access_token(dt.access_token, dt.access_token_secret)
-        dbclient = DropboxClient.new(dbsession)
-        documents.each do |doc|
-          Rails.logger.warn ">>> putting file #{doc.file} to dropbox with path #{self.path}"
-          dbclient.put_file(path, doc.original_file)
-        end
-      end
+      Rails.logger.warn ">>> creating dropbox subfolder #{slug} for user #{user.name}"
+      documents.each { |doc| doc.copy_to_dropbox(user) }
     end
 
     def copy_to_dav

@@ -7,6 +7,18 @@ module Droom
     scope :by_date, order("created_at DESC")
     scope :other_than, lambda { |token| where "id <> ?", token.id }
     
+    def dropbox_session
+      unless @dbsession
+        @dbsession = DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
+        @dbsession.set_access_token(access_token, access_token_secret)
+      end
+      @dbsession
+    end
+    
+    def dropbox_client
+      @dbclient ||= DropboxClient.new(dbsession)
+    end
+    
   protected
 
     def delete_previous

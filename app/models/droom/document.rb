@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'dropbox_sdk'
 
 module Droom
   class Document < ActiveRecord::Base
@@ -93,6 +94,12 @@ module Droom
 
     def index
       Sunspot.index!(self)
+    end
+    
+    def copy_to_dropbox(user)
+      if dbclient = user.dropbox_client
+        dbclient.put_file(path, original_file)
+      end
     end
 
   protected
