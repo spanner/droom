@@ -10,14 +10,6 @@ module Droom
     belongs_to :organisation
     has_many :organisations, :foreign_key => :owner_id
 
-    has_upload :image, 
-               :geometry => "520x520#",
-               :styles => {
-                 :icon => "32x32#",
-                 :thumb => "120x120#",
-                 :precrop => "1200x1200^"
-               }
-
     ### Group memberships
     #
     has_many :memberships, :dependent => :destroy
@@ -119,16 +111,13 @@ module Droom
 
     ### Images
     #
-    # The treatment here is very basic compared to the yearbook's uploader, but we might bring that across
-    # if this starts to look like a useful directory resource.
-    #
-    has_attached_file :image, { 
-      :styles => {:standard => "400x300#", :thumb => "100x100#"},
-      :default_url => "/assets/person/nopicture_:style.png"
-    }
-
-
-
+    has_upload :image, 
+               :geometry => "520x520#",
+               :styles => {
+                 :icon => "32x32#",
+                 :thumb => "120x120#",
+                 :precrop => "1200x1200^"
+               }
 
     ## Scopes
     

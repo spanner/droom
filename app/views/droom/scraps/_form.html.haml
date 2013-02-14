@@ -11,7 +11,8 @@
     .upload
       - @scrap.build_image_upload unless @scrap.image_upload
       = f.fields_for :image_upload do |iuf|
-        .uploadbox{:data => {:action => "upload", :url => cropper.uploads_path(:format => :js), :scale => 2}}
+        
+        .uploadbox{:data => {:action => "upload", :url => cropper.uploads_path(:format => :js, :for => "scrap"), :scale => 2}}
           = iuf.file_field :file, :class => 'file_upload', :accept => "image"
           .img
             - if @scrap.image?

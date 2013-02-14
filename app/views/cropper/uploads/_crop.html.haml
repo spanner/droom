@@ -1,10 +1,20 @@
 // default state of precrop upload
 
 - upload ||= @upload
-- scrap ||= Droom::Scrap.new
+- recipient = (params[:for] || "person").to_sym
 
-- w = 260
-- h = 260
+- if recipient == :scrap
+  - object = Droom::Scrap.new
+  - w = 260
+  - h = 260
+  - multiplier = 2
+
+- elsif recipient == :person
+  - object = Droom::Person.new
+  - w = 130
+  - h = 130
+  - multiplier = 4
+
 - prefix = 'image'
 
 - max_w = upload.width(:precrop)
@@ -24,8 +34,9 @@
   .preview{:style => "width: #{scale_w}px; height: #{scale_h}px; top: #{scale_t}px; left: #{scale_l}px"}
     %img{:src => upload.file.url(:precrop)}
 
-  = fields_for scrap do |sf|
+  = fields_for recipient, object do |sf|
     %fieldset.crop
+      = hidden_field_tag :multiplier, :multiplier
       = sf.hidden_field :"#{prefix}_offset_left", :value => scale_l, :class => 'ol'
       = sf.hidden_field :"#{prefix}_offset_top", :value => scale_t, :class => 'ot'
       = sf.hidden_field :"#{prefix}_upload_id", :value => upload.id

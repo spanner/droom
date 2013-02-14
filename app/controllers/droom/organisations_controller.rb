@@ -5,7 +5,6 @@ module Droom
     helper Droom::DroomHelper
   
     before_filter :authenticate_user!
-    before_filter :scale_image_params, :only => [:create, :update]
     before_filter :find_organisations, :only => [:index]
     before_filter :get_organisation, :only => [:show, :edit, :update, :destroy]
     before_filter :build_organisation, :only => [:new, :create]
@@ -43,13 +42,6 @@ module Droom
 
     def build_organisation
       @organisation = Droom::Organisation.new(params[:organisation])
-    end
-  
-    def scale_image_params
-      multiplier = params[:multiplier] || 4
-      [:image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top].each do |p|
-        params[:person][p] = (params[:person][p].to_i * multiplier.to_i) unless params[:person][p].blank?
-      end
     end
   
   end

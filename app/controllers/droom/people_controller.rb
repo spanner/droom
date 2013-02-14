@@ -4,6 +4,7 @@ module Droom
     layout :no_layout_if_pjax
     
     before_filter :authenticate_user! 
+    before_filter :scale_image_params, :only => [:create, :update]
     before_filter :get_current_person
     before_filter :find_people, :only => :index
     before_filter :get_groups
@@ -74,5 +75,14 @@ module Droom
       @person = current_user.person unless current_user.admin?
     end
 
+    def scale_image_params
+      multiplier = params[:multiplier] || 4
+      if params[:person]
+        [:image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top].each do |p|
+          params[:person][p] = (params[:person][p].to_i * multiplier.to_i) unless params[:person][p].blank?
+        end
+      end
+    end
+  
   end
 end

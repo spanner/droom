@@ -959,8 +959,6 @@ div.popup
   padding: 20px
   z-index: 250
   min-height: 200px
-  overflow: auto
-  overflow-x: hidden
   background-color: white
   +box_shadow(1px 3px 8px #52555f)
   +border-radius
@@ -974,6 +972,7 @@ div.popup
     margin-top: -20px
     margin-left: -20px
     width: 100%
+    padding-top: 15px
     +border-top-radius
     a.closer
       display: block
@@ -1569,6 +1568,7 @@ form.scrap
   background-color: $mid
   border: 4px solid white
   +box-shadow(1px 2px 5px $mid)
+  margin-top: -4px
   margin-left: -4px
   &.hover
     background-position: 0 - 150px
@@ -1672,6 +1672,10 @@ form.scrap
         width: 100%
         height: 40px
         background: transparent image-url('cropper/scale.png') no-repeat 0 20px
+        .scale
+          display: block
+          width: 100%
+          height: 100%
         .marker
           display: block
           position: absolute

@@ -107,6 +107,7 @@ en:
   dropbox_copy_selected: "Copy only when you click"
   edit: "Edit"
   edit_event: "Edit event"
+  edit_person: "Edit person"
   events: "Events"
   events_between: "Events between %{start} and %{finish}"
   events_in: "Events in %{period}"

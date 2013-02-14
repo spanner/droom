@@ -50,7 +50,6 @@ jQuery ($) ->
       @_container.insertAfter(@_mask).hide()
 
     receive: (data) =>
-      console.log "receive", data
       if @_iteration == 0 || $(data).find('form').length
         @display(data)
       else
@@ -71,12 +70,10 @@ jQuery ($) ->
       @show()
       
     conclude: (data) =>
-      console.log "conclude", data
       if @_affected
         $(@_affected).trigger "refresh"
       if @_replaced
         replacement = $(data)
-        console.log "replacement is", replacement
         $(@_replaced).after(replacement)
         $(@_replaced).remove()
         replacement.activate().signal_confirmation()
