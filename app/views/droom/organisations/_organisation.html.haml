@@ -1,0 +1,17 @@
+- if organisation
+  .organisation.holder{:id => "organisation_#{organisation.id}", :data => {:refreshable => true, :url => droom.organisation_path(organisation, :format => :js)} }
+    %h2.name
+      = organisation.name
+      - if organisation.url?
+        %span.addendum
+          = link_to organisation.url_without_protocol, organisation.url_with_protocol
+      - if admin?
+        %span.admin<
+          = link_to t(:edit_organisation), droom.edit_organisation_url(organisation), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :replaced => "#organisation_#{organisation.id}"}
+          = link_to t(:remove), droom.organisation_url(organisation), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_organisation, :name => organisation.name)}
+
+    .detail
+      = organisation.description.html_safe
+      - if organisation.people.any?
+        %ul.people
+          = render :partial => "droom/people/person", :collection => organisation.people.order("name ASC")

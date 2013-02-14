@@ -2,5 +2,6 @@
 %p.caption
   = link_to scrap.name, scrap.note
   - if scrap.body?
+    %br
     = shorten(scrap.body, :length => 128 - scrap.note.length)
   = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}

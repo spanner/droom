@@ -19,6 +19,10 @@ en:
           venue_name: "Choose or add a location"
           start_time: "Time"
           start_date: "Date"
+        organisation:
+          name: "Name"
+          url: "Web link"
+          description: "Mission and description"
         person:
           invite_on_creation: "Invite on creation"
           admin_user: "as admin user"
@@ -80,7 +84,7 @@ en:
   choose_new_password: "Choose a new password"
   clear_search: "Clear search"
   click_to_choose_file: "Click to choose a file"
-  click_to_upload: "Click here to choose a local image file"
+  click_to_upload: "Click here to choose an image file"
   drop_to_upload: "or drop something in this box"
   confirm_delete_document: "Are you sure you want to delete the document '%{name}'? This cannot be undone."
   confirm_delete_event: "Are you sure you want to delete the event '%{name}'? This cannot be undone."
@@ -91,6 +95,7 @@ en:
   confirm_remove_member: "Are you sure you want to remove '%{name}' from '%{group}'?"
   confirm_uninvite_group: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   confirm_uninvite_person: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
+  contact_information_unavailable: "No contact information"
   copy_to_dropbox: "Copy folder to dropbox"
   download_ical: "Download event"
   downloads: "Downloads"

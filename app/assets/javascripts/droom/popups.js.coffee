@@ -49,11 +49,12 @@ jQuery ($) ->
       @_container.bind "resize", @place
       @_container.insertAfter(@_mask).hide()
 
-    receive: (response) =>
-      if @_iteration == 0 || $(response).find('form').length
-        @display(response)
+    receive: (data) =>
+      console.log "receive", data
+      if @_iteration == 0 || $(data).find('form').length
+        @display(data)
       else
-        @conclude(response)
+        @conclude(data)
         
     display: (data) =>
       @_iteration++
@@ -70,11 +71,14 @@ jQuery ($) ->
       @show()
       
     conclude: (data) =>
+      console.log "conclude", data
       if @_affected
         $(@_affected).trigger "refresh"
       if @_replaced
         replacement = $(data)
-        $(@_replaced).replaceWith(replacement)
+        console.log "replacement is", replacement
+        $(@_replaced).after(replacement)
+        $(@_replaced).remove()
         replacement.activate().signal_confirmation()
       @reset()
 

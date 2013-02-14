@@ -43,6 +43,10 @@ module Droom
       :inactive
     end
 
+    def is_person?(person)
+      person == self.person
+    end
+
     def invited?
       invited_at? && invited_at < Time.now
     end

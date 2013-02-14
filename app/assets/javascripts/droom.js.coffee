@@ -28,6 +28,8 @@ jQuery ($) ->
     
     # link actions
     
+    @find_including_self('[data-action="upload"]').uploader()
+    @find_including_self('[data-action="recrop"]').recropper()
     @find_including_self('[data-action="remove"]').removes()
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="popup"]').popup()
@@ -39,8 +41,6 @@ jQuery ($) ->
     @find_including_self('[data-action="fetch"]').replace_with_remote_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder",
       force: true
-    @find_including_self('[data-action="upload"]').uploader()
-    @find_including_self('[data-action="recrop"]').recropper()
   
     @find_including_self('a.scrap').popup()
   

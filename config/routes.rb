@@ -32,6 +32,10 @@ Droom::Engine.routes.draw do
     resources :documents
   end
   
+  resources :organisations do
+    resources :people
+  end
+  
   resources :people do
     resources :events do
       collection do

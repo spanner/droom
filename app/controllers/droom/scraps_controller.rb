@@ -45,7 +45,7 @@ module Droom
   protected
 
     def find_scraps
-      @show = params[:show] || 20
+      @show = params[:show] || 10
       @page = params[:page] || 1
       @scraps = Droom::Scrap.page(@page).per(@show) unless @show == 'all'
     end

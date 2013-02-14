@@ -23,27 +23,13 @@ module Droom
     end
     
     def create
-      if @person.save
-        render :partial => "person"
-      else
-        respond_with @person
-      end
+      @person.update_attributes(params[:person])
+      respond_with @person
     end
 
     def update
-      Rails.logger.warn params[:person]
       @person.update_attributes(params[:person])
-      @person.save!
-      respond_with @person do |format|
-        format.js {
-          render :partial => "person"
-        }
-      end
-      # if @person.save
-      #   render :partial => "person"
-      # else
-      #   respond_with @person
-      # end
+      respond_with @person
     end
     
     def destroy

@@ -1,13 +1,22 @@
 # This has been pulled from the yearbook and simplified. Docs need updating to match.
 require 'vcard'
+
 module Droom
   class Person < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user, :position, :post_line1, :post_line2, :post_city, :post_region, :post_code, :mobile, :dob
+    attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user, :position, :post_line1, :post_line2, :post_city, :post_region, :post_code, :mobile, :dob, :organisation_id
     attr_accessor :invite_on_creation, :admin_user
     acts_as_list
 
-    # The data requirements are minimal, with the idea that the directory will be populated gradually.
-    validates :name, :presence => true
+    belongs_to :organisation
+    has_many :organisations, :foreign_key => :owner_id
+
+    has_upload :image, 
+               :geometry => "520x520#",
+               :styles => {
+                 :icon => "32x32#",
+                 :thumb => "120x120#",
+                 :precrop => "1200x1200^"
+               }
 
     ### Group memberships
     #
@@ -17,6 +26,9 @@ module Droom
     
     has_many :preferences, :dependent => :destroy
     accepts_nested_attributes_for :preferences
+
+    # The data requirements are minimal, with the idea that the directory will be populated gradually.
+    validates :name, :presence => true
 
     def admit_to(group)
       memberships.find_or_create_by_group_id(group.id) if group

@@ -31,7 +31,5 @@
       = sf.hidden_field :"#{prefix}_upload_id", :value => upload.id
       .scaler
         %p.range
-          %span.stop.min
           = sf.range_field :"#{prefix}_scale_width", :min => w, :max => max_w, :value => scale_w, :class => 'sw'
           = sf.hidden_field :"#{prefix}_scale_height", :value => scale_h, :class => 'sh'
-          %span.stop.max
