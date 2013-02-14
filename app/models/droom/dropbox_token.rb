@@ -16,7 +16,7 @@ module Droom
     end
     
     def dropbox_client
-      @dbclient ||= DropboxClient.new(dbsession)
+      @dbclient ||= DropboxClient.new(dropbox_session)
     end
     
   protected

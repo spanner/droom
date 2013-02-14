@@ -1,0 +1,14 @@
+#admin.panel
+  - if admin?
+    %h4
+      = t :admin
+    %ul
+      %li
+        = link_to t(:add_event), droom.new_event_url, :remote => true, :data => {:action => "popup", :type => "html", :affected => ".events_list, .minimonth"}
+      %li
+        = link_to t(:add_document), droom.new_document_url, :remote => true, :data => {:action => "popup", :affected => "table.documents"}
+      %li
+        = link_to t(:add_person), droom.new_person_url, :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
+        \|
+        = link_to t(:manage_groups), droom.groups_url
+        

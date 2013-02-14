@@ -1,0 +1,11 @@
+- person ||= listing
+
+%li.person
+  = person.formal_name
+  %span.note
+    - if person.phone?
+      = person.phone
+    - if person.phone? && person.email?
+      = t :or
+    - if person.email?
+      = mail_to person.email

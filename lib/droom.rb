@@ -87,11 +87,11 @@ module Droom
     end
 
     def margin_dashboard_modules
-      @@margin_dashboard_modules ||= %w{stream}
+      @@margin_dashboard_modules ||= %w{quicksearch stream}
     end
     
     def panels
-      @@panels ||= %w{dropbox email rss devices networks readers account search}
+      @@panels ||= %w{dropbox email rss devices networks readers account search admin}
     end
     
     def scrap_types

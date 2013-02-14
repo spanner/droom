@@ -11,39 +11,36 @@ $coolgrey9: #747679
 $coolgrey10: #616265
 $coolgrey11: #4d4e53
 $rubine: #d1005d
+$blue: #00afdb
+$green: #74b87a
+$warmred: #ff625b
+$darkred: #b92a23
 
 $dark: $coolgrey10
 $mid: $coolgrey7
+$pale: #d6d6d4
 $verypale: #ebeae8
 $palest: #f5f5f5
 
-$page: #ffffff
-$text: #4d4e53
-$link: #ED1C24
-$hover: lighten($link, 20)
-$active: #8c8d8e
-$visited: #d3181f
-$pale: #d6d6d4
-$blue: #00afdb
-$green: #74b87a
+$text: $dark
+$link: $rubine
+$hover: lighten($link, 8)
 $input: $blue
 $submit: $green
 $error: $rubine
-$help: #e59811
+$active: #8c8d8e
+$visited: #d3181f
 
-$tag: #7489b8
-$match: $green
-$inst: $coolgrey10
-$person: $link
-
-$default-box-shadow-color: $dark
-$default-box-shadow-h-offset: 1px
-$default-box-shadow-v-offset: 3px
-$default-box-shadow-blur: 3px
+=hover
+  &:hover
+    color: $hover
+  &:active
+    color: $active
 
 =pale
   color: $pale
   a
+    color: $mid
     &.bright
       color: $link
     &:visited
@@ -61,7 +58,7 @@ $default-box-shadow-blur: 3px
   overflow: hidden
   text-indent: $indent
 
-=button($color: $dark)
+=button($color)
   background-color: $color
   +border-radius(3px)
   &:hover
@@ -72,18 +69,6 @@ $default-box-shadow-blur: 3px
 =small
   font-size: 80%
   line-height: 1.2
-  
-=hover
-  &:hover
-    color: $hover
-  &:active
-    color: $active
-
-=pale
-  color: $pale
-  a
-    color: $mid
-    +hover
 
 =icon($url)
   display: inline-block
@@ -121,7 +106,7 @@ $default-box-shadow-blur: 3px
   display: inline-block
   text-indent: 26px
   margin-top: 0
-  line-height: 30px
+  line-height: 26px
   min-height: 30px
   background:
     color: transparent
@@ -159,10 +144,10 @@ $default-box-shadow-blur: 3px
     repeat: no-repeat
     image: image-url($image)
   &:hover
-    background-position: $x $y - 32px
+    background-position: $x $y - 48px
   &.here
     background-color: $verypale
-    background-position: $x $y - 64px
+    background-position: $x $y - 96px
 
 =blurred($color: $pale)
   text-shadow: $color 0 0 3px
@@ -193,3 +178,8 @@ $default-box-shadow-blur: 3px
     color: white
     text-shadow: 0 0 3px white
     text-decoration: none
+
+=plain
+  margin: 0
+  padding: 0
+  list-style: none

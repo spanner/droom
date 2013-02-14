@@ -1,7 +1,3 @@
-.holder
-  %p
-    = link_to t(:add_event), droom.new_event_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => ".events_list, .minimonth"}
-
 #main.events
   = render :partial => 'events'
 

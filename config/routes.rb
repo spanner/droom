@@ -8,7 +8,7 @@ Droom::Engine.routes.draw do
   ), :anchor => false, :constraints => { :subdomain => Droom.dav_subdomain }
 
   devise_for :users, :class_name => 'Droom::User', :module => :devise
-  resources :users, :only => [:edit, :update] do
+  resources :users do
     get 'welcome/:auth_token', :action => :welcome, :on => :member, :as => :welcome
   end
 

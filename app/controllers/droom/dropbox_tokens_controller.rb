@@ -11,6 +11,7 @@ module Droom
 
     before_filter :get_dropbox_session, :only => [:new, :create]
     before_filter :get_token, :only => [:show, :destroy]
+    skip_before_filter :verify_authenticity_token, :only => :create
     
     def new
       session[:dropbox_session] = @dbsession.serialize

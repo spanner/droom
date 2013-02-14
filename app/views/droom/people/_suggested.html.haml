@@ -1,8 +1,3 @@
 - person ||= suggested
 
-%li.person
-  = mail_to person.email, person.formal_name
-  %span.note
-    = person.phone
-    = t :or
-    = mail_to person.email
+= render :partial => "droom/person/listing"

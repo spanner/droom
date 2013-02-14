@@ -683,7 +683,6 @@ span.erratic
 
 a.add
   +icon_with_text("droom/add.png")
-  font-size: 0.9em
   color: $green
   &:visited
     color: $green
@@ -693,91 +692,38 @@ a.add
     +smallicon("droom/smalladd.png")
     min-height: 16px
     
-a.edit, a.delete, a.revert, a.copy, a.email, a.web, a.drop
-  display: inline-block
-  text-indent: 16px
-  margin-right: 10px
-  height: 16px
-  line-height: 14px
-  background:
-    image: image-url('droom/symbols.png')
-    position: 0 -32px
-    repeat: no-repeat
-    scroll: scroll
-  &:hover
-    color: $hover
-  &:active
-    color: $active
-  +waitable
-  &.minimal
-    width: 16px
-    line-height: 100px
-    overflow: hidden
-    margin-right: 2px
-
 a.edit
-  background-position: 0 0
+  +icon_with_text("droom/edit.png")
   color: $blue
   &:visited
     color: $blue
-    +hover
   &:hover
-    background-position: 0 -24px
-  &:active
-    background-position: 0 -48px
-  
-a.revert
-  background-position: 0 -144px
-  color: $mid
-  &:visited
-    color: $mid
-  &:hover
-    background-position: 0 -168px
-  &:active
-    background-position: 0 -192px
-
+    color: $hover
+  &.minimal
+    +smallicon("droom/smalledit.png")
+    min-height: 16px
+    
 a.delete
-  background-position: 0 -144px
+  +icon_with_text("droom/delete.png")
   color: $mid
   &:visited
     color: $mid
   &:hover
-    background-position: 0 -168px
-  &:active
-    background-position: 0 -192px
+    color: $hover
+  &.minimal
+    +smallicon("droom/smalldelete.png")
+    min-height: 16px
 
 a.copy
-  background-position: 0 -72px
+  +icon_with_text("droom/copy.png")
   color: $mid
   &:visited
     color: $mid
-    +hover
-  &:hover, &.hover
-    background-position: 0 -96px
-    color: $hover
-  &:active, &.active
-    background-position: 0 -120px
-
-a.email
-  background-position: 0 -288px
-  text-indent: 20px
-
-a.web
-  background-position: 0 -360px
-  text-indent: 20px
-
-a.drop
-  background-position: 0 -432px
   &:hover
-    background-position: 0 -456px
-
-
-// a.edit, a.delete
-//   display: none
-//   
-// .holder:hover 
-//   a.edit, a.delete
-//     display: inline-block
+    color: $hover
+  &.minimal
+    +smallicon("droom/smallcopy.png")
+    min-height: 16px
 
 
 div.copyholder
@@ -980,7 +926,7 @@ input[type="submit"]
     &.preferences
       font-size: 2em
     &.ok
-      border-color: $match
+      border-color: $green
     &.notok
       border-color: $error
   p.confirmation
@@ -1125,7 +1071,7 @@ table.minimonth
   border:
     style: solid
     width: 1px
-    color: $page
+    color: white
   color: $text
   margin: 5px 0
   h3
@@ -1143,7 +1089,7 @@ table.minimonth
     border:
       style: solid
       width: 1px
-      color: $page
+      color: white
     vertical-align: top
     text-align: center
     height: 32px
@@ -1186,13 +1132,13 @@ table.minimonth
   td.e
     a:hover
       background-color: $hover
-      color: $page
+      color: white
   td.o
     color: $verypale
     a
       color: $pale
       &:hover
-        color: $page
+        color: white
   td.t
     font-weight: bold
   td.p
@@ -1243,6 +1189,10 @@ ul.setup
 .note, .formnote
   font-size: 0.8em
   color: $mid
+  a, a:visited
+    color: $mid
+    &:hover
+      color: $hover
 
 p.note
   line-height: 1.2
@@ -1368,6 +1318,10 @@ nav.icons
     +panel_icon("droom/integration_buttons.png", -288px, 0)
   a.networks
     +panel_icon("droom/integration_buttons.png", -320px, 0)
+  a.admin
+    +panel_icon("droom/integration_buttons.png", -356px, 0)
+    &.here
+      background-color: $warmred
   span.spacer
     display: inline-block
     float: left
