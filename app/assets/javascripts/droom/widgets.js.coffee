@@ -972,13 +972,3 @@ jQuery ($) ->
         when "image"
           @_primary.find('textarea').attr("placeholder", "Caption")
           @_uploader.find('input').prop('disabled', false);
-      
-      
-  
-      
-      
-      
-      
-      
-      
-      

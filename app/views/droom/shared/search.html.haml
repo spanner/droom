@@ -2,5 +2,17 @@
   Search
 
 %form.search_form{:action => droom.search_url}
-  = text_field_tag :term, params[:term], :placeholder => t(:quick_search), :autocomplete => "off", :class => "search_box"
+  = text_field_tag :term, params[:term], :placeholder => t(:advanced_search), :autocomplete => "off", :class => "search_box"
+  = submit_tag "search"
+
 = render :partial => 'droom/shared/search_results'
+  
+%p.note
+  This search works in a fairly google-like way. It is designed more for strength than sophistication,
+  but your query can include modifiers like 
+  %strong +term
+  and 
+  %strong -term
+  to insist on the presence or absence of a word, and "phrases enclosed in double quotes" must occur intact.
+  The index includes uploaded documents as well as our events and people.
+
