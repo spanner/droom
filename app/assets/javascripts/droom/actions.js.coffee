@@ -149,6 +149,57 @@ jQuery ($) ->
          path: '/'
 
 
+  # The collapser is a self-expanding unit. Basically a toggle. #todo: amalgamate!
+
+  $.fn.collapser = (options) ->
+    @each ->
+      new Collapser(@, options)
+    @
+
+  class Collapser
+    constructor: (element, opts) ->
+      @container = $(element)
+      @options = $.extend {
+        toggle: ".heading a.name"
+        body: ".detail"
+        preview: ".preview"
+      }, opts
+      @id = @container.attr('id')
+      @switch = @container.find(@options.toggle)
+      @body = @container.find(@options.body)
+      @preview = @container.find(@options.preview)
+      @switch.click @toggle
+      @set()
+      
+    set: () =>
+      if @container.hasClass("open") then @show() else @hide()
+      
+    toggle: (e) =>
+      e.preventDefault() if e
+      if @container.hasClass("open") then @hide() else @show()
+
+    hide: () =>
+      @container.removeClass('open')
+      @preview.show().css('position', 'relative')
+      @body.stop().slideUp 
+        duration: 'slow'
+        easing: 'glide'
+        complete: =>
+          @body.hide()
+
+    show: () =>
+      @container.addClass('open')
+      @preview.css('position', 'absolute')
+      @body.stop().slideDown
+        duration: 'normal'
+        easing: 'boing'
+        complete: =>
+          @preview.hide().css('position', 'relative')
+        
+
+
+
+
   # The *alternator* action is a more extreme toggle. It allows an element to declare its alternate: 
   # when a link within the element is clicked, it will be removed from the DOM and its alternate
   # inserted. Usually the relation is reciprocal, so that another link in the alternate will bring

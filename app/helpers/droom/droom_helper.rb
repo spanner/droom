@@ -7,6 +7,10 @@ module Droom
       current_user and current_user.admin?
     end
 
+    def pageclass
+      controller.controller_name
+    end
+
     def preference_checkbox(key)
       render :partial => "droom/preferences/checkbox", :locals => {:key => key}
     end
@@ -103,11 +107,11 @@ module Droom
     end
     
     def url_for_month(date)
-      droom.calendar_url(:year => date.year, :month => date.month)
+      droom.events_url(:year => date.year, :month => date.month)
     end
 
     def url_for_date(date)
-      droom.calendar_url(:year => date.year, :month => date.month, :mday => date.day)      
+      droom.events_url(:year => date.year, :month => date.month, :mday => date.day)      
     end
     
     def day_names

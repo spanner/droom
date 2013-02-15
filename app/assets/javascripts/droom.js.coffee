@@ -42,9 +42,9 @@ jQuery ($) ->
     @find_including_self('[data-action="fetch"]').replace_with_remote_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder",
       force: true
-  
+    @find_including_self('[data-action="collapser"]').collapser()
     @find_including_self('a.scrap').popup()
-  
+
     # and some shortcuts for compatibility
     
     @find_including_self('a.inline, a.fetch').replace_with_remote_content()

@@ -4,7 +4,7 @@ xml.rss :version => "2.0" do
   xml.channel do
     xml.title "Events"
     xml.description list_description
-    xml.link calendar_url(calendar_parameters.merge(:format => :html))
+    xml.link droom.events_url(calendar_parameters.merge(:format => :html))
 
     events.each do |event|
       xml.item do

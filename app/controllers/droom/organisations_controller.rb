@@ -31,9 +31,7 @@ module Droom
   protected
 
     def find_organisations
-      @show = params[:show] || 10
-      @page = params[:page] || 1
-      @organisations = Droom::Organisation.page(@page).per(@show)
+      @organisations = Droom::Organisation.order("name asc")
     end
 
     def get_organisation

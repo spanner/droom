@@ -3,8 +3,8 @@
     Follow the stream
   %p
     If your RSS reader will let you supply login information, you can use this 
-    = link_to t(:normal_RSS_link), scraps_url(:format => :rss)
+    = link_to t(:normal_RSS_link), droom.scraps_url(:format => :rss)
     to access the stream. If not, you can also use this 
-    = link_to t(:personal_RSS_link), feed_scraps_url(:format => :rss, :auth_token => current_user.authentication_token)
+    = link_to t(:personal_RSS_link), droom.feed_scraps_url(:format => :rss, :auth_token => current_user.authentication_token)
     with a secret token that will log you in automatically. Please don't share it.
     

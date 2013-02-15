@@ -60,10 +60,6 @@ Droom::Engine.routes.draw do
     get "/register", :on => :collection, :action => :create
   end
   
-  match "/library" => 'folders#index', :as => :library
-  match "/directory" => 'people#index', :as => :directory
-  match "/calendar" => 'events#index', :as => :calendar
-  match "/map" => 'venues#index', :as => :map
 
   match '/help/:slug', :to => 'pages#show', :as => 'help_page'
   match '/help', :to => 'pages#index', :as => 'help'
