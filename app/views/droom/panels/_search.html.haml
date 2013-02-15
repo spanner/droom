@@ -4,7 +4,7 @@
   - if dashboard
     %p.instructions
       = t :search_instructions
-  %form#searchform.searchtest{:action => droom.suggestions_url(:format => :js)}
+  %form#suggestions{:action => droom.suggestions_url(:format => :js)}
     %p
       - unless dashboard
         %label
@@ -14,4 +14,4 @@
     %p.formnote
       = link_to t(:advanced_search_link), droom.search_url, :class => "search"
       
-  .search_results
+  #suggestion_box

@@ -40,7 +40,8 @@ module Droom
                  :default_event_private,
                  :dropbox_app_key,
                  :dropbox_app_secret,
-                 :user_defaults
+                 :user_defaults,
+                 :people_sort
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end

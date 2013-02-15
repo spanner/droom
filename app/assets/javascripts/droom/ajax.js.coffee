@@ -39,8 +39,8 @@ jQuery ($) ->
       @_options.on_prepare?()
 
     pend: (event, xhr, settings) =>
-      console.log "remote pend", @_control.get(0)
       event.stopPropagation()
+      event.preventDefault()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_control.addClass('waiting')
       @_options.on_request?(xhr)
@@ -83,3 +83,31 @@ jQuery ($) ->
           replaced.remove()
           replacement.activate()
       $(@).click() if options['force']
+
+
+
+  $.fn.page_turner = () ->
+    @each ->
+      new Pager(@)
+  
+  class Pager
+    constructor: (element) ->
+      @_link = $(element)
+      @_selector = @_link.attr('data-affected') || '.paginated'
+      @_page = @_link.parents(@_selector).first()
+      @_link.remote
+        on_success: (r) =>
+          console.log "inserting", r, "after", @_page.get(0)
+          replacement = $(r).insertAfter(@_page)
+          @_page.remove()
+          replacement.activate()
+          @_page = replacement
+
+
+
+
+
+
+
+
+

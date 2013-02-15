@@ -1,2 +1,4 @@
-%ul.people{:data => {:action => "drag_sort"}}
-  = render :partial => 'person', :collection => @people
+%ul.people.paginated
+  = render :partial => 'droom/people/person', :collection => @people
+  .pagination
+    = paginate @people

@@ -48,7 +48,6 @@ en:
         everything: "Sync everything"
         relevant: "Sync only relevant documents"
         clicked: "Copy on command only"
-        
     dropbox:
       strategy:
         everything: "Sync everything"
@@ -63,12 +62,17 @@ en:
       mailing_lists?: "Join group mailing lists"
       digest?: "Receive a weekly summary"
       event_invitations?: "Receive event invitations"
+  views:
+    pagination:
+      previous: "&laquo;"
+      next: "&raquo;"
   account: "Account"
   admin: "Admin"
   advanced_search: "Search terms"
   advanced_search_link: "...advanced search"
   attachments: "Attachments"
   attending: "Attending"
+  by_name_or_email: "Search by name or email"
   cancel: "cancel"
   mon: "MON"
   devices: "Devices"
@@ -146,6 +150,8 @@ en:
   
   help: "Help"
   help_pages: "Help pages"
+  
+  loading_people: "Loading people"
   
   page_title: "Page title"
   page_slug: "Slug"

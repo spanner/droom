@@ -54,21 +54,23 @@ module Droom
     
     def find_people
       if current_user.admin?
-        @people = Person.all
+        @people = Person.scoped({})
       else
         @people = Person.visible_to(@current_person)
       end
       
-      if params[:group_id]
-        @people = @people.not_in_group(Droom::Group.find(params[:group_id]))
+      if params[:not_group_id]
+        @people = @people.not_in_group(Droom::Group.find(params[:not_group_id]))
       end
 
       unless params[:q].blank?
         @searching = true
-        @people = @people.name_matching(params[:q])
+        @people = @people.matching(params[:q])
       end
       
-      @people
+      @show = params[:show] || 10
+      @page = params[:page] || 1
+      @people = @people.page(@page).per(@show)
     end
  
     def confine_to_self

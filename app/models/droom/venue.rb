@@ -23,7 +23,7 @@ module Droom
       text :post_country
     end
 
-    scope :name_matching, lambda { |fragment| 
+    scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_venues.name like ?', fragment)
     }

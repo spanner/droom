@@ -86,7 +86,6 @@ jQuery ($) ->
           e.preventDefault() if e
 
 
-
   # The toggle action shows or hides the affected elements with cookie-based persistence across page
   # views. A link like this:
   #
@@ -98,6 +97,7 @@ jQuery ($) ->
     @each ->
       new Toggle(@, $(@).attr('data-affected'))
 
+  #todo: make this a more versatile base class
   class Toggle
     constructor: (element, @_selector, @_name) ->
       @_container = $(element)

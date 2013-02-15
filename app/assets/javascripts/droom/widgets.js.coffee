@@ -317,10 +317,6 @@ jQuery ($) ->
   #todo: This is very old now. Tidy it up with a more standard action structure, and fewer options.
 
   $.fn.captive = (options) ->
-    options = $.extend(
-      replacing: "#results"
-      clearing: null
-    , options)
     @each ->
       new CaptiveForm @, options
     @
@@ -329,26 +325,33 @@ jQuery ($) ->
     constructor: (element, opts) ->
       @_form = $(element)
       @_prompt = @_form.find("input[type=\"text\"]")
-      @_options = $.extend {}, opts
+      @_options = $.extend {
+        fast: false
+        auto: false
+        historical: false
+      }, opts
+      @_selector = @_form.attr('data-target') || @_options.into
       @_request = null
-      @_placed_content = null
-      @_original_content = $(@_options.replacing)
+      @_original_content = $(@_selector).html()
       @_form.remote
         on_submit: @prepare
         on_cancel: @cancel
         on_success: @capture
-        
       if @_options.fast
         @_form.find("input[type=\"text\"]").keyup @keyed
         @_form.find("input[type=\"text\"]").change @submit
         @_form.find("input[type=\"radio\"]").click @clicked
         @_form.find("input[type=\"checkbox\"]").click @clicked
-      
+      @submit() if @_options.auto
+        
     keyed: (e) =>
       k = e.which
       if (k >= 32 and k <= 165) or k == 8
-        if @_prompt.val() == "" then @revert() else @submit()
-
+        if @_prompt.val() is "" and not @_options.auto
+          @revert()
+        else
+          @submit()
+          
     clicked: (e) =>
       @submit()
       
@@ -356,7 +359,7 @@ jQuery ($) ->
       @_form.submit()
       
     prepare: (xhr, settings) =>
-      $(@_options.replacing).fadeTo "fast", 0.2
+      $(@_selector).fadeTo "fast", 0.2
       @_request.abort() if @_request
       @_request = xhr
     
@@ -366,28 +369,42 @@ jQuery ($) ->
     
     display: (results) =>
       replacement = $(results)
-      replacement.find('a.cancel').click @revert
-      @_placed_content?.remove()
-      @_original_content?.hide()
-      @_original_content?.before(replacement)
+      replacement.find('a.cancel').click(@revert)
+      (replacement).insertBefore($(@_selector).first())
+      $(@_selector).html(replacement)
       $(@_options.clearing).val("")
-      @_placed_content = replacement
-      @_placed_content.activate()
+      replacement.activate()
         
     revert: (e) =>
       e.preventDefault() if e
-      @_placed_content?.remove()
+      @_original_content.insertBefore $(@_selector).first()
+      $(@_selector).remove()
       @_original_content?.fadeTo "fast", 1
       @_prompt.val("")
       @saveState()
+
+
+  $.fn.filter_form = (options) ->
+    options = $.extend(
+      fast: true
+      auto: true
+    , options)
+    @each ->
+      new CaptiveForm @, options
+    @
+
+
+
+
+
 
   # The suggestions form is a fast captive with history support based on a single prompt field.
   #
   $.fn.suggestion_form = (options) ->
     options = $.extend(
       fast: true
-      clearing: null
-      replacing: ".search_results"
+      auto: true
+      into: "#suggestion_box"
     , options)
     @each ->
       new SuggestionForm @, options
@@ -411,8 +428,9 @@ jQuery ($) ->
     saveState: (results) =>
       results ?= @_original_content.html()
       term = @_prompt.val()
+      param = @_prompt.attr('name')
       if term
-        url = window.location.pathname + '?q=' + encodeURIComponent(term)
+        url = window.location.pathname + "?" + encodeURIComponent(param) + "=" + encodeURIComponent(term)
       else
         url = window.location.pathname
       state = 
@@ -425,6 +443,7 @@ jQuery ($) ->
       if event.state? && event.state.html?
         @display event.state.html
         @_prompt.val(event.state.term)
+
 
   # The preferences form is a simple captive that just displays a confirmation message, with or without some control
   # links (eg to copy or delete dropboxed folders). It may also include a number of preference blocks, which take care
@@ -571,7 +590,7 @@ jQuery ($) ->
       new ScoreShower @
 
 
-
+  #todo: make this a case of the page turner
 
   class Calendar
     constructor: (element, options) ->

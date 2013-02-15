@@ -122,7 +122,7 @@ module Droom
     scope :all_public, where("public = 1 OR public = 't'")
     scope :not_public, where("public = 0 OR public = 'f'")
 
-    scope :name_matching, lambda { |fragment| 
+    scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_events.name like ?', fragment)
     }

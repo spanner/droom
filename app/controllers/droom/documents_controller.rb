@@ -107,7 +107,7 @@ module Droom
         @documents = Droom::Document.visible_to(@current_person).with_latest_event
       end
 
-      @documents = @documents.name_matching(params[:q]) unless params[:q].blank?
+      @documents = @documents.matching(params[:q]) unless params[:q].blank?
       @documents = @documents.order(sort_parameters[@sort]).page(@page).per(@show)
     end
 

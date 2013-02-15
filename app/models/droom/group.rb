@@ -35,7 +35,7 @@ module Droom
       end
     }
 
-    scope :name_matching, lambda { |fragment| 
+    scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_groups.name like ?', fragment)
     }

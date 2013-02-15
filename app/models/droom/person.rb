@@ -133,9 +133,9 @@ module Droom
       text :description
     end
 
-    scope :name_matching, lambda { |fragment| 
+    scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
-      where('droom_people.name LIKE :f OR droom_people.forename LIKE :f', :f => fragment)
+      where('droom_people.name LIKE :f OR droom_people.forename LIKE :f OR droom_people.email LIKE :f OR droom_people.phone LIKE :f', :f => fragment)
     }
     
     # warning! won't work in SQLite.

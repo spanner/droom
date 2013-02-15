@@ -5,6 +5,7 @@ module Droom
     helper Droom::DroomHelper
   
     before_filter :authenticate_user!
+    before_filter :get_people, :only => [:index]
     before_filter :find_organisations, :only => [:index]
     before_filter :get_organisation, :only => [:show, :edit, :update, :destroy]
     before_filter :build_organisation, :only => [:new, :create]
@@ -34,6 +35,12 @@ module Droom
       @organisations = Droom::Organisation.order("name asc")
     end
 
+    def get_people
+      @show = params[:show] || 10
+      @page = params[:page] || 1
+      @people = Droom::Person.order("name asc").page(@page).per(@show)
+    end
+    
     def get_organisation
       @organisation = Droom::Organisation.find(params[:id])
     end

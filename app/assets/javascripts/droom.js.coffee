@@ -43,7 +43,9 @@ jQuery ($) ->
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder",
       force: true
     @find_including_self('[data-action="collapser"]').collapser()
+    @find_including_self('form[data-action="filter"]').filter_form()
     @find_including_self('a.scrap').popup()
+    @find_including_self('.pagination a').page_turner()
 
     # and some shortcuts for compatibility
     
@@ -70,9 +72,10 @@ jQuery ($) ->
     @find_including_self('#map').init_map()
     @find_including_self('#minicalendar').calendar()
     @find_including_self('form.search_form').search()
-    @find_including_self('form.fancy').captive
+    @find_including_self('form.fancy').captive()
     @find_including_self('div.folder').folder()
-    @find_including_self('form#searchform').suggestion_form
-      replacing: '.search_results'
+    @find_including_self('form#suggestions').suggestion_form
+      replacing: '#suggestion_box'
       fast: true
+      
     @
