@@ -14,7 +14,12 @@ Droom::Engine.routes.draw do
 
   resources :documents
   resources :preferences
-  resources :scraps
+
+  resources :scraps do
+    collection do
+      match "feed/:auth_token.:format" => "scraps#index", :as => :feed
+    end
+  end
 
   resources :events do
     resources :invitations

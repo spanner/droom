@@ -91,7 +91,7 @@ module Droom
     end
     
     def panels
-      @@panels ||= %w{dropbox email rss devices networks readers account search admin}
+      @@panels ||= %w{dropbox email rss devices readers account search admin}
     end
     
     def scrap_types
@@ -183,13 +183,11 @@ module Droom
         :dropbox => {
           :strategy => "clicked",
           :events? => true,
-          :groups? => true,
-          :topics? => false
         },
         :dav => {
+          :enabled? => false,
+          :strategy => "clicked",
           :everything? => false,
-          :events? => false,
-          :topics? => false
         }
       })
     end

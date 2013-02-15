@@ -1,3 +1,8 @@
 #account.panel
-  %p
-    = t :preferences_instructions
+  %h4
+    = t :account_preferences
+  
+  %ul
+    - if current_user.person
+      %li
+        = link_to t(:edit_profile), droom.edit_person_url(current_user.person), :remote => true, :data => {:action => "popup", :type => "html", :affected => ".people_list"}

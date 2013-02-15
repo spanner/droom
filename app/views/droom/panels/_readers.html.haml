@@ -1,3 +1,19 @@
 #readers.panel
+  %h4
+    = t :dav_preferences
+
   %p
-    = t :readers_instructions
+    If you don't have a dropbox, or your document reader doesn't support it, 
+    we can create a personal document folder for you on this site that will be
+    accessible from most popular document readers.
+
+  = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
+    %span.preference
+      = preference_checkbox 'dav.enabled?'
+      %span.subpreference
+        = preference_radio_set 'dav.strategy', 'everything', 'relevant', 'clicked'
+  %p.note
+    = link_to "How to use your personal folder", "#", :class => "help"
+          
+  %p.confirmation
+    

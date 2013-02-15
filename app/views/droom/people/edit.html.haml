@@ -1,4 +1,7 @@
 #edit_person
   %h2
-    = t :edit_person
+    - if current_user.is_person?(@person)
+      = t :edit_your_profile
+    - else
+      = t :edit_person
   = render :partial => 'form'

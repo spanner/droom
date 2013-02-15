@@ -7,8 +7,12 @@ module Droom
       current_user and current_user.admin?
     end
 
-    def preference_checkbox(key, user=nil)
-      render :partial => "droom/preferences/checkbox", :locals => {:key => key, :user => user}
+    def preference_checkbox(key)
+      render :partial => "droom/preferences/checkbox", :locals => {:key => key}
+    end
+
+    def preference_radio_set(key, *values)
+      render :partial => "droom/preferences/radio_set", :locals => {:key => key, :values => values}
     end
 
     def shorten(text, options={})

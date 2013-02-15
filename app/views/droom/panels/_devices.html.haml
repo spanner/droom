@@ -1,3 +1,19 @@
 #devices.panel
+  %h4
+    = t :mobile_devices
   %p
-    = t :device_instructions
+    Get HKFx on your phone or tablet without having to use a web browser:
+  %ul
+    - if current_user.person
+      %li
+        = link_to t(:subscribe_to_calendar), feed_events_url(:auth_token => current_user.authentication_token, :protocol => "webcals", :format => :ics)
+    %li
+      = link_to t(:download_contacts), directory_url(:format => :vcf)
+    %li
+      = link_to t(:follow_stream), feed_scraps_url(:format => :rss, :auth_token => current_user.authentication_token)
+    %li
+      = link_to t(:setup_dropbox), '#'
+    %li
+      = link_to t(:setup_dav), '#'
+  %p.note
+    These links are all personal to you and include an automatic login. Keep them secret.

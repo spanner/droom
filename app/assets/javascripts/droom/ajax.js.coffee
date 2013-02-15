@@ -18,6 +18,11 @@
 # * *on_complete* is called after the request, whether successful or not. Arguments: [status]
 #
 jQuery ($) ->
+
+  $.fn.remote = (opts) ->
+    @each ->
+      new Remote @, opts 
+
   class Remote
     constructor: (element, opts) ->
       @_control = $(element)
@@ -34,6 +39,7 @@ jQuery ($) ->
       @_options.on_prepare?()
 
     pend: (event, xhr, settings) =>
+      console.log "remote pend", @_control.get(0)
       event.stopPropagation()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_control.addClass('waiting')
@@ -62,9 +68,6 @@ jQuery ($) ->
       @_options.on_cancel?()
       @_form?.remove()
 
-  $.fn.remote = (opts) ->
-    @each ->
-      new Remote @, opts 
 
   # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
   # result of their action.

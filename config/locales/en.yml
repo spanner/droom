@@ -42,10 +42,18 @@ en:
           scraptype_quote: "Quote"
           
   preferences:
+    dav:
+      enabled?: "Use personal folder"
+      strategy:
+        everything: "Sync everything"
+        relevant: "Sync only relevant documents"
+        clicked: "Copy on command only"
+        
     dropbox:
       strategy:
         everything: "Sync everything"
         selected: "Sync these folders..."
+        relevant: "Sync relevant documents"
         clicked: "Copy on command only"
       events?: "Your events"
       topics?: "Your topics"
@@ -85,6 +93,7 @@ en:
   clear_search: "Clear search"
   click_to_choose_file: "Click to choose a file"
   click_to_upload: "Click here to choose an image file"
+  dav_preferences: "Personal folder preferences"
   drop_to_upload: "or drop something in this box"
   confirm_delete_document: "Are you sure you want to delete the document '%{name}'? This cannot be undone."
   confirm_delete_event: "Are you sure you want to delete the event '%{name}'? This cannot be undone."
@@ -97,6 +106,7 @@ en:
   confirm_uninvite_person: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   contact_information_unavailable: "No contact information"
   copy_to_dropbox: "Copy folder to dropbox"
+  download_contacts: "Download contacts"
   download_ical: "Download event"
   downloads: "Downloads"
   download_attachments_as_zipfile: "Download all attachments as a zipfile"
@@ -108,16 +118,22 @@ en:
   edit: "Edit"
   edit_event: "Edit event"
   edit_person: "Edit person"
+  edit_your_profile: "Edit your profile"
   events: "Events"
   events_between: "Events between %{start} and %{finish}"
   events_in: "Events in %{period}"
   events_on: "Events on %{day}"
   event_created: "Event '%{name}' created"
+  follow_stream: "Follow the stream in an RSS reader"
+  group_admin: "Membership"
   group_created: "Group '%{name}' created"
   calendar: "Calendar"
   library: "Library" 
   networks: "Networks"
+  normal_RSS_link: "normal RSS link"
+  personal_RSS_link: "personal link"
   set_preferences: "Account preferences"
+  subscribe_to_calendar: "Subscribe to the calendar"
   user_preferences: "User preferences"
   user_updated: "Preferences for %{name} have been updated."
   your_preferences_saved: "Thank you. Your preferences have been updated"

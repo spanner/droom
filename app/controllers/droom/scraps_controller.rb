@@ -41,6 +41,10 @@ module Droom
       @scrap.destroy
       respond_with(@scrap)
     end
+    
+    def feed
+      
+    end
 
   protected
 

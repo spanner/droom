@@ -4,28 +4,9 @@
       = t :dropbox_preferences
       
     = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
-      - pref = current_user.preference('dropbox.strategy')
-      = f.fields_for :preferences, pref, :child_index => pref.uuid do |pf|
-        = pf.hidden_field :key
-        = pf.hidden_field :uuid
-        %p
-          %span.preference
-            = pf.radio_button :value, "everything"
-            = pf.label :value_everything, t("preferences.dropbox.strategy.everything")
-          %span.preference
-            = pf.radio_button :value, "selected"
-            = pf.label :value_selected, t("preferences.dropbox.strategy.selected")
-            %span.subpreference
-              = preference_checkbox 'dropbox.events?'
-            %span.subpreference
-              = preference_checkbox 'dropbox.topics?'
-            %span.subpreference
-              = preference_checkbox 'dropbox.groups?'
-          %span.preference
-            = pf.radio_button :value, "clicked"
-            = pf.label :value_clicked, t("preferences.dropbox.strategy.clicked")
-
-    = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
+      = preference_radio_set 'dropbox.strategy', 'everything', 'relevant', 'clicked'
+    %p
+      = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
 
     %p.confirmation
       
