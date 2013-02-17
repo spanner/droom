@@ -81,11 +81,20 @@ module Droom
     # The `user` is this person's administrative account for logging in and out and forgetting her password.
     # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
     # without having a person.
-    belongs_to :user, :class_name => "Droom::User".to_s, :dependent => :destroy
+    belongs_to :user, :class_name => "Droom::User", :dependent => :destroy
     
     before_save :update_user
-    after_save :invite_if_instructed
     
+    scope :unusered, select("droom_people.*")
+                    .joins("LEFT OUTER JOIN droom_users as du ON droom_people.user_id = du.id")
+                    .group("droom_people.id")
+                    .having("count(du.id) = 0")
+
+    scope :usered, select("droom_people.*")
+                    .joins("INNER JOIN droom_users as du ON droom_people.user_id = du.id")
+                    .group("droom_people.id")
+                    .having("count(du.id) > 0")
+
     # some magic glue to allow slightly indiscriminate use of user and person objects.
     
     def person
@@ -95,15 +104,7 @@ module Droom
     def admin?
       user && user.admin?
     end
-    
-    def has_active_user?
-      user && user.activated?
-    end
-    
-    def has_invited_user?
-      user && user.invited?
-    end
-    
+
     def has_admin_user?
       user && user.admin?
     end

@@ -12,56 +12,36 @@ module Droom
            :rememberable,
            :trackable,
            :validatable,
+           :confirmable,
            :token_authenticatable,
            :encryptor => :sha512
   
     before_create :ensure_authentication_token
-    after_create :send_invitation
 
     attr_accessor :newly_activated, :update_person_email
   
     validates :password, :length => { :minimum => 6 }, :if => :password_required?
   
     # Password is not required on creation, contrary to the devise defaults.
-    # Login is by token auth until a password is set.
-    # Token is retained to allow ical subscription without login.
-    def activated?
-      activated_at? && activated_at < Time.now
-    end
-  
     def password_required?
-      activated? && (!password.blank?)
+      confirmed? && (!password.blank?)
     end
   
-    # The new user (who to begin with has a dummy password) cannot log in until activated by token.
-  
-    def active_for_authentication?
-      super && activated?
+    def password_match?
+      Rails.logger.warn ">>> password_match? '#{password}' == '#{password_confirmation}'"
+      
+      self.errors[:password] << "can't be blank" if password.blank?
+      self.errors[:password_confirmation] << "can't be blank" if password_confirmation.blank?
+      self.errors[:password_confirmation] << "does not match password" if password != password_confirmation
+      password == password_confirmation && !password.blank?
     end
   
-    def inactive_message
-      :inactive
-    end
-
     def is_person?(person)
       person == self.person
     end
-
-    def invited?
-      invited_at? && invited_at < Time.now
-    end
-
-    def activate!
-      self.activated_at = Time.now
-      self.save(:validation => false)
-    end
-  
-    def active_for_authentication?
-      super && activated?
-    end
-  
-    def after_token_authentication
-      activate!
+    
+    def organisation
+      person.organisation if person
     end
   
     # Current user is pushed into here to make it available in models
@@ -72,11 +52,6 @@ module Droom
     end
     def self.current=(user)
       Thread.current[:user] = user
-    end
-
-    def invitation
-      self.ensure_authentication_token
-      Droom::Mailer.invitation(self)
     end
 
     # Personal DAV repository is accessed via a DAV4rack endpoint but we have to take care of its creation and population.
@@ -145,11 +120,5 @@ module Droom
       preferences.find_or_create_by_key(key).set(value)
     end
 
-  protected
-
-    def send_invitation
-      invitation.deliver unless activated?
-    end
-  
   end
 end

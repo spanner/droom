@@ -5,12 +5,16 @@
   %h1.pagetitle
     =t :welcome
 
-  = form_for @user, :html => {:class => 'edit user'} do |f|
+  = form_for resource, :url => confirm_password_path, :html => {:class => 'edit user'} do |f|
+    = f.hidden_field :confirmation_token
+    
     %p
       %strong
         = t :hello
         = @user.name
       = t :welcome_preamble
+
+    = devise_error_messages!
 
     %p
       = f.label :password, t(:password_instructions)
@@ -28,7 +32,7 @@
       %span.formnote
         = t :password_confirmation_requirements
 
-    %p.notice
+    %p.password_notice
       Please choose a password before you proceed.
         
     .controls

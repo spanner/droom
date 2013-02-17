@@ -224,7 +224,7 @@ jQuery ($) ->
         length: 6
       , opts
       @field = $(element)
-      @_notice = $('.notice')
+      @_notice = $('.password_notice')
       @form = @field.parents('form')
       @submit = @form.find('.submit')
       @confirmation = $("#" + @field.attr("id") + "_confirmation")
@@ -269,7 +269,10 @@ jQuery ($) ->
           @confirmation.addClass("ok").removeClass("notok")
           @submittable()
         else
-          @notify "The confirmation does not match your password.", "erratic"
+          if @confirmation_empty()
+            @notify "Please confirm your password."
+          else
+            @notify "The confirmation does not match your password.", "erratic"
           @confirmation.addClass("notok").removeClass("ok")
           @unsubmittable()
       else
@@ -278,7 +281,10 @@ jQuery ($) ->
         @unsubmittable()
         @field.addClass("notok").removeClass("ok")
         @confirmation.addClass("notok").removeClass("ok")
-        @notify "Please enter password of at least six letters.", "erratic"
+        if @empty()
+          @notify "Please enter a password."
+        else
+          @notify "Your password should have least six letters.", "erratic"
     
     notify: (message, cssclass) =>
       @_notice.removeClass('erratic successful').addClass(cssclass).text(message)
@@ -293,6 +299,9 @@ jQuery ($) ->
 
     empty: () =>
       !@field.val() || @field.val().length == 0
+
+    confirmation_empty: () =>
+      !@confirmation.val() || @confirmation.val().length == 0
       
     valid: () =>
       v = @field.val()

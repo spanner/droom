@@ -7,11 +7,14 @@ Droom::Engine.routes.draw do
     :log_to => [(Rails.root + 'log/dav.log').to_s, Logger::DEBUG]
   ), :anchor => false, :constraints => { :subdomain => Droom.dav_subdomain }
 
-  devise_for :users, :class_name => 'Droom::User', :module => :devise
-  resources :users do
-    get 'welcome/:auth_token', :action => :welcome, :on => :member, :as => :welcome
+  devise_for :users, :class_name => 'Droom::User', :module => :devise, :controllers => {:confirmations => 'droom/confirmations'}
+
+  # intermediate confirmation step to allow invitation without setting a password
+  devise_scope :user do
+    put "/confirm_password" => "confirmations#update", :as => :confirm_password
   end
 
+  resources :users
   resources :documents
   resources :preferences
 

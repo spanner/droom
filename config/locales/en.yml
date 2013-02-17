@@ -235,6 +235,7 @@ en:
   no_documents: "Sorry: there are no documents accessible by your account."
   no_people: "Sorry: there are no directory entries accessible by your account."
   search_still_dumb: "This is a very basic title search. Full-text coming soon."
+  user_admin: "Users"
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

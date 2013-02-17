@@ -1,8 +1,9 @@
 module Droom
   class UsersController < ApplicationController
+    helper Droom::DroomHelper
     respond_to :html, :js
     layout :no_layout_if_pjax
-    before_filter :authenticate_user!, :except => [:welcome]
+    before_filter :authenticate_user!
     before_filter :remember_token_auth
     before_filter :get_user, :only => :edit
     before_filter :get_user, :only => [:show, :edit, :update, :destroy, :welcome]
@@ -10,15 +11,7 @@ module Droom
     def edit
       respond_with @user
     end
-  
-    def welcome
-      if @user
-        respond_with(@user)
-      else
-        render :template => "users/unwelcome"
-      end
-    end
-  
+    
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
@@ -46,7 +39,7 @@ module Droom
   protected
 
     def get_user
-      if current_user.admin?
+      if current_user.admin? && params[:id]
         @user = User.find(params[:id])
       else
         @user = current_user

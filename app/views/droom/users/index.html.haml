@@ -1,0 +1,36 @@
+#main.users
+
+  %p
+    Here "people" are the people listed in the directory, and "users" are the accounts they use to log in. 
+    The distinction is needed because a person can appear in the directory without having a login account,
+    and a user can log in to administer the site without being a person in the directory.
+
+  %h2
+    Users who do not appear in the directory
+    
+  %ul.users
+    = render :partial => "users/user", :collection => Droom::User.unpersoned
+
+  %h2
+    People who have not been invited to log in
+    
+  %ul.users
+    = render :partial => "users/person", :collection => Droom::Person.unusered
+
+  %h2
+    User accounts that have not been activated
+    
+  %ul.users
+    = render :partial => "users/user", :collection => Droom::User.unconfirmed
+
+  %h2
+    Successfully activated user accounts
+
+  %ul.users
+    = render :partial => "users/user", :collection => Droom::User.confirmed
+
+
+
+
+- content_for :title do 
+  = t :user_admin

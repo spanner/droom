@@ -7,7 +7,7 @@ Devise.setup do |config|
   config.mailer_sender = "please-change-me-at-your-app-config-initializers-droom@example.com"
 
   # Configure the class responsible to send e-mails.
-  config.mailer = "Droom::Mailer"
+  # config.mailer = "Droom::Mailer"
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
