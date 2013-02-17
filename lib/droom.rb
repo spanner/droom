@@ -21,6 +21,7 @@ module Droom
                  :email_layout,
                  :email_host,
                  :email_from,
+                 :email_from_name,
                  :email_return_path,
                  :main_dashboard_modules,
                  :margin_dashboard_modules,
@@ -61,6 +62,10 @@ module Droom
 
     def email_from
       @@email_from ||= "please-change-email_from-in-droom-initializer@example.com"
+    end
+
+    def email_from_name
+      @@email_from ||= "Please Set Email-From Name In Droom Initializer"
     end
 
     def email_return_path
