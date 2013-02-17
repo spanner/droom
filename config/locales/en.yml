@@ -212,6 +212,7 @@ en:
   save_event: "Save event"
   save_document: "Save document"
   save_person: "Save person"
+  save_your_profile: "Save profile"
   send_reset_instructions: "Send reset instructions"
   manage_folders: "manage folders"
   manage_groups: "manage groups"

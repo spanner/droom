@@ -20,7 +20,7 @@
 
 jQuery ($) ->
   $.activate_with () ->
-    console.log "activate", @
+    # console.log "activate", @
     
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('[data-refreshable]').refresher()
@@ -74,8 +74,6 @@ jQuery ($) ->
     @find_including_self('form.search_form').search()
     @find_including_self('form.fancy').captive()
     @find_including_self('div.folder').folder()
-    @find_including_self('form#suggestions').suggestion_form
-      replacing: '#suggestion_box'
-      fast: true
-      
+    @find_including_self('form#suggestions').suggestion_form()
+    @find_including_self('.panel').panel()
     @

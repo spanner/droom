@@ -42,7 +42,10 @@
       = f.label :admin_user
     
   .buttons
-    = f.submit t(:save_person)
+    - if current_user.is_person?(@person)
+      = f.submit t(:save_your_profile)
+    - else
+      = f.submit t(:save_person)
     = t :or
     = link_to t(:cancel), '#', :class => 'cancel'
   

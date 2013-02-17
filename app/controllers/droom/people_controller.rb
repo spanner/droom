@@ -29,7 +29,10 @@ module Droom
     end
 
     def update
+      Rails.logger.warn ">>> updating person with #{params[:person].inspect}"
       @person.update_attributes(params[:person])
+      Rails.logger.warn "    person.valid? #{@person.valid?.inspect}: errors #{@person.errors.full_messages}"
+      Rails.logger.warn "    person: #{@person.inspect}"
       respond_with @person
     end
     
@@ -79,11 +82,13 @@ module Droom
 
     def scale_image_params
       multiplier = params[:multiplier] || 4
+      Rails.logger.warn ">>> before scale_image_params (with multiplier #{multiplier}), params for person: #{params[:person].inspect}"
       if params[:person]
         [:image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top].each do |p|
           params[:person][p] = (params[:person][p].to_i * multiplier.to_i) unless params[:person][p].blank?
         end
       end
+      Rails.logger.warn ">>> after scale_image_params, params for person: #{params[:person].inspect}"
     end
   
   end

@@ -5,7 +5,7 @@
       = person.formal_name
     - if admin? || current_user.is_person?(person)
       %span.admin
-        = link_to t(:edit_profile), droom.edit_person_url(person), :class => 'edit minimal', :data => {:action => "popup", :replaced => "#list_person_#{person.id}"}
+        = link_to t(:edit_profile), droom.edit_person_url(person), :class => 'edit minimal', :data => {:action => "popup", :affected => "#list_person_#{person.id}"}
         - if admin?
           = link_to t(:remove), droom.person_url(person), :method => 'delete', :class => 'delete minimal', :data => {:action => "remove", :removed => "#list_person_#{person.id}", :confirm => t(:confirm_delete_person, :name => person.name)}
     %br

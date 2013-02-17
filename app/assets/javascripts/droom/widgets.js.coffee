@@ -324,15 +324,16 @@ jQuery ($) ->
   class CaptiveForm
     constructor: (element, opts) ->
       @_form = $(element)
-      @_prompt = @_form.find("input[type=\"text\"]")
       @_options = $.extend {
         fast: false
         auto: false
         historical: false
       }, opts
       @_selector = @_form.attr('data-target') || @_options.into
+      @_container = $(@_selector)
+      @_original_content = @_container.html()
+      @_prompt = @_form.find("input[type=\"text\"]")
       @_request = null
-      @_original_content = $(@_selector).html()
       @_form.remote
         on_submit: @prepare
         on_cancel: @cancel
@@ -359,7 +360,7 @@ jQuery ($) ->
       @_form.submit()
       
     prepare: (xhr, settings) =>
-      $(@_selector).fadeTo "fast", 0.2
+      @_container.fadeTo "fast", 0.2
       @_request.abort() if @_request
       @_request = xhr
     
@@ -369,17 +370,14 @@ jQuery ($) ->
     
     display: (results) =>
       replacement = $(results)
-      replacement.find('a.cancel').click(@revert)
-      (replacement).insertBefore($(@_selector).first())
-      $(@_selector).html(replacement)
-      $(@_options.clearing).val("")
+      @_container.empty().append(replacement).fadeTo("fast", 1)
       replacement.activate()
+      replacement.find('a.cancel').click(@revert)
         
     revert: (e) =>
+      console.log "revert"
       e.preventDefault() if e
-      @_original_content.insertBefore $(@_selector).first()
-      $(@_selector).remove()
-      @_original_content?.fadeTo "fast", 1
+      @display(@_original_content)
       @_prompt.val("")
       @saveState()
 
@@ -395,15 +393,12 @@ jQuery ($) ->
 
 
 
-
-
-
   # The suggestions form is a fast captive with history support based on a single prompt field.
   #
   $.fn.suggestion_form = (options) ->
     options = $.extend(
       fast: true
-      auto: true
+      auto: false
       into: "#suggestion_box"
     , options)
     @each ->
@@ -414,7 +409,8 @@ jQuery ($) ->
     constructor: (element, opts) ->
       super
       @_prompt = @_form.find("input[type=\"text\"]")
-      @_original_term = decodeURIComponent($.urlParam("q"))
+      @_param = @_prompt.attr('name')
+      @_original_term = decodeURIComponent($.urlParam(@_param))
       if @_original_term and @_original_term isnt "false" and @_original_term isnt ""
         @_prompt.val(@_original_term)
         @submit()
@@ -426,11 +422,10 @@ jQuery ($) ->
       super
 
     saveState: (results) =>
-      results ?= @_original_content.html()
+      results ?= @_original_content
       term = @_prompt.val()
-      param = @_prompt.attr('name')
       if term
-        url = window.location.pathname + "?" + encodeURIComponent(param) + "=" + encodeURIComponent(term)
+        url = window.location.pathname + "?" + encodeURIComponent(@_param) + "=" + encodeURIComponent(term)
       else
         url = window.location.pathname
       state = 
@@ -991,3 +986,48 @@ jQuery ($) ->
         when "image"
           @_primary.find('textarea').attr("placeholder", "Caption")
           @_uploader.find('input').prop('disabled', false);
+
+
+  class Panel
+    @panels: $()
+    @remember: (panel) ->
+      @panels.push(panel)
+    @hideAll: () ->
+      panel.hide() for panel in @panels
+
+    constructor: (element) ->
+      @container = $(element)
+      @id = @container.attr('id')
+      @links = $("a[data-panel='#{@id}']")
+      Panel.remember(@)
+      @links.click @toggle
+      @set()
+        
+    set: () =>
+      if @container.hasClass('here') then @show() else @hide()
+      
+    toggle: (e) =>
+      if e
+        e.preventDefault()
+        e.stopPropagation()
+      if @container.is(":visible") then @revert() else @show()
+
+    hide: (e) =>
+      @container.fadeOut()
+      @links.removeClass('here')
+      $(document).unbind "click", @hide
+    
+    show: (e) =>
+      Panel.hideAll()
+      @container.stop().fadeIn()
+      @links.addClass('here')
+      # $(document).bind("click", @hide)
+  
+    revert: (e) =>
+      Panel.hideAll()
+      
+      
+  $.fn.panel = ->
+    @each ->
+      new Panel(@)
+    @
