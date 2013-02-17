@@ -30,9 +30,7 @@ module Droom
       @exception = exception
       render :template => 'droom/errors/bang', :status => 500
     end
-
-  protected
-
+  
     def no_layout_if_pjax
       if request.headers['X-PJAX']
         false

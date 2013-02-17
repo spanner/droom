@@ -4,11 +4,20 @@
       = t :admin
     %ul
       %li
-        = link_to t(:add_event), droom.new_event_url, :remote => true, :data => {:action => "popup", :type => "html", :affected => ".events_list, .minimonth"}
+        = link_to t(:add_event), droom.new_event_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => ".events_list, .minimonth"}
       %li
-        = link_to t(:add_document), droom.new_document_url, :remote => true, :data => {:action => "popup", :affected => "table.documents"}
+        = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "popup", :affected => "table.documents"}
       %li
-        = link_to t(:add_person), droom.new_person_url, :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
-        \|
-        = link_to t(:manage_groups), droom.groups_url
-        
+        = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
+      %li
+        = link_to t(:add_organisation), droom.new_organisation_url, :class => "add", :remote => true, :data => {:action => "popup", :affected => ".organisations_list"}
+
+    %ul
+      %li
+        = link_to t(:manage_venues), droom.venues_url, :class => "edit notyet"
+      %li
+        = link_to t(:manage_folders), droom.folders_url, :class => "edit notyet"
+      %li
+        = link_to t(:manage_users), droom.users_url, :class => "edit notyet"
+      %li
+        = link_to t(:manage_groups), droom.groups_url, :class => "edit"

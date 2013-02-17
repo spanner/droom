@@ -82,18 +82,10 @@ module Droom
     # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
     # without having a person.
     belongs_to :user, :class_name => "Droom::User", :dependent => :destroy
-    
     before_save :update_user
-    
-    scope :unusered, select("droom_people.*")
-                    .joins("LEFT OUTER JOIN droom_users as du ON droom_people.user_id = du.id")
-                    .group("droom_people.id")
-                    .having("count(du.id) = 0")
 
-    scope :usered, select("droom_people.*")
-                    .joins("INNER JOIN droom_users as du ON droom_people.user_id = du.id")
-                    .group("droom_people.id")
-                    .having("count(du.id) > 0")
+    scope :unusered, where("user_id IS NULL")
+    scope :usered, where("user_id IS NOT NULL")
 
     # some magic glue to allow slightly indiscriminate use of user and person objects.
     
@@ -241,7 +233,14 @@ module Droom
         :id => id
       }
     end
+
+    def invitable?
+      name? && email?
+    end
     
+    def invite!
+      invite_user
+    end
 
   protected
     
@@ -256,12 +255,12 @@ module Droom
     # ### Administration & callbacks
     #
     # At some point we may want to create a user to log in and look after this person. 
-    # This usually has the side effect of sending out a login invitation.
+    # This usually has the side effect of sending out a confirmation message.
     #
     def invite_user
       unless self.user
-        if self.name? && self.email?
-          self.create_user(:forename => forename, :name => name, :email => email, :admin => admin_user)
+        if invitable?
+          user = self.create_user(:forename => forename, :name => name, :email => email)
           self.save
         end
       end

@@ -22,6 +22,17 @@ module Droom
   
     validates :password, :length => { :minimum => 6 }, :if => :password_required?
   
+    scope :unconfirmed, where("confirmed_at IS NULL")
+  
+    scope :personed, select("droom_users.*")
+                  .joins("INNER JOIN droom_people as dp ON dp.user_id = droom_users.id")
+                  .group("droom_users.id")
+
+    scope :unpersoned, select("droom_users.*")
+                  .joins("LEFT OUTER JOIN droom_people as dp ON dp.user_id = droom_users.id")
+                  .group("droom_users.id")
+                  .having("count(dp.id) = 0")
+
     # Password is not required on creation, contrary to the devise defaults.
     def password_required?
       confirmed? && (!password.blank?)

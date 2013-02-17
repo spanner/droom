@@ -4,9 +4,15 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     before_filter :authenticate_user!
+    before_filter :require_admin!, :only => [:index, :new, :create, :destroy]
+    before_filter :require_self_or_admin!, :only => [:edit, :update]
     before_filter :remember_token_auth
     before_filter :get_user, :only => :edit
     before_filter :get_user, :only => [:show, :edit, :update, :destroy, :welcome]
+
+    def index
+      @everyone = Droom::Person.all + Droom::User.unpersoned
+    end
   
     def edit
       respond_with @user
@@ -47,6 +53,10 @@ module Droom
     end
   
   private
+
+    def require_self_or_admin!
+      raise Droom::PermissionDenied unless current_user && (current_user.admin? || @user == current_user)
+    end
 
     def remember_token_auth
       if params[:auth_token] && user_signed_in?

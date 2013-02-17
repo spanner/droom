@@ -1,0 +1,47 @@
+- user_or_person ||= @user
+
+- if user_or_person.is_a? Droom::Person
+  - person = user_or_person
+  - user = person.user
+  - rowid = "person_#{person.id}"
+  - cssclass = "person"
+
+- else
+  - person = nil
+  - user = user_or_person
+  - rowid = "user_#{user.id}"
+  - cssclass = "user"
+
+%tr{:id => rowid, :class => cssclass}
+  %td.name
+    = user_or_person.name
+  %td.email
+    = mail_to user_or_person.email
+  %td.directory
+    - if person
+      %span.yes
+    - else
+      %span.no
+  %td.invited
+    - if user
+      %span.yes
+    - else
+      - if person.invitable?
+        = link_to t(:invite), invite_person_url(person), :class => "no", :data => {:action => "fetch", :replaced => rowid}
+      - else
+        %span.not_applicable
+  %td.confirmed
+    - if user
+      %span{:class => user.confirmed? ? 'yes' : 'no'}
+    - else
+      %span.not_applicable
+  %td.admin
+    - if user && user.confirmed?
+      %span{:class => user.admin? ? 'yes' : 'no'}
+    - else
+      %span.not_applicable
+  %td.settings
+    - if user && user.confirmed?
+      = link_to "&nbsp;", edit_user_url(user), :data => {:action => "popup"}
+      
+

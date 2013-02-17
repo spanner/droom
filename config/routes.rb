@@ -45,6 +45,7 @@ Droom::Engine.routes.draw do
   end
   
   resources :people do
+    get "invite", :on => :member, :as => :invite
     resources :events do
       collection do
         match "feed/:auth_token.:format" => "events#feed", :as => :feed

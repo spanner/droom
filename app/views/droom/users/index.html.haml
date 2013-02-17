@@ -4,32 +4,37 @@
     Here "people" are the people listed in the directory, and "users" are the accounts they use to log in. 
     The distinction is needed because a person can appear in the directory without having a login account,
     and a user can log in to administer the site without being a person in the directory.
+  %p
+    Click on a red X to invite someone. The 'confirmed' and 'admin' columns will be clickable soon.
 
-  %h2
-    Users who do not appear in the directory
-    
-  %ul.users
-    = render :partial => "users/user", :collection => Droom::User.unpersoned
+  = render :partial => "droom/users/users_table"
 
-  %h2
-    People who have not been invited to log in
-    
-  %ul.users
-    = render :partial => "users/person", :collection => Droom::Person.unusered
+- content_for :somewhere do
 
-  %h2
-    User accounts that have not been activated
-    
-  %ul.users
-    = render :partial => "users/user", :collection => Droom::User.unconfirmed
-
-  %h2
-    Successfully activated user accounts
-
-  %ul.users
-    = render :partial => "users/user", :collection => Droom::User.confirmed
-
-
+  - uninvited = Droom::Person.unusered
+  - if uninvited.any?
+    %h4
+      People not yet invited
+  
+    %ul.checklist
+      - if uninvited.length > 1
+        %li
+          = check_box_tag :user_ids, "all", false, :id => "person_ids_all"
+          %label{:for => "person_ids_all"} 
+            select all
+      - uninvited.each do |person|
+        %li
+          = check_box_tag :"person_ids[]", person.id, false, :id => "person_ids_#{person.id}"
+          %label{:for => "person_ids_#{person.id}"}
+            %strong
+              = person.name
+            %span.admin
+              = link_to t(:edit_profile), droom.edit_person_url(person), :class => 'edit minimal', :data => {:action => "popup", :affected => "#list_person_#{person.id}"}
+            - if person.organisation
+              %span.affiliation
+                %br
+                = t :of_the
+                = person.organisation.name
 
 
 - content_for :title do 

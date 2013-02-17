@@ -73,15 +73,18 @@ jQuery ($) ->
   # result of their action.
   #
   $.fn.replace_with_remote_content = (selector, opts) ->
-    selector ?= '.reviewer'
+    selector ?= '.holder'
     options = $.extend { force: false }, opts
     @each ->
+      container = $(@).attr('data-replaced') || selector
+      affected = $(@).attr('data-affected')
       $(@).remote
         on_success: (r) =>
-          replaced = $(@).parents(selector).first()
+          replaced = $(@).parents(container).first()
           replacement = $(r).insertAfter(replaced)
           replaced.remove()
           replacement.activate()
+          $(affected).trigger('refresh')
       $(@).click() if options['force']
 
 

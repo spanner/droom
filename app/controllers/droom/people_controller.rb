@@ -8,7 +8,7 @@ module Droom
     before_filter :get_current_person
     before_filter :find_people, :only => :index
     before_filter :get_groups
-    before_filter :get_person, :only => [:show, :edit, :update, :destroy]
+    before_filter :get_person, :only => [:show, :edit, :update, :destroy, :invite]
     before_filter :build_person, :only => [:new, :create]
     before_filter :confine_to_self, :except => [:index, :show]
     
@@ -39,6 +39,14 @@ module Droom
     def destroy
       @person.destroy
       head :ok
+    end
+    
+    def invite
+      @user = @person.invite!
+      
+      Rails.logger.warn ">>> Inviting person #{@person.inspect} gave us #{@user.inspect}"
+      
+      render :partial => "droom/users/user_or_person", :locals => {:user_or_person => @person}
     end
     
   protected

@@ -40,7 +40,10 @@ en:
           scraptype_video: "Video"
           scraptype_link: "Link"
           scraptype_quote: "Quote"
-          
+        user:
+          name: "Preferred name"
+          email: "Private email address"
+          update_person_email: "Set your public address to match"
   preferences:
     dav:
       enabled?: "Use personal folder"
@@ -145,6 +148,7 @@ en:
   subscribe_to_calendar: "Subscribe to the calendar"
   user_preferences: "User preferences"
   user_updated: "Preferences for %{name} have been updated."
+  update_person_email: "also update your public email address"
   your_preferences_saved: "Thank you. Your preferences have been updated"
   posted: "Posted"
   directory: "Directory"
@@ -232,6 +236,8 @@ en:
   to: "to"
   venue_name: "Venue name"
   venue_post_code: "Post Code"
+  of_the: "of the"
+  preferred_name_explanation: "This is the name by which we will address you. To change your directory entry, please edit your profile."
   no_documents: "Sorry: there are no documents accessible by your account."
   no_people: "Sorry: there are no directory entries accessible by your account."
   search_still_dumb: "This is a very basic title search. Full-text coming soon."

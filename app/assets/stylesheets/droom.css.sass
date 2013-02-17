@@ -287,6 +287,75 @@ form.page
     width: 50%
     color: $mid
 
+form.person
+  .image
+    width: 130px
+    height: 130px
+    margin-right: 20px
+    float: left
+    .uploadbox
+      width: 130px
+      height: 130px
+    .img
+      width: 130px
+      height: 130px
+      .prompt
+        padding-top: 30px
+        +small
+      .scaler
+        width: 100px
+      p.range
+        .slider
+          width: 70px
+  p.name
+    margin: 0
+    input
+      width: 375px
+      font-size: 1.5em
+      font-weight: bold
+  .contacts
+    overflow: hidden
+    p
+      float: left
+      width: 184px
+      margin-top: 0.5em
+      margin-bottom: 0
+      input
+        width: 170px
+        font-size: 1em
+        margin-top: 0
+    p.email
+      margin-right: 20px
+  p.organisation
+    clear: left
+    select
+      width: 536px
+      font-size: 1em
+
+  .user, .buttons
+    clear: left
+      
+  .description
+    textarea
+      width: 520px
+      height: 150px
+      font-size: 1em
+  .buttons
+    position: relative
+    margin-top: 0.5em
+
+
+form.user
+  input[type="text"], input[type="password"]
+    width: 520px
+    font-size: 1em
+  p.name
+    margin: 0
+    input[type="text"]
+      font-size: 1.5em
+      font-weight: bold
+
+ 
 h2.name
   font-size: 3em
   margin: 0
@@ -521,6 +590,48 @@ table.people
   td.buttons
     width: 80px
 
+
+table.users
+  margin-top: 40px
+  thead
+    th.admin, th.invited, th.confirmed, th.directory, th.settings
+      max-width: 24px
+      height: 30px
+      padding-right: 2px
+      +rotate(-75deg)
+  tbody
+    td.email
+      +small
+      +pale
+      line-height: 1.8em
+    td.admin, td.invited, td.confirmed, td.directory
+      padding-right: 2px
+      width: 24px
+      span, a
+        +icon("droom/minisymbols.png")
+        &.yes
+          background-position: 0 -384px
+        &.no
+          background-position: 0 -528px
+        &.not_applicable
+          background-position: 0 -600px
+        &.waiting
+          background-image: image-url('droom/smallspinner.gif')
+          background-position: 5px 11px
+      span.no
+        background-position: 0 -504px
+      a.no
+        &:hover
+          background-position: 0 -576px
+    td.settings
+      padding-right: 2px
+      width: 24px
+      overflow: hidden
+      a
+        +icon("droom/edit.png")
+      
+      
+      
 table.groups
   margin-bottom: 25px
   th, td
@@ -1255,7 +1366,7 @@ input.search_box
 #flashes
   position: absolute
   top: 20px
-  right: 50px
+  left: 50px
   width: 300px
   p
     display: none
@@ -1705,5 +1816,14 @@ form.scrap
     height: 100%
 
 
-
-
+ul.checklist
+  font-size: 80%
+  list-style: none
+  padding: 0
+  margin: 0
+  input[type="checkbox"]
+    position: absolute
+  label
+    display: block
+    margin-left: 20px
+    overflow: hidden
