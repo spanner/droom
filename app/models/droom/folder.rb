@@ -28,7 +28,11 @@ module Droom
       not_private
     }
 
-    scope :loose, select('parent_id IS NULL')
+    # A root folders is created automatically for each class that has_folder, 
+    # the first time something in that class asks for its folder.
+    scope :roots, where('holder_type IS NULL AND parent_id IS NULL')
+
+    scope :loose, where('parent_id IS NULL')
 
     scope :populated, select('droom_folders.*')
       .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id')

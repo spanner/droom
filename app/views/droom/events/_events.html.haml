@@ -1,4 +1,2 @@
 .events_list{:data => {:refreshable => true, :url => "#{events_path}.js"}}
   = render :partial => 'droom/events/event', :collection => @events
-  .pagination
-    = paginate @events

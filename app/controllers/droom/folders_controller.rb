@@ -41,9 +41,9 @@ module Droom
 
     def find_folders
       if current_user.admin?
-        @folders = Droom::Folder.loose.populated
+        @folders = Droom::Folder.roots
       else
-        @folders = Droom::Folder.visible_to(@current_person).loose.populated
+        @folders = Droom::Folder.visible_to(@current_person).roots
       end
     end
     

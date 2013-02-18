@@ -1,4 +1,4 @@
 = t :library_introduction
 
 #folders
-  = render :partial => 'droom/folders/folder', :collection => @folders
+  = render :partial => 'droom/folders/folder', :collection => @folders, :locals => {:open => true}

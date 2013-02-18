@@ -76,10 +76,11 @@ module Droom
       # inside that of the named associate. The containing folder might be created as a side effect.
       #
       def get_parent_folder
-        if pfh = self.class.class_variable_get(:"@@parent_folder_holder")
-          if holder = send(pfh.to_sym)
-            holder.folder
-          end
+        pfh = self.class.class_variable_get(:"@@parent_folder_holder")
+        if pfh && holder = send(pfh.to_sym)
+          holder.folder
+        else
+          Droom::Folder.find_or_create_by_slug_and_parent_id(self.class.to_s.titlecase.split('/').last.pluralize, nil)
         end
       end
 
