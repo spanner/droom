@@ -30,13 +30,13 @@ module Droom
 
     # A root folders is created automatically for each class that has_folder, 
     # the first time something in that class asks for its folder.
-    scope :roots, where('holder_type IS NULL AND parent_id IS NULL')
+    scope :roots, where('droom_folders.holder_type IS NULL AND droom_folders.parent_id IS NULL')
 
     scope :loose, where('parent_id IS NULL')
 
     scope :populated, select('droom_folders.*')
-      .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id')
-      .having('count(dd.id) > 0')
+      .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id LEFT OUTER JOIN droom_folders AS df ON droom_folders.id = df.parent_id')
+      .having('count(dd.id) > 0 OR count(df.id) > 0')
       .group('droom_folders.id')
 
     scope :latest, lambda {|limit|
