@@ -76,6 +76,27 @@ jQuery ($) ->
           $(affected).trigger "refresh"
 
 
+  # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
+  # result of their action.
+  #
+  $.fn.replace_with_remote_content = (selector, opts) ->
+    selector ?= '.holder'
+    options = $.extend { force: false }, opts
+    @each ->
+      container = $(@).attr('data-replaced') || selector
+      affected = $(@).attr('data-affected')
+      $(@).remote
+        on_success: (r) =>
+          replaced = $(@).parents(container).first()
+          replacement = $(r).insertAfter(replaced)
+          replaced.remove()
+          replacement.activate()
+          $(affected).trigger('refresh')
+      $(@).click() if options['force']
+
+
+
+
   # The submitter is a self-disabling submit button that can only be clicked once.
   #
   $.fn.submitter = ->
@@ -388,6 +409,12 @@ jQuery ($) ->
                 position: index
 
 
+  #todo: this has been replaced with the filterform.
+
+  $.fn.search_filter = () ->
+    @each ->
+      new Filter @
+    @
 
   class Filter
     constructor: (element) ->
@@ -421,83 +448,21 @@ jQuery ($) ->
     filter: () =>
       $(@_affected).trigger "filter", @_container.val()
 
-  $.fn.search_filter = () ->
+
+
+  $.fn.page_turner = () ->
     @each ->
-      new Filter @
-    @
-
-
-  class TableSort
-    constructor: (element, opts) ->
-      @table = $(element)
-      @url ?= @table.attr("data-url") ? "/documents"
-      @_affected = $(@table.attr('data-affected'))
-      @query = ""
-      @sort = null
-      @order = null
-      @_request = null
-      @_cache = {}
-      @_request = null
-      @_original_content = @table.clone()
-      @activate()
-      $(window).bind 'popstate', @restoreState if Modernizr.history
-      
-    wait: () =>
-      @table.fadeTo('fast', 0.2)
-    
-    unWait: () =>
-      @table.fadeTo('fast', 1)
-    
-    setQuery: (e, q) =>
-      @query = q
-      @get()
-      
-    get: (url) =>
-      url ?= @url + '?sort=' + encodeURIComponent(@sort) + '&order=' + encodeURIComponent(@order)+ '&q=' + encodeURIComponent(@query)
-      @_request.abort() if @_request
-      @wait()
-      if @_cache[url]
-        @display @_cache[url], url
-      else
-        @_request = $.ajax
-          url: url
-          dataType: "html"
-          success: (data) =>
-            @_cache[url] = data
-            @display(data, url)
-
-    display: (data, url) =>
-      @_affected.trigger('refresh', @query)
-      replacement = $(data).insertAfter(@table).hide()
-      @table.remove()
-      @table = replacement
-      @table.children().activate()
-      @table.fadeTo('fast', 1)
-      @activate()
-      @saveState(data, url) if url and Modernizr.history
-
-    activate: () =>
-      @table.refresher()
-      @table.bind "refresh", @get
-      @table.bind "filter", @setQuery
-      @sort ?= @table.attr("data-sort")
-      @order ?= @table.attr("data-order")
-      @table.find('a.sorter, .pagination a').click (e) =>
-        e.preventDefault() if e
-        if url = $(e.target).attr('href')
-          @get(url)
-    
-    saveState: (data, url) =>
-      state = 
-        html: data
-      history.pushState state, "Reviewers", url.replace(".js", "")  #hack!
-
-    restoreState: (e) =>
-      event = e.originalEvent
-      @display(event.state.html) if event.state? && event.state.html?
-
-
-  $.fn.table_sort = (options) ->
-    @each ->
-      new TableSort @, options
-    @
+      new Pager(@)
+  
+  class Pager
+    constructor: (element) ->
+      @_link = $(element)
+      @_selector = @_link.attr('data-affected') || '.paginated'
+      @_page = @_link.parents(@_selector).first()
+      @_link.remote
+        on_success: (r) =>
+          console.log "inserting", r, "after", @_page.get(0)
+          replacement = $(r).insertAfter(@_page)
+          @_page.remove()
+          replacement.activate()
+          @_page = replacement

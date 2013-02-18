@@ -68,7 +68,6 @@ jQuery ($) ->
     
     # page widgets
     
-    @find_including_self('table.sortable').table_sort()
     @find_including_self('#map').init_map()
     @find_including_self('#minicalendar').calendar()
     @find_including_self('form.search_form').search()

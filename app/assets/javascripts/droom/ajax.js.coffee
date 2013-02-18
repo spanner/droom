@@ -69,43 +69,6 @@ jQuery ($) ->
       @_form?.remove()
 
 
-  # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
-  # result of their action.
-  #
-  $.fn.replace_with_remote_content = (selector, opts) ->
-    selector ?= '.holder'
-    options = $.extend { force: false }, opts
-    @each ->
-      container = $(@).attr('data-replaced') || selector
-      affected = $(@).attr('data-affected')
-      $(@).remote
-        on_success: (r) =>
-          replaced = $(@).parents(container).first()
-          replacement = $(r).insertAfter(replaced)
-          replaced.remove()
-          replacement.activate()
-          $(affected).trigger('refresh')
-      $(@).click() if options['force']
-
-
-
-  $.fn.page_turner = () ->
-    @each ->
-      new Pager(@)
-  
-  class Pager
-    constructor: (element) ->
-      @_link = $(element)
-      @_selector = @_link.attr('data-affected') || '.paginated'
-      @_page = @_link.parents(@_selector).first()
-      @_link.remote
-        on_success: (r) =>
-          console.log "inserting", r, "after", @_page.get(0)
-          replacement = $(r).insertAfter(@_page)
-          @_page.remove()
-          replacement.activate()
-          @_page = replacement
-
 
 
 
