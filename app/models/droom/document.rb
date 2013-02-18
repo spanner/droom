@@ -115,7 +115,7 @@ module Droom
     end
 
     def destroy_folder_if_empty
-      self.folder.destroy if self.folder.empty?
+      self.folder.destroy if self.folder && self.folder.empty?
     end
 
     def halt_unless_pdf

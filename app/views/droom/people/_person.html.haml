@@ -1,5 +1,5 @@
 %li.person{:id => "list_person_#{person.id}", :data => {:refreshable => true, :url => droom.edit_person_path(person, :format => :js)} }
-  %span.mugshot{:style => "background-image: url(#{person.image.url('icon')})"}
+  %span.mugshot{:style => "background-image: url(#{person.image.url('cropped')})"}
   %span.contact
     %span.name
       = person.formal_name
