@@ -1,7 +1,7 @@
 = link_to truncate(scrap.note, :length => 40), scrap.note, :class => "icon link scrap"
 %p.caption
-  = link_to scrap.name, scrap.note
+  = link_to truncate(scrap.note, :length => 40), scrap.note
   - if scrap.body?
     %br
-    = shorten(scrap.body, :length => 128 - scrap.note.length)
+    = shorten(scrap.body, :length => 192)
   = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}

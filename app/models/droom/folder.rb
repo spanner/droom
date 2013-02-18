@@ -50,7 +50,11 @@ module Droom
     scope :not_public, where("public <> 1 OR secret = 1)")
 
     def name
-      holder.name if holder
+      if holder
+        holder.name
+      else
+        slug
+      end
     end
         
     def path

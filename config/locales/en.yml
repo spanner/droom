@@ -138,6 +138,8 @@ en:
   events_in: "Events in %{period}"
   events_on: "Events on %{day}"
   event_created: "Event '%{name}' created"
+  find_documents: "Find documents"
+  find_people: "Find people"
   follow_stream: "Follow the stream in an RSS reader"
   group_admin: "Membership"
   group_created: "Group '%{name}' created"

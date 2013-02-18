@@ -10,7 +10,7 @@
 - content_for :margin do
   #document_finder
     %h2
-      Documents
+      = t :find_documents
 
     %form.filter{:action => droom.documents_url(:format => :js), :data => {:action => "filter", :target => "#documents_found"}}
       %p
