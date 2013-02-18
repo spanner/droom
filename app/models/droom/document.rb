@@ -41,7 +41,7 @@ module Droom
 
     scope :matching, lambda { |fragment|
       fragment = "%#{fragment}%"
-      where('droom_documents.name like ?', fragment)
+      where('droom_documents.name LIKE :f OR droom_documents.file_file_name LIKE :f', :f => fragment)
     }
 
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")

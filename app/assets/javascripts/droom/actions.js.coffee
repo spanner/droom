@@ -272,7 +272,9 @@ jQuery ($) ->
       if @_container.hasClass('open') then @show() else @hide()
 
     toggle: (e) =>
-      e.preventDefault() if e
+      if e
+        e.preventDefault() 
+        e.stopPropagation()
       if @_container.hasClass('open') then @hide() else @show()
 
     show: (e) =>

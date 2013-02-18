@@ -1,3 +1,7 @@
 %ul.filing
-  = render :partial => 'droom/folders/folder', :collection => folder.children.populated
-  = render :partial => 'droom/documents/listing', :collection => folder.documents
+  - if folder.children.any? or folder.documents.any?
+    = render :partial => 'droom/folders/folder', :collection => folder.children.populated
+    = render :partial => 'droom/documents/listing', :collection => folder.documents
+  - else
+    %p
+      Folder empty

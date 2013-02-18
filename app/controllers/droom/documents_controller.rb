@@ -63,7 +63,11 @@ module Droom
     
   protected
     def get_folder
-      @folder = Droom::Folder.find(params[:folder_id]) if params[:folder_id]
+      if params[:folder_id]
+        @folder = Droom::Folder.find(params[:folder_id])
+      else
+        @folder = Droom::Folder.find_or_create_by_slug_and_parent_id("Unattached", nil)
+      end
     end
     
     def build_document
