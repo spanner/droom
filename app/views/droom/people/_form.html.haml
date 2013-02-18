@@ -6,8 +6,8 @@
         .uploadbox{:data => {:action => "upload", :url => cropper.uploads_path(:format => :js, :for => "person"), :scale => 2}}
           = iuf.file_field :file, :class => 'file_upload', :accept => "image"
           .img
-            - if @person.image?
-              = link_to image_tag(@person.image.url(:cropped), :width => 260, :height => 260), cropper.edit_upload_url(@person.image_upload), :data => {:action => "recrop"}
+            - if @person.image_upload.persisted?
+              = link_to image_tag(@person.image.url(:cropped), :width => 260, :height => 260), cropper.edit_upload_url(@person.image_upload), :data => {:action => "recrop"}, :class => "recrop"
               = link_to t(:detach_upload), '#', :class => 'detach'
             .prompt
               = link_to t(:click_to_upload), cropper.new_upload_url, :class => 'picker'

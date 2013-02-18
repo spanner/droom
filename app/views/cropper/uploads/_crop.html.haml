@@ -33,7 +33,6 @@
 .cropper
   .preview{:style => "width: #{scale_w}px; height: #{scale_h}px; top: #{scale_t}px; left: #{scale_l}px"}
     %img{:src => upload.file.url(:precrop)}
-  = link_to t(:detach_upload), '#', :class => 'detach'
 
   = fields_for recipient, object do |sf|
     %fieldset.crop
