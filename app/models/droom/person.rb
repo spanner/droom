@@ -16,7 +16,7 @@ module Droom
     has_many :groups, :through => :memberships
     has_many :mailing_list_memberships, :through => :memberships
     
-    has_many :preferences, :dependent => :destroy
+    has_many :preferences, :dependent => :destroy, :foreign_key => :created_by_id
     accepts_nested_attributes_for :preferences
 
     # The data requirements are minimal, with the idea that the directory will be populated gradually.

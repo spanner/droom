@@ -41,7 +41,7 @@
     - else
       %span.not_applicable
   %td.settings
-    - if user && user.confirmed?
+    - if user
       = link_to "&nbsp;", edit_user_url(user), :data => {:action => "popup"}
       
 

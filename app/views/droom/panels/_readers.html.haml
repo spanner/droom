@@ -3,9 +3,8 @@
     = t :dav_preferences
 
   %p
-    If you don't have a dropbox, or your document reader doesn't support it, 
-    we can create a personal document folder for you on this site that will be
-    accessible from most popular document readers.
+    If you use a document reader like GoodReader but you don't have a dropbox, you can sync it with
+    a WebDAV folder on this server: 
 
   = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
     %span.preference
@@ -13,7 +12,7 @@
       %span.subpreference
         = preference_radio_set 'dav.strategy', 'everything', 'relevant', 'clicked'
   %p.note
-    = link_to "How to use your personal folder", "#", :class => "help"
+    = link_to "How to use your WebDAV folder", "#", :class => "help"
           
   %p.confirmation
     
