@@ -75,6 +75,7 @@ en:
   advanced_search_link: "...advanced search"
   attachments: "Attachments"
   attending: "Attending"
+  by_name: "Search by name or filename"
   by_name_or_email: "Search by name or email"
   cancel: "cancel"
   mon: "MON"
@@ -160,6 +161,7 @@ en:
   help_pages: "Help pages"
   
   loading_people: "Loading people"
+  loading_documents: "Loading documents"
   
   page_title: "Page title"
   page_slug: "Slug"
@@ -203,7 +205,7 @@ en:
   click_to_download: "Click to download %{name}"
   forgot_password: "Forgotten your password?"
   your_personal_documents: "Your personal documents"
-  library_introduction: "The library is organised into folders. Each of your events or groups will usually have a folder, and there may also be some public folders that everyone can see. The presentation of this page will get a lot nicer, by the way: during development it is useful to have a view of all the data."
+  library_introduction: "The library is organised into folders, which are usually attached to an event or group. You can browse through the folder hierarchy below, or search for a particular document on the right."
   loading_stream: "Loading stream: please wait."
   finish_time: "Finish"
   other_documents: "Other available documents"

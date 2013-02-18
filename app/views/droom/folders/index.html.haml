@@ -5,3 +5,18 @@
 
 - content_for :title do
   = t :library
+
+
+- content_for :margin do
+  #document_finder
+    %h2
+      Documents
+
+    %form.filter{:action => droom.documents_url(:format => :js), :data => {:action => "filter", :target => "#documents_found"}}
+      %p
+        = text_field_tag :q, params[:q], :placeholder => t(:by_name)
+    
+    #documents_found
+      %p.waiting
+        = t :loading_documents
+  

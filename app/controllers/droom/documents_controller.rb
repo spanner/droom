@@ -13,13 +13,7 @@ module Droom
     
     def index
       respond_with @documents do |format|
-        format.js { 
-          if @event
-            render :partial => 'documents_list'
-          else
-            render :partial => 'documents_table'
-          end
-        }
+        format.js { render :partial => 'droom/documents/documents' }
       end
     end
   
@@ -69,7 +63,7 @@ module Droom
     
   protected
     def get_folder
-      @folder = Droom::Folder.find(params[:folder_id])
+      @folder = Droom::Folder.find(params[:folder_id]) if params[:folder_id]
     end
     
     def build_document
@@ -81,7 +75,6 @@ module Droom
     end
 
     def find_documents
-      @event = Droom::Event.find(params[:event_id]) if params[:event_id]
       sort_orders = {
         'asc' => "ASC",
         'desc' => "DESC"
@@ -98,13 +91,13 @@ module Droom
       }
       params[:sort] = 'created' unless sort_parameters[params[:sort]]
       @sort = params[:sort]
-      @show = params[:show] || 50
+      @show = params[:show] || 10
       @page = params[:page] || 1
       
       if current_user.admin?
-        @documents = Droom::Document.with_latest_event
+        @documents = Droom::Document.scoped({})
       else
-        @documents = Droom::Document.visible_to(@current_person).with_latest_event
+        @documents = Droom::Document.visible_to(@current_person)
       end
 
       @documents = @documents.matching(params[:q]) unless params[:q].blank?

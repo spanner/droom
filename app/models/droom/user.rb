@@ -11,7 +11,6 @@ module Droom
            :recoverable,
            :rememberable,
            :trackable,
-           :validatable,
            :confirmable,
            :token_authenticatable,
            :encryptor => :sha512
@@ -20,7 +19,7 @@ module Droom
 
     attr_accessor :newly_activated, :update_person_email
   
-    validates :password, :length => { :minimum => 6 }, :if => :password_required?
+    # validates :password, :length => { :minimum => 6 }, :if => :password_required?
   
     scope :unconfirmed, where("confirmed_at IS NULL")
   
