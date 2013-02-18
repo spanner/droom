@@ -115,6 +115,7 @@ en:
   confirm_uninvite_person: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   contact_information_unavailable: "No contact information"
   copy_to_dropbox: "Copy folder to dropbox"
+  detach_upload: "Detach upload"
   download_contacts: "Download contacts"
   download_ical: "Download event"
   downloads: "Downloads"
