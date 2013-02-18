@@ -1,0 +1,7 @@
+- organisation ||= suggested
+
+%li.organisation
+  %strong
+    = link_to organisation.name, organisation_url(organisation)
+
+= render :partial => "droom/person/suggested", :collection => organisation.people

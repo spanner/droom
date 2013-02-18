@@ -1,3 +1,14 @@
 - person ||= suggested
 
-= render :partial => "droom/person/listing"
+%li.person
+  = mail_to person.email, person.formal_name
+  %span.note
+    - if person.phone? || person.email?
+      - if person.phone?
+        = person.phone
+      - if person.phone? && person.email?
+        %br
+      - if person.email?
+        = mail_to person.email
+    - else
+      = t :contact_information_unavailable

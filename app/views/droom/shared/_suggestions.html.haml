@@ -1,8 +1,8 @@
-#search_results
+#suggestion_box
   %h2.quiet
     = @title || "Search Results"
     
-  %ul.search_results
+  %ul.suggestion_search
     - if @suggestions.any?
       - @suggestions.each do |sugg|
         = render :partial => "#{sugg.class.to_s.pluralize.underscore}/suggested", :object => sugg

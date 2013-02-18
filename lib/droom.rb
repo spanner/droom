@@ -17,6 +17,8 @@ module Droom
   # Boolean items also offer the interrogative form.
   
   mattr_accessor :root_path,
+                 :suggestible_classes,
+                 :searchable_classes,
                  :layout,
                  :email_layout,
                  :email_host,
@@ -146,17 +148,14 @@ module Droom
       !!@@show_venue_map
     end
 
-    def suggestible_classes=(hash)
-      @@suggestible_classes = hash
-    end
-
     def suggestible_classes
       @@suggestible_classes ||= {
         "event" => "Droom::Event", 
         "person" => "Droom::Person", 
         "document" => "Droom::Document",
         "group" => "Droom::Group",
-        "venue" => "Droom::Venue"
+        "venue" => "Droom::Venue",
+        "organisation" => "Droom::Organisation"
       }
     end
 
