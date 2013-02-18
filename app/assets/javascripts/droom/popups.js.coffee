@@ -108,10 +108,10 @@ jQuery ($) ->
       else 
         width = 540
       w = $(window)
+      height_limit = w.height() - 100
       height = [@_container.height(), height_limit].min()
       left = parseInt((w.width() - width) / 2)
-      top = parseInt((w.height() - height) / 5)
-      height_limit = w.height() - top*2
+      top = parseInt((w.height() - height - 40) / 2)  # allowing for padding
       placement = 
         left: left
         top: top
