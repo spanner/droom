@@ -8,9 +8,19 @@ module Droom
     end
     
     def action_menu(thing)
-      type = thing.class.to_s.downcase.underscore
-      varname = type.split('/').last
-      render "#{type.pluralize}/action_menu", varname.to_sym => thing
+      if editable?(thing)
+        type = thing.class.to_s.downcase.underscore
+        varname = type.split('/').last
+        render "#{type.pluralize}/action_menu", varname.to_sym => thing
+      end
+    end
+
+    def editable?(thing)
+      current_user && current_user.admin? || current_user == thing.created_by
+    end
+
+    def deletable?(thing)
+      current_user && current_user.admin? || current_user == thing.created_by
     end
 
     def admin?
@@ -53,14 +63,6 @@ module Droom
       # note that here we never want to pick up the existing dropbox session. That happens in the dropbox_tokens_controller
       # when we register an access token. In the view, any existing session has probably expired and we're better off with a new one.
       DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
-    end
-
-    def editable?(thing)
-      current_user.admin? || current_user == thing.created_by
-    end
-
-    def deletable?(thing)
-      current_user.admin? || current_user == thing.created_by
     end
 
     def nav_link_to(name, url, options={})
