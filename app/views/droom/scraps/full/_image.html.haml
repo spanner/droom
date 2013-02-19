@@ -1,5 +1,6 @@
-= image_tag scrap.image.url(:cropped), :width => 520, :height => 520
-  
-%p.caption
-  = scrap.body
-  = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+= render "droom/scraps/heading", :scrap => scrap
+
+.body.image
+  = image_tag scrap.image.url(:cropped), :width => 580, :height => 435
+
+= render "droom/scraps/caption", :scrap => scrap

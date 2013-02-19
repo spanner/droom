@@ -1,7 +1,8 @@
-= link_to truncate(scrap.note, :length => 32), scrap.note, :class => "icon link scrap"
+- heading = scrap.name? ? scrap.name : scrap.body
+
+= link_to "link:", droom.scrap_url(scrap), :class => "icon link", :data => {:action => "scrapup"}
 %p.caption
-  = link_to truncate(scrap.note, :length => 32), scrap.note, :class => "main", :title => scrap.note
-  - if scrap.body?
-    %br
-    = shorten(scrap.body, :length => 240)
+  = link_to shorten(heading), droom.scrap_url(scrap), :title => scrap.note, :data => {:action => "scrapup"}
+  = action_menulink(scrap)
   = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+= action_menu(scrap)

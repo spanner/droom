@@ -2,10 +2,10 @@ module Droom
   class Scrap < ActiveRecord::Base
     belongs_to :created_by, :class_name => "Droom::User"
     has_upload :image, 
-               :geometry => "520x520#",
+               :geometry => "580x435#",
                :styles => {
                  :icon => "32x32#",
-                 :thumb => "120x120#",
+                 :thumb => "160x120#",
                  :precrop => "1200x1200^"
                }
 
@@ -37,7 +37,15 @@ module Droom
         1
       end
     end
-  
+    
+    def url_with_protocol
+      body =~ /^https?:\/\// ? body : "http://#{body}"
+    end
+
+    def url_without_protocol
+      body.sub(/^https?:\/\//, '')
+    end
+    
   protected
   
     def get_youtube_thumbnail

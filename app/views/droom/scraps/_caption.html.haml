@@ -1,0 +1,11 @@
+- scrap ||= @scrap
+
+.caption
+  - if scrap.name?
+    %h4
+      = scrap.name
+  %p.note
+    = scrap.note
+
+  %p.attribution
+    = render "droom/scraps/credit", :scrap => scrap

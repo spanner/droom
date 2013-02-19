@@ -1,7 +1,6 @@
-%iframe.youtube{:width => "520", :height => "400", :src => "http://www.youtube.com/embed/#{@scrap.note}?fs=1&autohide=1&modestbranding=1&autoplay=1&wmode=opaque", :frameborder => 0, :allowfullscreen => true}
-  
-%p.caption
-  = scrap.body
-  = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+= render "droom/scraps/heading", :scrap => scrap
 
+.body
+  %iframe.youtube{:width => "520", :height => "400", :src => "http://www.youtube.com/embed/#{@scrap.note}?fs=1&autohide=1&modestbranding=1&autoplay=1&wmode=opaque", :frameborder => 0, :allowfullscreen => true}
 
+= render "droom/scraps/caption", :scrap => scrap
