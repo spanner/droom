@@ -29,11 +29,12 @@ jQuery ($) ->
     
     # link actions
     
+    @find_including_self('[data-action="popup"]').popup()
+    @find_including_self('[data-action="menu"]').action_menu()
     @find_including_self('[data-action="upload"]').uploader()
     @find_including_self('[data-action="recrop"]').recropper()
     @find_including_self('[data-action="remove"]').removes()
     @find_including_self('[data-action="copy"]').copier()
-    @find_including_self('[data-action="popup"]').popup()
     @find_including_self('[data-action="column_toggle"]').column_expander()
     @find_including_self('[data-action="twister"]').twister()
     @find_including_self('[data-action="filter"]').search_filter()

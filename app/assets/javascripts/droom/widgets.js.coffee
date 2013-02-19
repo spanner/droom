@@ -539,6 +539,14 @@ jQuery ($) ->
       @_toolbar.fadeTo(1000, 0.2)
 
 
+
+
+
+
+  ## Display Widgets
+  #
+  # These stand alone and usually encapsulate some interaction with the user.
+  #
   # The Calendar widget is a display of one calendar month in the usual tabular format.
   # Here we wrap it in a scrolling div to support movement from one month to another and
   # hook it up to the suggestion box, if that's on the page, so that clicking a day or month
@@ -574,10 +582,6 @@ jQuery ($) ->
 
 
 
-
-  ## Display Widgets
-  #
-  # These stand alone and usually encapsulate some interaction with the user.
 
   class ScoreShower
     constructor: (element) ->
@@ -997,46 +1001,3 @@ jQuery ($) ->
           @_uploader.find('input').prop('disabled', false);
 
 
-  class Panel
-    @panels: $()
-    @remember: (panel) ->
-      @panels.push(panel)
-    @hideAll: () ->
-      panel.hide() for panel in @panels
-
-    constructor: (element) ->
-      @container = $(element)
-      @id = @container.attr('id')
-      @links = $("a[data-panel='#{@id}']")
-      Panel.remember(@)
-      @links.click @toggle
-      @set()
-        
-    set: () =>
-      if @container.hasClass('here') then @show() else @hide()
-      
-    toggle: (e) =>
-      if e
-        e.preventDefault()
-        e.stopPropagation()
-      if @container.is(":visible") then @revert() else @show()
-
-    hide: (e) =>
-      @container.fadeOut()
-      @links.removeClass('here')
-      $(document).unbind "click", @hide
-    
-    show: (e) =>
-      Panel.hideAll()
-      @container.stop().fadeIn()
-      @links.addClass('here')
-      # $(document).bind("click", @hide)
-  
-    revert: (e) =>
-      Panel.hideAll()
-      
-      
-  $.fn.panel = ->
-    @each ->
-      new Panel(@)
-    @

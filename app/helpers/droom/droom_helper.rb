@@ -3,6 +3,10 @@ require 'dropbox_sdk'
 module Droom
   module DroomHelper
 
+    def menulink(thing)
+      link_to t(:action), "#", :class => "action", :data => {:action => "menu"} if editable?(thing)
+    end
+
     def admin?
       current_user and current_user.admin?
     end
@@ -46,7 +50,11 @@ module Droom
     end
 
     def editable?(thing)
-      current_user.admin?
+      current_user.admin? || current_user == thing.created_by
+    end
+
+    def deletable?(thing)
+      current_user.admin? || current_user == thing.created_by
     end
 
     def nav_link_to(name, url, options={})

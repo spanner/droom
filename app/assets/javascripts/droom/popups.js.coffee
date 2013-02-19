@@ -147,3 +147,96 @@ jQuery ($) ->
             $(col).removeClass('hidden').find('input, select, textarea').removeAttr('disabled')
         # We finish by triggering a resize event on the popup container, which will trigger a place() on the popup..
         container.trigger('resize')
+
+
+
+  # The action menu is a simple popup submenu used to hide editing links.
+  #
+  $.fn.action_menu = ->
+    @each ->
+      new ActionMenu(@)
+    @
+
+  class ActionMenu
+    @menus: $()
+    @remember: (menu) ->
+      @menus.push(menu)
+    @hideAll: () ->
+      menu.hide() for menu in @menus
+
+    constructor: (element) ->
+      @_link = $(element)
+      @_menu = @_link.parents('div').first().find('.menu')
+      @_link.click @toggle
+      ActionMenu.remember(@)
+
+    place: =>
+      pos = @_link.position()
+      @_menu.css
+        top: pos.top + 20
+        left: pos.left
+
+    toggle: (e) =>
+      if e
+        e.preventDefault() 
+        e.stopPropagation()
+      if @_link.hasClass('up') then @hide() else @show()
+
+    show: (e) =>
+      @place()
+      ActionMenu.hideAll()
+      @_link.addClass('up')
+      @_menu.stop().slideDown 'fast'
+      $(document).bind "click", @hide
+    
+    hide: (e) =>
+      @_menu.stop().slideUp 'fast', () =>
+        @_link.removeClass('up')
+      $(document).unbind "click", @hide
+      
+
+
+  class Panel
+    @panels: $()
+    @remember: (panel) ->
+      @panels.push(panel)
+    @hideAll: () ->
+      panel.hide() for panel in @panels
+
+    constructor: (element) ->
+      @container = $(element)
+      @id = @container.attr('id')
+      @links = $("a[data-panel='#{@id}']")
+      Panel.remember(@)
+      @links.click @toggle
+      @set()
+        
+    set: () =>
+      if @container.hasClass('here') then @show() else @hide()
+      
+    toggle: (e) =>
+      if e
+        e.preventDefault()
+        e.stopPropagation()
+      if @container.is(":visible") then @revert() else @show()
+
+    hide: (e) =>
+      @container.fadeOut()
+      @links.removeClass('here')
+      $(document).unbind "click", @hide
+    
+    show: (e) =>
+      Panel.hideAll()
+      @container.stop().fadeIn()
+      @links.addClass('here')
+      # $(document).bind("click", @hide)
+  
+    revert: (e) =>
+      Panel.hideAll()
+      
+      
+  $.fn.panel = ->
+    @each ->
+      new Panel(@)
+    @
+

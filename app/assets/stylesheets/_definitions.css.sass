@@ -15,6 +15,7 @@ $blue: #00afdb
 $green: #74b87a
 $warmred: #ff625b
 $darkred: #b92a23
+$purple: #a27ec3
 
 $dark: $coolgrey10
 $mid: $coolgrey7
@@ -68,6 +69,44 @@ $visited: #d3181f
   font-size: 80%
   line-height: 1.2
 
+
+=menu_link($src)
+  display: inline-block
+  text-indent: 18px
+  height: 16px
+  line-height: 16px
+  margin: 0 0 5px 0
+  white-space: nowrap
+  color: white
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($src)
+  &:hover
+    background-position: 0 -32px
+    text-shadow: 0 0 3px white
+  
+=icon_link($url)
+  display: inline-block
+  text-indent: 26px
+  margin-top: 0
+  line-height: 26px
+  min-height: 30px
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($url)
+  &:hover
+    background-position: 0 -48px
+  &.minimal
+    width: 24px
+    height: 24px
+    overflow: hidden
+    &:hover
+      overflow: visible
+
 =icon($url)
   display: inline-block
   text-indent: 26px
@@ -82,53 +121,9 @@ $visited: #d3181f
     image: image-url($url)
   &:hover
     background-position: 0 -48px
-  
-=smallicon($url)
-  display: inline-block
-  text-indent: 50px
-  height: 16px
-  width: 16px
-  line-height: 16px
-  overflow: hidden
-  margin: -6px 0 0 0
-  white-space: nowrap
-  background:
-    color: transparent
-    position: 0 0
-    repeat: no-repeat
-    image: image-url($url)
-  &:hover
-    background-position: 0 -32px
-  
-=icon_with_text($url)
-  display: inline-block
-  text-indent: 26px
-  margin-top: 0
-  line-height: 26px
-  min-height: 30px
-  background:
-    color: transparent
-    position: 0 0
-    repeat: no-repeat
-    image: image-url($url)
-  &:hover
-    background-position: 0 -48px
 
-=smallicon_with_text($url)
-  display: inline-block
-  text-indent: 18px
-  height: 16px
-  line-height: 16px
-  margin: 0 0 5px 0
-  white-space: nowrap
-  background:
-    color: transparent
-    position: 0 0
-    repeat: no-repeat
-    image: image-url($url)
-  &:hover
-    background-position: 0 -16px
 
+  
 =panel_icon($image: "droom/integration_buttons.png", $x: 0, $y: 0)
   overflow: hidden
   text-indent: 34px

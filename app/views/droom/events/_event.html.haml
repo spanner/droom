@@ -35,13 +35,10 @@
     .heading
       %h2.name<
         = link_to event.name, event_url(event), :class => "name"
-        - if admin?
-          %span.admin<
-            = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :data => {:action => "popup", :replaced => "#event_#{event.id}", :affected => ".minimonth"}
-            = link_to t(:remove), event_url(event), :method => 'delete', :class => 'delete minimal', :data => {:action => "remove", :affected => ".minimonth", :confirm => t(:confirm_delete_event, :name => event.name)}
-        - else
-          = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
+        = menulink(event)
 
+      = render "droom/events/action_menu", :event => event
+        
       %p.practicalities
         %time
           = l(event.start_time, :format => :natural)
@@ -63,9 +60,6 @@
         - if event.folder.populated?
           .documents
             = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true}
-        - elsif editable?(event.folder)
-          .documents
-            = link_to t(:add_document), droom.new_folder_document_url(event.folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
       - unless brief
         = event.description.html_safe
 

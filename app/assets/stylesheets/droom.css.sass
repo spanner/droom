@@ -15,7 +15,7 @@ p.large
   font-size: 1.6em
   
 a.dropbox
-  +icon_with_text("droom/dropbox.png")
+  +icon_link("droom/dropbox.png")
   color: #4ea1ea
   &:visited
     color: #4ea1ea
@@ -25,17 +25,8 @@ a.dropbox
     background-position: 0 -48px
     color: $hover
 
-a.minidropbox
-  +smallicon("droom/to_dropbox.png")
-
-a.to_dropbox
-  +icon("droom/copy_to_dropbox.png")
-
-a.in_dropbox
-  +icon("droom/in_dropbox.png")
-
 input.dropbox.revoke[type="submit"]
-  +icon_with_text("droom/revoke.png")
+  +icon_link("droom/revoke.png")
   background-color: none
   color: $blue
   padding: 0
@@ -43,13 +34,7 @@ input.dropbox.revoke[type="submit"]
   line-height: 1
   &:hover
     color: $hover
-
-a.download
-  +icon_with_text("droom/download.png")
   
-a.ical
-  +smallicon("droom/ical.png")
-
 a.cancel, a.cancel:visited
   +pale
   +hover
@@ -122,13 +107,14 @@ a.changed
   +hover
 
 
-#body
-  h2.quiet
-    clear: both
-  > #attendants
-    position: absolute
-    right: 0
-    margin-top: -1em
+h2.section
+  font-size: 1.25em
+  line-height: 26px
+  clear: both
+> #attendants
+  position: absolute
+  right: 0
+  margin-top: -1em
 
 #help_pages
   h2
@@ -367,23 +353,6 @@ h2.name
 
 p.description.changed
   color: $green
-
-h2.quiet
-  font-size: 1.25em
-
-.twister
-  a.twisty
-    +smallicon_with_text("droom/twisty.png")
-    color: $dark
-    +hover
-    +waitable
-
-  &.showing
-    a.twisty
-      background-position: 0 -32px
-      &:hover
-        background-position: 0 -48px
-        color: $hover
         
 a.expander
   display: inline-block
@@ -506,7 +475,7 @@ table.main
       padding-top: 8px
       min-height: 22px
     a.vcard
-      +icon("droom/vcard.png")
+      +icon_link("droom/vcard.png")
 
 table.documents
   margin-bottom: 25px
@@ -758,7 +727,7 @@ div.pag
     
 p.notification
   color: $green
-  +icon_with_text("droom/tick.png")
+  +icon_link("droom/tick.png")
 
 
 span.erratic
@@ -786,49 +755,72 @@ span.erratic
         position: 3px -58px
         repeat: no-repeat
 
-a.add
-  +icon_with_text("droom/add.png")
-  color: $green
-  &:visited
-    color: $green
+a.action
+  display: inline-block
+  text-indent: 26px
+  height: 24px
+  width: 25px
+  overflow: hidden
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url('droom/asterisk.png')
   &:hover
-    color: $hover
-  &.minimal
-    +smallicon("droom/smalladd.png")
-    min-height: 16px
-    
-a.edit
-  +icon_with_text("droom/edit.png")
-  color: $blue
-  &:visited
-    color: $blue
-  &:hover
-    color: $hover
-  &.minimal
-    +smallicon("droom/smalledit.png")
-    min-height: 16px
-    
-a.delete
-  +icon_with_text("droom/delete.png")
-  color: $mid
-  &:visited
-    color: $mid
-  &:hover
-    color: $hover
-  &.minimal
-    +smallicon("droom/smalldelete.png")
-    min-height: 16px
+    background-position: 0 -48px
+  &:active
+    background-position: 0 0
+  &.up
+    +box-shadow(0 4px 6px $dark)
+    background:
+      position: 0 -144px
+      color: $blue
 
-a.copy
-  +icon_with_text("droom/copy.png")
-  color: $mid
-  &:visited
-    color: $mid
-  &:hover
-    color: $hover
-  &.minimal
-    +smallicon("droom/smallcopy.png")
-    min-height: 16px
+.no-touch
+  a.action
+    display: none
+    &.up
+      display: inline-block
+  *:hover
+    >a.action
+      display: inline-block
+
+.menu
+  position: absolute
+  z-index: 50
+  display: none
+  +box-shadow(0 4px 6px $dark)
+  background-color: $blue
+  ul.actions
+    padding: 0
+    margin: 8px 10px 3px 5px
+    list-style: none
+    font-size: 0.75em
+    +sans
+    li
+      a
+        color: white
+        &.add
+          +menu_link("droom/smalladd.png")
+        &.edit
+          +menu_link("droom/smalledit.png")
+        &.delete
+          +menu_link("droom/smalldelete.png")
+
+
+
+p.action, h2.section
+  min-height: 26px
+  a.add
+    color: $green
+    font-weight: normal
+    font-size: 16px
+    white-space: nowrap
+    +icon_link("droom/add.png")
+    &:hover
+      color: #89d690
+
+
 
 
 div.copyholder
@@ -1333,12 +1325,6 @@ ul.tags
     float: left
     +border-radius(100px)
     padding: 10px 30px
-  a.defilter
-    display: block
-    position: absolute
-    top: 15px
-    right: 10px
-    +icon("droom/defilter.png")
 
 
 #folders
@@ -1349,7 +1335,7 @@ ul.tags
       padding-left: 40px
       margin-top: 0
     a.folder
-      +icon_with_text("droom/folder.png")
+      +icon_link("droom/folder.png")
       color: $text
       font-weight: bold
       +hover
@@ -1427,7 +1413,7 @@ nav.icons
   a.admin
     +panel_icon("droom/integration_buttons.png", -356px, 0)
     &.here
-      background-color: $warmred
+      background-color: $blue
   span.spacer
     display: inline-block
     float: left
