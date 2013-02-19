@@ -776,14 +776,14 @@ a.action
       position: 0 -144px
       color: $blue
 
-.no-touch
-  a.action
-    display: none
-    &.up
-      display: inline-block
-  *:hover
-    >a.action
-      display: inline-block
+// .no-touch
+//   a.action
+//     display: none
+//     &.up
+//       display: inline-block
+//   *:hover
+//     >a.action
+//       display: inline-block
 
 .menu
   position: absolute
@@ -1550,54 +1550,54 @@ ul.people
     position: relative
     clear: left
     margin-bottom: 25px
-  a.thumb, a.icon
-    display: block
-    float: left
-    width: 32px
-    height: 32px
-    margin-right: 8px
-    margin-bottom: 6px
-    overflow: hidden
-    text-indent: 50px
-    line-height: 32px
-    +border-radius(3px)
-    background:
-      repeat: no-repeat
-      position: 0 0
-    &.playable
-      &:before
-        content: image-url('droom/playable.png')
-        position: absolute
-        width: 32px
-        height: 32px
-        left: -50px
-  a.icon
-    background:
-      image: image-url('droom/scrap_icons.png')
-    &.text
-      background-position: 0 -48px
-    &.quote
-      background-position: 0 -96px
-  a
-    font-weight: bold
-    color: $mid
-    +hover
-  a.scrap
-    font-weight: normal
-    color: $mid
-    &:hover, &.hover
-      color: $hover
-  p.caption
-    overflow: hidden
-  span.attribution
-    color: $pale
-    display: block
-  span.credit
-    display: block
-    font-size: 80%
-    font-weight: bold
-    color: $mid
-    margin-top: 0
+    a.thumb, a.icon
+      display: block
+      float: left
+      width: 32px
+      height: 32px
+      margin-right: 8px
+      margin-bottom: 6px
+      overflow: hidden
+      text-indent: 50px
+      line-height: 32px
+      +border-radius(3px)
+      background:
+        repeat: no-repeat
+        position: 0 0
+      &.playable
+        &:before
+          content: image-url('droom/playable.png')
+          position: absolute
+          width: 32px
+          height: 32px
+          left: -50px
+    a.icon
+      background:
+        image: image-url('droom/scrap_icons.png')
+      &.text
+        background-position: 0 -48px
+      &.quote
+        background-position: 0 -96px
+    a
+      font-weight: bold
+      color: $mid
+      +hover
+    a.scrap
+      font-weight: normal
+      color: $mid
+      &:hover, &.hover
+        color: $hover
+    p.caption
+      overflow: hidden
+    span.attribution
+      color: $pale
+      display: block
+    span.credit
+      display: block
+      font-size: 80%
+      font-weight: bold
+      color: $mid
+      margin-top: 0
 
 form.scrap
   ul.scraptypes

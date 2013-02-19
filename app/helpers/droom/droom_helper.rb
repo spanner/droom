@@ -3,8 +3,14 @@ require 'dropbox_sdk'
 module Droom
   module DroomHelper
 
-    def menulink(thing)
+    def action_menulink(thing)
       link_to t(:action), "#", :class => "action", :data => {:action => "menu"} if editable?(thing)
+    end
+    
+    def action_menu(thing)
+      type = thing.class.to_s.downcase.underscore
+      varname = type.split('/').last
+      render "#{type.pluralize}/action_menu", varname.to_sym => thing
     end
 
     def admin?

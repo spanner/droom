@@ -35,9 +35,8 @@
     .heading
       %h2.name<
         = link_to event.name, event_url(event), :class => "name"
-        = menulink(event)
-
-      = render "droom/events/action_menu", :event => event
+        = action_menulink(event)
+      = action_menu(event)
         
       %p.practicalities
         %time

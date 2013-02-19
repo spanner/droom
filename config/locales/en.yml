@@ -117,6 +117,8 @@ en:
   contact_information_unavailable: "No contact information"
   copy_to_dropbox: "Copy folder to dropbox"
   delete_event: "remove event"
+  delete_scrap: "remove scrap"
+  confirm_delete_scrap: "Are you sure you want to remove this %{type} scrap?"
   detach_upload: "detach upload"
   download_contacts: "download contacts"
   download_ical: "download event"
