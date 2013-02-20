@@ -1,4 +1,2 @@
-= t :library_introduction
-
-#folders
+%ul#folders{:data => {:refreshable => true, :url => "#{folders_path}.js"}}
   = render :partial => 'droom/folders/folder', :collection => @folders, :locals => {:open => true}

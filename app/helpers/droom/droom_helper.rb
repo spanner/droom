@@ -4,14 +4,15 @@ module Droom
   module DroomHelper
 
     def action_menulink(thing)
-      link_to t(:action), "#", :class => "action", :data => {:action => "menu"} if editable?(thing)
+      classname = thing.class.to_s.downcase.underscore.split('/').last
+      link_to t(:edit), "#", :class => "menu", :data => {:menu => "#{classname}_menu_#{thing.id}"} if editable?(thing)
     end
     
     def action_menu(thing)
       if editable?(thing)
         type = thing.class.to_s.downcase.underscore
-        varname = type.split('/').last
-        render "#{type.pluralize}/action_menu", varname.to_sym => thing
+        classname = type.split('/').last
+        render "#{type.pluralize}/action_menu", classname.to_sym => thing
       end
     end
 

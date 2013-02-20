@@ -546,7 +546,42 @@ jQuery ($) ->
   ## Display Widgets
   #
   # These stand alone and usually encapsulate some interaction with the user.
-  #
+
+  # The *folder* action is just a display convention that shows and hides the contents of a folder
+  # when its link is clicked. It could perhaps become a subclass of the generic toggle mechanism and benefit from its persistence.
+      
+  $.fn.folder = ->
+    @each ->
+      new Folder(@)
+      
+  class Folder
+    constructor: (element) ->
+      @_container = $(element)
+      @_list = @_container.children('ul.filing')
+      @_container.children('a.folder').click @toggle
+      @set()
+      
+    set: (e) =>
+      e.preventDefault() if e
+      if @_container.hasClass('open') then @show() else @hide()
+
+    toggle: (e) =>
+      if e
+        e.preventDefault() 
+        e.stopPropagation()
+      if @_container.hasClass('open') then @hide() else @show()
+
+    show: (e) =>
+      e.preventDefault() if e
+      @_container.addClass('open')
+      @_list.stop().slideDown("fast")
+      
+    hide: (e) =>
+      e.preventDefault() if e
+      @_list.stop().slideUp "normal", () =>
+        @_container.removeClass('open')
+
+
   # The Calendar widget is a display of one calendar month in the usual tabular format.
   # Here we wrap it in a scrolling div to support movement from one month to another and
   # hook it up to the suggestion box, if that's on the page, so that clicking a day or month

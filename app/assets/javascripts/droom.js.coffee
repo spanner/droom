@@ -32,20 +32,18 @@ jQuery ($) ->
     
     @find_including_self('[data-action="popup"]').popup()
     @find_including_self('[data-action="scrapup"]').scrapup()
-    @find_including_self('[data-action="menu"]').action_menu()
     @find_including_self('[data-action="upload"]').uploader()
     @find_including_self('[data-action="recrop"]').recropper()
     @find_including_self('[data-action="remove"]').removes()
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="column_toggle"]').column_expander()
-    @find_including_self('[data-action="twister"]').twister()
-    @find_including_self('[data-action="filter"]').search_filter()
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-action="alternate"]').alternator()
     @find_including_self('[data-action="fetch"]').replace_with_remote_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder", {force: true}
     @find_including_self('[data-action="collapser"]').collapser()
     @find_including_self('form[data-action="filter"]').filter_form()
+    @find_including_self('[data-menu]').action_menu()
     
     # it's not very easy to add data attributes to kaminari pagination links
     
@@ -76,7 +74,7 @@ jQuery ($) ->
     @find_including_self('#minicalendar').calendar()
     @find_including_self('form.search_form').search()
     @find_including_self('form.fancy').captive()
-    @find_including_self('div.folder').folder()
+    @find_including_self('li.folder').folder()
     @find_including_self('form#suggestions').suggestion_form()
     @find_including_self('.panel').panel()
     @
