@@ -5,7 +5,7 @@ module Droom
                :geometry => "580x435#",
                :styles => {
                  :icon => "32x32#",
-                 :thumb => "160x120#",
+                 :thumb => "160x160#",
                  :precrop => "1200x1200^"
                }
 

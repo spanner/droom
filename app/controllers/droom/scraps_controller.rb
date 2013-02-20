@@ -1,6 +1,6 @@
 module Droom
   class ScrapsController < Droom::EngineController
-    respond_to :html, :js, :json, :rss
+    respond_to :html, :js, :json, :atom
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!
@@ -12,7 +12,6 @@ module Droom
     def index
       respond_with(@scraps) do |format|
         format.js { render :partial => 'droom/scraps/stream' }
-        format.rss {}
       end
     end
   
