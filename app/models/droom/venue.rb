@@ -80,8 +80,7 @@ module Droom
         :postcode => post_code,
         :address => address.to_s,
         :lat => lat,
-        :lng => lng,
-        :events => events.visible_to(options[:person]).as_json(options)
+        :lng => lng
       }
     end
 

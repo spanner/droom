@@ -36,7 +36,7 @@ module Droom
     end
 
     def dropbox?
-      !!current_user.dropbox_token
+      current_user and !!current_user.dropbox_token
     end
     
     def dropbox_auth_url
@@ -56,11 +56,11 @@ module Droom
     end
 
     def editable?(thing)
-      current_user.admin? || current_user == thing.created_by
+      admin? || current_user == thing.created_by
     end
 
     def deletable?(thing)
-      current_user.admin? || current_user == thing.created_by
+      admin? || current_user == thing.created_by
     end
 
     def nav_link_to(name, url, options={})
