@@ -4,7 +4,7 @@
   
   - if admin?
     %p.action
-      = link_to t(:add_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
+      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
       %br
       %span.note
         = t :unattached_folder_note

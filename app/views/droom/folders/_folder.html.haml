@@ -1,6 +1,8 @@
 - folder ||= @folder
 - title ||= folder.slug
 - open ||= false
+- if @folder
+  - open = true if folder == @folder || folder.ancestor_of?(@folder)
 - cssclass = "folder"
 - cssclass << " open" if open
 - cssclass << " root" if folder.loose?
@@ -10,4 +12,4 @@
   = link_to title, droom.folder_url(folder), :class => "folder"
   = action_menulink(folder)
   = render :partial => "droom/folders/contents", :locals => {:folder => folder}
-= action_menu(folder)
+  = action_menu(folder)

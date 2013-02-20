@@ -89,6 +89,7 @@ en:
   add_document: "add a document"
   add_document_to: "add a document to %{name}"
   add_folder: "add a folder"
+  add_root_folder: "add a new root folder"
   add_page: "add a page"
   add_person: "add a person"
   add_group: "add a group"

@@ -6,9 +6,8 @@ module Droom
 
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
-    has_many :documents
-    has_many :personal_folders
-    has_many :folders
+    has_many :documents, :dependent => :destroy
+    has_many :personal_folders, :dependent => :destroy
     acts_as_tree
 
     validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
@@ -85,6 +84,10 @@ module Droom
     
     def loose?
       !parent
+    end
+    
+    def ancestor_of?(folder)
+      folder && folder.ancestors.include?(self)
     end
 
     def copy_to_dropbox(user)
