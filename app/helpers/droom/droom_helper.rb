@@ -8,9 +8,11 @@ module Droom
     end
     
     def action_menu(thing)
-      type = thing.class.to_s.downcase.underscore
-      varname = type.split('/').last
-      render "#{type.pluralize}/action_menu", varname.to_sym => thing
+      if editable?(thing)
+        type = thing.class.to_s.downcase.underscore
+        varname = type.split('/').last
+        render "#{type.pluralize}/action_menu", varname.to_sym => thing
+      end
     end
 
     def admin?
@@ -29,10 +31,9 @@ module Droom
       render :partial => "droom/preferences/radio_set", :locals => {:key => key, :values => values}
     end
 
-    def shorten(text, options={})
-      options[:length] ||= 128
-      options[:separator] ||= ' '
-      truncate(strip_tags(text), options)
+    def shorten(text, length=64)
+      length = length[:length] if length.is_a?(Hash)
+      truncate(strip_tags(text), {:length => length, :separator => " "})
     end
 
     def dropbox?

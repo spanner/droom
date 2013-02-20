@@ -1,3 +1,6 @@
-%p.large
-  = scrap.body
-= render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+= render "droom/scraps/heading", :scrap => scrap
+
+.body.large
+  = simple_format(scrap.body).html_safe
+
+= render "droom/scraps/caption", :scrap => scrap

@@ -15,6 +15,7 @@
 #= require droom/popups
 #= require droom/actions
 #= require droom/widgets
+#= require droom/stream
 #= require droom/map
 #= require_self
 
@@ -30,6 +31,7 @@ jQuery ($) ->
     # link actions
     
     @find_including_self('[data-action="popup"]').popup()
+    @find_including_self('[data-action="scrapup"]').scrapup()
     @find_including_self('[data-action="menu"]').action_menu()
     @find_including_self('[data-action="upload"]').uploader()
     @find_including_self('[data-action="recrop"]').recropper()
@@ -41,11 +43,12 @@ jQuery ($) ->
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-action="alternate"]').alternator()
     @find_including_self('[data-action="fetch"]').replace_with_remote_content()
-    @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder",
-      force: true
+    @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder", {force: true}
     @find_including_self('[data-action="collapser"]').collapser()
     @find_including_self('form[data-action="filter"]').filter_form()
-    @find_including_self('a.scrap').popup()
+    
+    # it's not very easy to add data attributes to kaminari pagination links
+    
     @find_including_self('.pagination a').page_turner()
 
     # and some shortcuts for compatibility

@@ -1,6 +1,6 @@
 module Droom
   class ScrapsController < Droom::EngineController
-    respond_to :html, :js, :json, :rss
+    respond_to :html, :js, :json, :atom
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!
@@ -39,7 +39,7 @@ module Droom
   
     def destroy
       @scrap.destroy
-      respond_with(@scrap)
+      head :ok
     end
     
     def feed
@@ -64,9 +64,10 @@ module Droom
     end
 
     def scale_image_params
-      multiplier = params[:multiplier] || 2
-      [:image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top].each do |p|
-        params[:scrap][p] = (params[:scrap][p].to_i * multiplier.to_i) unless params[:scrap][p].blank?
+      if multiplier = params[:multiplier]
+        [:image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top].each do |p|
+          params[:scrap][p] = (params[:scrap][p].to_i * multiplier.to_i) unless params[:scrap][p].blank?
+        end
       end
     end
   

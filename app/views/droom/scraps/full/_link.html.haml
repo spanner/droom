@@ -1,5 +1,7 @@
-= link_to scrap.note, scrap.note, :class => "icon link"
-%p.caption
-  = link_to scrap.note, scrap.note
-  = scrap.body
-  = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+= render "droom/scraps/heading", :scrap => scrap
+
+.body.large
+  %p
+    = link_to scrap.url_without_protocol, scrap.url_with_protocol, :class => "icon link"
+
+= render "droom/scraps/caption", :scrap => scrap

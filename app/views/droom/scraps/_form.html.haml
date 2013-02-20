@@ -1,5 +1,4 @@
 = form_for @scrap, :html => {:class => 'edit scrap'} do |f|
-
   %ul.scraptypes
     - Droom.scrap_types.each do |type|
       - cssclass = @scrap.scraptype == type ? "#{type} here" : type
@@ -11,25 +10,30 @@
     .upload
       - @scrap.build_image_upload unless @scrap.image_upload
       = f.fields_for :image_upload do |iuf|
-        
         .uploadbox{:data => {:action => "upload", :url => cropper.uploads_path(:format => :js, :for => "scrap"), :scale => 2}}
           = iuf.file_field :file, :class => 'file_upload', :accept => "image"
           .img
             - if @scrap.image?
-              = link_to image_tag(@scrap.image.url(:cropped), :width => 260, :height => 260), cropper.edit_upload_url(@scrap.image_upload), :data => {:action => "recrop"}
-              = link_to t(:detach_upload), '#', :class => 'detach'
+              .existing
+                = link_to image_tag(@scrap.image.url(:cropped)), cropper.edit_upload_url(@scrap.image_upload, :for => "scrap", :offset_t => @scrap.image_offset_top, :offset_l => @scrap.image_offset_left, :scale_w => @scrap.image_scale_width, :scale_h => @scrap.image_scale_height), :data => {:action => "recrop"}, :title => "Click to adjust crop"
+                = link_to t(:detach_upload), '#', :class => 'detach'
             .prompt
               = link_to t(:click_to_upload), cropper.new_upload_url, :class => 'picker'
               .droppable
                 .note
                   = t :drop_to_upload
 
-    %p.primary
-      = f.text_area :body, :placeholder => "Caption", :class => 'body'
-    %p.secondary
-      = f.text_field :note, :placeholder => "Note", :class => 'note'
+    .body
+      %p
+        = f.text_area :body, :placeholder => "Body text", :class => 'body'
 
-    
+    .name
+      %p
+        = f.text_field :name, :placeholder => t(:scrap_title), :class => 'name'
+
+    .caption
+      %p
+        = f.text_area :note, :placeholder => "Caption", :class => 'note'
 
   .buttons
     = f.submit t(:save)

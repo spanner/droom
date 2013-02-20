@@ -2,8 +2,8 @@
   %h1.pagetitle
     = t :stream
 
-  %p
-    = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add", :data => {:action => "popup", :affected => "#scraps"}
+  %p.action
+    = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add", :data => {:action => "scrapup", :affected => "#scraps"}
 
   - if @scraps.any?
     = render :partial => "stream"
@@ -11,5 +11,5 @@
   - else
     .nomatch
       %h2
-        = t :no_scraps
+        = t :no_stream
 

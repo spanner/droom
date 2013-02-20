@@ -283,6 +283,10 @@ form.person
     .uploadbox
       width: 130px
       height: 130px
+      border: 4px solid white
+      +box-shadow(1px 2px 5px $mid)
+      margin-top: -4px
+      margin-left: -4px
     .img
       width: 130px
       height: 130px
@@ -760,6 +764,7 @@ a.action
   text-indent: 26px
   height: 24px
   width: 25px
+  padding-top: 3px
   overflow: hidden
   background:
     color: transparent
@@ -795,11 +800,10 @@ a.action
     padding: 0
     margin: 8px 10px 3px 5px
     list-style: none
-    font-size: 0.75em
-    +sans
+    font-size: 14px
     li
       a
-        color: white
+        color: white !important
         &.add
           +menu_link("droom/smalladd.png")
         &.edit
@@ -811,6 +815,7 @@ a.action
 
 p.action, h2.section
   min-height: 26px
+  font-size: 0.9em
   a.add
     color: $green
     font-weight: normal
@@ -819,7 +824,23 @@ p.action, h2.section
     +icon_link("droom/add.png")
     &:hover
       color: #89d690
-
+  a.edit
+    color: $blue
+    font-weight: normal
+    font-size: 16px
+    white-space: nowrap
+    +icon_link("droom/edit.png")
+    &:hover
+      color: #00d5ff
+  a.delete
+    color: $dark
+    font-weight: normal
+    font-size: 16px
+    white-space: nowrap
+    +icon_link("droom/delete.png")
+    &:hover
+      color: #00d5ff
+    
 
 
 
@@ -1058,49 +1079,6 @@ input[type="submit"]
   top: 0
   left: 0
   z-index: 30
-  
-
-div.popup
-  position: fixed
-  top: 100px
-  left: 100px
-  width: 550px
-  padding: 20px
-  z-index: 250
-  min-height: 200px
-  background-color: white
-  overflow: scroll
-  +box_shadow(1px 3px 8px #52555f)
-  +border-radius
-  h2
-    margin: 0
-    margin-bottom: 15px
-    padding: 10px 20px
-    background-color: $dark
-    color: white
-    font-size: 1em
-    margin-top: -20px
-    margin-left: -20px
-    width: 100%
-    padding-top: 15px
-    +border-top-radius
-    a.closer
-      display: block
-      float: right
-      width: 16px
-      height: 16px
-      margin-left: 10px
-      margin-right: -8px
-      margin-top: 2px
-      +text-hidden
-      background: 
-        image: image-url('droom/crosses.png')
-        color: transparent
-        position: 0 0
-        repeat: no-repeat
-      &:hover
-        background-position: 0 -32px
-    
 
 div.interjected
   position: relative
@@ -1545,7 +1523,7 @@ ul.people
 
 // streams and scraps
 
-#scraps
+#stream
   .scrap
     position: relative
     clear: left
@@ -1556,7 +1534,8 @@ ul.people
       width: 32px
       height: 32px
       margin-right: 8px
-      margin-bottom: 6px
+      margin-bottom: 25px
+      margin-top: 5px
       overflow: hidden
       text-indent: 50px
       line-height: 32px
@@ -1573,18 +1552,14 @@ ul.people
           left: -50px
     a.icon
       background:
-        image: image-url('droom/scrap_icons.png')
+        image: image-url('droom/dark_scrap_icons.png')
       &.text
         background-position: 0 -48px
       &.quote
         background-position: 0 -96px
     a
-      font-weight: bold
       color: $mid
       +hover
-    a.scrap
-      font-weight: normal
-      color: $mid
       &:hover, &.hover
         color: $hover
     p.caption
@@ -1599,101 +1574,180 @@ ul.people
       color: $mid
       margin-top: 0
 
-form.scrap
-  ul.scraptypes
+
+div.scrapup, div.popup
+  position: fixed
+  overflow: scroll
+  top: 100px
+  left: 100px
+  width: 580px
+  padding: 0
+  z-index: 250
+  min-height: 200px
+  background-color: white
+  +box_shadow(1px 3px 8px #52555f)
+  h2
+    position: relative
     margin: 0
-    padding: 0
-    li
-      display: inline-block
-      margin-right: 10px
-      label
-        display: inline-block
-        height: 32px
-        line-height: 28px
-        padding-left: 34px
-        color: $mid
-        overflow: hidden
-        background:
-          repeat: no-repeat
-          position: 0 0
-          image: image-url('droom/scrap_icons.png')
-        &.text
-          background-position: 0 -48px
-        &.quote
-          background-position: 0 -96px
-        &.video
-          background-position: 0 -144px
-        &.image
-          background-position: 0 -192px
-      input[type="radio"]
-        display: none
-      input[type="radio"] + label
-        +opacity(0.3)
-      input[type="radio"]:checked + label
-        +opacity(1)
-        
-  .fields
-    min-height: 180px
-    margin-top: 10px
-    input[type="text"], textarea
-      font-size: 1.25em
-    .upload
-      display: none
-      float: left
-      margin-right: 20px
-    &.text
-      p.primary textarea
-        width: 520px
-        height: 260px
-      p.secondary
-        display: none
-    &.quote, &.link, &.video
-      p.primary textarea
-        width: 520px
-        height: 180px
-      p.secondary input
-        width: 520px
+    padding: 10px 20px 5px 20px
+    font-weight: normal
+    font-size: 0.9em
+    background-color: $text
+    color: white
+    padding: 15px
+  a.closer
+    display: block
+    float: right
+    width: 16px
+    height: 16px
+    margin-left: 10px
+    margin-right: 0
+    margin-top: 0
+    +text-hidden
+    background: 
+      image: image-url('droom/crosses.png')
+      color: transparent
+      position: 0 0
+      repeat: no-repeat
+    &:hover
+      background-position: 0 -32px
+
+div.popup
+  form
+    margin: 20px
+    &.event
+      margin-left: $datemark_width + $datemark_margin
+
+div.scrapup
+  a.next, a.last
+    position: absolute
+    top: 0
+    
+  .name
+    h4, p
+      margin: 10px 20px
+      
+  .body
+    position: relative
+    height: 435px
+    overflow: scroll
+    background-color: $verypale
+    p
+      margin: 10px 20px
+      font-size: 1.5em
     &.image
-      .upload
-        display: block
-        margin-right: 20px
-        margin-top: 1em
-      p.primary
-        float: left
+      overflow: hidden
+      
+  .caption
+    h4
+      color: $dark
+      margin: 10px 20px 0 20px
+      &+p
+        margin-top: 0
+    p
+      font-size: 75%
+      color: $mid
+      margin: 10px 20px
+    p.action
+      float: right
+
+  form.scrap
+    ul.scraptypes
+      position: relative
+      overflow: hidden
+      background-color: $dark
+      padding: 14px 20px 2px 20px
+      margin: 0
+      li
+        display: inline-block
+        margin-right: 5px
+        font-size: 80%
+        label
+          display: inline-block
+          height: 32px
+          line-height: 28px
+          padding-left: 34px
+          color: white
+          overflow: hidden
+          background:
+            repeat: no-repeat
+            position: 0 0
+            image: image-url('droom/scrap_icons.png')
+          &.text
+            background-position: 0 -48px
+          &.quote
+            background-position: 0 -96px
+          &.video
+            background-position: 0 -144px
+          &.image
+            background-position: 0 -192px
+        input[type="radio"]
+          display: none
+        input[type="radio"] + label
+          +opacity(0.4)
+        input[type="radio"]:checked + label
+          +opacity(1)
+
+    .fields
+      min-height: 180px
+      .name
+        input[type="text"]
+          width: 532px
+          font-size: 1.25em
+          font-weight: bold
+      .body, .caption
         textarea
-          width: 240px
-          height: 250px
-      p.secondary
+          width: 532px
+          background-color: transparent
+          font-size: 100%
+      .body
+        textarea
+          height: 400px
+      .caption
+        textarea
+          height: 80px
+          color: $pale
+      .upload
         display: none
+        .uploadbox
+          width: 580px
+          height: 435px
+          border: 0
+          margin: 0
+          background-color: $mid
+          .img
+            width: 580px
+            height: 435px
+          .prompt
+            padding-top: 180px
+            .note
+              color: $dark
+          .progress_holder
+            top: 178px
+            
+      &.image
+        .upload
+          display: block
+        p.body
+          display: none
       
-      
-  .buttons
-    margin-top: 30px
+    .buttons
+      margin: 10px 20px 20px 20px
 
 
 // uploader, scaler, cropper
 .uploadbox
   position: relative
-  width: 260px
-  height: 260px
   overflow: hidden
   background-color: $mid
-  border: 4px solid white
-  +box-shadow(1px 2px 5px $mid)
-  margin-top: -4px
-  margin-left: -4px
-  &.hover
-    background-position: 0 - 150px
   input
     position: absolute
-    top: 300px
+    top: 1000px
     left: 0
   .img
-    width: 260px
-    height: 260px
     .prompt
       text-align: center
-      padding: 105px 25px
+      padding: 50px
       line-height: 1.25
       a
         color: white
@@ -1728,18 +1782,17 @@ form.scrap
     overflow: hidden
     top: 10%
     left: 10%
-    width: 75%
+    width: 80%
     height: 32px
     border: 1px solid $mid
-    background-color: white
+    background-color: $verypale
     z-index: 900
     +border-radius
     .progress
       position: relative
       width: 0%
       height: 100%
-      background-color: $active
-      background: transparent image-url('cropper/progress_stripes.png') repeat-x top left scroll
+      background-color: $pale
     .commentary 
       position: absolute
       top: 0

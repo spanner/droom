@@ -62,7 +62,7 @@ jQuery ($) ->
       @_container.append(@_content)
       @_content.activate()
       @_header = @_content.find('h2')
-      @_closer = $('<a href="#" class="closer">close</a>').appendTo(@_header)
+      @_closer = $('<a href="#" class="closer">close</a>').prependTo(@_header)
       @_closer.click(@hide)
       @_content.find('form').remote
         on_cancel: @hide
@@ -104,9 +104,9 @@ jQuery ($) ->
     place: (e) =>
       cols = @_container.find("div.column").not('.hidden').length
       if cols
-        width = (cols * 280) - 20
+        width = (cols * 280) + 40
       else 
-        width = 540
+        width = 580
       w = $(window)
       height_limit = w.height() - 100
       height = [@_container.height(), height_limit].min()
@@ -121,7 +121,35 @@ jQuery ($) ->
         @_container.animate placement
       else
         @_container.css placement
+
+
+
+
+  $.fn.scrapup = () ->
+    @each ->
+      new Scrapup(@)          
+
+  class Scrapup extends Popup
+    prepare: () =>
+      @_mask = $('<div class="mask" />').appendTo($('body'))
+      @_container = $('<div class="scrapup" />')
+      @_container.bind "resize", @place
+      @_container.insertAfter(@_mask).hide()
+
+    display: (data) =>
+      super
+      if selector = @_content.find('a.edit').attr('data-affected')
+        @affect(selector)
+      @_content.find('a.edit').remote
+        on_success: @receive
+      @_content.find('a.delete').remote
+        on_success: @reset
       
+    affect: (selector) =>
+      console.log "affect", selector
+      @_affected = selector
+
+
   # Popup forms will usually contain one or more .column divs. The columns are a standard width and
   # the number of columns determines the width of the popup. Columns can also be hidden, initially,
   # then revealed if the user clicks a 'more' or 'detail' link. The expander action is defined here.
