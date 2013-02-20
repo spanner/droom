@@ -104,8 +104,19 @@ $visited: #d3181f
     width: 16px
     height: 16px
     overflow: hidden
+    +opacity(0.4)
     &:hover
       overflow: visible
+      +opacity(1)
+
+=big_icon_link($url)
+  +icon_link($url)
+  text-indent: 30px
+  line-height: 30px
+  min-height: 24px
+  &:hover
+    background-position: 0 -48px
+  
 
 =icon($url)
   display: inline-block
@@ -121,8 +132,6 @@ $visited: #d3181f
     image: image-url($url)
   &:hover
     background-position: 0 -48px
-
-
   
 =panel_icon($image: "droom/integration_buttons.png", $x: 0, $y: 0)
   overflow: hidden

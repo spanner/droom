@@ -73,7 +73,7 @@ jQuery ($) ->
         on_success: (response) =>
           $(@).parents(removed).first().fadeOut 'fast', () ->
             $(@).remove()
-          $(affected).trigger "refresh"
+            $(affected).trigger "refresh"
 
 
   # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
@@ -251,75 +251,6 @@ jQuery ($) ->
   $.fn.alternator = ->
     @each ->
       new Alternator(@)
-
-
-  # The *folder* action is just a display convention that shows and hides the contents of a folder
-  # when its link is clicked. It should probably become a subclass of the generic toggle mechanism and benefit from its persistence.
-      
-  $.fn.folder = ->
-    @each ->
-      new Folder(@)
-      
-  class Folder
-    constructor: (element) ->
-      @_container = $(element)
-      @_list = @_container.find('ul.filing')
-      @_container.find('a.folder').click @toggle
-      @set()
-      
-    set: (e) =>
-      e.preventDefault() if e
-      if @_container.hasClass('open') then @show() else @hide()
-
-    toggle: (e) =>
-      if e
-        e.preventDefault() 
-        e.stopPropagation()
-      if @_container.hasClass('open') then @hide() else @show()
-
-    show: (e) =>
-      e.preventDefault() if e
-      @_container.addClass('open')
-      @_list.stop().slideDown()
-      
-    hide: (e) =>
-      e.preventDefault() if e
-      @_container.removeClass('open')
-      @_list.stop().slideUp()
-
-  # The *twister* is yet another show/hider, not currently in use since the library view has gone over to folders.
-
-  $.fn.twister = ->
-    @each ->
-      new Twister(@)
-  class Twister
-    @currently_open: []
-    constructor: (element) ->
-      @_twister = $(element)
-      @_twisted = @_twister.find('.twisted')
-      @_toggles = @_twister.find('a.twisty')
-      @_toggles.click @toggle
-      @_open = @_twister.hasClass("showing")
-      @set()
-
-    set: () =>
-      if @_open then @open() else @close()
-      
-    toggle: (e) =>
-      e.preventDefault() if e
-      if @_open then @close() else @open()
-      
-    open: () =>
-      @_twister.addClass("showing")
-      @_twisted.show()
-      @_open = true
-      Twister.currently_open.push(@_id)
-      
-    close: () =>
-      @_twister.removeClass("showing")
-      @_twisted.hide()
-      @_open = false
-      Twister.currently_open.remove(@_id)  # remove is defined in lib/extensions
 
 
 

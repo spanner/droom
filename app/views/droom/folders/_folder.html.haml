@@ -1,16 +1,15 @@
 - folder ||= @folder
 - title ||= folder.slug
 - open ||= false
-- cssclass = open ? "folder holder open" : "folder holder"
+- if @folder
+  - open = true if folder == @folder || folder.ancestor_of?(@folder)
+- cssclass = "folder"
+- cssclass << " open" if open
+- cssclass << " root" if folder.loose?
+- cssclass << " empty" unless folder.populated?
 
-%div{:class => cssclass, :id => "folder_#{folder.id}", :data => {:refreshable => true, :url => droom.folder_path(folder, :format => :js)} }
-  %h3
-    = link_to title, "#", :class => "folder"
-    - if editable?(folder)
-      %span.admin
-        = link_to t(:add_document), droom.new_folder_document_url(folder), :class => "add minimal", :remote => true, :data => {:action => "popup", :type => "html", :affected => "folder_#{folder.id}"}
-        - if dropbox? && current_user.pref('dropbox.strategy') == "clicked"
-          = link_to " ", droom.dropbox_folder_url(folder), :class => "minidropbox", :remote => true, :data => {:action => "dropbox", :type => "html"}
-    
+%li{:class => cssclass, :id => "folder_#{folder.id}", :data => {:refreshable => true, :url => droom.folder_path(folder, :format => :js)} }
+  = link_to title, droom.folder_url(folder), :class => "folder"
+  = action_menulink(folder)
   = render :partial => "droom/folders/contents", :locals => {:folder => folder}
-
+  = action_menu(folder)

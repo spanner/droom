@@ -6,7 +6,7 @@
 
 - content_for :margin do
   #people_finder
-    %h2
+    %h3
       = t :find_people
 
     %form.filter{:action => droom.people_url(:format => :js), :data => {:action => "filter", :target => "#people_found"}}

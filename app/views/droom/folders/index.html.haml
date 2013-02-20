@@ -1,7 +1,16 @@
 #main.folders{:data => {:panel => false}}
+  %p
+    = t :library_introduction
+  
+  - if admin?
+    %p.action
+      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
+      %br
+      %span.note
+        = t :unattached_folder_note
+      
+
   = render :partial => 'folders'
-
-
 
 - content_for :title do
   = t :library
@@ -9,7 +18,7 @@
 
 - content_for :margin do
   #document_finder
-    %h2
+    %h3
       = t :find_documents
 
     %form.filter{:action => droom.documents_url(:format => :js), :data => {:action => "filter", :target => "#documents_found"}}

@@ -233,6 +233,11 @@ form.event
       font-size: 1em
       height: 250px
 
+form.folder
+  input.slug
+    width: 480px
+    font-size: 2em
+
 form.document
   .filepicker
     +outset
@@ -759,38 +764,7 @@ span.erratic
         position: 3px -58px
         repeat: no-repeat
 
-a.action
-  display: inline-block
-  text-indent: 26px
-  height: 24px
-  width: 25px
-  padding-top: 3px
-  overflow: hidden
-  background:
-    color: transparent
-    position: 0 0
-    repeat: no-repeat
-    image: image-url('droom/asterisk.png')
-  &:hover
-    background-position: 0 -48px
-  &:active
-    background-position: 0 0
-  &.up
-    +box-shadow(0 4px 6px $dark)
-    background:
-      position: 0 -144px
-      color: $blue
-
-// .no-touch
-//   a.action
-//     display: none
-//     &.up
-//       display: inline-block
-//   *:hover
-//     >a.action
-//       display: inline-block
-
-.menu
+div.menu
   position: absolute
   z-index: 50
   display: none
@@ -810,12 +784,51 @@ a.action
           +menu_link("droom/smalledit.png")
         &.delete
           +menu_link("droom/smalldelete.png")
+        &.download
+          +menu_link("droom/smalldownload.png")
 
+a.menu
+  display: inline-block
+  text-indent: 26px
+  height: 24px
+  width: 26px
+  padding-top: 3px
+  overflow: hidden
+  +opacity(0.4)
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url('droom/asterisk.png')
+  &:hover
+    background-position: 0 -48px
+    +opacity(1)
+  &:active
+    background-position: 0 0
+    +opacity(1)
+  &.up
+    +box-shadow(0 4px 6px $dark)
+    +opacity(1)
+    background:
+      position: 0 -144px
+      color: $blue
 
+// .no-touch
+//   a.action
+//     display: none
+//     &.up
+//       display: inline-block
+//   *:hover
+//     >a.action
+//       display: inline-block
 
-p.action, h2.section
+span.action
+  display: inline-block
+  
+p.action, span.action
   min-height: 26px
-  font-size: 0.9em
+  font-size: 14px
+  font-weight: normal
   a.add
     color: $green
     font-weight: normal
@@ -833,13 +846,13 @@ p.action, h2.section
     &:hover
       color: #00d5ff
   a.delete
-    color: $dark
+    color: $darkred
     font-weight: normal
     font-size: 16px
     white-space: nowrap
     +icon_link("droom/delete.png")
     &:hover
-      color: #00d5ff
+      color: $warmred
     
 
 
@@ -945,18 +958,12 @@ ul.downloads
   margin: 0
   padding: 0
   list-style: none
-
-li.document
-  &:hover
-    .delete
-      display: inline-block
-  .delete
-    display: none
       
 li.document a.document
   display: inline-block
   padding: 8px 0 0 28px
-  min-height: 22px
+  font-size: 14px
+  min-height: 20px
   line-height: 22px
   background: 
     repeat: no-repeat
@@ -1305,23 +1312,36 @@ ul.tags
     padding: 10px 30px
 
 
-#folders
+ul#folders
+  padding-left: 0
   li
     list-style: none
-  div.folder
+  li.folder
     ul.filing
-      padding-left: 40px
+      padding-left: 30px
       margin-top: 0
+      margin-bottom: 10px
     a.folder
-      +icon_link("droom/folder.png")
+      +big_icon_link("droom/folder.png")
       color: $text
       font-weight: bold
       +hover
+    &.root
+      > a.folder
+        font-size: 140%
     &.open
-      a.folder
-        background-position: 0 -144px
+      > a.folder
+        background-position: 0 -192px
         &:hover
-          background-position: 0 -192px
+          background-position: 0 -240px
+    &.empty
+      > a.folder
+        color: $pale
+        background-position: 0 -144px
+      &.open
+        > a.folder
+          background-position: 0 -336px
+
 
 input.search_box
   font-size: 1.5em
@@ -1535,7 +1555,7 @@ ul.people
       height: 32px
       margin-right: 8px
       margin-bottom: 25px
-      margin-top: 5px
+      margin-top: 0
       overflow: hidden
       text-indent: 50px
       line-height: 32px
@@ -1615,7 +1635,7 @@ div.scrapup, div.popup
 div.popup
   form
     margin: 20px
-    &.event
+    &.event, &.document
       margin-left: $datemark_width + $datemark_margin
 
 div.scrapup

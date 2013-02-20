@@ -194,7 +194,7 @@ jQuery ($) ->
 
     constructor: (element) ->
       @_link = $(element)
-      @_menu = @_link.parents('div').first().find('.menu')
+      @_menu = $("##{@_link.attr('data-menu')}")
       @_link.click @toggle
       ActionMenu.remember(@)
 

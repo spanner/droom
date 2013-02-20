@@ -2,19 +2,20 @@ require 'zip/zip'
 
 module Droom
   class Folder < ActiveRecord::Base
-    attr_accessible :slug, :parent
+    attr_accessible :slug, :parent, :parent_id
 
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
-    has_many :documents
-    has_many :personal_folders
-    has_many :folders
+    has_many :documents, :dependent => :destroy
+    has_many :personal_folders, :dependent => :destroy
     acts_as_tree
 
     validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
 
     before_validation :set_slug
     before_save :set_properties
+    
+    default_scope includes(:children, :documents)
 
     scope :visible_to, lambda { |person|
       # if person
@@ -61,10 +62,6 @@ module Droom
       "#{parent.path if parent}/#{slug}"
     end
 
-    def empty?
-      documents.empty?
-    end
-    
     def documents_zipped
       if self.documents.any?
         tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")
@@ -84,6 +81,14 @@ module Droom
     def empty?
       !populated?
     end
+    
+    def loose?
+      !parent
+    end
+    
+    def ancestor_of?(folder)
+      folder && folder.ancestors.include?(self)
+    end
 
     def copy_to_dropbox(user)
       Rails.logger.warn ">>> creating dropbox subfolder #{slug} for user #{user.name}"
@@ -97,7 +102,8 @@ module Droom
   protected
 
     def set_slug
-      self.slug = holder.slug if holder
+      self.slug ||= holder.slug if holder
+      self.slug = self.slug.parameterize
       true
     end
 
