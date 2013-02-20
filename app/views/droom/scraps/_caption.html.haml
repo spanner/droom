@@ -1,6 +1,12 @@
 - scrap ||= @scrap
 
 .caption
+  - if editable?(scrap)
+    %p.action
+      = link_to t(:edit_scrap), droom.edit_scrap_url(scrap), :class => 'edit', :data => {:action => "edit", :affected => "#scraps"}
+      %br
+      = link_to t(:delete_scrap), droom.scrap_url(scrap), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#scrap_#{scrap.id}", :affected => "#scraps", :confirm => t(:confirm_delete_scrap, :type => scrap.scraptype)}
+      
   - if scrap.name?
     %h4
       = scrap.name

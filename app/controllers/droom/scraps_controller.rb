@@ -12,6 +12,7 @@ module Droom
     def index
       respond_with(@scraps) do |format|
         format.js { render :partial => 'droom/scraps/stream' }
+        format.rss {}
       end
     end
   
@@ -39,7 +40,7 @@ module Droom
   
     def destroy
       @scrap.destroy
-      respond_with(@scrap)
+      head :ok
     end
     
     def feed

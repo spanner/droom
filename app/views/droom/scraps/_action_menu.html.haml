@@ -2,6 +2,6 @@
   .menu
     %ul.actions
       %li
-        = link_to t(:edit_scrap), droom.edit_scrap_url(scrap), :class => 'edit', :data => {:action => "scrapup", :replaced => "#scrap_#{scrap.id}"}
+        = link_to t(:edit_scrap), droom.edit_scrap_url(scrap), :class => 'edit', :data => {:action => "scrapup", :affected => "#scraps"}
       %li
-        = link_to t(:delete_scrap), droom.scrap_url(scrap), :method => 'delete', :class => 'delete', :data => {:action => "remove", :affected => "#stream", :confirm => t(:confirm_delete_scrap, :type => scrap.scraptype)}
+        = link_to t(:delete_scrap), droom.scrap_url(scrap), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#scrap_#{scrap.id}", :affected => "#scraps", :confirm => t(:confirm_delete_scrap, :type => scrap.scraptype)}

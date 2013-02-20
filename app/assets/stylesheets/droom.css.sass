@@ -815,6 +815,7 @@ a.action
 
 p.action, h2.section
   min-height: 26px
+  font-size: 0.9em
   a.add
     color: $green
     font-weight: normal
@@ -823,7 +824,23 @@ p.action, h2.section
     +icon_link("droom/add.png")
     &:hover
       color: #89d690
-
+  a.edit
+    color: $blue
+    font-weight: normal
+    font-size: 16px
+    white-space: nowrap
+    +icon_link("droom/edit.png")
+    &:hover
+      color: #00d5ff
+  a.delete
+    color: $dark
+    font-weight: normal
+    font-size: 16px
+    white-space: nowrap
+    +icon_link("droom/delete.png")
+    &:hover
+      color: #00d5ff
+    
 
 
 
@@ -1518,6 +1535,7 @@ ul.people
       height: 32px
       margin-right: 8px
       margin-bottom: 25px
+      margin-top: 5px
       overflow: hidden
       text-indent: 50px
       line-height: 32px
@@ -1608,6 +1626,7 @@ div.scrapup
   .name
     h4, p
       margin: 10px 20px
+      
   .body
     position: relative
     height: 435px
@@ -1622,18 +1641,22 @@ div.scrapup
   .caption
     h4
       color: $dark
-      margin: 10px 20px
+      margin: 10px 20px 0 20px
+      &+p
+        margin-top: 0
     p
       font-size: 75%
       color: $mid
       margin: 10px 20px
-      
+    p.action
+      float: right
+
   form.scrap
     ul.scraptypes
       position: relative
       overflow: hidden
       background-color: $dark
-      padding: 10px 20px 3px 20px
+      padding: 14px 20px 2px 20px
       margin: 0
       li
         display: inline-block
@@ -1661,7 +1684,7 @@ div.scrapup
         input[type="radio"]
           display: none
         input[type="radio"] + label
-          +opacity(0.6)
+          +opacity(0.4)
         input[type="radio"]:checked + label
           +opacity(1)
 
@@ -1696,10 +1719,12 @@ div.scrapup
             width: 580px
             height: 435px
           .prompt
-            padding-top: 145px
+            padding-top: 180px
             .note
               color: $dark
-          
+          .progress_holder
+            top: 178px
+            
       &.image
         .upload
           display: block
@@ -1707,7 +1732,7 @@ div.scrapup
           display: none
       
     .buttons
-      margin: 30px 20px 10px 20px
+      margin: 10px 20px 20px 20px
 
 
 // uploader, scaler, cropper
@@ -1757,18 +1782,17 @@ div.scrapup
     overflow: hidden
     top: 10%
     left: 10%
-    width: 75%
+    width: 80%
     height: 32px
     border: 1px solid $mid
-    background-color: white
+    background-color: $verypale
     z-index: 900
     +border-radius
     .progress
       position: relative
       width: 0%
       height: 100%
-      background-color: $active
-      background: transparent image-url('cropper/progress_stripes.png') repeat-x top left scroll
+      background-color: $pale
     .commentary 
       position: absolute
       top: 0

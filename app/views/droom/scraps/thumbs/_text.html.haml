@@ -3,6 +3,4 @@
 = link_to "text:", droom.scrap_url(scrap), :class => "icon text", :data => {:action => "scrapup"}
 %p.caption
   = link_to shorten(heading), droom.scrap_url(scrap), :data => {:action => "scrapup"}
-  = action_menulink(scrap)
   = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
-= action_menu(scrap)
