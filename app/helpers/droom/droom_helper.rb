@@ -21,14 +21,6 @@ module Droom
       end
     end
 
-    def editable?(thing)
-      current_user && current_user.admin? || current_user == thing.created_by
-    end
-
-    def deletable?(thing)
-      current_user && current_user.admin? || current_user == thing.created_by
-    end
-
     def admin?
       current_user and current_user.admin?
     end
@@ -51,7 +43,7 @@ module Droom
     end
 
     def dropbox?
-      !!current_user.dropbox_token
+      current_user and !!current_user.dropbox_token
     end
     
     def dropbox_auth_url
@@ -68,6 +60,14 @@ module Droom
       # note that here we never want to pick up the existing dropbox session. That happens in the dropbox_tokens_controller
       # when we register an access token. In the view, any existing session has probably expired and we're better off with a new one.
       DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
+    end
+
+    def editable?(thing)
+      admin? || current_user == thing.created_by
+    end
+
+    def deletable?(thing)
+      admin? || current_user == thing.created_by
     end
 
     def nav_link_to(name, url, options={})
