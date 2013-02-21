@@ -36,6 +36,9 @@ jQuery ($) ->
     s ?= 1.70158;
     c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b
 
+  $.easing.expo = (x, t, b, c, d) ->
+    (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b
+
   $.add_stylesheet = (path) ->
     if document.createStyleSheet
       document.createStyleSheet(path)

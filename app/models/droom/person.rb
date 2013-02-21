@@ -156,6 +156,10 @@ module Droom
 
     
 
+    def full_name
+      [forename, name].compact.join(' ').strip
+    end
+
     def formal_name
       [title, forename, name].compact.join(' ').strip
     end

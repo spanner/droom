@@ -5,11 +5,9 @@
   .heading
     %h2.name<
       = link_to organisation.name, organisation_url(organisation), :class => "name"
-      - if admin?
-        %span.admin<
-          = link_to t(:edit_organisation), droom.edit_organisation_url(organisation), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :replaced => "#organisation_#{organisation.id}"}
-          = link_to t(:remove), droom.organisation_url(organisation), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_organisation, :name => organisation.name)}
-
+      = action_menulink(organisation)
+    = action_menu(organisation)
+      
   %p.preview
     = shorten(organisation.description, :length => 64)
 

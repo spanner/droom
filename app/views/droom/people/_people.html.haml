@@ -1,4 +1,5 @@
-%ul.people.paginated
-  = render :partial => 'droom/people/person', :collection => @people
+.paginated
+  %ul.people
+    = render :partial => 'droom/people/person', :collection => @people
   .pagination
     = paginate @people

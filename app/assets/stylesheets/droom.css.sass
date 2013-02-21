@@ -1146,6 +1146,19 @@ div.timepicker
       position: relative
       float: left
 
+#finder
+  position: relative
+  .scrolled
+    width: 320px
+    .scroller
+      margin-left: 5px
+      width: 640px
+      .paginated
+        width: 320px
+        position: relative
+        float: left
+
+
 #search, .search_results
   position: relative
   margin-left: 10px
@@ -1547,15 +1560,27 @@ ul.people
 // streams and scraps
 
 #stream
+  .scrolled
+    width: 320px
+  .scroller
+    margin-left: 5px
+    width: 640px
+    .paginated
+      width: 320px
+      position: relative
+      float: left
   .scrap
     position: relative
     clear: left
     margin-bottom: 25px
+    a.thumb
+      height: 18px
+    a.icon
+      height: 32px
     a.thumb, a.icon
       display: block
       float: left
       width: 32px
-      height: 18px
       margin-right: 8px
       margin-bottom: 25px
       margin-top: 0
@@ -1571,7 +1596,7 @@ ul.people
           content: image-url('droom/playable.png')
           position: absolute
           width: 32px
-          height: 32px
+          height: 18px
           left: -50px
     a.icon
       background:

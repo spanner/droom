@@ -1,0 +1,10 @@
+- if editable?(person)
+  .menu{:data => {:for => "person_#{person.id}"}}
+    %ul.actions
+      %li
+        = link_to t(:edit_profile), droom.edit_person_url(person), :class => 'edit', :data => {:action => "popup", :replaced => "#person_#{person.id}"}
+      - if person.user
+        %li
+          = link_to t(:edit_account), droom.edit_user_url(person.user), :class => 'edit', :data => {:action => "popup", :replaced => "#person_#{person.id}"}
+      %li
+        = link_to t(:delete_person), droom.person_url(person), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#person_#{person.id}", :confirm => t(:confirm_delete_person, :name => person.full_name)}

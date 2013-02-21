@@ -4,6 +4,7 @@
     %span.action
       = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add minimal", :data => {:action => "scrapup", :affected => "#scraps"}
 
-  #scraps.holder{:data => {:refreshable => true, :url => scraps_path(:format => :js)}}
-    = link_to t(:loading_stream), droom.scraps_url(:format => :js, :show => 8), :data => {:action => "autofetch"}
+  .scroller
+    #scraps.holder{:data => {:refreshable => true, :url => scraps_path(:format => :js)}}
+      = link_to t(:loading_stream), droom.scraps_url(:format => :js, :show => 8), :data => {:action => "autofetch"}
   

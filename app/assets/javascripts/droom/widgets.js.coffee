@@ -395,6 +395,7 @@ jQuery ($) ->
     options = $.extend(
       fast: true
       auto: true
+      into: "#found"
     , options)
     @each ->
       new CaptiveForm @, options
@@ -633,7 +634,63 @@ jQuery ($) ->
       new ScoreShower @
 
 
-  #todo: make this a case of the page turner
+  # The page turner is a pagination link that retrieves a page of results remotely
+  # then slides it into view from either the right or left depending on its relation 
+  # to the current page.
+
+  $.fn.page_turner = () ->
+    @each ->
+      new Pager(@)
+  
+  class Pager
+    constructor: (element) ->
+      @_link = $(element)
+      @_selector = @_link.attr('data-affected') || '.paginated'
+      @_page = @_link.parents(@_selector).first()
+      @findPageNumber()
+      @getDirection()
+      @_scroller = @_page.parents('.scroller').first()
+      @_scrolled = @_scroller.parents('.scrolled').first()
+      unless @_scrolled.length
+        @_scroller.wrap($('<div class="scrolled" />'))
+        @_scrolled = @_scroller.parents('.scrolled').first()
+      @_container = @_scroller.parent()
+      @_width = @_page.width()
+      @_link.remote
+        on_success: (r) =>
+          response = $(r)
+          @sweep response
+          response.activate()
+
+    findPageNumber: =>
+      @_page_number = parseInt(@_link.parent().siblings('.current').text())
+
+    getDirection: =>
+      if @_link.attr "rel"
+        @_direction = if @_link.attr("rel") == "next" then "right" else "left"
+      else
+        @_direction = if parseInt(@_link.text()) > @_page_number then "right" else "left"
+
+    sweep: (r) =>
+      old = @_page
+      @_scrolled.css("overflow", "hidden")
+      if @_direction == 'right'
+        @_scroller.append(r)
+        @_container.animate {scrollLeft: @_width}, 'slow', 'glide', () =>
+          old.remove()
+          @_scrolled.css("overflow", "visible")
+          @_container.scrollLeft(0)
+      else
+        @_scroller.prepend(r)
+        @_container.scrollLeft(@_width).animate {scrollLeft: 0}, 'slow', 'glide', () =>
+          old.remove()
+          @_scrolled.css("overflow", "visible")
+
+
+
+
+
+  #todo: make this a case of the page turner?
 
   class Calendar
     constructor: (element, options) ->

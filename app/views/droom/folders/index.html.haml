@@ -17,15 +17,16 @@
 
 
 - content_for :margin do
-  #document_finder
+  #finder
     %h3
       = t :find_documents
 
-    %form.filter{:action => droom.documents_url(:format => :js), :data => {:action => "filter", :target => "#documents_found"}}
+    %form.filter{:action => droom.documents_url(:format => :js), :data => {:action => "filter"}}
       %p
         = text_field_tag :q, params[:q], :placeholder => t(:by_name)
     
-    #documents_found
-      %p.waiting
-        = t :loading_documents
+    .scroller
+      #found
+        %p.waiting
+          = t :loading_documents
   

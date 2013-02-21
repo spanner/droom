@@ -1,5 +1,5 @@
 - if editable?(event)
-  .menu{:id => "event_menu_#{event.id}"}
+  .menu{:data => {:for => "event_#{event.id}"}}
     %ul.actions
       %li
         = link_to t(:edit_event), droom.edit_event_url(event), :class => 'edit', :data => {:action => "popup", :replaced => "#event_#{event.id}", :affected => ".minimonth"}

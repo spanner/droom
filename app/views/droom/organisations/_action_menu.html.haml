@@ -1,0 +1,7 @@
+- if editable?(organisation)
+  .menu{:data => {:for => "organisation_#{organisation.id}"}}
+    %ul.actions
+      %li
+        = link_to t(:edit_organisation), droom.edit_organisation_url(organisation), :class => 'edit', :data => {:action => "popup", :replaced => "#organisation_#{organisation.id}", :affected => ".minimonth"}
+      %li
+        = link_to t(:delete_organisation), droom.organisation_url(organisation), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#organisation_#{organisation.id}", :affected => ".minimonth", :confirm => t(:confirm_delete_organisation, :name => organisation.name)}

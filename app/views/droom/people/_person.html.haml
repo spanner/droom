@@ -1,13 +1,9 @@
-%li.person{:id => "list_person_#{person.id}", :data => {:refreshable => true, :url => droom.edit_person_path(person, :format => :js)} }
+%li.person{:id => "person_#{person.id}", :data => {:refreshable => true, :url => droom.edit_person_path(person, :format => :js)} }
   %span.mugshot{:style => "background-image: url(#{person.image.url('cropped')})"}
   %span.contact
     %span.name
       = person.formal_name
-    - if admin? || current_user.is_person?(person)
-      %span.admin
-        = link_to t(:edit_profile), droom.edit_person_url(person), :class => 'edit minimal', :data => {:action => "popup", :replaced => "#list_person_#{person.id}"}
-        - if admin?
-          = link_to t(:remove), droom.person_url(person), :method => 'delete', :class => 'delete minimal', :data => {:action => "remove", :removed => "#list_person_#{person.id}", :confirm => t(:confirm_delete_person, :name => person.name)}
+      = action_menulink(person, :class => "small")
     %br
     %span.note
       - if person.phone? || person.email?
@@ -19,3 +15,4 @@
           = mail_to person.email
       - else
         = t :contact_information_unavailable
+    = action_menu(person)

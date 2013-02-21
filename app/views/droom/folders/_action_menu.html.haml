@@ -1,5 +1,5 @@
 - if editable?(folder)
-  .menu{:id => "folder_menu_#{folder.id}"}
+  .menu{:data =>{:for => "folder_#{folder.id}"}}
     %ul.actions
       %li
         = link_to t(:edit_folder), droom.edit_folder_url(folder), :class => "edit", :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}
