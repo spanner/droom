@@ -9,10 +9,16 @@ module Droom
                  :precrop => "1200x1200^"
                }
 
+    searchable do
+      text :name, :boost => 10
+      text :body, :stored => true
+      text :note
+    end
+
     attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by
     before_save :get_youtube_thumbnail
     default_scope order("droom_scraps.created_at desc")
-    
+
     Droom.scrap_types.each do |t|
       define_method(:"#{t}?") { scraptype == t.to_s }
       scope t.pluralize.to_sym, where(["scraptype == ?", t])
@@ -45,7 +51,16 @@ module Droom
     def url_without_protocol
       body.sub(/^https?:\/\//, '')
     end
-    
+
+    def as_search_result
+      {
+        :type => 'scrap',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
+    end
+
   protected
   
     def get_youtube_thumbnail

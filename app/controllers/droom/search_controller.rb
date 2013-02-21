@@ -19,6 +19,7 @@ module Droom
             fulltext frag do
               highlight :description
               highlight :extracted_text
+              highlight :body
             end
             paginate :page => @page, :per_page => 10
           end
@@ -41,7 +42,7 @@ module Droom
     def get_classes
       searchable_classes = Droom.searchable_classes
       requested_types = [params[:type]].flatten.compact.uniq
-      requested_types = %w{event document group venue} if requested_types.empty?
+      requested_types = %w{event document group venue scrap} if requested_types.empty?
 
       logger.warn ">>> requested_types is #{requested_types.inspect}"
 

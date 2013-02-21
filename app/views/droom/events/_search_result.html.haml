@@ -1,6 +1,11 @@
 - event ||= search_result
 - hit = event.hit
-%li.event
+.event
+  .datemark
+    %span.mon= event.start.strftime('%b')
+    %span.dom= event.start.strftime('%d')
+    - if event.start.year != Date.today.year
+      %span.year= event.start.strftime('%Y')
   = link_to event.name, event_url(event)
-  %span.excerpt
+  .excerpt
     = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
