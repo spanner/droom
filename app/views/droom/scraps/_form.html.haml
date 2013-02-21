@@ -1,5 +1,6 @@
 = form_for @scrap, :html => {:class => 'edit scrap'} do |f|
   .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
     %ul.scraptypes
       - Droom.scrap_types.each do |type|
         - cssclass = @scrap.scraptype == type ? "#{type} here" : type
