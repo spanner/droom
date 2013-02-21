@@ -690,9 +690,7 @@ jQuery ($) ->
           
     cleanup: () =>
       @_viewport.scrollLeft(0)
-      console.log "cleanup is removing", @_old_page.attr('id')
       @_old_page.remove()
-
 
 
 

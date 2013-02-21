@@ -51,7 +51,7 @@ module Droom
     def find_scraps
       @show = params[:show] || 10
       @page = params[:page] || 1
-      @scraps = Droom::Scrap.page(@page).per(@show) unless @show == 'all'
+      @scraps = Droom::Scrap.by_date.page(@page).per(@show) unless @show == 'all'
     end
 
     def get_scrap

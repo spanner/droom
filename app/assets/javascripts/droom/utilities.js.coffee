@@ -18,6 +18,17 @@ jQuery ($) ->
     return false unless results
     results[1] or null
 
+  # This sends a command to the youtube API event listener in an iframe player.
+  # commands include pauseVideo, playVideo, etc.
+
+  $.fn.sendCommand = (command, args) ->
+    @each ->
+      payload = JSON.stringify 
+        "event": "command"
+        "func": command
+        "args": args || [],
+        "id": @id
+      @contentWindow.postMessage payload, "*"
 
   # Radio buttons don't fire a change event when deselected. Here we mimic that effect
   # by firing it from any other input in that button set when it *is* selected. 

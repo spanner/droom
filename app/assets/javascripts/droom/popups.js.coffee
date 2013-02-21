@@ -94,6 +94,8 @@ jQuery ($) ->
       @_mask.fadeOut('fast')
       @_mask.unbind "click", @hide
       $(window).unbind "resize", @place
+      @_container.find('iframe.youtube').sendCommand('pauseVideo')
+      
 
     reset: () =>
       @hide()

@@ -17,10 +17,16 @@ module Droom
 
     attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by
     before_save :get_youtube_thumbnail
-    default_scope order("droom_scraps.created_at desc")
 
-    scope :later_than, lambda { |date| where(["created_at > ?", date]) }
-    scope :earlier_than, lambda { |date| where(["created_at < ?", date]) }
+    scope :by_date, order("droom_scraps.created_at DESC")
+
+    scope :later_than, lambda { |scrap| 
+      where(["created_at > ?", scrap.created_at]).order("droom_scraps.created_at ASC") 
+    }
+    
+    scope :earlier_than, lambda { |scrap| 
+      where(["created_at < ?", scrap.created_at]).order("droom_scraps.created_at DESC") 
+    }
 
     Droom.scrap_types.each do |t|
       define_method(:"#{t}?") { scraptype == t.to_s }
@@ -65,19 +71,19 @@ module Droom
     end
     
     def next_younger
-      Droom::Scrap.earlier_than(self.created_at).first
+      Droom::Scrap.later_than(self).first
     end
     
     def next_older
-      Droom::Scrap.later_than(self.created_at).last
+      Droom::Scrap.earlier_than(self).first
     end
 
   protected
   
     def get_youtube_thumbnail
       # youtube id is held in the 'note' column.
-      if scraptype == "video" && note?
-        self.image = URI.parse("http://img.youtube.com/vi/#{note}/0.jpg")
+      if scraptype == "video" && body?
+        self.image = URI.parse("http://img.youtube.com/vi/#{body}/0.jpg")
       end
     end
     
