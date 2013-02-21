@@ -1540,7 +1540,10 @@ ul.people
         font-size: 1.2em
 
 .search_results
+  margin-top: 15px
   .scrap, .person, .document, .event, .venue, .group
+    a
+      font-size: 1.3em
     clear: left
     position: relative
     margin: 5px 0 10px
@@ -1555,7 +1558,6 @@ ul.people
       background:
         repeat: no-repeat
         scroll: scroll
-  .scrap
   .document
     a.icon
       background:
@@ -1565,12 +1567,8 @@ ul.people
         background-position: 0 -48px
       &.doc, &.docx
         background-position: 0 -96px
-        color: #1683ab
-        +hover
       &.xls, &.xlsx
         background-position: 0 -144px
-        color: #369620
-        +hover
   .venue, .person, .group
     a.icon
       background-image: image-url('droom/object_icons.png')
@@ -1585,7 +1583,6 @@ ul.people
       background-position: 0 -196px
 
 // streams and scraps
-  
 
 #stream, .search_results
   .scrap
