@@ -815,7 +815,7 @@ a.menu
   &.small
     background-image: image-url('droom/small_asterisk.png')
     width: 20px
-    
+    height: 18px
   
 // .no-touch
 //   a.action
@@ -1634,23 +1634,29 @@ div.scrapup, div.popup
   min-height: 200px
   background-color: white
   +box_shadow(1px 3px 8px #52555f)
+  .header
+    position: relative
+    overflow: hidden
+    background-color: $text
+    padding: 8px 20px 4px 20px
   h2
     position: relative
+    height: 24px
+    line-height: 27px
     margin: 0
-    padding: 10px 20px 5px 20px
+    margin-right: 40px
     font-weight: normal
     font-size: 0.9em
-    background-color: $text
     color: white
-    padding: 15px
+    white-space: nowrap
   a.closer
     display: block
     float: right
     width: 16px
-    height: 16px
+    height: 18px
     margin-left: 10px
     margin-right: 0
-    margin-top: 0
+    margin-top: 2px
     +text-hidden
     background: 
       image: image-url('droom/crosses.png')
@@ -1667,22 +1673,49 @@ div.popup
       margin-left: $datemark_width + $datemark_margin
 
 div.scrapup
-  .header
-    position: relative
+  .scrolled
     overflow: hidden
-    background-color: $dark
-    padding: 14px 20px 2px 20px
-
-  a.next, a.last
+  .scroller
+    overflow: hidden
+    margin: 0
+    width: 1200px
+    .scrap
+      float: left
+      width: 580px
+  .header
     position: absolute
     top: 0
-    
-  .name
-    h4, p
-      margin: 10px 20px
-      
+    left: 0
+    width: 540px
+    a.next, a.prev, span.next, span.prev
+      position: relative
+      display: inline-block
+      width: 18px
+      height: 18px
+      text-indent: 20px
+      margin: 0 4px
+      overflow: hidden
+      background:
+        repeat: no-repeat
+        image: image-url('droom/leftright.png')
+    a.next
+      background-position: 0 0
+      &:hover
+        background-position: 0 -32px
+    a.prev
+      background-position: 0 -96px
+      margin-left: 0
+      &:hover
+        background-position: 0 -128px
+    span.next
+      background-position: 0 -64px
+    span.prev
+      background-position: 0 -160px
+      margin-left: 0
+        
   .body
     position: relative
+    margin-top: 36px
     overflow: hidden
     height: 326px
     background-color: $verypale

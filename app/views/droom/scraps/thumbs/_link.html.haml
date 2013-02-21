@@ -1,6 +1,6 @@
 = link_to "link:", scrap.body, :class => "icon link", :data => {:action => "scrapup"}, :target => "_scrap"
 %p.caption
-  = link_to shorten(scrap.body, 92), scrap.body, :class => "external", :target => "_scrap"
+  = link_to shorten(scrap.body, 70), scrap.body, :class => "external", :target => "_scrap"
   = action_menulink(scrap, :class => "small")
   - if scrap.note
     %span.caption

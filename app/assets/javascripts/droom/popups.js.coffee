@@ -61,16 +61,14 @@ jQuery ($) ->
       @_container.empty()
       @_container.append(@_content)
       @_content.activate()
-      @addCloser(@_content.find('h2'))
+      @_header = @_content.find('.header')
+      @_closer = $('<a href="#" class="closer">close</a>').prependTo(@_header)
+      @_closer.click(@hide)
       @_content.find('form').remote
         on_cancel: @hide
         on_success: @receive
       @show()
-    
-    addCloser: (header) =>
-      @_closer = $('<a href="#" class="closer">close</a>').prependTo(header)
-      @_closer.click(@hide)
-      
+          
     conclude: (data) =>
       if @_affected
         $(@_affected).trigger "refresh"
@@ -140,7 +138,6 @@ jQuery ($) ->
 
     display: (data) =>
       super
-      @addCloser(@_content.find('.header'))
       if selector = @_content.find('a.edit').attr('data-affected')
         @affect(selector)
       @_content.find('a.edit').remote

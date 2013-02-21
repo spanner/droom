@@ -164,8 +164,10 @@ en:
   calendar: "Calendar"
   library: "Library" 
   networks: "Networks"
+  next: "Next"
   normal_RSS_link: "normal RSS link"
   personal_RSS_link: "personal link"
+  previous: "Previous"
   set_preferences: "Account preferences"
   subscribe_to_calendar: "Subscribe to the calendar"
   user_preferences: "User preferences"
@@ -270,6 +272,7 @@ en:
   scrap_title: "Title (optional)"
   unattached_folder_note: "A folder not attached to anything is visible to everyone logged in."
   user_admin: "Users"
+  stream: "Stream"
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

@@ -638,53 +638,82 @@ jQuery ($) ->
   # then slides it into view from either the right or left depending on its relation 
   # to the current page.
 
+  $.fn.sliding_link = () ->
+    @each ->
+      new Slider(@)
+  
+  class Slider
+    constructor: (element) ->
+      @_link = $(element)
+      @_selector = @_link.attr('data-affected') || @defaultSelector()
+      @_direction = @getDirection()
+      @_page = @getPage()
+      
+      # build viewport and sliding frame around the the content-holding @_page
+      @_frame = @_page.parents('.scroller').first()
+      unless @_frame.length
+        @_page.wrap($('<div class="scroller" />'))
+        @_frame = @_page.parent()
+
+      @_viewport = @_frame.parents('.scrolled').first()
+      unless @_viewport.length
+        @_frame.wrap($('<div class="scrolled" />'))
+        @_viewport = @_frame.parents('.scrolled')
+
+      @_width = @_page.width()
+      @_link.remote
+        on_success: @receive
+      
+    getPage: =>
+      @_link.parents(@_selector).first()
+      
+    getDirection: =>
+      @_link.attr "data-direction"
+
+    defaultSelector: () =>
+      '.scrap'
+      
+    receive: (r) =>
+      response = $(r)
+      @sweep response
+      response.activate()
+      
+    sweep: (r) =>
+      @_old_page = @_page
+      @_viewport.css("overflow", "hidden")
+      if @_direction == 'right'
+        @_frame.append(r)
+        @_viewport.animate {scrollLeft: @_width}, 'slow', 'glide', @cleanup
+      else
+        @_frame.prepend(r)
+        @_viewport.scrollLeft(@_width).animate {scrollLeft: 0}, 'slow', 'glide', @cleanup
+          
+    cleanup: () =>
+      @_viewport.scrollLeft(0)
+      console.log "cleanup is removing", @_old_page.attr('id')
+      @_old_page.remove()
+
+
+
+
   $.fn.page_turner = () ->
     @each ->
       new Pager(@)
-  
-  class Pager
+
+  class Pager extends Slider
     constructor: (element) ->
-      @_link = $(element)
-      @_selector = @_link.attr('data-affected') || '.paginated'
-      @_page = @_link.parents(@_selector).first()
-      @findPageNumber()
-      @getDirection()
-      @_scroller = @_page.parents('.scroller').first()
-      @_scrolled = @_scroller.parents('.scrolled').first()
-      unless @_scrolled.length
-        @_scroller.wrap($('<div class="scrolled" />'))
-        @_scrolled = @_scroller.parents('.scrolled').first()
-      @_container = @_scroller.parent()
-      @_width = @_page.width()
-      @_link.remote
-        on_success: (r) =>
-          response = $(r)
-          @sweep response
-          response.activate()
-
-    findPageNumber: =>
+      super
       @_page_number = parseInt(@_link.parent().siblings('.current').text())
-
+    
+    defaultSelector: () =>
+      '.paginated'
+      
     getDirection: =>
       if @_link.attr "rel"
         @_direction = if @_link.attr("rel") == "next" then "right" else "left"
       else
         @_direction = if parseInt(@_link.text()) > @_page_number then "right" else "left"
 
-    sweep: (r) =>
-      old = @_page
-      @_scrolled.css("overflow", "hidden")
-      if @_direction == 'right'
-        @_scroller.append(r)
-        @_container.animate {scrollLeft: @_width}, 'slow', 'glide', () =>
-          old.remove()
-          @_scrolled.css("overflow", "visible")
-          @_container.scrollLeft(0)
-      else
-        @_scroller.prepend(r)
-        @_container.scrollLeft(@_width).animate {scrollLeft: 0}, 'slow', 'glide', () =>
-          old.remove()
-          @_scrolled.css("overflow", "visible")
 
 
 
