@@ -1,4 +1,4 @@
 - hit.highlights.each do |highlight|
-  - description = highlight.format{|word| "<b>#{word}</b>"}
-  = description.html_safe
+  - description = highlight.format{|word| "{{#{word}}}"}
+  = strip_tags(description).gsub(/\{\{(\w+)\}\}/, '<strong>\1</strong>').html_safe
 

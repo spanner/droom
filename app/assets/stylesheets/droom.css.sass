@@ -1561,17 +1561,18 @@ ul.people
   .scrap, .person, .document, .event, .venue, .group
     a
       font-size: 1.3em
+      font-weight: bold
     clear: left
     position: relative
-    margin: 5px 0 10px
+    margin: 5px 0 25px 0
     a.icon, a.thumb
       position: absolute
       display: block
-      left: -50px
+      left: -56px
       text-indent: 50px
       overflow: hidden
       width: 50px
-      height: 50px
+      height: 70px
       background:
         repeat: no-repeat
         scroll: scroll
@@ -1579,16 +1580,16 @@ ul.people
     a.icon
       background:
         position: 0 0
-        image: image-url('droom/icons.png')
+        image: image-url('droom/medium_icons.png')
       &.pdf
-        background-position: 0 -48px
+        background-position: 0 -100px
       &.doc, &.docx
-        background-position: 0 -96px
+        background-position: 0 -200px
       &.xls, &.xlsx
-        background-position: 0 -144px
+        background-position: 0 -300px
   .venue, .person, .group
     a.icon
-      background-image: image-url('droom/object_icons.png')
+      background-image: image-url('droom/medium_object_icons.png')
   .venue
     a.icon
       background-position: 0 -146px
@@ -1601,7 +1602,7 @@ ul.people
 
 // streams and scraps
 
-#stream
+#stream, .search_results
   .scrolled
     width: 320px
   .scroller
@@ -1654,6 +1655,7 @@ ul.people
         color: $hover
     p.caption
       overflow: hidden
+      line-height: 1.2
     span.attribution, span.caption
       color: $pale
       display: block
