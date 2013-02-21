@@ -75,6 +75,13 @@ jQuery ($) ->
             $(@).remove()
             $(affected).trigger "refresh"
 
+  # Close links work just by triggering a 'hide' event and hoping that something further up the tree will bind
+  # it to the right thing.
+
+  $.fn.closes = () ->
+    @click (e) ->
+      e.preventDefault()
+      $(@).trigger('close')
 
   # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
   # result of their action.

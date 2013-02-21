@@ -60,10 +60,9 @@ jQuery ($) ->
       @_content = $(data)
       @_container.empty()
       @_container.append(@_content)
+      @_container.bind 'close', @hide
       @_content.activate()
       @_header = @_content.find('.header')
-      @_closer = $('<a href="#" class="closer">close</a>').prependTo(@_header)
-      @_closer.click(@hide)
       @_content.find('form').remote
         on_cancel: @hide
         on_success: @receive
