@@ -163,6 +163,7 @@ module Droom
       @@searchable_classes ||= {
         "event" => "Droom::Event",
         "document" => "Droom::Document",
+        "person" => "Droom::Person", 
         "group" => "Droom::Group",
         "scrap" => "Droom::Scrap",
         "venue" => "Droom::Venue"

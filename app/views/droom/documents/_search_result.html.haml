@@ -1,7 +1,10 @@
 - document ||= search_result
-- hit = document.hit
-%li.document
-  = link_to document.name, folder_document_url(document.folder, document), :class => document.file_extension, :title => t(:click_to_download, :name => document.file_file_name)
-  %span.excerpt
-    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+.document
+  = link_to "document:", folder_document_url(document.folder, document), :class => "#{document.file_extension} icon"
+  = link_to document.name, folder_document_url(document.folder, document), :title => t(:click_to_download, :name => document.file_file_name)
+  .excerpt
+    - if hit = document.hit
+      = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+    - else
+      = truncate document.extracted_text, :length => 130
 
