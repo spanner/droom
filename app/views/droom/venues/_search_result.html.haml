@@ -1,6 +1,12 @@
 - venue ||= search_result
-- hit = venue.hit
-%li.venue
+.venue
+  = link_to "venue:", venue_url(venue), :class => "icon"
   = link_to venue.name, venue_url(venue)
-  %span.excerpt
-    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+  .excerpt
+    - if hit = venue.hit
+      = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+    - else
+      - if venue.description
+        = truncate venue.description, :length => 60
+        %br
+      = venue.address

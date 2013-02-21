@@ -1,5 +1,4 @@
 - event ||= search_result
-- hit = event.hit
 .event
   .datemark
     %span.mon= event.start.strftime('%b')
@@ -8,4 +7,7 @@
       %span.year= event.start.strftime('%Y')
   = link_to event.name, event_url(event)
   .excerpt
-    = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+    - if hit = event.hit
+      = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+    - else
+      = truncate event.description, :length => 130

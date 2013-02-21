@@ -1,0 +1,9 @@
+- person ||= search_result
+.person
+  = link_to "person:", person_url(person), :class => "icon"
+  = link_to person.name, person_url(person)
+  .excerpt
+    - if hit = person.hit
+      = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+    - else
+      = truncate person.description, :length => 130

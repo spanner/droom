@@ -20,12 +20,18 @@ module Droom
               highlight :description
               highlight :extracted_text
               highlight :body
+              highlight :post_line1
+              highlight :post_line2
+              highlight :post_city
+              highlight :post_region
+              highlight :post_code
+              highlight :post_country
             end
             paginate :page => @page, :per_page => 10
           end
           # push the hits (for retrieving highlights) into the search results
           search.each_hit_with_result do |hit, result|
-            result[:hit] = hit
+            result[:hit] = if hit.highlights.length > 0 then hit else nil end
             @results.push result
           end
         end
@@ -42,7 +48,7 @@ module Droom
     def get_classes
       searchable_classes = Droom.searchable_classes
       requested_types = [params[:type]].flatten.compact.uniq
-      requested_types = %w{event document group venue scrap} if requested_types.empty?
+      requested_types = %w{event document group venue scrap person} if requested_types.empty?
 
       logger.warn ">>> requested_types is #{requested_types.inspect}"
 

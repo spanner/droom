@@ -238,6 +238,15 @@ module Droom
       }
     end
 
+    def as_search_result
+      {
+        :type => 'person',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
+    end
+
     def invitable?
       name? && email?
     end

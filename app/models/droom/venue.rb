@@ -16,11 +16,13 @@ module Droom
 
     searchable do
       text :name, :boost => 10
-      text :description
-      text :post_line2
-      text :post_city
-      text :post_region
-      text :post_country
+      text :description, :stored => true
+      text :post_line1, :stored => true
+      text :post_line2, :stored => true
+      text :post_city, :stored => true
+      text :post_region, :stored => true
+      text :post_country, :stored => true
+      text :post_code, :stored => true
     end
 
     scope :matching, lambda { |fragment| 

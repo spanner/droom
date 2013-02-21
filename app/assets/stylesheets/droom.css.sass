@@ -1556,6 +1556,48 @@ ul.people
       span.name
         font-size: 1.2em
 
+.search_results
+  margin-top: 15px
+  .scrap, .person, .document, .event, .venue, .group
+    a
+      font-size: 1.3em
+    clear: left
+    position: relative
+    margin: 5px 0 10px
+    a.icon, a.thumb
+      position: absolute
+      display: block
+      left: -50px
+      text-indent: 50px
+      overflow: hidden
+      width: 50px
+      height: 50px
+      background:
+        repeat: no-repeat
+        scroll: scroll
+  .document
+    a.icon
+      background:
+        position: 0 0
+        image: image-url('droom/icons.png')
+      &.pdf
+        background-position: 0 -48px
+      &.doc, &.docx
+        background-position: 0 -96px
+      &.xls, &.xlsx
+        background-position: 0 -144px
+  .venue, .person, .group
+    a.icon
+      background-image: image-url('droom/object_icons.png')
+  .venue
+    a.icon
+      background-position: 0 -146px
+  .person
+    a.icon
+      background-position: 0 -46px
+  .group
+    a.icon
+      background-position: 0 -196px
 
 // streams and scraps
 
