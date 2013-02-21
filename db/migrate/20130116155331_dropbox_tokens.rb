@@ -1,4 +1,4 @@
-class Dropbox < ActiveRecord::Migration
+class DropboxTokens < ActiveRecord::Migration
   def change
     create_table :droom_dropbox_tokens do |t|
       t.column :created_by_id, :integer

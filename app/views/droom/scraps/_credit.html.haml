@@ -1,3 +1,5 @@
+- with_edit ||= false
+
 %span.credit
   - if scrap.created_by
     = t :posted_by
@@ -6,4 +8,3 @@
     = t :posted
   = time_ago_in_words scrap.created_at
   = t :ago
-  

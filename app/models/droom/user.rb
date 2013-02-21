@@ -1,6 +1,6 @@
 module Droom
   class User < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes
+    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes, :old_id
     has_one :person
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :preferences, :foreign_key => "created_by_id"

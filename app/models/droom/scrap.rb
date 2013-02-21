@@ -2,10 +2,10 @@ module Droom
   class Scrap < ActiveRecord::Base
     belongs_to :created_by, :class_name => "Droom::User"
     has_upload :image, 
-               :geometry => "580x435#",
+               :geometry => "580x326#",
                :styles => {
-                 :icon => "32x32#",
-                 :thumb => "160x160#",
+                 :icon => "32x18#",
+                 :thumb => "160x90#",
                  :precrop => "1200x1200^"
                }
 

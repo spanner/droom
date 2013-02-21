@@ -812,7 +812,11 @@ a.menu
     background:
       position: 0 -144px
       color: $blue
-
+  &.small
+    background-image: image-url('droom/small_asterisk.png')
+    width: 20px
+    
+  
 // .no-touch
 //   a.action
 //     display: none
@@ -1552,7 +1556,7 @@ ul.people
       display: block
       float: left
       width: 32px
-      height: 32px
+      height: 18px
       margin-right: 8px
       margin-bottom: 25px
       margin-top: 0
@@ -1584,7 +1588,7 @@ ul.people
         color: $hover
     p.caption
       overflow: hidden
-    span.attribution
+    span.attribution, span.caption
       color: $pale
       display: block
     span.credit
@@ -1597,7 +1601,7 @@ ul.people
 
 div.scrapup, div.popup
   position: fixed
-  overflow: scroll
+  overflow: auto
   top: 100px
   left: 100px
   width: 580px
@@ -1639,6 +1643,12 @@ div.popup
       margin-left: $datemark_width + $datemark_margin
 
 div.scrapup
+  .header
+    position: relative
+    overflow: hidden
+    background-color: $dark
+    padding: 14px 20px 2px 20px
+
   a.next, a.last
     position: absolute
     top: 0
@@ -1649,34 +1659,28 @@ div.scrapup
       
   .body
     position: relative
-    height: 435px
-    overflow: scroll
+    overflow: hidden
+    height: 326px
     background-color: $verypale
     p
       margin: 10px 20px
       font-size: 1.5em
     &.image
       overflow: hidden
+    p.attribution
+      color: $pale
       
   .caption
-    h4
-      color: $dark
-      margin: 10px 20px 0 20px
-      &+p
-        margin-top: 0
     p
-      font-size: 75%
       color: $mid
       margin: 10px 20px
-    p.action
-      float: right
+      span.credit
+        font-size: 80%
+        color: $pale
 
   form.scrap
     ul.scraptypes
-      position: relative
-      overflow: hidden
-      background-color: $dark
-      padding: 14px 20px 2px 20px
+      padding: 0
       margin: 0
       li
         display: inline-block
@@ -1722,7 +1726,7 @@ div.scrapup
           font-size: 100%
       .body
         textarea
-          height: 400px
+          height: 290px
       .caption
         textarea
           height: 80px
@@ -1731,19 +1735,19 @@ div.scrapup
         display: none
         .uploadbox
           width: 580px
-          height: 435px
+          height: 326px
           border: 0
           margin: 0
           background-color: $mid
           .img
             width: 580px
-            height: 435px
+            height: 326px
           .prompt
-            padding-top: 180px
+            padding-top: 140px
             .note
               color: $dark
           .progress_holder
-            top: 178px
+            top: 138px
             
       &.image
         .upload
@@ -1771,18 +1775,16 @@ div.scrapup
       line-height: 1.25
       a
         color: white
+        +glow_on_hover
       .note
         color: $pale
         margin-top: 2px
-    &:hover, &.hover
-      .prompt
-        a
-          color: $hover
   &.hover
     .img
       .prompt
         a
-          color: $hover
+          color: white
+          text-shadow: 0 0 3px white
       
   a.detach
     position: absolute

@@ -1,6 +1,6 @@
-- heading = scrap.name? ? scrap.name : scrap.note
-
 = link_to "image:", droom.scrap_url(scrap), :class => "thumb", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:action => "scrapup"}
 %p.caption
-  = link_to shorten(heading), droom.scrap_url(scrap), :class => "scrap", :data => {:action => "scrapup"}
+  = link_to shorten(scrap.note, 140), droom.scrap_url(scrap), :class => "scrap", :data => {:action => "scrapup"}
+  = action_menulink(scrap, :class => "small")
   = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+= action_menu(scrap)

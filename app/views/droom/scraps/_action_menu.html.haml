@@ -1,5 +1,5 @@
 - if editable?(scrap)
-  .menu
+  .menu{:data => {:for => "scrap_#{scrap.id}"}}
     %ul.actions
       %li
         = link_to t(:edit_scrap), droom.edit_scrap_url(scrap), :class => 'edit', :data => {:action => "scrapup", :affected => "#scraps"}

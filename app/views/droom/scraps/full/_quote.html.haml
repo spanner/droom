@@ -2,5 +2,9 @@
 
 .body.large
   = simple_format(scrap.body).html_safe
+  %p.attribution
+    = scrap.note
 
-= render "droom/scraps/caption", :scrap => scrap
+.caption
+  %p.attribution
+    = render "droom/scraps/credit", :scrap => scrap

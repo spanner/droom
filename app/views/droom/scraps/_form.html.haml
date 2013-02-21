@@ -1,10 +1,11 @@
 = form_for @scrap, :html => {:class => 'edit scrap'} do |f|
-  %ul.scraptypes
-    - Droom.scrap_types.each do |type|
-      - cssclass = @scrap.scraptype == type ? "#{type} here" : type
-      %li{:data => {:action => 'tab', :selector => ".#{type}"}}
-        = f.radio_button :scraptype, type
-        = f.label :"scraptype_#{type}", type, :class => cssclass
+  .header
+    %ul.scraptypes
+      - Droom.scrap_types.each do |type|
+        - cssclass = @scrap.scraptype == type ? "#{type} here" : type
+        %li{:data => {:action => 'tab', :selector => ".#{type}"}}
+          = f.radio_button :scraptype, type
+          = f.label :"scraptype_#{type}", type, :class => cssclass
 
   %div{:class => "fields #{@scrap.scraptype}"}
     .upload
@@ -26,10 +27,6 @@
     .body
       %p
         = f.text_area :body, :placeholder => "Body text", :class => 'body'
-
-    .name
-      %p
-        = f.text_field :name, :placeholder => t(:scrap_title), :class => 'name'
 
     .caption
       %p

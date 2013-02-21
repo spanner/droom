@@ -3,9 +3,14 @@ require 'dropbox_sdk'
 module Droom
   module DroomHelper
 
-    def action_menulink(thing)
+    def action_menulink(thing, html_options={})
       classname = thing.class.to_s.downcase.underscore.split('/').last
-      link_to t(:edit), "#", :class => "menu", :data => {:menu => "#{classname}_menu_#{thing.id}"} if editable?(thing)
+      html_options.reverse_merge!({
+        :class => "",
+        :data => {:menu => "#{classname}_#{thing.id}"}
+      })
+      html_options[:class] << " menu"
+      link_to t(:edit), "#", html_options if editable?(thing)
     end
     
     def action_menu(thing)

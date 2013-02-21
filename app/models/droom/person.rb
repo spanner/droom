@@ -264,6 +264,7 @@ module Droom
           self.save
         end
       end
+      self.user
     end
   
     def update_user

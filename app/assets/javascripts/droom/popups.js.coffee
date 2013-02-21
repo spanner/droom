@@ -61,13 +61,15 @@ jQuery ($) ->
       @_container.empty()
       @_container.append(@_content)
       @_content.activate()
-      @_header = @_content.find('h2')
-      @_closer = $('<a href="#" class="closer">close</a>').prependTo(@_header)
-      @_closer.click(@hide)
+      @addCloser(@_content.find('h2'))
       @_content.find('form').remote
         on_cancel: @hide
         on_success: @receive
       @show()
+    
+    addCloser: (header) =>
+      @_closer = $('<a href="#" class="closer">close</a>').prependTo(header)
+      @_closer.click(@hide)
       
     conclude: (data) =>
       if @_affected
@@ -138,6 +140,7 @@ jQuery ($) ->
 
     display: (data) =>
       super
+      @addCloser(@_content.find('.header'))
       if selector = @_content.find('a.edit').attr('data-affected')
         @affect(selector)
       @_content.find('a.edit').remote
@@ -194,13 +197,13 @@ jQuery ($) ->
 
     constructor: (element) ->
       @_link = $(element)
-      @_menu = $("##{@_link.attr('data-menu')}")
+      @_selector = "[data-for=\"#{@_link.attr('data-menu')}\"]"
       @_link.click @toggle
       ActionMenu.remember(@)
 
     place: =>
       pos = @_link.position()
-      @_menu.css
+      $(@_selector).css
         top: pos.top + 20
         left: pos.left
 
@@ -214,11 +217,12 @@ jQuery ($) ->
       @place()
       ActionMenu.hideAll()
       @_link.addClass('up')
-      @_menu.stop().slideDown 'fast'
+      console.log "showing", @_selector, $(@_selector).get(0)
+      $(@_selector).stop().slideDown 'fast'
       $(document).bind "click", @hide
     
     hide: (e) =>
-      @_menu.stop().slideUp 'fast', () =>
+      $(@_selector).stop().slideUp 'fast', () =>
         @_link.removeClass('up')
       $(document).unbind "click", @hide
       
