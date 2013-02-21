@@ -803,7 +803,7 @@ jQuery ($) ->
       Kalendae.moment.months[@_month-1]
       
     searchForm: =>
-      @_form ?= $('#searchform')
+      @_form ?= $('#suggestions')
     
     searchForDay: (e) =>
       e.preventDefault() if e

@@ -47,7 +47,7 @@ module Droom
   
     def text_size
       if l = body.length
-        ((600.0/(l+100.0)) + 0.25) / 1.5
+        ((560.0/(1.4 * l+150.0)) + 0.25) / 1.5
       else
         1
       end

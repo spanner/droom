@@ -390,3 +390,26 @@ jQuery ($) ->
 
 
 
+
+
+  # A text input that sizes to fit will adjust its font size to suit the length of its content.
+  # At the moment this is done just by fitting a curve, but it ought really to be based on a 
+  # calculation of area occupied.
+
+  $.size_to_fit = (e) ->
+    container = $(@)
+    l = container.val().length
+    size = if l then (((560.0/(2 * l+150.0)) + 0.25)).toFixed(2) else 1
+    container.stop().animate
+      'font-size': "#{size}em"
+      width: 540
+      height: 290
+    , 
+      queue: false
+      duration: 100
+        
+  $.fn.self_sizes = () ->
+    @each ->
+      $(@).bind "keyup", $.size_to_fit
+      $(@).bind "change", $.size_to_fit
+      $.size_to_fit.apply(@)

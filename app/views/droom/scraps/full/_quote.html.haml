@@ -1,4 +1,4 @@
-.body.large
+.body{:style => "font-size: #{"%.2f" % scrap.text_size}em"}
   = simple_format(scrap.body).html_safe
   %p.attribution
     = scrap.note
