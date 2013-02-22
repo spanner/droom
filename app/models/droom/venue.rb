@@ -15,7 +15,7 @@ module Droom
     # reverse_geocoded_by :lat, :lng
 
     searchable do
-      text :name, :boost => 10
+      text :name, :boost => 10, :stored => true
       text :description, :stored => true
       text :post_line1, :stored => true
       text :post_line2, :stored => true
@@ -23,6 +23,10 @@ module Droom
       text :post_region, :stored => true
       text :post_country, :stored => true
       text :post_code, :stored => true
+    end
+
+    def self.highlight_fields
+      [:name, :description, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code]
     end
 
     scope :matching, lambda { |fragment| 

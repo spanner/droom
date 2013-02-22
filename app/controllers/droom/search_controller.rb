@@ -4,6 +4,7 @@ module Droom
     before_filter :authenticate_user!
     before_filter :get_current_person
     before_filter :get_classes
+    before_filter :get_fields
 
     def index
       @results = []
@@ -12,27 +13,24 @@ module Droom
         frag = @fragment.force_encoding("US-ASCII")
         # if term isn't empty
         unless frag == ""
-          classes = @klasses.collect {|klass| klass.constantize}
+          classes = Droom.searchable_classes.values.collect {|klass| klass.constantize}
+          highlights = @highlights.collect {|field| field.to_sym}
           # search the searchable classes
-          # highlight matching words from :description and :extracted_text
+          # highlight matching words from highlightable fields
           search = Sunspot.search classes do
             fulltext frag do
-              highlight :description
-              highlight :extracted_text
-              highlight :body
-              highlight :post_line1
-              highlight :post_line2
-              highlight :post_city
-              highlight :post_region
-              highlight :post_code
-              highlight :post_country
+              highlights.each do |hl|
+                highlight hl
+              end
             end
             paginate :page => @page, :per_page => 10
           end
           # push the hits (for retrieving highlights) into the search results
           search.each_hit_with_result do |hit, result|
-            result[:hit] = if hit.highlights.length > 0 then hit else nil end
-            @results.push result
+            if @requested_types.include? result.class.to_s
+              result[:hit] = if hit.highlights.length > 0 then hit else nil end
+              @results.push result
+            end
           end
         end
       end
@@ -45,17 +43,23 @@ module Droom
 
   protected
 
+    def get_fields
+      @highlights = []
+      @requested_types.each do |klass|
+        klass.constantize.highlight_fields.each do |hlf|
+          @highlights.push hlf unless @highlights.include? hlf
+        end
+      end
+    end
+
     def get_classes
       searchable_classes = Droom.searchable_classes
-      requested_types = [params[:type]].flatten.compact.uniq
-      requested_types = %w{event document group venue scrap person} if requested_types.empty?
+      @types = [params[:type]].flatten.compact.uniq
+      @types = searchable_classes.keys if @types.empty?
 
-      logger.warn ">>> requested_types is #{requested_types.inspect}"
+      logger.warn ">>> requested_types is #{@types.inspect}"
 
-      @types = searchable_classes.keys & requested_types
-      logger.warn ">>> @types is #{@types.inspect}"
-
-      @klasses = searchable_classes.values_at(*@types)
+      @requested_types = searchable_classes.values_at(*@types)
     end
 
   end

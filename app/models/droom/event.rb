@@ -46,8 +46,12 @@ module Droom
     default_scope order('start ASC').includes(:venue)
 
     searchable do
-      text :name, :boost => 10
+      text :name, :boost => 10, :stored => true
       text :description, :stored => true
+    end
+
+    def self.highlight_fields
+      [:name, :description]
     end
 
     ## Event retrieval in various ways

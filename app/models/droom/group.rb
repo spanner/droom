@@ -20,8 +20,12 @@ module Droom
     validates :mailing_list_name, :uniqueness => true, :presence => true
 
     searchable do
-      text :name, :boost => 10
+      text :name, :boost => 10, :stored => true
       text :description, :stored => true
+    end
+
+    def self.highlight_fields
+      [:name, :description]
     end
 
     scope :visible_to, lambda { |person|

@@ -17,7 +17,7 @@ module Droom
     validates :file, :presence => true
 
     searchable do
-      text :name, :boost => 10
+      text :name, :boost => 10, :stored => true
       text :description, :stored => true
       text :extracted_text, :stored => true
     end
@@ -45,6 +45,10 @@ module Droom
     }
 
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
+
+    def self.highlight_fields
+      [:name, :description, :extracted_text]
+    end
 
     def attach_to(holder)
       self.folder = holder.folder

@@ -122,8 +122,13 @@ module Droom
     scope :not_public, where("public <> 1 OR shy = 1)")
 
     searchable do
-      text :name, :boost => 10
-      text :description
+      text :name, :boost => 10, :stored => true
+      text :forename, :boost => 10, :stored => true
+      text :description, :stored => true
+    end
+
+    def self.highlight_fields
+      [:name, :forename, :description]
     end
 
     scope :matching, lambda { |fragment| 
