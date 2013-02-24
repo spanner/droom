@@ -238,7 +238,8 @@ jQuery ($) ->
       @id = @container.attr('id')
       @links = $("a[data-panel='#{@id}']")
       Panel.remember(@)
-      @links.click @toggle
+      @links.bind "click", @toggle
+      @container.bind "show", @show
       @set()
         
     set: () =>

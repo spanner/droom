@@ -1,15 +1,12 @@
+- if admin?
+  %p.action
+    = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => ".events_list"}
+
 #main.events
   = render :partial => 'events'
-
 
 - content_for :title do
   = t :calendar
 
 - content_for :margin do
-  / %h2.quiet
-  /   = t :invitations
-  / %p
-  /   = t :invitation_preamble
-
-- content_for :filter do
   = render :partial => 'droom/shared/calendar_holder'

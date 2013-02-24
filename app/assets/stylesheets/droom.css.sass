@@ -164,7 +164,7 @@ form.event, form.document
   width: 495px
   margin-left: 55px
 
-div.event, form.event
+div.event, form.event, div.project
   .summary
     .heading
       p.name
@@ -177,24 +177,28 @@ div.event, form.event
       p
         margin-top: 0
 
-div.documents, span.admin.documents
-  position: relative
-  overflow: hidden
-  float: right
-  margin-left: 20px
-  margin-bottom: 10px
-  margin-top: 0
-  width: 240px
-  h3
+  ul.folder
     position: relative
-    min-height: 18px
-    margin-top: 0.2em
-    a
-      color: $text
-  ul.filing
-    margin: -4px 0 0 -3px
-    padding: 0
+    float: right
+    padding-left: 20px
+    margin-bottom: 10px
+    margin-top: 0
+    width: 240px
     list-style: none
+    h3
+      position: relative
+      min-height: 18px
+      margin-top: 0.2em
+      a
+        color: $text
+    li.folder
+      a.folder
+        font-weight: bold
+        color: $text
+    ul.filing
+      margin: -4px 0 0 -3px
+      padding: 0
+      list-style: none
 
 span.admin.documents
   margin-bottom: 0
@@ -857,6 +861,14 @@ p.action, span.action
     +icon_link("droom/delete.png")
     &:hover
       color: $warmred
+  a.revert
+    color: $mid
+    font-weight: normal
+    font-size: 16px
+    white-space: nowrap
+    &:hover
+      color: $warmred
+    
     
 
 
@@ -1661,10 +1673,10 @@ ul.people
       display: block
     span.credit
       display: block
-      font-size: 80%
+      font-size: 90%
       font-weight: bold
       color: $mid
-      margin-top: 0
+      margin-top: 4px
 
 
 div.scrapup, div.popup
@@ -1769,7 +1781,7 @@ div.scrapup
     &.image
       overflow: hidden
     p.attribution
-      color: $pale
+      color: lighten($mid, 10)
       
   div.caption
     p.scrapnote
@@ -1777,11 +1789,11 @@ div.scrapup
     p.action
       float: right
     p
-      color: $mid
+      color: $text
       margin: 10px 20px
       span.credit
         font-size: 80%
-        color: $pale
+        color: $mid
 
   form.scrap
     ul.scraptypes

@@ -1,4 +1,6 @@
 #new_organisation
-  %h2
-    = t :add_organisation
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :add_organisation
   = render :partial => 'form'

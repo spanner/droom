@@ -1,4 +1,6 @@
 #edit_folder
-  %h2
-    = t :edit_folder
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :edit_folder
   = render :partial => 'form'

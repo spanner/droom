@@ -1,6 +1,6 @@
 = link_to "quote:", droom.scrap_url(scrap), :class => "icon quote", :data => {:action => "scrapup"}
 %p.caption
-  = link_to shorten(scrap.body, 100), droom.scrap_url(scrap), :data => {:action => "scrapup"}
+  = link_to shorten(scrap.body, 160), droom.scrap_url(scrap), :data => {:action => "scrapup"}
   = action_menulink(scrap, :class => "small")
   %span.attribution
     = shorten(scrap.note, 40)

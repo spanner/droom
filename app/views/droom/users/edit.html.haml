@@ -1,8 +1,10 @@
 #edit_user
-  %h2
-    = t :account_settings
-    - unless @user == current_user
-      = t :for
-      = @user.name
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :account_settings
+      - unless @user == current_user
+        = t :for
+        = @user.name
 
   = render :partial => 'form'

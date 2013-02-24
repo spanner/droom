@@ -18,7 +18,7 @@ module Droom
 
     searchable do
       text :name, :boost => 10
-      text :description, :stored => true
+      text :description, :stored => true, :boost => 3
       text :extracted_text, :stored => true
     end
 

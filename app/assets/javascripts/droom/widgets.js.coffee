@@ -816,6 +816,7 @@ jQuery ($) ->
       
     search: (term) =>
       @searchForm()?.find('input#term').val(term).change()
+      @searchForm().trigger('show')
       # should trigger a change event, then we hit the cache if possible
       # @searchForm()?.submit()
       

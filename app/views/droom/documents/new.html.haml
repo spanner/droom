@@ -1,5 +1,7 @@
 #new_document
-  %h2
-    = t :add_document_to, :name => @folder.name
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :add_document_to, :name => @folder.name
       
   = render :partial => 'form'

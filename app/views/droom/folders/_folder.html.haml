@@ -1,4 +1,5 @@
 - folder ||= @folder
+- standalone ||= false
 - title ||= folder.slug
 - open ||= false
 - if @folder
@@ -7,8 +8,9 @@
 - cssclass << " open" if open
 - cssclass << " root" if folder.loose?
 - cssclass << " empty" unless folder.populated?
+- cssclass << " standalone" if standalone
 
-%li{:class => cssclass, :id => "folder_#{folder.id}", :data => {:refreshable => true, :url => droom.folder_path(folder, :format => :js)} }
+%li{:class => cssclass, :id => "folder_#{folder.id}", :data => {:refreshable => true, :url => droom.folder_path(folder, :js)} }
   = link_to title, droom.folder_url(folder), :class => "folder"
   = action_menulink(folder)
   = render :partial => "droom/folders/contents", :locals => {:folder => folder}

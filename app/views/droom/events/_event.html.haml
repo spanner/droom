@@ -57,8 +57,9 @@
     .detail
       - unless brief || full_attachments
         - if event.folder.populated?
-          .documents
-            = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true}
+          %ul.folder
+            = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true, :standalone => true}
+
       - unless brief
         = event.description.html_safe
 

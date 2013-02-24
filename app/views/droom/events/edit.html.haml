@@ -1,4 +1,6 @@
 #edit_event
-  %h2
-    = t :edit_event
-  = render :partial => 'form'
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :edit_event
+    = render :partial => 'form'

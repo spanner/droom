@@ -1,4 +1,5 @@
 require 'zip/zip'
+require 'open-uri'
 
 module Droom
   class Folder < ActiveRecord::Base
@@ -67,7 +68,7 @@ module Droom
         tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")
         Zip::ZipOutputStream.open(tempfile.path) do |z|
           self.documents.each do |doc|
-            z.add(doc.file_file_name, open(doc.file.url))
+            z.add(doc.file_file_name, doc.original_file)
           end
         end
         tempfile
