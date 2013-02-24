@@ -10,9 +10,13 @@ module Droom
                }
 
     searchable do
-      text :name, :boost => 10
+      text :name, :boost => 10, :stored => true
       text :body, :stored => true
       text :note
+    end
+
+    def self.highlight_fields
+      [:name, :body]
     end
 
     attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by

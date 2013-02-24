@@ -1,13 +1,19 @@
 - event ||= search_result
+- path = event_url(event)
+- hit = event.hit
 .event
   .datemark
     %span.mon= event.start.strftime('%b')
     %span.dom= event.start.strftime('%d')
     - if event.start.year != Date.today.year
       %span.year= event.start.strftime('%Y')
-  = link_to event.name, event_url(event)
+  - if hit and (highlights = hit.highlights.select{|hl| hl.field_name == :name}).any?
+    = render :partial => "droom/shared/title_excerpt", :locals => {:path => path, :highlights => highlights}
+  - else
+    = link_to event.name, path
+  
   .excerpt
-    - if hit = event.hit
-      = render :partial => "droom/shared/excerpt", :locals => { :hit => hit }
+    - if hit and (highlights = hit.highlights.select{|hl| hl.field_name == :description}).any?
+      = render :partial => "droom/shared/excerpt", :locals => { :highlights => highlights }
     - else
       = truncate event.description, :length => 130

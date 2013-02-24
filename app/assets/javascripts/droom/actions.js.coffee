@@ -315,17 +315,18 @@ jQuery ($) ->
       @form = $(element)
       @search_box = @form.find(".search_box")
       @container = $(".search_results")
+      @filters = @form.find "input[type='checkbox']"
       @search_box.on "keyup", @submit
+      @filters.on "change", @submit
 
     submit: =>
       $.ajax
-        url: "#{@form.attr('action')}?term=#{@search_box.val()}"
+        url: "#{@form.attr('action')}?#{@form.serialize()}"
         type: "GET"
         dataType: "script"
         complete: (data) =>
           @container.replaceWith data.responseText
           @container = $(".search_results")
-
 
   #todo: Dragsort also needs to use Remote.
 
