@@ -5,7 +5,7 @@ require 'ri_cal'
 
 module Droom
   class Event < ActiveRecord::Base
-    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :venue_id, :private, :public, :venue_name
+    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :venue_id, :private, :public, :venue_name, :calendar_id
 
     belongs_to :created_by, :class_name => "Droom::User"
 
@@ -25,6 +25,10 @@ module Droom
 
     belongs_to :event_set
     accepts_nested_attributes_for :event_set
+
+    belongs_to :calendar
+
+    has_many :scraps
 
     belongs_to :master, :class_name => 'Event'
     has_many :occurrences, :class_name => 'Event', :foreign_key => 'master_id', :dependent => :destroy

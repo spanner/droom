@@ -1,6 +1,10 @@
 module Droom
   class Scrap < ActiveRecord::Base
     belongs_to :created_by, :class_name => "Droom::User"
+
+    belongs_to :event
+    accepts_nested_attributes_for :event
+
     has_upload :image, 
                :geometry => "580x326#",
                :styles => {
@@ -19,7 +23,7 @@ module Droom
       [:name, :body]
     end
 
-    attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by
+    attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by, :event
     before_save :get_youtube_thumbnail
 
     scope :by_date, order("droom_scraps.created_at DESC")

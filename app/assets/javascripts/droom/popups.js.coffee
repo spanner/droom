@@ -128,7 +128,7 @@ jQuery ($) ->
 
   $.fn.scrapup = () ->
     @each ->
-      new Scrapup(@)          
+      new Scrapup(@)
 
   class Scrapup extends Popup
     prepare: () =>

@@ -211,7 +211,7 @@ span.admin.documents
   .person_picker
     font-size: 1.8em
 
-form.event
+form.event, form .event
   p.name
     margin: 0
   a.datepicker
@@ -1825,6 +1825,8 @@ div.scrapup
             background-position: 0 -192px
           &.document
             background-position: 0 -224px
+          &.event
+            //
         input[type="radio"]
           display: none
         input[type="radio"] + label
@@ -1834,6 +1836,9 @@ div.scrapup
 
     .fields
       min-height: 180px
+      .event
+        display: none
+        margin-top: 46px
       .name
         input[type="text"]
           width: 532px
@@ -1876,7 +1881,11 @@ div.scrapup
           display: block
         p.body
           display: none
-      
+      &.event
+        .event
+          display: block
+        .upload, .body, .caption
+          display: none
     .buttons
       margin: 10px 20px 20px 20px
 

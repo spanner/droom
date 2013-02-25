@@ -24,6 +24,8 @@ Droom::Engine.routes.draw do
     end
   end
 
+  resources :calendars
+
   resources :events do
     resources :invitations
     resources :group_invitations
@@ -49,7 +51,7 @@ Droom::Engine.routes.draw do
     get "invite", :on => :member, :as => :invite
     resources :events do
       collection do
-        match "feed/:auth_token.:format" => "events#feed", :as => :feed
+        match "feed/:auth_token.:format" => "events#index", :as => :feed
       end
     end
   end

@@ -33,6 +33,40 @@
       %p
         = f.text_area :note, :placeholder => "Caption", :class => 'note'
 
+    .event
+      - event = @scrap.event ||= Droom::Event.new()
+      = f.fields_for event do |ef|
+        = ef.hidden_field :calendar_id, :value => Droom::Calendar.find_or_create_by_name("stream").id
+        .datemark.datepicker
+          %a{:href => "#"}
+            - if event.start
+              %span.mon= event.start.strftime('%b')
+              %span.dom= event.start.strftime('%d')
+              %span.year= event.start.strftime('%Y')
+            - else
+              %span.mon= t(:mon)
+              %span.dom= t(:dom)
+              %span.year= t(:year)
+
+          = ef.hidden_field :start_date
+          .kal
+        .summary
+          %p.name
+            = ef.text_field :name, :class => 'name', :placeholder => t(:event_name)
+
+          %p.practicalities
+            = ef.text_field :start_time, :class => "timepicker start", :value => (I18n.l(event.start_time, :format => :precise) if event.start_time), :placeholder => t(:event_time)
+            = t :to
+            = ef.text_field :finish_time, :class => "timepicker finish", :value => (I18n.l(event.finish_time, :format => :precise) if event.finish_time), :placeholder => t(:finish_time)
+            = t :at
+            %span.venue
+              %span.name
+                = ef.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off"
+        .description.wysihtml
+          .toolbar#t1
+            = render 'droom/shared/toolbar'
+          = ef.text_area :description, :id => 'd1'
+
   .buttons
     = f.submit t(:save)
     = t :or

@@ -1,0 +1,12 @@
+- @calendars.each do |cal|
+  .calendar
+    %h2.name
+      = cal.name
+      = action_menulink(cal)
+    = action_menu(cal)
+    - cal.events.each do |event|
+      .event
+        %span.name
+          = event.name
+          = action_menulink(event)
+        = action_menu(event)

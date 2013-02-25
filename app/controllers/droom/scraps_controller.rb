@@ -55,11 +55,13 @@ module Droom
     end
 
     def get_scrap
-      @scrap = Scrap.find(params[:id])
+      @scrap = Droom::Scrap.find(params[:id])
     end
 
     def build_scrap
-      @scrap = Scrap.new(params[:scrap])
+      params[:scrap]
+      @scrap = Droom::Scrap.new(params[:scrap])
+      @folder = Droom::Folder.find_or_create_by_slug("stream")
       @scrap.scraptype ||= 'text'
     end
 

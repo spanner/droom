@@ -25,7 +25,10 @@
       %span.venue
         %span.name
           = f.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off"
-
+    - if admin?
+      .calendar
+        = f.label :calendar
+        = f.select :calendar_id, Droom::Calendar.all.collect{|cal| [cal.name, cal.id]}
     .description.wysihtml
       .toolbar#t1
         = render 'droom/shared/toolbar'

@@ -44,7 +44,8 @@ module Droom
                  :dropbox_app_key,
                  :dropbox_app_secret,
                  :user_defaults,
-                 :people_sort
+                 :people_sort,
+                 :required_calendar_names
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -103,7 +104,7 @@ module Droom
     end
     
     def scrap_types
-      @@scrap_types ||= %w{image video text quote link}
+      @@scrap_types ||= %w{image video text quote link event}
     end
 
     # base path of DAV directory tree, relative to rails root.
@@ -174,7 +175,11 @@ module Droom
       klass ||= label.titlecase
       suggestible_classes[label] = klass.to_s
     end
-    
+
+    def required_calendar_names
+      @@required_calendar_names ||= %w{main stream}
+    end
+
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
     # doesn't exist you just get back the default value, or nil if there isn't one. This is where you
     # set the defaults.

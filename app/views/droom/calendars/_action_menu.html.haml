@@ -1,0 +1,6 @@
+- cal ||= calendar
+- if editable?(cal)
+  .menu{:data => {:for => "calendar_#{calendar.id}"}}
+    %ul.actions
+      %li= link_to t(:edit_calendar), droom.edit_calendar_url(cal), :class => 'edit', :data => {:action => "popup", :replaced => "#calendar_#{calendar.id}", :affected => "#calendars"}
+      %li= link_to t(:delete_calendar), droom.calendar_url(cal), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#calendar_#{calendar.id}", :affected => "#calendars", :confirm => t(:confirm_delete_calendar, :name => calendar.name)}
