@@ -403,7 +403,7 @@ jQuery ($) ->
     size = if l then (((560.0/(2 * l+150.0)) + 0.25)).toFixed(2) else 1
     container.stop().animate
       'font-size': "#{size}em"
-      width: 540
+      width: 532
       height: 290
     , 
       queue: false

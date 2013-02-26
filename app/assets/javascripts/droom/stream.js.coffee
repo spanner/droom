@@ -20,6 +20,7 @@ jQuery ($) ->
       @_body = @_fields.find('.body')
       @_caption = @_fields.find('.caption')
       @_image = @_fields.find('.upload')
+      @_event = @_fields.find('.scrapevent')
       @setType()
     
     setType: () =>
@@ -40,14 +41,24 @@ jQuery ($) ->
           @textBased()
         when "image"
           @imageBased()
+        when "event"
+          @eventBased()
       
     imageBased: () =>
       @_image.find('input').prop('disabled', false);
       @_image.show()
+      @_event.hide()
       @_body.hide()
 
     textBased: () =>
       @_image.find('input').prop('disabled', true);
       @_image.hide()
+      @_event.hide()
       @_body.show()
+
+    eventBased: () =>
+      @_image.find('input').prop('disabled', true);
+      @_image.hide()
+      @_event.show()
+      @_body.hide()
         

@@ -77,7 +77,7 @@ module Droom
     def build_event
       params[:event] ||= {}
       params[:event][:calendar_id] ||= @calendar.id
-      @event = Droom::Event.new({:start => Time.now}.merge(params[:event]))
+      @event = Droom::Event.new({:start => Time.now.floor(30.minutes)}.merge(params[:event]))
     end
 
     def get_event

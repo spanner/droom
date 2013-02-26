@@ -839,7 +839,7 @@ jQuery ($) ->
 
   $.fn.venue_picker = (options) ->
     options = $.extend(
-      submit_form: true
+      submit_form: false
       threshold: 1
       type: 'venue'
     , options)
@@ -849,7 +849,7 @@ jQuery ($) ->
 
   $.fn.person_picker = (options) ->
     options = $.extend(
-      submit_form: true
+      submit_form: false
       threshold: 1
       type: 'person'
     , options)
@@ -985,8 +985,8 @@ jQuery ($) ->
         @prompt.trigger 'suggester.change'
       else if @options.empty_field?
         @prompt.val "" 
-      if @options.submit_form?
-        @form.submit()
+      # if @options.submit_form?
+      #   @form.submit()
       @options.afterSelect.call(@, value) if @options.afterSelect
       @hide()
 

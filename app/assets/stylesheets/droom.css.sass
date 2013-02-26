@@ -211,7 +211,7 @@ span.admin.documents
   .person_picker
     font-size: 1.8em
 
-form.event, form .event
+form.event
   p.name
     margin: 0
   a.datepicker
@@ -236,7 +236,13 @@ form.event, form .event
       width: 470px
       font-size: 1em
       height: 250px
-
+  p.calendar
+    clear: both
+    float: right
+    margin: 5px 10px
+  .buttons
+    margin-top: 10px
+    
 form.folder
   input.slug
     width: 480px
@@ -1654,6 +1660,27 @@ ul.people
           width: 32px
           height: 18px
           left: -50px
+    a.minidatemark
+      display: block
+      float: left
+      width: 28px
+      margin-right: 12px
+      span
+        display: block
+        line-height: 1
+        text-align: center
+      span.mon
+        text-transform: uppercase
+        font-size: 0.9em
+      span.dom
+        font-size: 1.8em
+        letter-spacing: -0.1em
+        margin-left: -1px
+        margin-top: 0
+      span.year
+        font-size: 0.9em
+        margin-top: 0
+      
     a.icon
       background:
         image: image-url('droom/dark_scrap_icons.png')
@@ -1666,7 +1693,7 @@ ul.people
       +hover
       &:hover, &.hover
         color: $hover
-    p.caption
+    p.caption, p.scrapevent
       overflow: hidden
       line-height: 1.2
     span.attribution, span.caption
@@ -1693,6 +1720,7 @@ div.scrapup, div.popup
   +box_shadow(1px 3px 8px #52555f)
   .header
     position: relative
+    height: 40px
     overflow: hidden
     background-color: $text
     padding: 8px 20px 4px 20px
@@ -1772,7 +1800,7 @@ div.scrapup
         
   div.body
     position: relative
-    margin-top: 36px
+    margin-top: 40px
     overflow: hidden
     height: 326px
     background-color: $verypale
@@ -1783,6 +1811,22 @@ div.scrapup
       overflow: hidden
     p.attribution
       color: lighten($mid, 10)
+
+  div.scrapevent
+    position: relative
+    margin: 40px 0 0 0
+    overflow: auto
+    background-color: $verypale
+    height: 326px
+    .datemark
+      float: left
+      width: 50px
+      margin: 15px 10px 0 10px
+      color: $input
+    h3
+      margin-bottom: 0
+    p.practicalities
+      margin-top: 2px
       
   div.caption
     p.scrapnote
@@ -1824,9 +1868,9 @@ div.scrapup
           &.image
             background-position: 0 -192px
           &.document
-            background-position: 0 -224px
+            background-position: 0 -240px
           &.event
-            //
+            background-position: 0 -288px
         input[type="radio"]
           display: none
         input[type="radio"] + label
@@ -1836,9 +1880,6 @@ div.scrapup
 
     .fields
       min-height: 180px
-      .event
-        display: none
-        margin-top: 46px
       .name
         input[type="text"]
           width: 532px
@@ -1847,19 +1888,42 @@ div.scrapup
       .body, .caption
         textarea
           width: 532px
-          background-color: transparent
+          background-color: white
           font-size: 100%
       .body
         textarea
           height: 290px
           line-height: 1.2
+      .scrapevent
+        display: none
+        // margin: 20px 10px 10px 10px
+        .summary
+          p.name
+            margin: 10px 0
+        input.name
+          width: 482px
+          font-size: 2.4em
+        p.practicalities
+          margin: 5px 0 0 70px
+          input.timepicker
+            font-size: 1.2em
+            width: 70px
+          input.venuepicker
+            font-size: 1.2em
+            width: 200px
+        p.url
+          margin: 10px 0 0 70px
+          input.url
+            font-size: 1.2em
+            width: 482px
+            
       .caption
         textarea
           height: 80px
-          color: $pale
+          color: $mid
       .upload
         display: none
-        margin-top: 36px
+        margin-top: 40px
         .uploadbox
           width: 580px
           height: 326px
@@ -1875,7 +1939,7 @@ div.scrapup
               color: $dark
           .progress_holder
             top: 138px
-            
+
       &.image
         .upload
           display: block
@@ -1884,7 +1948,7 @@ div.scrapup
       &.event
         .event
           display: block
-        .upload, .body, .caption
+        .upload, .body
           display: none
     .buttons
       margin: 10px 20px 20px 20px

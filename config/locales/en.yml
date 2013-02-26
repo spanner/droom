@@ -18,7 +18,9 @@ en:
           name: "Event name"
           venue_name: "Choose or add a location"
           start_time: "Time"
+          finish_time: "Finish (optional)"
           start_date: "Date"
+          calendar_id: "Calendar"
         folder: 
           slug: "Folder name"
         organisation:
@@ -230,7 +232,8 @@ en:
   your_personal_documents: "Your personal documents"
   library_introduction: "The library is organised into folders, which are usually attached to an event or group. You can browse through the folder hierarchy below, or search for a particular document on the right."
   loading_stream: "Loading stream: please wait."
-  finish_time: "Finish"
+  finish_time: "Finish?"
+  event_url: "Web link?"
   other_documents: "Other available documents"
   personal_calendar_feed: "Personal calendar subscription"
   general_calendar_feed: "General calendar subscription"

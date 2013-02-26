@@ -323,6 +323,14 @@ module Droom
     def add_recurrence(rule)
       self.recurrence_rules << Droom::RecurrenceRule.from(rule)
     end
+    
+    def url_with_protocol
+      url =~ /^https?:\/\// ? url : "http://#{url}"
+    end
+
+    def url_without_protocol
+      url.sub(/^https?:\/\//, '')
+    end
 
     def to_rical
       RiCal.Event do |cal_event|
@@ -331,7 +339,7 @@ module Droom
         cal_event.description = description if description
         cal_event.dtstart =  (all_day? ? start_date : start) if start
         cal_event.dtend = (all_day? ? finish_date : finish) if finish
-        cal_event.url = url if url
+        cal_event.url = url_with_protocol if url
         cal_event.rrules = recurrence_rules.map(&:to_rical) if recurrence_rules.any?
         cal_event.location = venue.name if venue
       end
@@ -383,7 +391,7 @@ module Droom
         to_rical.occurrences(:before => recurrence_horizon).each do |occ|
           occurrences.create!({
             :name => self.name,
-            :url => self.url,
+            :url => self.url_with_protocol,
             :description => self.description,
             :venue => self.venue,
             :start => occ.dtstart,

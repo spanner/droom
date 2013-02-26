@@ -1,0 +1,26 @@
+- if event = scrap.event
+  %a.minidatemark{:href => droom.scrap_url(scrap), :data => {:action => "scrapup"}}
+    %span.mon= event.start.strftime('%b')
+    %span.dom= event.start.strftime('%d')
+    - if event.start.year != Date.today.year
+      %span.year= event.start.strftime('%Y')
+
+  %p.scrapevent
+    - if event.url
+      = link_to shorten(event.name, 90), event.url_with_protocol, :class => "name"
+    - else
+      = link_to shorten(event.name, 90), droom.scrap_url(scrap), :data => {:action => "scrapup"}
+    %br
+      = l(event.start_time, :format => :natural)
+      - if event.finish?
+        = t :to
+        = l(event.finish_time, :format => :natural)
+      - if event.venue
+        %span.location
+          = t(:at)
+          = event.venue.proper_name
+    - if scrap.note
+      %span.caption
+        = shorten(scrap.note, 140)
+    = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+  = action_menu(scrap)

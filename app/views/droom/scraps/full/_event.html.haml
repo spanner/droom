@@ -1,0 +1,25 @@
+- if event = scrap.event
+  .scrapevent
+    .datemark
+      %span.mon= event.start.strftime('%b')
+      %span.dom= event.start.strftime('%d')
+      - if event.start.year != Date.today.year
+        %span.year= event.start.strftime('%Y')
+
+    .summary
+      %h3
+        - if scrap.event.url
+          = link_to shorten(scrap.event.name, 90), scrap.event.url_with_protocol, :class => "name"
+        - else
+          = link_to shorten(scrap.event.name, 90), droom.scrap_url(scrap), :data => {:action => "scrapup"}
+      %p.practicalities
+        = l(event.start_time, :format => :natural)
+        - if event.finish?
+          = t :to
+          = l(event.finish_time, :format => :natural)
+        - if event.venue
+          %span.location
+            = t(:at)
+            = event.venue.proper_name
+
+  = render "droom/scraps/caption", :scrap => scrap
