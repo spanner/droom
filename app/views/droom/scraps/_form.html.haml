@@ -44,12 +44,6 @@
         .summary
           %p.name
             = ef.text_field :name, :class => 'name', :placeholder => t(:event_name)
-          %p.practicalities
-            = ef.text_field :start_time, :class => "timepicker start", :value => (I18n.l(event.start_time, :format => :precise) if event.start_time), :placeholder => t(:event_time)
-            = t :to
-            = ef.text_field :finish_time, :class => "timepicker finish", :value => (I18n.l(event.finish_time, :format => :precise) if event.finish_time), :placeholder => t(:finish_time)
-            = t :at
-            = ef.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off"
         %p.url
           = ef.text_field :url, :class => 'url', :placeholder => t(:event_url)
 
@@ -57,14 +51,14 @@
       - document = @scrap.document ||= @scrap.build_document()
       = f.fields_for :document, document do |df|
         = df.hidden_field :folder_id, :value => Droom::Folder.find_or_create_by_slug("Stream").id
-        .metadata
-          %p.name
-            = df.text_field :name, :class => 'name', :placeholder => t(:"activerecord.attributes.droom.document.name")
-        .filepicker{ :data => { :form => "form.scrap", :affected => "#scraps", :popup => ".scrapup" } }
+        .filemark.filepicker{ :data => { :form => "form.scrap", :affected => "#scraps", :popup => ".scrapup" } }
           = link_to "choose file", "#", :class => "ul minimal #{document.file_extension}"
           = df.file_field :file, :class => "file"
           %p.tip
             = t :click_to_choose_file
+        .summary
+          %p.name
+            = df.text_field :name, :class => 'name', :placeholder => t(:"activerecord.attributes.droom.document.name")
 
     .caption
       %p
