@@ -1700,6 +1700,8 @@ ul.people
         background-position: 0 -48px
       &.quote
         background-position: 0 -96px
+      &.link
+        background: none
     a
       color: $mid
       +hover
@@ -1855,10 +1857,13 @@ div.scrapup
     p.name
       margin-bottom: 0
       margin-top: 20px
-      font-size: 2em
       line-height: 1.2
-      a.dl
+      a.dl, .eventname
+        font-size: 1.4em
         max-height: 50px
+      span.note
+        display: block
+        margin-left: 50px
     p.practicalities
       margin-top: 2px
 
@@ -1935,21 +1940,13 @@ div.scrapup
           p.name
             margin: 10px 0
         input.name
-          width: 400px
+          width: 350px
           font-size: 2.4em
-        p.practicalities
-          margin: 5px 0 0 70px
-          input.timepicker
-            font-size: 1.2em
-            width: 70px
-          input.venuepicker
-            font-size: 1.2em
-            width: 200px
         p.url
           margin: 10px 0 0 70px
           input.url
             font-size: 1.2em
-            width: 400px
+            width: 350px
         
       .caption
         textarea
