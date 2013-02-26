@@ -18,7 +18,7 @@ jQuery ($) ->
   #
   $.fn.popup = () ->
     @each ->
-      new Popup(@)          
+      new Popup(@)
           
   class Popup
     constructor: (element) ->
@@ -43,10 +43,15 @@ jQuery ($) ->
           @reset()
           @prepare()
 
+    getContainer: () =>
+      $('<div class="popup" />')
+
     prepare: () =>
       @_mask = $('<div class="mask" />').appendTo($('body'))
-      @_container = $('<div class="popup" />')
-      @_container.bind "resize", @place
+      @_container = @getContainer()
+      @_container.bind 'close', @hide
+      @_container.bind 'complete', @conclude
+      @_container.bind 'resize', @place
       @_container.insertAfter(@_mask).hide()
 
     receive: (data) =>
@@ -60,7 +65,6 @@ jQuery ($) ->
       @_content = $(data)
       @_container.empty()
       @_container.append(@_content)
-      @_container.bind 'close', @hide
       @_content.activate()
       @_header = @_content.find('.header')
       @_content.find('form').remote
@@ -131,11 +135,8 @@ jQuery ($) ->
       new Scrapup(@)
 
   class Scrapup extends Popup
-    prepare: () =>
-      @_mask = $('<div class="mask" />').appendTo($('body'))
-      @_container = $('<div class="scrapup" />')
-      @_container.bind "resize", @place
-      @_container.insertAfter(@_mask).hide()
+    getContainer: () =>
+      $('<div class="scrapup" />')
 
     display: (data) =>
       super

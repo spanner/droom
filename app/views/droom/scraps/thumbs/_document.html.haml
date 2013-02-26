@@ -1,0 +1,8 @@
+- if document = scrap.document
+  = link_to "document:", document_url(document), :class => "#{document.file_extension} icon"
+  = link_to document.name, document_url(document), :class => "external", :target => "_scrap"
+  = action_menulink(scrap, :class => "small")
+  %span.caption
+    = shorten(scrap.note, 140)
+  = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+  = action_menu(scrap)

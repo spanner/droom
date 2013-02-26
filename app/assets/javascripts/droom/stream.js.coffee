@@ -10,7 +10,6 @@ jQuery ($) ->
       if $(@).is('checked')
         scrapform.setType($(@).val())
 
-
   class ScrapForm
     constructor: (element) ->
       @_container = $(element)
@@ -21,8 +20,9 @@ jQuery ($) ->
       @_caption = @_fields.find('.caption')
       @_image = @_fields.find('.upload')
       @_event = @_fields.find('.scrapevent')
+      @_document = @_fields.find('.scrapdocument')
       @setType()
-    
+
     setType: () =>
       scraptype = @_header.find('input:radio:checked').val()
       @_fields.attr("class", "fields #{scraptype}")
@@ -43,19 +43,31 @@ jQuery ($) ->
           @imageBased()
         when "event"
           @eventBased()
-      
+        when "document"
+          @documentBased()
+
     imageBased: () =>
-      @_image.show().find('input').prop('disabled', false);
-      @_event.hide().find('input').prop('disabled', true);
-      @_body.hide().find('input, textarea').prop('disabled', true);
+      @_image.show().find('input').prop('disabled', false)
+      @_document.remove().find('input').prop('disabled', true)
+      @_event.hide().find('input').prop('disabled', true)
+      @_body.hide().find('input, textarea').prop('disabled', true)
 
     textBased: () =>
-      @_image.hide().find('input').prop('disabled', true);
-      @_event.hide().find('input').prop('disabled', true);
-      @_body.show().find('input, textarea').prop('disabled', false);
+      @_image.hide().find('input').prop('disabled', true)
+      @_document.remove().find('input').prop('disabled', true)
+      @_event.hide().find('input').prop('disabled', true)
+      @_body.show().find('input, textarea').prop('disabled', false)
 
     eventBased: () =>
-      @_image.hide().find('input').prop('disabled', true);
-      @_event.show().find('input').prop('disabled', false);
-      @_body.hide().find('input, textarea').prop('disabled', true);
-        
+      @_image.hide().find('input').prop('disabled', true)
+      @_document.remove().find('input').prop('disabled', true)
+      @_event.show().find('input').prop('disabled', false)
+      @_body.hide().find('input, textarea').prop('disabled', true)
+
+    documentBased: () =>
+      @_image.hide().find('input').prop('disabled', true)
+      @_fields.prepend @_document
+      @_document = @_fields.find('.scrapdocument').activate()
+      @_document.show().find('input').prop('disabled', false)
+      @_event.hide().find('input').prop('disabled', true)
+      @_body.hide().find('input, textarea').prop('disabled', true)

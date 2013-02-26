@@ -4,6 +4,9 @@ module Droom
     belongs_to :event, :class_name => "Droom::Event"
     accepts_nested_attributes_for :event
 
+    belongs_to :document, :class_name => "Droom::Document", :dependent => :destroy
+    accepts_nested_attributes_for :document
+
     has_upload :image, 
                :geometry => "580x326#",
                :styles => {
@@ -22,7 +25,7 @@ module Droom
       [:name, :body]
     end
 
-    attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by, :event, :event_attributes
+    attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by, :event, :event_attributes, :document, :document_attributes
     before_save :get_youtube_thumbnail
 
     scope :by_date, order("droom_scraps.created_at DESC")

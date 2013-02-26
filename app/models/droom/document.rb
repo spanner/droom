@@ -3,7 +3,7 @@ require 'dropbox_sdk'
 
 module Droom
   class Document < ActiveRecord::Base
-    attr_accessible :name, :file, :description, :folder
+    attr_accessible :name, :file, :description, :folder, :folder_id
 
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder

@@ -78,7 +78,7 @@ jQuery ($) ->
         $(document).unbind "click", @hide
         @holder.hide()
 
-  $.fn.time_picker = () ->
+  $.fn.time_picker = ->
     @each ->
       new TimePicker(@)
 
@@ -88,7 +88,9 @@ jQuery ($) ->
   class FilePicker
     constructor: (element) ->
       @_container = $(element)
-      @_form = @_container.parent()
+      @_form = if form = @_container.attr("data-form") then $(form) else @_container.parent()
+      if popup = @_container.attr("data-popup")
+        @_popup = $(popup)
       @_holder = @_form.parent()
       @_link = @_container.find('a.ul')
       @_filefield = @_container.find('input[type="file"]')
@@ -110,24 +112,25 @@ jQuery ($) ->
         @showSelection() if @_file
 
     submit: (e) =>
-      if @_file
-        e.preventDefault() if e
-        @_fields.hide()
-        @_notifier = $('<div class="notifier"></div>').appendTo @_form
-        @_label = $('<h3 class="filename"></h3>').appendTo @_notifier
-        @_progress = $('<div class="progress"></div>').appendTo @_notifier
-        @_bar = $('<div class="bar"></div>').appendTo @_progress
-        @_status = $('<div class="status"></div>').appendTo @_notifier
-        @_label.text(@_filename)
-        @send()
-      
-    showSelection: () =>
+      unless @_filefield.attr("disabled")
+        if @_file
+          e.preventDefault() if e
+          @_fields.hide()
+          @_notifier = $('<div class="notifier"></div>').appendTo @_form
+          @_label = $('<h3 class="filename"></h3>').appendTo @_notifier
+          @_progress = $('<div class="progress"></div>').appendTo @_notifier
+          @_bar = $('<div class="bar"></div>').appendTo @_progress
+          @_status = $('<div class="status"></div>').appendTo @_notifier
+          @_label.text(@_filename)
+          @send()
+
+    showSelection: =>
       @_filename = @_file.name.split(/[\/\\]/).pop()
       @_ext = @_filename.split('.').pop()
       @_link.addClass(@_ext) if @_ext in @_extensions
       $('input.name').val(@_filename)# if $('input.name').val() is ""
 
-    send: () =>
+    send: =>
       formData = new FormData @_form.get(0)
       @xhr = new XMLHttpRequest()
       @xhr.onreadystatechange = @update
@@ -143,16 +146,15 @@ jQuery ($) ->
         full_width = @_progress.width()
         progress_width = Math.round(full_width * e.loaded / e.total)
         @_bar.width progress_width
-      
-    update: () =>
+
+    update: =>
       if @xhr.readyState == 4
         if @xhr.status == 200
+          response = @xhr.responseText
           @_form.remove()
-          @_holder.append(@xhr.responseText).delay(5000).slideUp()
-          #todo: remove this nasty shortcut and integrate with RemoteForm and jquery_ujs
-          #(which will require us to prevent form serialization in some way)
-          $('.documents').trigger("refresh")
-    
+          # @_holder.append(response).delay(5000).slideUp()
+          @_popup?.trigger "complete", response
+
     finish: (e) =>
       @_status.text("Processing")
       @_bar.css

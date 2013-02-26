@@ -1,0 +1,5 @@
+- if document = scrap.document
+  .body.scrapdocument
+    = link_to "document:", document_url(document), :class => "#{document.file_extension} icon"
+
+  = render "droom/scraps/caption", :scrap => scrap

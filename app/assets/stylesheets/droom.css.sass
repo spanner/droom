@@ -1635,6 +1635,17 @@ ul.people
     position: relative
     clear: left
     margin-bottom: 25px
+    &.document
+      a.icon
+        background:
+          position: 0 0
+          image: image-url('droom/icons.png')
+        &.pdf
+          background-position: 0 -48px
+        &.doc, &.docx
+          background-position: 0 -96px
+        &.xls, &.xlsx
+          background-position: 0 -144px
     a.thumb
       height: 18px
     a.icon
@@ -1811,7 +1822,21 @@ div.scrapup
       overflow: hidden
     p.attribution
       color: lighten($mid, 10)
-
+  div.scrapdocument
+    position: relative
+    margin: 40px 0 0 0
+    overflow: auto
+    background-color: $verypale
+    height: 326px
+    .filepicker
+      margin-top: 5px
+      input[type="file"]
+        display: none
+      p.tip
+        font-size: 0.65em
+        line-height: 1.1
+        color: $pale
+        margin: 0 5px
   div.scrapevent
     position: relative
     margin: 40px 0 0 0
@@ -1846,7 +1871,7 @@ div.scrapup
       margin: 0
       li
         display: inline-block
-        margin-right: 5px
+        margin-right: 3px
         font-size: 80%
         label
           display: inline-block
@@ -1894,7 +1919,7 @@ div.scrapup
         textarea
           height: 290px
           line-height: 1.2
-      .scrapevent
+      .scrapevent, .scrapdocument
         display: none
         // margin: 20px 10px 10px 10px
         .summary
@@ -1946,9 +1971,14 @@ div.scrapup
         p.body
           display: none
       &.event
-        .event
+        .scrapevent
           display: block
-        .upload, .body
+        .upload, .body, .scrapdocument
+          display: none
+      &.document
+        .scrapdocument
+          display: block
+        .upload, .body, .scrapevent
           display: none
     .buttons
       margin: 10px 20px 20px 20px

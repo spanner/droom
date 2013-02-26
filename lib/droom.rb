@@ -104,7 +104,7 @@ module Droom
     end
     
     def scrap_types
-      @@scrap_types ||= %w{image video text quote link event}
+      @@scrap_types ||= %w{image video text quote link event document}
     end
 
     # base path of DAV directory tree, relative to rails root.
