@@ -45,20 +45,17 @@ jQuery ($) ->
           @eventBased()
       
     imageBased: () =>
-      @_image.find('input').prop('disabled', false);
-      @_image.show()
-      @_event.hide()
-      @_body.hide()
+      @_image.show().find('input').prop('disabled', false);
+      @_event.hide().find('input').prop('disabled', true);
+      @_body.hide().find('input, textarea').prop('disabled', true);
 
     textBased: () =>
-      @_image.find('input').prop('disabled', true);
-      @_image.hide()
-      @_event.hide()
-      @_body.show()
+      @_image.hide().find('input').prop('disabled', true);
+      @_event.hide().find('input').prop('disabled', true);
+      @_body.show().find('input, textarea').prop('disabled', false);
 
     eventBased: () =>
-      @_image.find('input').prop('disabled', true);
-      @_image.hide()
-      @_event.show()
-      @_body.hide()
+      @_image.hide().find('input').prop('disabled', true);
+      @_event.show().find('input').prop('disabled', false);
+      @_body.hide().find('input, textarea').prop('disabled', true);
         
