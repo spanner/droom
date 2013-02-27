@@ -1085,6 +1085,7 @@ jQuery ($) ->
     constructor: () ->
       super
       @target = $('textarea#scrap_body')
+      @thumb = $('.scrapvideo .thumb')
 
     suggest: (suggestions) =>
       @button.removeClass "waiting"
@@ -1108,9 +1109,14 @@ jQuery ($) ->
       e.preventDefault() if e
       selection ?= $(@suggestions.get(@suggestion))
       if @options.fill_field?
-        @prompt.val suggestion.prompt
         @target.val suggestion.value
         @prompt.trigger 'suggester.change'
+        @thumb.empty().append $("<img class='main_thumb' src='#{suggestion.thumb_url}'/>")
+        minithumbs = $('<div class="mini_thumbs" />')
+        for mini in suggestion.mini_thumbs
+          minithumbs.append $("<img src='#{mini}' />")
+        @thumb.append minithumbs
+        @thumb.append $("<p>#{suggestion.prompt}</p>")
       else if @options.empty_field?
         @target.val ""
       # if @options.submit_form?

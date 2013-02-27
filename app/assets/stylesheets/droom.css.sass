@@ -392,6 +392,8 @@ a.dl, a.ul
   display: inline-block
   min-height: 50px
   padding-top: 4px
+  text-indent: 60px
+  line-height: 50px
   background:
     position: 0 -10px
     repeat: no-repeat
@@ -405,9 +407,8 @@ a.dl, a.ul
   &.minimal
     width: 50px
     height: 50px
-    text-indent: 60px
-    line-height: 50px
     overflow: hidden
+
 
 span.icon
   display: block
@@ -1638,14 +1639,14 @@ ul.people
     &.document
       a.icon
         background:
-          position: 0 0
+          position: 3px 0
           image: image-url('droom/icons.png')
         &.pdf
-          background-position: 0 -48px
+          background-position: 3px -48px
         &.doc, &.docx
-          background-position: 0 -96px
+          background-position: 3px -96px
         &.xls, &.xlsx
-          background-position: 0 -144px
+          background-position: 3px -144px
     a.thumb
       height: 18px
     a.icon
@@ -1699,12 +1700,14 @@ ul.people
         background-position: 0 -48px
       &.quote
         background-position: 0 -96px
+      &.link
+        background: none
     a
       color: $mid
       +hover
       &:hover, &.hover
         color: $hover
-    p.caption, p.scrapevent
+    p.caption, p.scrapevent, p.scrapdocument
       overflow: hidden
       line-height: 1.2
     span.attribution, span.caption
@@ -1731,10 +1734,10 @@ div.scrapup, div.popup
   +box_shadow(1px 3px 8px #52555f)
   .header
     position: relative
-    height: 40px
+    height: 28px
     overflow: hidden
     background-color: $text
-    padding: 8px 20px 4px 20px
+    padding: 8px 10px 4px 20px
   h2
     position: relative
     height: 24px
@@ -1782,7 +1785,7 @@ div.scrapup
     position: absolute
     top: 0
     left: 0
-    width: 540px
+    width: 550px
     a.next, a.prev, span.next, span.prev
       position: relative
       display: inline-block
@@ -1814,7 +1817,7 @@ div.scrapup
     margin-top: 40px
     overflow: hidden
     height: 326px
-    background-color: $verypale
+    background-color: white
     p
       margin: 10px 20px
       font-size: 1.5em
@@ -1822,12 +1825,8 @@ div.scrapup
       overflow: hidden
     p.attribution
       color: lighten($mid, 10)
+      
   div.scrapdocument
-    position: relative
-    margin: 40px 0 0 0
-    overflow: auto
-    background-color: $verypale
-    height: 326px
     .filepicker
       margin-top: 5px
       input[type="file"]
@@ -1839,26 +1838,66 @@ div.scrapup
         margin: 0 5px
   div.scrapvideo
     position: relative
-    margin: 40px 0 0 0
+    margin: 40px 20px 0 20px
     overflow: auto
-    background-color: $verypale
-    height: 326px
-  div.scrapevent
+    padding-top: 10px
+    background-color: white
+    height: 316px
+    .thumb
+      margin: 10px 0
+      img.main_thumb
+        float: left
+        width: 265px
+        padding: 3px
+        border-radius: 2px
+        border: 1px solid #aaa
+      .mini_thumbs
+        width: 60px
+        float: left
+        margin-left: 5px
+        img
+          width: 55px
+          margin-bottom: 3px
+          padding: 1px
+          border-radius: 2px
+          border: 1px solid #aaa
+      p
+        float: left
+        width: 165px
+        margin-left: 10px
+    .icon
+      width: 60px
+      height: 60px
+      background:
+        image: url("droom/youtube_icon.png")
+        size: 60px
+      float: left
+      margin: 10px 10px 0 0
+  div.scrapevent, div.scrapdocument
     position: relative
-    margin: 40px 0 0 0
+    margin: 40px 40px 0 60px
     overflow: auto
-    background-color: $verypale
-    height: 326px
-    .datemark
+    padding-top: 126px
+    background-color: white
+    height: 200px
+    .datemark, .filemark
       float: left
       width: 50px
       margin: 15px 10px 0 10px
       color: $input
-    h3
+    p.name
       margin-bottom: 0
+      margin-top: 20px
+      line-height: 1.2
+      a.dl, .eventname
+        font-size: 1.4em
+        max-height: 50px
+      span.note
+        display: block
+        margin-left: 50px
     p.practicalities
       margin-top: 2px
-      
+
   div.caption
     p.scrapnote
       min-height: 2em
@@ -1886,6 +1925,7 @@ div.scrapup
           padding-left: 34px
           color: white
           overflow: hidden
+          font-size: 0.9em
           background:
             repeat: no-repeat
             position: 0 0
@@ -1925,29 +1965,25 @@ div.scrapup
         textarea
           height: 290px
           line-height: 1.2
-      .scrapevent, .scrapdocument, .scrapvideo
+      .scrapevent, .scrapdocument
         display: none
-        // margin: 20px 10px 10px 10px
         .summary
           p.name
             margin: 10px 0
         input.name
-          width: 482px
+          width: 350px
           font-size: 2.4em
-        p.practicalities
-          margin: 5px 0 0 70px
-          input.timepicker
-            font-size: 1.2em
-            width: 70px
-          input.venuepicker
-            font-size: 1.2em
-            width: 200px
         p.url
           margin: 10px 0 0 70px
           input.url
             font-size: 1.2em
-            width: 482px
-            
+            width: 350px
+      .scrapvideo
+        display: none
+        input.name
+          width: 440px
+          font-size: 1.8em
+        
       .caption
         textarea
           height: 80px
@@ -1977,12 +2013,13 @@ div.scrapup
         p.body
           display: none
       &.event
-        margin-bottom: 0
+        margin-bottom: 10px
         .scrapevent
           display: block
         .upload, .body, .scrapdocument, .scrapvideo
           display: none
       &.document
+        margin-bottom: 10px
         .scrapdocument
           display: block
         .upload, .body, .scrapevent, .scrapvideo
@@ -1990,9 +2027,6 @@ div.scrapup
       &.video
         .scrapvideo
           display: block
-          input
-            height: 50px
-            width: 530px
           li
             a
               padding: 4px 4px 4px 15px

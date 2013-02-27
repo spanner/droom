@@ -18,7 +18,13 @@ module Droom
             :type => 'video',
             :prompt => vid.title,
             :value => vid.unique_id,
-            :thumb_url => vid.thumbnails.first.url
+            :thumb_url => vid.thumbnails[2].url,
+            :mini_thumbs => [
+              vid.thumbnails[0].url,
+              vid.thumbnails[3].url,
+              vid.thumbnails[4].url,
+              vid.thumbnails[5].url
+            ]
           }
           @suggestions.push sug
         end

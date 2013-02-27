@@ -6,19 +6,10 @@
       %span.year= event.start.strftime('%Y')
 
   %p.scrapevent
-    - if event.url
-      = link_to shorten(event.name, 90), event.url_with_protocol, :class => "name"
-    - else
-      = link_to shorten(event.name, 90), droom.scrap_url(scrap), :data => {:action => "scrapup"}
-    %br
-      = l(event.start_time, :format => :natural)
-      - if event.finish?
-        = t :to
-        = l(event.finish_time, :format => :natural)
-      - if event.venue
-        %span.location
-          = t(:at)
-          = event.venue.proper_name
+    = link_to shorten(event.name, 90), droom.scrap_url(scrap), :data => {:action => "scrapup"}
+    - if scrap.event.url
+      = link_to "&rarr;".html_safe, scrap.event.url_with_protocol
+    = action_menulink(scrap, :class => "small")
     - if scrap.note
       %span.caption
         = shorten(scrap.note, 140)
