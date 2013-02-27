@@ -9,6 +9,7 @@
     = link_to shorten(event.name, 90), droom.scrap_url(scrap), :data => {:action => "scrapup"}
     - if scrap.event.url
       = link_to "&rarr;".html_safe, scrap.event.url_with_protocol
+    = action_menulink(scrap, :class => "small")
     - if scrap.note
       %span.caption
         = shorten(scrap.note, 140)
