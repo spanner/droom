@@ -1837,6 +1837,12 @@ div.scrapup
         line-height: 1.1
         color: $pale
         margin: 0 5px
+  div.scrapvideo
+    position: relative
+    margin: 40px 0 0 0
+    overflow: auto
+    background-color: $verypale
+    height: 326px
   div.scrapevent
     position: relative
     margin: 40px 0 0 0
@@ -1919,7 +1925,7 @@ div.scrapup
         textarea
           height: 290px
           line-height: 1.2
-      .scrapevent, .scrapdocument
+      .scrapevent, .scrapdocument, .scrapvideo
         display: none
         // margin: 20px 10px 10px 10px
         .summary
@@ -1971,14 +1977,28 @@ div.scrapup
         p.body
           display: none
       &.event
+        margin-bottom: 0
         .scrapevent
           display: block
-        .upload, .body, .scrapdocument
+        .upload, .body, .scrapdocument, .scrapvideo
           display: none
       &.document
         .scrapdocument
           display: block
-        .upload, .body, .scrapevent
+        .upload, .body, .scrapevent, .scrapvideo
+          display: none
+      &.video
+        .scrapvideo
+          display: block
+          input
+            height: 50px
+            width: 530px
+          li
+            a
+              padding: 4px 4px 4px 15px
+            img
+              width: 50px
+        .upload, .body, .scrapevent, .scrapdocument
           display: none
     .buttons
       margin: 10px 20px 20px 20px

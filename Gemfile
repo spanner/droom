@@ -32,6 +32,7 @@ gem 'osgb', :git => 'git://github.com/spanner/osgb.git'#:path => "/var/www/gems/
 gem 'devise'
 gem 'devise-encryptable'
 gem 'kaminari'
+gem 'youtube_it'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

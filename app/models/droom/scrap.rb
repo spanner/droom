@@ -54,7 +54,7 @@ module Droom
         'text'
       end
     end
-  
+
     def text_size
       if l = body.length
         ((560.0/(1.4 * l+150.0)) + 0.25) / 1.5

@@ -839,6 +839,17 @@ jQuery ($) ->
       new Suggester(@, options)
     @
 
+  $.fn.video_picker = (options) ->
+    options = $.extend(
+      submit_form: true
+      threshold: 3
+      type: "video"
+    , options)
+    @each ->
+      new YoutubeSuggester(@, options)
+    @
+
+
   $.fn.venue_picker = (options) ->
     options = $.extend(
       submit_form: false
@@ -922,11 +933,11 @@ jQuery ($) ->
       @suggestion = null
       @cache = {}
       @blanks = []
-      
       @prompt.keyup @keyed
+      @prompt.bind "paste", @get
       @form.submit @hide
       @
-      
+
     place: () =>
       @container.css
         top: @prompt.position().top + @prompt.outerHeight() - 2
@@ -952,7 +963,7 @@ jQuery ($) ->
         else if @previously_blank(query)
           @suggest []
         else
-          @request.abort()  if @request
+          @request.abort() if @request
           @request = $.getJSON(@options.url, "term=" + encodeURIComponent(query) + "&limit=" + @options.limit, (suggestions) =>
             @cache[query] = suggestions
             @blanks.push query if suggestions.length is 0
@@ -1070,5 +1081,42 @@ jQuery ($) ->
         return blank_re.test(query)
       false
 
+  class YoutubeSuggester extends Suggester
+    constructor: () ->
+      super
+      @target = $('textarea#scrap_body')
+
+    suggest: (suggestions) =>
+      @button.removeClass "waiting"
+      @show()
+      if suggestions.length > 0
+        $.each suggestions, (i, suggestion) =>
+          link = $("<a href=\"#\"><img src='#{suggestion.thumb_url}'></img>#{suggestion.prompt}</a>")
+          value = suggestion.value || suggestion.prompt
+          link.hover () =>
+            @hover(link)
+            link.click (e) =>
+              @select(e, link, suggestion)
+          $("<li></li>").addClass(suggestion.type).append(link).appendTo @container
+
+        @suggestions = @container.find("a")
+      else
+        @hide()
+      @options.afterSuggest.call @, suggestions  if @options.afterSuggest
+
+    select: (e, selection, suggestion) =>
+      e.preventDefault() if e
+      selection ?= $(@suggestions.get(@suggestion))
+      if @options.fill_field?
+        @prompt.val suggestion.prompt
+        @target.val suggestion.value
+        @prompt.trigger 'suggester.change'
+      else if @options.empty_field?
+        @target.val ""
+      # if @options.submit_form?
+      #   @form.submit()
+      @options.afterSelect.call(@, value) if @options.afterSelect
+      @hide()
+    
 
 

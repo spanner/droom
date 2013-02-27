@@ -84,6 +84,8 @@ module Droom
     belongs_to :user, :class_name => "Droom::User", :dependent => :destroy
     before_save :update_user
 
+    after_create :invite_if_instructed
+
     scope :unusered, where("user_id IS NULL")
     scope :usered, where("user_id IS NOT NULL")
 

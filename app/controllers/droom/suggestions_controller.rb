@@ -10,6 +10,18 @@ module Droom
       max = params[:limit] || 10
       if fragment.blank?
         @suggestions = []
+      elsif params[:type] and params[:type] == "video"
+        videos = Droom.yt_client.videos_by(:query => fragment, :per_page => max).videos
+        @suggestions = []
+        videos.each do |vid|
+          sug = {
+            :type => 'video',
+            :prompt => vid.title,
+            :value => vid.unique_id,
+            :thumb_url => vid.thumbnails.first.url
+          }
+          @suggestions.push sug
+        end
       else
         if @types.include?('event') && fragment.length > 6 && span = Chronic.parse(fragment, :guess => false)
           @suggestions = Droom::Event.falling_within(span).visible_to(@current_person)
@@ -21,8 +33,13 @@ module Droom
         end
       end
       respond_with @suggestions do |format|
+          
         format.json {
-          render :json => @suggestions.map(&:as_suggestion).to_json
+          if params[:type] == "video"
+            render :json => @suggestions.to_json
+          else
+            render :json => @suggestions.map(&:as_suggestion).to_json
+          end
         }
         format.js {
           render :partial => "droom/shared/suggestions"

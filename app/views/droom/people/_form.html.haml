@@ -45,10 +45,10 @@
         = f.check_box :admin_user
         = f.label :admin_user
 
-    %p.organisation
-      = f.label :organisation_id, :class => "optional"
-      %br
-      = f.select :organisation_id, Droom::Organisation.for_selection
+    / %p.organisation
+    /   = f.label :organisation_id, :class => "optional"
+    /   %br
+    /   = f.select :organisation_id, Droom::Organisation.for_selection
   
   .buttons
     - if current_user.is_person?(@person)
