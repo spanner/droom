@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'dropbox_sdk'
+require 'yomu'
 
 module Droom
   class Document < ActiveRecord::Base
@@ -101,7 +102,11 @@ module Droom
     end
 
     def index
-      Sunspot.index!(self)
+      begin
+        Sunspot.index!(self)
+      rescue Errno::ECONNREFUSED, Timeout::Error => e
+        Rails.logger.warn "Solr server has gone away: #{file_file_name}: #{e}"
+      end
     end
     
     def copy_to_dropbox(user)
@@ -122,17 +127,19 @@ module Droom
       self.folder.destroy if self.folder && self.folder.empty?
     end
 
-    def halt_unless_pdf
-      false unless file_extension == 'pdf'
+    def extract_text
+      data = File.read file.queued_for_write[:original].path
+      begin
+        self.extracted_text = Yomu.read :text, data
+      rescue Exception => e
+        Rails.logger.warn "Failed to parse document metadata from #{file_file_name}: #{e}"
+      end
+      begin
+        self.extracted_metadata = Yomu.read :metadata, data
+      rescue Exception => e
+        Rails.logger.warn "Failed to parse document text from #{file_file_name}: #{e}"
+      end
     end
 
-    def extract_text
-      require 'yomu'
-      data = File.read "#{file.queued_for_write[:original].path}"
-      plain_text = Yomu.read :text, data
-      metadata = Yomu.read :metadata, data
-      # Rails.logger.warn ">>> metadata => #{metadata}"
-      self.extracted_text = plain_text #text column to hold the extracted text for searching
-    end
   end
 end
