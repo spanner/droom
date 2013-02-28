@@ -952,6 +952,7 @@ jQuery ($) ->
     pend: () =>
       @place()
       @reset()
+      @prompt.addClass "waiting"
       @button.addClass "waiting"
 
     get: (e) =>
@@ -974,6 +975,7 @@ jQuery ($) ->
 
     suggest: (suggestions) =>
       @button.removeClass "waiting"
+      @prompt.removeClass "waiting"
       @show()
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
@@ -1089,6 +1091,7 @@ jQuery ($) ->
 
     suggest: (suggestions) =>
       @button.removeClass "waiting"
+      @prompt.removeClass "waiting"
       @show()
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
@@ -1112,10 +1115,6 @@ jQuery ($) ->
         @target.val suggestion.value
         @prompt.trigger 'suggester.change'
         @thumb.empty().append $("<img class='main_thumb' src='#{suggestion.thumb_url}'/>")
-        minithumbs = $('<div class="mini_thumbs" />')
-        for mini in suggestion.mini_thumbs
-          minithumbs.append $("<img src='#{mini}' />")
-        @thumb.append minithumbs
         @thumb.append $("<p>#{suggestion.prompt}</p>")
       else if @options.empty_field?
         @target.val ""
