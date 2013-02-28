@@ -51,9 +51,9 @@ module Droom
 
     scope :with_latest_event, 
       select('droom_documents.*, droom_categories.name AS category_name, droom_events.id AS latest_event_id, droom_events.name AS latest_event_name')
-        .joins('LEFT OUTER JOIN droom_document_attachments AS dda ON droom_documents.id = dda.document_id 
-                LEFT OUTER JOIN droom_categories ON dda.category_id = droom_categories.id
-                LEFT OUTER JOIN droom_events ON dda.attachee_id = droom_events.id AND dda.attachee_type = "Droom::Event"')
+        .joins('LEFT OUTER JOIN droom_document_attachments AS da ON droom_documents.id = da.document_id 
+                LEFT OUTER JOIN droom_categories ON da.category_id = droom_categories.id
+                LEFT OUTER JOIN droom_events ON da.attachee_id = droom_events.id AND da.attachee_type = "Droom::Event"')
         .group('droom_documents.id')
 
     # so that we can apply the joined finders above to an existing object
