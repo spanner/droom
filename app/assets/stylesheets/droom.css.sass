@@ -937,13 +937,21 @@ ul.suggestions
     &.video
       clear: left
       margin-bottom: 4px
-      font-size: 0.8em
+      line-height: 1.2
+      span.title
+        font-weight: bold
+        margin-top: 2px
+      span.description
+        white-space: nowrap
+        color: $pale
+        font-size: 0.8em
       a
-        padding: 8px
+        padding: 8px 6px 6px 6px
       img
         width: 50px
         float: left
         margin-right: 5px
+        margin-top: -2px
       
     
 ul.suggestion_search
@@ -1726,12 +1734,13 @@ a.minidatemark
     span.attribution, span.caption
       color: $pale
       display: block
-    span.credit
-      display: block
-      font-size: 90%
-      font-weight: bold
-      color: $mid
-      margin-top: 4px
+
+span.credit
+  display: block
+  font-size: 90%
+  font-weight: bold
+  color: $mid
+  margin-top: 4px
 
 
 div.scrapup, div.popup
@@ -1857,13 +1866,16 @@ div.scrapup
     padding-top: 10px
     background-color: white
     height: 316px
-    .preview
+    .thumb
       margin: 10px 0
-      object
+      img.main_thumb, iframe.thumb
         float: left
+        width: 265px
+        height: 200px
+        margin: 0 10px 0 70px
       p
         float: left
-        margin: 0 0 0 10px
+        margin: 0
         width: 170px
     .icon
       width: 60px

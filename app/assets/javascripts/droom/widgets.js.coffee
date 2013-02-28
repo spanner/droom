@@ -839,16 +839,6 @@ jQuery ($) ->
       new Suggester(@, options)
     @
 
-  $.fn.video_picker = (options) ->
-    options = $.extend(
-      submit_form: true
-      threshold: 3
-      type: "video"
-    , options)
-    @each ->
-      new YoutubeSuggester(@, options)
-    @
-
 
   $.fn.venue_picker = (options) ->
     options = $.extend(
@@ -1083,6 +1073,21 @@ jQuery ($) ->
         return blank_re.test(query)
       false
 
+
+
+
+  $.fn.video_picker = (options) ->
+    options = $.extend(
+      submit_form: true
+      threshold: 3
+      type: "video"
+      url: "/videos.json"
+    , options)
+    @each ->
+      new YoutubeSuggester(@, options)
+    @
+
+
   class YoutubeSuggester extends Suggester
     constructor: () ->
       super
@@ -1092,36 +1097,29 @@ jQuery ($) ->
     suggest: (suggestions) =>
       @button.removeClass "waiting"
       @prompt.removeClass "waiting"
-      @show()
+      console.log "yt suggest", suggestions
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
-          link = $("<a href=\"#\"><img src='#{suggestion.thumb_url}'></img>#{suggestion.prompt}</a>")
+          link = $("<a href=\"/videos/#{suggestion.unique_id}.js\"><img src='#{suggestion.thumbnails[2].url}' /><span class=\"title\">#{suggestion.title.truncate(36)}</span><br /><span class=\"description\">#{suggestion.description.truncate(48)}</span></a>")
           value = suggestion.value || suggestion.prompt
+          link.remote
+            on_success: (response) =>
+              @select(response, suggestion)
           link.hover () =>
             @hover(link)
-            link.click (e) =>
-              @select(e, link, suggestion)
-          $("<li></li>").addClass(suggestion.type).append(link).appendTo @container
-
+          $("<li></li>").addClass("video").append(link).appendTo(@container)
         @suggestions = @container.find("a")
+        @show()
       else
         @hide()
       @options.afterSuggest.call @, suggestions  if @options.afterSuggest
 
-    select: (e, selection, suggestion) =>
-      e.preventDefault() if e
-      selection ?= $(@suggestions.get(@suggestion))
-      if @options.fill_field?
-        @target.val suggestion.value
-        @prompt.trigger 'suggester.change'
-        @thumb.empty().append $("<img class='main_thumb' src='#{suggestion.thumb_url}'/>")
-        @thumb.append $("<p>#{suggestion.prompt}</p>")
-      else if @options.empty_field?
-        @target.val ""
-      # if @options.submit_form?
-      #   @form.submit()
-      @options.afterSelect.call(@, value) if @options.afterSelect
+    select: (response, selection) =>
       @hide()
+      @prompt.trigger 'suggester.change'
+      @target.val selection.unique_id
+      @thumb.empty().html(response)
+      @options.afterSelect?.call(@, value)
     
 
 
