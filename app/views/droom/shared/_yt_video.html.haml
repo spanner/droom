@@ -1,7 +1,4 @@
 - video ||= @video
 %img.main_thumb{ :src => video[:thumb_url] }
-.mini_thumbs
-  - video[:mini_thumbs].each do |mini|
-    %img{ :src => mini }
 %p
   = video[:title]
