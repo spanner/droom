@@ -63,6 +63,11 @@ module Droom
     # Events differ from other models in that they are visible to all unless marked 'private'.
     # The documents attached to them are only visible to all if marked 'public'.
     #
+    scope :all_private, where("private = 1")
+    scope :not_private, where("private <> 1 OR private IS NULL")
+    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
+    scope :not_public, where("public <> 1 OR private = 1)")
+
     scope :visible_to, lambda { |person|
       if person
         select('droom_events.*')
@@ -124,11 +129,6 @@ module Droom
       select("droom_events.*")
         .joins("INNER JOIN droom_document_attachments ON droom_events.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Event'")
         .group("droom_events.id")
-
-    scope :all_private, where("private = 1 OR private = 't'")
-    scope :not_private, where("private = 0 OR private = 'f'")
-    scope :all_public, where("public = 1 OR public = 't'")
-    scope :not_public, where("public = 0 OR public = 'f'")
 
     scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"

@@ -80,6 +80,7 @@ module Droom
         if pfh && holder = send(pfh.to_sym)
           holder.folder
         else
+          # otherwise we want a root folder like /Events
           Droom::Folder.find_or_create_by_slug_and_parent_id(self.class.to_s.titlecase.split('/').last.pluralize, nil)
         end
       end

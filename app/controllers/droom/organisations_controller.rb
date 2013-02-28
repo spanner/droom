@@ -1,5 +1,5 @@
 module Droom
-  class OrganisationsController < ApplicationController
+  class OrganisationsController < Droom::EngineController
     respond_to :html
     layout :no_layout_if_pjax
     helper Droom::DroomHelper

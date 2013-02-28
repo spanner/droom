@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
 
     before_filter :authenticate_user!
-    before_filter :get_current_person
     before_filter :get_calendar, :only => :show
     before_filter :get_calendars, :only => :index
     before_filter :require_admin!, :except => :show

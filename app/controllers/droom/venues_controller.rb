@@ -3,7 +3,6 @@ module Droom
     respond_to :json, :html
   
     before_filter :authenticate_user!  
-    before_filter :get_current_person
     before_filter :get_venues, :only => ["index"]
     before_filter :get_venue, :only => [:show, :update]
 
@@ -32,7 +31,7 @@ module Droom
 
     def get_venue
       @venue = Venue.find(params[:id])
-      @events = @venue.events.visible_to(@current_person).future_and_current
+      @events = @venue.events.visible_to(current_person).future_and_current
     end
 
   end

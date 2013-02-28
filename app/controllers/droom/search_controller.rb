@@ -2,7 +2,6 @@ module Droom
   class SearchController < Droom::EngineController
     respond_to :json, :js, :html
     before_filter :authenticate_user!
-    before_filter :get_current_person
     before_filter :get_classes
     before_filter :get_fields
 

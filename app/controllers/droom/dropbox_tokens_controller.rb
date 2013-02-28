@@ -49,5 +49,13 @@ module Droom
       @dropbox_token = DropboxToken.find(params[:id])
     end
     
+    def get_dropbox_session
+      if session[:dropbox_session]
+        @dbsession = DropboxSession.deserialize(session[:dropbox_session])
+      else
+        @dbsession = DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
+      end
+    end
+    
   end
 end

@@ -22,10 +22,10 @@ module Droom
       text :extracted_text, :stored => true
     end
 
-    scope :all_private, where("secret = 1")
-    scope :not_private, where("secret <> 1")
-    scope :all_public, where("public = 1 AND secret <> 1")
-    scope :not_public, where("public <> 1 OR secret = 1)")
+    scope :all_private, where("private = 1")
+    scope :not_private, where("private <> 1 OR private IS NULL")
+    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
+    scope :not_public, where("public <> 1 OR private = 1)")
 
     scope :visible_to, lambda { |person|
       if person

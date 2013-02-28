@@ -10,6 +10,8 @@ module Droom
     before_filter :authenticate_user!
     before_filter :note_current_user
 
+    helper_method :current_person, :dropbox_session
+    
   protected
 
     def require_admin!
@@ -43,16 +45,14 @@ module Droom
       User.current = current_user
     end
 
-    def get_current_person
-      @current_person = current_user.person if current_user
+    def current_person
+      current_user.person if current_user
     end
     
-    def get_dropbox_session
-      if session[:dropbox_session]
-        @dbsession = DropboxSession.deserialize(session[:dropbox_session])
-      else
-        @dbsession = DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
-      end
+    def dropbox_session
+      # note that we usually don't want to pick up the existing dropbox session. That happens in the dropbox_tokens_controller, when
+      # following up an access token round trip, but in the view any existing session has probably expired and we're better off with a new one.
+      DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
     end
     
   end

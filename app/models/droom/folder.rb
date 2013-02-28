@@ -18,6 +18,11 @@ module Droom
     
     default_scope includes(:children, :documents)
 
+    scope :all_private, where("#{table_name}.private = 1")
+    scope :not_private, where("#{table_name}.private <> 1 OR #{table_name}.private IS NULL")
+    scope :all_public, where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL")
+    scope :not_public, where("#{table_name}.public <> 1 OR #{table_name}.private = 1)")
+
     scope :visible_to, lambda { |person|
       # if person
       #   select('droom_folders.*')
@@ -32,7 +37,7 @@ module Droom
 
     # A root folders is created automatically for each class that has_folder, 
     # the first time something in that class asks for its folder.
-    scope :roots, where('droom_folders.holder_type IS NULL AND droom_folders.parent_id IS NULL')
+    # scope :roots, where('droom_folders.holder_type IS NULL AND droom_folders.parent_id IS NULL')
 
     scope :loose, where('parent_id IS NULL')
 
@@ -44,12 +49,6 @@ module Droom
     scope :latest, lambda {|limit|
       order("updated_at DESC, created_at DESC").limit(limit)
     }
-
-    # These are going to be Droom.* configurable
-    scope :all_private, where("secret = 1")
-    scope :not_private, where("secret <> 1")
-    scope :all_public, where("public = 1 AND secret <> 1")
-    scope :not_public, where("public <> 1 OR secret = 1)")
 
     def name
       if holder
