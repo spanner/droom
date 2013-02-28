@@ -21,6 +21,8 @@ jQuery ($) ->
       @_image = @_fields.find('.upload')
       @_event = @_fields.find('.scrapevent')
       @_document = @_fields.find('.scrapdocument')
+      @_video = @_fields.find('.scrapvideo')
+      @_video.find('input').video_picker()
       @setType()
 
     setType: () =>
@@ -38,7 +40,7 @@ jQuery ($) ->
           @textBased()
         when "video"
           @_body.find('textarea').attr("placeholder", "Youtube ID")
-          @textBased()
+          @videoBased()
         when "image"
           @imageBased()
         when "event"
@@ -46,28 +48,34 @@ jQuery ($) ->
         when "document"
           @documentBased()
 
-    imageBased: () =>
+    imageBased: =>
       @_image.show().find('input').prop('disabled', false)
       @_document.remove().find('input').prop('disabled', true)
       @_event.hide().find('input').prop('disabled', true)
       @_body.hide().find('input, textarea').prop('disabled', true)
 
-    textBased: () =>
+    textBased: =>
       @_image.hide().find('input').prop('disabled', true)
       @_document.remove().find('input').prop('disabled', true)
       @_event.hide().find('input').prop('disabled', true)
       @_body.show().find('input, textarea').prop('disabled', false)
 
-    eventBased: () =>
+    eventBased: =>
       @_image.hide().find('input').prop('disabled', true)
       @_document.remove().find('input').prop('disabled', true)
       @_event.show().find('input').prop('disabled', false)
       @_body.hide().find('input, textarea').prop('disabled', true)
 
-    documentBased: () =>
+    documentBased: =>
       @_image.hide().find('input').prop('disabled', true)
       @_fields.prepend @_document
       @_document = @_fields.find('.scrapdocument').activate()
       @_document.show().find('input').prop('disabled', false)
       @_event.hide().find('input').prop('disabled', true)
       @_body.hide().find('input, textarea').prop('disabled', true)
+
+    videoBased: =>
+      @_image.hide().find('input').prop('disabled', true)
+      @_document.remove().find('input').prop('disabled', true)
+      @_event.hide().find('input').prop('disabled', true)
+      @_body.hide().find('input, textarea').prop('disabled', false)

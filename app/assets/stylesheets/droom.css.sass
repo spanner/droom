@@ -1828,11 +1828,6 @@ div.scrapup
       color: lighten($mid, 10)
       
   div.scrapdocument
-    position: relative
-    margin: 40px 0 0 0
-    overflow: auto
-    background-color: white
-    height: 226px
     .filepicker
       margin-top: 5px
       input[type="file"]
@@ -1842,7 +1837,43 @@ div.scrapup
         line-height: 1.1
         color: $pale
         margin: 0 5px
-        
+  div.scrapvideo
+    position: relative
+    margin: 40px 20px 0 20px
+    overflow: auto
+    padding-top: 10px
+    background-color: white
+    height: 316px
+    .thumb
+      margin: 10px 0
+      img.main_thumb
+        float: left
+        width: 265px
+        padding: 3px
+        border-radius: 2px
+        border: 1px solid #aaa
+      .mini_thumbs
+        width: 60px
+        float: left
+        margin-left: 5px
+        img
+          width: 55px
+          margin-bottom: 3px
+          padding: 1px
+          border-radius: 2px
+          border: 1px solid #aaa
+      p
+        float: left
+        width: 165px
+        margin-left: 10px
+    .icon
+      width: 60px
+      height: 60px
+      background:
+        image: url("droom/youtube_icon.png")
+        size: 60px
+      float: left
+      margin: 10px 10px 0 0
   div.scrapevent, div.scrapdocument
     position: relative
     margin: 40px 40px 0 60px
@@ -1948,6 +1979,11 @@ div.scrapup
           input.url
             font-size: 1.2em
             width: 350px
+      .scrapvideo
+        display: none
+        input.name
+          width: 440px
+          font-size: 1.8em
         
       .caption
         textarea
@@ -1981,13 +2017,23 @@ div.scrapup
         margin-bottom: 10px
         .scrapevent
           display: block
-        .upload, .body, .scrapdocument
+        .upload, .body, .scrapdocument, .scrapvideo
           display: none
       &.document
         margin-bottom: 10px
         .scrapdocument
           display: block
-        .upload, .body, .scrapevent
+        .upload, .body, .scrapevent, .scrapvideo
+          display: none
+      &.video
+        .scrapvideo
+          display: block
+          li
+            a
+              padding: 4px 4px 4px 15px
+            img
+              width: 50px
+        .upload, .body, .scrapevent, .scrapdocument
           display: none
     .buttons
       margin: 10px 20px 20px 20px

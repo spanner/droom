@@ -25,6 +25,13 @@
                 .note
                   = t :drop_to_upload
 
+    .scrapvideo
+      .icon
+      .summary
+        %p.name
+          %input.name{ :type => "text", :placeholder => "Search Youtube"}
+        .thumb
+
     .body
       %p
         = f.text_area :body, :placeholder => "Body text", :class => 'body', :data => {:action => "fit"}

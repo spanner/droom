@@ -19,6 +19,7 @@ module Droom
   mattr_accessor :root_path,
                  :suggestible_classes,
                  :searchable_classes,
+                 :yt_client,
                  :layout,
                  :email_layout,
                  :email_host,
@@ -174,6 +175,10 @@ module Droom
     def add_suggestible_class(label, klass=nil)
       klass ||= label.titlecase
       suggestible_classes[label] = klass.to_s
+    end
+
+    def yt_client
+      @@yt_client ||= YouTubeIt::Client.new(:dev_key => "AI39si473p0K4e6id0ZrM1vniyk8pdbqr67hH39hyFjW_JQoLg9xi6BecWFtraoPMCeYQmRgIc_XudGKVU8tmeQF8VHwjOUg8Q")
     end
 
     def required_calendar_names
