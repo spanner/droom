@@ -7,7 +7,6 @@ module Droom
 
     before_filter :authenticate_user!
     before_filter :require_admin!, :except => [:index, :show]
-    before_filter :get_current_person
     before_filter :numerical_parameters
     before_filter :get_event, :only => [:show, :edit, :update, :destroy]
     before_filter :find_or_create_calendar, :only => :new
@@ -89,7 +88,7 @@ module Droom
       if current_user.admin?
         @events = @events.future_and_current
       else
-        @events = @events.visible_to(@current_person).future_and_current
+        @events = @events.visible_to(current_person).future_and_current
       end
       @show = params[:show] || 10
       @page = params[:page] || 1

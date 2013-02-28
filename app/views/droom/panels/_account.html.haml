@@ -3,9 +3,9 @@
     = t :account_preferences
   
   %ul
-    - if current_user.person
+    - if current_person
       %li
-        = link_to t(:edit_your_profile), droom.edit_person_url(current_user.person), :data => {:action => "popup", :affected => ".people_list"}
+        = link_to t(:edit_your_profile), droom.edit_person_url(current_person), :data => {:action => "popup", :affected => ".people_list"}
         %br
         %span.note
           = t(:edit_your_profile_note)

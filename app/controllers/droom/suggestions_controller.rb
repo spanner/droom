@@ -2,7 +2,6 @@ module Droom
   class SuggestionsController < Droom::EngineController
     respond_to :json, :js
     before_filter :authenticate_user!
-    before_filter :get_current_person
     before_filter :get_classes
     
     def index
@@ -30,11 +29,11 @@ module Droom
         end
       else
         if @types.include?('event') && fragment.length > 6 && span = Chronic.parse(fragment, :guess => false)
-          @suggestions = Droom::Event.falling_within(span).visible_to(@current_person)
+          @suggestions = Droom::Event.falling_within(span).visible_to(current_person)
           @title = span.width > 86400 ? "Events in #{fragment}" : "Events on #{fragment}"
         else
           @suggestions = @klasses.collect {|klass|
-            klass.constantize.visible_to(@current_person).matching(fragment).limit(max.to_i)
+            klass.constantize.visible_to(current_person).matching(fragment).limit(max.to_i)
           }.flatten.sort_by(&:name).slice(0, max.to_i)
         end
       end

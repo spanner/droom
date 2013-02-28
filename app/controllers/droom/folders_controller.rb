@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!
-    before_filter :get_current_person
     before_filter :find_folders, :only => [:index]
     before_filter :get_folder, :only => [:show, :edit, :update, :destroy, :dropbox]
     before_filter :build_folder, :only => [:new, :create]
@@ -83,7 +82,7 @@ module Droom
       if current_user.admin?
         @folders = Droom::Folder.roots
       else
-        @folders = Droom::Folder.visible_to(@current_person).roots
+        @folders = Droom::Folder.visible_to(current_person).roots.populated
       end
     end
     

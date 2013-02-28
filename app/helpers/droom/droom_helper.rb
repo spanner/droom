@@ -56,12 +56,6 @@ module Droom
       authorization_url
     end
     
-    def dropbox_session
-      # note that here we never want to pick up the existing dropbox session. That happens in the dropbox_tokens_controller
-      # when we register an access token. In the view, any existing session has probably expired and we're better off with a new one.
-      DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
-    end
-
     def editable?(thing)
       admin? || current_user == thing.created_by
     end

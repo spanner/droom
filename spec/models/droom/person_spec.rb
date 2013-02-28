@@ -43,7 +43,7 @@ describe Droom::Person, :solr => true do
       @friend = FactoryGirl.create(:person, :name => "Friend")
       @stranger = FactoryGirl.create(:person, :name => "Stranger")
       @publicist = FactoryGirl.create(:public_person, :name => "Public figure")
-      @elvis = FactoryGirl.create(:shy_person, :name => "Elvis")
+      @elvis = FactoryGirl.create(:private_person, :name => "Elvis")
       @group = FactoryGirl.create(:group)
       @person.admit_to(@group)
       @friend.admit_to(@group)
@@ -64,7 +64,7 @@ describe Droom::Person, :solr => true do
       Droom::Person.visible_to(@person).should include(@publicist)
     end
 
-    it "should never be able to see shy people" do
+    it "should never be able to see private people" do
       Droom::Person.visible_to(@person).should_not include(@elvis)
     end
   end

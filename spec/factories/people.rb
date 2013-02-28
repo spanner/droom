@@ -8,8 +8,8 @@ FactoryGirl.define do
       public true
     end
 
-    factory :shy_person do
-      name "Shy Person"
+    factory :private_person do
+      name "Private Person"
       shy true
     end
   end  

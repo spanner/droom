@@ -5,7 +5,6 @@ module Droom
     
     before_filter :authenticate_user! 
     before_filter :scale_image_params, :only => [:create, :update]
-    before_filter :get_current_person
     before_filter :find_people, :only => :index
     before_filter :get_groups
     before_filter :get_person, :only => [:show, :edit, :update, :destroy, :invite]
@@ -67,7 +66,7 @@ module Droom
       if current_user.admin?
         @people = Person.scoped({})
       else
-        @people = Person.visible_to(@current_person)
+        @people = Person.visible_to(current_person)
       end
       
       if params[:not_group_id]
