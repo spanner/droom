@@ -3,11 +3,6 @@ require 'dropbox_sdk'
 module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
-    rescue_from "Exception", :with => :rescue_bang
-    rescue_from "Droom::DroomError", :with => :rescue_bang
-    rescue_from "Droom::PermissionDenied", :with => :rescue_not_allowed
-    rescue_from "ActionController::RoutingError", :with => :rescue_not_found
-    rescue_from "ActiveRecord::RecordNotFound", :with => :rescue_not_found
 
     before_filter :authenticate_user!
     before_filter :note_current_user
@@ -20,21 +15,6 @@ module Droom
       raise Droom::PermissionDenied unless current_user && current_user.admin?
     end
     
-    def rescue_not_found(exception)
-      @exception = exception
-      render :template => 'droom/errors/404', :status => :not_found, :layout => "error"
-    end
-
-    def rescue_not_allowed(exception)
-      @exception = exception
-      render :template => 'droom/errors/403', :status => :permission_denied, :layout => "error"
-    end
-    
-    def rescue_bang(exception)
-      @exception = exception
-      render :template => 'droom/errors/50x', :status => 500, :layout => "error"
-    end
-  
     def no_layout_if_pjax
       if request.headers['X-PJAX']
         false
