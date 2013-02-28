@@ -902,6 +902,7 @@ ul.suggestions
   border: 1px solid $pale
   border-top: 0
   z-index: 100
+  list-style: none
   +box-shadow
   li
     a, a:visited
@@ -933,7 +934,18 @@ ul.suggestions
     &.venue
       a
         background-image: image-url('droom/venue_bullet.png')
-
+    &.video
+      clear: left
+      margin-bottom: 4px
+      font-size: 0.8em
+      a
+        padding: 8px
+      img
+        width: 50px
+        float: left
+        margin-right: 5px
+      
+    
 ul.suggestion_search
   margin: 0
   margin-left: 7px
@@ -1837,6 +1849,7 @@ div.scrapup
         line-height: 1.1
         color: $pale
         margin: 0 5px
+
   div.scrapvideo
     position: relative
     margin: 40px 20px 0 20px
@@ -1850,8 +1863,8 @@ div.scrapup
         float: left
       p
         float: left
-        width: 165px
-        margin-left: 10px
+        margin: 0 0 0 10px
+        width: 170px
     .icon
       width: 60px
       height: 60px
@@ -1968,8 +1981,13 @@ div.scrapup
       .scrapvideo
         display: none
         input.name
-          width: 440px
+          width: 450px
           font-size: 1.8em
+          &.waiting
+            background:
+              position: 430px 15px
+              repeat: no-repeat
+              image: image-url('droom/spinner.gif')
         
       .caption
         textarea
@@ -2014,11 +2032,6 @@ div.scrapup
       &.video
         .scrapvideo
           display: block
-          li
-            a
-              padding: 4px 4px 4px 15px
-            img
-              width: 50px
         .upload, .body, .scrapevent, .scrapdocument
           display: none
     .buttons
