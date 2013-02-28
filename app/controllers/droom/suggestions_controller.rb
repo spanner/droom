@@ -15,6 +15,7 @@ module Droom
           @title = span.width > 86400 ? "Events in #{fragment}" : "Events on #{fragment}"
         else
           @suggestions = @klasses.collect {|klass|
+            logger.warn ">>> getting #{klass}"
             klass.constantize.visible_to(current_person).matching(fragment).limit(max.to_i)
           }.flatten.sort_by(&:name).slice(0, max.to_i)
         end
@@ -34,10 +35,7 @@ module Droom
     def get_classes
       suggestible_classes = Droom.suggestible_classes
       requested_types = [params[:type]].flatten.compact.uniq
-      requested_types = %w{event person document group venue} if requested_types.empty?
-
-      logger.warn ">>> requested_types is #{requested_types.inspect}"
-      
+      requested_types = Droom.suggestible_classes.keys if requested_types.empty?
       @types = suggestible_classes.keys & requested_types
       logger.warn ">>> @types is #{@types.inspect}"
 

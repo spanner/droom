@@ -38,6 +38,15 @@ module Droom
       where(["created_at < ?", scrap.created_at]).order("droom_scraps.created_at DESC") 
     }
 
+    scope :matching, lambda { |fragment|
+      fragment = "%#{fragment}%"
+      where('droom_scraps.name LIKE :f OR droom_scraps.body LIKE :f OR droom_scraps.note LIKE :f', :f => fragment)
+    }
+    
+    scope :visible_to, lambda { |person|
+      where("1=1")
+    }
+
     Droom.scrap_types.each do |t|
       define_method(:"#{t}?") { scraptype == t.to_s }
       scope t.pluralize.to_sym, where(["scraptype == ?", t])

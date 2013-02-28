@@ -1663,7 +1663,7 @@ a.minidatemark
     font-size: 0.9em
     margin-top: 0
 
-#stream, .search_results
+#stream, .search_results, .suggestion_search
   .scrolled
     width: 320px
   .scroller
@@ -1676,7 +1676,6 @@ a.minidatemark
   .scrap
     position: relative
     clear: left
-    margin-bottom: 25px
     &.document
       a.icon
         background:
@@ -1735,13 +1734,17 @@ a.minidatemark
       color: $pale
       display: block
 
+#stream
+  .scrap
+    margin-bottom: 25px
+    
+
 span.credit
   display: block
   font-size: 90%
   font-weight: bold
   color: $mid
   margin-top: 4px
-
 
 div.scrapup, div.popup
   position: fixed

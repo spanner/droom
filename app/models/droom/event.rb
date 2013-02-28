@@ -132,7 +132,7 @@ module Droom
 
     scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
-      where('droom_events.name like ?', fragment)
+      where('droom_events.name like :f OR droom_events.description like :f', :f => fragment)
     }
 
     # All of these class methods also return scopes.
