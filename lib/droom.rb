@@ -155,8 +155,6 @@ module Droom
         "event" => "Droom::Event", 
         "person" => "Droom::Person", 
         "document" => "Droom::Document",
-        "group" => "Droom::Group",
-        "scrap" => "Droom::Scrap",
         "venue" => "Droom::Venue"
       }
     end
