@@ -23,7 +23,19 @@ jQuery ($) ->
       @_document = @_fields.find('.scrapdocument')
       @_video = @_fields.find('.scrapvideo')
       @_video.find('input').video_picker()
+      @_thumb = @_video.find '.thumb'
       @setType()
+      @getVideo()
+
+    getVideo: =>
+      if @_header.find('input:radio:checked').val() == "video"
+        yt_id = @_video.find('input.name').val()
+        $.ajax
+          url: "/videos/#{yt_id}.js"
+          type: "GET"
+          dataType: "html"
+          success: (data) =>
+            @_thumb.append data
 
     setType: () =>
       scraptype = @_header.find('input:radio:checked').val()
