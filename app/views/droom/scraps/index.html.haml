@@ -1,6 +1,6 @@
 #stream
   %h1.pagetitle
-    = t :stream
+    = t(:stream_title)
 
   %p.action
     = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add", :data => {:action => "scrapup", :affected => "#scraps"}
