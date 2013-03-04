@@ -119,10 +119,10 @@ module Droom
     
     default_scope order("droom_people.#{Droom.people_sort}")
 
-    scope :all_private, where("private = 1")
-    scope :not_private, where("private <> 1 OR private IS NULL")
-    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
-    scope :not_public, where("public <> 1 OR private = 1)")
+    scope :all_private, where("shy = 1")
+    scope :not_private, where("shy <> 1 OR shy IS NULL")
+    scope :all_public, where("public = 1 AND shy <> 1 OR shy IS NULL")
+    scope :not_public, where("public <> 1 OR shy = 1)")
 
     searchable do
       text :name, :boost => 10, :stored => true
@@ -145,7 +145,7 @@ module Droom
         select('droom_people.*')
           .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
           .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
-          .where(['(dm2.person_id = ?) OR (droom_people.private <> 1)', person.id])
+          .where(['(dm2.person_id = ?) OR (droom_people.shy <> 1)', person.id])
           .group('droom_people.id')
       else
         all_public
