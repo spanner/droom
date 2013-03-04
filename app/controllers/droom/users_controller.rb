@@ -41,7 +41,7 @@ module Droom
         render :edit
       end
     end
-  
+
   protected
 
     def get_user

@@ -67,6 +67,11 @@ jQuery ($) ->
     selection.push @ if @is(selector)
     selection
 
+  $.fn.self_or_ancestor = (selector) ->
+    selection = @.parents(selector)
+    selection.push @ if @is(selector)
+    selection
+
   $.ajaxError = (jqXHR, textStatus, errorThrown) =>
     console.log "...error!", jqXHR, textStatus, errorThrown
     trigger "error", textStatus, errorThrown

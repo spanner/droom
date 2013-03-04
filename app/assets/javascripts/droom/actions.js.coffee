@@ -83,6 +83,8 @@ jQuery ($) ->
       e.preventDefault()
       $(@).trigger('close')
 
+
+
   # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
   # result of their action.
   #
@@ -94,9 +96,9 @@ jQuery ($) ->
       affected = $(@).attr('data-affected')
       $(@).remote
         on_success: (r) =>
-          replaced = $(@).parents(container).first()
+          replaced = $(@).self_or_ancestor(container).last()
           replacement = $(r).insertAfter(replaced)
-          replaced.remove()
+          replaced.get(0).remove()
           replacement.activate()
           $(affected).trigger('refresh')
       $(@).click() if options['force']

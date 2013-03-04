@@ -157,6 +157,9 @@ module Droom
     }
 
 
+    def membership_of(group)
+      memberships.find_by_group_id(group.id)
+    end
 
 
 
