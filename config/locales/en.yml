@@ -78,6 +78,7 @@ en:
   admin: "Admin"
   advanced_search: "Search terms"
   advanced_search_link: "...advanced search"
+  quick_search_prompt: "Type anything here"
   attachments: "Attachments"
   attending: "Attending"
   by_name: "Search by name or filename"

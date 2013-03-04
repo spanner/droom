@@ -10,7 +10,7 @@ module Droom
       @group = @membership.group
       @person = @membership.person
       @membership.destroy
-      render :partial => "button"
+      render :partial => "membership_toggle"
     end
         
     def new
@@ -26,7 +26,8 @@ module Droom
     
     def create
       if @membership.save
-        render :partial => "created"
+        @person = @membership.person
+        render :partial => "membership_toggle"
       else
         respond_with @membership
       end

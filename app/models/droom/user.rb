@@ -1,6 +1,6 @@
 module Droom
   class User < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes, :old_id
+    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes, :confirm, :old_id
     has_one :person
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :preferences, :foreign_key => "created_by_id"
@@ -17,7 +17,7 @@ module Droom
   
     before_create :ensure_authentication_token
 
-    attr_accessor :newly_activated, :update_person_email
+    attr_accessor :newly_activated, :update_person_email, :confirm
   
     # validates :password, :length => { :minimum => 6 }, :if => :password_required?
   
@@ -31,6 +31,10 @@ module Droom
                   .joins("LEFT OUTER JOIN droom_people as dp ON dp.user_id = droom_users.id")
                   .group("droom_users.id")
                   .having("count(dp.id) = 0")
+
+    def confirm=(confirmed)
+      confirm! if confirmed
+    end
 
     # Password is not required on creation, contrary to the devise defaults.
     def password_required?
