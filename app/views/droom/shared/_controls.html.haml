@@ -1,4 +1,4 @@
-- if current_user && current_user.activated?
+- if user_signed_in?
   %p.controls
     = t(:signed_in_as, :name => current_user.full_name).html_safe
     = link_to t(:preferences), "/users/#{current_user.id}/edit"

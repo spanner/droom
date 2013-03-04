@@ -12,9 +12,7 @@ module Droom
         
     # *for_selection* returns a set of [name, id] pairs suitable for use as select options.
     def self.for_selection
-      categories = self.all.map{|c| [c.name, c.id] }
-      categories.unshift(['', ''])
-      categories
+      self.all.map{|c| [c.name, c.id] }
     end
 
   protected

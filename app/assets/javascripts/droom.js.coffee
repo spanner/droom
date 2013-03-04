@@ -42,7 +42,6 @@ jQuery ($) ->
     @find_including_self('[data-action="alternate"]').alternator()
     @find_including_self('[data-action="fetch"]').replace_with_remote_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder", {force: true}
-    @find_including_self('[data-action="collapser"]').collapser()
     @find_including_self('[data-action="slide"]').sliding_link()
     @find_including_self('[data-action="fit"]').self_sizes()
     @find_including_self('form[data-action="filter"]').filter_form()
