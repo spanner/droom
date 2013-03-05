@@ -174,7 +174,7 @@ en:
   find_documents: "Find documents"
   find_people: "Find people"
   follow_stream: "Follow the stream in an RSS reader"
-  group_admin: "Membership"
+  group_admin: "Groups"
   group_created: "Group '%{name}' created"
   calendar: "Calendar"
   library: "Library" 

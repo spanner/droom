@@ -1,3 +1,2 @@
-%table.main.groups{:data => {:refreshable => true, :url => "#{groups_path}.js"}}
-  %tbody
-    = render :partial => 'group', :collection => @groups
+.groups{:data => {:refreshable => true, :url => "#{groups_path}.js"}}
+  = render :partial => 'group', :collection => @groups
