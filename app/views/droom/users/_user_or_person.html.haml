@@ -1,4 +1,4 @@
-- user_or_person ||= @user
+- user_or_person ||= @user ||= @person
 
 - if user_or_person.is_a? Droom::Person
   - person = user_or_person
@@ -14,7 +14,7 @@
 
 %tr{:id => rowid, :class => cssclass}
   %td.name
-    = user_or_person.name
+    = user_or_person.full_name
   %td.email
     = mail_to user_or_person.email
   %td.invited
@@ -22,7 +22,7 @@
       %span.yes
     - else
       - if person.invitable?
-        = link_to t(:invite), invite_person_url(person), :class => "no", :data => {:action => "replace", :replaced => rowid}
+        = link_to t(:invite), invite_person_url(person), :class => "no", :data => {:action => "replace", :replaced => "##{rowid}"}
       - else
         %span.not_applicable
   %td.confirmed
@@ -45,11 +45,16 @@
     - if user
       = link_to "&nbsp;", edit_user_url(user), :data => {:action => "popup"}
   %td.directory
-    - if person
-      %span.yes
+    - if user
+      - if person
+        = link_to "&nbsp;", person_url(person, :format => :js), :class => "yes", :method => :delete, :remote => true, :confirm => "Really delete person?", :data => { :action => "replace", :replaced => "##{rowid}" }
+      - else
+        = link_to "&nbsp;", people_url(:person => { :user_id => user.id, :email => user.email, :name => user.name, :forename => user.forename}, :format => :js), :class => "no", :method => :post, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
     - else
-      %span.no
-  - if person
-    - Droom::Group.all.each do |group|
-      %td.group
+      %span.yes
+  - Droom::Group.all.each do |group|
+    %td.group
+      - if person
         = render :partial => "droom/memberships/membership_toggle", :locals => { :group => group, :person => person}
+      - else
+        %span.not_applicable

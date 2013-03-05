@@ -3,7 +3,7 @@ require 'vcard'
 
 module Droom
   class Person < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user, :position, :post_line1, :post_line2, :post_city, :post_region, :post_code, :mobile, :dob, :organisation_id
+    attr_accessible :name, :forename, :email, :phone, :description, :user, :user_id, :title, :invite_on_creation, :admin_user, :position, :post_line1, :post_line2, :post_city, :post_region, :post_code, :mobile, :dob, :organisation_id
     attr_accessor :invite_on_creation, :admin_user
     acts_as_list
 
@@ -86,7 +86,7 @@ module Droom
     # The `user` is this person's administrative account for logging in and out and forgetting her password.
     # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
     # without having a person.
-    belongs_to :user, :class_name => "Droom::User", :dependent => :destroy
+    belongs_to :user, :class_name => "Droom::User"
     before_save :update_user
 
     after_create :invite_if_instructed
