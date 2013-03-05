@@ -1,6 +1,6 @@
 module Droom
   class User < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes, :confirm, :old_id
+    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes, :confirm, :old_id, :remove_person
     has_one :person
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :preferences, :foreign_key => "created_by_id"
@@ -17,7 +17,7 @@ module Droom
   
     before_create :ensure_authentication_token
 
-    attr_accessor :newly_activated, :update_person_email, :confirm
+    attr_accessor :newly_activated, :update_person_email, :confirm, :remove_person
   
     # validates :password, :length => { :minimum => 6 }, :if => :password_required?
   
@@ -36,28 +36,35 @@ module Droom
       confirm! if confirmed
     end
 
+    def remove_person=(boolean)
+      if boolean
+        p = Droom::Person.find(person.id)
+        p.user = nil
+        p.save!
+      end
+    end
+
     # Password is not required on creation, contrary to the devise defaults.
     def password_required?
       confirmed? && (!password.blank?)
     end
-  
+
     def password_match?
       Rails.logger.warn ">>> password_match? '#{password}' == '#{password_confirmation}'"
-      
       self.errors[:password] << "can't be blank" if password.blank?
       self.errors[:password_confirmation] << "can't be blank" if password_confirmation.blank?
       self.errors[:password_confirmation] << "does not match password" if password != password_confirmation
       password == password_confirmation && !password.blank?
     end
-  
+
     def is_person?(person)
       person == self.person
     end
-    
+
     def organisation
       person.organisation if person
     end
-  
+
     # Current user is pushed into here to make it available in models
     # such as the UserActionObserver that sets ownership before save.
     #

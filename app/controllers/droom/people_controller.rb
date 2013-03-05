@@ -24,7 +24,9 @@ module Droom
     
     def create
       @person.update_attributes(params[:person])
-      respond_with @person
+      respond_with @person do |format|
+        format.js { render :partial => "droom/users/user_or_person" }
+      end
     end
 
     def update
@@ -36,8 +38,16 @@ module Droom
     end
     
     def destroy
+      @user = @person.user
       @person.destroy
-      head :ok
+      if @user
+        respond_with @user do |format|
+          format.js { render :partial => "droom/users/user_or_person"}
+          format.html { head :ok }
+        end
+      else
+        head :ok 
+      end
     end
     
     def invite
