@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>app/controllers/droom/events_controller.rb</string>
+	<string>app/views/droom/events/_action_menu.html.haml</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -70,14 +70,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>44</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>1665</integer>
+				<integer>117</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1635</integer>
+			<integer>89</integer>
 		</dict>
 		<key>app/assets/stylesheets/lib/_kalendae.css.sass</key>
 		<dict>
@@ -123,28 +123,14 @@
 				<integer>24</integer>
 			</dict>
 		</dict>
-		<key>app/controllers/droom/events_controller.rb</key>
+		<key>app/controllers/droom/groups_controller.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>20</integer>
+				<integer>31</integer>
 				<key>line</key>
-				<integer>48</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>36</integer>
-		</dict>
-		<key>app/controllers/droom/memberships_controller.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>20</integer>
+				<integer>1</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -195,20 +181,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>app/controllers/droom/users_controller.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>49</integer>
-				<key>line</key>
-				<integer>1</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>app/controllers/droom/youtube_controller.rb</key>
 		<dict>
 			<key>caret</key>
@@ -223,35 +195,19 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>app/models/droom/document.rb</key>
+		<key>app/helpers/droom/droom_helper.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>5</integer>
+				<integer>35</integer>
 				<key>line</key>
-				<integer>45</integer>
+				<integer>19</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>42</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>46</integer>
-			</dict>
 		</dict>
 		<key>app/models/droom/dropbox_token.rb</key>
 		<dict>
@@ -261,50 +217,6 @@
 				<integer>53</integer>
 				<key>line</key>
 				<integer>18</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>app/models/droom/event.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>41</integer>
-				<key>line</key>
-				<integer>134</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>102</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>134</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>135</integer>
-			</dict>
-		</dict>
-		<key>app/models/droom/folder.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>40</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -344,14 +256,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>4</integer>
+				<integer>17</integer>
 				<key>line</key>
-				<integer>55</integer>
+				<integer>51</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>49</integer>
+			<integer>25</integer>
 		</dict>
 		<key>app/models/droom/recurrence_rule.rb</key>
 		<dict>
@@ -455,6 +367,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>app/views/droom/events/_action_menu.html.haml</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>14</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>app/views/droom/events/_created.html.haml</key>
 		<dict>
 			<key>caret</key>
@@ -463,20 +389,6 @@
 				<integer>42</integer>
 				<key>line</key>
 				<integer>1</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>app/views/droom/events/_form.html.haml</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>17</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -527,35 +439,61 @@
 				<integer>12</integer>
 			</dict>
 		</dict>
-		<key>app/views/droom/folders/_action_menu.html.haml</key>
+		<key>app/views/droom/events/show.html.haml</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>35</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>app/views/droom/groups/_group.html.haml</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>app/views/droom/groups/_groups.html.haml</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>14</integer>
+				<integer>1</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
+		</dict>
+		<key>app/views/droom/groups/index.html.haml</key>
+		<dict>
+			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>11</integer>
+				<integer>10</integer>
 			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>app/views/droom/scraps/_caption.html.haml</key>
 		<dict>
@@ -659,36 +597,6 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
-		<key>app/views/droom/shared/_controls.html.haml</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>6</integer>
-			</dict>
-		</dict>
 		<key>app/views/droom/youtube/show.html.haml</key>
 		<dict>
 			<key>caret</key>
@@ -708,14 +616,44 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>235</integer>
+				<integer>194</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>196</integer>
+			<integer>154</integer>
+		</dict>
+		<key>config/routes.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>26</integer>
+				<key>line</key>
+				<integer>29</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>10</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>29</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>26</integer>
+				<key>line</key>
+				<integer>29</integer>
+			</dict>
 		</dict>
 		<key>config/sunspot.yml</key>
 		<dict>
@@ -836,14 +774,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>77</integer>
 				<key>line</key>
-				<integer>157</integer>
+				<integer>103</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>123</integer>
+			<integer>88</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>103</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>77</integer>
+				<key>line</key>
+				<integer>103</integer>
+			</dict>
 		</dict>
 		<key>lib/droom/dav_resource.rb</key>
 		<dict>
@@ -920,37 +874,22 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>config/locales/en.yml</string>
+		<string>config/routes.rb</string>
+		<string>app/views/droom/events/show.html.haml</string>
 		<string>app/assets/stylesheets/droom.css.sass</string>
-		<string>app/controllers/droom/engine_controller.rb</string>
-		<string>app/controllers/droom/events_controller.rb</string>
-		<string>app/controllers/droom/users_controller.rb</string>
-		<string>app/views/droom/events/_form.html.haml</string>
-		<string>app/views/droom/events/edit.html.haml</string>
-		<string>app/views/droom/shared/_controls.html.haml</string>
-		<string>app/controllers/droom/suggestions_controller.rb</string>
-		<string>app/models/droom/organisation.rb</string>
-		<string>app/models/droom/recurrence_rule.rb</string>
-		<string>app/models/droom/event.rb</string>
-		<string>app/controllers/droom/search_controller.rb</string>
-		<string>app/models/droom/document.rb</string>
-		<string>app/models/droom/group.rb</string>
-		<string>app/models/droom/person.rb</string>
-		<string>app/models/droom/scrap.rb</string>
-		<string>app/models/droom/folder.rb</string>
-		<string>droom.gemspec</string>
 		<string>lib/droom.rb</string>
-		<string>db/migrate/20130228083509_privateness.rb</string>
-		<string>db/migrate/20130228134143_store_metadata.rb</string>
-		<string>app/views/droom/scraps/_search_result.html.haml</string>
-		<string>app/views/droom/scraps/_suggested.html.haml</string>
-		<string>app/controllers/droom/youtube_controller.rb</string>
-		<string>app/views/droom/youtube/show.html.haml</string>
-		<string>app/assets/javascripts/droom/widgets.js.coffee</string>
+		<string>app/controllers/droom/groups_controller.rb</string>
+		<string>app/views/droom/groups/index.html.haml</string>
+		<string>app/views/droom/events/_action_menu.html.haml</string>
+		<string>config/locales/en.yml</string>
+		<string>app/views/droom/groups/_groups.html.haml</string>
+		<string>app/views/droom/groups/_group.html.haml</string>
+		<string>app/models/droom/person.rb</string>
+		<string>app/helpers/droom/droom_helper.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{1466, 493}, {887, 878}}</string>
+	<string>{{389, 0}, {992, 878}}</string>
 </dict>
 </plist>

@@ -1,6 +1,6 @@
 - folder ||= @folder
 - standalone ||= false
-- title ||= folder.slug
+- title ||= folder.name
 - open ||= false
 - if @folder
   - open = true if folder == @folder || folder.ancestor_of?(@folder)

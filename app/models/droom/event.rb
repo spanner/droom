@@ -47,7 +47,6 @@ module Droom
 
     scope :primary, where("master_id IS NULL")
     scope :recurrent, where(:conditions => "master_id IS NOT NULL")
-    default_scope order('start ASC').includes(:venue)
 
     searchable do
       text :name, :boost => 10, :stored => true
@@ -95,8 +94,12 @@ module Droom
       where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now])
     }
 
-    scope :unfinished, lambda { |start| # datetimable object.
-      where(['start < :start AND finish > :start', :start => start])
+    scope :finished, lambda {
+      where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.now])
+    }
+    
+    scope :unbegun, lambda {
+      where(['start > :now', :now => Time.now])
     }
 
     scope :by_finish, order("finish ASC")
@@ -176,11 +179,11 @@ module Droom
     end
 
     def self.future
-      after(Time.now)
+      unbegun.order('start ASC')
     end
 
     def self.past
-      before(Time.now)
+      finished.order('start DESC')
     end
 
     ## Instance methods
@@ -285,6 +288,10 @@ module Droom
       cats = categories.map{|c| [c.name, c.id] }
       cats.unshift(['', ''])
       cats
+    end
+
+    def attended_by?(person)
+      person && person.invited_to?(self)
     end
 
     def visible_to?(user_or_person)

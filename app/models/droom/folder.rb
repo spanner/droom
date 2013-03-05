@@ -13,8 +13,8 @@ module Droom
 
     validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
 
-    before_validation :set_slug
-    before_save :set_properties
+    before_validation :set_properties
+    before_validation :ensure_slug
     
     default_scope includes(:children, :documents)
 
@@ -54,14 +54,6 @@ module Droom
       order("updated_at DESC, created_at DESC").limit(limit)
     }
 
-    def name
-      if holder
-        holder.name
-      else
-        slug
-      end
-    end
-        
     def path
       "#{parent.path if parent}/#{slug}"
     end
@@ -111,18 +103,28 @@ module Droom
     def copy_to_dav
       Rails.logger.warn ">>> copy folder #{@folder.inspect} to DAV"
     end
+    
+    def name_from_holder
+      send :set_properties
+      p "saving folder #{self.inspect}"
+      self.save if self.changed?
+    end
 
   protected
 
-    def set_slug
-      self.slug ||= holder.slug if holder
-      self.slug = self.slug.parameterize
+    def set_properties
+      if holder
+        self.name ||= holder.name
+        self.slug ||= holder.slug
+      end
+      # folders originally only had slugs, so this happens from time to time
+      self.name ||= self.slug
+      self.public = !holder && (!parent || parent.public?)
       true
     end
 
-    def set_properties
-      self.public = !holder && (!parent || parent.public?)
-      true
+    def ensure_slug
+      ensure_presence_and_uniqueness_of(:slug, name.parameterize)
     end
 
   end

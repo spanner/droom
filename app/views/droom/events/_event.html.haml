@@ -16,6 +16,7 @@
 - cssclasses << 'private' if event.private?
 - cssclasses << 'public' if event.public?
 - cssclasses << 'open' if open
+- cssclasses << 'invited' if event.attended_by?(current_person)
 
 
 - if show_header 

@@ -1,6 +1,5 @@
 - dashboard = request.path == main_app.dashboard_path
-- cssclass = dashboard ? "panel here" : "panel"
-#search{:class => cssclass}
+#search.panel
   - if dashboard
     %p.instructions
       = t :search_instructions
