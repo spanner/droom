@@ -1,0 +1,6 @@
+#new_event
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :add_agenda_category
+  = render :partial => 'form'

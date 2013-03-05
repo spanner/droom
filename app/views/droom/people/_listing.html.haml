@@ -3,8 +3,8 @@
 %li.person{:id => "list_person_#{person.id}", :data => {:refreshable => true, :url => droom.edit_person_path(person, :format => :js)} }
   %span.name
     = person.formal_name
-    = action_menulink(organisation)
-  = action_menu(organisation)
+    = action_menulink(person)
+  = action_menu(person)
 
   %br
   %span.note

@@ -44,6 +44,11 @@ module Droom
       fragment = "%#{fragment}%"
       where('droom_documents.name LIKE :f OR droom_documents.file_file_name LIKE :f', :f => fragment)
     }
+    
+    scope :in_folders, lambda{ |folders|
+      placeholders = folders.map { "?" }.join(',')
+      where(["folder_id IN(#{placeholders})", *folders.map(&:id)])
+    }
 
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
 

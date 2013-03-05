@@ -6,6 +6,6 @@
       %li
         = link_to t(:add_document), droom.new_folder_document_url(event.folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
       %li
-        = link_to t(:add_category), droom.new_event_agenda_category_url(event), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
+        = link_to t(:add_subfolder), droom.new_folder_folder_url(event.folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
       %li
         = link_to t(:delete_event), droom.event_url(event), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#event_#{event.id}", :affected => ".minimonth", :confirm => t(:confirm_delete_event, :name => event.name)}

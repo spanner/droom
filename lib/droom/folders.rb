@@ -55,7 +55,6 @@ module Droom
 
     module FolderedClassMethods
       # The has_folder? method is used to prevent multiple calls to has_folder, but might possibly be useful elsewhere.
-
       def has_folder?
         true
       end
@@ -69,6 +68,10 @@ module Droom
       #
       def folder_with_lazy_load
         folder_without_lazy_load || self.create_folder(:parent => get_parent_folder)
+      end
+
+      def all_documents
+        Droom::Document.in_folders(folder.family)
       end
 
       #

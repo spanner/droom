@@ -1,5 +1,5 @@
 %ul.filing
   - if folder.children.any? or folder.documents.any?
     - children = admin? ? folder.children : folder.children.populated
-    = render :partial => 'droom/folders/folder', :collection => children
     = render :partial => 'droom/documents/listing', :collection => folder.documents
+    = render :partial => 'droom/folders/folder', :collection => children

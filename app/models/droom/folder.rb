@@ -34,6 +34,10 @@ module Droom
       # end
       not_private
     }
+    
+    def visible_to?(person)
+      true
+    end
 
     # A root folders is created automatically for each class that has_folder, 
     # the first time something in that class asks for its folder.
@@ -80,6 +84,15 @@ module Droom
 
     def empty?
       !populated?
+    end
+    
+    def simple?
+      children.empty? && documents.count <= 2
+    end
+    
+    # If we start to get deep folder trees we'll have to use ancestry instead of acts_as_tree.
+    def family
+      self_and_children
     end
     
     def loose?

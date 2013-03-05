@@ -1,3 +1,5 @@
+- uninvite ||= false
+
 %li.person{:id => "person_#{person.id}", :data => {:refreshable => true, :url => droom.edit_person_path(person, :format => :js)} }
   %span.mugshot{:style => "background-image: url(#{person.image.url('cropped')})"}
   %span.contact
@@ -15,4 +17,5 @@
           = mail_to person.email
       - else
         = t :contact_information_unavailable
-    = action_menu(person)
+
+    = action_menu(person, :uninvite => uninvite)
