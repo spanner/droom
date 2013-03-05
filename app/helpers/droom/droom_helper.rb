@@ -13,11 +13,12 @@ module Droom
       link_to t(:edit), "#", html_options if editable?(thing)
     end
     
-    def action_menu(thing)
+    def action_menu(thing, locals={})
       if editable?(thing)
         type = thing.class.to_s.downcase.underscore
         classname = type.split('/').last
-        render "#{type.pluralize}/action_menu", classname.to_sym => thing
+        locals[classname.to_sym] = thing
+        render :partial => "#{type.pluralize}/action_menu", :locals => locals
       end
     end
 

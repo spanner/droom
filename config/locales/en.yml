@@ -104,7 +104,6 @@ en:
   dashboard: "Dashboard"
   document_created: "Document '%{name}' created"
   download_folder: "download as zipfile"
-  dropbox_access_revoked: "Dropbox access has been revoked. If there is still an hkfx folder in your dropbox you can safely delete it."
   hello: "Hello world"
   sign_in: "Sign in"
   can_still_log_in: 'Your password has not changed until you complete this process, <br />so if you remember the old one you can still <a href="%{url}">log in</a>'
@@ -131,7 +130,20 @@ en:
   delete_scrap: "remove"
   delete_person: "delete person"
   confirm_delete_scrap: "Are you sure you want to remove this %{type} scrap?"
+  containing: "containing"
   detach_upload: "detach upload"
+  attachment_count: 
+    zero: "No documents attached."
+    one: "One document attached."
+    other: "%{count} documents attached."
+  document_count: 
+    zero: "no documents"
+    one: "one document"
+    other: "%{count} documents"
+  subfolder_count:
+    zero: ""
+    one: "one subfolder"
+    other: "%{count} subfolders"
   download_contacts: "download contacts"
   download_ical: "download event"
   downloads: "downloads"
@@ -162,7 +174,7 @@ en:
   find_documents: "Find documents"
   find_people: "Find people"
   follow_stream: "Follow the stream in an RSS reader"
-  group_admin: "Membership"
+  group_admin: "Groups"
   group_created: "Group '%{name}' created"
   calendar: "Calendar"
   library: "Library" 
@@ -179,7 +191,8 @@ en:
   your_preferences_saved: "Thank you. Your preferences have been updated"
   posted: "Posted"
   directory: "Directory"
-  
+  invite_group: "invite a group"
+  invite_person: "invite an individual"
   group_name: "Name"
   group_description: "Description"
   
@@ -277,6 +290,7 @@ en:
   unattached_folder_note: "A folder not attached to anything is visible to everyone logged in."
   user_admin: "Users"
   stream: "Stream"
+  uninvite: "uninvite"
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

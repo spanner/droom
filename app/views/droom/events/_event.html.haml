@@ -48,23 +48,27 @@
           %span.location
             = t(:at)
             - if event.venue.url
-              = link_to event.venue.proper_name, event.venue.url
+              = link_to event.venue.proper_name + ".", event.venue.url
             - elsif Droom.show_venue_map
-              = link_to event.venue.proper_name, venues_url(:id => event.venue.id)
+              = link_to event.venue.proper_name + ".", venues_url(:id => event.venue.id)
             - else
-              = event.venue.proper_name
+              = event.venue.proper_name + "."
+
+        - unless full_attachments
+          - if event.all_documents.any?
+            %span.attachments
+              - if event.all_documents.count == 1
+                - document = event.all_documents.first
+                = link_to truncate(document.name, :length => 24), droom.folder_document_url(document.folder, document), :class => "document #{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
+              - else
+                = link_to t(:attachment_count, :count => event.all_documents.count)
 
     .detail
-      - unless brief || full_attachments
-        - if event.folder.populated?
-          %ul.folder
-            = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true, :standalone => true}
-
       - unless brief
         = event.description.html_safe
 
-- if full_attachments
+- if full_attachments && event.detail_visible_to?(current_person)
   .invitations
     = render :partial => 'droom/events/invitations', :locals => {:event => event}
-  .invitations
-    = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true}
+  .attachments
+    = render :partial => "droom/folders/attachments", :locals => {:folder => event.folder, :title => t(:attachments), :open => true}

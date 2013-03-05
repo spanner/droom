@@ -67,7 +67,7 @@ a.autofetch
   &:hover
     > span.admin
       display: inline-block
-
+  
 p.stretcher
   clear: left
   height: 1px
@@ -111,11 +111,10 @@ h2.section
   font-size: 1.25em
   line-height: 26px
   clear: both
-> #attendants
-  position: absolute
-  right: 0
-  margin-top: -1em
 
+.relations
+  position: relative
+  
 #help_pages
   h2
     margin-bottom: 0
@@ -176,29 +175,6 @@ div.event, form.event, div.project
     .detail
       p
         margin-top: 0
-
-  ul.folder
-    position: relative
-    float: right
-    padding-left: 20px
-    margin-bottom: 10px
-    margin-top: 0
-    width: 240px
-    list-style: none
-    h3
-      position: relative
-      min-height: 18px
-      margin-top: 0.2em
-      a
-        color: $text
-    li.folder
-      a.folder
-        font-weight: bold
-        color: $text
-    ul.filing
-      margin: -4px 0 0 -3px
-      padding: 0
-      list-style: none
 
 span.admin.documents
   margin-bottom: 0
@@ -672,38 +648,6 @@ p.twister
         background-position: 0 -30px
 
 
-#attendants
-  li
-    list-style: none
-    padding-left: 24px
-    background:
-      repeat: no-repeat
-      position: 0 0
-      image: image-url('droom/people_icons.png')
-      size: 20px
-    a.delete
-      position: absolute
-      display: none
-      right: -5px
-      height: 20px
-      line-height: 20px
-      padding: 0
-      margin-left: 10px
-    &.holder:hover 
-      a.delete
-        display: inline-block
-    &.group
-      font-weight: bold
-      background-position: 0 0
-    &.person
-      background-position: 0 0
-  .interjected
-    width: 132px
-    .suggestions
-      li
-        padding-left: 0
-    .notification
-      margin: 0
 
 div.pag
   position: relative
@@ -1003,7 +947,7 @@ ul.downloads
   padding: 0
   list-style: none
       
-li.document a.document
+a.document
   display: inline-block
   padding: 8px 0 0 28px
   font-size: 14px
@@ -1015,6 +959,7 @@ li.document a.document
     image: image-url('droom/icons.png')
   &.pdf
     background-position: 0 -48px
+    color: red
   &.doc, &.docx
     background-position: 0 -96px
     color: #1683ab
@@ -1201,7 +1146,6 @@ div.timepicker
 
 #search, .search_results
   position: relative
-  margin-left: 10px
   
 table.minimonth
   font-style: normal
@@ -1367,8 +1311,11 @@ ul.tags
     +border-radius(100px)
     padding: 10px 30px
 
-
-ul#folders
+ul.filing
+  padding: 0
+  list-style: none
+  
+ul#folders, div.attachments
   padding-left: 0
   li
     list-style: none
@@ -1397,7 +1344,6 @@ ul#folders
       &.open
         > a.folder
           background-position: 0 -336px
-
 
 input.search_box
   font-size: 1.5em

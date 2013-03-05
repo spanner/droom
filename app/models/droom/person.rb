@@ -49,7 +49,11 @@ module Droom
     end
 
     def invited_to?(event)
-      event && invitations.to_event(event).any?
+      event && !!invitation_to(event)
+    end
+    
+    def invitation_to(event)
+      invitations.to_event(event).first
     end
 
     ## Folder permissions
