@@ -107,6 +107,10 @@ module Droom
       dropbox_token.dropbox_client if dropbox_token
     end
     
+    def privileged?
+      admin? || person && person.privileged?
+    end
+    
     
     ## Preferences
     #
