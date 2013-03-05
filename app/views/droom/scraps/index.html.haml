@@ -3,7 +3,7 @@
     = t(:stream_title)
 
   %p.action
-    = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add", :data => {:action => "scrapup", :affected => "#scraps"}
+    = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add", :data => {:action => "popup", :affected => "#scraps"}
 
   - if @scraps.any?
     = render :partial => "stream"

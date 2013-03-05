@@ -98,7 +98,7 @@ jQuery ($) ->
         on_success: (r) =>
           replaced = $(@).self_or_ancestor(container).last()
           replacement = $(r).insertAfter(replaced)
-          replaced.get(0).remove()
+          replaced?.remove()
           replacement.activate()
           $(affected).trigger('refresh')
       $(@).click() if options['force']

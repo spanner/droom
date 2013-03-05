@@ -32,7 +32,6 @@ jQuery ($) ->
     
     @find_including_self('[data-action="popup"]').popup()
     @find_including_self('[data-action="close"]').closes()
-    @find_including_self('[data-action="scrapup"]').scrapup()
     @find_including_self('[data-action="upload"]').uploader()
     @find_including_self('[data-action="recrop"]').recropper()
     @find_including_self('[data-action="remove"]').removes()
