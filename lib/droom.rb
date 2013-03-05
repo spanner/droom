@@ -46,7 +46,8 @@ module Droom
                  :dropbox_app_secret,
                  :user_defaults,
                  :people_sort,
-                 :required_calendar_names
+                 :required_calendar_names,
+                 :stream_shared
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -124,6 +125,10 @@ module Droom
 
     def use_titles?
       !!@@use_titles
+    end
+
+    def stream_shared?
+      !!@@stream_shared
     end
 
     def use_separate_mobile_number?

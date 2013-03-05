@@ -291,6 +291,8 @@ en:
   user_admin: "Users"
   stream: "Stream"
   uninvite: "uninvite"
+  more: "more..."
+  your_invitations: "Invitations"
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

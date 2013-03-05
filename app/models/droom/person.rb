@@ -302,6 +302,10 @@ module Droom
         self.user.update_column(:forename, self.forename) if forename_changed?
       end
     end
+    
+    def update_status
+      update_column(:privileged, memberships.privileged.any?)
+    end
         
   end
 end

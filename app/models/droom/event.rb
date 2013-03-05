@@ -308,6 +308,14 @@ module Droom
       return false if self.private?
       return true
     end
+    
+    def has_people?
+      invitations.any?
+    end
+
+    def has_documents?
+      all_documents.any?
+    end
 
     def one_day?
       all_day? && within_day?

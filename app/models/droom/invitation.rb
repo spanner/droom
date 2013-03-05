@@ -15,6 +15,13 @@ module Droom
     scope :to_event, lambda { |event|
       where(["event_id = ?", event.id])
     }
+    
+    scope :future, lambda {
+      select('droom_invitations.*')
+        .joins('inner join droom_events as de on droom_invitations.event_id = de.id')
+        .where(['de.start > :now', :now => Time.now])
+        .group('droom_invitations.id')
+    }
   
     def link_folder
       person.add_personal_folders(event.folder)
