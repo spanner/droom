@@ -851,6 +851,21 @@ jQuery ($) ->
       new Suggester(@, options)
     @
 
+  $.fn.person_selector = (options) ->
+    options = $.extend(
+      submit_form: false
+      threshold: 1
+      type: 'person'
+    , options)
+    @each ->
+      target = $(@).siblings('.person_picker_target')
+      $(@).bind "keyup", () =>
+        target.val null
+      suggester = new Suggester(@, options)
+      suggester.options.afterSelect = (value, id) ->
+        target.val id
+    @
+
   $.fn.person_picker = (options) ->
     options = $.extend(
       submit_form: false
@@ -866,6 +881,21 @@ jQuery ($) ->
         id = JSON.parse(suggester.request.responseText)[0].id
         target.val id
         suggester.form.submit()
+    @
+
+  $.fn.group_selector = (options) ->
+    options = $.extend(
+      submit_form: false
+      threshold: 1
+      type: 'group'
+    , options)
+    @each ->
+      target = $(@).siblings('.group_picker_target')
+      $(@).bind "keyup", () =>
+        target.val null
+      suggester = new Suggester(@, options)
+      suggester.options.afterSelect = (value, id) ->
+        target.val id
     @
 
   $.fn.group_picker = (options) ->
@@ -968,14 +998,17 @@ jQuery ($) ->
       @button.removeClass "waiting"
       @prompt.removeClass "waiting"
       @show()
+      console.log "suggestions.length =>", suggestions.length
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
           link = $("<a href=\"#\">#{suggestion.prompt}</a>")
+          id = suggestion.id
           value = suggestion.value || suggestion.prompt
+          console.log 
           link.hover () =>
             @hover(link)
             link.click (e) =>
-              @select(e, link, value)
+              @select(e, link, value, id)
           $("<li></li>").addClass(suggestion.type).append(link).appendTo @container
 
         @suggestions = @container.find("a")
@@ -983,7 +1016,7 @@ jQuery ($) ->
         @hide()
       @options.afterSuggest.call @, suggestions  if @options.afterSuggest
 
-    select: (e, selection, value) =>
+    select: (e, selection, value, id) =>
       e.preventDefault() if e
       selection ?= $(@suggestions.get(@suggestion))
       if @options.fill_field?
@@ -993,7 +1026,7 @@ jQuery ($) ->
         @prompt.val "" 
       # if @options.submit_form?
       #   @form.submit()
-      @options.afterSelect.call(@, value) if @options.afterSelect
+      @options.afterSelect.call(@, value, id) if @options.afterSelect
       @hide()
 
     show: () =>

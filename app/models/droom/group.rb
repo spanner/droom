@@ -48,7 +48,7 @@ module Droom
       fragment = "%#{fragment}%"
       where('droom_groups.name like ?', fragment)
     }
-    
+
     default_scope order("droom_groups.created_at ASC")
 
     def admit(person)

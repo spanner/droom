@@ -247,8 +247,8 @@ module Droom
     def as_suggestion
       {
         :type => 'person',
-        :prompt => name,
-        :value => name,
+        :prompt => formal_name,
+        :value => formal_name,
         :id => id
       }
     end

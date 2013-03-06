@@ -17,7 +17,7 @@ module Droom
     end
     
     def new
-      render :partial => "form"
+      respond_with @invitation
     end
     
     def create
