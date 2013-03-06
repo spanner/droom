@@ -67,6 +67,7 @@ jQuery ($) ->
       @_container.append(@_content)
       @_content.activate()
       @_header = @_content.find('.header')
+      console.log @_content
       @_content.find('form').remote
         on_cancel: @hide
         on_success: @receive
