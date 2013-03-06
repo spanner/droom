@@ -86,10 +86,10 @@ module Droom
     def find_events
       @events = @calendar.events
       if params[:direction] == 'past'
-        @events = @events.past
+        @events = @events.past.order('start DESC')
         @direction = "past"
       else
-        @events = @events.future_and_current
+        @events = @events.future_and_current.order('start ASC')
         @direction = "future"
       end
       unless current_user.admin?
