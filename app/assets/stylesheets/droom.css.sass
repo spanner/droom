@@ -600,8 +600,8 @@ table.users
         &.not_applicable
           background-position: 0 -600px
         &.waiting
-          background-image: image-url('droom/smallspinner.gif')
-          background-position: 5px 11px
+          background-image: image-url('droom/spinner.gif')
+          background-position: 2px 2px
       span.no
         background-position: 0 -504px
       a.no
@@ -1310,6 +1310,20 @@ ul.tags
 .twisted
   display: none
 
+.twister
+  a.twisty
+    +icon_link("droom/twisty.png")
+    color: $dark
+    +hover
+    +waitable
+
+  &.showing
+    a.twisty
+      background-position: 0 -32px
+      &:hover
+        background-position: 0 -48px
+        color: $hover
+
 .search
   position: relative
   float: right
@@ -1805,8 +1819,9 @@ div.popup
     position: absolute
     top: 0
     left: 0px
+    height: 100%
     background-color: white
-    padding: 200px 140px
+    padding: 20px 140px
 
   div.body
     position: relative

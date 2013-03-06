@@ -89,8 +89,6 @@ jQuery ($) ->
     constructor: (element) ->
       @_container = $(element)
       @_form = if form = @_container.attr("data-form") then $(form) else @_container.parent()
-      if popup = @_container.attr("data-popup")
-        @_popup = $(popup)
       @_holder = @_form.parent()
       @_link = @_container.find('a.ul')
       @_filefield = @_container.find('input[type="file"]')
@@ -99,6 +97,8 @@ jQuery ($) ->
       @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
       @_filefield.bind 'change', @pick
       @_file = null
+      @_form.bind "finished", (e) =>
+        console.log "filepicker has triggered 'finished'", e
       @_filename = ""
       @_ext = ""
       @_fields = @_container.siblings('.metadata')
@@ -141,7 +141,7 @@ jQuery ($) ->
       @xhr.send formData
 
     progress: (e) =>
-      @_status.text("Uploading")
+      @_status.text("Uploading. Please wait.")
       if e.lengthComputable
         full_width = @_progress.width()
         progress_width = Math.round(full_width * e.loaded / e.total)
@@ -152,11 +152,12 @@ jQuery ($) ->
         if @xhr.status == 200
           response = @xhr.responseText
           @_form.remove()
-          # @_holder.append(response).delay(5000).slideUp()
-          @_popup?.trigger "complete", response
+          @_holder.append(response)
+          console.log "triggering 'finished' on", @_holder
+          @_holder.trigger "finished", response
 
     finish: (e) =>
-      @_status.text("Processing")
+      @_status.text("Indexing for search. Please wait.")
       @_bar.css
         "background-color": "green"
 

@@ -50,7 +50,7 @@ jQuery ($) ->
       @_mask = $('<div class="mask" />').appendTo($('body'))
       @_container = @getContainer()
       @_container.bind 'close', @hide
-      @_container.bind 'complete', @conclude
+      @_container.bind 'finished', @conclude
       @_container.bind 'resize', @place
       @_container.insertAfter(@_mask).hide()
 
@@ -74,6 +74,8 @@ jQuery ($) ->
       @show()
           
     conclude: (data) =>
+      console.log "popup conclude", data
+      console.log "affected:", $(@_affected)
       if @_affected
         $(@_affected).trigger "refresh"
       if @_replaced
