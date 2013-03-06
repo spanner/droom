@@ -98,6 +98,9 @@ jQuery ($) ->
         on_success: (r) =>
           replaced = $(@).self_or_ancestor(container).last()
           replacement = $(r).insertAfter(replaced)
+          console.log "rwrc: container", container
+          console.log "rwrc: replaced", replaced
+          console.log "rwrc: replacement", replacement
           replaced?.remove()
           replacement.activate()
           $(affected).trigger('refresh')
