@@ -14,16 +14,12 @@ Droom::Engine.routes.draw do
     put "/confirm_password" => "confirmations#update", :as => :confirm_password
   end
 
-  resources :users do
-    # member do
-    #   put :conceal
-    #   put :reveal
-    # end
-  end
+  resources :users
   resources :documents
   resources :preferences
   resources :calendars
   resources :invitations
+  resources :memberships
 
   resources :scraps do
     collection do

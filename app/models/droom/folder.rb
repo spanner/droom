@@ -104,9 +104,9 @@ module Droom
       Rails.logger.warn ">>> copy folder #{@folder.inspect} to DAV"
     end
     
-    def name_from_holder
+    def get_name_from_holder
       send :set_properties
-      p "saving folder #{self.inspect}"
+      p "...saving folder #{self.inspect}"
       self.save if self.changed?
     end
 

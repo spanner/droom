@@ -1,0 +1,5 @@
+- if current_person && current_person.invitations.future.any?
+  %h2.section
+    = t :your_invitations
+  %ul.invitations
+    = render :partial => "droom/invitations/invitation", :collection => current_person.invitations.future

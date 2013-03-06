@@ -57,6 +57,10 @@ module Droom
       authorization_url
     end
     
+    def visible?(thing)
+      admin? || privileged? || current_user.can_see?(thing)
+    end
+    
     def editable?(thing)
       admin? || current_user == thing.created_by
     end

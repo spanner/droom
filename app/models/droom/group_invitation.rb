@@ -10,13 +10,17 @@ module Droom
     validates_uniqueness_of :group_id, :scope => :event_id
     
     scope :to_event, lambda { |event|
-      where("group_invitations.event_id = ?", event.id)
+      where("droom_group_invitations.event_id = ?", event.id)
     }
     
     def create_personal_invitations
       group.people.each do |person|
-        invitations.find_or_create_by_person_id_and_event_id(person.id, event.id)
+        create_personal_invitation_for(person)
       end
+    end
+
+    def create_personal_invitation_for(person)
+      invitations.find_or_create_by_person_id_and_event_id(person.id, event.id) if person.member_of?(group)
     end
     
   end

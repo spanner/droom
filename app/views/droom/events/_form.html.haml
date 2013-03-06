@@ -26,6 +26,10 @@
         %span.name
           = f.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off"
 
+    %p.visibility
+      = f.check_box :private
+      = f.label :private
+
     .description.wysihtml
       .toolbar#t1
         = render 'droom/shared/toolbar'

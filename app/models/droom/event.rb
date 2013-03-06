@@ -67,6 +67,9 @@ module Droom
     scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
     scope :not_public, where("public <> 1 OR private = 1)")
 
+    # events are visible by default. Private events are made invisible except to the people
+    # invited to them.
+
     scope :visible_to, lambda { |person|
       if person
         select('droom_events.*')
@@ -296,17 +299,25 @@ module Droom
 
     def visible_to?(user_or_person)
       return true if self.public?
-      return false if self.private?
+      return false if self.private?# || Droom.events_private_by_default?
       return true
     end
     
     def detail_visible_to?(user_or_person)
       return true if self.public?
       return false unless user_or_person
+      return true if user_or_person.privileged?
       return true if user_or_person.person.invited_to?(self)
-      return true if user_or_person.admin?
       return false if self.private?
       return true
+    end
+    
+    def has_people?
+      invitations.any?
+    end
+
+    def has_documents?
+      all_documents.any?
     end
 
     def one_day?

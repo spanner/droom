@@ -1,6 +1,0 @@
-- if current_user.person
-  - events = current_user.person.events.past
-  - if events.any?
-    %h2.quiet
-      = t :my_past_events
-    = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
