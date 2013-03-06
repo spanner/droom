@@ -185,6 +185,46 @@ div.event, form.event, div.project
 ul.invitations
   padding: 0
   list-style: none
+  li.invitation
+    text-indent: 20px
+    background:
+      repeat: no-repeat
+      position: 0 0
+      image: image-url('droom/acceptance.png')
+    &.rejected
+      color: $mid
+      text-decoration: line-through
+      background-position: 0 -32px
+      a
+        color: $mid
+    &.accepted
+      background-position: 0 -64px
+      a
+        color: $green
+    &.waiting
+      background-image: image-url('droom/spinner.gif')
+      background-position: 0 0
+      a
+        color: $pale
+    span.action
+      display: inline-block
+      margin: 0 0 0 10px
+      text-indent: 0
+      a.accept, a.reject
+        display: inline-block
+        text-indent: 20px
+        height: 16px
+        width: 16px
+        line-height: 16px
+        overflow: hidden
+        background:
+          position: 0 0
+          repeat: no-repeat
+          image: image-url("droom/acceptance.png")
+      a.accept
+        background-position: 0 -162px
+      a.reject
+        background-position: 0 -130px
 
 span.admin.documents
   margin-bottom: 0
@@ -798,7 +838,6 @@ span.action
   display: inline-block
   
 p.action, span.action
-  min-height: 26px
   font-size: 14px
   font-weight: normal
   a.add

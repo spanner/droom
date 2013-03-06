@@ -28,7 +28,12 @@ Droom::Engine.routes.draw do
   end
 
   resources :events do
-    resources :invitations
+    resources :invitations do
+      member do
+        put :accept
+        put :reject
+      end
+    end
     resources :group_invitations
     resources :documents
     resources :agenda_categories

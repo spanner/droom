@@ -294,7 +294,9 @@ en:
   stream: "Stream"
   uninvite: "uninvite"
   more: "more..."
-  your_invitations: "Invitations"
+  accept: "accept"
+  reject: "reject"
+  your_invitations: "Your invitations"
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

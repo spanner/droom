@@ -12,7 +12,7 @@
           = link_to scrap.event.name, scrap.event.url_with_protocol, :class => "eventname"
           %br
           %span.note
-            = link_to "&rarr; #{scrap.event.url_with_protocol}".html_safe, scrap.event.url_with_protocol
+            = link_to shorten("&rarr; #{scrap.event.url_with_protocol}".html_safe), scrap.event.url_with_protocol
         - else
           %span.eventname
             = scrap.event.name
