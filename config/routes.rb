@@ -14,16 +14,9 @@ Droom::Engine.routes.draw do
     put "/confirm_password" => "confirmations#update", :as => :confirm_password
   end
 
-  resources :users do
-    # member do
-    #   put :conceal
-    #   put :reveal
-    # end
-  end
+  resources :users
   resources :documents
   resources :preferences
-  resources :calendars
-  resources :invitations
 
   resources :scraps do
     collection do
@@ -31,13 +24,14 @@ Droom::Engine.routes.draw do
     end
   end
 
+  resources :calendars
+
   resources :events do
     resources :invitations
     resources :group_invitations
+    get "calendar", :on => :collection
     resources :documents
-    resources :agenda_categories
     collection do
-      get "calendar"
       match "feed/:auth_token.:format" => "events#feed", :as => :feed
     end
   end
