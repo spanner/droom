@@ -21,6 +21,7 @@ en:
           finish_time: "Finish (optional)"
           start_date: "Date"
           calendar_id: "Calendar"
+          private: "hidden unless attending"
         folder: 
           slug: "Folder name"
         organisation:
