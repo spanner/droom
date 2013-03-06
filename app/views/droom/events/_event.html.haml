@@ -2,7 +2,8 @@
 - brief ||= false
 - show_header ||= false
 - event ||= @event
-- full_attachments ||= false
+- full_attachments ||= @event == event
+- brief = false if full_attachments
 - closed ||= false
 - open ||= !closed || event == @event
 - open = true if pageclass == 'events'
