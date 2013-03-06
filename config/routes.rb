@@ -24,6 +24,7 @@ Droom::Engine.routes.draw do
   resources :preferences
   resources :calendars
   resources :invitations
+  resources :memberships
 
   resources :scraps do
     collection do

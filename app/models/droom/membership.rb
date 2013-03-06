@@ -15,6 +15,7 @@ module Droom
     after_destroy :unlink_folder
     after_destroy :update_person_status
     after_destroy :destroy_invitations
+    after_destroy :destroy_similar
     
     validates :person, :presence => true
     validates :group, :presence => true
@@ -73,10 +74,15 @@ module Droom
       end
     end
 
-    def delete_invitations
+    def destroy_invitations
       group.group_invitations.each do |gi|
         gi.invitations.for_person(person).destroy_all
       end
+    end
+
+    # it's easy to end up with multiple similar membership objects.
+    def destroy_similar
+      group.memberships.where(:person_id => person.id).destroy_all
     end
 
   end

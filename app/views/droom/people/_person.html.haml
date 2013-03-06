@@ -1,4 +1,5 @@
 - uninvite ||= false
+- expel ||= false
 
 %li.person{:id => "person_#{person.id}", :data => {:refreshable => true, :url => droom.edit_person_path(person, :format => :js)} }
   %span.mugshot{:style => "background-image: url(#{person.image.url('cropped')})"}
@@ -18,4 +19,4 @@
       - else
         = t :contact_information_unavailable
 
-    = action_menu(person, :uninvite => uninvite)
+    = action_menu(person, :uninvite => uninvite, :expel => expel)
