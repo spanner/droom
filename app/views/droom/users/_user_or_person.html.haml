@@ -14,7 +14,10 @@
 
 %tr{:id => rowid, :class => cssclass}
   %td.name
-    = user_or_person.full_name
+    - if person
+      = link_to person.full_name, person_url(person)
+    - else
+      = user_or_person.full_name
   %td.email
     = mail_to user_or_person.email
   %td.invited
