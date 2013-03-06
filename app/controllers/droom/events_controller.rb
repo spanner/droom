@@ -85,11 +85,17 @@ module Droom
 
     def find_events
       @events = @calendar.events
-      if current_user.admin?
-        @events = @events.future_and_current
+      if params[:direction] == 'past'
+        @events = @events.past
+        @direction = "past"
       else
-        @events = @events.visible_to(current_person).future_and_current
+        @events = @events.future_and_current
+        @direction = "future"
       end
+      unless current_user.admin?
+        @events = @events.visible_to(current_person)
+      end
+      
       @show = params[:show] || 10
       @page = params[:page] || 1
       @events.page(@page).per(@show)

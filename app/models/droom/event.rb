@@ -67,6 +67,9 @@ module Droom
     scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
     scope :not_public, where("public <> 1 OR private = 1)")
 
+    # events are visible by default. Private events are made invisible except to the people
+    # invited to them.
+
     scope :visible_to, lambda { |person|
       if person
         select('droom_events.*')

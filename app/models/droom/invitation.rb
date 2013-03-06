@@ -16,6 +16,10 @@ module Droom
       where(["event_id = ?", event.id])
     }
     
+    scope :for_person, lambda { |person|
+      where("droom_invitations.person_id = ?", person.id)
+    }
+    
     scope :future, lambda {
       select('droom_invitations.*')
         .joins('inner join droom_events as de on droom_invitations.event_id = de.id')

@@ -11,8 +11,10 @@ module Droom
     after_create :link_folder
     after_create :make_mailing_list_membership
     after_create :update_person_status
+    after_create :create_invitations
     after_destroy :unlink_folder
     after_destroy :update_person_status
+    after_destroy :destroy_invitations
     
     validates :person, :presence => true
     validates :group, :presence => true
@@ -63,6 +65,18 @@ module Droom
 
     def update_person_status
       person.send :update_status
+    end
+
+    def create_invitations
+      group.group_invitations.each do |gi|
+        gi.create_personal_invitation_for(person)
+      end
+    end
+
+    def delete_invitations
+      group.group_invitations.each do |gi|
+        gi.invitations.for_person(person).destroy_all
+      end
     end
 
   end
