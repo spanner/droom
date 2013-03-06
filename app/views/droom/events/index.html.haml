@@ -1,8 +1,16 @@
-- if admin?
-  %p.action
-    = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => ".events_list"}
-
 #main.events
+  - if @direction == 'past'
+    %h2.section
+      = t(:past_events)
+      %span.addendum
+        = link_to t(:show_future_events), droom.events_url(:direction => "future"), :class => "future"
+  - else
+    %h2.section
+      = t(:future_events)
+      - if @calendar.events.past.any?
+        %span.addendum
+          = link_to t(:show_past_events), droom.events_url(:direction => "past"), :class => "past"
+    
   = render :partial => 'events'
 
 - content_for :title do
@@ -10,3 +18,4 @@
 
 - content_for :margin do
   = render :partial => 'droom/shared/calendar_holder'
+  = render :partial => "droom/invitations/invitations"

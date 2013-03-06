@@ -3,7 +3,8 @@
 - show_header ||= false
 - event ||= @event
 - full_attachments ||= false
-- open ||= event == @event
+- closed ||= false
+- open ||= !closed || event == @event
 - open = true if pageclass == 'events'
 
 - event_master_id = event.master_id || event.id
@@ -16,6 +17,8 @@
 - cssclasses << 'private' if event.private?
 - cssclasses << 'public' if event.public?
 - cssclasses << 'open' if open
+- cssclasses << 'closed' if closed
+- cssclasses << 'invited' if event.attended_by?(current_person)
 
 
 - if show_header 
@@ -34,7 +37,10 @@
   .summary
     .heading
       %h2.name<
-        = link_to event.name, event_url(event), :class => "name"
+        - if event.description? || event.has_documents? || event.has_people?
+          = link_to event.name, event_url(event), :class => "name"
+        - else
+          = event.name
         = action_menulink(event)
       = action_menu(event)
         
@@ -55,20 +61,19 @@
               = event.venue.proper_name + "."
 
         - unless full_attachments
-          - if event.all_documents.any?
+          - if event.has_documents?
             %span.attachments
-              - if event.all_documents.count == 1
-                - document = event.all_documents.first
-                = link_to truncate(document.name, :length => 24), droom.folder_document_url(document.folder, document), :class => "document #{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
-              - else
-                = link_to t(:attachment_count, :count => event.all_documents.count)
-
-    .detail
-      - unless brief
+              = link_to t(:attachment_count, :count => event.all_documents.count), droom.event_url(event)
+          - elsif brief && event.description?
+            = link_to t(:more), droom.event_url(event)
+            
+        
+    - unless brief 
+      .detail
         = event.description.html_safe
 
-- if full_attachments && event.detail_visible_to?(current_person)
-  .invitations
-    = render :partial => 'droom/events/invitations', :locals => {:event => event}
-  .attachments
-    = render :partial => "droom/folders/attachments", :locals => {:folder => event.folder, :title => t(:attachments), :open => true}
+      - if full_attachments && event.detail_visible_to?(current_person)
+        .invitations
+          = render :partial => 'droom/events/invitations', :locals => {:event => event}
+        .attachments
+          = render :partial => "droom/folders/attachments", :locals => {:folder => event.folder, :title => t(:attachments), :open => true}

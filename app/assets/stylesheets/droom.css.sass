@@ -111,7 +111,8 @@ h2.section
   font-size: 1.25em
   line-height: 26px
   clear: both
-
+  margin-top: 2em
+  
 .relations
   position: relative
   
@@ -170,11 +171,20 @@ div.event, form.event, div.project
         margin: 0
       p.practicalities
         margin: 0
-        margin-top: -6px
+        margin-top: 0
         color: $mid
+        span.admin
+          margin-left: 20px
+    p.visibility
+      float: right
+      margin: 10px 16px 0 10px
     .detail
       p
         margin-top: 0
+
+ul.invitations
+  padding: 0
+  list-style: none
 
 span.admin.documents
   margin-bottom: 0
@@ -339,12 +349,8 @@ form.user
 
  
 h2.name
-  font-size: 3em
+  font-size: 2em
   margin: 0
-  a
-    &.changed
-      color: $green
-      +hover
 
 p.description.changed
   color: $green
@@ -562,18 +568,24 @@ table.users
   thead
     th.admin, th.invited, th.confirmed, th.directory, th.group, th.settings
       max-width: 24px
-      height: 30px
-      padding-right: 2px
-      line-height: 0.8
+      height: 50px
+      padding-top: 36px
+      padding-left: 6px
+      line-height: 1
       +rotate(-75deg)
   tbody
+    td.name
+      min-width: 140px
+      min-height: 36px
+      line-height: 1
     td.email
       +small
       +pale
       line-height: 1.8em
     td.admin, td.invited, td.confirmed, td.directory, td.group
       padding-right: 2px
-      width: 24px
+      width: 36px
+      text-align: center
       span, a
         +icon("droom/minisymbols.png")
         &.yes
@@ -1123,7 +1135,6 @@ div.timepicker
   position: relative
   overflow: hidden
   width: 222px
-  height: 280px
   .scroller
     width: 500px
     height: 260px
@@ -1693,7 +1704,7 @@ span.credit
   color: $mid
   margin-top: 4px
 
-div.scrapup, div.popup
+div.popup
   position: fixed
   overflow: auto
   top: 100px
@@ -1736,14 +1747,6 @@ div.scrapup, div.popup
       repeat: no-repeat
     &:hover
       background-position: 0 -32px
-
-div.popup
-  form
-    margin: 20px
-    &.event, &.document
-      margin-left: $datemark_width + $datemark_margin
-
-div.scrapup
   .scrolled
     overflow: hidden
   .scroller
@@ -1753,8 +1756,17 @@ div.scrapup
     .scrap
       float: left
       width: 580px
+  form
+    margin: 20px
+  form.event
+    margin-left: $datemark_width + $datemark_margin
+  form.document
+    margin-left: 60px
+  form.scrap
+    margin: 0
+    
   .header
-    position: absolute
+    position: relative
     top: 0
     left: 0
     width: 550px
@@ -1786,14 +1798,14 @@ div.scrapup
 
   div.notifier
     position: absolute
-    top: 50px
+    top: 0
     left: 0px
     background-color: white
     padding: 200px 140px
 
   div.body
     position: relative
-    margin-top: 40px
+    margin-top: 0
     overflow: hidden
     height: 326px
     background-color: white
@@ -1818,7 +1830,7 @@ div.scrapup
 
   div.scrapvideo
     position: relative
-    margin: 40px 20px 0 20px
+    margin: 0 20px 0 20px
     overflow: auto
     padding-top: 10px
     background-color: white
@@ -1845,7 +1857,7 @@ div.scrapup
       
   div.scrapevent, div.scrapdocument
     position: relative
-    margin: 40px 40px 0 60px
+    margin: 0 40px 0 60px
     overflow: auto
     padding-top: 126px
     background-color: white
@@ -1896,6 +1908,7 @@ div.scrapup
           color: white
           overflow: hidden
           font-size: 0.9em
+          cursor: pointer
           background:
             repeat: no-repeat
             position: 0 0
@@ -1965,7 +1978,7 @@ div.scrapup
           color: $mid
       .upload
         display: none
-        margin-top: 40px
+        margin-top: 0
         .uploadbox
           width: 580px
           height: 326px

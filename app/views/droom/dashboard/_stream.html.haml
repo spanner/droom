@@ -1,9 +1,9 @@
 #stream
   %h2.section
     = link_to t(:stream_title), droom.scraps_url
-    %span.action
-      = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add minimal", :data => {:action => "scrapup", :affected => "#scraps"}
+    - if admin? || Droom.stream_shared?
+      %span.action
+        = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add minimal", :data => {:action => "popup", :affected => "#scraps"}
 
   #scraps.holder{:data => {:refreshable => true, :url => scraps_path(:format => :js)}}
     = link_to t(:loading_stream), droom.scraps_url(:format => :js, :show => 8), :data => {:action => "autofetch"}
-  

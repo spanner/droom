@@ -10,6 +10,6 @@ module Droom
     validates :event, :presence => true
     validates :category, :presence => true
     
-    delegate :slug, :to => :category
+    delegate :slug, :name, :to => :category
   end
 end

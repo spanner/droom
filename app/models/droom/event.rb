@@ -47,7 +47,6 @@ module Droom
 
     scope :primary, where("master_id IS NULL")
     scope :recurrent, where(:conditions => "master_id IS NOT NULL")
-    default_scope order('start ASC').includes(:venue)
 
     searchable do
       text :name, :boost => 10, :stored => true
@@ -67,6 +66,9 @@ module Droom
     scope :not_private, where("private <> 1 OR private IS NULL")
     scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
     scope :not_public, where("public <> 1 OR private = 1)")
+
+    # events are visible by default. Private events are made invisible except to the people
+    # invited to them.
 
     scope :visible_to, lambda { |person|
       if person
@@ -95,8 +97,12 @@ module Droom
       where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now])
     }
 
-    scope :unfinished, lambda { |start| # datetimable object.
-      where(['start < :start AND finish > :start', :start => start])
+    scope :finished, lambda {
+      where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.now])
+    }
+    
+    scope :unbegun, lambda {
+      where(['start > :now', :now => Time.now])
     }
 
     scope :by_finish, order("finish ASC")
@@ -176,11 +182,11 @@ module Droom
     end
 
     def self.future
-      after(Time.now)
+      unbegun.order('start ASC')
     end
 
     def self.past
-      before(Time.now)
+      finished.order('start DESC')
     end
 
     ## Instance methods
@@ -287,19 +293,31 @@ module Droom
       cats
     end
 
+    def attended_by?(person)
+      person && person.invited_to?(self)
+    end
+
     def visible_to?(user_or_person)
       return true if self.public?
-      return false if self.private?
+      return false if self.private?# || Droom.events_private_by_default?
       return true
     end
     
     def detail_visible_to?(user_or_person)
       return true if self.public?
       return false unless user_or_person
+      return true if user_or_person.privileged?
       return true if user_or_person.person.invited_to?(self)
-      return true if user_or_person.admin?
       return false if self.private?
       return true
+    end
+    
+    def has_people?
+      invitations.any?
+    end
+
+    def has_documents?
+      all_documents.any?
     end
 
     def one_day?

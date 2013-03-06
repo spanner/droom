@@ -1,9 +1,6 @@
 - scrap ||= @scrap
 
 .caption
-  %p.action
-    = link_to t(:edit_scrap), droom.edit_scrap_url(scrap), :class => 'edit', :data => {:affected => "#scraps"}
-
   %p.scrapnote
     = scrap.note
 

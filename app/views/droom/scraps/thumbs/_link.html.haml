@@ -1,6 +1,7 @@
-= link_to "link:", scrap.body, :class => "icon link", :data => {:action => "scrapup"}, :target => "_scrap"
+= link_to "link:", droom.scrap_url(scrap), :class => "icon link", :data => {:action => "popup"}
 %p.caption
-  = link_to shorten(scrap.body, 70), scrap.body, :class => "external", :target => "_scrap"
+  = link_to shorten(scrap.body, 70), droom.scrap_url(scrap), :data => {:action => "popup"}
+  = link_to "&rarr;".html_safe, scrap.url_with_protocol
   = action_menulink(scrap, :class => "small")
   - if scrap.note
     %span.caption

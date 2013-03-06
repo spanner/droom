@@ -129,29 +129,6 @@ jQuery ($) ->
 
 
 
-
-  $.fn.scrapup = () ->
-    @each ->
-      new Scrapup(@)
-
-  class Scrapup extends Popup
-    getContainer: () =>
-      $('<div class="scrapup" />')
-
-    display: (data) =>
-      super
-      if selector = @_content.find('a.edit').attr('data-affected')
-        @affect(selector)
-      @_content.find('a.edit').remote
-        on_success: @receive
-      @_content.find('a.delete').remote
-        on_success: @reset
-      
-    affect: (selector) =>
-      console.log "affect", selector
-      @_affected = selector
-
-
   # Popup forms will usually contain one or more .column divs. The columns are a standard width and
   # the number of columns determines the width of the popup. Columns can also be hidden, initially,
   # then revealed if the user clicks a 'more' or 'detail' link. The expander action is defined here.

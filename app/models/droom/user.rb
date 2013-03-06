@@ -86,13 +86,29 @@ module Droom
     def full_name
       [forename, name].compact.join(' ').strip
     end
-  
+
+    def formal_name
+      [title, forename, name].compact.join(' ').strip
+    end
+    
+    def informal_name
+      if Droom.use_forenames
+        forename
+      else
+        name
+      end
+    end
+
     def dropbox_token
       dropbox_tokens.by_date.last
     end
 
     def dropbox_client
       dropbox_token.dropbox_client if dropbox_token
+    end
+    
+    def privileged?
+      admin? || person && person.privileged?
     end
     
     

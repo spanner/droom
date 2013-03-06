@@ -21,6 +21,7 @@ en:
           finish_time: "Finish (optional)"
           start_date: "Date"
           calendar_id: "Calendar"
+          private: "hidden unless attending"
         folder: 
           slug: "Folder name"
         organisation:
@@ -171,6 +172,7 @@ en:
   events_in: "Events in %{period}"
   events_on: "Events on %{day}"
   event_created: "Event '%{name}' created"
+  expel: "remove from group"
   find_documents: "Find documents"
   find_people: "Find people"
   follow_stream: "Follow the stream in an RSS reader"
@@ -195,7 +197,7 @@ en:
   invite_person: "invite an individual"
   group_name: "Name"
   group_description: "Description"
-  
+  invitations_highlighted: "Events to which you are invited will be highlighted."
   help: "Help"
   help_pages: "Help pages"
   
@@ -291,6 +293,8 @@ en:
   user_admin: "Users"
   stream: "Stream"
   uninvite: "uninvite"
+  more: "more..."
+  your_invitations: "Invitations"
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"
