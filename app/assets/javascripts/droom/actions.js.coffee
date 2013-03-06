@@ -230,6 +230,40 @@ jQuery ($) ->
           @preview.hide().css('position', 'relative')
         
 
+  # Yet another toggle, resuscitated for cdr reviewers but I hope not for long.
+
+  $.fn.twister = ->
+    @each ->
+      new Twister(@)
+
+  class Twister
+    @currently_open: []
+    constructor: (element) ->
+      @_twister = $(element)
+      @_twisted = @_twister.find('.twisted')
+      @_toggles = @_twister.find('a.twisty')
+      @_toggles.click @toggle
+      @_open = @_twister.hasClass("showing")
+      @set()
+
+    set: () =>
+      if @_open then @open() else @close()
+      
+    toggle: (e) =>
+      e.preventDefault() if e
+      if @_open then @close() else @open()
+      
+    open: () =>
+      @_twister.addClass("showing")
+      @_twisted.show()
+      @_open = true
+      Twister.currently_open.push(@_id)
+      
+    close: () =>
+      @_twister.removeClass("showing")
+      @_twisted.hide()
+      @_open = false
+      Twister.currently_open.remove(@_id)  # remove is defined in lib/extensions
 
 
 

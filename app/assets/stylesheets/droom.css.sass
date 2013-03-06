@@ -1305,6 +1305,20 @@ ul.tags
 .twisted
   display: none
 
+.twister
+  a.twisty
+    +icon_link("droom/twisty.png")
+    color: $dark
+    +hover
+    +waitable
+
+  &.showing
+    a.twisty
+      background-position: 0 -32px
+      &:hover
+        background-position: 0 -48px
+        color: $hover
+
 .search
   position: relative
   float: right
