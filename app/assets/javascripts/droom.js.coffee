@@ -38,6 +38,7 @@ jQuery ($) ->
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="column_toggle"]').column_expander()
     @find_including_self('[data-action="toggle"]').toggle()
+    @find_including_self('[data-action="twister"]').twister()
     @find_including_self('[data-action="alternate"]').alternator()
     @find_including_self('[data-action="replace"]').replace_with_remote_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder", {force: true}
@@ -61,6 +62,8 @@ jQuery ($) ->
     @find_including_self('.datepicker').date_picker()
     @find_including_self('.timepicker').time_picker()
     @find_including_self('.filepicker').file_picker()
+    @find_including_self('.person_selector').person_selector()
+    @find_including_self('.group_selector').group_selector()
     @find_including_self('.person_picker').person_picker()
     @find_including_self('.group_picker').group_picker()
     @find_including_self('.drag_sort').drag_sort()

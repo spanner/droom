@@ -61,7 +61,7 @@ module Droom
     def build_scrap
       params[:scrap]
       @scrap = Droom::Scrap.new(params[:scrap])
-      @folder = Droom::Folder.find_or_create_by_name("stream")
+      @folder = Droom::Folder.find_or_create_by_slug("stream")
       @scrap.scraptype ||= 'text'
     end
 

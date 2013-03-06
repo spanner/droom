@@ -160,6 +160,7 @@ module Droom
         "event" => "Droom::Event", 
         "person" => "Droom::Person", 
         "document" => "Droom::Document",
+        "group" => "Droom::Group",
         "venue" => "Droom::Venue"
       }
     end

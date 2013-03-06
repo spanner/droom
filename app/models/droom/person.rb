@@ -146,11 +146,15 @@ module Droom
     # warning! won't work in SQLite.
     scope :visible_to, lambda { |person|
       if person
-        select('droom_people.*')
-          .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
-          .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
-          .where(['(dm2.person_id = ?) OR (droom_people.private <> 1)', person.id])
-          .group('droom_people.id')
+        if person.admin?
+          scoped({})
+        else
+          select('droom_people.*')
+            .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
+            .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
+            .where(['(dm2.person_id = ?) OR (droom_people.private <> 1)', person.id])
+            .group('droom_people.id')
+        end
       else
         all_public
       end
@@ -247,8 +251,8 @@ module Droom
     def as_suggestion
       {
         :type => 'person',
-        :prompt => name,
-        :value => name,
+        :prompt => formal_name,
+        :value => formal_name,
         :id => id
       }
     end

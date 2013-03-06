@@ -22,7 +22,7 @@ module Droom
     scope :not_private, where("#{table_name}.private <> 1 OR #{table_name}.private IS NULL")
     scope :all_public, where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL")
     scope :not_public, where("#{table_name}.public <> 1 OR #{table_name}.private = 1)")
-
+    scope :by_name, order("#{table_name}.name ASC")
     scope :visible_to, lambda { |person|
       # if person
       #   select('droom_folders.*')

@@ -89,8 +89,6 @@ jQuery ($) ->
     constructor: (element) ->
       @_container = $(element)
       @_form = if form = @_container.attr("data-form") then $(form) else @_container.parent()
-      if popup = @_container.attr("data-popup")
-        @_popup = $(popup)
       @_holder = @_form.parent()
       @_link = @_container.find('a.ul')
       @_filefield = @_container.find('input[type="file"]')
@@ -99,6 +97,8 @@ jQuery ($) ->
       @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
       @_filefield.bind 'change', @pick
       @_file = null
+      @_form.bind "finished", (e) =>
+        console.log "filepicker has triggered 'finished'", e
       @_filename = ""
       @_ext = ""
       @_fields = @_container.siblings('.metadata')
@@ -141,7 +141,7 @@ jQuery ($) ->
       @xhr.send formData
 
     progress: (e) =>
-      @_status.text("Uploading")
+      @_status.text("Uploading. Please wait.")
       if e.lengthComputable
         full_width = @_progress.width()
         progress_width = Math.round(full_width * e.loaded / e.total)
@@ -152,11 +152,12 @@ jQuery ($) ->
         if @xhr.status == 200
           response = @xhr.responseText
           @_form.remove()
-          # @_holder.append(response).delay(5000).slideUp()
-          @_popup?.trigger "complete", response
+          @_holder.append(response)
+          console.log "triggering 'finished' on", @_holder
+          @_holder.trigger "finished", response
 
     finish: (e) =>
-      @_status.text("Processing")
+      @_status.text("Indexing for search. Please wait.")
       @_bar.css
         "background-color": "green"
 
@@ -850,6 +851,21 @@ jQuery ($) ->
       new Suggester(@, options)
     @
 
+  $.fn.person_selector = (options) ->
+    options = $.extend(
+      submit_form: false
+      threshold: 1
+      type: 'person'
+    , options)
+    @each ->
+      target = $(@).siblings('.person_picker_target')
+      $(@).bind "keyup", () =>
+        target.val null
+      suggester = new Suggester(@, options)
+      suggester.options.afterSelect = (value, id) ->
+        target.val id
+    @
+
   $.fn.person_picker = (options) ->
     options = $.extend(
       submit_form: false
@@ -865,6 +881,21 @@ jQuery ($) ->
         id = JSON.parse(suggester.request.responseText)[0].id
         target.val id
         suggester.form.submit()
+    @
+
+  $.fn.group_selector = (options) ->
+    options = $.extend(
+      submit_form: false
+      threshold: 1
+      type: 'group'
+    , options)
+    @each ->
+      target = $(@).siblings('.group_picker_target')
+      $(@).bind "keyup", () =>
+        target.val null
+      suggester = new Suggester(@, options)
+      suggester.options.afterSelect = (value, id) ->
+        target.val id
     @
 
   $.fn.group_picker = (options) ->
@@ -967,14 +998,17 @@ jQuery ($) ->
       @button.removeClass "waiting"
       @prompt.removeClass "waiting"
       @show()
+      console.log "suggestions.length =>", suggestions.length
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
           link = $("<a href=\"#\">#{suggestion.prompt}</a>")
+          id = suggestion.id
           value = suggestion.value || suggestion.prompt
+          console.log 
           link.hover () =>
             @hover(link)
             link.click (e) =>
-              @select(e, link, value)
+              @select(e, link, value, id)
           $("<li></li>").addClass(suggestion.type).append(link).appendTo @container
 
         @suggestions = @container.find("a")
@@ -982,7 +1016,7 @@ jQuery ($) ->
         @hide()
       @options.afterSuggest.call @, suggestions  if @options.afterSuggest
 
-    select: (e, selection, value) =>
+    select: (e, selection, value, id) =>
       e.preventDefault() if e
       selection ?= $(@suggestions.get(@suggestion))
       if @options.fill_field?
@@ -992,7 +1026,7 @@ jQuery ($) ->
         @prompt.val "" 
       # if @options.submit_form?
       #   @form.submit()
-      @options.afterSelect.call(@, value) if @options.afterSelect
+      @options.afterSelect.call(@, value, id) if @options.afterSelect
       @hide()
 
     show: () =>

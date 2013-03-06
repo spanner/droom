@@ -11,7 +11,7 @@
 - cssclass << " standalone" if standalone
 
 %li{:class => cssclass, :id => "folder_#{folder.id}", :data => {:refreshable => true, :url => droom.folder_path(folder, :js)} }
-  = link_to title, droom.folder_url(folder), :class => "folder"
+  = link_to shorten(title, 48), droom.folder_url(folder), :class => "folder"
   = action_menulink(folder)
   = render :partial => "droom/folders/contents", :locals => {:folder => folder}
   = action_menu(folder)

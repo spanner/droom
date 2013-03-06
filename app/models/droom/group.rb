@@ -35,10 +35,14 @@ module Droom
 
     scope :visible_to, lambda { |person|
       if person
-        select('droom_groups.*')
-          .joins('INNER JOIN droom_memberships as dm on droom_groups.id = dm.group_id')
-          .where(['dm.person_id = ?', person.id])
-          .group('droom_groups.id')
+        if person.admin?
+          scoped({})
+        else
+          select('droom_groups.*')
+            .joins('INNER JOIN droom_memberships as dm on droom_groups.id = dm.group_id')
+            .where(['dm.person_id = ?', person.id])
+            .group('droom_groups.id')
+        end
       else
         where("1=0")
       end
@@ -48,7 +52,7 @@ module Droom
       fragment = "%#{fragment}%"
       where('droom_groups.name like ?', fragment)
     }
-    
+
     default_scope order("droom_groups.created_at ASC")
 
     def admit(person)

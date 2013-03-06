@@ -26,6 +26,13 @@ module Droom
         .where(['de.start > :now', :now => Time.now])
         .group('droom_invitations.id')
     }
+    
+    scope :refused, where("response < 1")
+    scope :accepted, where("response > 1")
+    scope :not_refused, where("response > 0")
+    scope :not_accepted, where("response < 2")
+    scope :responded, where("response <> 1")
+    scope :not_responded, where("response == 1")
   
     def link_folder
       person.add_personal_folders(event.folder)
@@ -34,6 +41,25 @@ module Droom
     def unlink_folder
       person.remove_personal_folders(event.folder)
     end
+    
+    def status
+      if response < 1
+        "rejected"
+      elsif response == 1
+        "maybe"
+      else
+        "accepted"
+      end
+    end
+    
+    def accepted?
+      response && response > 1
+    end
 
+    def rejected?
+      response && response < 1
+    end
+    
   end
+  
 end

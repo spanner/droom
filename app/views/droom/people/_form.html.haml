@@ -15,10 +15,21 @@
                 .note
                   = t :drop_to_upload
 
-  %p.name
-    = f.label :name
-    %br
-    = f.text_field :name, :required => true
+  - if Droom.use_forenames?
+    %p.name
+      = f.label :forename
+      %br
+      = f.text_field :forename, :required => true
+    %p.name
+      = f.label :name, "Surname"
+      %br
+      = f.text_field :name, :required => true
+
+  - else
+    %p.name
+      = f.label :name
+      %br
+      = f.text_field :name, :required => true
 
   .contacts
     %p.email

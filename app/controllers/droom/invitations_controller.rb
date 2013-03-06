@@ -4,7 +4,7 @@ module Droom
     layout :no_layout_if_pjax
     
     before_filter :build_invitation, :only => [:new, :create]
-    before_filter :get_invitation, :only => :destroy
+    before_filter :get_invitation, :only => [:destroy, :accept, :reject]
 
     def destroy
       @invitation.destroy
@@ -17,7 +17,7 @@ module Droom
     end
     
     def new
-      render :partial => "form"
+      respond_with @invitation
     end
     
     def create
@@ -27,8 +27,18 @@ module Droom
         respond_with @invitation
       end
     end
+    
+    def accept
+      @invitation.update_attribute(:response, 2)
+      render :partial => "droom/invitations/invitation"
+    end
 
-    protected
+    def reject
+      @invitation.update_attribute(:response, 0)
+      render :partial => "droom/invitations/invitation"
+    end
+
+  protected
     
     def build_invitation
       @event = Droom::Event.find(params[:event_id])
