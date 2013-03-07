@@ -3,8 +3,7 @@
 
 #groups
   - if current_user.admin?
-    .holder
-      %p.admin
-        = link_to t(:add_group), droom.new_group_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.groups"}
+    %p.action
+      = link_to t(:add_group), droom.new_group_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
 
   = render :partial => 'groups'
