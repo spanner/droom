@@ -13,7 +13,7 @@
   - repeating = true 
   - brief = true
 - @seen_events[event_master_id] = true;
-- cssclasses = ['event holder']
+- cssclasses = ['event']
 - cssclasses << 'repeat' if repeating
 - cssclasses << 'private' if event.private?
 - cssclasses << 'public' if event.public?
@@ -68,13 +68,18 @@
           - elsif brief && event.description?
             = link_to t(:more), droom.event_url(event)
             
-        
-    - unless brief 
+    - unless brief
       .detail
         = event.description.html_safe
 
       - if full_attachments && event.detail_visible_to?(current_person)
         .invitations
-          = render :partial => 'droom/events/invitations', :locals => {:event => event}
+          - if event.invitations.any?
+            %h2
+              = t :attending
+            = render :partial => 'droom/events/invitations', :locals => {:event => event}
         .attachments
-          = render :partial => "droom/folders/attachments", :locals => {:folder => event.folder, :title => t(:attachments), :open => true}
+          - if event.folder.populated?
+            %h2
+              = t(:attachments)
+            = render :partial => "droom/folders/attachments", :locals => {:folder => event.folder, :title => t(:attachments), :open => true}

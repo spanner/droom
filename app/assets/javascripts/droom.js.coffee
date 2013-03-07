@@ -34,6 +34,7 @@ jQuery ($) ->
     @find_including_self('[data-action="close"]').closes()
     @find_including_self('[data-action="upload"]').uploader()
     @find_including_self('[data-action="recrop"]').recropper()
+    @find_including_self('[data-action="affect"]').affects()
     @find_including_self('[data-action="remove"]').removes()
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="column_toggle"]').column_expander()

@@ -9,6 +9,7 @@ module Droom
 
     after_create :link_folder
     after_destroy :unlink_folder
+    # after_destroy :delete_similar
 
     validates_uniqueness_of :person_id, :scope => [:event_id, :group_invitation_id]
 
@@ -44,7 +45,7 @@ module Droom
     
     def status
       if response < 1
-        "rejected"
+        "refused"
       elsif response == 1
         "maybe"
       else
@@ -56,8 +57,14 @@ module Droom
       response && response > 1
     end
 
-    def rejected?
+    def refused?
       response && response < 1
+    end
+  
+  protected
+  
+    def delete_similar
+      Droom::Invitation.for_person(person).to_event(event).delete_all
     end
     
   end

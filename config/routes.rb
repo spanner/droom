@@ -31,7 +31,8 @@ Droom::Engine.routes.draw do
     resources :invitations do
       member do
         put :accept
-        put :reject
+        put :refuse
+        put :toggle
       end
     end
     resources :group_invitations

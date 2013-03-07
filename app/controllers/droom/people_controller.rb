@@ -19,7 +19,12 @@ module Droom
     end
     
     def show
-      respond_with @person
+      respond_with @person do |format|
+        format.js { 
+          @invitation = Droom::Invitation.find_by_id(params[:invitation_id])
+          render :partial => 'droom/people/person' 
+        }
+      end
     end
     
     def create
@@ -30,10 +35,7 @@ module Droom
     end
 
     def update
-      Rails.logger.warn ">>> updating person with #{params[:person].inspect}"
       @person.update_attributes(params[:person])
-      Rails.logger.warn "    person.valid? #{@person.valid?.inspect}: errors #{@person.errors.full_messages}"
-      Rails.logger.warn "    person: #{@person.inspect}"
       respond_with @person
     end
     
@@ -52,9 +54,6 @@ module Droom
     
     def invite
       @user = @person.invite!
-      
-      Rails.logger.warn ">>> Inviting person #{@person.inspect} gave us #{@user.inspect}"
-      
       render :partial => "droom/users/user_or_person", :locals => {:user_or_person => @person}
     end
     

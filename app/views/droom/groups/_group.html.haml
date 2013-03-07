@@ -4,4 +4,4 @@
   = group.name
 
 %ul.people
-  = render :partial => "droom/people/person", :collection => group.people, :locals => {:expel => group}
+  = render :partial => "droom/people/person", :collection => group.people, :locals => {:group => group}

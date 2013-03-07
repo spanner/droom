@@ -306,6 +306,7 @@ module Droom
     def detail_visible_to?(user_or_person)
       return true if self.public?
       return false unless user_or_person
+      return true if user_or_person.admin?
       return true if user_or_person.privileged?
       return true if user_or_person.person.invited_to?(self)
       return false if self.private?

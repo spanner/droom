@@ -78,6 +78,10 @@ module Droom
       end
       group_invitation.destroy!
     end
+    
+    def invited_to?(event)
+      group_invitations.to_event(event).any?
+    end
 
     def as_suggestion
       {

@@ -1,6 +1,3 @@
 - event ||= @event
 - folder ||= event.folder
-- if folder.populated?
-  %h2
-    = t(:attachments)
-  = render :partial => "droom/folders/contents", :locals => {:folder => folder}
+= render :partial => "droom/folders/contents", :locals => {:folder => folder}

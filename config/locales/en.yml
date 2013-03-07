@@ -230,9 +230,8 @@ en:
   person_post_code: "Post code"
   has_been_created: "has been added to the system"
   and_invited: "and invited to log in."
-  
   new_membership_instructions: "Start typing a name here and a list of possible matches will appear. Click on someone to add them to the %{name} group."
-  
+  type_name: "Start typing a name"
   profile: "Profile"
   search: "Search"
   "on": "on"
@@ -299,7 +298,10 @@ en:
   more: "more..."
   accept: "accept"
   reject: "reject"
+  phone_unknown: "phone unknown"
+  group_already_invited: "Already invited: select to reissue any missing personal invitations."
   your_invitations: "Your invitations"
+  invitation_successful: "Success: %{name} has been invited."
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"
