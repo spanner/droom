@@ -6,7 +6,7 @@ module Droom
     belongs_to :group
     belongs_to :event
     has_many :invitations, :dependent => :destroy
-    after_create :create_personal_invitations
+    after_save :create_personal_invitations
     validates_uniqueness_of :group_id, :scope => :event_id
     
     scope :to_event, lambda { |event|

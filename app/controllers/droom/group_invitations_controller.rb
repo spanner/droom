@@ -34,6 +34,10 @@ module Droom
     def build_group_invitation
       @group_invitation = @event.group_invitations.new(params[:group_invitation])
     end
+    
+    def find_or_build_group_invitation
+      @event.group_invitations.find_or_create_by_group_id(params[:group_invitation][:group_id])
+    end
 
     def get_group_invitation
       @group_invitation = @event.group_invitations.find(params[:id])

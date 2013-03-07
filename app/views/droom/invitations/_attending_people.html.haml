@@ -1,6 +1,0 @@
-- event ||= @event
-
-- if event.invitations.not_refused.any?
-  %ul.people{ :"data-url" => "#{event_invitations_path(event)}.js", :"data-refreshable" => true}
-    - event.invitations.not_refused.each do |invitation|
-      = render :partial => "droom/people/person", :object => invitation.person, :locals => {:uninvite => event}

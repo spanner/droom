@@ -201,11 +201,6 @@ ul.invitations
       background-position: 0 -64px
       a
         color: $green
-    &.waiting
-      background-image: image-url('droom/spinner.gif')
-      background-position: 0 0
-      a
-        color: $pale
     span.action
       display: inline-block
       margin: 0 0 0 10px
@@ -225,6 +220,11 @@ ul.invitations
         background-position: 0 -162px
       a.reject
         background-position: 0 -130px
+      a.waiting
+        background-image: image-url('droom/spinner.gif')
+        background-position: 0 0
+        a
+          color: $pale
 
 form.invitation
   input.name
