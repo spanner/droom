@@ -23,7 +23,7 @@ en:
           calendar_id: "Calendar"
           private: "hidden unless attending"
         folder: 
-          slug: "Folder name"
+          name: "Folder name"
         organisation:
           name: "Name"
           url: "Web link"
