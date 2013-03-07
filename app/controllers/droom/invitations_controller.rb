@@ -6,7 +6,7 @@ module Droom
     before_filter :get_event
     before_filter :build_invitation, :only => [:new]
     before_filter :find_or_build_invitation, :only => [:create]
-    before_filter :get_invitation, :only => [:accept, :reject, :toggle]
+    before_filter :get_invitation, :only => [:accept, :refuse, :toggle]
 
     def destroy
       @invitation = @event.invitations.find_by_id(params[:id])
@@ -36,7 +36,7 @@ module Droom
       render :partial => "droom/invitations/invitation"
     end
 
-    def reject
+    def refuse
       @invitation.update_attribute(:response, 0)
       render :partial => "droom/invitations/invitation"
     end

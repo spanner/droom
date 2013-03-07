@@ -1,7 +1,7 @@
 - document ||= listing
 
 %li.document{:id => "list_document_#{document.id}"}
-  = link_to truncate(document.name, :length => 24), droom.folder_document_url(document.folder, document), :class => "document #{document.file_extension}", :title => t(:click_to_download, :name => document.file_file_name)
+  = link_to truncate(document.name, :length => 24), droom.folder_document_url(document.folder, document), :class => "document #{document.file_extension.downcase}", :title => t(:click_to_download, :name => document.file_file_name)
   - if editable?(document)
     %span.action
       = link_to t(:remove), droom.folder_document_url(document.folder, document), :method => :delete, :class => 'delete minimal', :data => {:action => "remove", :removed => "#list_document_#{document.id}", :confirm => t(:confirm_remove_document, :name => document.name)}

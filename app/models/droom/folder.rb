@@ -106,7 +106,6 @@ module Droom
     
     def get_name_from_holder
       send :set_properties
-      p "...saving folder #{self.inspect}"
       self.save if self.changed?
     end
 
