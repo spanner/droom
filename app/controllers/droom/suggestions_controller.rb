@@ -7,7 +7,8 @@ module Droom
     def index
       fragment = params[:term]
       max = params[:limit] || 10
-      if fragment.blank?
+      show_when_empty = params[:empty] == "all"
+      if !show_when_empty && fragment.blank?
         @suggestions = []
       else
         if @types.include?('event') && fragment.length > 6 && span = Chronic.parse(fragment, :guess => false)

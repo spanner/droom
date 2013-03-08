@@ -1,7 +1,13 @@
 = form_for [@event, @group_invitation], :html => {:class => "invitation", :remote => true, :data => {:type => :html}} do |f|
-  %p
-    %input.group_selector.name{:type => "text", :placeholder => t(:group_name), :autocomplete => "off"}
-    = f.hidden_field :group_id, :class => "group_picker_target"
+  %ul.groups
+    - Droom::Group.all.each do |group|
+      %li.group
+        = f.radio_button :group_id, group.id
+        = f.label :"group_id_#{group.id}", group.name
+        - if group.invited_to?(@event)
+          %br
+          %span.formnote
+            = t :group_already_invited
 
   .buttons
     = f.submit t(:invite), :class => "submit"

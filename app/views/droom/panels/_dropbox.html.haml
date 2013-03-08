@@ -9,7 +9,7 @@
       = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
 
     %p.confirmation
-      
+      We are testing dropbox integration today, so your documents may not appear immediately.
 
   - else
     %p

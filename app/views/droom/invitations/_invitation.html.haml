@@ -5,5 +5,5 @@
   %span.action
     - unless invitation.accepted? 
       = link_to t(:accept), accept_event_invitation_url(invitation.event, invitation), :class => 'accept', :data => {:action => "replace", :method => "put", :replaced => "#invitation_#{invitation.id}"}
-    - unless invitation.rejected? 
-      = link_to t(:reject), reject_event_invitation_url(invitation.event, invitation), :class => 'reject', :data => {:action => "replace", :method => "put", :replaced => "#invitation_#{invitation.id}"}
+    - unless invitation.refused? 
+      = link_to t(:refuse), refuse_event_invitation_url(invitation.event, invitation), :class => 'refuse', :data => {:action => "replace", :method => "put", :replaced => "#invitation_#{invitation.id}"}

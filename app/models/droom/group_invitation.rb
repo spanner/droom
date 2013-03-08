@@ -13,6 +13,11 @@ module Droom
       where("droom_group_invitations.event_id = ?", event.id)
     }
     
+    scope :for_group, lambda { |group|
+      where("droom_group_invitations.group_id = ?", group.id)
+    }
+    
+    
     def create_personal_invitations
       group.people.each do |person|
         create_personal_invitation_for(person)
@@ -20,7 +25,7 @@ module Droom
     end
 
     def create_personal_invitation_for(person)
-      invitations.find_or_create_by_person_id_and_event_id(person.id, event.id) if person.member_of?(group)
+      event.invitations.find_or_create_by_person_id(person.id) if person.member_of?(group)
     end
     
   end

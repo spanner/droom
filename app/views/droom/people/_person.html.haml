@@ -1,22 +1,32 @@
-- uninvite ||= false
-- expel ||= false
+- person ||= @person
+- invitation ||= @invitation
+- membership ||= false
+- event ||= false
+- group ||= false
+- cssclass = "person"
 
-%li.person{:id => "person_#{person.id}", :data => {:refreshable => true, :url => droom.edit_person_path(person, :format => :js)} }
+- if invitation
+  - cssclass << " #{invitation.status}"
+  - event = invitation.event
+- if membership
+  - group = membership.group
+
+%li{:id => "person_#{person.id}", :class => cssclass, :data => {:refreshable => true, :url => droom.person_path(person, :format => :js, :invitation_id => invitation ? invitation.id : nil)} }
   %span.mugshot{:style => "background-image: url(#{person.image.url('cropped')})"}
+    - if invitation
+      - if editable?(invitation)
+        = link_to invitation.status, toggle_event_invitation_url(event, invitation), :class => "invitation #{invitation.status}", :data => {:action => "affect", :method => "put", :affected => "#person_#{person.id}"}
+      - else
+        %span{:class => "invitation #{invitation.status}"}
   %span.contact
     %span.name
       = person.formal_name
       = action_menulink(person, :class => "small")
     %br
     %span.note
-      - if person.phone? || person.email?
-        - if person.phone?
-          = person.phone
-        - if person.phone? && person.email?
-          %br
-        - if person.email?
-          = mail_to person.email
+      - if person.email?
+        = mail_to person.email
       - else
         = t :contact_information_unavailable
 
-    = action_menu(person, :uninvite => uninvite, :expel => expel)
+    = action_menu(person, :event => event, :group => group)

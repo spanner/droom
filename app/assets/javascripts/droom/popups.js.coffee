@@ -67,15 +67,12 @@ jQuery ($) ->
       @_container.append(@_content)
       @_content.activate()
       @_header = @_content.find('.header')
-      console.log @_content
       @_content.find('form').remote
         on_cancel: @hide
         on_success: @receive
       @show()
           
     conclude: (data) =>
-      console.log "popup conclude", data
-      console.log "affected:", $(@_affected)
       if @_affected
         $(@_affected).trigger "refresh"
       if @_replaced
@@ -196,7 +193,6 @@ jQuery ($) ->
       @place()
       ActionMenu.hideAll()
       @_link.addClass('up')
-      console.log "showing", @_selector, $(@_selector).get(0)
       $(@_selector).stop().slideDown 'fast'
       $(document).bind "click", @hide
     

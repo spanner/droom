@@ -887,9 +887,11 @@ jQuery ($) ->
     options = $.extend(
       submit_form: false
       threshold: 1
+      preload: true
       type: 'group'
     , options)
     @each ->
+      console.log "group_picker", @
       target = $(@).siblings('.group_picker_target')
       $(@).bind "keyup", () =>
         target.val null
@@ -931,20 +933,22 @@ jQuery ($) ->
       @prompt = $(element)
       @type = @prompt.attr('data-type')
       @form = @prompt.parents("form")
-      if options.type
-        @url = "/suggestions/#{options.type}.json"
-      else
-        @url = "/suggestions.json"
       @options = $.extend(
-        url: @url
         fill_field: true
         empty_field: false
         submit_form: false
+        preload: false
         threshold: 2
         limit: 10
         afterSuggest: null
         afterSelect: null
       , options)
+      if options.type
+        @url = "/suggestions/#{options.type}.json"
+      else
+        @url = "/suggestions.json"
+      if options.preload
+        @url += "?empty=all"
       @container = $("<ul class=\"suggestions\"></ul>").insertAfter(@prompt)
       @button = @form.find("a.search")
       @previously = null
@@ -957,9 +961,11 @@ jQuery ($) ->
       @prompt.keyup @keyed
       @prompt.bind "paste", @get
       @form.submit @hide
+      @get(null, true)  if @options.preload
       @
 
     place: () =>
+      console.log "placing suggester", @prompt.position().top
       @container.css
         top: @prompt.position().top + @prompt.outerHeight() - 2
         left: @prompt.position().left
@@ -976,17 +982,17 @@ jQuery ($) ->
       @prompt.addClass "waiting"
       @button.addClass "waiting"
 
-    get: (e) =>
+    get: (e, force) =>
       @pend()
       query = @prompt.val()
-      if query.length >= @options.threshold and query isnt @previously
+      if force or query.length >= @options.threshold and query isnt @previously
         if @cache[query]
           @suggest @cache[query]
         else if @previously_blank(query)
           @suggest []
         else
           @request.abort() if @request
-          @request = $.getJSON(@options.url, "term=" + encodeURIComponent(query) + "&limit=" + @options.limit, (suggestions) =>
+          @request = $.getJSON(@url, "term=" + encodeURIComponent(query) + "&limit=" + @options.limit, (suggestions) =>
             @cache[query] = suggestions
             @blanks.push query if suggestions.length is 0
             @suggest suggestions

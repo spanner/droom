@@ -21,7 +21,12 @@ jQuery ($) ->
 
   $.fn.remote = (opts) ->
     @each ->
-      new Remote @, opts 
+      new Remote @, opts
+  
+  $.fn.silent = (opts) ->
+    @each ->
+      
+      new Remote
 
   class Remote
     constructor: (element, opts) ->
@@ -69,7 +74,7 @@ jQuery ($) ->
       @_form?.remove()
 
 
-
+  
 
 
 

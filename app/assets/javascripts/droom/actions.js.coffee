@@ -69,11 +69,22 @@ jQuery ($) ->
     @each ->
       removed = $(@).attr('data-removed') || ".holder"
       affected = $(@).attr('data-affected')
+      
       $(@).remote
         on_success: (response) =>
+          console.log "removing", removed, "->", $(@).parents(removed).first()
           $(@).parents(removed).first().fadeOut 'fast', () ->
             $(@).remove()
             $(affected).trigger "refresh"
+
+
+  $.fn.affects = () ->
+    @each ->
+      affected = $(@).attr('data-affected')
+      $(@).remote
+        on_success: (response) =>
+          console.log "affecting", affected, "->", $(affected)
+          $(affected).trigger "refresh"
 
   # Close links work just by triggering a 'hide' event and hoping that something further up the tree will bind
   # it to the right thing.
@@ -98,9 +109,6 @@ jQuery ($) ->
         on_success: (r) =>
           replaced = $(@).self_or_ancestor(container).last()
           replacement = $(r).insertAfter(replaced)
-          console.log "rwrc: container", container
-          console.log "rwrc: replaced", replaced
-          console.log "rwrc: replacement", replacement
           replaced?.remove()
           replacement.activate()
           $(affected).trigger('refresh')

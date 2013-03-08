@@ -1,5 +1,5 @@
-- uninvite ||= false
-- expel ||= false
+- event ||= false
+- group ||= false
 
 - if editable?(person)
   .menu{:data => {:for => "person_#{person.id}"}}
@@ -12,13 +12,11 @@
       %li
         = link_to t(:delete_person), droom.person_url(person), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#person_#{person.id}", :confirm => t(:confirm_delete_person, :name => person.full_name)}
 
-      - if uninvite
-        - invitation = person.invitation_to(uninvite)
+      - if event && invitation = person.invitation_to(event)
         %li
-          = link_to t(:uninvite), droom.invitation_url(invitation), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#person_#{person.id}"}
+          = link_to t(:uninvite), droom.event_invitation_url(event, invitation), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#person_#{person.id}"}
 
-      - if expel
-        - membership = person.membership_of(expel)
+      - if group && membership = person.membership_of(group)
         %li
           = link_to t(:expel), droom.membership_url(membership), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#person_#{person.id}"}
         

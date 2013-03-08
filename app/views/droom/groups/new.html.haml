@@ -1,6 +1,7 @@
-#new_group_invitation
+#new_group
   .header
     = link_to "X", '#', :class => "closer", :data => {:action => "close"}
     %h2
-      = t :invite_person_to, :name => @event.name
+      = t :add_group
+      
   = render :partial => 'form'

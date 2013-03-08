@@ -1,12 +1,11 @@
 = form_for @group, :html => {:class => 'edit group', :remote => true, :data => {:type => :html}} do |f|
-  %table.main.groups
-    %tr.group
-      %th.name
-        = f.text_field :name, :class => 'name', :placeholder => t(:group_name)
-      %td.description
-        = f.text_field :description, :class => 'name', :placeholder => t(:group_description)
-      %td.count
-      %td.buttons
-        = f.submit t(:save)
-        = t :or
-        = link_to t(:cancel), "/", :class => 'cancel'
+  %p.name
+    = f.text_field :name, :class => 'name', :placeholder => t(:group_name)
+    
+  %p.description
+    = f.text_area :description, :class => 'name', :placeholder => t(:group_description)
+
+  .buttons
+    = f.submit t(:save)
+    = t :or
+    = link_to t(:cancel), "/", :class => 'cancel'

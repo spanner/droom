@@ -16,7 +16,7 @@ module Droom
     end
 
     def new
-      render :partial => "form"
+      respond_with @group
     end
 
     def show

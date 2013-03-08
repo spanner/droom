@@ -25,6 +25,19 @@ a.dropbox
     background-position: 0 -48px
     color: $hover
 
+a.dropboxer
+  +icon_link("droom/dropbox_button_small.png")
+  margin-left: 10px
+  color: #4ea1ea
+  &:visited
+    color: #4ea1ea
+  &:hover
+    color: $hover
+  &.revoke
+    background-position: 0 -48px
+    color: $hover
+
+
 input.dropbox.revoke[type="submit"]
   +icon_link("droom/revoke.png")
   background-color: none
@@ -191,7 +204,7 @@ ul.invitations
       repeat: no-repeat
       position: 0 0
       image: image-url('droom/acceptance.png')
-    &.rejected
+    &.refused
       color: $mid
       text-decoration: line-through
       background-position: 0 -32px
@@ -205,7 +218,7 @@ ul.invitations
       display: inline-block
       margin: 0 0 0 10px
       text-indent: 0
-      a.accept, a.reject
+      a.accept, a.refuse
         display: inline-block
         text-indent: 20px
         height: 16px
@@ -218,7 +231,7 @@ ul.invitations
           image: image-url("droom/acceptance.png")
       a.accept
         background-position: 0 -162px
-      a.reject
+      a.refuse
         background-position: 0 -130px
       a.waiting
         background-image: image-url('droom/spinner.gif')
@@ -227,9 +240,16 @@ ul.invitations
           color: $pale
 
 form.invitation
+  min-height: 200px
   input.name
     width: 470px
     font-size: 2em
+  ul.groups
+    padding-left: 4px
+    list-style: none
+    margin: 30px 0
+    span.formnote
+      padding-left: 24px
 
 span.admin.documents
   margin-bottom: 0
@@ -275,7 +295,7 @@ form.event
     margin-top: 10px
     
 form.folder
-  input.slug
+  input.name
     width: 480px
     font-size: 2em
 
@@ -381,6 +401,17 @@ form.person
     position: relative
     margin-top: 0.5em
 
+form.group
+  input[type="text"], textarea
+    width: 520px
+    font-size: 1em
+  textarea
+    height: 120px
+  p.name
+    margin: 0
+    input[type="text"]
+      font-size: 1.5em
+      font-weight: bold
 
 form.user
   input[type="text"], input[type="password"]
@@ -1325,12 +1356,16 @@ ul.setup
 
 .note, .formnote
   font-size: 0.8em
+  line-height: 1.1
   color: $mid
   a, a:visited
     color: $mid
     &:hover
       color: $hover
 
+span.formnote
+  display: block
+  
 p.note
   line-height: 1.2
   white-space: normal
@@ -1591,7 +1626,10 @@ ul.people
     height: 48px
     line-height: 1.1
     margin-bottom: 10px
+    &.refused
+      +opacity(0.4)
     span.mugshot
+      position: relative
       display: block
       float: left
       width: 32px
@@ -1604,6 +1642,26 @@ ul.people
         repeat: no-repeat
         position: center center
         size: cover
+      .invitation
+        display: block
+        position: absolute
+        overflow: hidden
+        top: -6px
+        right: -10px
+        width: 14px
+        height: 14px
+        text-indent: 20px
+        background:
+          repeat: no-repeat
+          position: 0 0
+          image: image-url('droom/acceptance.png')
+        &.refused
+          background-position: 0 -130px
+        &.accepted
+          background-position: 0 -162px
+        &.maybe
+          background-position: 0 -98px
+        
     span.contact
       display: block
       overflow: hidden
