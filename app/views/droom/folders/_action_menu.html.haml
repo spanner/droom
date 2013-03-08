@@ -10,8 +10,5 @@
       %li
         = link_to t(:delete_folder), droom.folder_url(folder), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#folder_#{folder.id}", :confirm => t(:confirm_delete_folder, :path => folder.path)}
       - if folder.populated?
-        - if show_dropbox_links?
-          %li
-            = link_to "sync with dropbox", droom.dropbox_folder_url(folder), :remote => true, :class => "copy"
         / %li
         /   = link_to t(:download_folder), droom.folder_url(folder, :zip), :class => 'download'
