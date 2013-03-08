@@ -99,6 +99,10 @@ module Droom
       Rails.logger.warn ">>> creating dropbox subfolder #{slug} for user #{user.name}"
       documents.each { |doc| doc.copy_to_dropbox(user) }
     end
+    
+    def dropboxed_for(user)
+      # user.person && dropbox_documents.for_person(person).any?
+    end
 
     def copy_to_dav
       Rails.logger.warn ">>> copy folder #{@folder.inspect} to DAV"

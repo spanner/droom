@@ -6,7 +6,7 @@
     - else
       %span.prev
 
-    = t(:stream)
+    = t(:stream_title)
 
     - if following = @scrap.next_younger
       = link_to t(:next), droom.scrap_url(following), :data => {:action => "slide", :direction => "right", :affected => ".scrap"}, :class => "next"

@@ -25,6 +25,19 @@ a.dropbox
     background-position: 0 -48px
     color: $hover
 
+a.dropboxer
+  +icon_link("droom/dropbox_button_small.png")
+  margin-left: 10px
+  color: #4ea1ea
+  &:visited
+    color: #4ea1ea
+  &:hover
+    color: $hover
+  &.revoke
+    background-position: 0 -48px
+    color: $hover
+
+
 input.dropbox.revoke[type="submit"]
   +icon_link("droom/revoke.png")
   background-color: none
