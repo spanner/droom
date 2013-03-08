@@ -100,7 +100,7 @@ module Droom
       documents.each { |doc| doc.copy_to_dropbox(user) }
     end
     
-    def dropboxed_for(user)
+    def dropboxed_for?(user)
       # user.person && dropbox_documents.for_person(person).any?
     end
 

@@ -23,7 +23,7 @@ module Droom
     end
     
     def dropbox_link(folder)
-      if dropbox? && current_user.pref('dropbox.strategy') == 'clicked' && !folder.dropboxed_for(current_user)
+      if dropbox? && current_user.pref('dropbox.strategy') == 'clicked' && !folder.dropboxed_for?(current_user)
         link_to t(:copy_to_dropbox), droom.dropbox_folder_url(folder), :id => "dropbox_folder_#{folder.id}", :class => 'dropboxer minimal', :data => {:action => "remove", :removed => "#dropbox_folder_#{folder.id}"}
       end
     end
