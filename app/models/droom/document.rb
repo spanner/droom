@@ -9,13 +9,19 @@ module Droom
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
 
+    has_many :dropbox_documents
+
     has_attached_file :file
     after_post_process :extract_text
 
     before_save :set_version
     after_destroy :destroy_folder_if_empty
+
+    after_destroy :mark_dropbox_documents_deleted
     
     validates :file, :presence => true
+
+    after_save :update_dropbox_documents
 
     searchable do
       text :name, :boost => 10, :stored => true
@@ -115,8 +121,18 @@ module Droom
     end
     
     def copy_to_dropbox(user)
-      if dbclient = user.dropbox_client
-        dbclient.put_file(full_path, original_file)
+      dropbox_documents.create(:person_id => user.person.id)
+    end
+
+    def mark_dropbox_documents_deleted
+      dropbox_documents.each do |dd|
+        dd.mark_deleted(true)
+      end
+    end
+
+    def update_dropbox_documents
+      dropbox_documents.each do |dd|
+        dd.update
       end
     end
 
@@ -144,6 +160,10 @@ module Droom
       rescue Exception => e
         Rails.logger.warn "Failed to parse document text from #{file_file_name}: #{e}"
       end
+    end
+
+    def dropbox_sync
+
     end
 
   end

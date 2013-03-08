@@ -47,6 +47,10 @@ module Droom
       current_user and !!current_user.dropbox_token
     end
     
+    def show_dropbox_links?
+      dropbox?# && preference is 'clicked'
+    end
+    
     def dropbox_auth_url
       dbs = dropbox_session
       # get an auth link address, with our register action as the callback
@@ -125,18 +129,18 @@ module Droom
         end
       end
     end
-    
+
     def url_for_month(date)
       droom.events_url(:year => date.year, :month => date.month)
     end
 
     def url_for_date(date)
-      droom.events_url(:year => date.year, :month => date.month, :mday => date.day)      
+      droom.events_url(:year => date.year, :month => date.month, :mday => date.day)
     end
-    
+
     def day_names
       ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     end
-    
+
   end
 end
