@@ -62,6 +62,7 @@ jQuery ($) ->
       field.after holder
       field.focus @show
       field.blur @hide
+      field.keyup @keyed
       @holder = holder
       @field = field
 
@@ -77,6 +78,18 @@ jQuery ($) ->
       unless e.target is @field[0]
         $(document).unbind "click", @hide
         @holder.hide()
+
+    keyed: (e) =>
+      k = e.keyCode
+      if (48 <= k <= 59) or k == 8
+        console.log "keyed", k, " -> number, ok"
+        #match typed value in dropdown
+      else if k == 9
+        console.log "tabbed out"
+        @hide()
+      else
+        console.log "other input", k, "..."
+        e.preventDefault()
 
   $.fn.time_picker = ->
     @each ->
@@ -883,23 +896,6 @@ jQuery ($) ->
         suggester.form.submit()
     @
 
-  $.fn.group_selector = (options) ->
-    options = $.extend(
-      submit_form: false
-      threshold: 1
-      preload: true
-      type: 'group'
-    , options)
-    @each ->
-      console.log "group_picker", @
-      target = $(@).siblings('.group_picker_target')
-      $(@).bind "keyup", () =>
-        target.val null
-      suggester = new Suggester(@, options)
-      suggester.options.afterSelect = (value, id) ->
-        target.val id
-    @
-
   $.fn.group_picker = (options) ->
     options = $.extend(
       submit_form: true
@@ -949,7 +945,9 @@ jQuery ($) ->
         @url = "/suggestions.json"
       if options.preload
         @url += "?empty=all"
-      @container = $("<ul class=\"suggestions\"></ul>").insertAfter(@prompt)
+      @dropdown = new Dropdown @prompt,
+        on_select: @select
+        on_keypress: @keyed
       @button = @form.find("a.search")
       @previously = null
       @request = null
@@ -961,30 +959,20 @@ jQuery ($) ->
       @prompt.keyup @keyed
       @prompt.bind "paste", @get
       @form.submit @hide
-      @get(null, true)  if @options.preload
+      @get(null, true) if @options.preload
       @
 
-    place: () =>
-      console.log "placing suggester", @prompt.position().top
-      @container.css
-        top: @prompt.position().top + @prompt.outerHeight() - 2
-        left: @prompt.position().left
-        width: @prompt.outerWidth() - 2
-
     reset: () =>
-      @container.empty()
-      @suggestions = []
-      @suggestion = null
+      @dropdown.reset().hide()
 
-    pend: () =>
-      @place()
-      @reset()
-      @prompt.addClass "waiting"
-      @button.addClass "waiting"
-
+    keyed: (e) =>
+      console.log "suggester keyed", e.which
+      @dropdown.keyed(e, true) or @get(e)
+      
     get: (e, force) =>
-      @pend()
+      @wait()
       query = @prompt.val()
+      console.log "get:", query
       if force or query.length >= @options.threshold and query isnt @previously
         if @cache[query]
           @suggest @cache[query]
@@ -1000,118 +988,41 @@ jQuery ($) ->
       else
         @hide()
 
-    suggest: (suggestions) =>
-      @button.removeClass "waiting"
-      @prompt.removeClass "waiting"
-      @show()
-      console.log "suggestions.length =>", suggestions.length
-      if suggestions.length > 0
-        $.each suggestions, (i, suggestion) =>
-          link = $("<a href=\"#\">#{suggestion.prompt}</a>")
-          id = suggestion.id
-          value = suggestion.value || suggestion.prompt
-          console.log 
-          link.hover () =>
-            @hover(link)
-            link.click (e) =>
-              @select(e, link, value, id)
-          $("<li></li>").addClass(suggestion.type).append(link).appendTo @container
-
-        @suggestions = @container.find("a")
-      else
-        @hide()
-      @options.afterSuggest.call @, suggestions  if @options.afterSuggest
-
-    select: (e, selection, value, id) =>
-      e.preventDefault() if e
-      selection ?= $(@suggestions.get(@suggestion))
-      if @options.fill_field?
-        @prompt.val value
-        @prompt.trigger 'suggester.change'
-      else if @options.empty_field?
-        @prompt.val "" 
-      # if @options.submit_form?
-      #   @form.submit()
-      @options.afterSelect.call(@, value, id) if @options.afterSelect
-      @hide()
-
-    show: () =>
-      unless @visible
-        @container.fadeIn "slow"
-        @visible = true
-
-    hide: () =>
-      if @visible
-        @container.fadeOut "fast"
-        @visible = false
-
-    keyed: (e) =>
-      key_code = e.which
-      if action = @movementKey(key_code)
-        @show() if @suggestions.length > 0
-        if @visible
-          action.call @, e
-          e.preventDefault()
-          e.stopPropagation()
-      else if @inputKey(key_code)
-        @get e
-
-    movementKey: (kc) =>
-      switch kc
-        when 27 # escape
-          @hide
-        when 33 # page up
-          @first
-        when 38 # up
-          @previous
-        when 40 # down
-          @next
-        when 33 # page down
-          @last
-        when 9 # tab
-          @next
-        when 13 # enter
-          @select
-
-    inputKey: (kc) =>
-      #delete,     backspace,    alphanumerics,    number pad,        punctuation
-      (kc is 8) or (kc is 46) or (47 < kc < 91) or (96 < kc < 112) or (kc > 145)
-      
-    next: (e) =>
-      if @suggestion is null or @suggestion >= @suggestions.length - 1
-        @first()
-      else
-        @highlight @suggestion + 1
-
-    previous: (e) =>
-      if @suggestion <= 0
-        @last()
-      else
-        @highlight @suggestion - 1
-
-    first: (e) =>
-      @highlight 0
-
-    last: (e) =>
-      @highlight @suggestions.length - 1
-
-    hover: (link) =>
-      @highlight @suggestions.index(link) # this will be the hovered link
-
-    highlight: (i) =>
-      @unHighlight @suggestion  if @suggestion isnt null
-      $(@suggestions.get(i)).addClass "hover"
-      @suggestion = i
-
-    unHighlight: (i) =>
-      $(@suggestions.get(i)).removeClass "hover"
-      @suggestion = null
-
     previously_blank: (query) =>
       if @blanks.length > 0
         blank_re = new RegExp("(" + @blanks.join("|") + ")")
         return blank_re.test(query)
       false
+    
+    suggest: (suggestions) =>
+      @unwait()
+      @dropdown.show(suggestions)
+      @options.afterSuggest.call(@, suggestions) if @options.afterSuggest
+
+    select: (value) =>
+      if @options.fill_field?
+        @prompt.val(value)
+        @prompt.trigger('suggester.change')
+      else if @options.empty_field?
+        @prompt.val ""
+      @options.afterSelect.call(@, value) if @options.afterSelect
+
+    show: () =>
+      @dropdown.show()
+
+    hide: () =>
+      @dropdown.hide()
+
+    wait: () =>
+      @button.addClass "waiting"
+      @prompt.addClass "waiting"
+
+    unwait: () =>
+      @button.removeClass "waiting"
+      @prompt.removeClass "waiting"
+      
+
+
 
 
 
@@ -1160,6 +1071,130 @@ jQuery ($) ->
       @target.val selection.unique_id
       @thumb.empty().html(response)
       @options.afterSelect?.call(@, value)
+
+
+
+  # I've just lifted this out of the suggester so that it can be used in other pickers.
+
+  $.fn.dropdown = (options) ->
+    @each ->
+      new Dropdown(@, options)
+
+  class Dropdown
+    constructor: (element, opts) ->
+      @hook = $(element)
+      @drop = $('<ul class="dropdown" />').insertAfter(@hook).hide()
+      @options = $.extend {}, opts
+      console.log "dropdown attached to:", @hook
+      @
+
+    place: () =>
+      @drop.css
+        top: @hook.position().top + @hook.outerHeight() - 2
+        left: @hook.position().left
+        width: @hook.outerWidth() - 2
+      
+    populate: (items) =>
+      console.log "dropdown populate:", items
+      @reset()
+      if items.length > 0
+        $.each items, (i, item) =>
+          console.log "dropdown item:", item
+          link = $("<a href=\"#\">#{item.prompt}</a>")
+          id = item.id
+          value = item.value || item.prompt
+          link.hover () =>
+            @hover(link)
+            link.click (e) =>
+              @item = i
+              @select(value)
+          $("<li></li>").addClass(item.type).append(link).appendTo(@drop)
+      @items = @drop.find("a")
+        
+    reset: () =>
+      @drop.empty()
+
+    select: (value) =>
+      @hide()
+      @options.on_select?(value)
+
+    cancel: (e) =>
+      @hide()
+      @options.on_cancel?()
     
+    show: (values) =>
+      @place()
+      @populate(values) if values
+      unless @visible
+        @drop.fadeIn "fast"
+        @visible = true
+      
+    hide: () =>
+      if @visible
+        @drop.fadeOut "fast"
+        @visible = false
 
+    keyed: (e, discard) =>
+      kc = e.which
+      console.log "dropdown keyed", kc, discard
+      if action = @movementKey(kc)
+        @show() if @items.length > 0
+        if @visible
+          console.log "movement action", action
+          action.call @, e
+          e.preventDefault()
+          e.stopPropagation()
+        return true
+      else unless discard
+        @hook.trigger($.Event('keypress', {which: kc}))
+      return false
+      
+    movementKey: (kc) =>
+      switch kc
+        when 27 # escape
+          @hide
+        when 33 # page up
+          @first
+        when 38 # up
+          @previous
+        when 40 # down
+          @next
+        when 33 # page down
+          @last
+        when 9 # tab
+          @next
+        when 13 # enter
+          @select
 
+    next: (e) =>
+      console.log "dropdown next", @item
+      if !@item? or @item >= @items.length - 1
+        @first()
+      else
+        @highlight(@item + 1)
+
+    previous: (e) =>
+      if @item <= 0
+        @last()
+      else
+        @highlight(@item - 1)
+
+    first: (e) =>
+      console.log "dropdown first"
+      @highlight(0)
+
+    last: (e) =>
+      @highlight(@items.length - 1)
+
+    hover: (link) =>
+      @highlight(@items.index(link))
+
+    highlight: (i) =>
+      console.log "dropdown highlight", i
+      @unHighlight(@item) if @item isnt null
+      $(@items.get(i)).addClass("hover")
+      @item = i
+
+    unHighlight: (i) =>
+      $(@items.get(i)).removeClass("hover")
+      @item = null
