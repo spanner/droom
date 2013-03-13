@@ -50,54 +50,40 @@ jQuery ($) ->
 
   class TimePicker
     constructor: (element) ->
-      holder = $('<div class="timepicker" />')
-      menu = $('<ul />').appendTo(holder)
-      field = $(element)
+      @holder = $('<div class="timepicker" />')
+      @field = $(element)
+      @dropdown = new Dropdown @field,
+        on_select: @select
+        on_keypress: @keyed
+      times = []
       for i in [0..24]
-        $("<li>#{i}:00</li><li>#{i}:30</li>").appendTo(menu)
-      menu.find('li').click (e) ->
-        e.preventDefault()
-        field.val $(@).text()
-        field.trigger('change')
-      field.after holder
-      field.focus @show
-      field.blur @hide
-      field.keyup @keyed
-      @holder = holder
-      @field = field
+        times.push({value: "#{i}:00"})
+        times.push({value: "#{i}:30"})
+      @dropdown.populate(times)
+      @field.focus @show
+      @field.blur @hide
+      # @field.keyup @keyed
+        
+    select: (value) =>
+      @field.val(value)
+      @field.trigger('change')
+      
+    keyed: (e) =>
+      @dropdown.keyed(e, true) or @dropdown.match(@field.val())
 
     show: (e) =>
-      position = @field.position()
-      @holder.css
-        left: position.left
-        top: position.top + @field.outerHeight() - 2
-      @holder.show()
-      $(document).bind "click", @hide
-      
-    hide: (e) =>
-      unless e.target is @field[0]
-        $(document).unbind "click", @hide
-        @holder.hide()
+      @dropdown.show()
 
-    keyed: (e) =>
-      k = e.keyCode
-      if (48 <= k <= 59) or k == 8
-        console.log "keyed", k, " -> number, ok"
-        #match typed value in dropdown
-      else if k == 9
-        console.log "tabbed out"
-        @hide()
-      else
-        console.log "other input", k, "..."
-        e.preventDefault()
+    hide: (e) =>
+      @dropdown.hide()
 
   $.fn.time_picker = ->
     @each ->
       new TimePicker(@)
 
+
   #todo: this can now make proper use of the remote mechanism and doesn't need to take over the whole form any more.
   #
-
   class FilePicker
     constructor: (element) ->
       @_container = $(element)
@@ -956,7 +942,8 @@ jQuery ($) ->
       @suggestion = null
       @cache = {}
       @blanks = []
-      @prompt.keyup @keyed
+      @prompt.bind "blur", @hide
+      @prompt.bind "keyup", @keyed
       @prompt.bind "paste", @get
       @form.submit @hide
       @get(null, true) if @options.preload
@@ -1085,7 +1072,6 @@ jQuery ($) ->
       @hook = $(element)
       @drop = $('<ul class="dropdown" />').insertAfter(@hook).hide()
       @options = $.extend {}, opts
-      console.log "dropdown attached to:", @hook
       @
 
     place: () =>
@@ -1099,13 +1085,14 @@ jQuery ($) ->
       @reset()
       if items.length > 0
         $.each items, (i, item) =>
-          console.log "dropdown item:", item
-          link = $("<a href=\"#\">#{item.prompt}</a>")
-          id = item.id
-          value = item.value || item.prompt
+          id = item.id || item.value
+          value = item.value || item.prompt || item.id
+          link = $("<a href=\"#\">#{value}</a>")
           link.hover () =>
             @hover(link)
             link.click (e) =>
+              e.preventDefault()
+              e.stopPropagation()
               @item = i
               @select(value)
           $("<li></li>").addClass(item.type).append(link).appendTo(@drop)
@@ -1136,11 +1123,9 @@ jQuery ($) ->
 
     keyed: (e, discard) =>
       kc = e.which
-      console.log "dropdown keyed", kc, discard
       if action = @movementKey(kc)
         @show() if @items.length > 0
         if @visible
-          console.log "movement action", action
           action.call @, e
           e.preventDefault()
           e.stopPropagation()
@@ -1166,8 +1151,17 @@ jQuery ($) ->
         when 13 # enter
           @select
 
+    match: (text) =>
+      matching = @items.select(":contains(#{text})")
+      if item = matching.first()
+        @hover(item)
+        holder = item.parents('li').first()
+        top = holder.offset().top
+        @drop.animate
+          scrollTop: top,
+        'fast'
+
     next: (e) =>
-      console.log "dropdown next", @item
       if !@item? or @item >= @items.length - 1
         @first()
       else
@@ -1180,7 +1174,6 @@ jQuery ($) ->
         @highlight(@item - 1)
 
     first: (e) =>
-      console.log "dropdown first"
       @highlight(0)
 
     last: (e) =>
@@ -1190,7 +1183,6 @@ jQuery ($) ->
       @highlight(@items.index(link))
 
     highlight: (i) =>
-      console.log "dropdown highlight", i
       @unHighlight(@item) if @item isnt null
       $(@items.get(i)).addClass("hover")
       @item = i

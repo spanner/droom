@@ -902,7 +902,8 @@ div.copyholder
 
 ul.dropdown
   position: absolute
-  overflow: hidden
+  overflow-x: hidden
+  overflow-y: auto
   color: $link
   margin: 0
   padding: 0
@@ -911,6 +912,7 @@ ul.dropdown
   border-top: 0
   z-index: 100
   list-style: none
+  max-height: 300px
   +box-shadow
   li
     a, a:visited
