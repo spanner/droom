@@ -17,6 +17,8 @@ module Droom
     has_many :groups, :through => :memberships
     has_many :mailing_list_memberships, :through => :memberships
     
+    has_many :dropbox_documents
+    
     has_many :preferences, :dependent => :destroy, :foreign_key => :created_by_id
     accepts_nested_attributes_for :preferences
 
@@ -134,13 +136,15 @@ module Droom
       text :description, :stored => true
     end
 
+    handle_asynchronously :solr_index
+
     def self.highlight_fields
       [:name, :forename, :description]
     end
 
     scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
-      where('droom_people.name LIKE :f OR droom_people.forename LIKE :f OR droom_people.email LIKE :f OR droom_people.phone LIKE :f', :f => fragment)
+      where('droom_people.name LIKE :f OR droom_people.forename LIKE :f OR droom_people.email LIKE :f OR droom_people.phone LIKE :f OR CONCAT(droom_people.forename, " ", droom_people.name) LIKE :f', :f => fragment)
     }
     
     # warning! won't work in SQLite.
@@ -275,11 +279,7 @@ module Droom
     end
 
   protected
-    
-    def index
-      Sunspot.index!(self)
-    end
-    
+
     def invite_if_instructed
       invite_user if invite_on_creation
     end

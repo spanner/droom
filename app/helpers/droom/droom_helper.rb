@@ -21,6 +21,12 @@ module Droom
         render :partial => "#{type.pluralize}/action_menu", :locals => locals
       end
     end
+    
+    def dropbox_link(folder)
+      if dropbox? && current_user.pref('dropbox.strategy') == 'clicked' && folder.populated? && !folder.dropboxed_for?(current_user)
+        link_to t(:copy_to_dropbox), droom.dropbox_folder_url(folder), :id => "dropbox_folder_#{folder.id}", :class => 'dropboxer minimal', :data => {:action => "remove", :removed => "#dropbox_folder_#{folder.id}"}
+      end
+    end
 
     def admin?
       current_user and current_user.admin?
@@ -45,6 +51,10 @@ module Droom
 
     def dropbox?
       current_user and !!current_user.dropbox_token
+    end
+    
+    def show_dropbox_links?
+      dropbox?# && preference is 'clicked'
     end
     
     def dropbox_auth_url
@@ -125,18 +135,18 @@ module Droom
         end
       end
     end
-    
+
     def url_for_month(date)
       droom.events_url(:year => date.year, :month => date.month)
     end
 
     def url_for_date(date)
-      droom.events_url(:year => date.year, :month => date.month, :mday => date.day)      
+      droom.events_url(:year => date.year, :month => date.month, :mday => date.day)
     end
-    
+
     def day_names
       ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     end
-    
+
   end
 end

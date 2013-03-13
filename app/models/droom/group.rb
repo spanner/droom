@@ -24,6 +24,8 @@ module Droom
       text :description, :stored => true
     end
 
+    handle_asynchronously :solr_index
+
     def self.highlight_fields
       [:name, :description]
     end
@@ -93,10 +95,6 @@ module Droom
     end
 
   protected
-
-    def index
-      Sunspot.index!(self)
-    end
 
     def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, name.parameterize)

@@ -53,6 +53,8 @@ module Droom
       text :description, :stored => true
     end
 
+    handle_asynchronously :solr_index
+
     def self.highlight_fields
       [:name, :description]
     end
@@ -425,10 +427,6 @@ module Droom
           }) unless occ.dtstart == self.start
         end
       end
-    end
-
-    def index
-      Sunspot.index!(self)
     end
 
     def parse_date(value)

@@ -21,6 +21,7 @@ module Droom
               highlights.each do |hl|
                 highlight hl
               end
+              with visible_to?(current_person)
             end
             paginate :page => @page, :per_page => 10
           end

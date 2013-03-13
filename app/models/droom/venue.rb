@@ -25,6 +25,8 @@ module Droom
       text :post_code, :stored => true
     end
 
+    handle_asynchronously :solr_index
+
     def self.highlight_fields
       [:name, :description, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code]
     end
@@ -128,10 +130,6 @@ module Droom
 
   private
 
-    def index
-      Sunspot.index!(self)
-    end
-    
     def convert_gridref
       if post_code_changed?
         if post_code.is_gridref?

@@ -25,6 +25,19 @@ a.dropbox
     background-position: 0 -48px
     color: $hover
 
+a.dropboxer
+  +icon_link("droom/dropbox_button_small.png")
+  margin-left: 10px
+  color: #4ea1ea
+  &:visited
+    color: #4ea1ea
+  &:hover
+    color: $hover
+  &.revoke
+    background-position: 0 -48px
+    color: $hover
+
+
 input.dropbox.revoke[type="submit"]
   +icon_link("droom/revoke.png")
   background-color: none
@@ -388,6 +401,17 @@ form.person
     position: relative
     margin-top: 0.5em
 
+form.group
+  input[type="text"], textarea
+    width: 520px
+    font-size: 1em
+  textarea
+    height: 120px
+  p.name
+    margin: 0
+    input[type="text"]
+      font-size: 1.5em
+      font-weight: bold
 
 form.user
   input[type="text"], input[type="password"]
