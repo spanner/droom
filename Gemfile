@@ -11,7 +11,7 @@ gem "haml"
 gem "geocoder"
 gem 'devise'
 gem 'devise-encryptable'
-gem "paperclip", '~> 3.1.0'
+gem "paperclip"#, '~> 3.1.0'
 gem "debugger"
 gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
 gem "date_validator"
@@ -25,6 +25,7 @@ gem 'acts_as_list'
 gem 'rdiscount'
 gem 'acts_as_tree'
 gem 'dropbox-sdk'
+gem 'delayed_job'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'yomu'
@@ -45,7 +46,7 @@ end
 group :test, :development do
   gem 'mysql2'
   gem 'haml'
-  gem 'paperclip', "~> 3.1.0"
+  gem 'paperclip'#, "~> 3.1.0"
   gem "launchy"
   gem "capybara"
   gem "rspec-rails", ">= 2.6.0"

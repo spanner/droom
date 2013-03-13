@@ -12,16 +12,16 @@ module Droom
     has_many :dropbox_documents
 
     has_attached_file :file
-    after_post_process :extract_text
 
     before_save :set_version
     after_destroy :destroy_folder_if_empty
 
     after_destroy :mark_dropbox_documents_deleted
-    
+
     validates :file, :presence => true
 
     after_save :update_dropbox_documents
+    after_create :extract_text
 
     searchable do
       text :name, :boost => 10, :stored => true
@@ -112,14 +112,6 @@ module Droom
       }
     end
 
-    def index
-      begin
-        Sunspot.index!(self)
-      rescue Errno::ECONNREFUSED, Timeout::Error => e
-        Rails.logger.warn "Solr server has gone away: #{file_file_name}: #{e}"
-      end
-    end
-    
     def copy_to_dropbox(user)
       dropbox_documents.create(:person_id => user.person.id)
     end
@@ -138,20 +130,12 @@ module Droom
 
   protected
 
-    def set_version
-      if file.dirty?
-        self.version = (version || 0) + 1
-      end
-    end
-
-    def destroy_folder_if_empty
-      self.folder.destroy if self.folder && self.folder.empty?
-    end
-
     def extract_text
-      data = File.read file.queued_for_write[:original].path
+      temp = Paperclip.io_adapters.for(self.file)
+      data = File.read(temp.path)
       begin
-        self.extracted_text = Yomu.read :text, data
+        text = Yomu.read :text, data
+        self.extracted_text = text
       rescue Exception => e
         Rails.logger.warn "Failed to parse document metadata from #{file_file_name}: #{e}"
       end
@@ -160,6 +144,22 @@ module Droom
       rescue Exception => e
         Rails.logger.warn "Failed to parse document text from #{file_file_name}: #{e}"
       end
+      if self.extracted_text or self.extracted_metadata
+        solr_index
+      end
+      save
+    end
+
+    handle_asynchronously :extract_text
+
+    def set_version
+      if file.dirty?
+        self.version = (version || 0) + 1
+      end
+    end
+
+    def destroy_folder_if_empty
+      self.folder.destroy if self.folder && self.folder.empty?
     end
 
     def dropbox_sync
