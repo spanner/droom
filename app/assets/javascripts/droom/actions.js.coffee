@@ -72,7 +72,6 @@ jQuery ($) ->
       
       $(@).remote
         on_success: (response) =>
-          console.log "removing", removed, "->", $(@).parents(removed).first()
           $(@).parents(removed).first().fadeOut 'fast', () ->
             $(@).remove()
             $(affected).trigger "refresh"
@@ -83,7 +82,6 @@ jQuery ($) ->
       affected = $(@).attr('data-affected')
       $(@).remote
         on_success: (response) =>
-          console.log "affecting", affected, "->", $(affected)
           $(affected).trigger "refresh"
 
   # Close links work just by triggering a 'hide' event and hoping that something further up the tree will bind

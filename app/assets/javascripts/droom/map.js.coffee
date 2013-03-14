@@ -108,7 +108,7 @@ jQuery ($) ->
       @infowindow().open(@_map, @_marker)
     
     update: (e) =>
-      console.log "update", e.latLng
+      # console.log "update", e.latLng
 
     infowindow: () =>
       unless @_infowindow?

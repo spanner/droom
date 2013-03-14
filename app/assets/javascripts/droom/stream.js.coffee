@@ -6,7 +6,6 @@ jQuery ($) ->
 
   $.fn.type_setter = (scrapform) ->
     @change ->
-      console.log "change!", @
       if $(@).is('checked')
         scrapform.setType($(@).val())
 

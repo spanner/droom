@@ -20,6 +20,7 @@ jQuery ($) ->
       @_kal = new Kalendae @_holder[0]
       @_holder.hide()
       @_trigger.click @toggle
+      @_container.click @contain
       @_kal.subscribe 'change', () =>
         @hide()
         @_field.val(@_kal.getSelected())
@@ -28,6 +29,9 @@ jQuery ($) ->
         @_dom.text(day)
         @_mon.text(Kalendae.moment.monthsShort[parseInt(month, 10) - 1])
 
+    contain: (e) =>
+      e.stopPropagation() if e
+
     toggle: (e) =>
       e.preventDefault() if e
       if @_holder.is(':visible') then @hide() else @show()
@@ -35,10 +39,10 @@ jQuery ($) ->
     show: () =>
       @_holder.fadeIn "fast", () =>
         @_container.addClass('editing')
-        # $(document).bind "click", @hide
+        $(document).bind "click", @hide
               
     hide: () =>
-      # $(document).unbind "click", @hide
+      $(document).unbind "click", @hide
       @_container.removeClass('editing')
       @_holder.fadeOut("fast")
 
@@ -96,8 +100,6 @@ jQuery ($) ->
       @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
       @_filefield.bind 'change', @pick
       @_file = null
-      @_form.bind "finished", (e) =>
-        console.log "filepicker has triggered 'finished'", e
       @_filename = ""
       @_ext = ""
       @_fields = @_container.siblings('.metadata')
@@ -152,7 +154,6 @@ jQuery ($) ->
           response = @xhr.responseText
           @_form.remove()
           @_holder.append(response)
-          console.log "triggering 'finished' on", @_holder
           @_holder.trigger "finished", response
 
     finish: (e) =>
@@ -386,7 +387,6 @@ jQuery ($) ->
       replacement.find('a.cancel').click(@revert)
         
     revert: (e) =>
-      console.log "revert"
       e.preventDefault() if e
       @display(@_original_content)
       @_prompt.val("")
@@ -953,13 +953,11 @@ jQuery ($) ->
       @dropdown.reset().hide()
 
     keyed: (e) =>
-      console.log "suggester keyed", e.which
       @dropdown.keyed(e, true) or @get(e)
       
     get: (e, force) =>
       @wait()
       query = @prompt.val()
-      console.log "get:", query
       if force or query.length >= @options.threshold and query isnt @previously
         if @cache[query]
           @suggest @cache[query]
@@ -1035,7 +1033,6 @@ jQuery ($) ->
     suggest: (suggestions) =>
       @button.removeClass "waiting"
       @prompt.removeClass "waiting"
-      console.log "yt suggest", suggestions
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
           link = $("<a href=\"/videos/#{suggestion.unique_id}.js\"><img src='#{suggestion.thumbnails[2].url}' /><span class=\"title\">#{suggestion.title.truncate(36)}</span><br /><span class=\"description\">#{suggestion.description.truncate(48)}</span></a>")
@@ -1081,7 +1078,6 @@ jQuery ($) ->
         width: @hook.outerWidth() - 2
       
     populate: (items) =>
-      console.log "dropdown populate:", items
       @reset()
       if items.length > 0
         $.each items, (i, item) =>
@@ -1100,6 +1096,10 @@ jQuery ($) ->
         
     reset: () =>
       @drop.empty()
+
+    select_highlit: (e) =>
+      if highlit = @items[@item]
+        @select $(highlit).text()
 
     select: (value) =>
       @hide()
@@ -1126,9 +1126,9 @@ jQuery ($) ->
       if action = @movementKey(kc)
         @show() if @items.length > 0
         if @visible
-          action.call @, e
           e.preventDefault()
           e.stopPropagation()
+          action.call @, e
         return true
       else unless discard
         @hook.trigger($.Event('keypress', {which: kc}))
@@ -1149,7 +1149,7 @@ jQuery ($) ->
         when 9 # tab
           @next
         when 13 # enter
-          @select
+          @select_highlit
 
     match: (text) =>
       matching = @items.select(":contains(#{text})")
