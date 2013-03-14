@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>app/models/droom/event.rb</string>
+	<string>app/models/droom/document.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -100,44 +100,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>17</integer>
 				<key>line</key>
-				<integer>1105</integer>
+				<integer>70</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1044</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1104</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1106</integer>
-			</dict>
+			<integer>44</integer>
 		</dict>
 		<key>app/assets/stylesheets/droom.css.sass</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>186</integer>
+				<integer>906</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>137</integer>
+			<integer>873</integer>
 		</dict>
 		<key>app/assets/stylesheets/lib/_kalendae.css.sass</key>
 		<dict>
@@ -181,36 +165,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>24</integer>
-			</dict>
-		</dict>
-		<key>app/controllers/droom/events_controller.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>63</integer>
-				<key>line</key>
-				<integer>91</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>58</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>44</integer>
-				<key>line</key>
-				<integer>91</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>63</integer>
-				<key>line</key>
-				<integer>91</integer>
 			</dict>
 		</dict>
 		<key>app/controllers/droom/groups_controller.rb</key>
@@ -348,14 +302,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
 				<integer>49</integer>
+				<key>line</key>
+				<integer>133</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>24</integer>
+			<integer>111</integer>
+		</dict>
+		<key>app/models/droom/dropbox_document.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>app/models/droom/dropbox_token.rb</key>
 		<dict>
@@ -370,36 +338,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>app/models/droom/event.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>29</integer>
-				<key>line</key>
-				<integer>95</integer>
-			</dict>
-			<key>columnSelection</key>
-			<true/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>203</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>95</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>29</integer>
-				<key>line</key>
-				<integer>95</integer>
-			</dict>
 		</dict>
 		<key>app/models/droom/event_set.rb</key>
 		<dict>
@@ -871,20 +809,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>1</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>app/views/droom/invitations/_invitations.html.haml</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>3</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -1401,48 +1325,13 @@
 		<string>config/routes.rb</string>
 		<string>app/assets/stylesheets/droom.css.sass</string>
 		<string>app/views/droom/events/show.html.haml</string>
-		<string>app/views/droom/events/_event.html.haml</string>
-		<string>app/models/droom/event.rb</string>
-		<string>app/views/droom/events/_form.html.haml</string>
-		<string>app/views/droom/memberships/_button.html.haml</string>
-		<string>app/controllers/droom/events_controller.rb</string>
-		<string>app/controllers/droom/scraps_controller.rb</string>
-		<string>app/models/droom/folder.rb</string>
-		<string>app/views/droom/dashboard/_stream.html.haml</string>
-		<string>app/views/droom/events/index.html.haml</string>
-		<string>app/views/droom/shared/_calendar_holder.haml</string>
-		<string>app/views/droom/events/_action_menu.html.haml</string>
-		<string>app/views/droom/dashboard/_invitations.html.haml</string>
-		<string>app/views/droom/dashboard/_past_events.haml</string>
-		<string>app/views/droom/dashboard/_future_events.html.haml</string>
-		<string>app/models/droom/membership.rb</string>
-		<string>app/models/droom/group_invitation.rb</string>
-		<string>app/models/droom/page.rb</string>
-		<string>app/views/droom/shared/_controls.html.haml</string>
-		<string>app/models/droom/agenda_category.rb</string>
-		<string>app/views/droom/folders/_folder.html.haml</string>
-		<string>app/models/droom/event_set.rb</string>
-		<string>lib/droom.rb</string>
-		<string>app/controllers/droom/groups_controller.rb</string>
-		<string>config/locales/en.yml</string>
-		<string>app/views/droom/invitations/_invitations.html.haml</string>
 		<string>app/assets/javascripts/droom/widgets.js.coffee</string>
-		<string>app/assets/javascripts/droom/actions.js.coffee</string>
-		<string>app/views/droom/shared/_quicklinks.html.haml</string>
-		<string>app/assets/javascripts/droom/popups.js.coffee</string>
-		<string>app/views/droom/panels/_search.html.haml</string>
-		<string>app/views/droom/groups/_groups.html.haml</string>
-		<string>app/views/droom/groups/_group.html.haml</string>
-		<string>app/views/droom/people/_person.html.haml</string>
-		<string>db/migrate/20130305150648_folders_nicely.rb</string>
-		<string>app/models/droom/person.rb</string>
+		<string>app/models/droom/dropbox_document.rb</string>
 		<string>app/models/droom/document.rb</string>
-		<string>app/views/droom/people/_action_menu.html.haml</string>
-		<string>app/helpers/droom/droom_helper.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{77, -6}, {992, 878}}</string>
+	<string>{{990, 332}, {1158, 1029}}</string>
 </dict>
 </plist>

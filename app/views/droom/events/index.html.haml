@@ -4,6 +4,7 @@
       = t(:past_events)
       %span.addendum
         = link_to t(:show_future_events), droom.events_url(:direction => "future"), :class => "future"
+
   - else
     %h2.section
       = t(:future_events)
@@ -11,6 +12,13 @@
         %span.addendum
           = link_to t(:show_past_events), droom.events_url(:direction => "past"), :class => "past"
     
+  - if admin?
+    %p.action
+      = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => ".events_list, #minicalendar"}
+      %br
+      %span.note
+        = t :new_event_note
+
   = render :partial => 'events'
 
 - content_for :title do

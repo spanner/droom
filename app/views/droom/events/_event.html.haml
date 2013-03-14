@@ -82,4 +82,6 @@
           - if event.folder.populated?
             %h2
               = t(:attachments)
+              = action_menulink(event.folder)
+            = action_menu(event.folder)
             = render :partial => "droom/folders/attachments", :locals => {:folder => event.folder, :title => t(:attachments), :open => true}

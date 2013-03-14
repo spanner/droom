@@ -8,22 +8,17 @@ module Droom
 
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
-
     has_many :dropbox_documents
-
     has_attached_file :file
 
-    before_save :set_version
-    after_destroy :destroy_folder_if_empty
+    after_create :read_and_reindex
 
+    after_save :update_dropbox_documents
     after_destroy :mark_dropbox_documents_deleted
 
     validates :file, :presence => true
 
-    after_save :update_dropbox_documents
-    after_create :extract_text
-
-    searchable do
+    searchable :auto_index => false, :auto_remove => true do
       text :name, :boost => 10, :stored => true
       text :description, :stored => true
       text :extracted_text, :stored => true
@@ -116,54 +111,40 @@ module Droom
       dropbox_documents.create(:person_id => user.person.id)
     end
 
-    def mark_dropbox_documents_deleted
-      dropbox_documents.each do |dd|
-        dd.mark_deleted(true)
-      end
-    end
-
-    def update_dropbox_documents
-      dropbox_documents.each do |dd|
-        dd.update
-      end
-    end
-
   protected
 
-    def extract_text
+    def read_and_reindex
       temp = Paperclip.io_adapters.for(self.file)
       data = File.read(temp.path)
       begin
-        text = Yomu.read :text, data
-        self.extracted_text = text
-      rescue Exception => e
-        Rails.logger.warn "Failed to parse document metadata from #{file_file_name}: #{e}"
-      end
-      begin
+        self.extracted_text = Yomu.read :text, data
         self.extracted_metadata = Yomu.read :metadata, data
       rescue Exception => e
-        Rails.logger.warn "Failed to parse document text from #{file_file_name}: #{e}"
+        Rails.logger.warn "Failed to parse document text or metadata from #{file_file_name}: #{e}"
       end
       if self.extracted_text or self.extracted_metadata
         solr_index
       end
       save
     end
+    handle_asynchronously :read_and_reindex, :priority => 20
 
-    handle_asynchronously :extract_text
-
-    def set_version
-      if file.dirty?
-        self.version = (version || 0) + 1
+    def mark_dropbox_documents_deleted
+      dropbox_documents.each do |dd|
+        dd.mark_deleted(true)
       end
     end
 
-    def destroy_folder_if_empty
-      self.folder.destroy if self.folder && self.folder.empty?
+    def create_dropbox_documents
+      # after create, in a delayed job
+      # for each user who is syncing our folder, create a dropbox document
+      # that is: everyone who has the sync everything preference or who is associated with the holder of this folder
     end
 
-    def dropbox_sync
-
+    def update_dropbox_documents
+      dropbox_documents.each do |dd|
+        dd.update
+      end
     end
 
   end
