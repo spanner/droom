@@ -111,8 +111,6 @@ module Droom
       dropbox_documents.create(:person_id => user.person.id)
     end
 
-  protected
-
     def read_and_reindex
       temp = Paperclip.io_adapters.for(self.file)
       data = File.read(temp.path)
