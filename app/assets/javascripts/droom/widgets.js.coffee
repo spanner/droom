@@ -54,11 +54,11 @@ jQuery ($) ->
 
   class TimePicker
     constructor: (element) ->
-      @holder = $('<div class="timepicker" />')
       @field = $(element)
+      @holder = $('<div class="timepicker" />')
       @dropdown = new Dropdown @field,
         on_select: @select
-        on_keypress: @keyed
+        on_keyup: @change
       times = []
       for i in [0..24]
         times.push({value: "#{i}:00"})
@@ -66,14 +66,14 @@ jQuery ($) ->
       @dropdown.populate(times)
       @field.focus @show
       @field.blur @hide
-      # @field.keyup @keyed
-        
+
     select: (value) =>
       @field.val(value)
       @field.trigger('change')
-      
-    keyed: (e) =>
-      @dropdown.keyed(e, true) or @dropdown.match(@field.val())
+
+    change: (e) =>
+      # this is called on keyup but only if the dropdown doesn't recognise the keypress as a command
+      @dropdown.match(@field.val())
 
     show: (e) =>
       @dropdown.show()
@@ -839,7 +839,6 @@ jQuery ($) ->
       new Suggester(@, options)
     @
 
-
   $.fn.venue_picker = (options) ->
     options = $.extend(
       submit_form: false
@@ -933,7 +932,7 @@ jQuery ($) ->
         @url += "?empty=all"
       @dropdown = new Dropdown @prompt,
         on_select: @select
-        on_keypress: @keyed
+        on_keyup: @get
       @button = @form.find("a.search")
       @previously = null
       @request = null
@@ -943,7 +942,6 @@ jQuery ($) ->
       @cache = {}
       @blanks = []
       @prompt.bind "blur", @hide
-      @prompt.bind "keyup", @keyed
       @prompt.bind "paste", @get
       @form.submit @hide
       @get(null, true) if @options.preload
@@ -951,9 +949,6 @@ jQuery ($) ->
 
     reset: () =>
       @dropdown.reset().hide()
-
-    keyed: (e) =>
-      @dropdown.keyed(e, true) or @get(e)
       
     get: (e, force) =>
       @wait()
@@ -1069,6 +1064,8 @@ jQuery ($) ->
       @hook = $(element)
       @drop = $('<ul class="dropdown" />').insertAfter(@hook).hide()
       @options = $.extend {}, opts
+      @hook.bind "keydown", @keydown
+      @hook.bind "keyup", @keyup
       @
 
     place: () =>
@@ -1099,6 +1096,8 @@ jQuery ($) ->
 
     select_highlit: (e) =>
       if highlit = @items[@item]
+        e.preventDefault()
+        e.stopPropagation()
         @select $(highlit).text()
 
     select: (value) =>
@@ -1113,53 +1112,69 @@ jQuery ($) ->
       @place()
       @populate(values) if values
       unless @visible
-        @drop.fadeIn "fast"
+        @drop.stop().fadeIn "fast"
         @visible = true
       
     hide: () =>
       if @visible
-        @drop.fadeOut "fast"
+        @drop.stop().fadeOut "fast"
         @visible = false
 
-    keyed: (e, discard) =>
+    # the keyup and keydown handlers will first check for local significacne (ie it's a movement or action key 
+    # that we recognise). If there is none, they call the supplied callback, if any. Event cancellation is up to
+    # the called function: we don't stop propagation here.
+    #
+    # On keydown we look for keys that have to be intercepted: enter, mostly. Perhaps also tab, but that's not 
+    # very reliable.
+    #
+    keydown: (e) =>
       kc = e.which
-      if action = @movementKey(kc)
-        @show() if @items.length > 0
-        if @visible
-          e.preventDefault()
-          e.stopPropagation()
-          action.call @, e
+      if action = @actionKey(kc)
+        action.call(@, e) if @items?.length
         return true
-      else unless discard
-        @hook.trigger($.Event('keypress', {which: kc}))
-      return false
-      
-    movementKey: (kc) =>
+      else
+        @options.on_keydown?(e)
+        return true
+        
+    actionKey: (kc) =>
       switch kc
+        # we may also want to catch tab here
         when 27 # escape
           @hide
+        when 13 # enter
+          @select_highlit
+
+    # on keyup we look for movement keys. Everything else is let through.
+    #
+    keyup: (e, discard) =>
+      kc = e.which
+      if action = @movementKey(kc)
+        @show() if @items?.length
+        action.call(@, e) if @visible
+        return true
+      else
+        @options.on_keyup?(e)
+        return true
+
+    movementKey: (kc) =>
+      switch kc
         when 33 # page up
           @first
         when 38 # up
           @previous
         when 40 # down
           @next
-        when 33 # page down
+        when 34 # page down
           @last
-        when 9 # tab
-          @next
-        when 13 # enter
-          @select_highlit
 
     match: (text) =>
-      matching = @items.select(":contains(#{text})")
+      matching = @items.filter(":contains(#{text})")
+      $.items = @items
       if item = matching.first()
         @hover(item)
-        holder = item.parents('li').first()
-        top = holder.offset().top
-        @drop.animate
-          scrollTop: top,
-        'fast'
+        if holder = item.parents('li').first()
+          top = holder.offset().top
+          @drop.scrollTop(top)
 
     next: (e) =>
       if !@item? or @item >= @items.length - 1
@@ -1188,5 +1203,6 @@ jQuery ($) ->
       @item = i
 
     unHighlight: (i) =>
-      $(@items.get(i)).removeClass("hover")
-      @item = null
+      if item = @items?.get(i)
+        $(item).removeClass("hover")
+      
