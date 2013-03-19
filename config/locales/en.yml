@@ -256,6 +256,7 @@ en:
   other_documents: "Other available documents"
   personal_calendar_feed: "Personal calendar subscription"
   general_calendar_feed: "General calendar subscription"
+  more_in_calendar: "More future events..."
   password_confirmation_instructions: "Please confirm your password."
   password_instructions: "Please choose a password of at least six letters."
   password_leave_same: "Leave this field blank to keep your existing password."
