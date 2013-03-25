@@ -519,15 +519,15 @@ jQuery ($) ->
         parserRules: wysihtml5ParserRules
         useLineBreaks: false
       @_toolbar.show()
-      @_editor.on "load", () =>
-        @_iframe = @_editor.composer.iframe
-        $(@_editor.composer.doc).find('html').css
-          "height": 0
-        @resizeIframe()
-        @_textarea = @_editor.composer.element
-        @_textarea.addEventListener("keyup", @resizeIframe, false)
-        @_textarea.addEventListener("blur", @resizeIframe, false)
-        @_textarea.addEventListener("focus", @resizeIframe, false)
+      # @_editor.on "load", () =>
+      #   @_iframe = @_editor.composer.iframe
+      #   $(@_editor.composer.doc).find('html').css
+      #     "height": 0
+      #   @resizeIframe()
+      #   @_textarea = @_editor.composer.element
+      #   @_textarea.addEventListener("keyup", @resizeIframe, false)
+      #   @_textarea.addEventListener("blur", @resizeIframe, false)
+      #   @_textarea.addEventListener("focus", @resizeIframe, false)
         
     resizeIframe: () =>
       if $(@_iframe).height() != $(@_editor.composer.doc).height()

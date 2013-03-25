@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>app/models/droom/document.rb</string>
+	<string>spec/dummy/db/schema.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -1391,6 +1391,34 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>spec/dummy/db/migrate/20130201103738_mailing_lists.droom.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>spec/dummy/db/schema.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>89</integer>
+		</dict>
 		<key>spec/spec_helper.rb</key>
 		<dict>
 			<key>caret</key>
@@ -1422,6 +1450,8 @@
 		<string>app/assets/javascripts/droom.js.coffee</string>
 		<string>app/models/droom/dropbox_document.rb</string>
 		<string>app/models/droom/document.rb</string>
+		<string>spec/dummy/db/migrate/20130201103738_mailing_lists.droom.rb</string>
+		<string>spec/dummy/db/schema.rb</string>
 		<string>app/views/droom/folders/_folder.html.haml</string>
 		<string>app/views/droom/events/_event.html.haml</string>
 		<string>app/views/droom/events/index.html.haml</string>
@@ -1429,6 +1459,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{832, 70}, {1158, 1269}}</string>
+	<string>{{299, 0}, {1131, 878}}</string>
 </dict>
 </plist>

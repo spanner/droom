@@ -5,6 +5,7 @@ module Droom
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :preferences, :foreign_key => "created_by_id"
     accepts_nested_attributes_for :preferences, :allow_destroy => true
+    receives_messages
   
     devise :database_authenticatable,
            :encryptable,
@@ -156,6 +157,24 @@ module Droom
     def set_pref(key, value)
       preferences.find_or_create_by_key(key).set(value)
     end
+    
+    ## Email
+    #
+    # If using `msg`, this defines the variables available in message templates.
+    #
+    def for_email
+      {
+        :informal_name => informal_name,
+        :formal_name => formal_name,
+        :forename => forename,
+        :name => name,
+        :email => email,
+        :confirmation_url => "#",
+        :sign_in_url => "#",
+        :password_reset_url => "#"
+      }
+    end
+    
 
   end
 end

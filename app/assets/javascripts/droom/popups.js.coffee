@@ -111,7 +111,7 @@ jQuery ($) ->
       if cols
         width = (cols * 280) + 40
       else 
-        width = 580
+        width = @_container.children().first().width() + 20
       w = $(window)
       height_limit = w.height() - 100
       height = [@_container.height(), height_limit].min()

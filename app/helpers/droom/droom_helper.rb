@@ -28,6 +28,16 @@ module Droom
       end
     end
 
+    def dropbox_session
+      # note that we usually don't want to pick up an existing dropbox session. That happens in the dropbox_tokens_controller, when
+      # following up an access token round trip, but in the view any existing session has probably expired and we're better off with a new one.
+      DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
+    end
+
+    def current_person
+      current_user.person if current_user
+    end
+
     def admin?
       current_user and current_user.admin?
     end
