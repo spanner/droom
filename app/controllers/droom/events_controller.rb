@@ -98,7 +98,7 @@ module Droom
       
       @show = params[:show] || 10
       @page = params[:page] || 1
-      @events.page(@page).per(@show)
+      @events = @events.page(@page).per(@show)
     end
 
     def get_calendar
