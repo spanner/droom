@@ -354,8 +354,8 @@ en:
         too_short: "Your password must have at least 6 letters"
   msg:
     groups:
-      unconfirmed: "Anyone who hasn't activated their account"
-      personed: "People in the directory"
-      administrative: "Administrators"
-      selected: "Selected users:"
-    droom/user: "Users"
+      unconfirmed: "anyone who hasn't activated their account"
+      personed: "people in the directory"
+      administrative: "administrators"
+      selected: "selected users"
+    droom/user: "users"
