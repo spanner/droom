@@ -256,11 +256,15 @@ jQuery ($) ->
 
     show: (e) =>
       $(@_affected).stop().slideDown()
+      $(@_affected).find('input').attr('disabled', false)
       $(@_converse).stop().slideUp()
+      $(@_converse).find('input').attr('disabled', true)
 
     hide: (e) =>
       $(@_affected).stop().slideUp()
+      $(@_affected).find('input').attr('disabled', true)
       $(@_converse).stop().slideDown()
+      $(@_converse).find('input').attr('disabled', false)
 
 
   # Yet another toggle, preserved for cdr reviewers but I hope not for long.

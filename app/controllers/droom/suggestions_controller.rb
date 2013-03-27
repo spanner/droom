@@ -35,13 +35,9 @@ module Droom
 
     def get_classes
       suggestible_classes = Droom.suggestible_classes
-      logger.warn ">>> suggestible_classes is #{suggestible_classes.inspect}"
-      
       requested_types = [params[:type]].flatten.compact.uniq
       requested_types = Droom.suggestible_classes.keys if requested_types.empty?
       @types = suggestible_classes.keys & requested_types
-      logger.warn ">>> @types is #{@types.inspect}"
-
       @klasses = suggestible_classes.values_at(*@types)
     end
 

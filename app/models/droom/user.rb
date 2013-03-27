@@ -7,8 +7,7 @@ module Droom
     has_many :preferences, :foreign_key => "created_by_id"
     accepts_nested_attributes_for :preferences, :allow_destroy => true
 
-    # each group is defined in the form :scope_name => "label"
-    receives_messages :groups => [:unconfirmed, :personed, :administrative]
+    receives_messages# :groups => [:unconfirmed, :personed, :administrative]
   
     devise :database_authenticatable,
            :encryptable,
@@ -30,13 +29,37 @@ module Droom
   
     scope :personed, select("droom_users.*")
                   .joins("INNER JOIN droom_people as dp ON dp.user_id = droom_users.id")
-                  .group("droom_users.id")
 
     scope :unpersoned, select("droom_users.*")
                   .joins("LEFT OUTER JOIN droom_people as dp ON dp.user_id = droom_users.id")
-                  .group("droom_users.id")
                   .having("count(dp.id) = 0")
-                  
+    
+    scope :with_person_in_group, lambda { |group|
+      group = group.id if group.is_a? Droom::Group
+      select("droom_users.*")
+        .joins("INNER JOIN droom_people as dp ON dp.user_id = droom_users.id")
+        .joins("INNER JOIN droom_memberships as dm ON dp.id = dm.person_id")
+        .where("dm.group_id" => group)
+    }
+
+    # Messaging groups are normally scopes passed through when receives_messages is called,
+    # but anything will work that can be called on the class and return a set of instances.
+    # Here we're overriding the getter so as to offer sending by group membership as well as
+    # the usual scoping.
+    #
+    def self.messaging_groups
+      unless @messaging_groups
+        @messaging_groups = {
+          :unconfirmed => lambda { Droom::User.unconfirmed},
+          :personed => lambda { Droom::User.personed },
+          :administrative => lambda { Droom::User.administrative }
+        }
+        Droom::Group.all.each do |group|
+          @messaging_groups[group.slug.to_sym] = lambda { Droom::User.with_person_in_group(group.id) }
+        end
+      end
+      @messaging_groups
+    end
 
     def confirm=(confirmed)
       confirm! if confirmed
