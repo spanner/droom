@@ -5,5 +5,6 @@
   - if current_user.admin?
     %p.action
       = link_to t(:add_group), droom.new_group_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
+      = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
 
   = render :partial => 'groups'

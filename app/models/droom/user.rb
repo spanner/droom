@@ -1,11 +1,14 @@
 module Droom
   class User < ActiveRecord::Base
+
     attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes, :confirm, :old_id, :remove_person
     has_one :person
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :preferences, :foreign_key => "created_by_id"
     accepts_nested_attributes_for :preferences, :allow_destroy => true
-    receives_messages
+
+    # each group is defined in the form :scope_name => "label"
+    receives_messages :groups => [:unconfirmed, :personed, :administrative]
   
     devise :database_authenticatable,
            :encryptable,
@@ -23,6 +26,7 @@ module Droom
     # validates :password, :length => { :minimum => 6 }, :if => :password_required?
   
     scope :unconfirmed, where("confirmed_at IS NULL")
+    scope :administrative, where(:admin => true)
   
     scope :personed, select("droom_users.*")
                   .joins("INNER JOIN droom_people as dp ON dp.user_id = droom_users.id")
@@ -32,6 +36,7 @@ module Droom
                   .joins("LEFT OUTER JOIN droom_people as dp ON dp.user_id = droom_users.id")
                   .group("droom_users.id")
                   .having("count(dp.id) = 0")
+                  
 
     def confirm=(confirmed)
       confirm! if confirmed
@@ -169,9 +174,9 @@ module Droom
         :forename => forename,
         :name => name,
         :email => email,
-        :confirmation_url => "#",
-        :sign_in_url => "#",
-        :password_reset_url => "#"
+        :confirmation_url => Droom::Engine.routes.url_helpers.new_user_confirmation_url(self, :confirmation_token => self.confirmation_token, :host => ActionMailer::Base.default_url_options[:host]),
+        :sign_in_url => Droom::Engine.routes.url_helpers.new_user_session_path(:host => ActionMailer::Base.default_url_options[:host]),
+        :password_reset_url => Droom::Engine.routes.url_helpers.new_user_password_path(self, :host => ActionMailer::Base.default_url_options[:host])
       }
     end
     

@@ -1,6 +1,7 @@
 module Droom
   class MembershipsController < Droom::EngineController
     respond_to :js, :html
+    layout :no_layout_if_pjax
     
     before_filter :build_membership, :only => [:new, :create]
     before_filter :get_membership, :only => :destroy
@@ -20,7 +21,7 @@ module Droom
         @membership = @group.memberships.create!(:person_id => @person.id, :group_id => @group.id)
         render :partial => "button"
       else
-        render :partial => "form"
+        respond_with @membership
       end
     end
     

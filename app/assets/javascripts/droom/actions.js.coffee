@@ -84,6 +84,7 @@ jQuery ($) ->
         on_success: (response) =>
           $(affected).trigger "refresh"
 
+
   # Close links work just by triggering a 'hide' event and hoping that something further up the tree will bind
   # it to the right thing.
 
@@ -141,8 +142,8 @@ jQuery ($) ->
     constructor: (element, @_selector, @_name) ->
       @_container = $(element)
       @_name ?= "droom_#{@_selector}_state"
-      @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide')
-      @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show')
+      @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide').replace('more', 'less').replace('More', 'Less')
+      @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show').replace('less', 'more').replace('Less', 'More')
       @_container.click @toggle
       if cookie = $.cookie(@_name)
         @_showing = cookie is "showing"
@@ -234,9 +235,36 @@ jQuery ($) ->
         easing: 'boing'
         complete: =>
           @preview.hide().css('position', 'relative')
-        
 
-  # Yet another toggle, resuscitated for cdr reviewers but I hope not for long.
+
+  # this one just shows or hides based on whether a checkbox is checked
+
+  $.fn.reveals = () ->
+    @each ->
+      new Revealer(@)
+
+  class Revealer
+    constructor: (element) ->
+      @_checkbox = $(element)
+      @_affected = @_checkbox.attr('data-affected')
+      @_converse = @_checkbox.attr('data-converse')
+      @_checkbox.bind "click", @set
+      @set()
+      console.log "revealer reveals", @_affected, $(@_affected)
+      
+    set: () =>
+      if @_checkbox.is(":checked") then @show() else @hide()
+
+    show: (e) =>
+      $(@_affected).stop().slideDown()
+      $(@_converse).stop().slideUp()
+
+    hide: (e) =>
+      $(@_affected).stop().slideUp()
+      $(@_converse).stop().slideDown()
+
+
+  # Yet another toggle, preserved for cdr reviewers but I hope not for long.
 
   $.fn.twister = ->
     @each ->

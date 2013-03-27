@@ -61,6 +61,7 @@ jQuery ($) ->
         @conclude(data)
         
     display: (data) =>
+      console.log "popup displaying", @_iteration
       @_iteration++
       @_content = $(data)
       @_container.empty()
@@ -83,6 +84,7 @@ jQuery ($) ->
       @reset()
 
     show: (e) =>
+      console.log "popup show"
       e.preventDefault() if e
       @place()
       unless @_container.is(":visible")
@@ -111,7 +113,7 @@ jQuery ($) ->
       if cols
         width = (cols * 280) + 40
       else 
-        width = @_container.children().first().width() + 20
+        width = @_container.children().first().width()
       w = $(window)
       height_limit = w.height() - 100
       height = [@_container.height(), height_limit].min()
@@ -154,6 +156,8 @@ jQuery ($) ->
             $(col).removeClass('hidden').find('input, select, textarea').removeAttr('disabled')
         # We finish by triggering a resize event on the popup container, which will trigger a place() on the popup..
         container.trigger('resize')
+
+
 
 
 

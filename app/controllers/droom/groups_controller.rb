@@ -22,7 +22,7 @@ module Droom
     def show
       respond_with @group do |format|
         format.js {
-          render :partial => 'droom/memberships/memberships'
+          render :partial => 'droom/groups/group'
         }
       end
     end

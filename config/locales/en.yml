@@ -91,9 +91,11 @@ en:
   year: "YEAR"
   add_event: "add an event"
   add_document: "add a document"
-  add_document_to: "add a document to %{name}"
+  add_document_to: "Add a document to the"
   add_folder: "add a folder"
   add_root_folder: "add a new root folder"
+  add_member: "add group member"
+  add_member_to: Add a member to the
   add_page: "add a page"
   add_person: "add a person"
   add_group: "add a group"
@@ -117,7 +119,7 @@ en:
   confirm_delete_document: "Are you sure you want to delete the document '%{name}'? This cannot be undone."
   confirm_delete_folder: "Are you sure you want to delete the folder '%{path}'? This will permanentely delete all the documents in the folder."
   confirm_delete_event: "Are you sure you want to delete the event '%{name}'? This cannot be undone."
-  confirm_delete_group: "Are you sure you want to delete the group '%{name}'? This cannot be undone."
+  confirm_delete_group: "Are you sure you want to delete the group '%{name}'? Its members will remain the system but the group cannot be retrieved."
   confirm_delete_page: "Are you sure you want to delete the page '%{title}'? This cannot be undone."
   confirm_delete_person: "Are you sure you want to delete the person '%{name}'? This cannot be undone."
   confirm_remove_document: "Are you sure you want to remove the document '%{name}'?" 
@@ -128,6 +130,7 @@ en:
   copy_to_dropbox: "Copy folder to dropbox"
   delete_event: "remove event"
   delete_folder: "delete folder"
+  delete_group: "delete group"
   delete_scrap: "remove"
   delete_person: "delete person"
   confirm_delete_scrap: "Are you sure you want to remove this %{type} scrap?"
@@ -157,6 +160,7 @@ en:
   edit: "Edit"
   edit_event: "edit event"
   edit_folder: "edit folder"
+  edit_group: "edit group"
   edit_person: "edit person"
   edit_scrap: "edit"
   edit_profile: "edit profile"
@@ -175,7 +179,9 @@ en:
   expel: "remove from group"
   find_documents: "Find documents"
   find_people: "Find people"
+  folder: "folder"
   follow_stream: "Follow the stream in an RSS reader"
+  group: "group"
   group_admin: "Groups"
   group_created: "Group '%{name}' created"
   calendar: "Calendar"
@@ -346,4 +352,9 @@ en:
       password:
         confirmation: "The password and its confirmation do not match"
         too_short: "Your password must have at least 6 letters"
-      
+  msg:
+    groups:
+      unconfirmed: "Everyone who has been invited but hasn't yet logged in"
+      personed: "Everyone in the directory"
+      administrative: "All admin users"
+    droom/user: "Users"

@@ -66,6 +66,7 @@ Droom::Engine.routes.draw do
   
   resources :groups do
     resources :memberships
+    resources :people
   end
   
   resources :venues

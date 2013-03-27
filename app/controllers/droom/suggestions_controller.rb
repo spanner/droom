@@ -12,12 +12,12 @@ module Droom
         @suggestions = []
       else
         if @types.include?('event') && fragment.length > 6 && span = Chronic.parse(fragment, :guess => false)
-          @suggestions = Droom::Event.falling_within(span).visible_to(current_person)
+          @suggestions = Droom::Event.falling_within(span).visible_to(current_user.person)
           @title = span.width > 86400 ? "Events in #{fragment}" : "Events on #{fragment}"
         else
           @suggestions = @klasses.collect {|klass|
             logger.warn ">>> getting #{klass}"
-            klass.constantize.visible_to(current_person).matching(fragment).limit(max.to_i)
+            klass.constantize.visible_to(current_user.person).matching(fragment).limit(max.to_i)
           }.flatten.sort_by(&:name).slice(0, max.to_i)
         end
       end

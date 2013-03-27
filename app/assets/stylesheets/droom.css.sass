@@ -1078,7 +1078,7 @@ input[type="text"], input[type="password"], input[type="email"], select, textare
     background-color: #fff
     border-color: $verypale
 
-input[type="submit"]
+input[type="submit"], a.submit, a.submit:visited
   display: inline-block
   background: 
     color: $submit 
@@ -1088,13 +1088,14 @@ input[type="submit"]
   padding: 5px 12px 5px 24px
   text-align: left
   color: white
-  height: 39px
+  // height: 39px
   border: none
   font-size: 1em
   line-height: 2
   +border-radius(3px)
   &:hover
     background-color: $hover
+    color: white
   &.unavailable
     background-color: $mid
     +opacity(0.5)
@@ -1397,6 +1398,18 @@ ul.tags
       &:hover
         background-position: 0 -48px
         color: $hover
+
+a.expander
+  +icon_link("droom/expander.png")
+  color: $dark
+  +hover
+  &:visited
+    color: $dark
+    +hover
+  &.showing
+    background-position: 0 -64px
+    &:hover
+      background-position: 0 -96px
 
 .search
   position: relative
@@ -1821,6 +1834,10 @@ span.credit
   margin-top: 4px
 
 div.popup
+  #event, #document, #person, #group, #membership
+    width: 580px
+  
+div.popup
   position: fixed
   overflow: auto
   top: 100px
@@ -1829,7 +1846,7 @@ div.popup
   padding: 0
   z-index: 250
   min-height: 200px
-  background-color: white
+  background-color: $palest
   +box_shadow(1px 3px 8px #52555f)
   .header
     position: relative
