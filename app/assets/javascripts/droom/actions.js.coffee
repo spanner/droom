@@ -245,15 +245,14 @@ jQuery ($) ->
 
   class Revealer
     constructor: (element) ->
-      @_checkbox = $(element)
-      @_affected = @_checkbox.attr('data-affected')
-      @_converse = @_checkbox.attr('data-converse')
-      @_checkbox.bind "click", @set
+      @_input = $(element)
+      @_affected = @_input.attr('data-affected')
+      @_converse = @_input.attr('data-converse')
+      @_input.bind "click", @set
       @set()
-      console.log "revealer reveals", @_affected, $(@_affected)
       
     set: () =>
-      if @_checkbox.is(":checked") then @show() else @hide()
+      if @_input.is(":checked") then @show() else @hide()
 
     show: (e) =>
       $(@_affected).stop().slideDown()

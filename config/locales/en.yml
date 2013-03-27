@@ -357,4 +357,5 @@ en:
       unconfirmed: "Everyone who has been invited but hasn't yet logged in"
       personed: "Everyone in the directory"
       administrative: "All admin users"
+      selected: "Selected users:"
     droom/user: "Users"
