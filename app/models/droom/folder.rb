@@ -9,14 +9,14 @@ module Droom
     belongs_to :holder, :polymorphic => true
     has_many :documents, :dependent => :destroy
     has_many :personal_folders, :dependent => :destroy
-    acts_as_tree
+    acts_as_tree :order => "name ASC"
 
     validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
 
     before_validation :set_properties
     before_validation :ensure_slug
     
-    default_scope includes(:children, :documents)
+    default_scope includes(:documents)
 
     scope :all_private, where("#{table_name}.private = 1")
     scope :not_private, where("#{table_name}.private <> 1 OR #{table_name}.private IS NULL")

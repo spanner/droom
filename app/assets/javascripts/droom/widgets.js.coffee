@@ -561,8 +561,9 @@ jQuery ($) ->
     constructor: (element) ->
       @_container = $(element)
       @_list = @_container.children('ul.filing')
-      @_container.children('a.folder').click @toggle
-      @set()
+      if @_list[0]
+        @_container.children('a.folder').click @toggle
+        @set()
       
     set: (e) =>
       e.preventDefault() if e

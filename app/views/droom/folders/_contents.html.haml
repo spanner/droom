@@ -3,4 +3,4 @@
     - children = folder.children.by_name
     - children = children.populated unless admin?
     = render :partial => 'droom/documents/listing', :collection => folder.documents
-    = render :partial => 'droom/folders/folder', :collection => children
+    = render :partial => 'droom/folders/folder', :collection => folder.children, :locals => {:defer_contents => true}

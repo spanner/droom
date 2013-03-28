@@ -157,6 +157,7 @@ en:
   dropbox_copy_personal: "Copy only the most useful folders"
   dropbox_copy_topics: "Copy only selected topics"
   dropbox_copy_selected: "Copy only when you click"
+  dropbox_introduction: "We can copy document folders to your dropbox either automatically or in response to your selections. They will be placed within a new 'hkfx' folder. To begin, please click the link below and log into your dropbox."
   edit: "Edit"
   edit_event: "edit event"
   edit_folder: "edit folder"

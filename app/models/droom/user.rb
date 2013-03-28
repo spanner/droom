@@ -129,7 +129,10 @@ module Droom
     end
 
     def dropbox_token
-      dropbox_tokens.by_date.last
+      unless @dropbox_token
+        @dropbox_token = dropbox_tokens.by_date.last || 'nope'
+      end
+      @dropbox_token unless @dropbox_token == 'nope'
     end
 
     def dropbox_client

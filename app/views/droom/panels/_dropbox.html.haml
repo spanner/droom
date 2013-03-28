@@ -8,15 +8,10 @@
     %p
       = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
 
-    %p.confirmation
-      We are testing dropbox integration today, so your documents may not appear immediately.
-
   - else
     %p
-      We can copy document folders to your dropbox either automatically or in response to your selections. 
-      They will be placed within a new 'hkfx' folder.
-      To begin, please click the link below and log into your dropbox.
+      = t :dropbox_introduction
     %p
-      = link_to "Connect to your dropbox", dropbox_auth_url, :class => "dropbox"
+      = link_to "Connect to your dropbox", droom.new_dropbox_token_url, :class => "dropbox"
       
       
