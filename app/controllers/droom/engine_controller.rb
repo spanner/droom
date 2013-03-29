@@ -1,5 +1,4 @@
 require 'dropbox_sdk'
-require 'ruby-prof'
 
 module Droom
   class EngineController < ::ApplicationController
