@@ -1,4 +1,7 @@
-Droom::Engine.routes.draw do
+Droom::Engine.routes.draw do 
+  namespace :droom do
+    use_doorkeeper
+  end
   
   match '/' => DAV4Rack::Handler.new(
     :root => Rails.root.to_s, 
@@ -12,6 +15,11 @@ Droom::Engine.routes.draw do
   # intermediate confirmation step to allow invitation without setting a password
   devise_scope :user do
     put "/confirm_password" => "confirmations#update", :as => :confirm_password
+  end
+
+  namespace :api, :defaults => {:format => 'json'}, :constraints => {:format => /(json|xml)/} do
+    #...
+    get '/me' => "credentials#me"
   end
 
   resources :users

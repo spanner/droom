@@ -35,6 +35,7 @@ gem 'devise'
 gem 'devise-encryptable'
 gem 'kaminari'
 gem 'youtube_it'
+gem 'doorkeeper'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

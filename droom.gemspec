@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'devise-encryptable'
   s.add_dependency 'sunspot_rails'
   s.add_dependency 'sunspot_solr'
+  s.add_dependency 'doorkeeper'
   
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
