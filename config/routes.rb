@@ -1,10 +1,10 @@
-Droom::Engine.routes.draw do 
-
+Rails.application.routes.draw do
   scope :oauth do
-    use_doorkeeper do
-      controllers :applications => 'oauth_applications'
-    end
+    use_doorkeeper
   end
+end
+
+Droom::Engine.routes.draw do 
   
   match '/' => DAV4Rack::Handler.new(
     :root => Rails.root.to_s, 
