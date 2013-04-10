@@ -1,0 +1,4 @@
+#panels
+  - Droom.panels.each do |panel|
+    - if admin? || panel != 'admin'
+      = render :partial => "droom/panels/#{panel}"

@@ -16,13 +16,13 @@ module Droom
     end
 
     def new
-      render :partial => "form"
+      respond_with @group
     end
 
     def show
       respond_with @group do |format|
         format.js {
-          render :partial => 'droom/memberships/memberships'
+          render :partial => 'droom/groups/group'
         }
       end
     end
@@ -58,10 +58,10 @@ module Droom
     def get_group
       @group = Droom::Group.find(params[:id])
     end
-    
+
     def get_groups
       @groups = Droom::Group.all
     end
-  
+
   end
 end

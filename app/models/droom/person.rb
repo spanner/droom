@@ -1,60 +1,164 @@
 # This has been pulled from the yearbook and simplified. Docs need updating to match.
 require 'vcard'
+
 module Droom
   class Person < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :phone, :description, :user, :title, :invite_on_creation, :admin_user, :position
+    attr_accessible :name, :forename, :email, :phone, :description, :user, :user_id, :title, :invite_on_creation, :admin_user, :position, :post_line1, :post_line2, :post_city, :post_region, :post_code, :mobile, :dob, :organisation_id
     attr_accessor :invite_on_creation, :admin_user
     acts_as_list
-    ### Associations
+
+    belongs_to :organisation
+    belongs_to :created_by, :class_name => "Droom::User"
+    has_many :organisations, :foreign_key => :owner_id
+
+    ### Group memberships
     #
     has_many :memberships, :dependent => :destroy
     has_many :groups, :through => :memberships
-
-    has_many :invitations, :dependent => :destroy
-    has_many :events, :through => :invitations
-
-    # document_links is an automatically maintained index that we use to make easier the task of retrieving
-    # the documents this person is allowed to see.
-    has_many :document_links, :dependent => :destroy
-    has_many :document_attachments, :through => :document_links
-    # is this association really needed? We always retrieve the document list using the visible_to scope, so as to get public docs too.
-    has_many :documents, :through => :document_attachments, :uniq => true
+    has_many :mailing_list_memberships, :through => :memberships
     
-    # personal documents are the document clones created when a user logs to her DAV folder.
-    # they are spun off the document links
-    has_many :personal_documents, :through => :document_links
-
-    # The `user` is this person's administrative account for logging in and out and forgetting her password.
-    # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
-    # without having a person.
-    belongs_to :user, :class_name => Droom.user_class.to_s, :dependent => :destroy
+    has_many :dropbox_documents
     
-    before_save :update_user
-    after_save :invite_if_instructed
+    has_many :preferences, :dependent => :destroy, :foreign_key => :created_by_id
+    accepts_nested_attributes_for :preferences
 
     # The data requirements are minimal, with the idea that the directory will be populated gradually.
     validates :name, :presence => true
+
+    def admit_to(group)
+      memberships.find_or_create_by_group_id(group.id) if group
+    end
+    
+    def expel_from(group)
+      memberships.of_group(group).destroy_all
+    end
+
+    def member_of?(group)
+      group && memberships.of_group(group).any?
+    end
+
+    ### Event invitations
+    #
+    has_many :invitations, :dependent => :destroy
+    has_many :events, :through => :invitations
+
+    def invite_to(event)
+      invitations.find_or_create_by_event_id(event.id) if event
+    end
+    
+    def uninvite_from(event)
+      invitations.to_event(event).destroy_all
+    end
+
+    def invited_to?(event)
+      event && !!invitation_to(event)
+    end
+    
+    def invitation_to(event)
+      invitations.to_event(event).first
+    end
+
+    ## Folder permissions
+    #
+    # To simplify the business of showing and listing documents, we have adopted the convention that all
+    # documents live in a folder. Person accounts have links to those folders through the very thin
+    # PersonalFolder joining class, and at the view level we only ever show folder and subfolder lists.
+    # The only place we ever need a list of all the documents visible to this person is when searching, and
+    # for that we use the Document.visible_to scope, usually by way of the #documents method defined below.
+    #
+    # Personal folders are created and destroyed along with invitations and memberships..
+    #
+    has_many :personal_folders
+    has_many :folders, :through => :personal_folders
+
+    def add_personal_folders(folders=[])
+      self.folders << folders if folders
+    end
+    
+    def remove_personal_folders(folders=[])
+      self.folders.delete(folders) if folders
+    end
+    
+    def documents
+      Document.visible_to(self)
+    end
+    
+    ## User accounts
+    #
+    # The `user` is this person's administrative account for logging in and out and forgetting her password.
+    # A person can be listed without ever having a user, and a user account can exist (for an administrator) 
+    # without having a person.
+    belongs_to :user, :class_name => "Droom::User"
+    before_save :update_user
+
+    after_create :invite_if_instructed
+
+    scope :unusered, where("user_id IS NULL")
+    scope :usered, where("user_id IS NOT NULL")
+
+    # some magic glue to allow slightly indiscriminate use of user and person objects.
+    
+    def person
+      self
+    end
+    
+    def admin?
+      user && user.admin?
+    end
+
+    def has_admin_user?
+      user && user.admin?
+    end
+
+
+    ### Images
+    #
+    has_upload :image, 
+               :geometry => "520x520#",
+               :styles => {
+                 :icon => "32x32#",
+                 :thumb => "120x120#",
+                 :precrop => "1200x1200^"
+               }
+
+    ## Scopes
     
     default_scope order("droom_people.#{Droom.people_sort}")
 
-    scope :all_private, where("shy = 1")
-    scope :not_private, where("shy <> 1")
-    scope :all_public, where("public = 1 AND shy <> 1")
-    scope :not_public, where("public <> 1 OR shy = 1)")
+    scope :all_private, where("private = 1")
+    scope :not_private, where("private <> 1 OR private IS NULL")
+    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
+    scope :not_public, where("public <> 1 OR private = 1)")
 
-    scope :name_matching, lambda { |fragment| 
+    searchable do
+      text :name, :boost => 10, :stored => true
+      text :forename, :boost => 10, :stored => true
+      text :description, :stored => true
+    end
+
+    handle_asynchronously :solr_index
+
+    def self.highlight_fields
+      [:name, :forename, :description]
+    end
+
+    scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
-      where('droom_people.name LIKE :f OR droom_people.forename LIKE :f', :f => fragment)
+      where('droom_people.name LIKE :f OR droom_people.forename LIKE :f OR droom_people.email LIKE :f OR droom_people.phone LIKE :f OR CONCAT(droom_people.forename, " ", droom_people.name) LIKE :f', :f => fragment)
     }
     
     # warning! won't work in SQLite.
     scope :visible_to, lambda { |person|
       if person
-        select('droom_people.*')
-          .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
-          .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
-          .where(['(droom_people.public = 1 OR dm2.person_id = ?) AND (droom_people.shy IS NULL OR droom_people.shy <> 1)', person.id])
-          .group('droom_people.id')
+        if person.admin?
+          scoped({})
+        else
+          select('droom_people.*')
+            .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_people.id = dm1.person_id')
+            .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
+            .where(['(dm2.person_id = ?) OR (droom_people.private <> 1)', person.id])
+            .group('droom_people.id')
+        end
       else
         all_public
       end
@@ -64,24 +168,21 @@ module Droom
       joins('LEFT OUTER JOIN droom_invitations on droom_people.id = droom_invitations.person_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
     }
 
-    ### Images
-    #
-    # The treatment here is very basic compared to the yearbook's uploader, but we might bring that across
-    # if this starts to look like a useful directory resource.
-    #
-    has_attached_file :image, { 
-      :styles => {:standard => "400x300#", :thumb => "100x100#"},
-      :default_url => "/assets/person/nopicture_:style.png"
-    }
-  
-    def image_url(style=:standard)
-      image.url(style)
+
+    def membership_of(group)
+      memberships.find_by_group_id(group.id)
     end
-  
-    def identifier
-      'person'
-    end
+
+
+
+
+
     
+
+    def full_name
+      [forename, name].compact.join(' ').strip
+    end
+
     def formal_name
       [title, forename, name].compact.join(' ').strip
     end
@@ -94,138 +195,21 @@ module Droom
       end
     end
 
-    # I don't think we're using this anywhere at the moment, but a JSON API will grow here. Other classes already make more use of 
-    # JSON representation, eg institutions for mapping or tags for tagging.
-    #
-    def as_json(options={})
-      {
-        :id => id,
-        :name => name,
-        :title => title
-      }
-    end
-      
     # *for_selection* returns a list of people in options_for_select format with which to populate a select box.
     # 
     def self.for_selection
       self.published.map{|p| [p.name, p.id] }
     end
 
-    # Document links function as a lookup table to speed up the process of working out what this person can see.
-    # They are created when an attachment, invitation or membership confers access, and destroyed when a link in  
-    # that chain is removed.
-    #
-    # This will rebuild the document_link index for this person.
-    #
-    def repair_document_links
-      # NB this will also destroy all our personal documents. Very much a last resort.
-      self.document_links.destroy_all
-      group_and_event_attachments.each do |da|
-        document_links.create(:document_attachment => da)
-      end
-    end
-    
-    def group_and_event_attachments
-      Droom::DocumentAttachment.to_groups(groups) + Droom::DocumentAttachment.to_events(events)
-    end
 
-    # We defer the creation and updating of personal documents until the person actually logs in over DAV. At that stage a call 
-    # goes to person.create_personal_documents and the copying begins. It's not really ideal from a responsiveness point of view
-    # but it saves a great deal of update hassle (and storage space).
-    #
-    # NB this will not recreate deleted files: we only look as far as the PersonalDocument object, not the file 
-    # it would usually have. This is to allow people to delete files they don't want, without having them 
-    # constantly recreated.
-    #
-    def create_personal_documents
-      create_and_update_dav_directories
-      document_links.each { |dl| dl.ensure_personal_document }
-    end
     
-    def create_and_update_dav_directories
-      document_links.each do |dl|
-        p "-> creating DAV directory #{dl.slug}"
-        create_dav_directory(dl.slug)
-      end
-    end
-    
-    def create_dav_directory(name)
-      FileUtils.mkdir_p(Rails.root + "#{Droom.dav_root}/#{self.id}/#{name}")
-    end
-    
-    # If a personal version exists, we will return that since it may contain annotations or amendments.
-    #
-    def personal_or_generic_version_of(document)
-      personal_version_of(document) || document
-    end
-
-    # But if there has been no DAV login there can be no personal version.
-    #
-    def personal_version_of(document)
-      personal_documents.derived_from(document).first
-    end
-
-    # group_documents returns all those documents that have been attached to a group of which this person is a member.
-    # These documents will not show up in the calendar (since they are not attached to an event) so it's often a useful list.
-    #
-    def group_documents
-      groups.any? ? Droom::Document.attached_to_these_groups(groups).by_date : []
-    end
-    
-    # It is possible to give us a document by creating an attachment that has no attachee
-    # but which links to this person.
-    #
-    def attach(doc)
-      document_attachments.create(:document => doc)
-    end
 
 
-    def invite_to(event)
-      invitations.find_or_create_by_event_id(event.id) if event
-    end
-    
-    def uninvite_from(event)
-      p "-> destroying invitations: #{invitations.to_event(event).inspect}"
-      invitations.to_event(event).destroy_all
-    end
-    
-    def admit_to(group)
-      memberships.find_or_create_by_group_id(group.id) if group
-    end
-    
-    def expel_from(group)
-      memberships.of_group(group).destroy_all
-    end
-    
-    def member_of?(group)
-      group && memberships.of_group(group).any?
-    end
 
-    def invited_to?(event)
-      group && invitations.to_event(event).any?
-    end
+
+
     
-    # some magic glue to allow slightly indiscriminate use of user and person objects.
     
-    def person
-      self
-    end
-    
-    def admin?
-      user && user.admin?
-    end
-    
-    def has_active_user?
-      user && user.activated?
-    end
-    
-    def has_invited_user?
-      user && user.invited?
-    end
-    
-    def has_admin_user?
-      user && user.admin?
-    end
     
     
     # Snail is a library that abstracts away - as far as possible - the vagaries of international address formats. Here we map our data columns onto Snail's abstract representations so that they can be rendered into the correct format for their country.
@@ -245,7 +229,7 @@ module Droom
     end
     
     def to_vcf
-      @vcard ||= Vpim::Vcard::Maker.make2 do |maker|
+      @vcard ||= Vcard::Vcard::Maker.make2 do |maker|
         maker.add_name do |n|
           n.given = name || ""
         end
@@ -271,18 +255,31 @@ module Droom
     def as_suggestion
       {
         :type => 'person',
+        :prompt => formal_name,
+        :value => formal_name,
+        :id => id
+      }
+    end
+
+    def as_search_result
+      {
+        :type => 'person',
         :prompt => name,
         :value => name,
         :id => id
       }
     end
 
-  protected
-    
-    def index
-      Sunspot.index!(self)
+    def invitable?
+      name? && email?
     end
     
+    def invite!
+      invite_user
+    end
+
+  protected
+
     def invite_if_instructed
       invite_user if invite_on_creation
     end
@@ -290,15 +287,16 @@ module Droom
     # ### Administration & callbacks
     #
     # At some point we may want to create a user to log in and look after this person. 
-    # This usually has the side effect of sending out a login invitation.
+    # This usually has the side effect of sending out a confirmation message.
     #
     def invite_user
       unless self.user
-        if self.name? && self.email?
-          self.create_user(:forename => forename, :name => name, :email => email, :admin => admin_user)
+        if invitable?
+          user = self.create_user(:forename => forename, :name => name, :email => email)
           self.save
         end
       end
+      self.user
     end
   
     def update_user
@@ -307,6 +305,10 @@ module Droom
         self.user.update_column(:name, self.name) if name_changed?
         self.user.update_column(:forename, self.forename) if forename_changed?
       end
+    end
+    
+    def update_status
+      update_column(:privileged, memberships.privileged.any?)
     end
         
   end

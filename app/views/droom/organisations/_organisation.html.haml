@@ -1,0 +1,23 @@
+- organisation ||= @organisation
+- open ||= organisation == @organisation
+
+.organisation.holder{:id => "organisation_#{organisation.id}", :class => open ? "name open" : "name", :data => {:action => "collapser", :refreshable => true, :url => droom.organisation_path(organisation, :format => :js)} }
+  .heading
+    %h2.name<
+      = link_to organisation.name, organisation_url(organisation), :class => "name"
+      = action_menulink(organisation)
+    = action_menu(organisation)
+      
+  %p.preview
+    = shorten(organisation.description, :length => 64)
+
+  .detail
+    = organisation.description.html_safe
+    - if organisation.url?
+      %p.note
+        = link_to organisation.url_without_protocol, organisation.url_with_protocol, :class => "external"
+    
+
+    - if organisation.people.any?
+      %ul.people
+        = render :partial => "droom/people/person", :collection => organisation.people.order("name ASC")

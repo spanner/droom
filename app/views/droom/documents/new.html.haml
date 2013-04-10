@@ -1,8 +1,10 @@
-#new_document
-  %h2
-    - if @event
-      = t :add_document_to, :name => @event.name
-    - else
-      = t :add_document
+#document
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :add_document_to
+      %strong
+        = @folder.name
+      = t :folder
       
   = render :partial => 'form'

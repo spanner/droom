@@ -1,4 +1,6 @@
-#new_person
-  %h2
-    = t :new_person
+#person
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :new_person
   = render :partial => 'form'

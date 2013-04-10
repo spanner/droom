@@ -1,0 +1,19 @@
+- person ||= listing
+
+%li.person{:id => "list_person_#{person.id}", :data => {:refreshable => true, :url => droom.edit_person_path(person, :format => :js)} }
+  %span.name
+    = person.formal_name
+    = action_menulink(person)
+  = action_menu(person)
+
+  %br
+  %span.note
+    - if person.phone? || person.email?
+      - if person.phone?
+        = person.phone
+      - if person.phone? && person.email?
+        %br
+      - if person.email?
+        = mail_to person.email
+    - else
+      = t :contact_information_unavailable

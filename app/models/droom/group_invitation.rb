@@ -6,17 +6,26 @@ module Droom
     belongs_to :group
     belongs_to :event
     has_many :invitations, :dependent => :destroy
-    after_create :create_personal_invitations
+    after_save :create_personal_invitations
     validates_uniqueness_of :group_id, :scope => :event_id
     
     scope :to_event, lambda { |event|
-      where("group_invitations.event_id = ?", event.id)
+      where("droom_group_invitations.event_id = ?", event.id)
     }
+    
+    scope :for_group, lambda { |group|
+      where("droom_group_invitations.group_id = ?", group.id)
+    }
+    
     
     def create_personal_invitations
       group.people.each do |person|
-        invitations.find_or_create_by_person_id_and_event_id(person.id, event.id)
+        create_personal_invitation_for(person)
       end
+    end
+
+    def create_personal_invitation_for(person)
+      event.invitations.find_or_create_by_person_id(person.id) if person.member_of?(group)
     end
     
   end

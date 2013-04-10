@@ -1,11 +1,10 @@
 - group ||= @group
-%tr.group.holder{:id => "group_#{group.id}"}
-  %th.name
-    = link_to group.name, group
-  %td.description= group.description
-  %td.count= t(:group_members, :count => group.people.count)
-  %td.buttons
-    - if admin?
-      = link_to t(:edit_group), edit_group_url(group), :class => 'admin edit minimal', :remote => true, :data => {:action => "popup", :type => "html"}
-    - if current_user.admin?
-      = link_to t(:remove), group_url(group), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_group, :name => group.name)}
+
+%div{:id => "group_#{group.id}", :data => {:action => "collapser", :refreshable => true, :url => group_path(group, :format => :js)} }
+  %h2
+    = group.name
+    = action_menulink(group)
+  = action_menu(group)
+
+  %ul.people
+    = render :partial => "droom/people/person", :collection => group.people, :locals => {:group => group}

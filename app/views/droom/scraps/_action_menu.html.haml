@@ -1,0 +1,9 @@
+- if editable?(scrap)
+  .menu{:data => {:for => "scrap_#{scrap.id}"}}
+    %ul.actions
+      %li
+        = link_to t(:edit_scrap), droom.edit_scrap_url(scrap), :class => 'edit', :data => {:action => "popup", :affected => "#scraps"}
+      %li
+        = link_to t(:delete_scrap), droom.scrap_url(scrap), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#scrap_#{scrap.id}", :affected => "#scraps", :confirm => t(:confirm_delete_scrap, :type => scrap.scraptype)}
+      %li
+        / = link_to t(:add_document), droom.new_folder_document_url(scrap.folder), :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#scrap_#{scrap.id}"}

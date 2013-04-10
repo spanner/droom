@@ -9,7 +9,9 @@ gemspec
 gem "jquery-rails"
 gem "haml"
 gem "geocoder"
-gem "paperclip", '~> 3.1.0'
+gem 'devise'
+gem 'devise-encryptable'
+gem "paperclip"#, '~> 3.1.0'
 gem "debugger"
 gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
 gem "date_validator"
@@ -21,8 +23,18 @@ gem "chronic"
 gem "dynamic_form"
 gem 'acts_as_list'
 gem 'rdiscount'
+gem 'acts_as_tree'
+gem 'dropbox-sdk'
+gem 'daemons'
+gem 'delayed_job_active_record'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
+gem 'yomu'
+gem 'osgb', :git => 'git://github.com/spanner/osgb.git'#:path => "/var/www/gems/osgb"#
+gem 'devise'
+gem 'devise-encryptable'
+gem 'kaminari'
+gem 'youtube_it'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -35,13 +47,21 @@ end
 group :test, :development do
   gem 'mysql2'
   gem 'haml'
-  gem 'paperclip', "~> 3.1.0"
+  gem 'paperclip'#, "~> 3.1.0"
+  gem "launchy"
   gem "capybara"
-  gem "rspec-rails", "~> 2.0"
+  gem "rspec-rails", ">= 2.6.0"
   gem 'watchr'
   gem 'spork'
   gem 'factory_girl_rails'
   gem "database_cleaner"
   gem 'shoulda-matchers'
   gem 'awesome_print'
+  gem 'devise'
+  gem 'devise-encryptable'
+  gem 'sunspot-rails-tester'
+  gem 'acts_as_fu'
+  gem 'cucumber-rails'
+  gem "sunspot_test"
 end
+

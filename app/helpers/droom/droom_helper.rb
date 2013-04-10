@@ -1,6 +1,94 @@
+require 'dropbox_sdk'
+
 module Droom
   module DroomHelper
+
+    def action_menulink(thing, html_options={})
+      classname = thing.class.to_s.downcase.underscore.split('/').last
+      html_options.reverse_merge!({
+        :class => "",
+        :data => {:menu => "#{classname}_#{thing.id}"}
+      })
+      html_options[:class] << " menu"
+      link_to t(:edit), "#", html_options if editable?(thing)
+    end
     
+    def action_menu(thing, locals={})
+      if editable?(thing)
+        type = thing.class.to_s.downcase.underscore
+        classname = type.split('/').last
+        locals[classname.to_sym] = thing
+        render :partial => "#{type.pluralize}/action_menu", :locals => locals
+      end
+    end
+    
+    def dropbox_link(folder)
+      if dropbox? && current_user.pref('dropbox.strategy') == 'clicked' && folder.populated? && !folder.dropboxed_for?(current_user)
+        link_to t(:copy_to_dropbox), droom.dropbox_folder_url(folder), :id => "dropbox_folder_#{folder.id}", :class => 'dropboxer minimal', :data => {:action => "remove", :removed => "#dropbox_folder_#{folder.id}"}
+      end
+    end
+
+    def dropbox_session
+      # note that we usually don't want to pick up an existing dropbox session. That happens in the dropbox_tokens_controller, when
+      # following up an access token round trip, but in the view any existing session has probably expired and we're better off with a new one.
+      DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
+    end
+
+    def current_person
+      current_user.person if current_user
+    end
+
+    def admin?
+      current_user and current_user.admin?
+    end
+
+    def pageclass
+      controller.controller_name
+    end
+
+    def preference_checkbox(key)
+      render :partial => "droom/preferences/checkbox", :locals => {:key => key}
+    end
+
+    def preference_radio_set(key, *values)
+      render :partial => "droom/preferences/radio_set", :locals => {:key => key, :values => values}
+    end
+
+    def shorten(text, length=64)
+      length = length[:length] if length.is_a?(Hash)
+      truncate(strip_tags(text), {:length => length, :separator => " "})
+    end
+
+    def dropbox?
+      current_user and !!current_user.dropbox_token
+    end
+    
+    def show_dropbox_links?
+      dropbox?# && preference is 'clicked'
+    end
+    
+    def dropbox_auth_url
+      dbs = dropbox_session
+      # get an auth link address, with our register action as the callback
+      authorization_url = dbs.get_authorize_url(droom.register_dropbox_tokens_url)
+      # store the requesting dropbox session, serialized, in our user's session cookie
+      # if the oauth confirmation is successful, we will need it.
+      session[:dropbox_session] = dbs.serialize
+      authorization_url
+    end
+    
+    def visible?(thing)
+      admin? || privileged? || current_user.can_see?(thing)
+    end
+    
+    def editable?(thing)
+      admin? || current_user == thing.created_by
+    end
+
+    def deletable?(thing)
+      admin? || current_user == thing.created_by
+    end
+
     def nav_link_to(name, url, options={})
       options[:class] ||= ""
       options[:class] << "here" if (request.path == url) || (request.path =~ /^#{url}/ && url != "/")
@@ -57,18 +145,18 @@ module Droom
         end
       end
     end
-    
+
     def url_for_month(date)
-      calendar_url(:year => date.year, :month => date.month)
+      droom.events_url(:year => date.year, :month => date.month)
     end
 
     def url_for_date(date)
-      calendar_url(:year => date.year, :month => date.month, :mday => date.day)      
+      droom.events_url(:year => date.year, :month => date.month, :mday => date.day)
     end
-    
+
     def day_names
       ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     end
-    
+
   end
 end

@@ -1,0 +1,24 @@
+%p
+  Dear 
+  = @resource.name + ','
+  
+%p
+  You are cordially invited to visit our new Data Room.
+
+%p
+  The data room is a private space for the dissemination of useful information.
+
+%p
+  An account has been created for you; all that remains is to activate it and choose a password.
+  
+%h2
+  = link_to "Please click here to begin", confirmation_url(@resource, :confirmation_token => @resource.confirmation_token)
+  
+%p
+  As always your comments and suggestions will be very welcome.
+
+%p
+  With best wishes,
+
+%p
+  = Droom.email_from_name

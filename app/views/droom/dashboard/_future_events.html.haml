@@ -1,0 +1,18 @@
+.divider
+#events{:data => {:refreshable => true, :url => droom.events_url(:limit => 8)}}
+  - calendar = Droom::Calendar.find_or_create_by_name('main')
+  - events = calendar.events.future_and_current.order('start ASC').limit(8)
+
+  %h2.section
+    = link_to t(:future_events), main_app.calendar_url
+    %span.action
+      = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
+
+  - if events.any?
+    = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
+  - else
+    = t :no_future_events
+  
+  - if calendar.events.future_and_current.count > 8
+    %p
+      = link_to t(:more_in_calendar), main_app.calendar_url

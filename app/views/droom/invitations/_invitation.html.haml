@@ -1,0 +1,9 @@
+- invitation ||= @invitation
+
+%li.invitation{:class => invitation.status, :id => "invitation_#{invitation.id}"}
+  = link_to invitation.event.name, droom.event_url(invitation.event)
+  %span.action
+    - unless invitation.accepted? 
+      = link_to t(:accept), accept_event_invitation_url(invitation.event, invitation), :class => 'accept', :data => {:action => "replace", :method => "put", :replaced => "#invitation_#{invitation.id}"}
+    - unless invitation.refused? 
+      = link_to t(:refuse), refuse_event_invitation_url(invitation.event, invitation), :class => 'refuse', :data => {:action => "replace", :method => "put", :replaced => "#invitation_#{invitation.id}"}

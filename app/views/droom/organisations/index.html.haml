@@ -1,0 +1,20 @@
+#main.organisations
+  = render :partial => 'droom/organisations/organisations'
+
+- content_for :title do
+  = t :directory
+
+- content_for :margin do
+  #finder
+    %h3
+      = t :find_people
+
+    %form.filter{:action => droom.people_url(:format => :js), :data => {:action => "filter"}}
+      %p
+        = text_field_tag :q, params[:q], :placeholder => t(:by_name_or_email)
+
+    .scroller
+      #found
+        %p.waiting
+          = t :loading_people
+  

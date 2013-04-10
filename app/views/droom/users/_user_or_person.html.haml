@@ -1,0 +1,63 @@
+- user_or_person ||= @user ||= @person
+
+- if user_or_person.is_a? Droom::Person
+  - person = user_or_person
+  - user = person.user
+  - rowid = "person_#{person.id}"
+  - cssclass = "person"
+
+- else
+  - person = user_or_person.person
+  - user = user_or_person
+  - rowid = "user_#{user.id}"
+  - cssclass = "user"
+
+%tr{:id => rowid, :class => cssclass}
+  %td.name
+    - if person
+      = link_to person.full_name, person_url(person)
+    - else
+      = user_or_person.full_name
+  %td.email
+    = mail_to user_or_person.email
+  %td.invited
+    - if user
+      %span.yes
+    - else
+      - if person.invitable?
+        = link_to t(:invite), invite_person_url(person), :class => "no", :data => {:action => "replace", :replaced => "##{rowid}"}
+      - else
+        %span.not_applicable
+  %td.confirmed
+    - if user
+      - if user.confirmed?
+        %span.yes
+      - else
+        = link_to "&nbsp;", user_url(user, :user => { :confirm => true }, :format => :js, :response_partial => "user_or_person"), :class => "no", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
+    - else
+      %span.not_applicable
+  %td.admin
+    - if user && user.confirmed?
+      - if user.admin?
+        = link_to "&nbsp;", user_url(user, :user => { :admin => false }, :format => :js, :response_partial => "user_or_person"), :class => "yes", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
+      - else
+        = link_to "&nbsp;", user_url(user, :user => { :admin => true }, :format => :js, :response_partial => "user_or_person"), :class => "no", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
+    - else
+      %span.not_applicable
+  %td.settings
+    - if user
+      = link_to "&nbsp;", edit_user_url(user), :data => {:action => "popup"}
+  %td.directory
+    - if user
+      - if person
+        = link_to "&nbsp;", person_url(person, :format => :js), :class => "yes", :method => :delete, :remote => true, :confirm => "Really delete person?", :data => { :action => "replace", :replaced => "##{rowid}" }
+      - else
+        = link_to "&nbsp;", people_url(:person => { :user_id => user.id, :email => user.email, :name => user.name, :forename => user.forename}, :format => :js), :class => "no", :method => :post, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
+    - else
+      %span.yes
+  - Droom::Group.all.each do |group|
+    %td.group
+      - if person
+        = render :partial => "droom/memberships/membership_toggle", :locals => { :group => group, :person => person}
+      - else
+        %span.not_applicable

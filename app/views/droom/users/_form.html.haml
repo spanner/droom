@@ -1,0 +1,34 @@
+= form_for @user, :html => {:class => 'edit user', :autocomplete => false} do |f|
+
+  %p.email
+    = f.label :email
+    %br
+    = f.text_field :email, :class => 'preferences', :autocomplete => false
+    - if @user.person
+      %br
+        = f.check_box :update_person_email
+        = f.label :update_person_email, :class => 'minor'
+      %span.formnote
+        = t :update_person_email_note
+
+  %p.password
+    = f.label :password
+    %br
+    = f.password_field :password, :autocomplete => "off", :class => 'preferences password'
+    %br
+    %span.formnote
+      = t :password_requirements
+      = t :password_leave_same
+
+  %p.confirmation
+    = f.label :password_confirmation
+    %br
+    = f.password_field :password_confirmation, :class => 'preferences'
+
+  %p.password_notice
+
+  .buttons
+    = f.submit t(:save_changes), :class => "submit"
+    = t :or
+    = link_to t(:cancel), '#', :class => "cancel"
+

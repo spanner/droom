@@ -3,7 +3,7 @@ FactoryGirl.define do
     name "A document"
     description "Test document"
     file Rack::Test::UploadedFile.new('/private/var/www/gems/droom/spec/fixtures/images/rat.png', 'image/png')
-    
+
     factory :grouped do
       name "Grouped Document"
     end

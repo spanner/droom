@@ -1,0 +1,10 @@
+#rss.panel
+  %h4
+    Follow the stream
+  %p
+    If your RSS reader will let you enter login information, you can use this 
+    = link_to t(:normal_RSS_link), droom.scraps_url(:format => :atom)
+    to access the stream. If not, you can also use this 
+    = link_to t(:personal_RSS_link), droom.feed_scraps_url(:format => :atom, :auth_token => current_user.authentication_token)
+    with a secret token that will log you in automatically. Please don't share it.
+    

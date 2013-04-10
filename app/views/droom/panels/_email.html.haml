@@ -1,0 +1,16 @@
+#email.panel
+  %h4
+    = t :email_preferences
+    
+  = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
+    %p
+      %span.preference
+        = preference_checkbox 'email.enabled?'
+      %span.preference
+        = preference_checkbox 'email.event_invitations?'
+      %span.preference
+        = preference_checkbox 'email.mailing_lists?'
+      %span.preference
+        = preference_checkbox 'email.digest?'
+
+  %p.confirmation

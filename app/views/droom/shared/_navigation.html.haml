@@ -1,8 +1,8 @@
 - if current_user && current_user.activated?
   %nav<
     = nav_link_to t(:your_page), droom.dashboard_path
-    = nav_link_to t(:calendar), droom.calendar_path
-    = nav_link_to t(:library), droom.library_path
-    = nav_link_to t(:directory), droom.directory_path
+    = nav_link_to t(:calendar), droom.events_path
+    = nav_link_to t(:library), droom.documents_path
+    = nav_link_to t(:directory), droom.people_path
     - if Droom.show_venue_map
-      = nav_link_to t(:map), droom.map_path
+      = nav_link_to t(:map), droom.venues_path

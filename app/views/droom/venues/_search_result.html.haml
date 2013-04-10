@@ -1,0 +1,17 @@
+- venue ||= search_result
+- path = venue_url(venue)
+- hit = venue.hit
+.venue
+  = link_to "venue:", path, :class => "icon"
+  - if hit and (highlights = hit.highlights.select{|hl| hl.field_name == :name}).any?
+    = render :partial => "droom/shared/title_excerpt", :locals => {:path => path, :highlights => highlights}
+  - else
+    = link_to venue.name, path
+  .excerpt
+    - if hit and (highlights = hit.highlights.select{|hl| hl.field_name != :name}).any?
+      = render :partial => "droom/shared/excerpt", :locals => { :highlights => highlights }
+    - else
+      - if venue.description
+        = truncate venue.description, :length => 60
+        %br
+      = venue.address

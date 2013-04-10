@@ -1,0 +1,9 @@
+= fields_for current_user do |f|
+  - pref = current_user.preference(key)
+  = f.fields_for :preferences, pref, :child_index => pref.uuid do |pf|
+    = pf.hidden_field :key
+    = pf.hidden_field :uuid
+    - values.each do |val|
+      = pf.radio_button :value, val
+      = pf.label :"value_#{val}", t(:"preferences.#{key}.#{val}")
+      %br

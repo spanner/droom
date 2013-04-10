@@ -1,34 +1,32 @@
 - person ||= @person
-- cssclass = "icon placeholder"
-- cssclass << " invited" if person.has_invited_user?
-- cssclass << " active" if person.has_active_user?
+- invitation ||= @invitation
+- membership ||= false
+- event ||= false
+- group ||= false
+- cssclass = "person"
 
-%tr.person.holder{:id => "person_#{person.id}"}
-  %td.handle
-    %span{:class => cssclass}
-    
-  %th.name
-    = person.formal_name
-      
-  %td.email
-    %p
-      = mail_to person.email
-  %td.phone
-    - if person.phone
-      %p
-        = person.phone
-    - else
-      %p.unavailable
-        no phone
-  - if admin?
-    - @groups.each do |group|
-      %td.group.admin
-        = render :partial => 'droom/memberships/button', :locals => {:group => group, :person => person}
-  - unless admin?
-    %td.buttons
-      %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
-  - if admin?
-    %td.admin
-      = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "popup", :type => "html"}
-    %td.admin
-      = link_to t(:remove), person_url(person), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_person, :name => person.name)}
+- if invitation
+  - cssclass << " #{invitation.status}"
+  - event = invitation.event
+- if membership
+  - group = membership.group
+
+%li{:id => "person_#{person.id}", :class => cssclass, :data => {:refreshable => true, :url => droom.person_path(person, :format => :js, :invitation_id => invitation ? invitation.id : nil)} }
+  %span.mugshot{:style => "background-image: url(#{person.image.url('cropped')})"}
+    - if invitation
+      - if editable?(invitation)
+        = link_to invitation.status, toggle_event_invitation_url(event, invitation), :class => "invitation #{invitation.status}", :data => {:action => "affect", :method => "put", :affected => "#person_#{person.id}"}
+      - else
+        %span{:class => "invitation #{invitation.status}"}
+  %span.contact
+    %span.name
+      = person.formal_name
+      = action_menulink(person, :class => "small")
+    %br
+    %span.note
+      - if person.email?
+        = mail_to person.email
+      - else
+        = t :contact_information_unavailable
+
+    = action_menu(person, :event => event, :group => group)

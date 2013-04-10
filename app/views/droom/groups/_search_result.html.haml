@@ -1,7 +1,16 @@
 - group ||= search_result
-
-%li.group
-  = link_to group.name, group_url(group)
+- path = group_url(group)
+- hit = group.hit
+.group
+  = link_to "group:", group_url(group), :class => "icon"
+  - if hit and (highlights = hit.highlights.select{|hl| hl.field_name == :name}).any?
+    = render :partial => "droom/shared/title_excerpt", :locals => {:path => path, :highlights => highlights}
+  - else
+    = link_to group.name, path
   %span.note
     = t :group_members, :count => group.people.count
-    
+  .excerpt
+    - if hit and (highlights = hit.highlights.select{|hl| hl.field_name != :name}).any?
+      = render :partial => "droom/shared/excerpt", :locals => { :highlights => highlights }
+    - else
+      = truncate group.description, :length => 130

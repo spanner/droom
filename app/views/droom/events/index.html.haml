@@ -1,12 +1,29 @@
-- if current_user.admin?
-  .holder
-    %p.admin
-      = link_to t(:add_event), droom.new_event_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => ".events_list, .minimonth"}
+#main.events
+  - if @direction == 'past'
+    %h2.section
+      = t(:past_events)
+      %span.addendum
+        = link_to t(:show_future_events), droom.events_url(:direction => "future"), :class => "future"
 
-#events
-  %h2.quiet
-    = t(:future_events)
-  
+  - else
+    %h2.section
+      = t(:future_events)
+      - if @calendar.events.past.any?
+        %span.addendum
+          = link_to t(:show_past_events), droom.events_url(:direction => "past"), :class => "past"
+    
+  - if admin?
+    %p.action
+      = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => ".events_list, #minicalendar"}
+      %br
+      %span.note
+        = t :new_event_note
+
   = render :partial => 'events'
 
-= render :partial => 'droom/dashboard/marginalia'
+- content_for :title do
+  = t :calendar
+
+- content_for :margin do
+  = render :partial => 'droom/shared/calendar_holder'
+  = render :partial => "droom/invitations/invitations"

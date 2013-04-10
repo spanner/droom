@@ -1,0 +1,5 @@
+- scrap ||= search_result
+- if Droom.scrap_types.include? scrap.scraptype
+  .scrap
+    = render :partial => "droom/scraps/thumbs/#{scrap.scraptype}", :locals => {:scrap => scrap}
+

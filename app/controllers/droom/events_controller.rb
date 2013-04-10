@@ -7,10 +7,11 @@ module Droom
 
     before_filter :authenticate_user!
     before_filter :require_admin!, :except => [:index, :show]
-    before_filter :get_current_person
     before_filter :numerical_parameters
     before_filter :get_event, :only => [:show, :edit, :update, :destroy]
+    before_filter :find_or_create_calendar, :only => :new
     before_filter :build_event, :only => [:new, :create]
+    before_filter :get_calendar, :only => [:index, :calendar]
     before_filter :find_events, :only => [:index, :calendar]
 
     def index
@@ -27,11 +28,6 @@ module Droom
           render :partial => 'droom/events/calendar'
         }
       end
-    end
-
-    def feed
-      @events = Droom::Event.all
-      respond_with @events
     end
 
     def show
@@ -79,7 +75,8 @@ module Droom
 
     def build_event
       params[:event] ||= {}
-      @event = Droom::Event.new({:start => Time.now}.merge(params[:event]))
+      params[:event][:calendar_id] ||= @calendar.id
+      @event = Droom::Event.new({:start => Time.now.floor(30.minutes)}.merge(params[:event]))
     end
 
     def get_event
@@ -87,14 +84,30 @@ module Droom
     end
 
     def find_events
-      if current_user.admin?
-        @events = Event.future_and_current
+      @events = @calendar.events
+      if params[:direction] == 'past'
+        @events = @events.past.order('start DESC')
+        @direction = "past"
       else
-        @events = Event.visible_to(@current_person).future_and_current
+        @events = @events.future_and_current.order('start ASC')
+        @direction = "future"
       end
+      unless current_user.admin?
+        @events = @events.visible_to(current_person)
+      end
+      
       @show = params[:show] || 10
       @page = params[:page] || 1
-      @events.page(@page).per(@show)
+      @events = @events.page(@page).per(@show)
+    end
+
+    def get_calendar
+      @calendar = Droom::Calendar.find_by_id(params[:calendar_id]) || Droom::Calendar.find_or_create_by_name("main")
+    end
+
+    def find_or_create_calendar
+      name = if Droom.required_calendar_names.include?(params[:calendar]) then params[:calendar] else "main" end
+      @calendar = Droom::Calendar.find_or_create_by_name(name)
     end
 
     # months can be passed around either as names or numbers

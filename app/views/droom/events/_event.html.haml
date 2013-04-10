@@ -2,77 +2,86 @@
 - brief ||= false
 - show_header ||= false
 - event ||= @event
-- full_attachments ||= false
+- full_attachments ||= @event == event
+- brief = false if full_attachments
+- closed ||= false
+- open ||= !closed || event == @event
+- open = true if pageclass == 'events'
 
-- if event
-  - event_master_id = event.master_id || event.id
-  - if @seen_events[event_master_id]
-    - repeating = true 
-    - brief = true
-  - @seen_events[event_master_id] = true;
-  - cssclasses = ['event holder']
-  - cssclasses << 'repeat' if repeating
-  - cssclasses << 'private' if event.private?
-  - cssclasses << 'public' if event.public?
+- event_master_id = event.master_id || event.id
+- if @seen_events[event_master_id]
+  - repeating = true 
+  - brief = true
+- @seen_events[event_master_id] = true;
+- cssclasses = ['event']
+- cssclasses << 'repeat' if repeating
+- cssclasses << 'private' if event.private?
+- cssclasses << 'public' if event.public?
+- cssclasses << 'open' if open
+- cssclasses << 'closed' if closed
+- cssclasses << 'invited' if event.attended_by?(current_person)
 
-  - if show_header 
-    - header = month_header_for(event.start_date)
-    - if header != @event_header
-      %p.note
-        = @event_header = header
 
-  %div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:refreshable => true, :url => event_path(event, :format => :js)} }
-    .datemark
-      %span.mon= event.start.strftime('%b')
-      %span.dom= event.start.strftime('%d')
-      - if event.start.year != Date.today.year
-        %span.year= event.start.strftime('%Y')
+- if show_header 
+  - header = month_header_for(event.start_date)
+  - if header != @event_header
+    %p.note
+      = @event_header = header
 
-    .summary
+%div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:action => "collapser", :refreshable => true, :url => event_path(event, :format => :js)} }
+  .datemark
+    %span.mon= event.start.strftime('%b')
+    %span.dom= event.start.strftime('%d')
+    - if event.start.year != Date.today.year
+      %span.year= event.start.strftime('%Y')
+
+  .summary
+    .heading
       %h2.name<
-        = link_to event.name, event_url(event)
-        - if admin?
-          %span.admin<
-            = link_to t(:edit_event), edit_event_url(event), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :replaced => "#event_#{event.id}", :affected => ".minimonth"}
-            = link_to t(:remove), event_url(event), :method => 'delete', :class => 'delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_event, :name => event.name), :affected => ".minimonth"}
+        - if event.description? || event.has_documents? || event.has_people?
+          = link_to event.name, event_url(event), :class => "name"
         - else
-          = link_to t(:download_ical), event_url(event, :format => :ics), :class => 'ical icon'
-
-      - unless brief || full_attachments
-        - documents = current_user.admin? ? event.documents : event.documents.visible_to(@current_person)
-        - if admin? || documents.any?
-          .documents
-            - if documents.any?
-              %h3 
-                = t(:attachments)
-                - if admin?
-                  = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin minimal", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
-              %ul.downloads
-                = render :partial => 'droom/documents/listing', :collection => event.documents.by_date.limit(3)
-                - if event.documents.count > 3
-                  %li.more
-                    = link_to t(:more_documents_count, :count => event.documents.count - 3), event_url(event)
-            - elsif admin?
-              = link_to t(:add_document), droom.new_event_document_url(event), :class => "add admin", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#event_#{event.id}"}
-              
-              
+          = event.name
+        = action_menulink(event)
+      = action_menu(event)
+        
       %p.practicalities
         %time
           = l(event.start_time, :format => :natural)
+        - if event.finish?
+          = t :to
+          = l(event.finish_time, :format => :natural)
         - if event.venue
           %span.location
             = t(:at)
             - if event.venue.url
-              = link_to event.venue.proper_name, event.venue.url
+              = link_to event.venue.proper_name + ".", event.venue.url
             - elsif Droom.show_venue_map
-              = link_to event.venue.proper_name, venues_url(:id => event.venue.id)
+              = link_to event.venue.proper_name + ".", venues_url(:id => event.venue.id)
             - else
-              %strong
-                = event.venue.proper_name
-                
-      - unless brief
-        = simple_format event.description, :class => "description"
+              = event.venue.proper_name + "."
 
-  - if full_attachments
-    = render :partial => 'droom/events/invitations', :locals => {:event => event}
-    = render :partial => 'droom/documents/documents_list', :locals => {:event => event}
+        - unless full_attachments
+          - if event.has_documents?
+            %span.attachments
+              = link_to t(:attachment_count, :count => event.all_documents.count), droom.event_url(event)
+          - elsif brief && event.description?
+            = link_to t(:more), droom.event_url(event)
+            
+    - unless brief
+      .detail
+        = event.description.html_safe
+
+      - if full_attachments && event.detail_visible_to?(current_person)
+        .invitations
+          - if event.invitations.any?
+            %h2
+              = t :attending
+            = render :partial => 'droom/events/invitations', :locals => {:event => event}
+        .attachments
+          - if event.folder.populated?
+            %h2
+              = t(:attachments)
+              = action_menulink(event.folder)
+            = action_menu(event.folder)
+            = render :partial => "droom/folders/attachments", :locals => {:folder => event.folder, :title => t(:attachments), :open => true}

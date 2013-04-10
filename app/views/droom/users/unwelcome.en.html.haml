@@ -1,0 +1,17 @@
+- content_for :pagetitle do
+  = t :code_unknown
+
+#account
+  %h1.pagetitle
+    =t :code_unknown
+
+  %p
+    This welcome address is not correct. Please check your invitation email and make sure that 
+    you are typing or pasting the right address. It may be that your email program has broken
+    the address over two lines: in that case please make sure you enter the whole thing without
+    any spaces.
+    
+  %p
+    If you are seeing this message in error, please contact the site builder on 
+    = mail_to "will@spanner.org"
+    and he will sort it out for you right away.

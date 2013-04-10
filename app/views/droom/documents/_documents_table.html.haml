@@ -6,7 +6,7 @@
           = render :partial => 'pagination', :locals => {:with_info => false}
   %thead
     %tr
-      - %w{name filename filesize created event category}.each do |col|
+      - %w{name filename filesize created}.each do |col|
         %th
           - if @sort == col 
             - order = @order.downcase == 'desc' ? 'asc' : 'desc'

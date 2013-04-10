@@ -1,36 +1,85 @@
 require 'dav4rack'
 require 'dav4rack/resources/file_resource'
 require "droom/monkeys"
-require "droom/helpers"
+require "droom/lazy_hash"
+require "droom/model_helpers"
 require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
 require "droom/dav_resource"
 require "droom/searchability"
 require "droom/taggability"
+require "droom/folders"
 require "snail"
 
 module Droom
-  mattr_accessor :user_class, :layout, :sign_in_path, :sign_out_path, :user_class, :root_path, :active_dashboard_modules, :dav_root, :dav_subdomain, :use_forenames, :show_venue_map, :people_sort
+  # Droom configuration is handled by accessors on the Droom base module.
+  # Boolean items also offer the interrogative form.
+  
+  mattr_accessor :root_path,
+                 :suggestible_classes,
+                 :searchable_classes,
+                 :yt_client,
+                 :layout,
+                 :email_layout,
+                 :email_host,
+                 :email_from,
+                 :email_from_name,
+                 :email_return_path,
+                 :main_dashboard_modules,
+                 :margin_dashboard_modules,
+                 :panels,
+                 :scrap_types,
+                 :dav_root,
+                 :dav_subdomain,
+                 :use_forenames,
+                 :use_separate_mobile_number,
+                 :use_titles,
+                 :enable_mailing_lists,
+                 :mailman_table_name,
+                 :mailing_lists_active_by_default,
+                 :mailing_lists_digest_by_default,
+                 :show_venue_map,
+                 :default_document_private,
+                 :default_event_private,
+                 :dropbox_app_key,
+                 :dropbox_app_secret,
+                 :user_defaults,
+                 :people_sort,
+                 :required_calendar_names,
+                 :stream_shared,
+                 :aws_bucket_name
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
-  
+
   class << self
-    def user_class=(klass)
-      @@user_class = klass.to_s
-    end
-  
-    def user_class
-      (@@user_class ||= "User").constantize
-    end
-
     def layout
-      @@layout ||= "application"
+      @@layout ||= "droom/application"
     end
 
-    def sign_in_path
-      @@sign_in_path ||= "/users/sign_in"
+    def email_host
+      @@email_host ||= "please-change-email-host-in-droom-initializer.example.com"
+    end
+
+    def email_layout
+      @@email_layout ||= "droom/email"
+    end
+
+    def email_from
+      @@email_from ||= "please-change-email_from-in-droom-initializer@example.com"
+    end
+
+    def email_from_name
+      @@email_from ||= "Please Set Email-From Name In Droom Initializer"
+    end
+
+    def email_return_path
+      @@email_return_path ||= email_from
+    end
+
+    def people_sort
+      @@people_sort ||= "position ASC"
     end
 
     def sign_out_path
@@ -41,38 +90,70 @@ module Droom
       @@root_path ||= "dashboard#index"
     end
 
-    def people_sort
-      @@people_sort ||= "position ASC"
-    end
-    
     def home_country
       Snail.home_country = @@home_country ||= 'gb'
     end
 
-    def active_dashboard_modules
-      @@active_dashboard_modules ||= %w{my_future_events my_past_events my_group_documents}
+    def main_dashboard_modules
+      @@main_dashboard_modules ||= %w{my_future_events my_folders}
+    end
+
+    def margin_dashboard_modules
+      @@margin_dashboard_modules ||= %w{quicksearch stream}
     end
     
+    def panels
+      @@panels ||= %w{dropbox email rss devices readers account search admin}
+    end
+    
+    def scrap_types
+      @@scrap_types ||= %w{image video text quote link event document}
+    end
+
     # base path of DAV directory tree, relative to rails root.
     def dav_root
       @@dav_root ||= "webdav"
     end
-    
+
     # subdomain constraint applied when routing to dav.
     def dav_subdomain
       @@dav_subdomain ||= /dav/
     end
 
-    def use_forenamnes
+    def use_forenames?
       !!@@use_forenames
     end
 
-    def show_venue_map
-      !!@@show_venue_map
+    def use_titles?
+      !!@@use_titles
     end
 
-    def suggestible_classes=(hash)
-      @@suggestible_classes = hash
+    def stream_shared?
+      !!@@stream_shared
+    end
+
+    def use_separate_mobile_number?
+      !!@@use_separate_mobile_number
+    end
+
+    def enable_mailing_lists?
+      !!@@enable_mailing_lists
+    end
+
+    def mailman_table_name
+      @@mailman_table_name ||= 'mailman_mysql'
+    end
+
+    def mailing_lists_active_by_default?
+      !!@@mailing_lists_active_by_default
+    end
+
+    def mailing_lists_digest_by_default?
+      !!@@mailing_lists_digest_by_default
+    end
+
+    def show_venue_map?
+      !!@@show_venue_map
     end
 
     def suggestible_classes
@@ -85,9 +166,75 @@ module Droom
       }
     end
 
+    def searchable_classes
+      @@searchable_classes ||= {
+        "event" => "Droom::Event",
+        "document" => "Droom::Document",
+        "person" => "Droom::Person", 
+        "group" => "Droom::Group",
+        "scrap" => "Droom::Scrap",
+        "venue" => "Droom::Venue"
+      }
+    end
+
     def add_suggestible_class(label, klass=nil)
       klass ||= label.titlecase
       suggestible_classes[label] = klass.to_s
+    end
+
+    def yt_client
+      @@yt_client ||= YouTubeIt::Client.new(:dev_key => "AI39si473p0K4e6id0ZrM1vniyk8pdbqr67hH39hyFjW_JQoLg9xi6BecWFtraoPMCeYQmRgIc_XudGKVU8tmeQF8VHwjOUg8Q")
+    end
+
+    def aws_bucket_name
+      @@aws_bucket_name ||= nil
+    end
+
+    def aws_bucket
+      @@aws_bucket ||= Fog::Storage.new(Droom::Engine.config.paperclip_defaults[:fog_credentials]).directories.get(@@aws_bucket_name)
+    end
+
+    def required_calendar_names
+      @@required_calendar_names ||= %w{main stream}
+    end
+
+    # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
+    # doesn't exist you just get back the default value, or nil if there isn't one. This is where you
+    # set the defaults.
+    #
+    def user_defaults
+      @@user_defaults ||= Droom::LazyHash.new({
+        :email =>  {
+          :enabled? => true,
+          :mailing_lists? => true,
+          :event_invitations? => false,
+          :digest? => false
+        },
+        :dropbox => {
+          :strategy => "clicked",
+          :events? => true,
+        },
+        :dav => {
+          :enabled? => false,
+          :strategy => "clicked",
+          :everything? => false,
+        }
+      })
+    end
+    
+    # Here we are overriding droom default settings in a host app initializer to create local default settings.
+    # key should be dot-separated and string-like:
+    #
+    #   Droom.set_default('email.digest', true)
+    #
+    # LazyHash#deep_set is a setter that can take compound keys and set nested values. It's defined in lib/lazy_hash.rb.
+    #
+    def set_user_default(key, value)
+      user_defaults.set(key, value)
+    end
+    
+    def user_default(key)
+      user_defaults.get(key)
     end
   end
 end

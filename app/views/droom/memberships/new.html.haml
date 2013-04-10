@@ -1,0 +1,10 @@
+#membership
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :add_member_to
+      %strong
+        = @group.name
+      = t :group
+      
+  = render :partial => 'form'

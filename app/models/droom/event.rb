@@ -1,23 +1,21 @@
 require 'open-uri'
-require 'zip/zip'
 require 'uuidtools'
 require 'chronic'
 require 'ri_cal'
 
 module Droom
   class Event < ActiveRecord::Base
-    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :private, :public, :venue_name
+    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :venue_id, :private, :public, :venue_name, :calendar_id
 
-    belongs_to :created_by, :class_name => 'User'
+    belongs_to :created_by, :class_name => "Droom::User"
+
+    has_folder #... and subfolders via agenda_categories
 
     has_many :invitations, :dependent => :destroy
     has_many :people, :through => :invitations
 
     has_many :group_invitations, :dependent => :destroy
     has_many :groups, :through => :group_invitations
-
-    has_many :document_attachments, :as => :attachee, :dependent => :destroy
-    has_many :documents, :through => :document_attachments
 
     has_many :agenda_categories, :dependent => :destroy
     has_many :categories, :through => :agenda_categories
@@ -27,6 +25,10 @@ module Droom
 
     belongs_to :event_set
     accepts_nested_attributes_for :event_set
+
+    belongs_to :calendar
+
+    has_many :scraps
 
     belongs_to :master, :class_name => 'Event'
     has_many :occurrences, :class_name => 'Event', :foreign_key => 'master_id', :dependent => :destroy
@@ -39,19 +41,37 @@ module Droom
     validates :name, :presence => true
 
     before_validation :set_uuid
-    before_save :check_slug
+    before_save :ensure_slug
     after_save :update_occurrences
     after_save :index
 
     scope :primary, where("master_id IS NULL")
     scope :recurrent, where(:conditions => "master_id IS NOT NULL")
-    default_scope order('start ASC').includes(:venue)
+
+    searchable do
+      text :name, :boost => 10, :stored => true
+      text :description, :stored => true
+    end
+
+    handle_asynchronously :solr_index
+
+    def self.highlight_fields
+      [:name, :description]
+    end
 
     ## Event retrieval in various ways
     #
     # Events differ from other models in that they are visible to all unless marked 'private'.
     # The documents attached to them are only visible to all if marked 'public'.
     #
+    scope :all_private, where("private = 1")
+    scope :not_private, where("private <> 1 OR private IS NULL")
+    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
+    scope :not_public, where("public <> 1 OR private = 1)")
+
+    # events are visible by default. Private events are made invisible except to the people
+    # invited to them.
+
     scope :visible_to, lambda { |person|
       if person
         select('droom_events.*')
@@ -66,25 +86,29 @@ module Droom
     scope :after, lambda { |datetime| # datetime. eg calendar.occurrences.after(Time.now)
       where(['start > ?', datetime])
     }
-  
+
     scope :before, lambda { |datetime| # datetime. eg calendar.occurrences.before(Time.now)
       where(['start < :date AND (finish IS NULL or finish < :date)', :date => datetime])
     }
-  
+
     scope :between, lambda { |start, finish| # datetimable objects. eg. Event.between(reader.last_login, Time.now)
       where(['start > :start AND start < :finish AND (finish IS NULL or finish < :finish)', :start => start, :finish => finish])
     }
-  
+
     scope :future_and_current, lambda {
       where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now])
     }
-  
-    scope :unfinished, lambda { |start| # datetimable object.
-      where(['start < :start AND finish > :start', :start => start])
+
+    scope :finished, lambda {
+      where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.now])
     }
     
+    scope :unbegun, lambda {
+      where(['start > :now', :now => Time.now])
+    }
+
     scope :by_finish, order("finish ASC")
-  
+
     scope :coincident_with, lambda { |start, finish| # datetimable objects.
       where(['(start < :finish AND finish > :start) OR (finish IS NULL AND start > :start AND start < :finish)', {:start => start, :finish => finish}])
     }
@@ -92,37 +116,31 @@ module Droom
     scope :limited_to, lambda { |limit|
       limit(limit)
     }
-  
+
     scope :at_venue, lambda { |venue| # EventVenue object
       where(["venue_id = ?", venue.id])
     }
-  
+
     scope :except_these_uuids, lambda { |uuids| # array of uuid strings
       placeholders = uuids.map{'?'}.join(',')
       where(["uuid NOT IN (#{placeholders})", *uuids])
     }
-    
+
     scope :without_invitations_to, lambda { |person| # Person object
       select("droom_events.*")
         .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.person_id = #{sanitize(person.id)}")
         .group("droom_events.id")
         .having("COUNT(droom_invitations.id) = 0")
     }
-    
+
     scope :with_documents, 
       select("droom_events.*")
         .joins("INNER JOIN droom_document_attachments ON droom_events.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Event'")
         .group("droom_events.id")
-      
-    
-    scope :all_private, where("private = 1 OR private = 't'")
-    scope :not_private, where("private = 0 OR private = 'f'")
-    scope :all_public, where("public = 1 OR public = 't'")
-    scope :not_public, where("public = 0 OR public = 'f'")
 
-    scope :name_matching, lambda { |fragment| 
+    scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
-      where('droom_events.name like ?', fragment)
+      where('droom_events.name like :f OR droom_events.description like :f', :f => fragment)
     }
 
     # All of these class methods also return scopes.
@@ -166,11 +184,11 @@ module Droom
     end
 
     def self.future
-      after(Time.now)
+      unbegun.order('start ASC')
     end
 
     def self.past
-      before(Time.now)
+      finished.order('start DESC')
     end
 
     ## Instance methods
@@ -178,7 +196,7 @@ module Droom
     def invite(person)
       self.people << person
     end
-    
+
     def attach(doc)
       self.documents << doc
     end
@@ -235,15 +253,18 @@ module Droom
     def start_time=(value)
       self.start = (start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
     end
-    
+
     def start_date=(value)
       self.start = parse_date(value).to_date# + start_time
     end
-  
+
     def finish_time=(value)
-      self.finish = (finish_date || start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
+      if value && !value.blank?
+        time_portion = parse_date(value).seconds_since_midnight
+        self.finish = (finish_date || start_date || Date.today).to_time + time_portion
+      end
     end
-    
+
     def finish_date=(value)
       self.finish = parse_date(value).to_date# + finish_time
     end
@@ -259,57 +280,57 @@ module Droom
     def venue_name
       venue.name if venue
     end
-    
+
     def venue_name=(name)
       self.venue = Droom::Venue.find_or_create_by_name(name)
     end
 
-    # Agenda sections are global, and we don't want to have to manage the extra workload of associating a section with an event.
-    # This call retrieves all the agenda sections that are associated with any of our document attachments, and is suitable for looping
-    # on a template to display attachments per section.
-    #
-    def agenda_sections
-      Droom::AgendaSection.associated_with_event(self)
+    def find_or_create_agenda_category(category)
+      agenda_categories.find_or_create_by_category_id(category.id)
     end
-    
-    # and this sorts our attachment list into agenda section buckets so that we don't have to go back to the database for each section.
-    def attachments_by_category
-      cats = {}
-      document_attachments.each_with_object({}) do |att, hash|
-        key = att.category_name
-        cats[key] ||= []
-        cats[key].push(att)
-      end
-      categories.each do |category|
-        key = category.name
-        cats[key] ||= []
-      end
-      cats
-    end
-    
+        
     def categories_for_selection
       cats = categories.map{|c| [c.name, c.id] }
       cats.unshift(['', ''])
       cats
     end
-    
+
+    def attended_by?(person)
+      person && person.invited_to?(self)
+    end
+
     def visible_to?(user_or_person)
+      return true if self.public?
+      return false if self.private?# || Droom.events_private_by_default?
+      return true
+    end
+    
+    def detail_visible_to?(user_or_person)
       return true if self.public?
       return false unless user_or_person
       return true if user_or_person.admin?
+      return true if user_or_person.privileged?
       return true if user_or_person.person.invited_to?(self)
       return false if self.private?
       return true
+    end
+    
+    def has_people?
+      invitations.any?
+    end
+
+    def has_documents?
+      all_documents.any?
     end
 
     def one_day?
       all_day? && within_day?
     end
-  
+
     def within_day?
       (!finish || start.to.jd == finish.to.jd || finish == start + 1.day)
     end
-  
+
     def continuing?
       finish && start < Time.now && finish > Time.now
     end
@@ -317,29 +338,25 @@ module Droom
     def finished?
       start < Time.now && (!finish || finish < Time.now)
     end
-  
+
     def recurs?
       master || occurrences.any?
     end
-  
+
     def recurrence
       recurrence_rules.first.to_s
     end
-  
+
     def add_recurrence(rule)
       self.recurrence_rules << Droom::RecurrenceRule.from(rule)
     end
     
-    def documents_zipped
-      if self.documents.any?
-        tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")
-        Zip::ZipOutputStream.open(tempfile.path) do |z|
-          self.documents.each do |doc|
-            z.add(doc.file_file_name, open(doc.file.url))
-          end
-        end
-        tempfile
-      end
+    def url_with_protocol
+      url =~ /^https?:\/\// ? url : "http://#{url}"
+    end
+
+    def url_without_protocol
+      url.sub(/^https?:\/\//, '')
     end
 
     def to_rical
@@ -349,16 +366,16 @@ module Droom
         cal_event.description = description if description
         cal_event.dtstart =  (all_day? ? start_date : start) if start
         cal_event.dtend = (all_day? ? finish_date : finish) if finish
-        cal_event.url = url if url
+        cal_event.url = url_with_protocol if url
         cal_event.rrules = recurrence_rules.map(&:to_rical) if recurrence_rules.any?
         cal_event.location = venue.name if venue
       end
     end
-  
+
     def to_ics
       to_rical.to_s
     end
-    
+
     def as_json(options={})
       json = super
       json[:datestring] = I18n.l start, :format => :natural_with_date
@@ -373,7 +390,7 @@ module Droom
         :id => id
       }
     end
-    
+
     def as_search_result
       {
         :type => 'event',
@@ -384,11 +401,11 @@ module Droom
     end
 
   protected
-  
-    def check_slug
+
+    def ensure_slug
       ensure_presence_and_uniqueness_of(:slug, "#{start.strftime("%Y %m %d")} #{name}".parameterize)
     end
-    
+
     def set_uuid
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
     end
@@ -401,7 +418,7 @@ module Droom
         to_rical.occurrences(:before => recurrence_horizon).each do |occ|
           occurrences.create!({
             :name => self.name,
-            :url => self.url,
+            :url => self.url_with_protocol,
             :description => self.description,
             :venue => self.venue,
             :start => occ.dtstart,
@@ -410,10 +427,6 @@ module Droom
           }) unless occ.dtstart == self.start
         end
       end
-    end
-
-    def index
-      Sunspot.index!(self)
     end
 
     def parse_date(value)
@@ -426,6 +439,6 @@ module Droom
         value
       end
     end
-  
+
   end
 end

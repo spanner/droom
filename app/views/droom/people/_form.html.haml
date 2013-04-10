@@ -1,43 +1,70 @@
 = form_for @person, :html => {:class => 'edit person'} do |f|
-  .columns
-    .column
-      - if Droom.use_forenames
-        %p
-          = f.label :forename
-          %br
-          = f.text_field :forename, :required => true
+  .image
+    .upload
+      - @person.build_image_upload unless @person.image_upload
+      = f.fields_for :image_upload do |iuf|
+        .uploadbox{:data => {:action => "upload", :url => cropper.uploads_path(:format => :js, :for => "person"), :scale => 2}}
+          = iuf.file_field :file, :class => 'file_upload', :accept => "image"
+          .img
+            - if @person.image_upload.persisted?
+              = link_to image_tag(@person.image.url(:cropped), :width => 260, :height => 260), cropper.edit_upload_url(@person.image_upload), :data => {:action => "recrop"}, :class => "recrop"
+              = link_to t(:detach_upload), '#', :class => 'detach'
+            .prompt
+              = link_to t(:click_to_upload), cropper.new_upload_url, :class => 'picker'
+              .droppable
+                .note
+                  = t :drop_to_upload
+
+  - if Droom.use_forenames?
+    %p.name
+      = f.label :forename
+      %br
+      = f.text_field :forename, :required => true
+    %p.name
+      = f.label :name, "Surname"
+      %br
+      = f.text_field :name, :required => true
+
+  - else
+    %p.name
+      = f.label :name
+      %br
+      = f.text_field :name, :required => true
+
+  .contacts
+    %p.email
+      = f.label :email
+      %br
+      = f.text_field :email, :required => true
     
-      %p
-        = f.label :name
-        %br
-        = f.text_field :name, :required => true
+    %p.phone
+      = f.label :phone, :class => "optional"
+      %br
+      = f.text_field :phone
 
-      %p
-        = f.label :email
+    - if Droom.use_separate_mobile_number
+      %p.secondary
+        = f.label :mobile, :class => "optional"
         %br
-        = f.text_field :email, :required => true
-      
-    .column
-      %p
-        = f.label :title, :class => "optional"
-        %br
-        = f.text_field :title
+        = f.text_field :mobile
 
-      %p
-        = f.label :phone, :class => "optional"
-        %br
-        = f.text_field :phone
-
-  .fullwidth
+  - if admin?
     - if @person.new_record?
-      %p
+      %p.admin
         = f.check_box :invite_on_creation, :class => 'invite'
         = f.label :invite_on_creation      
         = f.check_box :admin_user
         = f.label :admin_user
-    
+
+    / %p.organisation
+    /   = f.label :organisation_id, :class => "optional"
+    /   %br
+    /   = f.select :organisation_id, Droom::Organisation.for_selection
+  
   .buttons
-    = f.submit t(:save_person)
+    - if current_user.is_person?(@person)
+      = f.submit t(:save_your_profile)
+    - else
+      = f.submit t(:save_person)
     = t :or
     = link_to t(:cancel), '#', :class => 'cancel'
-  

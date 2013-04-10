@@ -1,0 +1,17 @@
+.scrap{:id => "scrap_#{scrap.id}"}
+  - if scrap.video?
+    %h2 
+      youtube clip
+    .thumbnail{:style => "background-image: url('http://img.youtube.com/vi/#{scrap.youtube_id}/default.jpg')"}
+      .playable
+      
+  - elsif scrap.image?
+    = image_tag(scrap.image.url(:cropped))
+    
+  - else
+    - if scrap.wordiness == 'text' || scrap.wordiness == 'paragraph'
+      %p.sweet-justice{:style => "font-size: #{"%.2f" % scrap.text_size}em"}
+        = strip_tags(scrap.body)
+    - else
+      %p.sweet-hyphens{:style => "font-size: #{"%.2f" % scrap.text_size}em"}
+        = strip_tags(scrap.body)

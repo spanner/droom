@@ -15,12 +15,6 @@
   %td.created.minor
     %span.note
       = l document.created_at.to_date, :format => :minimal_with_year
-  %td.event.minor
-    - if document.latest_event_id
-      = link_to truncate(document.latest_event_name, :length => 18), event_url(Droom::Event.find(document.latest_event_id)), :class => "event note"
-  %td.agenda_section.minor
-    %span.note
-      = truncate(document.category_name, :length => 18, :separator => " ")
   - if current_user.admin?
     %td.admin<
       = link_to t(:edit), edit_document_url(document), :class => 'edit minimal', :remote => true, :data => {:action => "popup", :replaced => "#document_#{document.id}"}

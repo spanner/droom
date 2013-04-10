@@ -1,0 +1,24 @@
+- person ||= @person
+- cssclass = "icon placeholder"
+- cssclass << " invited" if person.has_invited_user?
+- cssclass << " active" if person.has_active_user?
+
+%tr.person.holder{:id => "person_#{person.id}"}
+  %td.handle
+    %span{:class => cssclass}
+    
+  %th.name
+    = person.formal_name
+      
+  - if admin?
+    - @groups.each do |group|
+      %td.group.admin
+        = render :partial => 'droom/memberships/button', :locals => {:group => group, :person => person}
+  - unless admin?
+    %td.buttons
+      %a{:href => person_url(person, :format => :vcf), :class => 'vcard'}
+  - if admin?
+    %td.admin
+      = link_to t(:edit_person), edit_person_url(person), :class => 'admin edit minimal', :remote => true, :data => {:action => "popup", :type => "html", :affected => "#person_#{person.id}"}
+    %td.admin
+      = link_to t(:remove), person_url(person), :method => 'delete', :class => 'admin delete minimal', :remote => 'true', :data => {:confirm => t(:confirm_delete_person, :name => person.name)}

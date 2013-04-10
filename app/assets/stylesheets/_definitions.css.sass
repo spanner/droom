@@ -1,0 +1,189 @@
+$coolgrey0: #f2f0ed
+$coolgrey1: #e2e1dd
+$coolgrey2: #d6d6d4
+$coolgrey3: #cacac8
+$coolgrey4: #bdbdbd
+$coolgrey5: #b3b3b3
+$coolgrey6: #afafaf
+$coolgrey7: #9a9b9d
+$coolgrey8: #8c8d8e
+$coolgrey9: #747679
+$coolgrey10: #616265
+$coolgrey11: #4d4e53
+$black6: #52555f
+$rubine: #d1005d
+$blue: #00afdb
+$green: #74b87a
+$warmred: #ff625b
+$darkred: #b92a23
+$purple: #a27ec3
+$red: #ed1c24
+
+$dark: $coolgrey10
+$mid: $coolgrey7
+$pale: #d6d6d4
+$verypale: #ebeae8
+$palest: #f5f5f5
+
+$text: $dark
+$link: $rubine
+$hover: lighten($link, 8)
+$input: $mid
+$submit: $green
+$error: $rubine
+$active: #8c8d8e
+$visited: $link
+
+=hover
+  &:hover
+    color: $hover
+  &:active
+    color: $active
+
+=pale
+  color: $pale
+  a, a:visited
+    color: $mid
+    &.bright
+      color: $link
+    &:hover
+      color: $hover
+
+=shadowed
+  +box-shadow(1px 3px 3px 1px #333)
+
+=bordered
+  border: 5px solid white
+
+=text-hidden($indent: 500px)
+  overflow: hidden
+  text-indent: $indent
+
+=button($color)
+  background-color: $color
+  +border-radius(3px)
+  &:hover
+    background-color: lighten($color, 6)
+  &:active
+    background-color: darken($color, 12)
+
+=small
+  font-size: 80%
+  line-height: 1.2
+
+=menu_link($src)
+  display: inline-block
+  text-indent: 18px
+  height: 16px
+  line-height: 16px
+  margin: 0 0 5px 0
+  white-space: nowrap
+  color: white
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($src)
+  &:hover
+    background-position: 0 -32px
+    text-shadow: 0 0 3px white
+  
+=icon_link($url)
+  display: inline-block
+  text-indent: 18px
+  margin-top: 0
+  line-height: 14px
+  min-height: 16px
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($url)
+  &:hover
+    background-position: 0 -32px
+  &.minimal
+    width: 16px
+    height: 16px
+    overflow: hidden
+    white-space: nowrap
+    +opacity(0.4)
+    &:hover
+      overflow: visible
+      +opacity(1)
+
+=big_icon_link($url)
+  +icon_link($url)
+  text-indent: 30px
+  line-height: 30px
+  min-height: 24px
+  &:hover
+    background-position: 0 -48px
+  
+
+=icon($url)
+  display: inline-block
+  text-indent: 26px
+  height: 24px
+  width: 24px
+  line-height: 24px
+  overflow: hidden
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($url)
+  &:hover
+    background-position: 0 -48px
+  
+=panel_icon($image: "droom/integration_buttons.png", $x: 0, $y: 0)
+  overflow: hidden
+  text-indent: 34px
+  line-height: 32px
+  width: 32px
+  height: 35px
+  margin: 0
+  margin-right: 3px
+  background: 
+    position: $x $y
+    repeat: no-repeat
+    image: image-url($image)
+  &:hover
+    background-position: $x $y - 48px
+  &.here
+    background-color: $verypale
+    background-position: $x $y - 96px
+
+=blurred($color: $pale)
+  text-shadow: $color 0 0 3px
+  
+=text-hidden($indent: 500px)
+  overflow: hidden
+  text-indent: $indent
+
+=waitable
+  &.waiting
+    color: $pale
+    background-image: image-url('droom/spinner.gif')
+    background-position: 0 0
+  
+=outset
+  position: relative
+  float: left
+  width: $datemark_width
+  margin-left: - $datemark_width - $datemark_margin
+  margin-right: $datemark_margin
+
+=hover
+  &:hover
+    color: $hover
+
+=glow_on_hover
+  &:hover
+    color: white
+    text-shadow: 0 0 3px white
+    text-decoration: none
+
+=plain
+  margin: 0
+  padding: 0
+  list-style: none

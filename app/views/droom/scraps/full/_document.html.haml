@@ -1,0 +1,6 @@
+- if document = scrap.document
+  .body.scrapdocument
+    %p.name
+      = link_to document.name, document_url(document), :class => "dl #{document.file_extension}"
+
+  = render "droom/scraps/caption", :scrap => scrap

@@ -2,18 +2,36 @@ require 'snail'
 
 module Droom
   class Venue < ActiveRecord::Base
-    attr_accessible :name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code
+    attr_accessible :name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code, :old_id
     
-    belongs_to :created_by, :class_name => 'User'
+    belongs_to :created_by, :class_name => "Droom::User"
     has_many :events, :dependent => :nullify
 
     default_scope :order => 'name asc'
 
     geocoded_by :full_address, :latitude  => :lat, :longitude => :lng
+    # before_validation :convert_gridref
     before_validation :geocode
     # reverse_geocoded_by :lat, :lng
 
-    scope :name_matching, lambda { |fragment| 
+    searchable do
+      text :name, :boost => 10, :stored => true
+      text :description, :stored => true
+      text :post_line1, :stored => true
+      text :post_line2, :stored => true
+      text :post_city, :stored => true
+      text :post_region, :stored => true
+      text :post_country, :stored => true
+      text :post_code, :stored => true
+    end
+
+    handle_asynchronously :solr_index
+
+    def self.highlight_fields
+      [:name, :description, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code]
+    end
+
+    scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_venues.name like ?', fragment)
     }
@@ -70,12 +88,20 @@ module Droom
         :postcode => post_code,
         :address => address.to_s,
         :lat => lat,
-        :lng => lng,
-        :events => events.visible_to(options[:person]).as_json(options)
+        :lng => lng
       }
     end
 
     def as_suggestion
+      {
+        :type => 'venue',
+        :prompt => name,
+        :value => name,
+        :id => id
+      }
+    end
+
+    def as_search_result
       {
         :type => 'venue',
         :prompt => name,
@@ -104,10 +130,13 @@ module Droom
 
   private
 
-    def index
-      Sunspot.index!(self)
+    def convert_gridref
+      if post_code_changed?
+        if post_code.is_gridref?
+          self.lat, self.lng = post_code.to_latlng
+        end
+      end
     end
-
 
   end
 end

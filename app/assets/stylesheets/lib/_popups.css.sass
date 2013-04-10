@@ -1,0 +1,86 @@
+div.popup
+  position: fixed
+  overflow: auto
+  top: 100px
+  left: 100px
+  width: 580px
+  padding: 0
+  z-index: 250
+  min-height: 200px
+  background-color: $palest
+  +box_shadow(1px 3px 8px #52555f)
+  .header
+    position: relative
+    height: 28px
+    width: 100%
+    overflow: hidden
+    background-color: $text
+    padding: 8px 10px 4px 20px
+  h2
+    position: relative
+    height: 24px
+    line-height: 27px
+    margin: 0
+    margin-right: 40px
+    font-weight: normal
+    font-size: 0.9em
+    color: white
+    white-space: nowrap
+  a.closer
+    display: block
+    float: right
+    width: 16px
+    height: 18px
+    margin-left: 10px
+    margin-right: 0
+    margin-top: 2px
+    +text-hidden
+    background: 
+      image: image-url('droom/crosses.png')
+      color: transparent
+      position: 0 0
+      repeat: no-repeat
+    &:hover
+      background-position: 0 -32px
+  .scrolled
+    overflow: hidden
+  .scroller
+    overflow: hidden
+    margin: 0
+    width: 1200px
+    .scrap
+      float: left
+      width: 580px
+  form
+    margin: 20px
+    
+  .header
+    position: relative
+    top: 0
+    left: 0
+    width: 550px
+    a.next, a.prev, span.next, span.prev
+      position: relative
+      display: inline-block
+      width: 18px
+      height: 18px
+      text-indent: 20px
+      margin: 0 4px
+      overflow: hidden
+      background:
+        repeat: no-repeat
+        image: image-url('droom/leftright.png')
+    a.next
+      background-position: 0 0
+      &:hover
+        background-position: 0 -32px
+    a.prev
+      background-position: 0 -96px
+      margin-left: 0
+      &:hover
+        background-position: 0 -128px
+    span.next
+      background-position: 0 -64px
+    span.prev
+      background-position: 0 -160px
+      margin-left: 0

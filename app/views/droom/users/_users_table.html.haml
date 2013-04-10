@@ -1,0 +1,17 @@
+- if @everyone.any?
+  %table.main.users{:data => {:refreshable => true, :url => "#{users_path}.js"}}
+    %thead
+      %tr
+        - %w{name email invited confirmed admin settings directory}.each do |col|
+          %th{:class => col}
+            = col unless col == "name" || col == "email"
+        - Droom::Group.all.each do |group|
+          %th{:class => "group"}
+            = group.name
+
+    = render :partial => 'user_or_person', :collection => @everyone
+
+- else
+  .everyone
+    %p
+      No users have been created. How odd that you can see this page.

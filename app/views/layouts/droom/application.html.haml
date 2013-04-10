@@ -12,25 +12,25 @@
     = content_for :head
     = csrf_meta_tags
 
-%body
-  #header
-    #pagehead
-      #nav
-        %h2
-          = t(:data_room)
+  %body
+    #header
+      #pagehead
+        #nav
+          %h2
+            = t(:data_room)
           
-        = render :partial => "droom/shared/navigation"
+          = render :partial => "droom/shared/navigation"
     
-  - if user_signed_in?
-    #controls
-      = render :partial => "droom/shared/controls"
+    - if user_signed_in?
+      #controls
+        = render :partial => "droom/shared/controls"
 
-  #page
-    #content
-      = yield
+    #page
+      #content
+        = yield
 
-  #flashes
-    %p.notice= notice
-    %p.alert= alert
+    #flashes
+      %p.notice= notice
+      %p.alert= alert
 
-  #mask
+    #mask

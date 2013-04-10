@@ -1,0 +1,20 @@
+- folder ||= @folder
+- standalone ||= false
+- title ||= folder.name
+- open ||= false
+- if @folder
+  - open = true if folder == @folder || folder.ancestor_of?(@folder)
+- defer_contents ||= !open
+- cssclass = "folder"
+- cssclass << " open" if open
+- cssclass << " root" if folder.loose?
+- cssclass << " empty" unless folder.populated?
+- cssclass << " standalone" if standalone
+
+%li{:class => cssclass, :id => "folder_#{folder.id}", :data => {:refreshable => true, :url => droom.folder_path(folder, :js)} }
+  = link_to shorten(title, 48), droom.folder_url(folder), :class => "folder", :data => {:remote => true, :action => 'replace', :affected => "#folder_#{folder.id}"}
+  = action_menulink(folder)
+  = dropbox_link(folder)
+  - unless defer_contents
+    = render :partial => "droom/folders/contents", :locals => {:folder => folder}
+  = action_menu(folder)

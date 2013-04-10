@@ -1,0 +1,5 @@
+- folders = Droom::Folder.visible_to(current_user.person).populated.latest(5)
+- if folders.any?
+  %h2.quiet
+    = t :my_folders
+  = render :partial => "droom/folders/folder", :collection => documents, :locals => {:closed => true}

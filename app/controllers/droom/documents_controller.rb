@@ -4,41 +4,33 @@ module Droom
     layout :no_layout_if_pjax
   
     before_filter :authenticate_user!
-    before_filter :require_admin!, :except => [:index, :show]
-    before_filter :get_current_person
+    # before_filter :require_admin!, :except => [:index, :show]
+    before_filter :get_folder
     before_filter :find_documents, :only => [:index]
     before_filter :get_document, :only => [:show, :edit, :update, :destroy]
     before_filter :build_document, :only => [:new, :create]
     
     def index
       respond_with @documents do |format|
-        format.js { 
-          if @event
-            render :partial => 'documents_list'
-          else
-            render :partial => 'documents_table'
-          end
-        }
+        format.js { render :partial => 'droom/documents/documents' }
       end
     end
   
     def show
-      if current_user.person && @document.file
-        if personal_document = current_user.person.personal_version_of(@document)
-          # personal documents are stored outside the web root so this is an internal-only redirect in nginx.
-          redirect_to personal_document.url
-        else
-          # master documents are stored in private S3 buckets
-          # To keep the documents secure, we: 
-          # * publish them only through this controller (so no S3 links appear on the page)
-          # * deliver them only to authenticated users
-          # * delivery by redirecting to a URL that expires in an hour
-          #
-          # We could channel all file delivery through this controller and may do so in future but for now the
-          # redirect approach seems more robust and the expiring URLs sufficiently secure.
-          #
-          redirect_to @document.file.expiring_url(Time.now + 3600)
-        end
+      if @document.file
+        # master documents are stored in private S3 buckets
+        # To keep the documents secure, we: 
+        # * publish them only through this controller (so no S3 links appear on the page)
+        # * deliver them only to authenticated users
+        # * delivery by redirecting to a URL that expires in ten minutes
+        #
+        # We could channel all file delivery through this controller and may do so in future but it
+        # creates a nasty performance bottleneck. For now the redirect approach seems more robust 
+        # and the expiring URLs sufficiently obscure.
+        #
+        redirect_to @document.file.expiring_url(Time.now + 600)
+      else
+        raise ActiveRecord::RecordNotFound
       end
     end
     
@@ -47,9 +39,7 @@ module Droom
     end
 
     def create
-      if @event
-        @event.save!
-      end
+      @document.update_attributes(params[:document])
       @document.save!
       render :partial => 'created'
     end
@@ -61,7 +51,7 @@ module Droom
     def update
       @document.update_attributes(params[:document])
       @document.save!
-      render :partial => 'table_document', :object => @document.with_event
+      render :partial => 'listing', :object => @document.with_event
     end
 
     def destroy
@@ -71,24 +61,19 @@ module Droom
     
     
   protected
+    def get_folder
+      @folder = Droom::Folder.find_by_id(params[:folder_id])
+    end
     
     def build_document
-      params[:document] ||= {}
-      if params[:event_id] || params[:document][:event_id]
-        @event = Droom::Event.find(params[:event_id] || params[:document][:event_id])
-        @document = @event.documents.new(params[:document])
-        @category = @event.categories.find(params[:category_name]) if params[:category_name]
-      else
-        @document = Droom::Document.new(params[:document])
-      end
+      @document = @folder.documents.build(params[:document])
     end
 
     def get_document
-      @document = Droom::Document.find(params[:id])
+      @document = @folder.documents.find(params[:id])
     end
 
     def find_documents
-      @event = Droom::Event.find(params[:event_id]) if params[:event_id]
       sort_orders = {
         'asc' => "ASC",
         'desc' => "DESC"
@@ -105,18 +90,18 @@ module Droom
       }
       params[:sort] = 'created' unless sort_parameters[params[:sort]]
       @sort = params[:sort]
-      @show = params[:show] || 50
+      @show = params[:show] || 10
       @page = params[:page] || 1
       
       if current_user.admin?
-        @documents = Droom::Document.with_latest_event
+        @documents = Droom::Document.scoped({})
       else
-        @documents = Droom::Document.visible_to(@current_person).with_latest_event
+        @documents = Droom::Document.visible_to(@current_person)
       end
 
-      @documents = @documents.name_matching(params[:q]) unless params[:q].blank?
+      @documents = @documents.matching(params[:q]) unless params[:q].blank?
       @documents = @documents.order(sort_parameters[@sort]).page(@page).per(@show)
     end
-    
+
   end
 end

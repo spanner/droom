@@ -1,11 +1,8 @@
-#people
-  - if current_user.admin?
-    .holder
-      %p.admin
-        = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
-        = link_to t(:manage_groups), droom.groups_url, :class => "edit"
-
+#main.people
   %p
-    = link_to "Download this list to your address book", directory_url(:format => :vcf), :class => 'vcard download'
-
+    = link_to t(:download_vcards), people_url(:format => :vcf), :class => 'vcard download'
+    
   = render :partial => "people"
+
+- content_for :title do 
+  = t :directory

@@ -30,6 +30,7 @@
 
   .commands
     border-left: 1px solid #ddd
+    border-top: 1px solid $pale
     display: inline-block
     -webkit-padding-start: 0
     padding: 0
@@ -154,31 +155,36 @@
       background-image: none !important
 
   [data-wysihtml5-dialog]
+    position: relative
+    display: block
+    overflow: hidden
+    width: 482px
+    background-color: $palest
+    clear: left
     color: #333
     font-size: 14px
+    line-height: 14px
     text-align: left
     -ms-box-sizing: border-box
     -webkit-box-sizing: border-box
     -moz-box-sizing: border-box
     box-sizing: border-box
-    padding: 5px 10px
-    background: white
-    position: relative
-    label
-      +bold
+    margin: 0
+    padding: 10px 6px 6px 6px
+    border: 1px solid $pale
+    border-bottom: none
     input[type="text"]
       color: $blue
       border: 1px solid $pale
-      padding: 3px
-      width: 50%
+      font-size: 14px
+      padding: 9px 6px 6px 6px
+      width: 310px
       min-width: 100px
       &:focus
         outline: 0
-        border: 1px solid #666
 
   [data-wysihtml5-dialog-action]
-    +book
-    padding: 4px
+    padding: 8px
     cursor: pointer
     +border-radius(3px)
 

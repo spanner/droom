@@ -1,8 +1,4 @@
-= form_for @document, :html => { :multipart => true, :class => 'edit document', :remote => true, :data => {:type => :html}} do |f|
-  - if @event
-    = f.hidden_field :event_id, :value => @event.id
-  - if @category
-    = f.hidden_field :attachment_category_id, :value =>  @category.id
+= form_for [@folder, @document], :html => { :multipart => true, :class => 'edit document', :remote => true, :data => {:type => :html}} do |f|
 
   .filepicker
     = link_to "choose file", "#", :class => "ul minimal #{@document.file_extension}"

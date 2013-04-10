@@ -1,0 +1,5 @@
+.paginated
+  %ul.documents
+    = render :partial => 'droom/documents/listing', :collection => @documents
+  .pagination
+    = paginate @documents
