@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>config/routes.rb</string>
+	<string>lib/droom.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -1414,14 +1414,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>15</integer>
 				<key>line</key>
-				<integer>110</integer>
+				<integer>55</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>96</integer>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>55</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>56</integer>
+			</dict>
 		</dict>
 		<key>lib/droom/dav_resource.rb</key>
 		<dict>
@@ -1528,6 +1544,7 @@
 	<array>
 		<string>Gemfile</string>
 		<string>config/routes.rb</string>
+		<string>lib/droom.rb</string>
 		<string>droom.gemspec</string>
 		<string>config/locales/en.yml</string>
 		<string>app/controllers/droom/folders_controller.rb</string>
@@ -1537,6 +1554,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{995, 187}, {1131, 1184}}</string>
+	<string>{{103, 218}, {1131, 1184}}</string>
 </dict>
 </plist>
