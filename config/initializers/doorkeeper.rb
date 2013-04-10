@@ -5,7 +5,6 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    Rails.logger.warn ">>> authenticating resource owner with cu #{current_user}"
     current_user || warden.authenticate!(:scope => :user)
   end
 

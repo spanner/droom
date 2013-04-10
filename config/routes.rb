@@ -1,6 +1,9 @@
 Droom::Engine.routes.draw do 
-  namespace :droom do
-    use_doorkeeper
+
+  scope :oauth do
+    use_doorkeeper do
+      controllers :applications => 'oauth_applications'
+    end
   end
   
   match '/' => DAV4Rack::Handler.new(
