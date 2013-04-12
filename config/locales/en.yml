@@ -360,3 +360,7 @@ en:
       administrative: "administrators"
       selected: "selected users"
     droom/user: "users"
+
+  apps:
+    data_room: "Data<br />Room"
+    

@@ -1,0 +1,6 @@
+= link_to t(:home_name), Droom.home_url, :class => "home"
+- if user_signed_in?
+  .tabs
+    = link_to t(:data_room).html_safe, '/'
+    - Doorkeeper::Application.all.each do |app|
+      = link_to app.name, main_app.oauth_authorization_path(:client_id => app.uid, :redirect_uri => app.redirect_uri, :response_type => 'code' )

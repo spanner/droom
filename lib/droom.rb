@@ -17,6 +17,7 @@ module Droom
   # Boolean items also offer the interrogative form.
   
   mattr_accessor :root_path,
+                 :home_url,
                  :suggestible_classes,
                  :searchable_classes,
                  :yt_client,
@@ -54,6 +55,10 @@ module Droom
   class PermissionDenied < DroomError; end
 
   class << self
+    def home_url
+      @@home_url ||= "http://example.com"
+    end
+    
     def layout
       @@layout ||= "droom/application"
     end
