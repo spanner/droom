@@ -1,9 +1,3 @@
-Rails.application.routes.draw do
-  scope :oauth do
-    use_doorkeeper
-  end
-end
-
 Droom::Engine.routes.draw do 
   
   match '/' => DAV4Rack::Handler.new(

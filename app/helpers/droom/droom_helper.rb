@@ -91,7 +91,7 @@ module Droom
 
     def nav_link_to(name, url, options={})
       options[:class] ||= ""
-      options[:class] << "here" if (request.path == url) || (request.path =~ /^#{url}/ && url != "/")
+      options[:class] << "here" if (request.path == url) || (request.path =~ /^#{url}/)
       link_to name, url, options
     end
 
