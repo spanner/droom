@@ -3,16 +3,45 @@
 //= depend_on lib/_kalendae.css.sass
 //= depend_on lib/_toolbar.css.sass
 
+@import compass/css3
+@import droom/variables
+
+$dark: #4d4e53 !default
+$mid: #9a9b9d !default
+$pale: #bdbdbd !default
+$verypale: #d6d6d4 !default
+$palest: #f2f0ed !default
+
+$blue: #00afdb
+$green: #74b87a
+$warmred: #ff625b
+$darkred: #b92a23
+$purple: #a27ec3
+$red: #ed1c24
+$palered: lighten($red, 30)
+
+$page: #ffffff !default
+$text: $green !default
+$link: #8f9cb8 !default
+$hover: #bec7d8 !default
+$active: #8c8d8e !default
+$submit: $green !default
+$error: #b92a23 !default
+$help: #e59811 !default
+$visited: $link !default
+$input: $blue !default
+$admin: $blue
+
 $datemark_width: 50px
 $datemark_margin: 5px
 $tool_button_height: 32px
 $tool_button_width: 32px
 
-@import compass/css3
-@import lib/definitions
-@import lib/toolbar
+@import droom/mixins
+@import droom/toolbar
 @import lib/kalendae
-@import lib/popups
+@import droom/popups
+
 
 p.large
   font-size: 1.6em
@@ -117,10 +146,6 @@ p.stretcher
     +box-shadow
     a, a:visited
       color: $dark
-
-a.changed
-  color: $green
-  +hover
 
 
 h2.section
@@ -431,9 +456,6 @@ h2.name
   font-size: 2em
   margin: 0
 
-p.description.changed
-  color: $green
-  
 a.dl, a.ul
   display: inline-block
   min-height: 50px
@@ -801,7 +823,7 @@ div.menu
   z-index: 50
   display: none
   +box-shadow(0 4px 6px $dark)
-  background-color: $blue
+  background-color: $admin
   ul.actions
     padding: 0
     margin: 8px 10px 3px 5px
@@ -1190,13 +1212,13 @@ div.timepicker
     cursor: pointer
     padding: 4px 3px
     &.selected
-      background: $rubine
+      background: $link
       color: #fff
       font-weight: bold
     &:hover
       background: $verypale
     &:active
-      background: $rubine
+      background: $link
       color: #fff
 
 #minicalendar
@@ -1476,8 +1498,8 @@ input.search_box
       background-color: $green
       border-color: darken($green, 10%)
     &.alert
-      background-color: $rubine
-      border-color: darken($rubine, 10%)
+      background-color: $link
+      border-color: darken($link, 10%)
     a.closer
       display: block
       float: right

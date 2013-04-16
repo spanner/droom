@@ -206,6 +206,26 @@ module Droom
       }
     end
     
+    ## Omniauth package
+    #
+    # This is returned to the client application in the final stage of oauth authentication, and may be used to create
+    # a new local account.
+    
+    def credentials(options={})
+      {
+        id: id,
+        title: title,
+        name: name,
+        forename: forename,
+        email: email,
+        admin: admin?,
+        image: thumbnail
+      }
+    end
+    
+    def thumbnail
+      person.image.url(:icon) if person
+    end
 
   end
 end
