@@ -651,15 +651,41 @@ table.people
 
 table.users
   margin-top: 40px
+  border-collapse: collapse
   thead
-    th.admin, th.invited, th.confirmed, th.directory, th.group, th.settings
+    th
       max-width: 24px
       height: 50px
       padding-top: 36px
       padding-left: 6px
-      line-height: 1
-      +rotate(-75deg)
+      span.rotated
+        display: block
+        line-height: 1
+        white-space: nowrap
+        +rotate(-75deg)
+    th.spacer
+      padding: 10px
+    th.note
+      font-weight: normal
+      height: 20px
+      color: $pale
+      font-size: 85%
+      padding: 5px
+      border-bottom: 1px solid $pale
+      text-align: center
+      &.spacer
+        border: none
   tbody
+    td
+      padding-top: 15px
+    td.hover
+      background-color: $palest
+    tr:hover
+      td
+        background-color: $palest
+        border-color: $palest
+    td[data-hoverable]:hover
+      background-color: $pale
     td.name
       min-width: 140px
       min-height: 36px
@@ -668,9 +694,10 @@ table.users
       +small
       +pale
       line-height: 1.8em
+    td.spacer
+      padding: 10px
     td.admin, td.invited, td.confirmed, td.directory, td.group
-      padding-right: 2px
-      width: 36px
+      width: 30px
       text-align: center
       span, a
         +icon("droom/minisymbols.png")
@@ -683,17 +710,14 @@ table.users
         &.waiting
           background-image: image-url('droom/spinner.gif')
           background-position: 2px 2px
-      span.no
-        background-position: 0 -504px
+      span.no, span.yes
+        +opacity(0.3)
       a.no
         &:hover
-          background-position: 0 -576px
-    td.settings
-      padding-right: 2px
-      width: 24px
-      overflow: hidden
-      a
-        +icon("droom/edit.png")
+          background-position: 0 -648px
+      a.yes
+        &:hover
+          background-position: 0 -480px
       
       
       

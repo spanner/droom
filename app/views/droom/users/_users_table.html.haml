@@ -1,17 +1,35 @@
+- groups = Droom::Group.all
+
 - if @everyone.any?
   %table.main.users{:data => {:refreshable => true, :url => "#{users_path}.js"}}
     %thead
       %tr
-        - %w{name email invited confirmed admin settings directory}.each do |col|
+        - %w{name email invited confirmed directory admin}.each do |col|
           %th{:class => col}
-            = col unless col == "name" || col == "email"
-        - Droom::Group.all.each do |group|
-          %th{:class => "group"}
-            = group.name
+            - unless col == "name" || col == "email"
+              %span.rotated
+                = col
+        %th.spacer
+        - groups.each do |group|
+          %th.group
+            %span.rotated
+              = group.name
+
+        = render :partial => 'extra_columns_header'
+
+      %tr
+        %td{:colspan => 2}
+        %th.note{:colspan => 4}
+          = t(:status)
+        %th.spacer.note
+        %th.note{:colspan => groups.count}
+          = t(:membership)
+
+        = render :partial => 'extra_columns_note'
 
     = render :partial => 'user_or_person', :collection => @everyone
 
 - else
   .everyone
     %p
-      No users have been created. How odd that you can see this page.
+      No users have been created. It is odd that you can see this page.

@@ -337,6 +337,13 @@ jQuery ($) ->
 
 
 
+  $.fn.hover_column = ->
+    @each ->
+      classes = @className.split(' ').join('.')
+      $(@).bind "mouseenter", (e) ->
+        $("td.#{classes}").addClass('hover')
+      $(@).bind "mouseleave", (e) ->
+        $("td.#{classes}").removeClass('hover')
 
 
 

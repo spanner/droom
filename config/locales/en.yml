@@ -302,7 +302,7 @@ en:
   search_still_dumb: "This is a very basic title search. Full-text coming soon."
   scrap_title: "Title (optional)"
   unattached_folder_note: "A folder not attached to anything is visible to everyone and can be used to share documents of general interest."
-  user_admin: "Users"
+  user_admin: "User admin"
   stream: "Stream"
   uninvite: "uninvite"
   more: "more..."
@@ -310,6 +310,8 @@ en:
   reject: "reject"
   phone_unknown: "phone unknown"
   group_already_invited: "Already invited: select to reissue any missing personal invitations."
+  users_introduction: "Here 'people' are the people listed in the directory, and 'users' are the accounts they use to log in. The distinction is needed because a person can appear in the directory without having a login account and a user can log in to administer the site without being a person in the directory."
+  users_warning: "Most of these columns are now clickable and can be used to make quite large changes quickly. Clicking a green button under 'directory', for example, will delete a person object and all its group memberships. Please handle with care."
   your_invitations: "Your invitations"
   invitation_successful: "Success: %{name} has been invited."
   future_event_count:

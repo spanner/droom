@@ -20,7 +20,7 @@
       = user_or_person.full_name
   %td.email
     = mail_to user_or_person.email
-  %td.invited
+  %td.invited{:data => {:hoverable => true}}
     - if user
       %span.yes
     - else
@@ -28,7 +28,7 @@
         = link_to t(:invite), invite_person_url(person), :class => "no", :data => {:action => "replace", :replaced => "##{rowid}"}
       - else
         %span.not_applicable
-  %td.confirmed
+  %td.confirmed{:data => {:hoverable => true}}
     - if user
       - if user.confirmed?
         %span.yes
@@ -36,18 +36,7 @@
         = link_to "&nbsp;", user_url(user, :user => { :confirm => true }, :format => :js, :response_partial => "user_or_person"), :class => "no", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
     - else
       %span.not_applicable
-  %td.admin
-    - if user && user.confirmed?
-      - if user.admin?
-        = link_to "&nbsp;", user_url(user, :user => { :admin => false }, :format => :js, :response_partial => "user_or_person"), :class => "yes", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
-      - else
-        = link_to "&nbsp;", user_url(user, :user => { :admin => true }, :format => :js, :response_partial => "user_or_person"), :class => "no", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
-    - else
-      %span.not_applicable
-  %td.settings
-    - if user
-      = link_to "&nbsp;", edit_user_url(user), :data => {:action => "popup"}
-  %td.directory
+  %td.directory{:data => {:hoverable => true}}
     - if user
       - if person
         = link_to "&nbsp;", person_url(person, :format => :js), :class => "yes", :method => :delete, :remote => true, :confirm => "Really delete person?", :data => { :action => "replace", :replaced => "##{rowid}" }
@@ -55,9 +44,22 @@
         = link_to "&nbsp;", people_url(:person => { :user_id => user.id, :email => user.email, :name => user.name, :forename => user.forename}, :format => :js), :class => "no", :method => :post, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
     - else
       %span.yes
+  %td.admin{:data => {:hoverable => true}}
+    - if user
+      - if user.admin?
+        = link_to "&nbsp;", user_url(user, :user => { :admin => false }, :format => :js, :response_partial => "user_or_person"), :class => "yes", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
+      - else
+        = link_to "&nbsp;", user_url(user, :user => { :admin => true }, :format => :js, :response_partial => "user_or_person"), :class => "no", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
+    - else
+      %span.not_applicable
+
+  %td.spacer
+
   - Droom::Group.all.each do |group|
-    %td.group
+    %td.group{:class => "group #{group.slug}", :data => {:hoverable => true}}
       - if person
         = render :partial => "droom/memberships/membership_toggle", :locals => { :group => group, :person => person}
       - else
         %span.not_applicable
+
+  = render :partial => 'extra_columns', :locals => {:person => person}

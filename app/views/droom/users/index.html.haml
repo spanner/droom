@@ -1,12 +1,9 @@
 #main.users
 
   %p
-    Here "people" are the people listed in the directory, and "users" are the accounts they use to log in. 
-    The distinction is needed because a person can appear in the directory without having a login account,
-    and a user can log in to administer the site without being a person in the directory.
+    = t(:users_introduction)
   %p
-    Most of these columns are now clickable and can be used to make quite large changes quickly. 
-    Clicking a green button under 'directory', for example, will entirely delete a person from the system. Please handle with care.
+    = t(:users_warning)
 
   = render :partial => "droom/users/users_table"
 
