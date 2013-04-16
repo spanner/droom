@@ -18,8 +18,10 @@
       = link_to person.full_name, person_url(person)
     - else
       = user_or_person.full_name
+
   %td.email
     = mail_to user_or_person.email
+
   %td.invited{:data => {:hoverable => true}}
     - if user
       %span.yes
@@ -28,6 +30,7 @@
         = link_to t(:invite), invite_person_url(person), :class => "no", :data => {:action => "replace", :replaced => "##{rowid}"}
       - else
         %span.not_applicable
+
   %td.confirmed{:data => {:hoverable => true}}
     - if user
       - if user.confirmed?
@@ -36,6 +39,7 @@
         = link_to "&nbsp;", user_url(user, :user => { :confirm => true }, :format => :js, :response_partial => "user_or_person"), :class => "no", :method => :put, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
     - else
       %span.not_applicable
+
   %td.directory{:data => {:hoverable => true}}
     - if user
       - if person
@@ -44,6 +48,7 @@
         = link_to "&nbsp;", people_url(:person => { :user_id => user.id, :email => user.email, :name => user.name, :forename => user.forename}, :format => :js), :class => "no", :method => :post, :remote => true, :data => { :action => "replace", :replaced => "##{rowid}" }
     - else
       %span.yes
+
   %td.admin{:data => {:hoverable => true}}
     - if user
       - if user.admin?
@@ -62,4 +67,4 @@
       - else
         %span.not_applicable
 
-  = render :partial => 'extra_columns', :locals => {:person => person}
+  = render :partial => 'extra_columns', :locals => {:person => person, :user => user}

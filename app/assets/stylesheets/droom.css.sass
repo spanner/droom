@@ -690,16 +690,18 @@ table.users
       min-width: 140px
       min-height: 36px
       line-height: 1
+      text-align: left
     td.email
       +small
       +pale
       line-height: 1.8em
+      text-align: left
     td.spacer
       padding: 10px
-    td.admin, td.invited, td.confirmed, td.directory, td.group
+    td
       width: 30px
       text-align: center
-      span, a
+      span, a.yes, a.no
         +icon("droom/minisymbols.png")
         &.yes
           background-position: 0 -384px
