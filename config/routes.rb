@@ -14,11 +14,6 @@ Droom::Engine.routes.draw do
     put "/confirm_password" => "confirmations#update", :as => :confirm_password
   end
 
-  namespace :api, :defaults => {:format => 'json'}, :constraints => {:format => /(json|xml)/} do
-    #...
-    get '/me' => "credentials#me"
-  end
-
   resources :users
   resources :documents
   resources :preferences
