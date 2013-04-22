@@ -75,7 +75,7 @@ module Droom
 
     def build_event
       params[:event] ||= {}
-      params[:event][:calendar_id] ||= @calendar.id
+      params[:event][:calendar_id] ||= @calendar.id if @calendar
       @event = Droom::Event.new({:start => Time.now.floor(30.minutes)}.merge(params[:event]))
     end
 
@@ -84,7 +84,11 @@ module Droom
     end
 
     def find_events
-      @events = @calendar.events
+      if @calendar
+        @events = @calendar.events
+      else
+        @events = Event.all
+      end
       if params[:direction] == 'past'
         @events = @events.past.order('start DESC')
         @direction = "past"
@@ -102,7 +106,11 @@ module Droom
     end
 
     def get_calendar
-      @calendar = Droom::Calendar.find_by_id(params[:calendar_id]) || Droom::Calendar.find_or_create_by_name("main")
+      if params[:calendar_id]
+        @calendar = Droom::Calendar.find_by_id(params[:calendar_id])
+      elsif Droom.calendar_closed?
+        @calendar = Droom::Calendar.find_or_create_by_name("main")
+      end
     end
 
     def find_or_create_calendar

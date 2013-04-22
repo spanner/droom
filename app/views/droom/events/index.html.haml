@@ -8,7 +8,7 @@
   - else
     %h2.section
       = t(:future_events)
-      - if @calendar.events.past.any?
+      - if @events.past.any?
         %span.addendum
           = link_to t(:show_past_events), droom.events_url(:direction => "past"), :class => "past"
     

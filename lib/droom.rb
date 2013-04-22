@@ -49,7 +49,8 @@ module Droom
                  :people_sort,
                  :required_calendar_names,
                  :stream_shared,
-                 :aws_bucket_name
+                 :aws_bucket_name,
+                 :calendar_closed
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -145,6 +146,10 @@ module Droom
       !!@@enable_mailing_lists
     end
 
+    def calendar_closed?
+      !!@@calendar_closed
+    end
+
     def mailman_table_name
       @@mailman_table_name ||= 'mailman_mysql'
     end
@@ -202,7 +207,7 @@ module Droom
     def required_calendar_names
       @@required_calendar_names ||= %w{main stream}
     end
-
+    
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
     # doesn't exist you just get back the default value, or nil if there isn't one. This is where you
     # set the defaults.
