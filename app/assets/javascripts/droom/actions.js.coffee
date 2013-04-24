@@ -141,11 +141,12 @@ jQuery ($) ->
   class Toggle
     constructor: (element, @_selector, @_name) ->
       @_container = $(element)
+      @_remembered = @_container.attr('data-remembered') != 'false'
       @_name ?= "droom_#{@_selector}_state"
       @_showing_text = @_container.text().replace('show', 'hide').replace('Show', 'Hide').replace('more', 'less').replace('More', 'Less')
       @_hiding_text = @_showing_text.replace('hide', 'show').replace('Hide', 'Show').replace('less', 'more').replace('Less', 'More')
       @_container.click @toggle
-      if cookie = $.cookie(@_name)
+      if @_remembered and cookie = $.cookie(@_name)
         @_showing = cookie is "showing"
         @apply()
       else
@@ -164,6 +165,7 @@ jQuery ($) ->
       @_container.addClass('showing')
       $(@_selector).slideDown () =>
         @show()
+        @_container.trigger('toggled')
 
     show: =>
       $(@_selector).show()
@@ -175,6 +177,7 @@ jQuery ($) ->
     slideUp: =>
       $(@_selector).slideUp () =>
         @hide()
+        @_container.trigger('toggled')
       
     hide: =>
       $(@_selector).hide()
@@ -184,9 +187,10 @@ jQuery ($) ->
       @store()
       
     store: () =>
-      value = if @_showing then "showing" else "hidden"
-      $.cookie @_name, value,
-         path: '/'
+      if @_remembered
+        value = if @_showing then "showing" else "hidden"
+        $.cookie @_name, value,
+           path: '/'
 
 
   # The collapser is a self-expanding unit. Basically a toggle. #todo: amalgamate!

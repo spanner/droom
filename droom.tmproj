@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>app/helpers/droom/droom_helper.rb</string>
+	<string>Gemfile</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -18,7 +18,7 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>385</integer>
+	<integer>380</integer>
 	<key>metaData</key>
 	<dict>
 		<key>Gemfile</key>
@@ -181,6 +181,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>app/controllers/droom/events_controller.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>6</integer>
+				<key>line</key>
+				<integer>97</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>70</integer>
+		</dict>
 		<key>app/controllers/droom/groups_controller.rb</key>
 		<dict>
 			<key>caret</key>
@@ -260,28 +274,12 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>60</integer>
+				<integer>55</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>42</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>56</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>60</integer>
-			</dict>
 		</dict>
 		<key>app/models/droom/agenda_category.rb</key>
 		<dict>
@@ -1313,6 +1311,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>lib/droom/version.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>lib/generators/droom/install/install_generator.rb</key>
 		<dict>
 			<key>caret</key>
@@ -1377,6 +1389,8 @@
 		<string>config/locales/en.yml</string>
 		<string>app/assets/stylesheets/droom.css.sass</string>
 		<string>app/helpers/droom/droom_helper.rb</string>
+		<string>app/controllers/droom/events_controller.rb</string>
+		<string>lib/droom/version.rb</string>
 		<string>app/assets/javascripts/droom/actions.js.coffee</string>
 		<string>app/assets/javascripts/droom.js.coffee</string>
 		<string>app/assets/stylesheets/droom/_variables.css.sass</string>
@@ -1388,6 +1402,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{240, 56}, {1131, 1070}}</string>
+	<string>{{912, 91}, {1131, 1070}}</string>
 </dict>
 </plist>

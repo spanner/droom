@@ -84,16 +84,11 @@ module Droom
     end
 
     def find_events
-      if @calendar
-        @events = @calendar.events
-      else
-        @events = Event.all
-      end
       if params[:direction] == 'past'
-        @events = @events.past.order('start DESC')
+        @events = @calendar.events.past.order('start DESC')
         @direction = "past"
       else
-        @events = @events.future_and_current.order('start ASC')
+        @events = @calendar.events.future_and_current.order('start ASC')
         @direction = "future"
       end
       unless current_user.admin?
@@ -106,11 +101,7 @@ module Droom
     end
 
     def get_calendar
-      if params[:calendar_id]
-        @calendar = Droom::Calendar.find_by_id(params[:calendar_id])
-      elsif Droom.calendar_closed?
-        @calendar = Droom::Calendar.find_or_create_by_name("main")
-      end
+      @calendar = Droom::Calendar.find_by_id(params[:calendar_id]) || find_or_create_calendar
     end
 
     def find_or_create_calendar
