@@ -5057,7 +5057,13 @@ wysihtml5.dom.parse = (function() {
   var attributeCheckMethods = {
     url: (function() {
       var REG_EXP = /^https?:\/\//i;
+      var MUSTACHE_REG_EXP = /^(\{\{\w+\}\}$)/i;
       return function(attributeValue) {
+        if (attributeValue.match(MUSTACHE_REG_EXP)) {
+          return attributeValue.replace(MUSTACHE_REG_EXP, function(match) {
+            return match.toLowerCase();
+          });
+        }
         if (!attributeValue || !attributeValue.match(REG_EXP)) {
           return null;
         }
@@ -5069,7 +5075,13 @@ wysihtml5.dom.parse = (function() {
 
     src: (function() {
       var REG_EXP = /^(\/|https?:\/\/)/i;
+      var MUSTACHE_REG_EXP = /^(\{\{\w+\}\}$)/i;
       return function(attributeValue) {
+        if (attributeValue.match(MUSTACHE_REG_EXP)) {
+          return attributeValue.replace(MUSTACHE_REG_EXP, function(match) {
+            return match.toLowerCase();
+          });
+        }
         if (!attributeValue || !attributeValue.match(REG_EXP)) {
           return null;
         }
@@ -5081,7 +5093,13 @@ wysihtml5.dom.parse = (function() {
 
     href: (function() {
       var REG_EXP = /^(\/|https?:\/\/|mailto:)/i;
+      var MUSTACHE_REG_EXP = /^(\{\{\w+\}\}$)/i;
       return function(attributeValue) {
+        if (attributeValue.match(MUSTACHE_REG_EXP)) {
+          return attributeValue.replace(MUSTACHE_REG_EXP, function(match) {
+            return match.toLowerCase();
+          });
+        }
         if (!attributeValue || !attributeValue.match(REG_EXP)) {
           return null;
         }

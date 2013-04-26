@@ -202,7 +202,7 @@ module Droom
         :email => email,
         :confirmation_url => Droom::Engine.routes.url_helpers.new_user_confirmation_url(self, :confirmation_token => self.confirmation_token, :host => ActionMailer::Base.default_url_options[:host]),
         :sign_in_url => Droom::Engine.routes.url_helpers.new_user_session_path(:host => ActionMailer::Base.default_url_options[:host]),
-        :password_reset_url => Droom::Engine.routes.url_helpers.new_user_password_path(self, :host => ActionMailer::Base.default_url_options[:host])
+        :password_reset_url => Droom::Engine.routes.url_helpers.edit_user_password_url(:reset_password_token => self.reset_password_token, :host => ActionMailer::Base.default_url_options[:host])
       }
     end
     
