@@ -9,11 +9,5 @@ module Droom
         helper Droom::DroomHelper
       end
     end
-
-    config.to_prepare do
-      # Base layout. Uses app/views/layouts/my_layout.html.erb
-      Doorkeeper::ApplicationController.layout Droom.layout
-    end
-
   end
 end

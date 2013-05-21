@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>Gemfile</string>
+	<string>app/assets/stylesheets/droom/_variables.css.sass</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -28,7 +28,7 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>37</integer>
+				<integer>38</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -40,37 +40,99 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>13</integer>
 				<key>line</key>
-				<integer>46</integer>
+				<integer>21</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>25</integer>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>21</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>22</integer>
+			</dict>
 		</dict>
 		<key>app/assets/javascripts/droom/actions.js.coffee</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>53</integer>
 				<key>line</key>
-				<integer>342</integer>
+				<integer>240</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>312</integer>
+			<integer>179</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>195</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>241</integer>
+			</dict>
 		</dict>
-		<key>app/assets/javascripts/droom/lib/wysihtml5.js</key>
+		<key>app/assets/javascripts/droom/lib/jquery.animate-colors.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>30</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>137</integer>
+				<integer>7</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>11</integer>
+				<key>line</key>
+				<integer>108</integer>
+			</dict>
+		</dict>
+		<key>app/assets/javascripts/droom/map.js.coffee</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>138</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
@@ -81,31 +143,17 @@
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>10</integer>
 				<key>line</key>
-				<integer>137</integer>
+				<integer>138</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>30</integer>
+				<integer>21</integer>
 				<key>line</key>
-				<integer>137</integer>
+				<integer>138</integer>
 			</dict>
-		</dict>
-		<key>app/assets/javascripts/droom/map.js.coffee</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>110</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>73</integer>
 		</dict>
 		<key>app/assets/javascripts/droom/utilities.js.coffee</key>
 		<dict>
@@ -142,39 +190,51 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>27</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>1895</integer>
+				<integer>1384</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1867</integer>
-			<key>selectFrom</key>
+			<integer>1376</integer>
+		</dict>
+		<key>app/assets/stylesheets/droom/_mixins.css.sass</key>
+		<dict>
+			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>1895</integer>
+				<integer>44</integer>
 			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1896</integer>
-			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>33</integer>
 		</dict>
 		<key>app/assets/stylesheets/droom/_variables.css.sass</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>16</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>30</integer>
+				<integer>36</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>app/controllers/droom/engine_controller.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>34</integer>
+				<key>line</key>
+				<integer>15</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -186,14 +246,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>6</integer>
+				<integer>34</integer>
 				<key>line</key>
-				<integer>97</integer>
+				<integer>90</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>70</integer>
+			<integer>69</integer>
 		</dict>
 		<key>app/controllers/droom/groups_controller.rb</key>
 		<dict>
@@ -203,6 +263,20 @@
 				<integer>37</integer>
 				<key>line</key>
 				<integer>22</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>app/controllers/droom/saml_id_controller.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>7</integer>
+				<key>line</key>
+				<integer>13</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -467,6 +541,36 @@
 				<integer>74</integer>
 			</dict>
 		</dict>
+		<key>app/models/droom/user.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>46</integer>
+				<key>line</key>
+				<integer>27</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>26</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>28</integer>
+			</dict>
+		</dict>
 		<key>app/models/droom/venue.rb</key>
 		<dict>
 			<key>caret</key>
@@ -509,6 +613,36 @@
 				<integer>58</integer>
 				<key>line</key>
 				<integer>14</integer>
+			</dict>
+		</dict>
+		<key>app/views/droom/confirmations/show.html.haml</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>16</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>16</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>17</integer>
 			</dict>
 		</dict>
 		<key>app/views/droom/dashboard/_future_events.html.haml</key>
@@ -1109,33 +1243,79 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>config/locales/en.yml</key>
+		<key>app/views/layouts/droom/email.html.haml</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>280</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>250</integer>
+			<integer>0</integer>
+		</dict>
+		<key>config/locales/en.yml</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>6</integer>
+				<key>line</key>
+				<integer>345</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>305</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>333</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>346</integer>
+			</dict>
 		</dict>
 		<key>config/routes.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>22</integer>
+				<integer>5</integer>
 				<key>line</key>
-				<integer>22</integer>
+				<integer>14</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>12</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
 		</dict>
 		<key>config/sunspot.yml</key>
 		<dict>
@@ -1385,14 +1565,22 @@
 	<key>openDocuments</key>
 	<array>
 		<string>Gemfile</string>
+		<string>app/controllers/droom/saml_id_controller.rb</string>
+		<string>app/models/droom/user.rb</string>
+		<string>app/views/layouts/droom/email.html.haml</string>
+		<string>app/assets/javascripts/droom/lib/jquery.animate-colors.js</string>
+		<string>app/controllers/droom/engine_controller.rb</string>
+		<string>app/views/droom/confirmations/show.html.haml</string>
 		<string>config/routes.rb</string>
+		<string>app/assets/javascripts/droom/map.js.coffee</string>
 		<string>config/locales/en.yml</string>
+		<string>app/assets/javascripts/droom.js.coffee</string>
 		<string>app/assets/stylesheets/droom.css.sass</string>
 		<string>app/helpers/droom/droom_helper.rb</string>
 		<string>app/controllers/droom/events_controller.rb</string>
 		<string>lib/droom/version.rb</string>
 		<string>app/assets/javascripts/droom/actions.js.coffee</string>
-		<string>app/assets/javascripts/droom.js.coffee</string>
+		<string>app/assets/stylesheets/droom/_mixins.css.sass</string>
 		<string>app/assets/stylesheets/droom/_variables.css.sass</string>
 		<string>app/views/droom/users/index.html.haml</string>
 		<string>app/views/droom/users/_users_table.html.haml</string>
@@ -1402,6 +1590,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{912, 91}, {1131, 1070}}</string>
+	<string>{{189, 61}, {1028, 1070}}</string>
 </dict>
 </plist>

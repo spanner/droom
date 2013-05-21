@@ -58,25 +58,21 @@ a.dropbox
     color: $hover
 
 a.dropboxer
-  +icon_link("droom/dropbox_button_small.png")
-  margin-left: 10px
+  +icon_link("droom/dropbox_small.png")
+  margin-left: 0
   color: #4ea1ea
   &:visited
     color: #4ea1ea
   &:hover
     color: $hover
-  &.revoke
-    background-position: 0 -48px
-    color: $hover
-
 
 input.dropbox.revoke[type="submit"]
-  +icon_link("droom/revoke.png")
+  +icon_link("droom/revoke_small.png")
   background-color: none
   color: $blue
   padding: 0
   height: auto
-  line-height: 1
+  line-height: 20px
   &:hover
     color: $hover
   
@@ -1472,7 +1468,20 @@ a.expander
 ul.filing
   padding: 0
   list-style: none
-  
+
+ul.folder
+  position: relative
+  float: right
+  width: 240px
+  padding-left: 20px
+  margin-bottom: 10px
+  margin-top: 0
+  list-style: none
+  li.folder
+    a.folder
+      font-weight: bold
+      color: $text
+
 ul#folders, div.attachments
   padding-left: 0
   li
@@ -1513,7 +1522,7 @@ input.search_box
 #flashes
   position: absolute
   top: 20px
-  left: 50px
+  right: 50px
   width: 300px
   p
     display: none
@@ -1951,7 +1960,7 @@ div.popup
       
   div.scrapevent, div.scrapdocument
     position: relative
-    margin: 0 40px 0 60px
+    margin: 0
     overflow: auto
     padding-top: 126px
     background-color: white
