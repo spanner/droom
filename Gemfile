@@ -35,7 +35,7 @@ gem 'devise'
 gem 'devise-encryptable'
 gem 'kaminari'
 gem 'youtube_it'
-gem 'ruby-saml-idp'
+# gem 'ruby-saml-idp'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
