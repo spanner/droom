@@ -21,7 +21,6 @@
 - cssclasses << 'closed' if closed
 - cssclasses << 'invited' if event.attended_by?(current_person)
 
-
 - if show_header 
   - header = month_header_for(event.start_date)
   - if header != @event_header

@@ -2,7 +2,7 @@
   = render :partial => 'droom/events/event', :object => @event, :locals => {:full_attachments => true}
 
 - content_for :title do
-  = link_to t(:calendar), main_app.calendar_url
+  = t(:calendar)
 
 - content_for :margin do
   = render :partial => 'droom/shared/calendar_holder'
