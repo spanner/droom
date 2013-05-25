@@ -78,6 +78,14 @@ a.cancel, a.cancel:visited
 a.external
   color: $mid
 
+a.toggle
+  +icon_link("droom/toggle.png")
+  color: $blue
+  &.showing
+    background-position: 0 -64px
+    &:hover
+      background-position: 0 -96px
+
 .unavailable
   +small
   +pale

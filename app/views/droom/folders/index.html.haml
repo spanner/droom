@@ -4,6 +4,8 @@
   
   - if admin?
     %p.action
+      = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
+      %br
       = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
       %br
       %span.note

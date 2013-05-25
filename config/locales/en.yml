@@ -200,6 +200,7 @@ en:
   your_preferences_saved: "Thank you. Your preferences have been updated"
   posted: "Posted"
   directory: "Directory"
+  hide_empty_folders: "hide empty folders"
   invite: "Invite"
   invite_group: "invite a group"
   invite_group_to: "Invite a group to %{name}"
