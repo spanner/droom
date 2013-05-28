@@ -35,11 +35,11 @@ module Droom
     end
 
     def current_person
-      current_user.person if current_user
+      current_user.person if user_signed_in?
     end
 
     def admin?
-      current_user and current_user.admin?
+      current_user && current_user.admin?
     end
 
     def pageclass
