@@ -10,7 +10,7 @@
 
   - else
     %p
-      = t :dropbox_introduction
+      = t :dropbox_introduction, :name => Droom.dropbox_app_name
     %p
       = link_to "Connect to your dropbox", droom.new_dropbox_token_url, :class => "dropbox"
       

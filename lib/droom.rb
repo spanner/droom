@@ -45,6 +45,7 @@ module Droom
                  :default_event_private,
                  :dropbox_app_key,
                  :dropbox_app_secret,
+                 :dropbox_app_name,
                  :user_defaults,
                  :people_sort,
                  :required_calendar_names,
@@ -148,6 +149,10 @@ module Droom
 
     def calendar_closed?
       !!@@calendar_closed
+    end
+
+    def dropbox_app_name
+      @@dropbox_app_name ||= 'droom'
     end
 
     def mailman_table_name

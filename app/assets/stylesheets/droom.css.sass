@@ -1100,45 +1100,24 @@ input[type="text"], input[type="password"], input[type="email"], select, textare
     background-color: #fff
     border-color: $verypale
 
-input[type="submit"], a.submit, a.submit:visited
+input[type="submit"]
+  +button($green)
   display: inline-block
-  background: 
-    color: $submit 
-    image: image-url('droom/small_go.png') 
-    repeat: no-repeat 
-    position: 8px 14px
-  padding: 5px 12px 5px 24px
-  text-align: left
-  color: white
-  // height: 39px
-  border: none
-  font-size: 1em
-  line-height: 2
-  +border-radius(3px)
-  &:hover
-    background-color: $hover
-    color: white
   &.unavailable
     background-color: $mid
     +opacity(0.5)
     &:hover
       background-color: $mid
   &.waiting
-    background:
-      color: $pale
-      image: image-url('droom/smallspinner.gif')
-      position: 5px 11px
+    background-color: $pale
     &:hover
       background-color: $pale
-
 
 #account
   position: relative
   clear: both
   width: 600px
   label
-    font-weight: bold
-    color: $dark
     font-size: 1.1em
     &.minor
       font-size: 0.9em
