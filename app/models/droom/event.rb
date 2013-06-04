@@ -43,7 +43,6 @@ module Droom
     before_validation :set_uuid
     before_save :ensure_slug
     after_save :update_occurrences
-    after_save :index
 
     scope :primary, where("master_id IS NULL")
     scope :recurrent, where(:conditions => "master_id IS NOT NULL")
