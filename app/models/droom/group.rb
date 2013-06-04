@@ -19,13 +19,6 @@ module Droom
     validates :slug, :uniqueness => true, :presence => true
     validates :mailing_list_name, :uniqueness => true, :presence => true
 
-    searchable do
-      text :name, :boost => 10, :stored => true
-      text :description, :stored => true
-    end
-
-    handle_asynchronously :solr_index
-
     def self.highlight_fields
       [:name, :description]
     end

@@ -18,12 +18,6 @@ module Droom
 
     validates :file, :presence => true
 
-    searchable :auto_index => false, :auto_remove => true do
-      text :name, :boost => 10, :stored => true
-      text :description, :stored => true
-      text :extracted_text, :stored => true
-    end
-
     scope :all_private, where("private = 1")
     scope :not_private, where("private <> 1 OR private IS NULL")
     scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
@@ -52,10 +46,6 @@ module Droom
     }
 
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
-
-    def self.highlight_fields
-      [:name, :description, :extracted_text]
-    end
 
     def attach_to(holder)
       self.folder = holder.folder
@@ -110,22 +100,6 @@ module Droom
     def copy_to_dropbox(user)
       dropbox_documents.create(:person_id => user.person.id)
     end
-
-    def read_and_reindex
-      temp = Paperclip.io_adapters.for(self.file)
-      data = File.read(temp.path)
-      begin
-        self.extracted_text = Yomu.read :text, data
-        self.extracted_metadata = Yomu.read :metadata, data
-      rescue Exception => e
-        Rails.logger.warn "Failed to parse document text or metadata from #{file_file_name}: #{e}"
-      end
-      if self.extracted_text or self.extracted_metadata
-        solr_index
-      end
-      save
-    end
-    handle_asynchronously :read_and_reindex, :priority => 20
 
     def mark_dropbox_documents_deleted
       dropbox_documents.each do |dd|

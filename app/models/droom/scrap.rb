@@ -15,16 +15,6 @@ module Droom
                  :precrop => "1200x1200^"
                }
 
-    searchable do
-      text :name, :boost => 10, :stored => true
-      text :body, :stored => true
-      text :note
-    end
-
-    def self.highlight_fields
-      [:name, :body]
-    end
-
     attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by, :event, :event_attributes, :document, :document_attributes
     before_save :get_youtube_thumbnail
 

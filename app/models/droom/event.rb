@@ -48,17 +48,6 @@ module Droom
     scope :primary, where("master_id IS NULL")
     scope :recurrent, where(:conditions => "master_id IS NOT NULL")
 
-    searchable do
-      text :name, :boost => 10, :stored => true
-      text :description, :stored => true
-    end
-
-    handle_asynchronously :solr_index
-
-    def self.highlight_fields
-      [:name, :description]
-    end
-
     ## Event retrieval in various ways
     #
     # Events differ from other models in that they are visible to all unless marked 'private'.

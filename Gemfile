@@ -25,12 +25,6 @@ gem 'acts_as_list'
 gem 'rdiscount'
 gem 'acts_as_tree'
 gem 'dropbox-sdk'
-gem 'daemons'
-gem 'delayed_job_active_record'
-gem 'sunspot_rails'
-gem 'sunspot_solr'
-gem 'yomu'
-gem 'osgb', :git => 'git://github.com/spanner/osgb.git'#:path => "/var/www/gems/osgb"#
 gem 'devise'
 gem 'devise-encryptable'
 gem 'kaminari'
@@ -60,9 +54,7 @@ group :test, :development do
   gem 'awesome_print'
   gem 'devise'
   gem 'devise-encryptable'
-  gem 'sunspot-rails-tester'
   gem 'acts_as_fu'
   gem 'cucumber-rails'
-  gem "sunspot_test"
 end
 

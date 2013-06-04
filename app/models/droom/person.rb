@@ -130,18 +130,6 @@ module Droom
     scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
     scope :not_public, where("public <> 1 OR private = 1)")
 
-    searchable do
-      text :name, :boost => 10, :stored => true
-      text :forename, :boost => 10, :stored => true
-      text :description, :stored => true
-    end
-
-    handle_asynchronously :solr_index
-
-    def self.highlight_fields
-      [:name, :forename, :description]
-    end
-
     scope :matching, lambda { |fragment| 
       fragment = "%#{fragment}%"
       where('droom_people.name LIKE :f OR droom_people.forename LIKE :f OR droom_people.email LIKE :f OR droom_people.phone LIKE :f OR CONCAT(droom_people.forename, " ", droom_people.name) LIKE :f', :f => fragment)
