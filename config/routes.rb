@@ -80,7 +80,6 @@ Droom::Engine.routes.draw do
   match '/help/:slug', :to => 'pages#show', :as => 'help_page'
   match '/help', :to => 'pages#index', :as => 'help'
   
-  match '/search', :to => 'search#index', :as => "search"
   match '/videos.:format', :to => 'youtube#index', :as => "videos"
   match '/videos/:yt_id.:format', :to => 'youtube#show', :as => "video"
   match '/suggestions.:format', :to => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}

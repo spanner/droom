@@ -110,7 +110,7 @@ module Droom
     end
     
     def panels
-      @@panels ||= %w{dropbox email rss devices readers account search admin}
+      @@panels ||= %w{dropbox email rss devices readers account admin}
     end
     
     def scrap_types
@@ -177,17 +177,6 @@ module Droom
         "person" => "Droom::Person", 
         "document" => "Droom::Document",
         "group" => "Droom::Group",
-        "venue" => "Droom::Venue"
-      }
-    end
-
-    def searchable_classes
-      @@searchable_classes ||= {
-        "event" => "Droom::Event",
-        "document" => "Droom::Document",
-        "person" => "Droom::Person", 
-        "group" => "Droom::Group",
-        "scrap" => "Droom::Scrap",
         "venue" => "Droom::Venue"
       }
     end
