@@ -25,7 +25,7 @@
     %br
     %span.note
       - if person.email?
-        = mail_to person.email
+        = mail_to truncate(person.email, :length => 20)
       - else
         = t :contact_information_unavailable
 

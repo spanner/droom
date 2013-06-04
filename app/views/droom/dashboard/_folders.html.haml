@@ -2,4 +2,4 @@
 - if folders.any?
   %h2.quiet
     = t :my_folders
-  = render :partial => "droom/folders/folder", :collection => documents, :locals => {:closed => true}
+  = render :partial => "droom/folders/folder", :collection => folders, :locals => {:closed => true}

@@ -60,7 +60,7 @@ module Droom
     end
 
     def get_groups
-      @groups = Droom::Group.all
+      @groups = current_user.admin? ? Droom::Group.all : Droom::Group.visible_to(current_user)
     end
 
   end

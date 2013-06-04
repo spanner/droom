@@ -202,9 +202,10 @@ jQuery ($) ->
 
   class Collapser
     constructor: (element, opts) ->
+      console.log "collapser", element
       @container = $(element)
       @options = $.extend {
-        toggle: ".heading a.name"
+        toggle: "a.name"
         body: ".detail"
         preview: ".preview"
       }, opts

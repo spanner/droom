@@ -1,10 +1,29 @@
 - content_for :title do
   = t :group_admin
 
-#groups
+#groups.main
+
+  %p.standfirst
+    = t :directory_introduction
+
   - if current_user.admin?
     %p.action
       = link_to t(:add_group), droom.new_group_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
       = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
 
   = render :partial => 'groups'
+
+- content_for :margin do
+  #finder
+    %h3
+      = t :find_people
+
+    %form.filter{:action => droom.people_url(:format => :js), :data => {:action => "filter"}}
+      %p
+        = text_field_tag :q, params[:q], :placeholder => t(:by_name_or_email)
+
+    .scroller
+      #found
+        %p.waiting
+          = t :loading_people
+  

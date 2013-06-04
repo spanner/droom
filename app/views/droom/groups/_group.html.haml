@@ -1,10 +1,13 @@
 - group ||= @group
 
 %div{:id => "group_#{group.id}", :data => {:action => "collapser", :refreshable => true, :url => group_path(group, :format => :js)} }
-  %h2
-    = group.name
+
+  %h2.section
+    = link_to group.name, '#', :class => "name"
     = action_menulink(group)
   = action_menu(group)
 
-  %ul.people
+  %ul.people.detail
     = render :partial => "droom/people/person", :collection => group.people, :locals => {:group => group}
+  %p.suffix.note
+    = t :group_members, :count => group.people.count

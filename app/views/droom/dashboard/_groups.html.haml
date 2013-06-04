@@ -1,0 +1,9 @@
+- groups = current_user.person.groups if current_user.person
+
+%h2.section
+  = link_to t(:your_groups), droom.documents_url
+
+- if groups.any?
+  = render :partial => "droom/groups/group", :collection => groups, :locals => {:closed => true}
+- else
+  = t :no_groups

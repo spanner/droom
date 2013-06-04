@@ -29,7 +29,7 @@ gem 'devise'
 gem 'devise-encryptable'
 gem 'kaminari'
 gem 'youtube_it'
-# gem 'ruby-saml-idp'
+gem 'yomu'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

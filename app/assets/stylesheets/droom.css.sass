@@ -90,6 +90,9 @@ a.toggle
   +small
   +pale
 
+.suffix
+  clear: both
+
 a.autofetch
   display: inline-block
   &.waiting
@@ -1554,7 +1557,7 @@ nav.icons
     +panel_icon("droom/integration_buttons.png", -192px, 0)
   a.keywords
     +panel_icon("droom/integration_buttons.png", -224px, 0)
-  a.search                          
+  a.suggestions                          
     +panel_icon("droom/integration_buttons.png", -256px, 0)
   a.devices
     +panel_icon("droom/integration_buttons.png", -288px, 0)
@@ -1660,7 +1663,6 @@ ul.documents
   margin: 20px 0 32px -2px
   padding: 0
   list-style: none
-  
 
 ul.people
   margin: 20px 0 32px -2px
@@ -1668,7 +1670,7 @@ ul.people
   list-style: none
   li.person
     display: inline-block
-    width: 280px
+    width: 190px
     height: 48px
     line-height: 1.1
     margin-bottom: 10px
@@ -1681,7 +1683,7 @@ ul.people
       width: 32px
       height: 32px
       margin-right: 9px
-      border: 4px solid white
+      border: 2px solid white
       +box-shadow(1px 2px 5px $mid)
       background:
         color: $mid
@@ -1713,7 +1715,7 @@ ul.people
       overflow: hidden
       padding-top: 4px
       span.name
-        font-size: 1.2em
+        font-size: 1em
 
 .search_results
   position: relative

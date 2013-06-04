@@ -11,8 +11,6 @@ module Droom
     has_many :dropbox_documents
     has_attached_file :file
 
-    after_create :read_and_reindex
-
     after_save :update_dropbox_documents
     after_destroy :mark_dropbox_documents_deleted
 
@@ -46,6 +44,10 @@ module Droom
     }
 
     scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
+
+    scope :latest, lambda {|limit|
+      order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit)
+    }
 
     def attach_to(holder)
       self.folder = holder.folder

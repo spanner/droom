@@ -110,7 +110,7 @@ module Droom
     end
     
     def panels
-      @@panels ||= %w{dropbox email rss devices readers account admin}
+      @@panels ||= %w{dropbox email rss devices readers account suggestions admin}
     end
     
     def scrap_types
