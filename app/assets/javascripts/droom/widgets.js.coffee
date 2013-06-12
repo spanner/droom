@@ -1031,7 +1031,7 @@ jQuery ($) ->
       @prompt.removeClass "waiting"
       if suggestions.length > 0
         $.each suggestions, (i, suggestion) =>
-          link = $("<a href=\"/videos/#{suggestion.unique_id}.js\"><img src='#{suggestion.thumbnails[2].url}' /><span class=\"title\">#{suggestion.title.truncate(36)}</span><br /><span class=\"description\">#{suggestion.description.truncate(48)}</span></a>")
+          link = $("<a href=\"/videos/#{suggestion.unique_id}.js\"><img src='#{suggestion.thumbnails[2].url}' /><span class=\"title\">#{suggestion.title?.truncate(36)}</span><br /><span class=\"description\">#{suggestion.description?.truncate(48)}</span></a>")
           value = suggestion.value || suggestion.prompt
           link.remote
             on_success: (response) =>
