@@ -926,11 +926,11 @@ jQuery ($) ->
         afterSelect: null
       , options)
       if options.type
-        @url = "/suggestions/#{options.type}.json"
+        @options.url ?= "/suggestions/#{options.type}.json"
       else
-        @url = "/suggestions.json"
-      if options.preload
-        @url += "?empty=all"
+        @options.url ?= "/suggestions.json"
+      if @options.preload
+        @options.url += "?empty=all"
       @dropdown = new Dropdown @prompt,
         on_select: @select
         on_keyup: @get
@@ -961,7 +961,7 @@ jQuery ($) ->
           @suggest []
         else
           @request.abort() if @request
-          @request = $.getJSON(@url, "term=" + encodeURIComponent(query) + "&limit=" + @options.limit, (suggestions) =>
+          @request = $.getJSON(@options.url, "term=" + encodeURIComponent(query) + "&limit=" + @options.limit, (suggestions) =>
             @cache[query] = suggestions
             @blanks.push query if suggestions.length is 0
             @suggest suggestions
