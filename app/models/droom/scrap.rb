@@ -90,9 +90,9 @@ module Droom
   protected
   
     def get_youtube_thumbnail
-      # youtube id is held in the 'note' column.
+      # youtube id is held in the 'body' column.
       if scraptype == "video" && body?
-        self.image = URI.parse("http://img.youtube.com/vi/#{body}/0.jpg")
+        self.image = URI("http://img.youtube.com/vi/#{body}/0.jpg")
       end
     end
     

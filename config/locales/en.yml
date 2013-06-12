@@ -101,6 +101,7 @@ en:
   add_group: "add a group"
   add_to_stream: "add to stream"
   add_subfolder: add a sub-folder
+  by: "by"
   added_to: "has been added to '%{group}'."
   continue: "Continue"
   copy: "copy"

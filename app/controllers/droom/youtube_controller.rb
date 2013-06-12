@@ -14,7 +14,10 @@ module Droom
       max = params[:limit] || 10
       @suggestions = []
       unless fragment.blank?
-        @suggestions = Droom.yt_client.videos_by(:query => fragment, :per_page => max).videos
+        videos = Droom.yt_client.videos_by(:query => fragment, :per_page => max).videos.to_a
+        @suggestions = videos.map { |vid|
+          vid.as_json.slice('unique_id', 'title', 'description', 'thumbnails').merge({"type" => "video"})
+        }
       end
       respond_with @suggestions
     end

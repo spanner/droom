@@ -980,7 +980,7 @@ jQuery ($) ->
       @dropdown.show(suggestions)
       @options.afterSuggest.call(@, suggestions) if @options.afterSuggest
 
-    select: (value) =>
+    select: (value, id) =>
       if @options.fill_field?
         @prompt.val(value)
         @prompt.trigger('suggester.change')
@@ -1024,35 +1024,31 @@ jQuery ($) ->
     constructor: () ->
       super
       @target = $('textarea#scrap_body')
+      @caption = $('textarea#scrap_note')
       @thumb = $('.scrapvideo .thumb')
 
     suggest: (suggestions) =>
-      @button.removeClass "waiting"
-      @prompt.removeClass "waiting"
+      @unwait()
       if suggestions.length > 0
-        $.each suggestions, (i, suggestion) =>
-          link = $("<a href=\"/videos/#{suggestion.unique_id}.js\"><img src='#{suggestion.thumbnails[2].url}' /><span class=\"title\">#{suggestion.title?.truncate(36)}</span><br /><span class=\"description\">#{suggestion.description?.truncate(48)}</span></a>")
-          value = suggestion.value || suggestion.prompt
-          link.remote
-            on_success: (response) =>
-              @select(response, suggestion)
-          link.hover () =>
-            @hover(link)
-          $("<li></li>").addClass("video").append(link).appendTo(@container)
-        @suggestions = @container.find("a")
-        @show()
+        detailed_suggestions = $.map suggestions, (suggestion, i) ->
+          {type: "video", id: suggestion.unique_id, value: "<img src='#{suggestion.thumbnails[0].url}' /><span class=\"title\">#{suggestion.title?.truncate(36)}</span><br /><span class=\"description\">#{suggestion.description?.truncate(48)}</span>"}
+        @dropdown.show(detailed_suggestions)
       else
         @hide()
-      @options.afterSuggest.call @, suggestions  if @options.afterSuggest
+      @options.afterSuggest.call @, suggestions if @options.afterSuggest
 
-    select: (response, selection) =>
+    select: (value, id) =>
       @hide()
       @prompt.trigger 'suggester.change'
-      @target.val selection.unique_id
-      @thumb.empty().html(response)
+      @target.val(id)
+      title = $("<div>#{value}</div>").find('.title')
+      @caption.val(title.text()) if @caption.val() is ""
+      $.get "/videos/#{id}.js", @preview, 'html'
       @options.afterSelect?.call(@, value)
-
-
+    
+    preview: (html) =>
+      @thumb.empty().html(html)
+      
 
   # I've just lifted this out of the suggester so that it can be used in other pickers.
 
@@ -1079,8 +1075,8 @@ jQuery ($) ->
       @reset()
       if items.length > 0
         $.each items, (i, item) =>
-          id = item.id || item.value
-          value = item.value || item.prompt || item.id
+          id = item.id ? item.value ? item.unique_id
+          value = item.title ? item.value ? item.prompt ? item.id
           link = $("<a href=\"#\">#{value}</a>")
           link.hover () =>
             @hover(link)
@@ -1088,7 +1084,7 @@ jQuery ($) ->
               e.preventDefault()
               e.stopPropagation()
               @item = i
-              @select(value)
+              @select(value, id)
           $("<li></li>").addClass(item.type).append(link).appendTo(@drop)
       @items = @drop.find("a")
         
@@ -1101,9 +1097,9 @@ jQuery ($) ->
         e.stopPropagation()
         @select $(highlit).text()
 
-    select: (value) =>
+    select: (value, id) =>
       @hide()
-      @options.on_select?(value)
+      @options.on_select?(value, id)
 
     cancel: (e) =>
       @hide()
