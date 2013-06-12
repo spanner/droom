@@ -202,7 +202,6 @@ jQuery ($) ->
 
   class Collapser
     constructor: (element, opts) ->
-      console.log "collapser", element
       @container = $(element)
       @options = $.extend {
         toggle: "a.name"
