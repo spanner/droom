@@ -48,13 +48,13 @@
         %br
         = f.text_field :mobile
 
-  - if admin? && Droom.use_organisations?
-    %p.organisation
-      = f.label :organisation_id
-      %br
-      = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
-
   - if admin?
+    - if Droom.use_organisations?
+      %p.organisation
+        = f.label :organisation_id
+        %br
+        = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+
     - if @person.new_record?
       %p.admin
         = f.check_box :invite_on_creation, :class => 'invite'
@@ -62,11 +62,6 @@
         = f.check_box :admin_user
         = f.label :admin_user
 
-    / %p.organisation
-    /   = f.label :organisation_id, :class => "optional"
-    /   %br
-    /   = f.select :organisation_id, Droom::Organisation.for_selection
-  
   .buttons
     - if current_user.is_person?(@person)
       = f.submit t(:save_your_profile)

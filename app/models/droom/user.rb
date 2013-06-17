@@ -7,6 +7,10 @@ module Droom
     has_many :preferences, :foreign_key => "created_by_id"
     accepts_nested_attributes_for :preferences, :allow_destroy => true
 
+    validates :email, :uniqueness => true, :presence => true
+    validates_format_of :email, :with => /@/
+    validates :name, :presence => true
+
     receives_messages# :groups => [:unconfirmed, :personed, :administrative]
   
     devise :database_authenticatable,

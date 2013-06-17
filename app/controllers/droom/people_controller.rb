@@ -28,9 +28,12 @@ module Droom
     end
     
     def create
-      @person.update_attributes(params[:person])
-      respond_with @person do |format|
-        format.js { render :partial => "droom/users/user_or_person" }
+      if @person.update_attributes(params[:person])
+        respond_with @person do |format|
+          format.js { render :partial => "droom/users/user_or_person" }
+        end
+      else
+        respond_with @person
       end
     end
 

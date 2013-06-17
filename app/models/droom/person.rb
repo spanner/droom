@@ -269,7 +269,7 @@ module Droom
   protected
 
     def invite_if_instructed
-      invite_user if invite_on_creation
+      invite_user if invite_on_creation?
     end
     
     # ### Administration & callbacks
@@ -277,6 +277,11 @@ module Droom
     # At some point we may want to create a user to log in and look after this person. 
     # This usually has the side effect of sending out a confirmation message.
     #
+    
+    def invite_on_creation?
+      !!invite_on_creation && invite_on_creation != 0 && invite_on_creation != "0"
+    end
+    
     def invite_user
       unless self.user
         if invitable?

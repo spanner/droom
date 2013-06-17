@@ -17,7 +17,7 @@ module Droom
     end
     
     def no_layout_if_pjax
-      if request.headers['X-PJAX']
+      if request.headers['X-PJAX'] || request.format == 'js'
         false
       else
         Droom.layout
