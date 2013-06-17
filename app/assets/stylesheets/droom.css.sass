@@ -376,7 +376,7 @@ form.person
     height: 130px
     margin-right: 20px
     float: left
-    .cropper
+    .uploadbox
       width: 130px
       height: 130px
       border: 4px solid white
@@ -386,14 +386,14 @@ form.person
     .img
       width: 130px
       height: 130px
-      .prompt
-        padding-top: 30px
-        +small
-      .scaler
-        width: 100px
-      p.range
-        .slider
-          width: 70px
+    .prompt
+      padding-top: 30px
+      +small
+    .scaler
+      width: 100px
+    p.range
+      .slider
+        width: 70px
   p.name
     margin: 0
     input
@@ -1895,8 +1895,8 @@ div.popup
       position: relative
       display: block
       float: left
-      width: 120px
-      height: 120px
+      width: 130px
+      height: 130px
       margin-right: 20px
       margin-bottom: 10px
       border: 2px solid white
@@ -2092,7 +2092,7 @@ div.popup
       .upload
         display: none
         margin-top: 0
-        .cropper
+        .uploadbox
           width: 580px
           height: 326px
           border: 0
@@ -2135,7 +2135,7 @@ div.popup
 
 
 // uploader, scaler, cropper
-.cropper
+.uploadbox
   position: relative
   overflow: hidden
   background-color: $mid
@@ -2143,23 +2143,28 @@ div.popup
     position: absolute
     top: 1000px
     left: 0
+  .prompt
+    text-align: center
+    padding: 20px
+    line-height: 1.25
+    a
+      color: white
+      +glow_on_hover
+    .note
+      color: $pale
+      margin-top: 2px
   .img
-    .prompt
-      text-align: center
-      padding: 20px
-      line-height: 1.25
-      a
-        color: white
-        +glow_on_hover
-      .note
-        color: $pale
-        margin-top: 2px
+    position: absolute
+    top: 0
+    left: 0
+    &:empty
+      display: none
   &.hover
     .img
-      .prompt
-        a
-          color: white
-          text-shadow: 0 0 3px white
+    .prompt
+      a
+        color: white
+        text-shadow: 0 0 3px white
       
   a.detach
     position: absolute

@@ -8,7 +8,6 @@
 #= require droom/lib/kalendae
 #= require droom/lib/wysihtml5
 #= require droom/lib/parser_rules/advanced
-#= require cropper
 #= require droom/extensions
 #= require droom/utilities
 #= require droom/ajax
@@ -17,6 +16,7 @@
 #= require droom/widgets
 #= require droom/stream
 #= require droom/map
+#= require cropper
 #= require_self
 
 jQuery ($) ->
@@ -32,8 +32,6 @@ jQuery ($) ->
     
     @find_including_self('[data-action="popup"]').popup()
     @find_including_self('[data-action="close"]').closes()
-    @find_including_self('[data-action="upload"]').uploader()
-    @find_including_self('[data-action="recrop"]').recropper()
     @find_including_self('[data-action="affect"]').affects()
     @find_including_self('[data-action="reveal"]').reveals()
     @find_including_self('[data-action="remove"]').removes()

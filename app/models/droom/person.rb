@@ -117,8 +117,8 @@ module Droom
                :geometry => "520x520#",
                :styles => {
                  :icon => "32x32#",
-                 :thumb => "120x120#",
-                 :precrop => "1200x1200^"
+                 :thumb => "130x130#",
+                 :precrop => "1200x1200<"
                }
 
     ## Scopes

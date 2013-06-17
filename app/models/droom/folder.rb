@@ -24,22 +24,21 @@ module Droom
     scope :not_public, where("#{table_name}.public <> 1 OR #{table_name}.private = 1)")
     scope :by_name, order("#{table_name}.name ASC")
     scope :visible_to, lambda { |person|
-      # if person
-      #   select('droom_folders.*')
-      #     .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON droom_folders.id = dpf.folder_id')
-      #     .where(["(droom_folders.public = 1 OR dpf.person_id = ?)", person.id])
-      #     .group('droom_folders.id')
-      # else
-      #   all_public
-      # end
-      not_private
+      if person
+        select('droom_folders.*')
+          .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON droom_folders.id = dpf.folder_id')
+          .where(["(droom_folders.public = 1 OR dpf.person_id = ?)", person.id])
+          .group('droom_folders.id')
+      else
+        all_public
+      end
     }
     
     def visible_to?(person)
       true
     end
 
-    # A root folders is created automatically for each class that has_folder, 
+    # A root folder is created automatically for each class that has_folders,
     # the first time something in that class asks for its folder.
     # scope :roots, where('droom_folders.holder_type IS NULL AND droom_folders.parent_id IS NULL')
 

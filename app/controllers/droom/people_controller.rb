@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
     
     before_filter :authenticate_user! 
-    before_filter :scale_image_params, :only => [:create, :update]
     before_filter :find_people, :only => :index
     before_filter :get_groups
     before_filter :get_person, :only => [:show, :edit, :update, :destroy, :invite]
@@ -26,11 +25,12 @@ module Droom
         }
       end
     end
-    
+
     def create
       if @person.update_attributes(params[:person])
         respond_with @person do |format|
           format.js { render :partial => "droom/users/user_or_person" }
+          format.html { render :partial => "droom/people/person" }
         end
       else
         respond_with @person
@@ -38,8 +38,14 @@ module Droom
     end
 
     def update
-      @person.update_attributes(params[:person])
-      respond_with @person
+      if @person.update_attributes(params[:person])
+        respond_with @person do |format|
+          format.js { render :partial => "droom/users/user_or_person" }
+          format.html { render :partial => "droom/people/person" }
+        end
+      else
+        respond_with @person
+      end
     end
     
     def destroy
@@ -99,17 +105,6 @@ module Droom
  
     def confine_to_self
       @person = current_user.person unless current_user.admin?
-    end
-
-    def scale_image_params
-      multiplier = params[:multiplier] || 4
-      Rails.logger.warn ">>> before scale_image_params (with multiplier #{multiplier}), params for person: #{params[:person].inspect}"
-      if params[:person]
-        [:image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top].each do |p|
-          params[:person][p] = (params[:person][p].to_i * multiplier.to_i) unless params[:person][p].blank?
-        end
-      end
-      Rails.logger.warn ">>> after scale_image_params, params for person: #{params[:person].inspect}"
     end
   
   end

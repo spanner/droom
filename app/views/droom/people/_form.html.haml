@@ -1,8 +1,7 @@
 = form_for @person, :html => {:class => 'edit person'} do |f|
   .image
-    .upload
-      - @person.build_image_upload unless @person.image_upload
-      = render :partial => "cropper/uploads/crop", :locals => {:upload => @person.image_upload}
+    - @person.build_image_upload unless @person.image_upload
+    = render :partial => "cropper/uploads/pick", :locals => {:upload => @person.image_upload, :holder => @person, :multiplier => 4}
 
   - if Droom.use_forenames?
     %p.name
