@@ -63,6 +63,7 @@
         = f.label :admin_user
 
   - if Droom.use_biogs?
+    - @person.description = "<p></p>" unless @person.description?
     .description.wysihtml
       .toolbar#t1
         = render 'droom/shared/toolbar'

@@ -1889,6 +1889,32 @@ div.popup
     background-color: white
     padding: 20px 140px
 
+  div.person
+    margin: 20px 20px
+    div.mugshot
+      position: relative
+      display: block
+      float: left
+      width: 120px
+      height: 120px
+      margin-right: 20px
+      margin-bottom: 10px
+      border: 2px solid white
+      +box-shadow(1px 2px 5px $mid)
+      background:
+        color: $mid
+        repeat: no-repeat
+        position: center center
+        size: cover
+    div.detail
+      overflow: hidden
+      h3
+        margin: 0
+        font-size: 2em
+      p.contact
+        +pale
+        margin-top: 0
+
   div.body
     position: relative
     margin-top: 0
@@ -1933,8 +1959,6 @@ div.popup
         margin: 0
         width: 170px
       
-
-
     .icon
       width: 60px
       height: 60px

@@ -1,7 +1,7 @@
 - person ||= suggested
 
 %li.person
-  = mail_to person.email, person.formal_name
+  = link_to person.formal_name, person_url(person), :data => {:action => "popup"}
   %span.note
     - if person.phone? || person.email?
       - if person.phone?

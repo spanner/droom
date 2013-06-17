@@ -16,7 +16,6 @@
     - if organisation.url?
       %p.note
         = link_to organisation.url_without_protocol, organisation.url_with_protocol, :class => "external"
-    
 
     - if organisation.people.any?
       %ul.people
