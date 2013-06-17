@@ -20,7 +20,7 @@
         %span{:class => "invitation #{invitation.status}"}
   %span.contact
     %span.name
-      = link_to person.formal_name, person_url(person), :data => {:action => "popup"}
+      = link_to truncate(person.formal_name, :length => 14), person_url(person), :data => {:action => "popup"}
       = action_menulink(person, :class => "small")
     %br
     %span.note

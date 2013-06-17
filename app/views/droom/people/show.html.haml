@@ -17,7 +17,7 @@
             = person.organisation.name
             %br
         - if person.email?
-          = mail_to truncate(person.email, :length => 20)
+          = mail_to person.email
         - if person.email? && person.phone?
           = t :or
         - if person.phone?
