@@ -283,11 +283,11 @@ module Droom
     end
     
     def invite_user
-      unless self.user
-        if invitable?
-          user = self.create_user(:forename => forename, :name => name, :email => email)
-          self.save
-        end
+      if self.user
+        self.user.send_confirmation_instructions
+      elsif invitable?
+        user = self.create_user(:forename => forename, :name => name, :email => email)
+        self.save
       end
       self.user
     end

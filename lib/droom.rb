@@ -34,6 +34,7 @@ module Droom
                  :dav_root,
                  :dav_subdomain,
                  :use_forenames,
+                 :use_biogs,
                  :use_separate_mobile_number,
                  :use_titles,
                  :use_organisations,
@@ -134,6 +135,10 @@ module Droom
 
     def use_titles?
       !!@@use_titles
+    end
+    
+    def use_biogs?
+      !!@@use_biogs
     end
     
     def use_organisations?

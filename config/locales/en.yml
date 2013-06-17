@@ -319,6 +319,8 @@ en:
   users_warning: "Most of these columns are now clickable and can be used to make quite large changes quickly. Clicking a green button under 'directory', for example, will delete a person object and all its group memberships. Please handle with care."
   your_invitations: "Your invitations"
   invitation_successful: "Success: %{name} has been invited."
+  welcome_preamble: "Welcome to the data room. Before we do anything else, please choose a password for your account."
+  hello_name: "Hello %{name}."
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

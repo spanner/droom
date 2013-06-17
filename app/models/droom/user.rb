@@ -10,6 +10,7 @@ module Droom
     validates :email, :uniqueness => true, :presence => true
     validates_format_of :email, :with => /@/
     validates :name, :presence => true
+    # validates :password, :presence => true, :length => { :minimum => 6 }, :confirmation => true, :if => :password_required?
 
     receives_messages# :groups => [:unconfirmed, :personed, :administrative]
   
@@ -22,11 +23,10 @@ module Droom
            :token_authenticatable,
            :encryptor => :sha512
   
-    before_create :ensure_authentication_token
+    before_create :ensure_authentication_token  # provided by devise
 
     attr_accessor :newly_activated, :update_person_email, :confirm, :remove_person
   
-    # validates :password, :length => { :minimum => 6 }, :if => :password_required?
   
     scope :unconfirmed, where("confirmed_at IS NULL")
     scope :administrative, where(:admin => true)
@@ -203,7 +203,7 @@ module Droom
         :forename => forename,
         :name => name,
         :email => email,
-        :confirmation_url => Droom::Engine.routes.url_helpers.new_user_confirmation_url(self, :confirmation_token => self.confirmation_token, :host => ActionMailer::Base.default_url_options[:host]),
+        :confirmation_url => Droom::Engine.routes.url_helpers.welcome_url(:id => self.id, :confirmation_token => self.confirmation_token, :host => ActionMailer::Base.default_url_options[:host]),
         :sign_in_url => Droom::Engine.routes.url_helpers.new_user_session_path(:host => ActionMailer::Base.default_url_options[:host]),
         :password_reset_url => Droom::Engine.routes.url_helpers.edit_user_password_url(:reset_password_token => self.reset_password_token, :host => ActionMailer::Base.default_url_options[:host])
       }
