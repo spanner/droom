@@ -60,7 +60,9 @@ module Droom
   protected
     
     def build_person
+      @organisation = Droom::Organisation.find(params[:organisation_id]) if params[:organisation_id]
       @person = Droom::Person.new(params[:person])
+      @person.organisation = @organisation if @organisation
     end
 
     def get_person

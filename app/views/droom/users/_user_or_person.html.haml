@@ -16,6 +16,8 @@
   %td.name
     - if person
       = link_to person.full_name, person_url(person)
+      = action_menulink(person)
+      = action_menu(person)
     - else
       = user_or_person.full_name
 

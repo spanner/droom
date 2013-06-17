@@ -1,29 +1,22 @@
-= form_for @user, :html => {:class => 'edit user', :autocomplete => false} do |f|
+= form_for @user, :html => {:class => 'edit user preferences', :autocomplete => false} do |f|
 
   %p.email
     = f.label :email
     %br
     = f.text_field :email, :class => 'preferences', :autocomplete => false
-    - if @user.person
-      %br
-        = f.check_box :update_person_email
-        = f.label :update_person_email, :class => 'minor'
-      %span.formnote
-        = t :update_person_email_note
 
   %p.password
     = f.label :password
     %br
-    = f.password_field :password, :autocomplete => "off", :class => 'preferences password'
+    = f.password_field :password, :autocomplete => "off", :class => 'preferences password', :pattern => ".{6,}"
     %br
-    %span.formnote
+    %span.note
       = t :password_requirements
-      = t :password_leave_same
 
   %p.confirmation
     = f.label :password_confirmation
     %br
-    = f.password_field :password_confirmation, :class => 'preferences'
+    = f.password_field :password_confirmation, :class => 'preferences password_confirmation', :pattern => ""
 
   %p.password_notice
 

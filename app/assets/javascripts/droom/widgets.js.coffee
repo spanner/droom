@@ -217,81 +217,56 @@ jQuery ($) ->
       @_field.val(i)
 
 
-  $.fn.password_field = ->
+  $.fn.password_form = ->
     @each ->
-      new PasswordField(@)
+      new PasswordForm(@)
 
-  class PasswordField
+  class PasswordForm
     constructor: (element, opts) ->
       @options = $.extend
         length: 6
       , opts
-      @field = $(element)
-      @_notice = $('.password_notice')
-      @form = @field.parents('form')
+      @form = $(element)
+      @password_field = @form.find('input.password')
+      @confirmation_field = @form.find('input.password_confirmation')
+      @fields = @form.find('input')
+      @confirmation_holder = @confirmation_field.parents("p")
       @submit = @form.find('.submit')
-      @confirmation = $("#" + @field.attr("id") + "_confirmation")
-      @confirmation_holder = @confirmation.parents("p")
-      @mock_password = 'password'
-      @required = @field.attr('required')
-      @field.focus @wake
-      @field.blur @sleep
-      @field.keyup @check
-      @confirmation.keyup @check
-      @form.submit @stumbit
-      # to set up initial state
-      @check()
-      @sleep()
+      @required = @password_field.attr('required')
 
-    wake: () =>
-      if @field.val() is @mock_password
-        @field.removeClass "empty"
-        @field.val ""
-
-    sleep: () =>
-      v = @field.val()
-      if v is @mock_password or v is ""
-        @field.val @mock_password
-        @field.addClass("empty")
-        # if we're not required, then both-empty is also a submittable condition
-        if @confirmation.val() is "" and not @required
-          @submittable()
-
-    check: () =>
-      if @empty() and !@required
-        @field.removeClass("ok notok").addClass("empty")
-        @confirmation_holder.hide()
-        @submittable()
-        @notify ""
-      else if @valid()
-        @field.addClass("ok").removeClass "notok"
-        @confirmation_holder.show()
-        @notify "You must confirm your password before you can proceed."
-        if @matching()
-          @notify "Passwords match.", "successful"
-          @confirmation.addClass("ok").removeClass("notok")
-          @submittable()
-        else
-          if @confirmation_empty()
-            @notify "Please confirm your password."
-          else
-            @notify "The confirmation does not match your password.", "erratic"
-          @confirmation.addClass("notok").removeClass("ok")
-          @unsubmittable()
-      else
-        @confirmation_holder.hide()
-        @confirmation.val ""
-        @unsubmittable()
-        @field.addClass("notok").removeClass("ok")
-        @confirmation.addClass("notok").removeClass("ok")
-        if @empty()
-          @notify "Please enter a password."
-        else
-          @notify "Your password should have least six letters.", "erratic"
-    
-    notify: (message, cssclass) =>
-      @_notice.removeClass('erratic successful').addClass(cssclass).text(message)
+      @fields.bind 'keyup', @checkForm
+      @password_field.bind 'keyup', @checkPassword
+      @fields.bind 'invalid', @invalidField
+      @form.bind 'submit', @submitIfValid
       
+      @fields.attr('data-strict', false)
+      @unsubmittable()
+      @confirmation_holder.hide()
+
+    checkForm: () =>
+      @fields.removeClass('invalid').addClass('valid')
+      if @form.get(0).checkValidity() then @submittable() else @unsubmittable()
+    
+    invalidField: () ->
+      # note thin arrow: `this` is the failing input element
+      field = $(@)
+      field.removeClass('valid')
+      if !field.attr('data-strict') and !field.val() or field.val() is ""
+        field.addClass('empty')
+      else
+        field.addClass("invalid")
+      
+    checkPassword: () =>
+      if @password_field.val() == "" and !@required
+        @confirmation_field.attr('pattern', '').attr('required', false)
+        @confirmation_holder.hide()
+      else
+        @confirmation_field.attr('pattern', @password_field.val()).attr('required', true)
+        if @password_field.get(0).checkValidity()
+          @confirmation_holder.show()
+        else
+          @confirmation_holder.hide()
+          
     submittable: () =>
       @submit.removeClass("unavailable")
       @blocked = false
@@ -300,25 +275,15 @@ jQuery ($) ->
       @submit.addClass("unavailable")
       @blocked = true
 
-    empty: () =>
-      !@field.val() || @field.val().length == 0
-
-    confirmation_empty: () =>
-      !@confirmation.val() || @confirmation.val().length == 0
-      
-    valid: () =>
-      v = @field.val()
-      v.length >= @options.length and (!@options.validator? or @options.validator.test(v))
-
-    matching: () =>
-      @confirmation.val() is @field.val()
-
-    stumbit: (e) =>
+    submitIfValid: (e) =>
+      @fields.attr('data-strict', true)
+      @checkForm()
       if @blocked
         e.preventDefault()
       else
-        @field.val("") if @field.val() is @mock_password
-        
+        # might as well debounce, since we're here
+        @submit.val('please wait')
+        @unsubmittable()
 
 
   # A captive form submits via an ajax request and pushes its results into the present page in the place 

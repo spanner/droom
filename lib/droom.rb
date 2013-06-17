@@ -36,6 +36,7 @@ module Droom
                  :use_forenames,
                  :use_separate_mobile_number,
                  :use_titles,
+                 :use_organisations,
                  :enable_mailing_lists,
                  :mailman_table_name,
                  :mailing_lists_active_by_default,
@@ -133,6 +134,10 @@ module Droom
 
     def use_titles?
       !!@@use_titles
+    end
+    
+    def use_organisations?
+      !!@@use_organisations
     end
 
     def stream_shared?

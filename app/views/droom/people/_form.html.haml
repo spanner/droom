@@ -48,6 +48,12 @@
         %br
         = f.text_field :mobile
 
+  - if admin? && Droom.use_organisations?
+    %p.organisation
+      = f.label :organisation_id
+      %br
+      = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+
   - if admin?
     - if @person.new_record?
       %p.admin
