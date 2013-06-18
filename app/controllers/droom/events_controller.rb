@@ -92,7 +92,11 @@ module Droom
         @direction = "future"
       end
       unless current_user.admin?
-        @events = @events.visible_to(current_person)
+        if current_person
+          @events = @events.visible_to(current_person)
+        else
+          @events = @events.all_public
+        end
       end
       
       @show = params[:show] || 10
