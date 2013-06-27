@@ -11,11 +11,7 @@ module Droom
     def require_admin!
       raise Droom::PermissionDenied unless current_user && current_user.admin?
     end
-    
-    def current_person
-      current_user.person if user_signed_in?
-    end
-    
+        
     def no_layout_if_pjax
       if request.headers['X-PJAX'] || request.format == 'js'
         false

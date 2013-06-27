@@ -96,7 +96,7 @@ module Droom
       if current_user.admin?
         @documents = Droom::Document.scoped({})
       else
-        @documents = Droom::Document.visible_to(@current_person)
+        @documents = Droom::Document.visible_to(current_user)
       end
 
       @documents = @documents.matching(params[:q]) unless params[:q].blank?

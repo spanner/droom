@@ -9,7 +9,7 @@ module Droom
     def index
       respond_with @venues do |format|
         format.json {
-          render :json => @venues.to_json(:person => @person)
+          render :json => @venues.to_json(:user => @user)
         }
       end
     end
@@ -31,7 +31,7 @@ module Droom
 
     def get_venue
       @venue = Venue.find(params[:id])
-      @events = @venue.events.visible_to(current_person).future_and_current
+      @events = @venue.events.visible_to(current_user).future_and_current
     end
 
   end

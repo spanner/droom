@@ -24,7 +24,7 @@ module Droom
     scope :not_public, where("#{table_name}.public <> 1 OR #{table_name}.private = 1)")
     scope :by_name, order("#{table_name}.name ASC")
     scope :visible_to, lambda { |user|
-      if person
+      if user
         select('droom_folders.*')
           .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON droom_folders.id = dpf.folder_id')
           .where(["(droom_folders.public = 1 OR dpf.user_id = ?)", user.id])
@@ -105,13 +105,9 @@ module Droom
     end
     
     def dropboxed_for?(user)
-      # user.person && dropbox_documents.for_person(person).any?
+      # dropbox_documents.for_user(user).any?
     end
 
-    def copy_to_dav
-      Rails.logger.warn ">>> copy folder #{@folder.inspect} to DAV"
-    end
-    
     def get_name_from_holder
       send :set_properties
       self.save if self.changed?

@@ -3,12 +3,11 @@
     = t(:signed_in_as, :name => current_user.full_name).html_safe
     = link_to t(:sign_out), Droom.sign_out_path, :method => :delete, :class => 'signout'
 
-  - if current_person
-    %p
-      = link_to t(:edit_your_profile), droom.edit_person_url(current_person), :data => {:action => "popup", :affected => ".people_list"}
-      %br
-      %span.note
-        = t(:edit_your_profile_note)
+  %p
+    = link_to t(:edit_your_profile), droom.edit_user_url(current_user), :data => {:action => "popup", :affected => ".people_list"}
+    %br
+    %span.note
+      = t(:edit_your_profile_note)
   %p
     = link_to t(:edit_your_preferences), droom.edit_user_url(current_user), :data => {:action => "popup"}
     %br

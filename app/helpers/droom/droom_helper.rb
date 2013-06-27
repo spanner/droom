@@ -34,10 +34,6 @@ module Droom
       DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
     end
 
-    def current_person
-      current_user.person if user_signed_in?
-    end
-
     def admin?
       current_user && current_user.admin?
     end

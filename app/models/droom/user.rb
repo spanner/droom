@@ -108,7 +108,7 @@ module Droom
     end
     
     scope :personally_invited_to_event, lambda { |event|
-      joins('LEFT OUTER JOIN droom_invitations on droom_people.id = droom_invitations.person_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
+      joins('LEFT OUTER JOIN droom_invitations on droom_people.id = droom_invitations.user_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
     }
 
     ## Folder permissions
@@ -180,15 +180,15 @@ module Droom
     
     # User.visible_to(user) returns a list of all the users in overlapping groups with this one.
     #
-    scope :visible_to, lambda { |person|
-      if person
-        if person.admin?
+    scope :visible_to, lambda { |user|
+      if user
+        if user.admin?
           scoped({})
         else
           select('droom_users.*')
             .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_users.id = dm1.person_id')
             .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
-            .where(['(dm2.person_id = ?) OR (droom_users.private <> 1)', person.id])
+            .where(['(dm2.user_id = ?) OR (droom_users.private <> 1)', user.id])
             .group('droom_users.id')
         end
       else
@@ -300,7 +300,6 @@ module Droom
       unless @messaging_groups
         @messaging_groups = {
           :unconfirmed => lambda { Droom::User.unconfirmed},
-          :personed => lambda { Droom::User.personed },
           :administrative => lambda { Droom::User.administrative }
         }
         Droom::Group.all.each do |group|
@@ -322,6 +321,21 @@ module Droom
         :password_reset_url => Droom::Engine.routes.url_helpers.edit_user_password_url(:reset_password_token => self.reset_password_token, :host => ActionMailer::Base.default_url_options[:host])
       }
     end
+
+    # ### Invitation
+    #
+    def invite_if_instructed
+      invite! if invite_on_creation?
+    end
+    
+    def invite_on_creation?
+      !!invite_on_creation && invite_on_creation != 0 && invite_on_creation != "0"
+    end
+    
+    def invite!
+      self.send_confirmation_instructions
+    end
+  
 
 
     ## Preferences

@@ -9,16 +9,16 @@ module Droom
     def destroy
       @membership = Membership.find(params[:id])
       @group = @membership.group
-      @person = @membership.person
+      @user = @membership.user
       @membership.destroy
       render :partial => "membership_toggle"
     end
         
     def new
-      if params[:person_id]
+      if params[:user_id]
         @group = Droom::Group.find(params[:group_id])
-        @person = Droom::Person.find(params[:person_id])
-        @membership = @group.memberships.create!(:person_id => @person.id, :group_id => @group.id)
+        @user = Droom::User.find(params[:user_id])
+        @membership = @group.memberships.create!(:user_id => @user.id, :group_id => @group.id)
         render :partial => "button"
       else
         respond_with @membership
@@ -27,7 +27,7 @@ module Droom
     
     def create
       if @membership.save
-        @person = @membership.person
+        @user = @membership.user
         render :partial => "membership_toggle"
       else
         respond_with @membership

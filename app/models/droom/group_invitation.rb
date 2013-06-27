@@ -19,7 +19,7 @@ module Droom
     
     
     def create_personal_invitations
-      group.users.each do |person|
+      group.users.each do |user|
         create_personal_invitation_for(user)
       end
     end

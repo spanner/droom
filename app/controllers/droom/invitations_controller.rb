@@ -57,8 +57,8 @@ module Droom
     end
     
     def find_or_build_invitation
-      @person = Droom::Person.find(params[:invitation][:person_id])
-      unless @invitation = @event.invitations.for_person(@person).first()
+      @user = Droom::User.find(params[:invitation][:user_id])
+      unless @invitation = @event.invitations.for_user(@user).first()
         @invitation = @event.invitations.build(params[:invitation])
       end
     end

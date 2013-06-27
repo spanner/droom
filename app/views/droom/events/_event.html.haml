@@ -14,7 +14,7 @@
 - cssclasses << 'private' if event.private?
 - cssclasses << 'public' if event.public?
 - cssclasses << 'open' if open
-- cssclasses << 'invited' if event.attended_by?(current_person)
+- cssclasses << 'invited' if event.attended_by?(current_user)
 
 %div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:action => "collapser", :refreshable => true, :url => event_path(event, :format => :js)} }
   .datemark

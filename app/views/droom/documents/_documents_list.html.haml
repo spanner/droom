@@ -1,5 +1,5 @@
 - event ||= @event
-- documents = event.documents.visible_to(@current_person)
+- documents = event.documents.visible_to(current_user)
 
 .documents{ :"data-url" => "#{event_documents_path(event)}.js", :"data-refreshable" => true}
 

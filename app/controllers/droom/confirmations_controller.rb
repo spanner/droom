@@ -1,5 +1,5 @@
 module Droom
-  class UserConfirmationsController < Devise::ConfirmationsController
+  class ConfirmationsController < Devise::ConfirmationsController
 
     # If user not yet confirmed, show password form (rather than just confirming, as is normal)
     # If already confirmed, allow devise to do whatever a devise does.

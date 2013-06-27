@@ -86,12 +86,12 @@ module Droom
       if current_user.admin?
         @folders = Droom::Folder.roots
       else
-        @folders = Droom::Folder.visible_to(current_user.person).roots.populated
+        @folders = Droom::Folder.visible_to(current_user).roots.populated
       end
     end
     
     def get_folder_tree
-      @folders = current_user.admin? ? Droom::Folder.all : Droom::Folder.visible_to(current_user.person).populated
+      @folders = current_user.admin? ? Droom::Folder.all : Droom::Folder.visible_to(current_user).populated
       @roots = []
       @children = @folders.each_with_object({}) do |folder, hash|
         parent = folder.parent_id || 'root'
