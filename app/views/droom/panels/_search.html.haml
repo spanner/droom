@@ -1,0 +1,6 @@
+.panel{:data => {:panel => 'search'}}
+  %form#suggestions{:action => droom.suggestions_url(:format => :js)}
+    %p
+      = text_field_tag :term, params[:term], :placeholder => t(:quick_search_prompt), :autocomplete => "off"
+      
+  #suggestion_box

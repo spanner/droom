@@ -53,7 +53,9 @@ module Droom
                  :required_calendar_names,
                  :stream_shared,
                  :aws_bucket_name,
-                 :calendar_closed
+                 :calendar_closed,
+                 :all_events_public,
+                 :all_documents_public
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -159,6 +161,14 @@ module Droom
 
     def calendar_closed?
       !!@@calendar_closed
+    end
+    
+    def all_events_public?
+      !!@@all_events_public
+    end
+    
+    def all_documents_public?
+      !!@@all_documents_public
     end
 
     def dropbox_app_name

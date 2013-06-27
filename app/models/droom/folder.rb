@@ -78,7 +78,7 @@ module Droom
     end
     
     def simple?
-      children.empty? && documents.count <= 2
+      children.empty? && documents.count <= 3
     end
     
     # If we start to get deep folder trees we'll have to use ancestry instead of acts_as_tree.

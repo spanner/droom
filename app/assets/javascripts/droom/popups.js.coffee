@@ -195,14 +195,14 @@ jQuery ($) ->
       @place()
       ActionMenu.hideAll()
       @_link.addClass('up')
-      $(@_selector).stop().slideDown 'fast'
+      $(@_selector).first().stop().slideDown 'fast'
       $(document).bind "click", @hide
     
     hide: (e) =>
-      $(@_selector).stop().slideUp 'fast', () =>
+      $(@_selector).first().stop().slideUp 'fast', () =>
         @_link.removeClass('up')
       $(document).unbind "click", @hide
-      
+
 
 
   class Panel
@@ -214,13 +214,26 @@ jQuery ($) ->
 
     constructor: (element) ->
       @container = $(element)
-      @id = @container.attr('id')
+      @id = @container.attr('data-panel')
       @links = $("a[data-panel='#{@id}']")
-      Panel.remember(@)
+      @header = $('.masthead').find("a[data-panel='#{@id}']")
+      @patch = $('<div class="patch" />').appendTo($('body'))
       @links.bind "click", @toggle
       @container.bind "show", @show
       @set()
+      Panel.remember(@)
+    
+    setup: () =>
+      offset = @header.offset()
+      @patch.css
+        left: offset.left
+        top: offset.top + @header.height() - 3
+        width: @header.outerWidth() - 2
+      @container.css
+        left: offset.left - (@container.outerWidth() - @header.outerWidth()) / 3
+        top: offset.top + @header.height() + 5
         
+      
     set: () =>
       if @container.hasClass('here') then @show() else @hide()
       
@@ -231,20 +244,25 @@ jQuery ($) ->
       if @container.is(":visible") then @revert() else @show()
 
     hide: (e) =>
-      @container.fadeOut()
-      @links.removeClass('here')
+      @container.stop().fadeOut()
+      @patch.stop().fadeOut()
+      @header.removeClass('up')
       $(document).unbind "click", @hide
     
     show: (e) =>
+      @setup()
       Panel.hideAll()
-      @container.stop().fadeIn()
-      @links.addClass('here')
-      # $(document).bind("click", @hide)
+      @container.stop().fadeIn('fast')
+      @patch.stop().fadeIn('fast')
+      @header.addClass('up')
   
     revert: (e) =>
       Panel.hideAll()
       
-      
+
+  class PanelLink
+    
+
   $.fn.panel = ->
     @each ->
       new Panel(@)

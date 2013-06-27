@@ -1,5 +1,7 @@
+- ineditable ||= false
+
 .paginated
   %ul.people
-    = render :partial => 'droom/people/person', :collection => @people
+    = render :partial => 'droom/people/person', :collection => @people, :locals => {:ineditable => ineditable} 
   .pagination
     = paginate @people

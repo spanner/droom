@@ -45,6 +45,7 @@ jQuery ($) ->
     @find_including_self('[data-action="slide"]').sliding_link()
     @find_including_self('[data-action="fit"]').self_sizes()
     @find_including_self('form[data-action="filter"]').filter_form()
+    @find_including_self('div[data-panel]').panel()
     @find_including_self('[data-menu]').action_menu()
     @find_including_self('td[data-hoverable]').hover_column()
     
@@ -81,5 +82,4 @@ jQuery ($) ->
     @find_including_self('form.fancy').captive()
     @find_including_self('li.folder').folder()
     @find_including_self('form#suggestions').suggestion_form()
-    @find_including_self('.panel').panel()
     @

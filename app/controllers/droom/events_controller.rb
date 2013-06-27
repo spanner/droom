@@ -6,9 +6,10 @@ module Droom
     layout :no_layout_if_pjax
 
     before_filter :authenticate_user!
-    before_filter :require_admin!, :except => [:index, :show]
     before_filter :numerical_parameters
     before_filter :get_event, :only => [:show, :edit, :update, :destroy]
+    before_filter :require_admin_or_open_calendar!, :only => [:new, :create]
+    before_filter :require_admin_or_ownership!, :only => [:edit, :update, :destroy]
     before_filter :find_or_create_calendar, :only => :new
     before_filter :build_event, :only => [:new, :create]
     before_filter :get_calendar, :only => [:index, :calendar]
@@ -73,6 +74,14 @@ module Droom
 
   protected
 
+    def require_admin_or_ownership!
+      current_user.admin? || @event.created_by == current_user
+    end
+
+    def require_admin_or_open_calendar!
+      current_user.admin? || !Droom::calendar_closed?
+    end
+
     def build_event
       params[:event] ||= {}
       params[:event][:calendar_id] ||= @calendar.id if @calendar
@@ -91,7 +100,7 @@ module Droom
         @events = @calendar.events.future_and_current.order('start ASC')
         @direction = "future"
       end
-      unless current_user.admin?
+      unless current_user.admin? || Droom.all_events_public?
         if current_person
           @events = @events.visible_to(current_person)
         else

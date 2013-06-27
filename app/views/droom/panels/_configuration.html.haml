@@ -1,0 +1,29 @@
+.panel{:data => {:panel => 'configuration'}}
+  %p.controls
+    = t(:signed_in_as, :name => current_user.full_name).html_safe
+    = link_to t(:sign_out), Droom.sign_out_path, :method => :delete, :class => 'signout'
+
+  - if current_person
+    %p
+      = link_to t(:edit_your_profile), droom.edit_person_url(current_person), :data => {:action => "popup", :affected => ".people_list"}
+      %br
+      %span.note
+        = t(:edit_your_profile_note)
+  %p
+    = link_to t(:edit_your_preferences), droom.edit_user_url(current_user), :data => {:action => "popup"}
+    %br
+    %span.note
+      = t(:edit_your_preferences_note)
+      
+  - if dropbox?
+    = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
+      = preference_radio_set 'dropbox.strategy', 'everything', 'relevant', 'clicked'
+    %p
+      = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
+
+  - else
+    %p
+      = link_to "Connect to your dropbox", droom.new_dropbox_token_url, :class => "dropbox"
+      %br
+      %span.note
+        = t :dropbox_introduction, :name => Droom.dropbox_app_name

@@ -22,10 +22,12 @@
           = t :or
         - if person.phone?
           = person.phone
-      .description
-        - if person.description?
-          = sanitize(person.description.html_safe)
-        - else
-          %p
-            = t :no_person_description
+
+      - if Droom.use_biogs?
+        .description
+          - if person.description?
+            = sanitize(person.description.html_safe)
+          - else
+            %p
+              = t :no_person_description
           

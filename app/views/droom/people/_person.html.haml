@@ -4,6 +4,7 @@
 - event ||= false
 - group ||= false
 - cssclass = "person"
+- ineditable ||= false
 
 - if invitation
   - cssclass << " #{invitation.status}"
@@ -21,7 +22,8 @@
   %span.contact
     %span.name
       = link_to truncate(person.formal_name, :length => 14), person_url(person), :data => {:action => "popup"}
-      = action_menulink(person, :class => "small")
+      - unless ineditable
+        = action_menulink(person, :class => "small")
     %br
     %span.note
       - if person.email?
@@ -29,4 +31,5 @@
       - else
         = t :contact_information_unavailable
 
-    = action_menu(person, :event => event, :group => group)
+    - unless ineditable
+      = action_menu(person, :event => event, :group => group)

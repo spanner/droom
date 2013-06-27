@@ -1,6 +1,6 @@
 %ul.filing
   - if folder.children.any? or folder.documents.any?
+    = render :partial => 'droom/documents/listing', :collection => folder.documents
     - children = folder.children.by_name
     - children = children.populated unless admin?
-    = render :partial => 'droom/documents/listing', :collection => folder.documents
     = render :partial => 'droom/folders/folder', :collection => folder.children, :locals => {:defer_contents => true}
