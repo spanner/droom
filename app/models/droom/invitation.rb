@@ -68,5 +68,4 @@ module Droom
     end
     
   end
-  
 end

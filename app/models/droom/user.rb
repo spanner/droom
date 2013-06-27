@@ -211,7 +211,8 @@ module Droom
     
     ## Coca package
     #
-    # This is returned to the client application on successful coca authentication.
+    # If using `coca`, this is returned to the client application on successful authentication. 
+    # It will be used to create or update a local user record.
     
     def serializable_hash(options={})
       {
