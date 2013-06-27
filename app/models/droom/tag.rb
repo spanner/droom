@@ -1,5 +1,5 @@
 # Tags are simple one-word descriptors. There is no hierarchy or other structure among them.
-# They are strictly catalogue data, used to locate people but not treated as part of the person record.
+# They are strictly catalogue data, used to locate people but not treated as part of the user record.
 
 module Droom
   class Tag < ActiveRecord::Base
@@ -21,7 +21,7 @@ module Droom
   
     # The public-facing search engine is faceted and relies on a similar but broader suggestion mechanism
     # that offers both tags and institutions. In that situation we only want to display tags that will give
-    # give results, so we limit the suggestions to only those tags that have been applied to a person.
+    # give results, so we limit the suggestions to only those tags that have been applied to a user.
     #
     scope :in_use, 
       joins("INNER JOIN taggings ON taggings.tag_id = tags.id")

@@ -19,13 +19,13 @@ module Droom
     
     
     def create_personal_invitations
-      group.people.each do |person|
-        create_personal_invitation_for(person)
+      group.users.each do |person|
+        create_personal_invitation_for(user)
       end
     end
 
-    def create_personal_invitation_for(person)
-      event.invitations.find_or_create_by_person_id(person.id) if person.member_of?(group)
+    def create_personal_invitation_for(user)
+      event.invitations.where(:user_id => user.id).first_or_create
     end
     
   end

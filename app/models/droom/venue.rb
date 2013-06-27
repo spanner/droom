@@ -19,7 +19,7 @@ module Droom
       where('droom_venues.name like ?', fragment)
     }
 
-    def self.visible_to(person=nil)
+    def self.visible_to(user=nil)
       self.scoped({})
     end
 

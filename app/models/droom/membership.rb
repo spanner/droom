@@ -1,8 +1,8 @@
 module Droom
   class Membership < ActiveRecord::Base
-    attr_accessible :group_id, :person_id
+    attr_accessible :group_id, :user_id
 
-    belongs_to :person
+    belongs_to :user
     belongs_to :group
     belongs_to :created_by, :class_name => "User"
 
@@ -10,24 +10,19 @@ module Droom
 
     after_create :link_folder
     after_create :make_mailing_list_membership
-    after_create :update_person_status
+    after_create :update_user_status
     after_create :create_invitations
     after_destroy :unlink_folder
-    after_destroy :update_person_status
+    after_destroy :update_user_status
     after_destroy :destroy_invitations
     after_destroy :destroy_similar
     
-    validates :person, :presence => true
+    validates :user, :presence => true
     validates :group, :presence => true
 
     scope :of_group, lambda { |group|
       where(["group_id = ?", group.id])
     }
-    
-    scope :privileged, select('droom_memberships.*')
-                         .joins('inner join droom_groups as dg on droom_memberships.group_id = dg.id')
-                         .where('dg.privileged' => true)
-                         .group('droom_memberships.id')
 
     def current?
       expires and expires > Time.now
@@ -49,40 +44,40 @@ module Droom
   protected
 
     def link_folder
-      person.add_personal_folders(group.folder)
+      user.add_personal_folders(group.folder)
     end
 
     def unlink_folder
-      person.remove_personal_folders(group.folder)
+      user.remove_personal_folders(group.folder)
     end
 
     def unlink_folder
-      person.remove_personal_folders(group.folder)
+      user.remove_personal_folders(group.folder)
     end
     
     def make_mailing_list_membership
-      self.mailing_list_membership = Droom::MailingListMembership.find_or_create_by_address_and_listname(person.email, group.mailing_list_name)
+      self.mailing_list_membership = Droom::MailingListMembership.find_or_create_by_address_and_listname(user.email, group.mailing_list_name)
     end
 
-    def update_person_status
-      person.send :update_status
+    def update_user_status
+      user.send :update_status
     end
 
     def create_invitations
       group.group_invitations.each do |gi|
-        gi.create_personal_invitation_for(person)
+        gi.create_personal_invitation_for(user)
       end
     end
 
     def destroy_invitations
       group.group_invitations.each do |gi|
-        gi.invitations.for_person(person).destroy_all
+        gi.invitations.for_user(user).destroy_all
       end
     end
 
     # it's easy to end up with multiple similar membership objects.
     def destroy_similar
-      group.memberships.where(:person_id => person.id).destroy_all
+      group.memberships.where(:user_id => user.id).destroy_all
     end
 
   end

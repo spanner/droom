@@ -12,7 +12,7 @@ module Droom
     has_folder #... and subfolders via agenda_categories
 
     has_many :invitations, :dependent => :destroy
-    has_many :people, :through => :invitations
+    has_many :users, :through => :invitations
 
     has_many :group_invitations, :dependent => :destroy
     has_many :groups, :through => :group_invitations
@@ -60,11 +60,11 @@ module Droom
     # events are visible by default. Private events are made invisible except to the people
     # invited to them.
 
-    scope :visible_to, lambda { |person|
-      if person
+    scope :visible_to, lambda { |user|
+      if user
         select('droom_events.*')
           .joins('LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id')
-          .where(["(NOT(droom_events.private = 1) OR droom_invitations.person_id = ?)", person.id])
+          .where(["(NOT(droom_events.private = 1) OR droom_invitations.user_id = ?)", user.id])
           .group('droom_events.id')
       else
         all_public
@@ -114,9 +114,9 @@ module Droom
       where(["uuid NOT IN (#{placeholders})", *uuids])
     }
 
-    scope :without_invitations_to, lambda { |person| # Person object
+    scope :without_invitations_to, lambda { |user|
       select("droom_events.*")
-        .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.person_id = #{sanitize(person.id)}")
+        .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.user_id = #{sanitize(user.id)}")
         .group("droom_events.id")
         .having("COUNT(droom_invitations.id) = 0")
     }
@@ -181,8 +181,8 @@ module Droom
 
     ## Instance methods
     #
-    def invite(person)
-      self.people << person
+    def invite(user)
+      self.users << user
     end
 
     def attach(doc)
@@ -283,22 +283,21 @@ module Droom
       cats
     end
 
-    def attended_by?(person)
-      person && person.invited_to?(self)
+    def attended_by?(user)
+      user && user.invited_to?(self)
     end
 
-    def visible_to?(user_or_person)
+    def visible_to?(user)
       return true if self.public?
       return false if self.private?# || Droom.events_private_by_default?
       return true
     end
     
-    def detail_visible_to?(user_or_person)
+    def detail_visible_to?(user)
       return true if self.public?
-      return false unless user_or_person
-      return true if user_or_person.admin?
-      return true if user_or_person.privileged?
-      return true if user_or_person.person.invited_to?(self)
+      return false unless user
+      return true if user.admin?
+      return true if user.invited_to?(self)
       return false if self.private?
       return true
     end

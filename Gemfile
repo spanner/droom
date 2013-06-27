@@ -11,7 +11,7 @@ gem "haml"
 gem "geocoder"
 gem 'devise'
 gem 'devise-encryptable'
-gem "paperclip"#, '~> 3.1.0'
+gem "paperclip"
 gem "debugger"
 gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
 gem "date_validator"

@@ -21,12 +21,12 @@ module Droom
     scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
     scope :not_public, where("public <> 1 OR private = 1)")
 
-    scope :visible_to, lambda { |person|
-      if person
+    scope :visible_to, lambda { |user|
+      if user
         select('droom_documents.*')
           .joins('LEFT OUTER JOIN droom_folders AS df ON droom_documents.folder_id = df.id')
           .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON df.id = dpf.folder_id')
-          .where(["(droom_documents.public = 1 OR dpf.person_id = ?)", person.id])
+          .where(["(droom_documents.public = 1 OR dpf.user_id = ?)", user.id])
           .group('droom_documents.id')
       else
         all_public
@@ -100,7 +100,7 @@ module Droom
     end
 
     def copy_to_dropbox(user)
-      dropbox_documents.create(:person_id => user.person.id)
+      dropbox_documents.create(:user => user)
     end
 
     def mark_dropbox_documents_deleted

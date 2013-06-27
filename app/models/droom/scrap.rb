@@ -33,7 +33,7 @@ module Droom
       where('droom_scraps.name LIKE :f OR droom_scraps.body LIKE :f OR droom_scraps.note LIKE :f', :f => fragment)
     }
     
-    scope :visible_to, lambda { |person|
+    scope :visible_to, lambda { |user|
       where("1=1")
     }
 

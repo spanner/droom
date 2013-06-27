@@ -23,19 +23,24 @@ module Droom
     scope :all_public, where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL")
     scope :not_public, where("#{table_name}.public <> 1 OR #{table_name}.private = 1)")
     scope :by_name, order("#{table_name}.name ASC")
-    scope :visible_to, lambda { |person|
+    scope :visible_to, lambda { |user|
       if person
         select('droom_folders.*')
           .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON droom_folders.id = dpf.folder_id')
-          .where(["(droom_folders.public = 1 OR dpf.person_id = ?)", person.id])
+          .where(["(droom_folders.public = 1 OR dpf.user_id = ?)", user.id])
           .group('droom_folders.id')
       else
         all_public
       end
     }
     
-    def visible_to?(person)
-      true
+    def visible_to?(user)
+      return true if self.public?
+      return false unless user
+      return true if user.admin?
+      return true if user.has_folder?(self)
+      return false if self.private?
+      return true
     end
 
     # A root folder is created automatically for each class that has_folders,

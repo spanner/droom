@@ -1,14 +1,13 @@
 module Droom
   class DropboxDocument < ActiveRecord::Base
-    attr_accessible :person_id
+    attr_accessible :user_id
 
-    belongs_to :person
+    belongs_to :user
     belongs_to :document
 
-    validates_uniqueness_of :person_id, :scope => :document_id
+    validates_uniqueness_of :user_id, :scope => :document_id
 
     after_save  :get_file
-
     after_destroy :remove_dropbox_document
 
     def get_file
@@ -22,7 +21,7 @@ module Droom
     end
 
     def dropbox_client
-      person.user.dropbox_client
+      user.dropbox_client
     end
 
     def deleted=(boolean)

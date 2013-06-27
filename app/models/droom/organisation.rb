@@ -2,7 +2,7 @@ module Droom
   class Organisation < ActiveRecord::Base
     attr_accessible :name, :description, :created_by, :owner, :url
     has_many :people
-    belongs_to :owner, :class_name => 'Droom::Person'
+    belongs_to :owner, :class_name => 'Droom::User'
     belongs_to :created_by, :class_name => 'Droom::User'
 
     def self.for_selection
