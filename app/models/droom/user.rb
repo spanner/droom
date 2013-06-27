@@ -1,7 +1,7 @@
 module Droom
   class User < ActiveRecord::Base
 
-    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :newly_activated, :update_person_email, :preferences_attributes, :confirm, :old_id, :remove_person
+    attr_accessible :name, :forename, :email, :password, :password_confirmation, :admin, :update_person_email, :preferences_attributes, :confirm, :old_id, :remove_person
     has_one :person
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :preferences, :foreign_key => "created_by_id"
@@ -23,10 +23,10 @@ module Droom
            :token_authenticatable,
            :encryptor => :sha512
   
-    before_create :ensure_authentication_token  # provided by devise
+    before_create :ensure_authentication_token
+    before_create :ensure_uid
 
-    attr_accessor :newly_activated, :update_person_email, :confirm, :remove_person
-  
+    attr_accessor :update_person_email, :confirm, :remove_person
   
     scope :unconfirmed, where("confirmed_at IS NULL")
     scope :administrative, where(:admin => true)
@@ -209,25 +209,35 @@ module Droom
       }
     end
     
-    ## Omniauth package
+    ## Coca package
     #
-    # This is returned to the client application in the final stage of oauth authentication, and may be used to create
-    # a new local account.
+    # This is returned to the client application on successful coca authentication.
     
-    def credentials(options={})
+    def serializable_hash(options={})
       {
-        id: id,
+        uid: uid,
+        authentication_token: authentication_token,
         title: title,
         name: name,
         forename: forename,
         email: email,
-        admin: admin?,
-        image: thumbnail
+        image: thumbnail,
+        permissions: permissions
       }
     end
     
     def thumbnail
       person.image.url(:icon) if person
+    end
+    
+    def permissions
+      # concatenated list of all the permissions belonging to all the groups of which we are a member.
+    end
+
+  protected
+  
+    def ensure_uid
+      self.uid ||= SecureRandom.uuid
     end
 
   end

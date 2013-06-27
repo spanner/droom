@@ -13,6 +13,9 @@ module Droom
     has_many :memberships, :dependent => :destroy
     has_many :people, :through => :memberships, :uniq => true
 
+    has_many :group_permissions, :dependent => :destroy
+    has_many :permissions, :through => :group_permissions, :uniq => true
+    
     before_validation :ensure_slug
     before_validation :ensure_mailing_list_name
 

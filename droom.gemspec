@@ -41,7 +41,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'devise'
   s.add_dependency 'devise-encryptable'
   s.add_dependency 'yomu'
-  # s.add_dependency 'ruby-saml-idp'
   
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

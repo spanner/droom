@@ -232,7 +232,6 @@ jQuery ($) ->
       @container.css
         left: offset.left - (@container.outerWidth() - @header.outerWidth()) / 3
         top: offset.top + @header.height() + 5
-        
       
     set: () =>
       if @container.hasClass('here') then @show() else @hide()
@@ -258,9 +257,6 @@ jQuery ($) ->
   
     revert: (e) =>
       Panel.hideAll()
-      
-
-  class PanelLink
     
 
   $.fn.panel = ->
