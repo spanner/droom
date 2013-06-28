@@ -22,8 +22,7 @@
   %span.contact
     %span.name
       = link_to truncate(user.formal_name, :length => 22), user_url(user), :data => {:action => "popup"}
-      - unless ineditable
-        = action_menulink(user, :class => "small")
+      = action_menulink(user, :class => "small")
     %br
     %span.note
       - if user.email?
@@ -31,5 +30,4 @@
       - else
         = t :contact_information_unavailable
 
-    - unless ineditable
-      = action_menu(user, :event => event, :group => group)
+    = action_menu(user, :event => event, :group => group)

@@ -16,7 +16,10 @@ Droom::Engine.routes.draw do
   end
   
 
-  resources :users
+  resources :users do
+    get "preferences", :on => :member, :as => :preferences
+  end
+
   resources :documents
   resources :preferences
   resources :calendars

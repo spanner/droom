@@ -1,27 +1,68 @@
 = form_for @user, :html => {:class => 'edit user password', :autocomplete => false} do |f|
 
-  %p.email
-    = f.label :email
-    %br
-    = f.email_field :email, :class => 'preferences', :autocomplete => false
+  .image
+    - @user.build_image_upload unless @user.image_upload
+    = render :partial => "cropper/uploads/pick", :locals => {:upload => @user.image_upload, :holder => @user, :multiplier => 4}
 
-  %p.password
-    = f.label :password
-    %br
-    = f.password_field :password, :autocomplete => "off", :class => 'preferences password', :pattern => ".{6,}"
-    %br
-    %span.note
-      = t :password_requirements
+  - if Droom.use_forenames?
+    %p.name
+      = f.label :forename
+      %br
+      = f.text_field :forename, :required => true
+    %p.name
+      = f.label :name, "Surname"
+      %br
+      = f.text_field :name, :required => true
 
-  %p.confirmation
-    = f.label :password_confirmation
-    %br
-    = f.password_field :password_confirmation, :class => 'preferences password_confirmation', :pattern => ""
+  - else
+    %p.name
+      = f.label :name
+      %br
+      = f.text_field :name, :required => true
 
-  %p.password_notice
+  .contacts
+    %p.email
+      = f.label :email
+      %br
+      = f.text_field :email, :required => true
+  
+    %p.phone
+      = f.label :phone, :class => "optional"
+      %br
+      = f.text_field :phone
+
+    - if Droom.use_separate_mobile_number
+      %p.secondary
+        = f.label :mobile, :class => "optional"
+        %br
+        = f.text_field :mobile
+
+  - if admin?
+    - if Droom.use_organisations?
+      %p.organisation
+        = f.label :organisation_id
+        %br
+        = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+
+    - if @user.new_record?
+      %p.admin
+        = f.check_box :invite_on_creation, :class => 'invite'
+        = f.label :invite_on_creation      
+        = f.check_box :admin_user
+        = f.label :admin_user
+
+  - if Droom.use_biogs?
+    - @user.description = "<p></p>" unless @user.description?
+    .description.wysihtml
+      .toolbar#t1
+        = render 'droom/shared/toolbar'
+      = f.text_area :description
 
   .buttons
-    = f.submit t(:save_changes), :class => "submit"
+    - if @user == current_user
+      = f.submit t(:save_your_profile)
+    - else
+      = f.submit t(:save_user)
     = t :or
-    = link_to t(:cancel), '#', :class => "cancel"
-
+    = link_to t(:cancel), '#', :class => 'cancel'
+  

@@ -9,7 +9,7 @@
     %span.note
       = t(:edit_your_profile_note)
   %p
-    = link_to t(:edit_your_preferences), droom.edit_user_url(current_user), :data => {:action => "popup"}
+    = link_to t(:edit_your_preferences), droom.preferences_user_url(current_user), :data => {:action => "popup"}
     %br
     %span.note
       = t(:edit_your_preferences_note)

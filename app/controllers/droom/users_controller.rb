@@ -6,7 +6,7 @@ module Droom
     before_filter :authenticate_user!
     before_filter :require_admin!, :only => [:index, :new, :create, :destroy]
     before_filter :find_users, :only => [:index]
-    before_filter :get_user, :only => [:show, :edit, :update, :destroy, :welcome]
+    before_filter :get_user, :only => [:show, :edit, :preferences, :update, :destroy, :welcome]
     before_filter :build_user, :only => [:new, :create]
     before_filter :require_self_or_admin!, :only => [:edit, :update]
     before_filter :remember_token_auth
@@ -19,6 +19,10 @@ module Droom
     end
   
     def edit
+      respond_with @user
+    end
+    
+    def preferences
       respond_with @user
     end
     
