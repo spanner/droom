@@ -3,7 +3,7 @@
 
 module Droom
   class Tag < ActiveRecord::Base
-    # They are attached to people through many-to-many taggings.
+    # They are attached to people and other things through many-to-many taggings.
     #
     has_many :taggings
     has_many :taggees, :through => :taggings

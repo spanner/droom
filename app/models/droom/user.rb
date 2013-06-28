@@ -108,7 +108,7 @@ module Droom
     end
     
     scope :personally_invited_to_event, lambda { |event|
-      joins('LEFT OUTER JOIN droom_invitations on droom_people.id = droom_invitations.user_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
+      joins('LEFT OUTER JOIN droom_invitations on droom_users.id = droom_invitations.user_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
     }
 
     ## Folder permissions

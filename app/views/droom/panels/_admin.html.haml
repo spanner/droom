@@ -8,7 +8,7 @@
       %li
         = link_to t(:add_document), droom.new_document_url, :class => "add", :remote => true, :data => {:action => "popup", :affected => "table.documents"}
       %li
-        = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
+        = link_to t(:add_person), droom.new_user_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "table.people"}
       %li
         = link_to t(:add_organisation), droom.new_organisation_url, :class => "add", :remote => true, :data => {:action => "popup", :affected => ".organisations_list"}
 

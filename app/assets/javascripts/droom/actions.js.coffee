@@ -429,7 +429,7 @@ jQuery ($) ->
           index = child.index() + offset
           id = parseInt(child.attr('id').split("person_")[1], 10)
           $.ajax
-            url: "/people/#{id}"
+            url: "/users/#{id}"
             type: "PUT"
             dataType: "JSON"
             data:

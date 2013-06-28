@@ -77,12 +77,12 @@ module Droom
       
       unless params[:q].blank?
         @searching = true
-        @people = @people.matching(params[:q])
+        @users = @users.matching(params[:q])
       end
       
       @show = params[:show] || 10
       @page = params[:page] || 1
-      @people = @people.page(@page).per(@show)
+      @users = @users.page(@page).per(@show)
     end
  
     def require_self_or_admin!

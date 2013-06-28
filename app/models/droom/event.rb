@@ -302,7 +302,7 @@ module Droom
       return true
     end
     
-    def has_people?
+    def has_anyone?
       invitations.any?
     end
 

@@ -1,4 +1,4 @@
-# Taggings are the many to many links that associated tags with people. There isn't much to see here.
+# Taggings are the many to many links that associated tags with people and other things. There isn't much to see here.
 
 module Droom
   class Tagging < ActiveRecord::Base

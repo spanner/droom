@@ -8,6 +8,6 @@
   = action_menu(group)
 
   %ul.people.detail
-    = render :partial => "droom/people/person", :collection => group.people, :locals => {:group => group}
+    = render :partial => "droom/users/user", :collection => group.users, :locals => {:group => group}
   %p.suffix.note
-    = t :group_members, :count => group.people.count
+    = t :group_members, :count => group.users.count
