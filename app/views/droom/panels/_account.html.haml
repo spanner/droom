@@ -4,7 +4,7 @@
   
   %ul
     %li
-      = link_to t(:edit_your_profile), droom.edit_user_url(current_person), :data => {:action => "popup", :affected => ".people_list"}
+      = link_to t(:edit_your_profile), droom.edit_user_url(current_user), :data => {:action => "popup", :affected => ".people_list"}
       %br
       %span.note
         = t(:edit_your_profile_note)

@@ -1,4 +1,4 @@
-- folders = Droom::Folder.visible_to(current_user.person).populated.latest(5)
+- folders = Droom::Folder.visible_to(current_user).populated.latest(5)
 - if folders.any?
   %h2.quiet
     = t :my_folders

@@ -1213,9 +1213,10 @@ div.timepicker
 #minicalendar
   position: relative
   overflow: hidden
-  width: 222px
+  width: 280px
+  margin: 10px 0
   .scroller
-    width: 500px
+    width: 600px
     height: 260px
     table
       position: relative
@@ -1236,7 +1237,12 @@ div.timepicker
 
 #search, .search_results
   position: relative
-  
+
+
+$calendar_width: 280px
+$day_width: 40px
+$box: $day_width - 2
+
 table.minimonth
   font-style: normal
   border-collapse: collapse
@@ -1264,9 +1270,9 @@ table.minimonth
       color: white
     vertical-align: top
     text-align: center
-    height: 32px
-    width: 30px
-    line-height: 32px
+    height: $box
+    width: $box
+    line-height: $box
     padding: 0
     overflow: hidden
   td.m
@@ -1275,8 +1281,8 @@ table.minimonth
       overflow: hidden
       font-size: 1.4em
       line-height: 1
-      width: 32px
-      height: 32px
+      width: $box
+      height: $box
       text-indent: 50px
       background:
         position: 5px 5px
@@ -2287,3 +2293,4 @@ ul.checklist
   border-right: 1px solid $verypale
   background-color: white
   z-index: 300
+  

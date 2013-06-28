@@ -218,8 +218,18 @@ jQuery ($) ->
       @links = $("a[data-panel='#{@id}']")
       @header = $('.masthead').find("a[data-panel='#{@id}']")
       @patch = $('<div class="patch" />').appendTo($('body'))
+      @timer = null
+      @showing = false
+
+      # Open on hover or click. Close with wobble catcher on exit. 
       @links.bind "click", @toggle
+      $(@header).hover(@show, @hideSoon)
+      $(@patch).hover(@show, @hideSoon)
+      $(@container).hover(@show, @hideSoon)
+
+      # for remote control. To open remotely just trigger a show event on the panel.
       @container.bind "show", @show
+      @container.bind "hide", @hide
       @set()
       Panel.remember(@)
     
@@ -229,9 +239,15 @@ jQuery ($) ->
         left: offset.left
         top: offset.top + @header.height() - 3
         width: @header.outerWidth() - 2
-      @container.css
-        left: offset.left - (@container.outerWidth() - @header.outerWidth()) / 3
-        top: offset.top + @header.height() + 5
+      if offset.left > $(window).width() / 2
+        @container.css
+          left: offset.left - (@container.outerWidth() - @header.outerWidth()) * 3 / 4
+          top: offset.top + @header.height() + 5
+      else
+        @container.css
+          left: offset.left - (@container.outerWidth() - @header.outerWidth()) / 4
+          top: offset.top + @header.height() + 5
+
       
     set: () =>
       if @container.hasClass('here') then @show() else @hide()
@@ -243,21 +259,28 @@ jQuery ($) ->
       if @container.is(":visible") then @revert() else @show()
 
     hide: (e) =>
+      window.clearTimeout @timer
       @container.stop().fadeOut()
       @patch.stop().fadeOut()
       @header.removeClass('up')
-      $(document).unbind "click", @hide
+      @showing = false
     
+    hideSoon: () =>
+      @timer = window.setTimeout @hide, 500
+      
     show: (e) =>
-      @setup()
-      Panel.hideAll()
-      @container.stop().fadeIn('fast')
-      @patch.stop().fadeIn('fast')
-      @header.addClass('up')
+      window.clearTimeout @timer
+      unless @showing
+        @setup()
+        Panel.hideAll()
+        @container.stop().fadeIn()
+        @patch.stop().fadeIn()
+        @header.addClass('up')
+        @showing = true
   
     revert: (e) =>
       Panel.hideAll()
-    
+
 
   $.fn.panel = ->
     @each ->
