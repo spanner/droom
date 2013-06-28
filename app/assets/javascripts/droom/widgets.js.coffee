@@ -361,7 +361,7 @@ jQuery ($) ->
   $.fn.filter_form = (options) ->
     options = $.extend(
       fast: true
-      auto: true
+      auto: false
       into: "#found"
     , options)
     @each ->

@@ -5,13 +5,17 @@ module Droom
     layout :no_layout_if_pjax
     before_filter :authenticate_user!
     before_filter :require_admin!, :only => [:index, :new, :create, :destroy]
+    before_filter :find_users, :only => [:index]
     before_filter :get_user, :only => [:show, :edit, :update, :destroy, :welcome]
     before_filter :build_user, :only => [:new, :create]
     before_filter :require_self_or_admin!, :only => [:edit, :update]
     before_filter :remember_token_auth
 
     def index
-      @users = Droom::User.all
+      respond_with @users do |format|
+        format.js { render :partial => 'droom/users/users' }
+        format.vcf { render :vcf => @users.map(&:to_vcf) }
+      end
     end
   
     def edit

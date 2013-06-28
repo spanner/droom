@@ -16,6 +16,7 @@ class UserProperties < ActiveRecord::Migration
     add_column :droom_users, :public, :boolean
     add_column :droom_users, :female, :boolean
     add_upload :droom_users, :image
+    add_column :users, :uid, :string
 
     Droom::User.reset_column_information
     Droom::Person.all.each do |p|

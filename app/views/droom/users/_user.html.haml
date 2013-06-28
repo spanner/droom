@@ -21,13 +21,13 @@
         %span{:class => "invitation #{invitation.status}"}
   %span.contact
     %span.name
-      = link_to truncate(user.formal_name, :length => 14), user_url(user), :data => {:action => "popup"}
+      = link_to truncate(user.formal_name, :length => 22), user_url(user), :data => {:action => "popup"}
       - unless ineditable
         = action_menulink(user, :class => "small")
     %br
     %span.note
       - if user.email?
-        = mail_to truncate(user.email, :length => 20)
+        = mail_to truncate(user.email, :length => 32)
       - else
         = t :contact_information_unavailable
 

@@ -107,6 +107,7 @@ en:
   continue: "Continue"
   copy: "copy"
   dashboard: "Dashboard"
+  directory_introduction: "The directory organises people by group. To find someone quickly, start typing their name on the right."
   document_created: "Document '%{name}' created"
   download_folder: "download as zipfile"
   hello: "Hello world"
