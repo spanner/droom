@@ -41,7 +41,7 @@ module Droom
           can :create, Droom::Venue
           can :create, Droom::Invitation
           can :create, Droom::GroupInvitation
-          if user.permitted?('droom.attach_documents')
+          if user.permitted?('droom.attach')
             # todo: scope to folders attached to own events
             can :create, Droom::AgendaCategory
             can :create, Droom::Document 

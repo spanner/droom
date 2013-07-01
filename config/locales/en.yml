@@ -77,6 +77,7 @@ en:
       next: "&raquo;"
   account: "Account"
   action: "*"
+  active: "active"
   admin: "Admin"
   advanced_search: "Search terms"
   advanced_search_link: "...advanced search"

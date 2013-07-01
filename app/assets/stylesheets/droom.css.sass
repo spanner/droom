@@ -652,79 +652,76 @@ table.people
     width: 80px
 
 
-table.users
+table.services
   margin-top: 40px
   border-collapse: collapse
-  thead
-    th
-      max-width: 24px
-      height: 50px
-      padding-top: 36px
-      padding-left: 6px
+  tr.rotated
+    td
+      position: relative
+      height: 80px
+      width: 32px
+      overflow: hidden
+      text-align: center
       span.rotated
-        display: block
+        display: inline-block
+        position: absolute
+        top: 80px
+        left: 10px
         line-height: 1
         white-space: nowrap
-        +rotate(-75deg)
-    th.spacer
-      padding: 10px
-    th.note
-      font-weight: normal
-      height: 20px
-      color: $pale
-      font-size: 85%
-      padding: 5px
-      border-bottom: 1px solid $pale
-      text-align: center
+        +apply-origin(top left, false)
+        +rotate(-90deg)
       &.spacer
-        border: none
-  tbody
+        width: auto
+  th
+    font-weight: normal
+  td, th
+    border: 1px solid $verypale
+    padding: 4px
+  th.dividing, td.dividing
+    border-right-width: 3px
+  td.hover
+    background-color: $coolgrey0
+  tr:hover
     td
-      padding-top: 15px
+      background-color: $coolgrey0
     td.hover
-      background-color: $palest
-    tr:hover
-      td
-        background-color: $palest
-        border-color: $palest
-    td[data-hoverable]:hover
-      background-color: $pale
-    td.name
-      min-width: 140px
-      min-height: 36px
-      line-height: 1
-      text-align: left
-    td.email
-      +small
-      +pale
-      line-height: 1.8em
-      text-align: left
-    td.spacer
-      padding: 10px
-    td
-      width: 30px
-      text-align: center
-      span, a.yes, a.no
-        +icon("droom/minisymbols.png")
-        &.yes
-          background-position: 0 -384px
-        &.no
-          background-position: 0 -528px
-        &.not_applicable
-          background-position: 0 -600px
-        &.waiting
-          background-image: image-url('droom/spinner.gif')
-          background-position: 2px 2px
-      span.no, span.yes
+      background-color: $coolgrey1
+  td.name
+    min-width: 140px
+    min-height: 36px
+    line-height: 1
+    text-align: left
+  td.spacer
+    padding: 10px
+  th.spacer
+    padding: 10px
+  td.toggle
+    min-height: 32px
+    text-align: center
+    span.no, span.yes, a.yes, a.no
+      +icon("droom/minisymbols.png")
+      margin: 5px 0 0 3px
+      &.yes
+        background-position: 0 -384px
+      &.no
+        background-position: 0 -528px
         +opacity(0.3)
-      a.no
         &:hover
-          background-position: 0 -648px
-      a.yes
-        &:hover
-          background-position: 0 -480px
-      
-      
+          +opacity(1)
+      &.not_applicable
+        background-position: 0 -600px
+      &.waiting
+        background-image: image-url('droom/spinner.gif')
+        background-position: 2px 2px
+    span.no, span.yes
+      +opacity(0.3)
+    a.no:hover
+      background-position: 0 -648px
+    a.yes:hover
+      background-position: 0 -480px
+    
+    
       
 table.groups
   margin-bottom: 25px

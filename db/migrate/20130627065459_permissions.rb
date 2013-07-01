@@ -1,15 +1,16 @@
 class Permissions < ActiveRecord::Migration
   
   def change
-    create_table :droom_resources do |t|
+    create_table :droom_services do |t|
       t.string :name
+      t.string :slug
       t.string :url
     end
     
     create_table :droom_permissions do |t|
-      t.integer :resource_id
+      t.integer :service_id
       t.string  :name
-      t.string :code
+      t.string :slug
       t.timestamps
     end
 

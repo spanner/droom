@@ -14,6 +14,8 @@ Droom::Engine.routes.draw do
 
   resources :documents
   resources :preferences
+  resources :permissions
+  resources :services
   resources :calendars
   resources :invitations
   resources :memberships
@@ -49,10 +51,10 @@ Droom::Engine.routes.draw do
   end
   
   resources :organisations do
-    resources :people
+    resources :users
   end
   
-  resources :people do
+  resources :users do
     get "invite", :on => :member, :as => :invite
     resources :events do
       collection do
@@ -63,7 +65,8 @@ Droom::Engine.routes.draw do
   
   resources :groups do
     resources :memberships
-    resources :people
+    resources :users
+    resources :group_permissions
   end
   
   resources :venues

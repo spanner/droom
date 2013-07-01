@@ -1,5 +1,7 @@
 module Droom
   class GroupPermission < ActiveRecord::Base
+    attr_accessible :permission_id, :group_id
+    
     belongs_to :group
     belongs_to :permission
     has_many :user_permissions, :dependent => :destroy
@@ -16,6 +18,13 @@ module Droom
 
     def create_permission_for(user)
       user_permissions.where(:user_id => user.id, :permission_id => permission.id).first_or_create
+    end
+    
+    def self.by_group_id
+      all.each_with_object({}) do |gp, hash|
+        hash[gp.group_id] ||= {}
+        hash[gp.group_id][gp.permission.id] = gp
+      end
     end
     
   end

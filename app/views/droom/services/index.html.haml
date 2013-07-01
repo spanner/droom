@@ -1,0 +1,9 @@
+#main.permissions
+  - if can?(:create, Droom::Service)
+    %p.action
+      = link_to t(:create_service), new_service_url, :class => 'add', :data => {:action => 'popup', :affected => 'table.services'}
+  
+  = render :partial => "services"
+
+- content_for :title do 
+  = t :access_control

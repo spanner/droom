@@ -1,0 +1,32 @@
+%table.main.services{:data => {:refreshable => true, :hoverable => true, :url => "#{services_path}.js"}}
+  %thead
+    %tr
+      %th.spacer.dividing
+      - @services.each do |service|
+        - width = service.permissions.count
+        %th.dividing{:colspan => width > 1 ? width : 1}
+          = t service.name
+    %tr.rotated
+      %th.dividing
+      - @services.each do |service|
+        - width = service.permissions.count
+        - service.permissions.each_with_index do |perm, i|
+          %td{:class => "#{perm.slug.gsub('.', '_')} #{'dividing' if i == width-1}".strip}
+            %span.rotated
+              = perm.name
+
+    - @groups.each do |group|
+      %tbody
+        %tr
+          %td.name.dividing
+            = truncate(group.name, :length => 16)
+          - @services.each do |service|
+            - width = service.permissions.count
+            - service.permissions.each_with_index do |perm, i|
+              %td.toggle{:class => "#{perm.slug.gsub('.', '_')} #{'dividing' if i == width-1}".strip}
+                = render :partial => 'droom/group_permissions/toggle', :locals => {:group => group, :permission => perm}
+                
+- if @services.empty?
+  .everyone
+    %p
+      No services are defined.

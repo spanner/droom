@@ -47,7 +47,7 @@ jQuery ($) ->
     @find_including_self('form[data-action="filter"]').filter_form()
     @find_including_self('div[data-panel]').panel()
     @find_including_self('[data-menu]').action_menu()
-    @find_including_self('td[data-hoverable]').hover_column()
+    @find_including_self('table[data-hoverable]').hover_table()
     
     # it's not very easy to add data attributes to kaminari pagination links
     
@@ -68,7 +68,6 @@ jQuery ($) ->
     @find_including_self('.person_picker').person_picker()
     @find_including_self('.group_picker').group_picker()
     @find_including_self('.drag_sort').drag_sort()
-    # @find_including_self('input.password').password_field()
     @find_including_self('form.password').password_form()
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('form.preferences').preferences_form()

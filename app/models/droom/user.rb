@@ -368,9 +368,10 @@ module Droom
     # object. Additional user-permission objects can be created: all we need to do here is return that set.
     
     has_many :user_permissions
+    has_many :permissions, :through => :user_permissions
     
     def permission_codes
-      user_permissions.map(&:code)
+      permissions.map(&:code)
     end
     
     def permitted?(key)
