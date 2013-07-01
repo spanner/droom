@@ -1,0 +1,14 @@
+- user ||= suggested
+
+%li.user
+  = link_to user.formal_name, user_url(user), :data => {:action => "popup"}
+  %span.note
+    - if user.phone? || user.email?
+      - if user.phone?
+        = user.phone
+      - if user.phone? && user.email?
+        %br
+      - if user.email?
+        = mail_to user.email
+    - else
+      = t :contact_information_unavailable

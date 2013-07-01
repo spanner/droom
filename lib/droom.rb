@@ -194,7 +194,7 @@ module Droom
     def suggestible_classes
       @@suggestible_classes ||= {
         "event" => "Droom::Event", 
-        "person" => "Droom::Person", 
+        "user" => "Droom::User", 
         "document" => "Droom::Document",
         "group" => "Droom::Group",
         "venue" => "Droom::Venue"
@@ -202,7 +202,7 @@ module Droom
     end
 
     def add_suggestible_class(label, klass=nil)
-      klass ||= label.titlecase
+      klass ||= label.camelize
       suggestible_classes[label] = klass.to_s
     end
 

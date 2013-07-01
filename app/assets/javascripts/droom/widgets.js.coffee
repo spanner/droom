@@ -320,7 +320,7 @@ jQuery ($) ->
         @_form.find("input[type=\"text\"]").change @submit
         @_form.find("input[type=\"radio\"]").click @clicked
         @_form.find("input[type=\"checkbox\"]").click @clicked
-      @submit() if @_options.auto
+      @submit() if @_options.auto or @_form.attr('data-prefill')
         
     keyed: (e) =>
       k = e.which
@@ -361,7 +361,6 @@ jQuery ($) ->
   $.fn.filter_form = (options) ->
     options = $.extend(
       fast: true
-      auto: false
       into: "#found"
     , options)
     @each ->

@@ -16,7 +16,8 @@ module Droom
           @title = span.width > 86400 ? "Events in #{fragment}" : "Events on #{fragment}"
         else
           @suggestions = @klasses.collect {|klass|
-            klass.constantize.visible_to(current_user).matching(fragment).limit(max.to_i)
+            Rails.logger.warn ">>> contantize #{klass} -> #{klass.camelize}"
+            klass.camelize.constantize.visible_to(current_user).matching(fragment).limit(max.to_i)
           }.flatten.sort_by(&:name).slice(0, max.to_i)
         end
       end
