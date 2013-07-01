@@ -3,13 +3,10 @@ module Droom
     respond_to :html, :js, :json, :atom
     layout :no_layout_if_pjax
   
-    before_filter :authenticate_user!
-    before_filter :scale_image_params, :only => [:create, :update]
-    before_filter :find_scraps, :only => [:index]
-    before_filter :get_scrap, :only => [:show, :edit, :update, :destroy, :chart]
-    before_filter :build_scrap, :only => [:new, :create]
+    load_and_authorize_resource
 
     def index
+      @scraps = paginated(@scraps, 8)
       respond_with(@scraps) do |format|
         format.js { render :partial => 'droom/scraps/stream' }
       end
@@ -44,33 +41,6 @@ module Droom
     
     def feed
       
-    end
-
-  protected
-
-    def find_scraps
-      @show = params[:show] || 10
-      @page = params[:page] || 1
-      @scraps = Droom::Scrap.by_date.page(@page).per(@show) unless @show == 'all'
-    end
-
-    def get_scrap
-      @scrap = Droom::Scrap.find(params[:id])
-    end
-
-    def build_scrap
-      params[:scrap]
-      @scrap = Droom::Scrap.new(params[:scrap])
-      @folder = Droom::Folder.find_or_create_by_slug("stream")
-      @scrap.scraptype ||= 'text'
-    end
-
-    def scale_image_params
-      if multiplier = params[:multiplier]
-        [:image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top].each do |p|
-          params[:scrap][p] = (params[:scrap][p].to_i * multiplier.to_i) unless params[:scrap][p].blank?
-        end
-      end
     end
 
   end

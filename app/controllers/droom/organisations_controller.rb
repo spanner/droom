@@ -4,11 +4,7 @@ module Droom
     layout :no_layout_if_pjax
     helper Droom::DroomHelper
   
-    before_filter :authenticate_user!
-    before_filter :get_users, :only => [:index]
-    before_filter :find_organisations, :only => [:index]
-    before_filter :get_organisation, :only => [:show, :edit, :update, :destroy]
-    before_filter :build_organisation, :only => [:new, :create]
+    load_and_authorize_resource
 
     def create
       @organisation.update_attributes(params[:organisation])
@@ -31,23 +27,5 @@ module Droom
 
   protected
 
-    def find_organisations
-      @organisations = Droom::Organisation.order("name asc")
-    end
-
-    def get_users
-      @show = params[:show] || 10
-      @page = params[:page] || 1
-      @users = Droom::User.order("name asc").page(@page).per(@show)
-    end
-    
-    def get_organisation
-      @organisation = Droom::Organisation.find(params[:id])
-    end
-
-    def build_organisation
-      @organisation = Droom::Organisation.new(params[:organisation])
-    end
-  
   end
 end

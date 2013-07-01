@@ -48,7 +48,7 @@ module Droom
         forename: forename,
         email: email,
         image: thumbnail,
-        permissions: permissions
+        permissions: permission_codes.join(',')
       }
     end
 
@@ -140,6 +140,7 @@ module Droom
       Document.visible_to(self)
     end
 
+
     ## Dropbox links
     #
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
@@ -170,31 +171,7 @@ module Droom
     def thumbnail
       image.url(:icon) if image
     end
-
-    # Access control
-    #
-    scope :all_private, where("private = 1")
-    scope :not_private, where("private <> 1 OR private IS NULL")
-    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
-    scope :not_public, where("public <> 1 OR private = 1)")
     
-    # User.visible_to(user) returns a list of all the users in overlapping groups with this one.
-    #
-    scope :visible_to, lambda { |user|
-      if user
-        if user.admin?
-          scoped({})
-        else
-          select('droom_users.*')
-            .joins('LEFT OUTER JOIN droom_memberships as dm1 on droom_users.id = dm1.person_id')
-            .joins('LEFT OUTER JOIN droom_memberships as dm2 on dm1.group_id = dm2.group_id')
-            .where(['(dm2.user_id = ?) OR (droom_users.private <> 1)', user.id])
-            .group('droom_users.id')
-        end
-      else
-        all_public
-      end
-    }
     
     # For suggestion box
     #
@@ -286,7 +263,8 @@ module Droom
       users.map(&:vcf).join("\n")
     end
 
-    # Messaging
+
+    ## Messaging
     #
     # Messaging groups are normally scopes passed through when receives_messages is called,
     # but anything will work that can be called on the class and return a set of instances.
@@ -321,6 +299,7 @@ module Droom
         :password_reset_url => Droom::Engine.routes.url_helpers.edit_user_password_url(:reset_password_token => self.reset_password_token, :host => ActionMailer::Base.default_url_options[:host])
       }
     end
+
 
     # ### Invitation
     #
@@ -385,15 +364,22 @@ module Droom
     
     ## Permissions
     #
+    # Permissions are usually assigned by way of group membership, but the effect of this is to create a user-permission
+    # object. Additional user-permission objects can be created: all we need to do here is return that set.
     
-    def permissions
-      # concatenated list of all the permissions belonging to all the groups of which we are a member.
+    has_many :user_permissions
+    
+    def permission_codes
+      user_permissions.map(&:code)
     end
     
+    def permitted?(key)
+      permission_codes.include?(key)
+    end
 
 
-  
-  
+    ## Ownership
+    #
     # Current user is pushed into here to make it available in models
     # such as the UserActionObserver that sets ownership before save.
     #

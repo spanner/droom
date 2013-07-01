@@ -2,43 +2,35 @@ module Droom
   class EventsController < Droom::EngineController
     require "uri"
     require "ri_cal"
-    respond_to :html, :json, :rss, :ics, :js, :zip
+    respond_to :html, :json, :ics, :js
     layout :no_layout_if_pjax
 
-    before_filter :authenticate_user!
-    before_filter :numerical_parameters
-    before_filter :get_event, :only => [:show, :edit, :update, :destroy]
-    before_filter :require_admin_or_open_calendar!, :only => [:new, :create]
-    before_filter :require_admin_or_ownership!, :only => [:edit, :update, :destroy]
-    before_filter :find_or_create_calendar, :only => :new
-    before_filter :build_event, :only => [:new, :create]
-    before_filter :get_calendar, :only => [:index, :calendar]
-    before_filter :find_events, :only => [:index, :calendar]
+    load_and_authorize_resource
 
     def index
+      if params[:direction] == 'past'
+        @events = @events.past.order('start DESC')
+        @direction = "past"
+      else
+        @events = @events.future_and_current.order('start ASC')
+        @direction = "future"
+      end
+      @events = paginated(@events)
       respond_with @events do |format|
-        format.js {
-          render :partial => 'droom/events/events'
-        }
+        format.js { render :partial => 'droom/events/events' }
       end
     end
 
     def calendar
       respond_with @events do |format|
-        format.js {
-          render :partial => 'droom/events/calendar'
-        }
+        format.js { render :partial => 'droom/events/calendar' }
       end
     end
 
     def show
       respond_with @event do |format|
-        format.js { 
-          render :partial => 'droom/events/event' 
-        }
-        format.zip { 
-          send_file @event.documents_zipped.path, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@event.slug}.zip"
-        }
+        format.js { render :partial => 'droom/events/event' }
+        format.zip { send_file @event.documents_zipped.path, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@event.slug}.zip" }
       end
     end
 
@@ -48,14 +40,10 @@ module Droom
 
     def create
       if @event.save
-        render :partial => "created"
+        render :partial => "event"
       else
         respond_with @event
       end
-    end
-
-    def edit
-      
     end
 
     def update
@@ -70,70 +58,6 @@ module Droom
     def destroy
       @event.destroy
       head :ok
-    end
-
-  protected
-
-    def require_admin_or_ownership!
-      current_user.admin? || @event.created_by == current_user
-    end
-
-    def require_admin_or_open_calendar!
-      current_user.admin? || !Droom::calendar_closed?
-    end
-
-    def build_event
-      params[:event] ||= {}
-      params[:event][:calendar_id] ||= @calendar.id if @calendar
-      @event = Droom::Event.new({:start => Time.now.floor(30.minutes)}.merge(params[:event]))
-    end
-
-    def get_event
-      @event = Droom::Event.find(params[:id])
-    end
-
-    def find_events
-      if params[:direction] == 'past'
-        @events = @calendar.events.past.order('start DESC')
-        @direction = "past"
-      else
-        @events = @calendar.events.future_and_current.order('start ASC')
-        @direction = "future"
-      end
-      unless current_user.admin? || Droom.all_events_public?
-        @events = @events.visible_to(current_user)
-      end
-      
-      @show = params[:show] || 10
-      @page = params[:page] || 1
-      @events = @events.page(@page).per(@show)
-    end
-
-    def get_calendar
-      @calendar = Droom::Calendar.find_by_id(params[:calendar_id]) || find_or_create_calendar
-    end
-
-    def find_or_create_calendar
-      name = if Droom.required_calendar_names.include?(params[:calendar]) then params[:calendar] else "main" end
-      @calendar = Droom::Calendar.find_or_create_by_name(name)
-    end
-
-    # months can be passed around either as names or numbers
-    # any date part can be 'now' or 'next' for ease of linking
-    # and everything is converted to_i to save clutter later
-    def month_names
-      ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    end
-
-    def numerical_parameters
-      if params[:month] && month_names.include?(params[:month].titlecase)
-        params[:month] = month_names.index(params[:month].titlecase)
-      end
-      [:year, :month, :mday].select{|p| params[p] }.each do |p|
-        params[p] = Date.today.send(p) if params[p] == 'now'
-        params[p] = (Date.today + 1.send(p == :mday ? :day : p)).send(p) if params[p] == 'next'
-        params[p] = params[p].to_i
-      end
     end
 
   end

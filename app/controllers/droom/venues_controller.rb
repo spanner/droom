@@ -1,10 +1,8 @@
 module Droom
   class VenuesController < Droom::EngineController
     respond_to :json, :html
-  
-    before_filter :authenticate_user!  
-    before_filter :get_venues, :only => ["index"]
-    before_filter :get_venue, :only => [:show, :update]
+
+    load_and_authorize_resource
 
     def index
       respond_with @venues do |format|
@@ -13,25 +11,14 @@ module Droom
         }
       end
     end
-    
+
     def show
       respond_with @venue
     end
-    
+
     def update
       @venue.update_attributes(params[:venue])
       respond_with @venue
-    end
-    
-  protected
-  
-    def get_venues
-      @venues = Venue.all
-    end
-
-    def get_venue
-      @venue = Venue.find(params[:id])
-      @events = @venue.events.visible_to(current_user).future_and_current
     end
 
   end

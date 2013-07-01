@@ -57,20 +57,6 @@ module Droom
     scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
     scope :not_public, where("public <> 1 OR private = 1)")
 
-    # events are visible by default. Private events are made invisible except to the people
-    # invited to them.
-
-    scope :visible_to, lambda { |user|
-      if user
-        select('droom_events.*')
-          .joins('LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id')
-          .where(["(NOT(droom_events.private = 1) OR droom_invitations.user_id = ?)", user.id])
-          .group('droom_events.id')
-      else
-        all_public
-      end
-    }
-
     scope :after, lambda { |datetime| # datetime. eg calendar.occurrences.after(Time.now)
       where(['start > ?', datetime])
     }

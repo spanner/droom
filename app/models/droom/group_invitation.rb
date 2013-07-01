@@ -17,7 +17,6 @@ module Droom
       where("droom_group_invitations.group_id = ?", group.id)
     }
     
-    
     def create_personal_invitations
       group.users.each do |user|
         create_personal_invitation_for(user)
@@ -25,8 +24,8 @@ module Droom
     end
 
     def create_personal_invitation_for(user)
-      event.invitations.where(:user_id => user.id).first_or_create
+      invitations.where(:user_id => user.id, :event_id => event.id).first_or_create
     end
-    
+
   end
 end

@@ -1,12 +1,9 @@
-require 'dav4rack'
-require 'dav4rack/resources/file_resource'
 require "droom/monkeys"
 require "droom/lazy_hash"
 require "droom/model_helpers"
 require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
-require "droom/dav_resource"
 require "droom/searchability"
 require "droom/taggability"
 require "droom/folders"
@@ -43,8 +40,6 @@ module Droom
                  :mailing_lists_active_by_default,
                  :mailing_lists_digest_by_default,
                  :show_venue_map,
-                 :default_document_private,
-                 :default_event_private,
                  :dropbox_app_key,
                  :dropbox_app_secret,
                  :dropbox_app_name,
@@ -53,7 +48,6 @@ module Droom
                  :required_calendar_names,
                  :stream_shared,
                  :aws_bucket_name,
-                 :calendar_closed,
                  :all_events_public,
                  :all_documents_public
   

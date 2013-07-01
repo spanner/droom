@@ -9,7 +9,6 @@ module Droom
 
     after_create :link_folder
     after_destroy :unlink_folder
-    # after_destroy :delete_similar
 
     validates_uniqueness_of :user_id, :scope => [:event_id, :group_invitation_id]
 
@@ -61,11 +60,5 @@ module Droom
       response && response < 1
     end
   
-  protected
-  
-    def delete_similar
-      Droom::Invitation.for_user(user).to_event(event).delete_all
-    end
-    
   end
 end

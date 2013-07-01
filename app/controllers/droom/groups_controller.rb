@@ -3,9 +3,7 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
 
-    before_filter :build_group, :only => [:new, :create]
-    before_filter :get_group, :only => [:show, :edit, :update, :destroy]
-    before_filter :get_groups, :only => :index
+    load_and_authorize_resource
 
     def index
       respond_with @groups do |format|
@@ -47,20 +45,6 @@ module Droom
     def destroy
       @group.destroy
       head :ok
-    end
-
-  protected
-
-    def build_group
-      @group = Droom::Group.new(params[:group])
-    end
-
-    def get_group
-      @group = Droom::Group.find(params[:id])
-    end
-
-    def get_groups
-      @groups = current_user.admin? ? Droom::Group.all : Droom::Group.visible_to(current_user)
     end
 
   end

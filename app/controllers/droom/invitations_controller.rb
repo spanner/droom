@@ -3,11 +3,9 @@ module Droom
     respond_to :js, :html
     layout :no_layout_if_pjax
     
-    before_filter :get_event
-    before_filter :build_invitation, :only => [:new]
-    before_filter :find_or_build_invitation, :only => [:create]
-    before_filter :get_invitation, :only => [:accept, :refuse, :toggle]
-
+    load_and_authorize_resource :event
+    load_and_authorize_resource :invitation, :through => :event
+    
     def destroy
       @invitation = @event.invitations.find_by_id(params[:id])
       @invitation.destroy if @invitation
@@ -44,27 +42,6 @@ module Droom
     def toggle
       @invitation.update_attribute(:response, @invitation.response == 0 ? 2 : 0)
       render :partial => "droom/invitations/invitation"
-    end
-
-  protected
-    
-    def get_event
-      @event = Droom::Event.find(params[:event_id])
-    end
-    
-    def build_invitation
-      @invitation = @event.invitations.build(params[:invitation])
-    end
-    
-    def find_or_build_invitation
-      @user = Droom::User.find(params[:invitation][:user_id])
-      unless @invitation = @event.invitations.for_user(@user).first()
-        @invitation = @event.invitations.build(params[:invitation])
-      end
-    end
-
-    def get_invitation
-      @invitation = @event.invitations.find(params[:id])
     end
 
   end

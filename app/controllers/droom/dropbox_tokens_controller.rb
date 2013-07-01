@@ -7,10 +7,9 @@ module Droom
   class DropboxTokensController < Droom::EngineController
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
-    before_filter :authenticate_user!
-
     before_filter :get_token, :only => [:show, :destroy]
     skip_before_filter :verify_authenticity_token, :only => :create
+    skip_authorization_check
     
     def new
       dbsession = DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)

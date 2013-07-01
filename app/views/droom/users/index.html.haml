@@ -7,33 +7,5 @@
 
   = render :partial => "droom/users/users_table"
 
-- content_for :somewhere do
-
-  - uninvited = Droom::Person.unusered
-  - if uninvited.any?
-    %h4
-      People not yet invited
-  
-    %ul.checklist
-      - if uninvited.length > 1
-        %li
-          = check_box_tag :user_ids, "all", false, :id => "person_ids_all"
-          %label{:for => "person_ids_all"} 
-            select all
-      - uninvited.each do |person|
-        %li
-          = check_box_tag :"person_ids[]", person.id, false, :id => "person_ids_#{person.id}"
-          %label{:for => "person_ids_#{person.id}"}
-            %strong
-              = person.name
-            %span.admin
-              = link_to t(:edit_profile), droom.edit_person_url(person), :class => 'edit minimal', :data => {:action => "popup", :affected => "#list_person_#{person.id}"}
-            - if person.organisation
-              %span.affiliation
-                %br
-                = t :of_the
-                = person.organisation.name
-
-
 - content_for :title do 
   = t :user_admin

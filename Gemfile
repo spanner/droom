@@ -5,32 +5,6 @@ source "http://rubygems.org"
 # development dependencies will be added by default to the :development group.
 gemspec
 
-# jquery-rails is used by the dummy application
-gem "jquery-rails"
-gem "haml"
-gem "geocoder"
-gem 'devise'
-gem 'devise-encryptable'
-gem "paperclip"
-gem "debugger"
-gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
-gem "date_validator"
-gem 'time_of_day'
-gem "rubyzip"
-gem "snail"
-gem "vcard"
-gem "chronic"
-gem "dynamic_form"
-gem 'acts_as_list'
-gem 'rdiscount'
-gem 'acts_as_tree'
-gem 'dropbox-sdk'
-gem 'devise'
-gem 'devise-encryptable'
-gem 'kaminari'
-gem 'youtube_it'
-gem 'yomu'
-
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'

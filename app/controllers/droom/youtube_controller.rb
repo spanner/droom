@@ -1,8 +1,8 @@
 module Droom
   class YoutubeController < Droom::EngineController
     respond_to :js, :json
-    before_filter :authenticate_user!
     layout nil
+    skip_authorization_check
 
     def show
       @video = Droom.yt_client.video_by(params[:yt_id])

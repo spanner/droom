@@ -3,10 +3,7 @@ module Droom
     respond_to :html, :json, :js, :zip
     layout :no_layout_if_pjax
   
-    before_filter :authenticate_user!
-    before_filter :find_folders, :only => [:index]
-    before_filter :get_folder, :only => [:show, :edit, :update, :destroy, :dropbox]
-    before_filter :build_folder, :only => [:new, :create]
+    load_and_authorize_resource
     
     def index
       respond_with @folders do |format|
@@ -67,40 +64,6 @@ module Droom
     def with_parent
       
     end
-    
-  protected
-    
-    def build_folder
-      if @parent = Droom::Folder.find_by_id(params[:folder_id])
-        @folder = @parent.children.build(params[:folder])
-      else
-        @folder = Droom::Folder.new(params[:folder])
-      end
-    end
-
-    def get_folder
-      @folder = Droom::Folder.find(params[:id])
-    end
-
-    def find_folders
-      if current_user.admin?
-        @folders = Droom::Folder.roots
-      else
-        @folders = Droom::Folder.visible_to(current_user).roots.populated
-      end
-    end
-    
-    def get_folder_tree
-      @folders = current_user.admin? ? Droom::Folder.all : Droom::Folder.visible_to(current_user).populated
-      @roots = []
-      @children = @folders.each_with_object({}) do |folder, hash|
-        parent = folder.parent_id || 'root'
-        hash[parent] ||= []
-        hash[parent] << folder
-      end
-      @roots = @children['root']
-    end
-    
     
   end
 end

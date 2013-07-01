@@ -5,7 +5,7 @@
 
   %h2.section
     = link_to t(:recent_events), main_app.calendar_url
-    - if admin? || !Droom.calendar_closed?
+    - if can?(:create, Droom::Event)
       %span.action
         = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
 

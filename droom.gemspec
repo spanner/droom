@@ -19,28 +19,32 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 3.2.11"
   s.add_dependency "jquery-rails"
-  s.add_dependency 'paperclip'
-  s.add_dependency 'msg'
-  s.add_dependency 'acts_as_tree'
-  s.add_dependency 'enumerize'
-  s.add_dependency 'geocoder'
-  s.add_dependency 'chronic'
-  s.add_dependency 'time_of_day'
-  s.add_dependency 'kaminari'
-  s.add_dependency 'haml'
-  s.add_dependency "uuidtools"
-  s.add_dependency "date_validator"
-  s.add_dependency "dav4rack"
+
+  s.add_dependency "msg"
+  s.add_dependency "coca"
+  s.add_dependency "cropper"
+  
+  s.add_dependency "devise"
+  s.add_dependency "devise-encryptable"
+  s.add_dependency "cancan"
+
+  s.add_dependency "acts_as_tree"
+  s.add_dependency "acts_as_list"
+  s.add_dependency "kaminari"
+  s.add_dependency "haml"
+  s.add_dependency "dynamic_form"
+
+  s.add_dependency "geocoder"
   s.add_dependency "ri_cal"
+  s.add_dependency "chronic"
+  s.add_dependency "time_of_day"
+  s.add_dependency "date_validator"
+  s.add_dependency "uuidtools"
+
   s.add_dependency "snail"
   s.add_dependency "vcard"
-  s.add_dependency "chronic"
-  s.add_dependency "dynamic_form"
-  s.add_dependency "acts_as_list"
-  s.add_dependency 'rdiscount'
-  s.add_dependency 'devise'
-  s.add_dependency 'devise-encryptable'
-  s.add_dependency 'yomu'
+  s.add_dependency "rdiscount"
+  s.add_dependency "yomu"
   
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

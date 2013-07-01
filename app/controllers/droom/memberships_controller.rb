@@ -3,8 +3,8 @@ module Droom
     respond_to :js, :html
     layout :no_layout_if_pjax
     
-    before_filter :build_membership, :only => [:new, :create]
-    before_filter :get_membership, :only => :destroy
+    load_and_authorize_resource :group
+    load_and_authorize_resource :membership, :through => :group
 
     def destroy
       @membership = Membership.find(params[:id])
@@ -32,17 +32,6 @@ module Droom
       else
         respond_with @membership
       end
-    end
-
-    protected
-    
-    def build_membership
-      @group = Droom::Group.find(params[:group_id])
-      @membership = @group.memberships.new(params[:membership])
-    end
-
-    def get_membership
-      @membership = Droom::Membership.find(params[:id])
     end
 
   end

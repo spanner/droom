@@ -1,6 +1,6 @@
 - groups = Droom::Group.all
 
-- if @everyone.any?
+- if @users.any?
   %table.main.users{:data => {:refreshable => true, :url => "#{users_path}.js"}}
     %thead
       %tr

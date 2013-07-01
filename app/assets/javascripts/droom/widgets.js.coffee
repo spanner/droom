@@ -309,26 +309,29 @@ jQuery ($) ->
       @_selector = @_form.attr('data-target') || @_options.into
       @_container = $(@_selector)
       @_original_content = @_container.html()
-      @_prompt = @_form.find("input[type=\"text\"]")
+      @_prompt = @_form.find('input[type="text"]').first()
       @_request = null
       @_form.remote
         on_submit: @prepare
         on_cancel: @cancel
         on_success: @capture
       if @_options.fast
-        @_form.find("input[type=\"text\"]").keyup @keyed
-        @_form.find("input[type=\"text\"]").change @submit
-        @_form.find("input[type=\"radio\"]").click @clicked
-        @_form.find("input[type=\"checkbox\"]").click @clicked
-      @submit() if @_options.auto or @_form.attr('data-prefill')
+        @_form.find('input[type="text"]').keyup @keyed
+        @_form.find('input[type="text"]').change @changed
+        @_form.find('input[type="radio"]').click @clicked
+        @_form.find('input[type="checkbox"]').click @clicked
+      @submit() if @_options.auto
         
     keyed: (e) =>
       k = e.which
       if (k >= 32 and k <= 165) or k == 8
-        if @_prompt.val() is "" and not @_options.auto
-          @revert()
-        else
-          @submit()
+        @changed()
+    
+    changed: () =>
+      if @_prompt.val() is "" and not @_options.auto
+        @revert()
+      else
+        @submit()
           
     clicked: (e) =>
       @submit()
@@ -355,7 +358,6 @@ jQuery ($) ->
       e.preventDefault() if e
       @display(@_original_content)
       @_prompt.val("")
-      @saveState()
 
 
   $.fn.filter_form = (options) ->
@@ -364,6 +366,7 @@ jQuery ($) ->
       into: "#found"
     , options)
     @each ->
+      options['auto'] = $(@).attr('data-prefill')?
       new CaptiveForm @, options
     @
 
