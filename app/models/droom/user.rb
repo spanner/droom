@@ -197,6 +197,7 @@ module Droom
     # If using `msg`, this defines the variables available in message templates.
     #
     def for_email
+      self.ensure_confirmation_token!
       {
         :informal_name => informal_name,
         :formal_name => formal_name,
