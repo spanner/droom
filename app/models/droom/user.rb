@@ -24,6 +24,7 @@ module Droom
            :encryptor => :sha512
   
     before_create :ensure_authentication_token  # provided by devise
+    before_create :ensure_confirmation_token  # provided by devise
 
     attr_accessor :newly_activated, :update_person_email, :confirm, :remove_person
   
@@ -197,7 +198,7 @@ module Droom
     # If using `msg`, this defines the variables available in message templates.
     #
     def for_email
-      self.ensure_confirmation_token!
+      generate_confirmation_token! unless confirmation_token?
       {
         :informal_name => informal_name,
         :formal_name => formal_name,
