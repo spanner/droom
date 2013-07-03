@@ -14,6 +14,10 @@ module Droom
         format.vcf { render :vcf => @users.map(&:to_vcf) }
       end
     end
+    
+    def show
+      respond_with @user
+    end
   
     def edit
       respond_with @user

@@ -20,15 +20,15 @@
 
 - content_for :margin do
   #finder
-    %h3
-      = t :find_documents
-
-    %form.filter{:action => droom.documents_url(:format => :js), :data => {:action => "filter"}}
+    %form.filter{:action => droom.documents_url(:format => :js), :autocomplete => 'off', :data => {:action => "filter"}}
       %p
-        = text_field_tag :q, params[:q], :placeholder => t(:by_name)
-    
+        = search_field_tag :q, params[:q], :results => 5, :autosave => 'document_filter'
+
     .scroller
       #found
-        %p.waiting
-          = t :loading_documents
+        %p.note
+          Type a fragment of a filename or title here to see everything that matches.
+
+
+
   

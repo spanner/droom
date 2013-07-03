@@ -87,8 +87,6 @@ en:
   quick_search_prompt: "Type anything here"
   attachments: "Attachments"
   attending: "Attending"
-  by_name: "Search by name or filename"
-  by_name_or_email: "Search by name or email"
   cancel: "cancel"
   mon: "MON"
   devices: "Devices"
@@ -110,6 +108,9 @@ en:
   add_to_stream: "add to stream"
   add_subfolder: add a sub-folder
   by: "by"
+  by_name: "Search by name or filename"
+  by_name_or_email: "Search by name or email"
+  by_title_or_filename: "by title or filename"
   added_to: "has been added to '%{group}'."
   continue: "Continue"
   copy: "copy"

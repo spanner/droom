@@ -308,33 +308,35 @@ jQuery ($) ->
     constructor: (element, opts) ->
       @_form = $(element)
       @_options = $.extend @constructor.default_options, opts
-      
-      console.log "#{@constructor} options", @_options, 'from', @constructor.default_options
-      
       @_selector = @_form.attr('data-target') || @_options.into
       @_container = $(@_selector)
       @_original_content = @_container.html()
-      @_prompt = @_form.find('input[type="text"]').first()
       @_request = null
       @_form.remote
         on_submit: @prepare
         on_cancel: @cancel
         on_success: @capture
       if @_options.fast
-        @_form.find('input[type="text"]').keyup @keyed
-        @_form.find('input[type="text"]').change @changed
-        @_form.find('input[type="radio"]').click @clicked
-        @_form.find('input[type="checkbox"]').click @clicked
+        @_form.find('input[type="search"]').bind 'keyup', @changed
+        @_form.find('input[type="search"]').bind 'change', @changed
+        @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box widget
+        @_form.find('input[type="text"]').bind 'keyup', @keyed
+        @_form.find('input[type="text"]').bind 'change', @changed
+        @_form.find('input[type="radio"]').bind 'click', @clicked
+        @_form.find('input[type="checkbox"]').bind 'click', @clicked
       @submit() if @_options.auto
         
-
+    value: () =>
+      @_prompt ?= @_form.find('input[type="text"]').first()
+      @_prompt.val()
+      
     keyed: (e) =>
       k = e.which
       if (k >= 32 and k <= 165) or k == 8
         @changed()
     
     changed: () =>
-      if @_prompt.val() is "" and not @_options.auto
+      if @value() is "" and not @_options.auto
         @revert()
       else
         @submit()
@@ -380,6 +382,7 @@ jQuery ($) ->
       auto: false
       historical: true
     }
+    value: () =>
 
     capture: (data, status, xhr) =>
       $('#finder').addClass('up')
@@ -389,6 +392,9 @@ jQuery ($) ->
       $('#finder').removeClass('up')
       super
 
+    value: () =>
+      @_prompt ?= @_form.find('input[type="search"]').first()
+      @_prompt.val()
 
 
 

@@ -3,10 +3,13 @@ module Droom
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
   
-    load_and_authorize_resource :folder, :class => Droom::Folder
-    load_and_authorize_resource :document, :through => :folder, :class => Droom::Document
+    load_and_authorize_resource :folder, :class => Droom::Folder, :except => :index
+    load_and_authorize_resource :document, :through => :folder, :class => Droom::Document, :shallow => true, :except => :index
+    load_and_authorize_resource :only => :index
     
     def index
+      @documents = @documents.matching(params[:q]) unless params[:q].blank?
+      @documents = paginated(@documents)
       respond_with @documents do |format|
         format.js { render :partial => 'droom/documents/documents' }
       end

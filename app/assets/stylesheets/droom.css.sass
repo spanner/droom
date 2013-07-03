@@ -912,7 +912,6 @@ p.action, span.action
   a.add
     color: $green
     font-weight: normal
-    font-size: 16px
     white-space: nowrap
     +icon_link("droom/add.png")
     &:hover
@@ -920,7 +919,6 @@ p.action, span.action
   a.edit
     color: $blue
     font-weight: normal
-    font-size: 16px
     white-space: nowrap
     +icon_link("droom/edit.png")
     &:hover
@@ -928,7 +926,6 @@ p.action, span.action
   a.delete
     color: $darkred
     font-weight: normal
-    font-size: 16px
     white-space: nowrap
     +icon_link("droom/delete.png")
     &:hover
@@ -936,7 +933,6 @@ p.action, span.action
   a.revert
     color: $mid
     font-weight: normal
-    font-size: 16px
     white-space: nowrap
     &:hover
       color: $warmred
@@ -1676,7 +1672,7 @@ span.preference
     margin: 3px 0 3px 20px
 
 ul.documents
-  margin: 20px 0 32px -2px
+  margin: 20px 0 0 -2px
   padding: 0
   list-style: none
 
@@ -1699,8 +1695,8 @@ ul.people
       width: 32px
       height: 32px
       margin-right: 9px
-      margin-top: 6px
-      +border-radius(10px)
+      margin-top: 7px
+      +border-radius(8px)
       background:
         color: $mid
         repeat: no-repeat
@@ -1885,7 +1881,7 @@ span.credit
   margin-top: 4px
 
 div.popup
-  #event, #document, #person, #group, #membership, #folder
+  #event, #document, #user, #group, #membership, #folder
     width: 580px
   .scrap
     width: 580px
@@ -1906,7 +1902,7 @@ div.popup
     background-color: white
     padding: 20px 140px
 
-  div.person
+  div.user
     margin: 20px 20px
     div.mugshot
       position: relative
@@ -1916,8 +1912,7 @@ div.popup
       height: 130px
       margin-right: 20px
       margin-bottom: 10px
-      border: 2px solid white
-      +box-shadow(1px 2px 5px $mid)
+      +border-radius(8px)
       background:
         color: $mid
         repeat: no-repeat
@@ -1931,6 +1926,8 @@ div.popup
       p.contact
         +pale
         margin-top: 0
+      div.description
+        min-height: 80px
 
   div.body
     position: relative

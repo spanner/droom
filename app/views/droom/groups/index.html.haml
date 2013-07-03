@@ -14,12 +14,9 @@
 
 - content_for :margin do
   #finder
-    %h3
-      = t :find_people
-
     %form.filter{:action => droom.users_url(:format => :js), :autocomplete => 'off', :data => {:action => "filter"}}
       %p
-        = text_field_tag :q, params[:q], :placeholder => t(:by_name_or_email)
+        = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
 
     .scroller
       #found
