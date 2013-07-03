@@ -687,11 +687,16 @@ table#services
     &:hover
       a.menu
         visibility: visible
+    h4
+      margin: 0
+      line-height: 1.1
   td, th
     border: 1px solid $verypale
     padding: 4px
+  th.action, th.spacer
+    border: 0
   th.d, td.d
-    border-right-width: 3px
+    border-right-color: $text
   td.hover
     background-color: $coolgrey0
   tr:hover
@@ -906,7 +911,7 @@ a.menu
 span.action
   display: inline-block
   
-p.action, span.action
+*.action
   font-size: 14px
   font-weight: normal
   a.add

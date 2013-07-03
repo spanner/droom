@@ -1,23 +1,23 @@
 %table.main#services{:data => {:refreshable => true, :hoverable => true, :url => "#{services_path}.js"}}
   %thead
     %tr
-      %th.d
-        %p.action
-          - if can?(:create, Droom::Service)
-            = link_to t(:add_service), new_service_url, :class => 'add', :data => {:action => 'popup', :affected => '#services'}
-          - if can?(:create, Droom::Group)
-            = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#services'}
+      %th.action
+        - if can?(:create, Droom::Service)
+          = link_to t(:add_service), new_service_url, :class => 'add', :data => {:action => 'popup', :affected => '#services'}
+        - if can?(:create, Droom::Group)
+          = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#services'}
         
       - @services.each do |service|
         - width = service.permissions.count
         %th.d{:colspan => width > 1 ? width : 1, :class => "s_#{service.id}"}
-          = t service.name
-          = action_menulink(service, :class => "small")
+          %h4
+            = service.name
+            = action_menulink(service, :class => "small")
           = action_menu(service)
           
 
     %tr.rotated
-      %th.d
+      %th.spacer
       - @services.each do |service|
         - width = service.permissions.count
         - service.permissions.each_with_index do |perm, i|
@@ -29,7 +29,7 @@
     - @groups.each do |group|
       %tbody
         %tr
-          %td.name.d
+          %td.name
             = truncate(group.name, :length => 16)
           - @services.each do |service|
             - width = service.permissions.count
