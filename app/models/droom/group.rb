@@ -11,7 +11,7 @@ module Droom
     has_many :events, :through => :group_invitations
 
     has_many :memberships, :dependent => :destroy
-    has_many :users, :through => :memberships, :uniq => true
+    has_many :users, :through => :memberships, :uniq => true, :order => "name ASC"
 
     has_many :group_permissions, :dependent => :destroy
     has_many :permissions, :through => :group_permissions, :uniq => true

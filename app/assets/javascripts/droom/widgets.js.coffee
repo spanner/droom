@@ -299,13 +299,18 @@ jQuery ($) ->
     @
 
   class CaptiveForm
+    @default_options: {
+      fast: false
+      auto: false
+      historical: false
+    }
+    
     constructor: (element, opts) ->
       @_form = $(element)
-      @_options = $.extend {
-        fast: false
-        auto: false
-        historical: false
-      }, opts
+      @_options = $.extend @constructor.default_options, opts
+      
+      console.log "#{@constructor} options", @_options, 'from', @constructor.default_options
+      
       @_selector = @_form.attr('data-target') || @_options.into
       @_container = $(@_selector)
       @_original_content = @_container.html()
@@ -322,6 +327,7 @@ jQuery ($) ->
         @_form.find('input[type="checkbox"]').click @clicked
       @submit() if @_options.auto
         
+
     keyed: (e) =>
       k = e.which
       if (k >= 32 and k <= 165) or k == 8
@@ -361,14 +367,28 @@ jQuery ($) ->
 
 
   $.fn.filter_form = (options) ->
-    options = $.extend(
+    @each ->
+      console.log "filter_form", @
+      new FilterForm @, options
+    @
+
+
+  class FilterForm extends CaptiveForm
+    @default_options: {
       fast: true
       into: "#found"
-    , options)
-    @each ->
-      options['auto'] = $(@).attr('data-prefill')?
-      new CaptiveForm @, options
-    @
+      auto: false
+      historical: true
+    }
+
+    capture: (data, status, xhr) =>
+      $('#finder').addClass('up')
+      super
+
+    revert: (e) =>
+      $('#finder').removeClass('up')
+      super
+
 
 
 
