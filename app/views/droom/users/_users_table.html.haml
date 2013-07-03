@@ -1,33 +1,32 @@
 - groups = Droom::Group.all
 
 - if @users.any?
-  %table.main.users{:data => {:refreshable => true, :url => "#{users_path}.js"}}
+  %table.main.toggles#users{:data => {:refreshable => true, :url => "#{users_path}.js"}}
     %thead
-      %tr
-        - %w{name email invited confirmed directory admin}.each do |col|
-          %th{:class => col}
+      %tr.rotated
+        %th.action{:colspan => 2}
+          %p
+            - if can?(:create, Droom::User)
+              = link_to t(:add_user), new_user_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
+            %br
+            - if can?(:create, Droom::Group)
+              = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
+
+          %form.filter{:action => droom.users_url(:format => :html), :autocomplete => 'off', :data => {:action => "table_filter"}}
+            %p
+              = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
+              
+        - %w{invited confirmed admin}.each do |col|
+          %th{:class => "#{col} #{'d' if col=='admin'}"}
             - unless col == "name" || col == "email"
               %span.rotated
                 = col
-        %th.spacer
-        - groups.each do |group|
-          %th.group
+        - groups.each_with_index do |group, i|
+          %th.group{:class => "#{'d' if i == groups.length-1}"}
             %span.rotated
-              = group.name
+              = truncate(group.name, :length => 16)
 
-        = render :partial => 'extra_columns_header'
-
-      %tr
-        %td{:colspan => 2}
-        %th.note{:colspan => 4}
-          = t(:status)
-        %th.spacer.note
-        %th.note{:colspan => groups.count}
-          = t(:membership)
-
-        = render :partial => 'extra_columns_note'
-
-    = render :partial => 'user_or_person', :collection => @everyone
+    = render :partial => 'tabled_user', :collection => @users
 
 - else
   .everyone

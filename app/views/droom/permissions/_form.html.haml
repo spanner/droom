@@ -6,6 +6,11 @@
   %p.description
     = f.text_area :description, :class => 'description', :placeholder => t(:"activerecord.attributes.droom.service.description")
 
+  %p.service
+    = f.label :service_id
+    %br
+    = f.select :service_id, Droom::Service.for_selection
+
   .buttons
     = f.submit t(:save_permission)
     = t :or

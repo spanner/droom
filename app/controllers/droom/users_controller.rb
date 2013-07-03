@@ -7,8 +7,9 @@ module Droom
     load_and_authorize_resource
 
     def index
+      @users = @users.order('name ASC')
       @users = @users.matching(params[:q]) unless params[:q].blank?
-      @users = paginated(@users)
+      @users = paginated(@users, 50)
       respond_with @users do |format|
         format.js { render :partial => 'droom/users/users' }
         format.vcf { render :vcf => @users.map(&:to_vcf) }
@@ -58,7 +59,6 @@ module Droom
     end
 
   protected
-
 
     def remember_token_auth
       if params[:auth_token] && user_signed_in?

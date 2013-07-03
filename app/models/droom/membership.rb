@@ -9,7 +9,7 @@ module Droom
     has_one :mailing_list_membership, :dependent => :destroy
 
     after_create :link_folder
-    after_create :make_mailing_list_membership
+    after_create :create_mailing_list_membership
     after_create :create_invitations
     after_create :create_permissions
 
@@ -39,7 +39,7 @@ module Droom
     # This is sometimes useful if a configuration change means we're looking at a different mailman table.
     #
     def self.repair_mailing_list_memberships
-      self.all.each { |m| m.send :make_mailing_list_membership }
+      self.all.each { |m| m.send :create_mailing_list_membership }
     end
 
   protected

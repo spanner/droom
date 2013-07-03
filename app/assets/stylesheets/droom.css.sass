@@ -652,33 +652,32 @@ table.people
     width: 80px
 
 
-table#services
+table.toggles
   margin-top: 40px
   border-collapse: collapse
   tr.rotated
-    td
+    td, th
       position: relative
-      height: 80px
+      height: 120px
       width: 32px
-      overflow: hidden
       text-align: center
-      a.delete
-        +icon_link("droom/delete.png")
+      a.menu
         visibility: hidden
       &:hover
-        a.delete
+        a.menu
           visibility: visible
-      span.rotated
-        display: inline-block
-        position: absolute
-        top: 80px
-        left: 10px
-        line-height: 1
-        white-space: nowrap
-        +apply-origin(top left, false)
-        +rotate(-90deg)
-      &.spacer
+      &.spacer, &.action
         width: auto
+        text-align: left
+    span.rotated
+      display: inline-block
+      position: absolute
+      top: 120px
+      left: 10px
+      line-height: 1
+      white-space: nowrap
+      +apply-origin(top left, false)
+      +rotate(-90deg)
         
   th
     font-weight: normal
@@ -695,6 +694,12 @@ table#services
     padding: 4px
   th.action, th.spacer
     border: 0
+  th.action
+    form.filter
+      position: absolute
+      bottom: 10px
+      input[type="search"]
+        width: 200px
   th.d, td.d
     border-right-color: $text
   td.hover
@@ -710,8 +715,6 @@ table#services
     line-height: 1
     text-align: left
   td.spacer
-    padding: 10px
-  th.spacer
     padding: 10px
   td.toggle
     min-height: 32px

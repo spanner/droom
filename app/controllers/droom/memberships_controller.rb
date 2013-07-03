@@ -3,15 +3,15 @@ module Droom
     respond_to :js, :html
     layout :no_layout_if_pjax
     
-    load_and_authorize_resource :group
-    load_and_authorize_resource :membership, :through => :group
+    load_and_authorize_resource :group, :class => Droom::Group
+    load_and_authorize_resource :membership, :through => :group, :class => Droom::Membership
 
     def destroy
       @membership = Membership.find(params[:id])
       @group = @membership.group
       @user = @membership.user
       @membership.destroy
-      render :partial => "membership_toggle"
+      render :partial => "toggle"
     end
         
     def new
@@ -28,7 +28,7 @@ module Droom
     def create
       if @membership.save
         @user = @membership.user
-        render :partial => "membership_toggle"
+        render :partial => "toggle"
       else
         respond_with @membership
       end

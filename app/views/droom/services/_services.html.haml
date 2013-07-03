@@ -1,4 +1,4 @@
-%table.main#services{:data => {:refreshable => true, :hoverable => true, :url => "#{services_path}.js"}}
+%table.main.toggles#services{:data => {:refreshable => true, :hoverable => true, :url => "#{services_path}.js"}}
   %thead
     %tr
       %th.action
@@ -22,9 +22,10 @@
         - width = service.permissions.count
         - service.permissions.each_with_index do |perm, i|
           %td{:class => "s_#{service.id} p_#{perm.id} #{'d' if i == width-1}".strip}
-            = link_to t(:remove), service_permission_url(service, perm), :method => 'delete', :class => 'delete minimal', :data => {:action => "affect", :affected => "#services"}
+            = action_menulink(perm, :class => "small")
             %span.rotated
               = perm.name
+            = action_menu(perm)
 
     - @groups.each do |group|
       %tbody

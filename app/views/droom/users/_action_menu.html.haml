@@ -1,7 +1,7 @@
 - event ||= false
 - group ||= false
 
-- if editable?(user)
+- if can?(:edit, user)
   .menu{:data => {:for => "user_#{user.id}"}}
     %ul.actions
       %li

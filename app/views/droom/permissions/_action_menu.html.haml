@@ -1,0 +1,10 @@
+- permission ||= @permission
+
+- if can?(:edit, permission)
+  .menu{:data => {:for => "permission_#{permission.id}"}}
+    %ul.actions
+      %li
+        = link_to t(:edit_permission), droom.edit_service_permission_url(permission.service, permission), :class => 'edit', :data => {:action => "popup", :affected => "#services"}
+      %li
+        = link_to t(:delete_permission), droom.service_permission_url(permission.service, permission), :method => 'delete', :class => 'delete', :data => {:action => "remove_all", :removed => ".p_#{permission.id}", :affected => "#services", :confirm => t(:confirm_delete_permission, :name => permission.name, :service_name => permission.service.name)}
+
