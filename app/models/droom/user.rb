@@ -169,7 +169,7 @@ module Droom
                }
 
     def thumbnail
-      image.url(:icon) if image
+      image.url(:icon) if image?
     end
     
     
@@ -375,7 +375,7 @@ module Droom
     has_many :permissions, :through => :user_permissions
     
     def permission_codes
-      permissions.map(&:code)
+      permissions.map(&:slug)
     end
     
     def permitted?(key)
