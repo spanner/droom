@@ -76,6 +76,23 @@ jQuery ($) ->
             $(@).remove()
             $(affected).trigger "refresh"
 
+  # The 'remove_all' action takes out on success anything matching the given selector:
+  #
+  #   link_to t(:remove), service_url(service), :method => 'delete', :data => { :removes => "s_#{service.id}" }
+  #
+  # ...on success takes out every DOM element with the class "s_1".
+  #
+  $.fn.removes_all = () ->
+    @each ->
+      removed = $(@).attr('data-removed')
+      affected = $(@).attr('data-affected')
+      
+      $(@).remote
+        on_success: (response) =>
+          $(removed).fadeOut 'fast', () ->
+            $(@).remove()
+            $(affected).trigger "refresh"
+
 
   $.fn.affects = () ->
     @each ->

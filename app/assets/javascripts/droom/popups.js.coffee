@@ -91,6 +91,7 @@ jQuery ($) ->
         @_mask.fadeTo('fast', 0.8)
         @_mask.bind "click", @hide
         $(window).bind "resize", @place
+        @focus()
 
     hide: (e) =>
       e.preventDefault() if e
@@ -99,7 +100,6 @@ jQuery ($) ->
       @_mask.unbind "click", @hide
       $(window).unbind "resize", @place
       @_container.find('iframe.youtube').sendCommand('pauseVideo')
-      
 
     reset: () =>
       @hide()
@@ -127,7 +127,8 @@ jQuery ($) ->
       else
         @_container.css placement
 
-
+    focus: () =>
+      @_container.find('[autofocus]').focus()
 
   # Popup forms will usually contain one or more .column divs. The columns are a standard width and
   # the number of columns determines the width of the popup. Columns can also be hidden, initially,

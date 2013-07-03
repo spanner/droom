@@ -35,7 +35,7 @@ module Droom
     end
 
     def create
-      if @group.save
+      if @group.update_attributes(params[:group])
         render :partial => "created"
       else
         respond_with @group

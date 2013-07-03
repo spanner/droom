@@ -5,12 +5,15 @@ class Permissions < ActiveRecord::Migration
       t.string :name
       t.string :slug
       t.string :url
+      t.text :description
     end
     
     create_table :droom_permissions do |t|
       t.integer :service_id
       t.string  :name
       t.string :slug
+      t.text :description
+      t.integer :position
       t.timestamps
     end
 

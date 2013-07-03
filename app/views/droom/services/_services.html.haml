@@ -1,31 +1,42 @@
-%table.main.services{:data => {:refreshable => true, :hoverable => true, :url => "#{services_path}.js"}}
+%table.main#services{:data => {:refreshable => true, :hoverable => true, :url => "#{services_path}.js"}}
   %thead
     %tr
-      %th.spacer.dividing
+      %th.d
+        %p.action
+          - if can?(:create, Droom::Service)
+            = link_to t(:add_service), new_service_url, :class => 'add', :data => {:action => 'popup', :affected => '#services'}
+          - if can?(:create, Droom::Group)
+            = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#services'}
+        
       - @services.each do |service|
         - width = service.permissions.count
-        %th.dividing{:colspan => width > 1 ? width : 1}
+        %th.d{:colspan => width > 1 ? width : 1, :class => "s_#{service.id}"}
           = t service.name
+          = action_menulink(service, :class => "small")
+          = action_menu(service)
+          
+
     %tr.rotated
-      %th.dividing
+      %th.d
       - @services.each do |service|
         - width = service.permissions.count
         - service.permissions.each_with_index do |perm, i|
-          %td{:class => "#{perm.slug.gsub('.', '_')} #{'dividing' if i == width-1}".strip}
+          %td{:class => "s_#{service.id} p_#{perm.id} #{'d' if i == width-1}".strip}
+            = link_to t(:remove), service_permission_url(service, perm), :method => 'delete', :class => 'delete minimal', :data => {:action => "affect", :affected => "#services"}
             %span.rotated
               = perm.name
 
     - @groups.each do |group|
       %tbody
         %tr
-          %td.name.dividing
+          %td.name.d
             = truncate(group.name, :length => 16)
           - @services.each do |service|
             - width = service.permissions.count
             - service.permissions.each_with_index do |perm, i|
-              %td.toggle{:class => "#{perm.slug.gsub('.', '_')} #{'dividing' if i == width-1}".strip}
+              %td.toggle{:class => "s_#{service.id}  p_#{perm.id} #{'d' if i == width-1}".strip}
                 = render :partial => 'droom/group_permissions/toggle', :locals => {:group => group, :permission => perm}
-                
+
 - if @services.empty?
   .everyone
     %p

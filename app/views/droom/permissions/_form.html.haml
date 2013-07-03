@@ -1,0 +1,12 @@
+= form_for [@service, @permission], :html => { :multipart => true, :class => 'edit permission', :remote => true, :data => {:type => :html}} do |f|
+
+  %p.name
+    = f.text_field :name, :class => 'name', :placeholder => t(:"activerecord.attributes.droom.service.name"), :autofocus => true
+
+  %p.description
+    = f.text_area :description, :class => 'description', :placeholder => t(:"activerecord.attributes.droom.service.description")
+
+  .buttons
+    = f.submit t(:save_permission)
+    = t :or
+    = link_to t(:cancel), "/", :class => 'cancel'

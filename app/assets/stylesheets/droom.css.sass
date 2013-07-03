@@ -433,8 +433,8 @@ form.user
     position: relative
     margin-top: 0.5em
 
-form.group
-  input[type="text"], textarea
+form.group, form.service, form.permission
+  input[type="text"], textarea, select
     width: 520px
     font-size: 1em
   textarea
@@ -455,7 +455,7 @@ form.user
       font-size: 1.5em
       font-weight: bold
 
- 
+
 h2.name
   font-size: 2em
   margin: 0
@@ -652,7 +652,7 @@ table.people
     width: 80px
 
 
-table.services
+table#services
   margin-top: 40px
   border-collapse: collapse
   tr.rotated
@@ -662,6 +662,12 @@ table.services
       width: 32px
       overflow: hidden
       text-align: center
+      a.delete
+        +icon_link("droom/delete.png")
+        visibility: hidden
+      &:hover
+        a.delete
+          visibility: visible
       span.rotated
         display: inline-block
         position: absolute
@@ -673,12 +679,18 @@ table.services
         +rotate(-90deg)
       &.spacer
         width: auto
+        
   th
     font-weight: normal
+    a.menu
+      visibility: hidden
+    &:hover
+      a.menu
+        visibility: visible
   td, th
     border: 1px solid $verypale
     padding: 4px
-  th.dividing, td.dividing
+  th.d, td.d
     border-right-width: 3px
   td.hover
     background-color: $coolgrey0

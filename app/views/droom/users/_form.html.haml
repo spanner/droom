@@ -8,7 +8,7 @@
     %p.name
       = f.label :forename
       %br
-      = f.text_field :forename, :required => true
+      = f.text_field :forename, :required => true, :autofocus => true
     %p.name
       = f.label :name, "Surname"
       %br
@@ -18,7 +18,7 @@
     %p.name
       = f.label :name
       %br
-      = f.text_field :name, :required => true
+      = f.text_field :name, :required => true, :autofocus => true
 
   .contacts
     %p.email
