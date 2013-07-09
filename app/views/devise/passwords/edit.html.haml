@@ -5,22 +5,8 @@
   = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "password" }) do |f|
     = devise_error_messages!
     = f.hidden_field :reset_password_token
-
-    %p
-      = f.label :password, t(:password_instructions)
-      %br
-      = f.password_field :password, :autocomplete => "off", :class => 'preferences password required', :required => true
-      %br
-      %span.formnote
-        = t :password_requirements
     
-    %p{:class => 'confirmation'}
-      = f.label :password_confirmation, t(:password_confirmation_instructions)
-      %br
-      = f.password_field :password_confirmation, :autocomplete => "off", :class => 'preferences required'
-      %br
-      %span.formnote
-        = t :password_confirmation_requirements
+    = render "droom/users/password_fields", :f => f
 
     %p.notice
       = t :password_notice

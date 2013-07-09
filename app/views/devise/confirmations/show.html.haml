@@ -10,20 +10,7 @@
   = form_for resource, :url => confirm_password_path, :html => {:class => 'password'} do |f|
     = f.hidden_field :confirmation_token
     
-    %p
-      = f.label :password
-      %br
-      = f.password_field :password, :autocomplete => "off", :class => 'preferences password required', :required => true, :pattern => ".{6,}"
-      %br
-      %span.note
-        = t :password_requirements
-
-    %p.confirmation
-      = f.label :password_confirmation
-      %br
-      = f.password_field :password_confirmation, :class => 'preferences password_confirmation required', :required => true, :pattern => ""
-
-    %p.note.password_notice
+    = render "droom/users/password_fields", :f => f
 
     .controls
       .save.button
