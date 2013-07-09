@@ -40,6 +40,8 @@ module Droom
     scope :administrative, where(:admin => true)
 
     def serializable_hash(options={})
+      ensure_uid
+      ensure_authentication_token
       {
         uid: uid,
         authentication_token: authentication_token,
@@ -47,7 +49,6 @@ module Droom
         name: name,
         forename: forename,
         email: email,
-        image: thumbnail,
         permissions: permission_codes.join(',')
       }
     end
