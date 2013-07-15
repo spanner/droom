@@ -49,7 +49,8 @@ module Droom
                  :stream_shared,
                  :aws_bucket_name,
                  :all_events_public,
-                 :all_documents_public
+                 :all_documents_public,
+                 :password_pattern
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -214,6 +215,10 @@ module Droom
 
     def required_calendar_names
       @@required_calendar_names ||= %w{main stream}
+    end
+    
+    def password_pattern
+      @@password_pattern ||= "{,6}"
     end
     
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 

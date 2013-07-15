@@ -14,20 +14,7 @@
       %br
       = f.email_field :email, :class => 'preferences', :autofocus => true
 
-    %p.password
-      = f.label :password
-      %br
-      = f.password_field :password, :autocomplete => "off", :class => 'preferences password', :pattern => ".{6,}"
-      %br
-      %span.note
-        = t :password_requirements
-
-    %p.confirmation
-      = f.label :password_confirmation
-      %br
-      = f.password_field :password_confirmation, :class => 'preferences password_confirmation', :pattern => ""
-
-    %p.password_notice
+    = render "droom/users/password_fields", :f => f
 
     .buttons
       - if @user == current_user
