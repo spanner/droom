@@ -7,11 +7,11 @@ module Droom
     after_save :create_personal_invitations
     validates_uniqueness_of :group_id, :scope => :event_id
     
-    scope :to_event, lambda { |event|
+    scope :to_event, -> event {
       where("droom_group_invitations.event_id = ?", event.id)
     }
     
-    scope :for_group, lambda { |group|
+    scope :for_group, -> group {
       where("droom_group_invitations.group_id = ?", group.id)
     }
     

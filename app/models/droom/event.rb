@@ -2,6 +2,7 @@ require 'open-uri'
 require 'uuidtools'
 require 'chronic'
 require 'ri_cal'
+require 'date_validator'
 
 module Droom
   class Event < ActiveRecord::Base
@@ -31,7 +32,7 @@ module Droom
 
     belongs_to :master, :class_name => 'Event'
     has_many :occurrences, :class_name => 'Event', :foreign_key => 'master_id', :dependent => :destroy
-    has_many :recurrence_rules, :dependent => :destroy, :conditions => {:active => true}
+    has_many :recurrence_rules, :dependent => :destroy
     accepts_nested_attributes_for :recurrence_rules, :allow_destroy => true
 
     validates :start, :presence => true, :date => true
@@ -43,75 +44,58 @@ module Droom
     before_save :ensure_slug
     after_save :update_occurrences
 
-    scope :primary, where("master_id IS NULL")
-    scope :recurrent, where(:conditions => "master_id IS NOT NULL")
+    scope :primary, -> { where("master_id IS NULL") }
+    scope :recurrent, -> { where(:conditions => "master_id IS NOT NULL") }
 
     ## Event retrieval in various ways
     #
     # Events differ from other models in that they are visible to all unless marked 'private'.
     # The documents attached to them are only visible to all if marked 'public'.
     #
-    scope :all_private, where("private = 1")
-    scope :not_private, where("private <> 1 OR private IS NULL")
-    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
-    scope :not_public, where("public <> 1 OR private = 1)")
+    scope :all_private, -> { where("private = 1") }
+    scope :not_private, -> { where("private <> 1 OR private IS NULL") }
+    scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
+    scope :not_public, -> { where("public <> 1 OR private = 1)") }
 
-    scope :after, lambda { |datetime| # datetime. eg calendar.occurrences.after(Time.now)
-      where(['start > ?', datetime])
-    }
+    scope :after, -> datetime { where(['start > ?', datetime]) }
 
-    scope :before, lambda { |datetime| # datetime. eg calendar.occurrences.before(Time.now)
-      where(['start < :date AND (finish IS NULL or finish < :date)', :date => datetime])
-    }
+    scope :before, -> datetime { where(['start < :date AND (finish IS NULL or finish < :date)', :date => datetime]) }
 
-    scope :between, lambda { |start, finish| # datetimable objects. eg. Event.between(reader.last_login, Time.now)
-      where(['start > :start AND start < :finish AND (finish IS NULL or finish < :finish)', :start => start, :finish => finish])
-    }
+    scope :between, -> start, finish { where(['start > :start AND start < :finish AND (finish IS NULL or finish < :finish)', :start => start, :finish => finish]) }
 
-    scope :future_and_current, lambda {
-      where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now])
-    }
+    scope :future_and_current, -> { where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now]) }
 
-    scope :finished, lambda {
-      where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.now])
-    }
+    scope :finished, -> { where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.now]) }
     
-    scope :unbegun, lambda {
-      where(['start > :now', :now => Time.now])
-    }
+    scope :unbegun, -> { where(['start > :now', :now => Time.now])}
 
-    scope :by_finish, order("finish ASC")
+    scope :by_finish, -> { order("finish ASC") }
 
-    scope :coincident_with, lambda { |start, finish| # datetimable objects.
-      where(['(start < :finish AND finish > :start) OR (finish IS NULL AND start > :start AND start < :finish)', {:start => start, :finish => finish}])
-    }
+    scope :coincident_with, -> start, finish { where(['(start < :finish AND finish > :start) OR (finish IS NULL AND start > :start AND start < :finish)', {:start => start, :finish => finish}]) }
 
-    scope :limited_to, lambda { |limit|
-      limit(limit)
-    }
+    scope :limited_to, -> limit { limit(limit) }
 
-    scope :at_venue, lambda { |venue| # EventVenue object
-      where(["venue_id = ?", venue.id])
-    }
+    scope :at_venue, -> venue { where(["venue_id = ?", venue.id]) }
 
-    scope :except_these_uuids, lambda { |uuids| # array of uuid strings
+    scope :except_these_uuids, -> uuids {
       placeholders = uuids.map{'?'}.join(',')
       where(["uuid NOT IN (#{placeholders})", *uuids])
     }
 
-    scope :without_invitations_to, lambda { |user|
+    scope :without_invitations_to, -> user {
       select("droom_events.*")
         .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.user_id = #{sanitize(user.id)}")
         .group("droom_events.id")
         .having("COUNT(droom_invitations.id) = 0")
     }
 
-    scope :with_documents, 
+    scope :with_documents, -> {
       select("droom_events.*")
         .joins("INNER JOIN droom_document_attachments ON droom_events.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Event'")
         .group("droom_events.id")
+    }
 
-    scope :matching, lambda { |fragment| 
+    scope :matching, -> fragment { 
       fragment = "%#{fragment}%"
       where('droom_events.name like :f OR droom_events.description like :f', :f => fragment)
     }

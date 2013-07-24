@@ -17,28 +17,22 @@ module Droom
 
     before_save :get_youtube_thumbnail
 
-    scope :by_date, order("droom_scraps.created_at DESC")
+    scope :by_date, -> { order("droom_scraps.created_at DESC") }
 
-    scope :later_than, lambda { |scrap| 
-      where(["created_at > ?", scrap.created_at]).order("droom_scraps.created_at ASC") 
-    }
-    
-    scope :earlier_than, lambda { |scrap| 
-      where(["created_at < ?", scrap.created_at]).order("droom_scraps.created_at DESC") 
-    }
+    scope :later_than, -> scrap { where(["created_at > ?", scrap.created_at]).order("droom_scraps.created_at ASC")  }
 
-    scope :matching, lambda { |fragment|
+    scope :earlier_than, -> scrap { where(["created_at < ?", scrap.created_at]).order("droom_scraps.created_at DESC")  }
+
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_scraps.name LIKE :f OR droom_scraps.body LIKE :f OR droom_scraps.note LIKE :f', :f => fragment)
     }
     
-    scope :visible_to, lambda { |user|
-      where("1=1")
-    }
+    scope :visible_to, -> user { where("1=1") }
 
     Droom.scrap_types.each do |t|
       define_method(:"#{t}?") { scraptype == t.to_s }
-      scope t.pluralize.to_sym, where(["scraptype == ?", t])
+      scope t.pluralize.to_sym, -> { where(["scraptype == ?", t]) }
     end
 
     def wordiness

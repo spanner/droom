@@ -19,7 +19,7 @@ module Droom
     validates :user, :presence => true
     validates :group, :presence => true
 
-    scope :of_group, lambda { |group|
+    scope :of_group, -> group {
       where(["group_id = ?", group.id])
     }
 

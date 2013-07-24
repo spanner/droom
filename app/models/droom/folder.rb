@@ -1,8 +1,11 @@
 require 'zip/zip'
 require 'open-uri'
+require 'acts_as_tree'
 
 module Droom
   class Folder < ActiveRecord::Base
+    include ActsAsTree
+
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
     has_many :documents, :dependent => :destroy
@@ -16,12 +19,12 @@ module Droom
     
     default_scope includes(:documents)
 
-    scope :all_private, where("#{table_name}.private = 1")
-    scope :not_private, where("#{table_name}.private <> 1 OR #{table_name}.private IS NULL")
-    scope :all_public, where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL")
-    scope :not_public, where("#{table_name}.public <> 1 OR #{table_name}.private = 1)")
-    scope :by_name, order("#{table_name}.name ASC")
-    scope :visible_to, lambda { |user|
+    scope :all_private, -> { where("#{table_name}.private = 1") }
+    scope :not_private, -> { where("#{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
+    scope :all_public, -> { where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
+    scope :not_public, -> { where("#{table_name}.public <> 1 OR #{table_name}.private = 1)") }
+    scope :by_name, -> { order("#{table_name}.name ASC") }
+    scope :visible_to, -> user {
       if user
         select('droom_folders.*')
           .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON droom_folders.id = dpf.folder_id')
@@ -45,15 +48,13 @@ module Droom
     # the first time something in that class asks for its folder.
     # scope :roots, where('droom_folders.holder_type IS NULL AND droom_folders.parent_id IS NULL')
 
-    scope :loose, where('parent_id IS NULL')
-
-    scope :populated, select('droom_folders.*')
-      .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id LEFT OUTER JOIN droom_folders AS df ON droom_folders.id = df.parent_id')
-      .having('count(dd.id) > 0 OR count(df.id) > 0')
-      .group('droom_folders.id')
-
-    scope :latest, lambda {|limit|
-      order("updated_at DESC, created_at DESC").limit(limit)
+    scope :loose, -> { where('parent_id IS NULL') }
+    scope :latest, -> limit { order("updated_at DESC, created_at DESC").limit(limit) }
+    scope :populated, -> { 
+      select('droom_folders.*')
+        .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id LEFT OUTER JOIN droom_folders AS df ON droom_folders.id = df.parent_id')
+        .having('count(dd.id) > 0 OR count(df.id) > 0')
+        .group('droom_folders.id')
     }
 
     def path

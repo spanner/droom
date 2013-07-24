@@ -14,12 +14,12 @@ module Droom
 
     validates :file, :presence => true
 
-    scope :all_private, where("private = 1")
-    scope :not_private, where("private <> 1 OR private IS NULL")
-    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
-    scope :not_public, where("public <> 1 OR private = 1)")
+    scope :all_private, -> { where("private = 1") }
+    scope :not_private, -> { where("private <> 1 OR private IS NULL") }
+    scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
+    scope :not_public, -> { where("public <> 1 OR private = 1)") }
 
-    scope :visible_to, lambda { |user|
+    scope :visible_to, -> user {
       if user
         select('droom_documents.*')
           .joins('LEFT OUTER JOIN droom_folders AS df ON droom_documents.folder_id = df.id')
@@ -31,21 +31,19 @@ module Droom
       end
     }
 
-    scope :matching, lambda { |fragment|
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_documents.name LIKE :f OR droom_documents.file_file_name LIKE :f', :f => fragment)
     }
     
-    scope :in_folders, lambda{ |folders|
+    scope :in_folders, -> folders{
       placeholders = folders.map { "?" }.join(',')
       where(["folder_id IN(#{placeholders})", *folders.map(&:id)])
     }
 
-    scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
+    scope :by_date, -> { order("droom_documents.updated_at DESC, droom_documents.created_at DESC") }
 
-    scope :latest, lambda {|limit|
-      order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit)
-    }
+    scope :latest, -> field { order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit) }
 
     def attach_to(holder)
       self.folder = holder.folder

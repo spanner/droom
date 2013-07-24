@@ -24,12 +24,12 @@ module Droom
       [:name, :description]
     end
 
-    scope :all_private, where("private = 1")
-    scope :not_private, where("private <> 1 OR private IS NULL")
-    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
-    scope :not_public, where("public <> 1 OR private = 1)")
+    scope :all_private, -> { where("private = 1") }
+    scope :not_private, -> { where("private <> 1 OR private IS NULL") }
+    scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
+    scope :not_public, -> { where("public <> 1 OR private = 1)") }
 
-    scope :visible_to, lambda { |user|
+    scope :visible_to, -> user {
       if user
         if user.admin?
           scoped({})
@@ -44,7 +44,7 @@ module Droom
       end
     }
 
-    scope :matching, lambda { |fragment| 
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_groups.name like ?', fragment)
     }

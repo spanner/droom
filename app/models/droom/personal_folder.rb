@@ -3,11 +3,11 @@ module Droom
     belongs_to :user
     belongs_to :folder
     
-    scope :of_folder, lambda { |folder|
+    scope :of_folder, -> folder {
       where(["folder_id = ?", folder.id])
     }
 
-    scope :for_user, lambda { |user|
+    scope :for_user, -> user {
       where(["user_id = ?", user.id])
     }
     
