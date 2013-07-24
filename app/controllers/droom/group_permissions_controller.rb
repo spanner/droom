@@ -16,5 +16,11 @@ module Droom
       render :partial => 'droom/group_permissions/toggle'
     end
 
+  protected
+  
+    def group_permission_parameters
+      params.require(:group_permission).permit(:permission_id, :group_id)
+    end
+
   end
 end

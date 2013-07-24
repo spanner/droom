@@ -1,6 +1,5 @@
 module Droom
   class Service < ActiveRecord::Base
-    attr_accessible :name, :slug, :description
     has_many :permissions, :dependent => :destroy, :order => "position ASC"
     before_save :set_slug
     after_create :create_basic_permissions

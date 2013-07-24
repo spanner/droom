@@ -29,7 +29,6 @@ module Droom
     end
 
     def create
-      @folder.update_attributes(params[:folder])
       respond_with @folder do |format|
         format.js { render :partial => "droom/folders/folder" }
       end
@@ -40,7 +39,6 @@ module Droom
     end
     
     def update
-      @folder.update_attributes(params[:folder])
       respond_with @folder do |format|
         format.js { render :partial => "droom/folders/folder" }
       end
@@ -65,5 +63,11 @@ module Droom
       
     end
     
+  protected
+  
+    def folder_params
+      params.require(:folder).permit(:name, :parent_id)
+    end
+ 
   end
 end

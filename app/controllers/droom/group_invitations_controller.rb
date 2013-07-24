@@ -28,5 +28,11 @@ module Droom
       end
     end
 
+  protected
+  
+    def group_invitation_parameters
+      params.require(:group_invitation).permit(:event_id, :group_id)
+    end
+
   end
 end

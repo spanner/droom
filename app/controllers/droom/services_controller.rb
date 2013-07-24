@@ -39,6 +39,12 @@ module Droom
       @service.destroy
       head :ok
     end
-    
+
+  protected
+
+    def service_parameters
+      params.require(:service).permit(:name, :slug, :description)
+    end
+
   end
 end

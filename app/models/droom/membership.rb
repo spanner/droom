@@ -1,7 +1,5 @@
 module Droom
   class Membership < ActiveRecord::Base
-    attr_accessible :group_id, :user_id
-
     belongs_to :user
     belongs_to :group
     belongs_to :created_by, :class_name => "User"

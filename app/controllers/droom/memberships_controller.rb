@@ -34,5 +34,11 @@ module Droom
       end
     end
 
+  protected
+
+    def membership_parameters
+      params.require(:membership).permit(:group_id, :user_id)
+    end
+
   end
 end

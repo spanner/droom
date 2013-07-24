@@ -2,7 +2,8 @@ module Droom
   class DocumentsController < Droom::EngineController
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
-  
+
+    # slightly overcomplicated until cancan is updated for rails 4
     load_and_authorize_resource :folder, :class => Droom::Folder, :except => :index
     load_and_authorize_resource :document, :through => :folder, :class => Droom::Document, :shallow => true, :except => :index
     load_and_authorize_resource :only => :index
@@ -28,7 +29,6 @@ module Droom
     end
 
     def create
-      @document.update_attributes(params[:document])
       @document.save!
       render :partial => 'created'
     end
@@ -38,7 +38,6 @@ module Droom
     end
     
     def update
-      @document.update_attributes(params[:document])
       @document.save!
       render :partial => 'listing', :object => @document.with_event
     end
@@ -46,6 +45,12 @@ module Droom
     def destroy
       @document.destroy
       head :ok
+    end
+
+  protected
+    
+    def document_params
+      params.require(:document).permit(:name, :file, :description, :folder_id)
     end
 
   end

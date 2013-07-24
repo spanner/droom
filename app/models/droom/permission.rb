@@ -1,6 +1,5 @@
 module Droom
   class Permission < ActiveRecord::Base
-    attr_accessible :name, :description
     belongs_to :service
     has_many :group_permissions, :dependent => :destroy
     has_many :user_permissions, :dependent => :destroy

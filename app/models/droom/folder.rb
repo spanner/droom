@@ -3,8 +3,6 @@ require 'open-uri'
 
 module Droom
   class Folder < ActiveRecord::Base
-    attr_accessible :name, :parent, :parent_id
-
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
     has_many :documents, :dependent => :destroy

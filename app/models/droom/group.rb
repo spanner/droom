@@ -1,7 +1,5 @@
 module Droom
   class Group < ActiveRecord::Base
-    attr_accessible :name, :leader_id, :description
-
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :leader, :class_name => 'Droom::User'
 

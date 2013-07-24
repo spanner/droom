@@ -2,8 +2,6 @@ require 'snail'
 
 module Droom
   class Venue < ActiveRecord::Base
-    attr_accessible :name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code, :old_id
-    
     belongs_to :created_by, :class_name => "Droom::User"
     has_many :events, :dependent => :nullify
 

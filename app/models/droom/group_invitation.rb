@@ -1,7 +1,5 @@
 module Droom
   class GroupInvitation < ActiveRecord::Base
-    attr_accessible :event_id, :group_id
-    
     belongs_to :created_by, :class_name => "User"
     belongs_to :group
     belongs_to :event

@@ -3,7 +3,7 @@ require 'vcard'
 
 module Droom
   class Person < ActiveRecord::Base
-    attr_accessible :name, :forename, :email, :phone, :description, :user, :user_id, :title, :invite_on_creation, :admin_user, :position, :post_line1, :post_line2, :post_city, :post_region, :post_code, :mobile, :dob, :organisation_id
+    #attr_accessible :name, :forename, :email, :phone, :description, :user, :user_id, :title, :invite_on_creation, :admin_user, :position, :post_line1, :post_line2, :post_city, :post_region, :post_code, :mobile, :dob, :organisation_id
     attr_accessor :invite_on_creation, :admin_user
     acts_as_list
 

@@ -42,6 +42,12 @@ module Droom
     def feed
       
     end
+    
+  protected
+
+    def scrap_parameters
+      params.require(:scrap).permit(:name, :body, :image, :description, :scraptype, :note, :event_attributes, :document_attributes)
+    end
 
   end
 end

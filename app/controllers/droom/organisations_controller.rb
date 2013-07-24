@@ -26,6 +26,10 @@ module Droom
     end
 
   protected
+  
+    def organisation_parameters
+      params.require(:organisation).permit(:name, :description, :created_by, :owner, :url)
+    end
 
   end
 end

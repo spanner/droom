@@ -37,6 +37,12 @@ module Droom
       @permission.destroy
       head :ok
     end
+  
+  protected
+  
+    def permission_parameters
+      params.require(:permission).permit(:name, :description)
+    end
     
   end
 end

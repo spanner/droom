@@ -47,7 +47,6 @@ module Droom
     end
 
     def update
-      @event.update_attributes(params[:event])
       if @event.save
         render :partial => "event"
       else
@@ -58,6 +57,12 @@ module Droom
     def destroy
       @event.destroy
       head :ok
+    end
+
+  protected
+  
+    def event_params
+      params.require(:event).permit(:name, :description, :event_set_id, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue_id, :venue_name)
     end
 
   end

@@ -5,6 +5,7 @@ module Droom
     helper Droom::DroomHelper
     before_filter :authenticate_user!
     before_filter :note_current_user
+    before_filter :strengthen_parameters
     check_authorization
     
     rescue_from CanCan::AccessDenied, :with => :not_allowed
@@ -14,6 +15,16 @@ module Droom
     end
     
   protected
+    
+    # Until cancan is updated for rails 4, we intervene so that
+    # strong-parameter permissions are applied before cancan gets there.
+    # Each controller has to define a [resource]_params method.
+    
+    def strengthen_parameters
+      resource = controller_path.singularize.gsub('/', '_').to_sym
+      method = "#{resource}_params"
+      params[resource] &&= send(method) if respond_to?(method, true)
+    end
     
     def paginated(collection, default_show=10, default_page=1)
       @show = params[:show] || default_show

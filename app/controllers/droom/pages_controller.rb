@@ -42,5 +42,11 @@ module Droom
       end
     end
 
+  protected
+
+    def page_parameters
+      params.require(:page).permit(:title, :slug, :summary, :body, :video_id)
+    end
+
   end
 end

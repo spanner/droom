@@ -1,8 +1,5 @@
-source "http://rubygems.org"
+source "https://rubygems.org"
 
-# Declare your gem's dependencies in droom.gemspec.
-# Bundler will treat runtime dependencies like base dependencies, and
-# development dependencies will be added by default to the :development group.
 gemspec
 
 group :assets do
@@ -16,7 +13,7 @@ end
 group :test, :development do
   gem 'mysql2'
   gem 'haml'
-  gem 'paperclip'#, "~> 3.1.0"
+  gem 'paperclip'
   gem "launchy"
   gem "capybara"
   gem "rspec-rails", ">= 2.6.0"

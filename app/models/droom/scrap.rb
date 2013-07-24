@@ -15,7 +15,6 @@ module Droom
                  :precrop => "1200x1200^"
                }
 
-    attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by, :event, :event_attributes, :document, :document_attributes
     before_save :get_youtube_thumbnail
 
     scope :by_date, order("droom_scraps.created_at DESC")

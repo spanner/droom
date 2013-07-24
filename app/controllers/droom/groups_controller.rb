@@ -47,5 +47,11 @@ module Droom
       head :ok
     end
 
+  protected
+  
+    def group_parameters
+      params.require(:group).permit(:name, :leader_id, :description)
+    end
+
   end
 end

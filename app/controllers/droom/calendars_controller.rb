@@ -13,5 +13,11 @@ module Droom
       respond_with @calendars
     end
 
+  protected
+  
+    def calendar_parameters
+      params.require(:calendar).permit(:events_private, :documents_private)
+    end
+
   end
 end

@@ -1,8 +1,5 @@
 module Droom
   class User < ActiveRecord::Base
-
-    attr_accessible :uid, :title, :name, :forename, :email, :password,  :password_confirmation, :phone, :description, :admin, :preferences_attributes, :confirm, :old_id, :invite_on_creation, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code, :mobile, :dob, :organisation_id, :public, :private, :female, :image_file_name, :image_file_size, :image_updated_at, :image_upload_id, :image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top
-    
     validates :name, :presence => true
     validates :email, :uniqueness => true, :presence => true
     validates_format_of :email, :with => /@/

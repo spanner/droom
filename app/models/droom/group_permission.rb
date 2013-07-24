@@ -1,7 +1,5 @@
 module Droom
   class GroupPermission < ActiveRecord::Base
-    attr_accessible :permission_id, :group_id
-    
     belongs_to :group
     belongs_to :permission
     has_many :user_permissions, :dependent => :destroy

@@ -22,8 +22,12 @@ module Droom
 
     def build_preference
       key = params[:preference][:key] || params[:key]
-      @preference = current_user.preferences.find_or_initialize_by_key(key)
+      @preference = current_user.preferences.where(:key => key).first_or_initialize
     end
-    
+
+    def preference_parameters
+      params.require(:preference).permit(:value, :uuid)
+    end
+
   end
 end

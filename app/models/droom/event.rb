@@ -5,7 +5,6 @@ require 'ri_cal'
 
 module Droom
   class Event < ActiveRecord::Base
-    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :venue_id, :private, :public, :venue_name, :calendar_id
 
     belongs_to :created_by, :class_name => "Droom::User"
 

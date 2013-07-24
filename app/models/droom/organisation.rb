@@ -1,6 +1,5 @@
 module Droom
   class Organisation < ActiveRecord::Base
-    attr_accessible :name, :description, :created_by, :owner, :url
     has_many :users
     belongs_to :owner, :class_name => 'Droom::User'
     belongs_to :created_by, :class_name => 'Droom::User'

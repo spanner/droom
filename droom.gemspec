@@ -20,9 +20,8 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 4.0.0"
   s.add_dependency "jquery-rails"
 
-  s.add_dependency "msg"
-  s.add_dependency "coca"
-  s.add_dependency "cropper"
+  s.add_dependency "msg", "~> 0.4.0"
+  s.add_dependency "coca", "~> 0.4.0"
   
   s.add_dependency "devise"
   s.add_dependency "devise-encryptable"

@@ -44,5 +44,11 @@ module Droom
       render :partial => "droom/invitations/invitation"
     end
 
+  protected
+  
+    def invitation_parameters
+      params.require(:invitation).permit(:event_id, :user_id)
+    end
+
   end
 end

@@ -1,4 +1,5 @@
-# This is a RESTful dropbox authentication controller. The access_token is treated as a resource.
+# This is a more or less RESTful dropbox authentication controller.
+# The access_token is treated as a resource.
 # Later it might be generalised to handle other oauth tokens.
 
 require 'dropbox_sdk'
@@ -21,7 +22,6 @@ module Droom
       if params[:oauth_token]
         dbsession = DropboxSession.deserialize(session[:dropbox_session])
         response = dbsession.get_access_token
-        Rails.logger.warn ">>> get_access_token: #{response.inspect}"
         @dropbox_token = current_user.dropbox_tokens.create(:access_token => response.key, :access_token_secret => response.secret)
         session[:dropbox_session] = dbsession.serialize
         flash[:panel] = 'dropbox'
