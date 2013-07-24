@@ -1,3 +1,4 @@
+# This migration comes from droom (originally 20130627073759)
 class UserProperties < ActiveRecord::Migration
   def change
     add_column :droom_users, :uid, :string

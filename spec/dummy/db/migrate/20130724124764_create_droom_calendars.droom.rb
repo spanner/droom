@@ -1,3 +1,4 @@
+# This migration comes from droom (originally 20130225095328)
 class CreateDroomCalendars < ActiveRecord::Migration
   def change
     create_table :droom_calendars do |t|

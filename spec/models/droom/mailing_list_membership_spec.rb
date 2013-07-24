@@ -2,9 +2,9 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Droom::MailingListMembership do
   before :each do
-    @person = FactoryGirl.create(:person)
+    @user = FactoryGirl.create(:user)
     @group = FactoryGirl.create(:group)
-    @membership = FactoryGirl.create(:membership, :person => @person, :group => @group)
+    @membership = FactoryGirl.create(:membership, :user => @user, :group => @group)
     @mlm = @membership.mailing_list_membership
   end
   
@@ -18,9 +18,9 @@ describe Droom::MailingListMembership do
       @mlm.membership.should_not be_nil
       @mlm.membership.should eq @membership
     end
-    it "should get an address from the membership's person" do
+    it "should get an address from the membership's user" do
       @mlm.address.should_not be_nil
-      @mlm.address.should eq @person.email
+      @mlm.address.should eq @user.email
     end
     it "should get a listname from the membership's group" do
       @mlm.listname.should_not be_nil

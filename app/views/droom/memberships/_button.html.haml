@@ -1,11 +1,11 @@
 - group ||= @group
-- person ||= @person
-- member = Droom::Membership.find_by_person_id_and_group_id(person.id, group.id)
+- user ||= @user
+- membership = Droom::Membership.where(:user_id => user.id, :group_id => group.id)
 
 .holder
-  - if member
-    %a.toggle_active{:href => group_membership_path(group, member), :"data-type" => "html", :"data-remote" => "true", :"data-method" => :delete}
+  - if membership
+    %a.toggle_active{:href => group_membership_path(group, membership), :"data-type" => "html", :"data-remote" => "true", :"data-method" => :delete}
       .a_member
   - else
-    %a.toggle_active{:href => new_group_membership_path(group, :person_id => person.id), :"data-type" => "html", :"data-remote" => "true"}
+    %a.toggle_active{:href => new_group_membership_path(group, :user_id => user.id), :"data-type" => "html", :"data-remote" => "true"}
       .not_a_member

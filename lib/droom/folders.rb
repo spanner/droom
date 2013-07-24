@@ -84,7 +84,7 @@ module Droom
           holder.folder
         else
           # otherwise we want a root folder like /Events
-          Droom::Folder.find_or_create_by_slug_and_parent_id(self.class.to_s.titlecase.split('/').last.pluralize, nil)
+          Droom::Folder.where(:slug => self.class.to_s.titlecase.split('/').last.pluralize, :parent_id => nil).first_or_create
         end
       end
 

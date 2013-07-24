@@ -1,21 +1,14 @@
 module Droom
   class EventsController < Droom::EngineController
     require "uri"
-    require "ri_cal"
+    require "icalendar"
     respond_to :html, :json, :ics, :js
     layout :no_layout_if_pjax
-
+    
+    before_filter :get_events, :only => [:index]
     load_and_authorize_resource
 
     def index
-      if params[:direction] == 'past'
-        @events = @events.past.order('start DESC')
-        @direction = "past"
-      else
-        @events = @events.future_and_current.order('start ASC')
-        @direction = "future"
-      end
-      @events = paginated(@events)
       respond_with @events do |format|
         format.js { render :partial => 'droom/events/events' }
       end
@@ -61,6 +54,17 @@ module Droom
 
   protected
   
+    def get_events
+      if params[:direction] == 'past'
+        @events = @events.past.order('start DESC')
+        @direction = "past"
+      else
+        @events = @events.future_and_current.order('start ASC')
+        @direction = "future"
+      end
+      @events = paginated(@events)
+    end
+    
     def event_params
       params.require(:event).permit(:name, :description, :event_set_id, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue_id, :venue_name)
     end

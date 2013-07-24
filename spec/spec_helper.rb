@@ -68,6 +68,7 @@ Spork.prefork do
     config.order = "random"
   end
 
+  ActiveSupport::Dependencies.clear
 end
 
 Spork.each_run do

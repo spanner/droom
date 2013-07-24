@@ -5,11 +5,11 @@ describe Droom::Folders do
     before :each do
       build_model :cabinet do
         #attr_accessible :slug
-        has_many :draws
+        has_many :drawers
         string :slug
         has_folder
       end
-      build_model :draw do
+      build_model :drawer do
         #attr_accessible :slug
         belongs_to :cabinet
         integer :cabinet_id
@@ -36,10 +36,10 @@ describe Droom::Folders do
       @cabinet.documents.first.folder_id.should eq @cabinet.folder.id
     end
     it "adding document to child model should create a subfolder of the parent model's folder" do
-      @draw = @cabinet.draws.create(:slug => "draw")
-      @draw.receive_document(@document)
-      @draw.folder.parent_id.should_not be_nil
-      @draw.folder.parent_id.should eq @cabinet.folder.id
+      @drawer = @cabinet.drawers.create(:slug => "drawer")
+      @drawer.receive_document(@document)
+      @drawer.folder.parent_id.should_not be_nil
+      @drawer.folder.parent_id.should eq @cabinet.folder.id
     end
   end
 

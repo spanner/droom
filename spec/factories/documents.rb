@@ -7,10 +7,5 @@ FactoryGirl.define do
     factory :grouped do
       name "Grouped Document"
     end
-
-    factory :public_document do
-      name "Public Document"
-      public true
-    end
   end
 end

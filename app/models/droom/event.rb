@@ -1,8 +1,9 @@
 require 'open-uri'
 require 'uuidtools'
 require 'chronic'
-require 'ri_cal'
+require 'icalendar'
 require 'date_validator'
+require 'time_of_day'
 
 module Droom
   class Event < ActiveRecord::Base
@@ -30,11 +31,6 @@ module Droom
 
     has_many :scraps
 
-    belongs_to :master, :class_name => 'Event'
-    has_many :occurrences, :class_name => 'Event', :foreign_key => 'master_id', :dependent => :destroy
-    has_many :recurrence_rules, :dependent => :destroy
-    accepts_nested_attributes_for :recurrence_rules, :allow_destroy => true
-
     validates :start, :presence => true, :date => true
     validates :finish, :date => {:after => :start, :allow_nil => true}
     validates :uuid, :presence => true, :uniqueness => true
@@ -42,10 +38,6 @@ module Droom
 
     before_validation :set_uuid
     before_save :ensure_slug
-    after_save :update_occurrences
-
-    scope :primary, -> { where("master_id IS NULL") }
-    scope :recurrent, -> { where(:conditions => "master_id IS NOT NULL") }
 
     ## Event retrieval in various ways
     #
@@ -294,42 +286,39 @@ module Droom
     def finished?
       start < Time.now && (!finish || finish < Time.now)
     end
-
-    def recurs?
-      master || occurrences.any?
-    end
-
-    def recurrence
-      recurrence_rules.first.to_s
-    end
-
-    def add_recurrence(rule)
-      self.recurrence_rules << Droom::RecurrenceRule.from(rule)
-    end
     
     def url_with_protocol
-      url =~ /^https?:\/\// ? url : "http://#{url}"
-    end
-
-    def url_without_protocol
-      url.sub(/^https?:\/\//, '')
-    end
-
-    def to_rical
-      RiCal.Event do |cal_event|
-        cal_event.uid = uuid
-        cal_event.summary = name
-        cal_event.description = description if description
-        cal_event.dtstart =  (all_day? ? start_date : start) if start
-        cal_event.dtend = (all_day? ? finish_date : finish) if finish
-        cal_event.url = url_with_protocol if url
-        cal_event.rrules = recurrence_rules.map(&:to_rical) if recurrence_rules.any?
-        cal_event.location = venue.name if venue
+      if url? && url !~ /^https?:\/\//
+        "http://#{url}"
+      else
+        url
       end
     end
 
+    def url_without_protocol
+      if url?
+        url.sub(/^https?:\/\//, '')
+      else
+        ""
+      end
+    end
+
+    def icalendar_event
+      event = Icalendar::Event.new
+      event.uid = uuid
+      event.summary = name
+      event.description = description if description?
+      event.dtstart = (all_day? ? start_date : start) if start?
+      event.dtend = (all_day? ? finish_date : finish) if finish?
+      event.url = url_with_protocol if url?
+      event.location = venue.name if venue
+      event
+    end
+
     def to_ics
-      to_rical.to_s
+      cal = Icalendar::Calendar.new
+      cal.add_event(icalendar_event)
+      cal.to_ical
     end
 
     def as_json(options={})
@@ -364,25 +353,6 @@ module Droom
 
     def set_uuid
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
-    end
-
-    # doesn't yet observe exceptions
-    def update_occurrences
-      occurrences.destroy_all
-      if recurrence_rules.any?
-        recurrence_horizon = Time.now + 10.years
-        to_rical.occurrences(:before => recurrence_horizon).each do |occ|
-          occurrences.create!({
-            :name => self.name,
-            :url => self.url_with_protocol,
-            :description => self.description,
-            :venue => self.venue,
-            :start => occ.dtstart,
-            :finish => occ.dtend,
-            :uuid => nil
-          }) unless occ.dtstart == self.start
-        end
-      end
     end
 
     def parse_date(value)
