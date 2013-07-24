@@ -15,7 +15,6 @@ Spork.prefork do
   require 'factory_girl_rails'
   require 'database_cleaner'
   require 'awesome_print'
-  require 'sunspot-rails-tester'
   require 'shoulda-matchers'
   require 'acts_as_fu'
 
@@ -25,7 +24,6 @@ Spork.prefork do
   # in spec/support/ and its subdirectories.
 
   Dir[File.join(ENGINE_RAILS_ROOT, "spec/support/**/*.rb")].each {|f| require f }
-  $original_sunspot_session = Sunspot.session
   
   RSpec.configure do |config|
     # config.include Paperclip::Shoulda::Matchers
@@ -38,14 +36,6 @@ Spork.prefork do
     # config.mock_with :mocha
     # config.mock_with :flexmock
     # config.mock_with :rr
-    config.before do
-      Sunspot::Rails::Tester.start_original_sunspot_session
-      Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
-    end
-    config.before :each, :solr => true do
-      Sunspot.session = $original_sunspot_session
-      Sunspot.remove_all!
-    end
 
     # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
     config.fixture_path = "#{::Rails.root}/spec/fixtures"

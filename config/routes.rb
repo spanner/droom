@@ -3,21 +3,18 @@ Droom::Engine.routes.draw do
 
   get '/help/:slug' => 'pages#show', :as => 'help_page'
   get '/help' => 'pages#index', :as => 'help'
-  
   get '/videos.:format' => 'youtube#index', :as => "videos"
   get '/videos/:yt_id.:format' => 'youtube#show', :as => "video"
   get '/suggestions.:format'  => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}
   get '/suggestions/:type.:format'  => 'suggestions#index', :defaults => {:format => 'json'}
-  
-  
-  
-  devise_for :users, :class_name => 'Droom::User', :module => :devise, :controllers => {:confirmations => 'droom/confirmations'}
 
-  # intermediate confirmation step to allow invitation without setting a password
-  devise_scope :user do
-    get "/users/:id/welcome/:confirmation_token" => "user_confirmations#show", :as => :welcome
-    put "/users/:id/confirm" => "user_confirmations#update", :as => :confirm_password
-  end
+  # devise_for :users, :class_name => 'Droom::User', :module => :devise, :controllers => {:confirmations => 'droom/confirmations'}
+  # 
+  # # intermediate confirmation step to allow invitation without setting a password
+  # devise_scope :user do
+  #   get "/users/:id/welcome/:confirmation_token" => "user_confirmations#show", :as => :welcome
+  #   put "/users/:id/confirm" => "user_confirmations#update", :as => :confirm_password
+  # end
 
   resources :services do
     resources :permissions

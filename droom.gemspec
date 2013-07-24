@@ -20,11 +20,10 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 4.0.0"
   s.add_dependency "jquery-rails"
 
-  s.add_dependency "msg", "~> 0.4.0"
-  s.add_dependency "coca", "~> 0.4.0"
-  
   s.add_dependency "devise", "~> 3.0.0"
+  s.add_dependency "coca", "~> 0.4.0"
   s.add_dependency "cancan"
+  s.add_dependency "msg", "~> 0.4.0"
 
   s.add_dependency "acts_as_tree"
   s.add_dependency "acts_as_list"
@@ -43,6 +42,7 @@ Gem::Specification.new do |s|
   s.add_dependency "vcard"
   s.add_dependency "rdiscount"
   s.add_dependency "yomu"
+  s.add_dependency "dropbox-sdk"
   
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

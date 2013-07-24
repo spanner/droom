@@ -4,13 +4,13 @@ describe Droom::Folders do
   context "model with has_folder" do
     before :each do
       build_model :cabinet do
-        attr_accessible :slug
+        #attr_accessible :slug
         has_many :draws
         string :slug
         has_folder
       end
       build_model :draw do
-        attr_accessible :slug
+        #attr_accessible :slug
         belongs_to :cabinet
         integer :cabinet_id
         string :slug
