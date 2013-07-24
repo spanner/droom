@@ -29,7 +29,9 @@ Gem::Specification.new do |s|
   s.add_dependency "acts_as_list"
   s.add_dependency "kaminari"
   s.add_dependency "haml"
-  s.add_dependency "dynamic_form"
+
+  s.add_dependency "paperclip"
+  s.add_dependency "fog"
 
   s.add_dependency "geocoder"
   s.add_dependency "icalendar"
@@ -43,6 +45,7 @@ Gem::Specification.new do |s|
   s.add_dependency "vcard"
   s.add_dependency "rdiscount"
   s.add_dependency "yomu"
+  s.add_dependency "youtube_it"
   s.add_dependency "dropbox-sdk"
   
   s.add_development_dependency "mysql2"

@@ -20,6 +20,7 @@ module Droom
                  :searchable_classes,
                  :yt_client,
                  :layout,
+                 :devise_layout,
                  :email_layout,
                  :email_host,
                  :email_from,
@@ -59,7 +60,11 @@ module Droom
     end
     
     def layout
-      @@layout ||= "droom/application"
+      @@layout ||= "application"
+    end
+
+    def devise_layout
+      @@devise_layout ||= "application"
     end
 
     def email_host
@@ -67,7 +72,7 @@ module Droom
     end
 
     def email_layout
-      @@email_layout ||= "droom/email"
+      @@email_layout ||= "email"
     end
 
     def email_from

@@ -16,7 +16,6 @@
 #= require droom/widgets
 #= require droom/stream
 #= require droom/map
-#= require cropper
 #= require_self
 
 jQuery ($) ->

@@ -1,4 +1,5 @@
 require 'snail'
+require 'geocoder'
 
 module Droom
   class Venue < ActiveRecord::Base

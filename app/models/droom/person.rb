@@ -6,7 +6,8 @@ module Droom
     # minimised but kept for a while to support migration away
 
     has_attached_file :image
-
+    belongs_to :user, :class_name => "Droom::User"
+    
   end
 end
 
