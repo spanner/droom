@@ -3,7 +3,6 @@ class UserProperties < ActiveRecord::Migration
     add_column :droom_users, :organisation_id, :integer
     add_column :droom_users, :phone, :string
     add_column :droom_users, :description, :text
-    add_column :droom_users, :description, :text
     add_column :droom_users, :post_line1, :string
     add_column :droom_users, :post_line2, :string
     add_column :droom_users, :post_city, :string

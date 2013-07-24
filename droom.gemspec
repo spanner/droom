@@ -23,8 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "msg", "~> 0.4.0"
   s.add_dependency "coca", "~> 0.4.0"
   
-  s.add_dependency "devise"
-  s.add_dependency "devise-encryptable"
+  s.add_dependency "devise", "~> 3.0.0"
   s.add_dependency "cancan"
 
   s.add_dependency "acts_as_tree"

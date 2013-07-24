@@ -10,13 +10,11 @@ module Droom
     ## Authentication
     #
     devise :database_authenticatable,
-           :encryptable,
            :recoverable,
            :rememberable,
            :trackable,
            :confirmable,
-           :token_authenticatable,
-           :encryptor => :sha512
+           :token_authenticatable
     
     before_create :ensure_authentication_token
     before_create :ensure_uid
@@ -33,8 +31,8 @@ module Droom
       password == password_confirmation && !password.blank?
     end
 
-    scope :unconfirmed, where("confirmed_at IS NULL")
-    scope :administrative, where(:admin => true)
+    scope :unconfirmed, -> { where("confirmed_at IS NULL") }
+    scope :administrative, -> { where(:admin => true) }
 
     def serializable_hash(options={})
       ensure_uid
@@ -77,7 +75,7 @@ module Droom
       memberships.find_by_group_id(group.id)
     end
     
-    scope :in_group, lambda { |group|
+    scope :in_group, -> group {
       group = group.id if group.is_a? Droom::Group
       select("droom_users.*")
         .joins("INNER JOIN droom_memberships as dm ON droom_users.id = dm.user_id")
@@ -105,7 +103,7 @@ module Droom
       invitations.to_event(event).first
     end
     
-    scope :personally_invited_to_event, lambda { |event|
+    scope :personally_invited_to_event, -> event {
       joins('LEFT OUTER JOIN droom_invitations on droom_users.id = droom_invitations.user_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
     }
 
@@ -173,7 +171,7 @@ module Droom
     
     # For suggestion box
     #
-    scope :matching, lambda { |fragment| 
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_users.name LIKE :f OR droom_users.forename LIKE :f OR droom_users.email LIKE :f OR droom_users.phone LIKE :f OR CONCAT(droom_users.forename, " ", droom_users.name) LIKE :f', :f => fragment)
     }
@@ -275,11 +273,11 @@ module Droom
     def self.messaging_groups
       unless @messaging_groups
         @messaging_groups = {
-          :unconfirmed => lambda { Droom::User.unconfirmed},
-          :administrative => lambda { Droom::User.administrative }
+          :unconfirmed => -> { Droom::User.unconfirmed},
+          :administrative => -> { Droom::User.administrative }
         }
         Droom::Group.all.each do |group|
-          @messaging_groups[group.slug.to_sym] = lambda { Droom::User.in_group(group.id) }
+          @messaging_groups[group.slug.to_sym] = -> { Droom::User.in_group(group.id) }
         end
       end
       @messaging_groups
