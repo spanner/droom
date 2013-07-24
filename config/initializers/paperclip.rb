@@ -1,11 +1,7 @@
 require 'paperclip'
 
-Paperclip.interpolates :dav_root do |attachment, style|
-  Droom.dav_root
-end
-
-Paperclip.interpolates :person do |attachment, style|
-  attachment.instance.person_id
+Paperclip.interpolates :user do |attachment, style|
+  attachment.instance.user_id
 end
 
 # Slug in this context will be the identifying string for either the group or the event

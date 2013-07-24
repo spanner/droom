@@ -6,7 +6,7 @@ module Droom
     before_validation :ensure_slug
     validates :slug, :presence => true, :uniqueness => true
     
-    default_scope order("droom_categories.name ASC")
+    default_scope -> { order("droom_categories.name ASC") }
         
     # *for_selection* returns a set of [name, id] pairs suitable for use as select options.
     def self.for_selection

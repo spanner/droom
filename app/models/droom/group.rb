@@ -5,14 +5,14 @@ module Droom
 
     has_folder
 
-    has_many :group_invitations, :dependent => :destroy, :uniq => true
-    has_many :events, :through => :group_invitations
+    has_many :group_invitations, :dependent => :destroy
+    has_many :events, -> { uniq }, :through => :group_invitations
 
     has_many :memberships, :dependent => :destroy
-    has_many :users, :through => :memberships, :uniq => true, :order => "name ASC"
+    has_many :users, -> { uniq.order("name ASC") }, :through => :memberships
 
     has_many :group_permissions, :dependent => :destroy
-    has_many :permissions, :through => :group_permissions, :uniq => true
+    has_many :permissions, -> { uniq }, :through => :group_permissions
     
     before_validation :ensure_slug
     before_validation :ensure_mailing_list_name
@@ -49,7 +49,7 @@ module Droom
       where('droom_groups.name like ?', fragment)
     }
 
-    default_scope order("droom_groups.created_at ASC")
+    default_scope -> { order("droom_groups.created_at ASC") }
 
     def admit(user)
       self.users << user

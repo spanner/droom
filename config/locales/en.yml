@@ -59,12 +59,6 @@ en:
           dob: "Date of birth"
           organisation_id: "Organisation"
   preferences:
-    dav:
-      enabled?: "Use DAV folder"
-      strategy:
-        everything: "Sync everything"
-        relevant: "Sync only relevant documents"
-        clicked: "Copy on command only"
     dropbox:
       strategy:
         everything: "Sync everything"
@@ -131,7 +125,6 @@ en:
   clear_search: "Clear search"
   click_to_choose_file: "Click to choose a file"
   click_to_upload: "Click here to choose an image file"
-  dav_preferences: "Document reader preferences"
   drop_to_upload: "or drop a picture in this box"
   confirm_delete_document: "Are you sure you want to delete the document '%{name}'? This cannot be undone."
   confirm_delete_folder: "Are you sure you want to delete the folder '%{path}'? This will permanentely delete all the documents in the folder."

@@ -1,5 +1,13 @@
-#Droom.dav_subdomain = "dav"
-#Droom.dav_root = "webdav"
+#Droom.layout = "application"
+#Droom.email_layout = "email"
 #Droom.use_forenames = false
 #Droom.show_venue_map = false
 #Droom.home_country = 'gb'
+#Droom.main_dashboard_modules = %w{welcome future_events past_events documents}
+#Droom.margin_dashboard_modules = %w{calendar invitations stream}
+#Droom.home_url = Settings.host
+#Droom.email_from = Settings.email.address
+#Droom.email_from_name = Settings.email.name
+#Droom.dropbox_app_key = Settings.dropbox.key
+#Droom.dropbox_app_secret = Settings.dropbox.secret
+#Droom.dropbox_app_name = Settings.dropbox.name

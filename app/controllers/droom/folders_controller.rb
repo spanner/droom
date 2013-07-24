@@ -54,11 +54,6 @@ module Droom
       render :partial => "folder"
     end
 
-    def dav
-      @folder.copy_to_dav
-      respond_with @folder
-    end
-    
     def with_parent
       
     end

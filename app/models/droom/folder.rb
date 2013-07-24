@@ -17,7 +17,7 @@ module Droom
     before_validation :set_properties
     before_validation :ensure_slug
     
-    default_scope includes(:documents)
+    default_scope -> { includes(:documents) }
 
     scope :all_private, -> { where("#{table_name}.private = 1") }
     scope :not_private, -> { where("#{table_name}.private <> 1 OR #{table_name}.private IS NULL") }

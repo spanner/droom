@@ -5,7 +5,7 @@ module Droom
     belongs_to :created_by, :class_name => "Droom::User"
     has_many :events, :dependent => :nullify
 
-    default_scope :order => 'name asc'
+    default_scope -> { :order => 'name asc' }
 
     geocoded_by :full_address, :latitude  => :lat, :longitude => :lng
     # before_validation :convert_gridref

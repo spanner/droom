@@ -27,10 +27,7 @@ module Droom
                  :email_return_path,
                  :main_dashboard_modules,
                  :margin_dashboard_modules,
-                 :panels,
                  :scrap_types,
-                 :dav_root,
-                 :dav_subdomain,
                  :use_forenames,
                  :use_biogs,
                  :use_separate_mobile_number,
@@ -109,22 +106,8 @@ module Droom
       @@margin_dashboard_modules ||= %w{quicksearch stream}
     end
     
-    def panels
-      @@panels ||= %w{dropbox email rss devices readers account suggestions admin}
-    end
-    
     def scrap_types
       @@scrap_types ||= %w{image video text quote link event document}
-    end
-
-    # base path of DAV directory tree, relative to rails root.
-    def dav_root
-      @@dav_root ||= "webdav"
-    end
-
-    # subdomain constraint applied when routing to dav.
-    def dav_subdomain
-      @@dav_subdomain ||= /dav/
     end
 
     def use_forenames?
@@ -237,11 +220,6 @@ module Droom
         :dropbox => {
           :strategy => "clicked",
           :events? => true,
-        },
-        :dav => {
-          :enabled? => false,
-          :strategy => "clicked",
-          :everything? => false,
         }
       })
     end
