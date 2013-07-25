@@ -32,7 +32,7 @@ module Droom
     end
 
     def create
-      if @event.save
+      if @event.update_attributes(event_params)
         render :partial => "event"
       else
         respond_with @event
@@ -40,7 +40,7 @@ module Droom
     end
 
     def update
-      if @event.save
+      if @event.update_attributes(event_params)
         render :partial => "event"
       else
         respond_with @event
