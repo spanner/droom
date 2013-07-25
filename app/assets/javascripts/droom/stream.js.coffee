@@ -13,10 +13,19 @@ jQuery ($) ->
       $('<a class="prev" href="#" />').appendTo(@_container).click @prev
       $('<a class="closer" href="#" />').appendTo(@_container).click @hide
       @_scraps = []
-      @showing = false
+      @_showing = false
+      @_modified = true
+      @place()
       @_container.bind "mousedown", @containEvent
       @_container.bind "touchstart", @containEvent
+      $(window).bind "resize", @place
     
+    place: (e) =>
+      w = $(window)
+      @_container.css
+        left: (w.width() - @_container.width()) / 2
+        top: (w.height() - @_container.height())/ 2
+      
     containEvent: (e) =>
       e.stopPropagation() if e
       
@@ -25,6 +34,7 @@ jQuery ($) ->
         scrap = new Scrap element, this
         scrap.container.removeClass('preload').appendTo @_scroller
         @_scraps.push scrap
+      @_modified = true
     
     goto: (scrap) =>
       @_swipe.slide @_scraps.indexOf(scrap)
@@ -42,11 +52,12 @@ jQuery ($) ->
         auto: false
         loop: false
       $.swipe = @_swipe
+      @_modified = false
       
     show: (scrap) =>
       unless @_showing
         @_container.fadeIn 'fast', () =>
-          @resetSwipe()
+          @resetSwipe() if @_modified
           @goto(scrap) if scrap?
         @_showing = true
         $(document).bind "mousedown", @hide
@@ -66,7 +77,9 @@ jQuery ($) ->
       $('a[data-scrap="' + @container.attr('data-scrap') + '"]').click @goto
     
     goto: (e) =>
-      e.preventDefault() if e
+      if e
+        e.preventDefault()
+        e.stopPropagation()
       @_stream.show(this)
 
 
