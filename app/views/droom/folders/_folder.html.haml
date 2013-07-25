@@ -2,6 +2,8 @@
 - standalone ||= false
 - title ||= folder.name || folder.slug
 - open ||= false
+- limit ||= false
+- for_more ||= false
 - if @folder
   - open = true if folder == @folder || folder.ancestor_of?(@folder)
 - defer_contents ||= !open
@@ -16,5 +18,5 @@
   = action_menulink(folder)
   = dropbox_link(folder)
   - unless defer_contents
-    = render :partial => "droom/folders/contents", :locals => {:folder => folder}
+    = render :partial => "droom/folders/contents", :locals => {:folder => folder, :limit => limit, :for_more => for_more}
   = action_menu(folder)

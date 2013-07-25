@@ -5,8 +5,6 @@
 %div.document.holder
   %h2.name<
     = link_to truncate(document.name, :length => 33), droom.folder_document_url(document.folder, document), :class => cssclasses, :title => t(:click_to_download, :name => document.file_file_name)
-    - if admin?
-      = link_to t(:edit_document), edit_document_url(document), :class => 'admin edit minimal', :remote => true, :data => {:action => "overlay", :type => "html"}
 
   - if document.description
     - cssclasses = document.changed_since_creation? ? "description changed" : "description"

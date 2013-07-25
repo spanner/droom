@@ -1,8 +1,11 @@
 .panel{:data => {:panel => 'search'}}
-  %form#suggestions{:action => droom.suggestions_url(:format => :js)}
-    %p
-      = text_field_tag :term, params[:term], :placeholder => t(:quick_search_prompt), :autocomplete => "off"
 
   = render :partial => "droom/shared/calendar_holder"
+
+  %form#suggestions{:action => droom.suggestions_url(:format => :js)}
+    %p
+      %label{:for => 'term'}
+        = t :quick_search
+      = text_field_tag :term, params[:term], :placeholder => t(:quick_search_prompt), :autocomplete => "off", :autofocus => true
 
   #suggestion_box

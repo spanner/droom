@@ -138,12 +138,8 @@ p.stretcher
     font-size: 1em
   span.dom
     font-size: 2em
-    letter-spacing: -0.1em
-    margin-left: -4px
-    margin-top: -2px
   span.year
     font-size: 1em
-    margin-top: -2px
   &.editing
     +box-shadow
     a, a:visited
@@ -155,7 +151,9 @@ h2.section
   line-height: 26px
   clear: left
   margin-top: 2em
-  
+  &:first-child
+    margin-top: 0
+
 .relations
   position: relative
   
@@ -462,20 +460,19 @@ h2.name
 
 a.dl, a.ul
   display: inline-block
-  min-height: 50px
-  padding-top: 4px
-  text-indent: 60px
-  line-height: 50px
+  min-height: 40px
+  text-indent: 40px
+  line-height: 40px
   background:
-    position: 0 -10px
+    position: 0 0
     repeat: no-repeat
-    image: image-url('droom/medium_icons.png')
+    image: image-url('droom/small_icons.png')
   &.pdf
-    background-position: 0 -110px
+    background-position: 0 -100px
   &.doc, &.docx
-    background-position: 0 -210px
+    background-position: 0 -200px
   &.xls, &.xlsx
-    background-position: 0 -310px
+    background-position: 0 -300px
   &.minimal
     width: 50px
     height: 50px
@@ -503,10 +500,12 @@ li.person
     
 div.document
   h2.name
-    font-size: 1.75em
+    font-size: 1.1em
     line-height: 1
+    a.dl
+      margin-left: -40px
     + p.description
-      margin-top: -20px
+      margin-top: -4px
   p.attachment
     margin: 0
     color: $mid
@@ -1106,6 +1105,7 @@ input[type="text"], input[type="password"], input[type="email"], select, textare
   color: $input
   padding: 5px
   border: 1px solid $pale
+  font-size: 1.2em
   &.strong
     font-weight: bold
   &.destination
@@ -1236,7 +1236,7 @@ div.timepicker
   position: relative
   overflow: hidden
   width: 280px
-  margin: 10px 0
+  margin: 0
   .scroller
     width: 600px
     height: 260px
@@ -1273,7 +1273,7 @@ table.minimonth
     width: 1px
     color: white
   color: $text
-  margin: 5px 0
+  margin: 0
   h3
     font-size: 1.2em
     line-height: 22px
@@ -1493,6 +1493,10 @@ ul.folder
     a.folder
       font-weight: bold
       color: $text
+  li.more
+    +small
+    a
+      padding-left: 28px
 
 ul#folders, div.attachments
   padding-left: 0
@@ -1561,45 +1565,6 @@ input.search_box
         color: transparent
         position: 0 -96px
         repeat: no-repeat
-
-nav.icons
-  position: relative
-  display: inline-block
-  a
-    display: inline-block
-    float: left
-  a.dropbox
-    +panel_icon("droom/integration_buttons.png", 0, 0)
-  a.rss                              
-    +panel_icon("droom/integration_buttons.png", -32px, 0)
-  a.email                            
-    +panel_icon("droom/integration_buttons.png", -64px, 0)
-  a.readers                          
-    +panel_icon("droom/integration_buttons.png", -96px, 0)
-  a.vcal                          
-    +panel_icon("droom/integration_buttons.png", -128px, 0)
-  a.account                            
-    +panel_icon("droom/integration_buttons.png", -160px, 0)
-  a.signout                          
-    +panel_icon("droom/integration_buttons.png", -192px, 0)
-  a.keywords
-    +panel_icon("droom/integration_buttons.png", -224px, 0)
-  a.suggestions                          
-    +panel_icon("droom/integration_buttons.png", -256px, 0)
-  a.devices
-    +panel_icon("droom/integration_buttons.png", -288px, 0)
-  a.networks
-    +panel_icon("droom/integration_buttons.png", -320px, 0)
-  a.admin
-    +panel_icon("droom/integration_buttons.png", -356px, 0)
-    &.here
-      background-color: $blue
-  span.spacer
-    display: inline-block
-    float: left
-    width: 64px
-    height: 32px
-
 
 
 /* -------- map infowindows -------- */
@@ -2308,12 +2273,93 @@ ul.checklist
     margin-left: 20px
     overflow: hidden
 
+
+
+#controls
+  a
+    display: block
+    height: 42px
+    width: 40px
+    margin: 0 2px 0 0
+    text-indent: 50px
+    overflow: hidden
+    border: 1px solid transparent
+    background:
+      position: 4px 6px
+      repeat: no-repeat
+    +transition-property(border-color, box-shadow)
+    +transition-duration(0.2s)
+    +transition-timing-function(ease-in)
+    &:hover
+      background-position: 4px -58px
+    &.config
+      background-image: image-url('droom/config_menu.png')
+    &.search
+      background-image: image-url('droom/search_menu.png')
+    &.admin
+      background-image: image-url('droom/admin_menu.png')
+    &.up
+      border-color: $verypale
+      +box-shadow(0 3px 16px #666)
+
 .patch
   position: absolute
-  height: 9px
+  height: 12px
   width: 10px
-  border-left: 1px solid $verypale
-  border-right: 1px solid $verypale
   background-color: white
+  visibility: hidden
   z-index: 300
-  
+  +transition-property(opacity, visibility)
+  +transition-duration(0.2s)
+  +transition-timing-function(ease-in)
+  &.up
+    visibility: visible
+    opacity: 1.0
+    
+.panel
+  position: absolute
+  z-index: 100
+  width: 280px
+  padding: 10px
+  background-color: white
+  border: 1px solid $verypale
+  visibility: hidden
+  opacity: 0
+  +box-shadow(0 8px 16px #666)
+  +transition-property(opacity, visibility)
+  +transition-duration(0.2s)
+  +transition-timing-function(ease-in)
+  &.up
+    visibility: visible
+    opacity: 0.95
+  input[type="text"], input[type="password"], input[type="email"], select, textarea
+    width: 260px
+    margin: 0 3px
+  h4
+    margin-left: 3px
+    margin-bottom: 5px
+  form
+    margin-top: 24px
+  p:first-child
+    margin-top: 5px
+  p:last-child
+    margin-bottom: 5px
+  p.controls
+    margin: 0 0 8px 0
+    +small
+    +pale
+    a.signout
+      display: block
+      position: absolute
+      right: 10px
+      top: 10px
+  input[type="text"]
+    
+  ul
+    +plain
+    &.col
+      float: left
+      width: 130px
+      margin-right: 10px
+      &:last-child
+        margin-right: 0

@@ -28,6 +28,7 @@ module Droom
                  :email_return_path,
                  :main_dashboard_modules,
                  :margin_dashboard_modules,
+                 :panels,
                  :scrap_types,
                  :use_forenames,
                  :use_biogs,
@@ -109,6 +110,10 @@ module Droom
 
     def margin_dashboard_modules
       @@margin_dashboard_modules ||= %w{quicksearch stream}
+    end
+    
+    def panels
+      @@panels ||= %w{configuration search admin}
     end
     
     def scrap_types

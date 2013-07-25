@@ -1,4 +1,4 @@
-- if current_user && current_user.activated?
+- if current_user && current_user.confirmed?
   %nav<
     = nav_link_to t(:your_page), droom.dashboard_path
     = nav_link_to t(:calendar), droom.events_path

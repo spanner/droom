@@ -14,7 +14,9 @@ module Droom
            :rememberable,
            :trackable,
            :confirmable,
-           :token_authenticatable
+           :encryptable,
+           :token_authenticatable,
+           :encryptor => :sha512
     
     before_create :ensure_authentication_token
     before_create :ensure_uid

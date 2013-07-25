@@ -11,8 +11,8 @@
 
 - cssclasses = ['event']
 - cssclasses << 'repeat' if repeating
-- cssclasses << 'private' if event.private?
-- cssclasses << 'public' if event.public?
+/ - cssclasses << 'private' if event.private?
+/ - cssclasses << 'public' if event.public?
 - cssclasses << 'open' if open
 - cssclasses << 'invited' if event.attended_by?(current_user)
 
@@ -51,6 +51,6 @@
       .detail
         - if event.folder.populated?
           %ul.folder
-            = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true}
+            = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true, :limit => 3, :for_more => event_url(event)}
         = event.description.html_safe
 

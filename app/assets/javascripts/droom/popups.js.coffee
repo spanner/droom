@@ -217,7 +217,7 @@ jQuery ($) ->
       @container = $(element)
       @id = @container.attr('data-panel')
       @links = $("a[data-panel='#{@id}']")
-      @header = $('.masthead').find("a[data-panel='#{@id}']")
+      @header = $('#masthead').find("a[data-panel='#{@id}']")
       @patch = $('<div class="patch" />').appendTo($('body'))
       @timer = null
       @showing = false
@@ -237,7 +237,7 @@ jQuery ($) ->
     setup: () =>
       offset = @header.offset()
       @patch.css
-        left: offset.left
+        left: offset.left + 1
         top: offset.top + @header.height() - 3
         width: @header.outerWidth() - 2
       if offset.left > $(window).width() / 2
@@ -257,15 +257,15 @@ jQuery ($) ->
       if e
         e.preventDefault()
         e.stopPropagation()
-      if @container.is(":visible") then @revert() else @show()
+      if @showing then @hide() else @show()
 
     hide: (e) =>
       window.clearTimeout @timer
-      @container.stop().fadeOut()
-      @patch.stop().fadeOut()
+      @container.removeClass('up')
+      @patch.removeClass('up')
       @header.removeClass('up')
       @showing = false
-    
+          
     hideSoon: () =>
       @timer = window.setTimeout @hide, 500
       
@@ -274,11 +274,12 @@ jQuery ($) ->
       unless @showing
         @setup()
         Panel.hideAll()
-        @container.stop().fadeIn()
-        @patch.stop().fadeIn()
+        @container.addClass('up')
+        @patch.addClass('up')
         @header.addClass('up')
         @showing = true
-  
+        @container.find('input[autofocus]').first().focus()
+
     revert: (e) =>
       Panel.hideAll()
 

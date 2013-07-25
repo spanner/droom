@@ -43,7 +43,7 @@ module Droom
 
     scope :by_date, -> { order("droom_documents.updated_at DESC, droom_documents.created_at DESC") }
 
-    scope :latest, -> field { order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit) }
+    scope :latest, -> limit { order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit) }
 
     def attach_to(holder)
       self.folder = holder.folder
