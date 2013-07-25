@@ -2,6 +2,7 @@
 - event ||= @event
 - open ||= event == @event
 - open = true if pageclass == 'events'
+- full_attachments ||= false
 
 - event_master_id = event.master_id || event.id
 - if @seen_events[event_master_id]
@@ -49,8 +50,11 @@
               = event.venue.proper_name + "."
 
       .detail
-        - if event.folder.populated?
+        - if !full_attachments && event.folder.populated?
           %ul.folder
             = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true, :limit => 3, :for_more => event_url(event)}
         = event.description.html_safe
 
+  - if full_attachments
+    = render :partial => 'droom/events/attachments', :locals => {:event => event}
+    = render :partial => 'droom/events/invitations', :locals => {:event => event}

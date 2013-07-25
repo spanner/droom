@@ -55,6 +55,7 @@ module Droom
   protected
   
     def get_events
+      @events = Droom::Event.accessible_by(current_ability)
       if params[:direction] == 'past'
         @events = @events.past.order('start DESC')
         @direction = "past"

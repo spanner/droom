@@ -1,0 +1,8 @@
+- event ||= @event
+- folder ||= event.folder
+
+.col
+  %h3
+    = t :attachments
+  
+  = render :partial => "droom/folders/contents", :locals => {:folder => folder}

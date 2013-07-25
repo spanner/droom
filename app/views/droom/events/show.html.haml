@@ -1,1 +1,8 @@
+- content_for :title do
+  = link_to t(:calendar), droom.events_url
+
+- content_for :standfirst do
+  %p
+    = t :event_introduction
+
 = render :partial => 'droom/events/event', :object => @event, :locals => {:full_attachments => true}

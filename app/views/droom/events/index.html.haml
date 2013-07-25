@@ -1,30 +1,26 @@
 #main.events
-  %p.standfirst
-    = t :calendar_introduction
 
-  - if @direction == 'past'
-    %h2.section
-      = t(:past_events)
-      %span.addendum
-        = link_to t(:show_future_events), droom.events_url(:direction => "future"), :class => "future"
 
-  - else
-    %h2.section
-      = t(:future_events)
-      %span.addendum
-        = link_to t(:show_past_events), droom.events_url(:direction => "past"), :class => "past"
-
-  - if admin?
-    %p.action
-      = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => ".events_list, #minicalendar"}
-      %br
-      %span.note
-        = t :new_event_note
+  %h2.section
+    =  @direction == 'past' ? t(:past_events) : t(:future_events)
+    - if can?(:create, Droom::Event)
+      %span.action
+        = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
 
   = render :partial => 'events'
 
+
+
 - content_for :title do
   = t :calendar
+
+- content_for :standfirst do
+  %p
+    - if @direction == 'past'
+      = t(:calendar_past_introduction, :url => droom.events_url(:direction => "future")).html_safe
+    - else
+      = t(:calendar_introduction, :url => droom.events_url(:direction => "past")).html_safe
+    
 
 - content_for :margin do
   = render :partial => "droom/invitations/invitations"
