@@ -1,12 +1,12 @@
 - if event = scrap.event
-  %a.minidatemark{:href => droom.scrap_url(scrap, :js), :data => {:action => "stream"}}
+  %a.minidatemark{:href => droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}}
     %span.mon= event.start.strftime('%b')
     %span.dom= event.start.strftime('%d')
     - if event.start.year != Date.today.year
       %span.year= event.start.strftime('%Y')
 
   %p
-    = link_to shorten(event.name, 90), droom.scrap_url(scrap, :js), :data => {:action => "stream"}
+    = link_to shorten(event.name, 90), droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}
     - if scrap.event.url
       = link_to "&rarr;".html_safe, scrap.event.url_with_protocol
     = action_menulink(scrap, :class => "small")

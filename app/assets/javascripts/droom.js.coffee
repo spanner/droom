@@ -2,6 +2,7 @@
 #= require jquery
 #= require jquery_ujs
 #= require droom/lib/ZeroClipboard
+#= require droom/lib/swipe
 #= require droom/lib/jquery.animate-colors
 #= require droom/lib/jquery.sortable
 #= require droom/lib/jquery.cookie
@@ -30,7 +31,6 @@ jQuery ($) ->
     # link actions
     
     @find_including_self('[data-action="popup"]').popup()
-    @find_including_self('[data-action="stream"]').stream_link()
     @find_including_self('[data-action="close"]').closes()
     @find_including_self('[data-action="affect"]').affects()
     @find_including_self('[data-action="reveal"]').reveals()
@@ -82,4 +82,9 @@ jQuery ($) ->
     @find_including_self('form.fancy').captive()
     @find_including_self('li.folder').folder()
     @find_including_self('form#suggestions').suggestion_form()
+
+    # stream slides
+
+    @find_including_self('.scrap.preload').add_to_stream()
+    
     @

@@ -1,6 +1,6 @@
-= link_to "text:", droom.scrap_url(scrap, :js), :class => "icon text", :data => {:action => "stream"}
+= link_to "text:", droom.scrap_url(scrap), :class => "icon text", :data => {:action => "stream", :scrap => scrap.id}
 %p
-  = link_to shorten(scrap.body, 90), droom.scrap_url(scrap, :js), :data => {:action => "stream"}
+  = link_to shorten(scrap.body, 90), droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}
   = action_menulink(scrap, :class => "small")
   %span.attribution
     = shorten(scrap.note, 40)

@@ -1,88 +1,95 @@
-#streamer
+.streamer
   position: fixed
   overflow: hidden
   z-index: 4000
   display: none
-  top: 5%
-  left: 5%
-  width: 90%
-  height: 90%
+  left: 0
+  top: 0
+  width: 1024px
+  height: 720px
   background-color: $coolgrey00
-  +box-shadow(0 3px 16px #666)
-
-  .scrap
-    position: relative
-    display: inline-block
-    overflow: hidden
-    width: 100%
-    height: 100%
-    .caption
-      position: absolute
-      bottom: 0
-      left: 0
-      width: 100%
-      height: 10%
-      background-color: white
-      p
-        color: $text
-        margin: 20px 50px
-        span.credit
-          font-size: 80%
-          color: $mid
-    .body
-      position: absolute
-      top: 0
-      left: 0
-      width: 100%
-      height: 90%
-      bottom: 10%
-      .text
-        margin: 50px
-      &.image
-        background:
-          position: center center
-          size: cover
-          repeat: no-repeat
-      &.video
-        iframe
-          width: 100%
-          height: 100%
-          
-    .controls
-      a.next, a.prev, a.closer
-        display: block
+  .scroller
+    width: 10000px
+    height: 720px
+    .scrap
+      position: relative
+      display: inline-block
+      overflow: hidden
+      width: 1024px
+      height: 720px
+      float: left
+      .caption
+        position: absolute
+        bottom: 0
+        left: 0
+        width: 1024px
+        height: 144px
+        background-color: white
+        p
+          color: $text
+          margin: 30px 60px
+          span.credit
+            font-size: 80%
+            color: $mid
+      .body
         position: absolute
         top: 0
-        width: 50%
-        height: 100%
-        background: 
-          position: center center
-          repeat: no-repeat
-        display: none
-      a.prev
         left: 0
-        background-image: image-url('droom/stream/previous.png')
-      a.next
-        right: 0
-        background-image: image-url('droom/stream/next.png')
-      a.closer
-        height: 150px
-        width: 150px
-        right: 0
-        background-image: image-url('droom/stream/closer.png')
+        width: 1024px
+        height: 576px
+        overflow: scroll
+        .text
+          margin: 30px 100px 0 60px
+        &.image
+          background:
+            position: center center
+            size: cover
+            repeat: no-repeat
+        &.video
+          iframe
+            width: 100%
+            height: 100%
+        &.text
+  a.next, a.prev
+    display: none
+    position: absolute
+    top: 300px
+    width: 60px
+    height: 60px
+    background: 
+      position: center center
+      repeat: no-repeat
+  a.prev
+    left: 20px
+    background-image: image-url('droom/stream/prev.png')
+  a.next
+    right: 20px
+    background-image: image-url('droom/stream/next.png')
+  a.closer
+    display: none
+    position: absolute
+    top: 20px
+    right: 20px
+    height: 60px
+    width: 60px
+    background: 
+      position: center center
+      repeat: no-repeat
+      image: image-url('droom/stream/closer.png')
+
 .touch
-  #streamer
-    .scrap
-      .controls
-        a.closer
-          display: block
+  .streamer
+    a.closer
+      display: block
 
 .no-touch
-  #streamer
-    .scrap:hover
-      .controls
-        a.next, a.prev, a.closer
-          display: block
+  .streamer
+    top: 5%
+    left: 5%
+    +box-shadow(0 3px 16px #666)
+    &:hover
+      a.next, a.prev, a.closer
+        display: block
 
 
 
@@ -120,6 +127,8 @@ span.credit
 
 #stream
   font-size: 90%
+  .preload
+    display: none
   .scrap
     position: relative
     clear: left

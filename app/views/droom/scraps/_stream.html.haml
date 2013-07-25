@@ -3,6 +3,10 @@
     = render :partial => "thumb", :collection => @scraps
     .pagination
       = paginate @scraps
+
+    .preload
+      = render :partial => "preload", :collection => @scraps
+      
   - else
     = t :no_stream
   

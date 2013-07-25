@@ -1,81 +1,73 @@
 jQuery ($) ->
 
-  $.fn.stream_link = () ->
-    $.stream ?= new Stream('#streamer')
-    @each ->
-      $.stream.fetch(@href)
-      $(@).click (e) ->
-        e.preventDefault() if e
-        $.stream.display(@href)
+  $.fn.add_to_stream = ->
+    if @length
+      $.stream ?= new Streamer()
+      $.stream.append(@) 
 
-
-  class Stream
-    @scraps: {}
-      
-    constructor: (element) ->
-      @_container = $(element)
-      @_container.bind 'open', @show
-      @_container.bind 'close', @hide
-      @_container.bind 'resize', @place
-      @_container.bind 'mousedown', @containEvent
-      @_container.bind 'touchstart', @containEvent
-      
+  class Streamer
+    constructor: () ->
+      @_container = $('<div class="streamer" />').appendTo $('body')
+      @_scroller = $('<div class="scroller" />').appendTo @_container
+      $('<a class="next" href="#" />').appendTo(@_container).click @next
+      $('<a class="prev" href="#" />').appendTo(@_container).click @prev
+      $('<a class="closer" href="#" />').appendTo(@_container).click @hide
+      @_scraps = []
+      @showing = false
+      @_container.bind "mousedown", @containEvent
+      @_container.bind "touchstart", @containEvent
+    
     containEvent: (e) =>
       e.stopPropagation() if e
       
-    display: (url) =>
-      if scrap = Stream.scraps[url]
-        @reveal(scrap)
-      else
-        @fetch(url, @reveal)
-
-    fetch: (url, callback) =>
-      unless Stream.scraps[url]?
-        $.ajax
-          url: url
-          dataType: 'html'
-          success: (response) =>
-            scrap = new Scrap(response)
-            Stream.scraps[url] = scrap
-            callback?(scrap)
-
-    reveal: (scrap) =>
-      @_container.html scrap.getContent()
-      @_container.activate()
-      @show()
-      
-    show: () =>
-      unless @_showing
-        @_container.fadeIn()
-        @_showing = true
-        $(document).bind 'mousedown', @hide
-        $(document).bind 'touchstart', @hide
+    append: (elements) =>
+      $(elements).each (i, element) =>
+        scrap = new Scrap element, this
+        scrap.container.removeClass('preload').appendTo @_scroller
+        @_scraps.push scrap
     
+    goto: (scrap) =>
+      @_swipe.slide @_scraps.indexOf(scrap)
+    
+    next: () =>
+      @_swipe.next()
+
+    prev: () =>
+      @_swipe.prev()
+      
+    resetSwipe: () =>
+      @_swipe?.kill()
+      @_swipe = new Swipe @_container[0],
+        speed: 1000
+        auto: false
+        loop: false
+      $.swipe = @_swipe
+      
+    show: (scrap) =>
+      unless @_showing
+        @_container.fadeIn 'fast', () =>
+          @resetSwipe()
+          @goto(scrap) if scrap?
+        @_showing = true
+        $(document).bind "mousedown", @hide
+        $(document).bind "touchstart", @hide
+
     hide: () =>
       if @_showing
-        @_container.fadeOut()
+        @_container.fadeOut('fast')
+        $(document).unbind "mousedown", @hide
+        $(document).unbind "touchstart", @hide
         @_showing = false
-        $(document).unbind 'mousedown', @hide
-        $(document).unbind 'touchstart', @hide
-    
-    width: () =>
-      @_container.width()
-
-    height: () =>
-      @_container.height()
-
-
 
   class Scrap
-    constructor: (html) ->
-      @_container = $('<div class="scrap_holder" />')
-      @_container.html(html)
-      @_container.css
-        width: $.stream.width()
-        height: $.stream.height()
-
-    getContent: () =>
-      @_container
+    constructor: (element, stream) ->
+      @container = $(element)
+      @_stream = stream
+      $('a[data-scrap="' + @container.attr('data-scrap') + '"]').click @goto
+    
+    goto: (e) =>
+      e.preventDefault() if e
+      @_stream.show(this)
 
 
 
