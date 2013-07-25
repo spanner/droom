@@ -154,19 +154,13 @@ module Droom
     def dropbox_client
       dropbox_token.dropbox_client if dropbox_token
     end
-    
 
     ## Mugshot
     #
     include Paperclip::Croppable
     has_attached_file :image, 
                       :styles => {
-                        :cropped => {
-                          :processors => [:offset_thumbnail],
-                          :geometry => "520x520#", 
-                          :scale => lambda { |att| att.instance.scale_geometry },
-                          :crop_and_offset => lambda { |att| att.instance.crop_geometry }
-                        },
+                        :standard => "520x520#",
                         :icon => "32x32#",
                         :thumb => "130x130#"
                       }

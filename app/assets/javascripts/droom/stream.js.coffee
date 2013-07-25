@@ -1,4 +1,97 @@
 jQuery ($) ->
+
+  $.fn.stream_link = () ->
+    $.stream ?= new Stream('#streamer')
+    @each ->
+      $.stream.fetch(@href)
+      $(@).click (e) ->
+        e.preventDefault() if e
+        $.stream.display(@href)
+
+
+  class Stream
+    @scraps: {}
+      
+    constructor: (element) ->
+      @_container = $(element)
+      @_container.bind 'open', @show
+      @_container.bind 'close', @hide
+      @_container.bind 'resize', @place
+      @_container.bind 'mousedown', @containEvent
+      @_container.bind 'touchstart', @containEvent
+      
+    containEvent: (e) =>
+      e.stopPropagation() if e
+      
+    display: (url) =>
+      if scrap = Stream.scraps[url]
+        @reveal(scrap)
+      else
+        @fetch(url, @reveal)
+
+    fetch: (url, callback) =>
+      unless Stream.scraps[url]?
+        $.ajax
+          url: url
+          dataType: 'html'
+          success: (response) =>
+            scrap = new Scrap(response)
+            Stream.scraps[url] = scrap
+            callback?(scrap)
+
+    reveal: (scrap) =>
+      @_container.html scrap.getContent()
+      @_container.activate()
+      @show()
+      
+    show: () =>
+      unless @_showing
+        @_container.fadeIn()
+        @_showing = true
+        $(document).bind 'mousedown', @hide
+        $(document).bind 'touchstart', @hide
+    
+    hide: () =>
+      if @_showing
+        @_container.fadeOut()
+        @_showing = false
+        $(document).unbind 'mousedown', @hide
+        $(document).unbind 'touchstart', @hide
+    
+    width: () =>
+      @_container.width()
+
+    height: () =>
+      @_container.height()
+
+
+
+  class Scrap
+    constructor: (html) ->
+      @_container = $('<div class="scrap_holder" />')
+      @_container.html(html)
+      @_container.css
+        width: $.stream.width()
+        height: $.stream.height()
+
+    getContent: () =>
+      @_container
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   $.fn.scrap_form = () ->
     @each ->
       new ScrapForm(@)
@@ -8,6 +101,11 @@ jQuery ($) ->
     @change ->
       if $(@).is('checked')
         scrapform.setType($(@).val())
+
+
+
+
+
 
   class ScrapForm
     constructor: (element) ->

@@ -1,7 +1,7 @@
 - if document = scrap.document
-  = link_to "document:", droom.scrap_url(scrap), :data => {:action => "popup"}, :class => "#{document.file_extension} icon"
-  %p.scrapdocument
-    = link_to document.name, droom.scrap_url(scrap), :data => {:action => "popup"}
+  = link_to "document:", droom.scrap_url(scrap, :js), :data => {:action => "stream"}, :class => "#{document.file_extension} icon"
+  %p
+    = link_to document.name, droom.scrap_url(scrap, :js), :data => {:action => "stream"}
     = action_menulink(scrap, :class => "small")
     %span.caption
       = shorten(scrap.note, 120)

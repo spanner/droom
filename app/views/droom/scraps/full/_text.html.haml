@@ -1,4 +1,5 @@
-.body{:style => "font-size: #{"%.2f" % scrap.text_size}em"}
-  = simple_format(scrap.body).html_safe
+.body
+  .text
+    = simple_format(scrap.body).html_safe
 
 = render "droom/scraps/caption", :scrap => scrap

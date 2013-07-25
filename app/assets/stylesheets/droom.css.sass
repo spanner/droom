@@ -36,7 +36,7 @@ $tool_button_width: 32px
 @import droom/toolbar
 @import lib/kalendae
 @import droom/popups
-
+@import droom/stream
 
 p.large
   font-size: 1.6em
@@ -63,7 +63,7 @@ a.dropboxer
 
 input.dropbox.revoke[type="submit"]
   +icon_link("droom/revoke_small.png")
-  background-color: none
+  background-color: transparent
   color: $blue
   padding: 0
   height: auto
@@ -983,7 +983,6 @@ ul.dropdown
       background:
         position: 6px 11px
         repeat: no-repeat
-        scroll: scroll
       &.hover
         color: white
         background-color: $active
@@ -1039,7 +1038,6 @@ ul.suggestion_search
       cursor: hand
       background:
         repeat: no-repeat
-        scroll: scroll
         image: image-url('droom/object_icons.png')
     &.event
       a
@@ -1209,7 +1207,7 @@ div.timepicker
   display: none
   height: 191px
   width: 60px
-  overflow-x: none
+  overflow-x: hidden
   overflow-y: auto
   background: #fff
   border: 1px solid #aaa
@@ -1231,6 +1229,17 @@ div.timepicker
     &:active
       background: $link
       color: #fff
+
+#stream, .search_results, .suggestion_search
+  .scrolled
+    width: 320px
+  .scroller
+    margin-left: 5px
+    width: 640px
+    .paginated
+      width: 320px
+      position: relative
+      float: left
 
 #minicalendar
   position: relative
@@ -1729,7 +1738,6 @@ ul.people
       height: 70px
       background:
         repeat: no-repeat
-        scroll: scroll
   .document
     a.icon
       background:
@@ -1754,116 +1762,9 @@ ul.people
     a.icon
       background-position: 0 -196px
 
-// streams and scraps
-
-a.minidatemark
-  display: block
-  float: left
-  width: 28px
-  margin-right: 12px
-  span
-    display: block
-    line-height: 1
-    text-align: center
-  span.mon
-    text-transform: uppercase
-    font-size: 0.9em
-  span.dom
-    font-size: 1.8em
-    letter-spacing: -0.1em
-    margin-left: -1px
-    margin-top: 0
-  span.year
-    font-size: 0.9em
-    margin-top: 0
-
-#stream, .search_results, .suggestion_search
-  .scrolled
-    width: 320px
-  .scroller
-    margin-left: 5px
-    width: 640px
-    .paginated
-      width: 320px
-      position: relative
-      float: left
-  .scrap
-    position: relative
-    clear: left
-    &.document
-      a.icon
-        background:
-          position: 3px 0
-          image: image-url('droom/icons.png')
-        &.pdf
-          background-position: 3px -48px
-        &.doc, &.docx
-          background-position: 3px -96px
-        &.xls, &.xlsx
-          background-position: 3px -144px
-    a.thumb
-      height: 18px
-    a.icon
-      height: 32px
-    a.thumb, a.icon
-      display: block
-      float: left
-      width: 32px
-      margin-right: 8px
-      margin-bottom: 25px
-      margin-top: 0
-      overflow: hidden
-      text-indent: 50px
-      line-height: 32px
-      +border-radius(3px)
-      background:
-        repeat: no-repeat
-        position: 0 0
-      &.playable
-        &:before
-          content: image-url('droom/playable.png')
-          position: absolute
-          width: 32px
-          height: 18px
-          left: -50px
-      
-    a.icon
-      background:
-        image: image-url('droom/dark_scrap_icons.png')
-      &.text
-        background-position: 0 -48px
-      &.quote
-        background-position: 0 -96px
-      &.link
-        background: none
-    a
-      color: $mid
-      +hover
-      &:hover, &.hover
-        color: $hover
-    p.caption, p.scrapevent, p.scrapdocument
-      overflow: hidden
-      line-height: 1.2
-    span.attribution, span.caption
-      color: $pale
-      display: block
-
-#stream
-  .scrap
-    margin-bottom: 25px
-    
-
-span.credit
-  display: block
-  font-size: 90%
-  font-weight: bold
-  color: $mid
-  margin-top: 4px
 
 div.popup
   #event, #document, #user, #group, #membership, #folder
-    width: 580px
-  .scrap
     width: 580px
   
 div.popup
@@ -1909,223 +1810,9 @@ div.popup
       div.description
         min-height: 80px
 
-  div.body
-    position: relative
-    margin-top: 0
-    overflow: hidden
-    height: 326px
-    p
-      margin: 20px 20px
-      font-size: 1.5em
-      line-height: 1.25
-    &.image
-      overflow: hidden
-    p.attribution
-      color: lighten($mid, 10)
-      
-  div.scrapdocument
-    .filepicker
-      margin-top: 5px
-      input[type="file"]
-        display: none
-      p.tip
-        font-size: 0.65em
-        line-height: 1.1
-        color: $pale
-        margin: 0 5px
 
-  div.scrapvideo
-    position: relative
-    margin: 0 20px 0 20px
-    overflow: auto
-    padding-top: 10px
-    background-color: white
-    height: 316px
-    .thumb
-      margin: 10px 0
-      img.main_thumb, iframe.thumb
-        float: left
-        width: 265px
-        height: 200px
-        margin: 0 10px 0 70px
-      p
-        float: left
-        margin: 0
-        width: 170px
-      
-    .icon
-      width: 60px
-      height: 60px
-      background:
-        image: url("droom/youtube_icon.png")
-        size: 60px
-      float: left
-      margin: 10px 10px 0 0
-      
-  div.scrapevent, div.scrapdocument
-    position: relative
-    margin: 0
-    overflow: auto
-    padding-top: 126px
-    background-color: white
-    height: 200px
-    .datemark, .filemark
-      float: left
-      width: 50px
-      margin: 15px 10px 0 10px
-      color: $input
-    p.name
-      margin-bottom: 0
-      margin-top: 20px
-      line-height: 1.2
-      a.dl, .eventname
-        font-size: 1.4em
-        max-height: 50px
-      span.note
-        display: block
-        margin-left: 50px
-    p.practicalities
-      margin-top: 2px
 
-  div.caption
-    p.scrapnote
-      min-height: 2em
-    p.action
-      float: right
-    p
-      color: $text
-      margin: 10px 20px
-      span.credit
-        font-size: 80%
-        color: $mid
-
-  form.scrap
-    ul.scraptypes
-      padding: 0
-      margin: 0
-      li
-        display: inline-block
-        margin-right: 3px
-        font-size: 80%
-        label
-          display: inline-block
-          height: 32px
-          line-height: 28px
-          padding-left: 34px
-          color: white
-          overflow: hidden
-          font-size: 0.9em
-          cursor: pointer
-          background:
-            repeat: no-repeat
-            position: 0 0
-            image: image-url('droom/scrap_icons.png')
-          &.text
-            background-position: 0 -48px
-          &.quote
-            background-position: 0 -96px
-          &.video
-            background-position: 0 -144px
-          &.image
-            background-position: 0 -192px
-          &.document
-            background-position: 0 -240px
-          &.event
-            background-position: 0 -288px
-        input[type="radio"]
-          display: none
-        input[type="radio"] + label
-          +opacity(0.4)
-        input[type="radio"]:checked + label
-          +opacity(1)
-
-    .fields
-      min-height: 180px
-      .name
-        input[type="text"]
-          width: 532px
-          font-size: 1.25em
-          font-weight: bold
-      .body, .caption
-        textarea
-          width: 532px
-          background-color: white
-          font-size: 100%
-      .body
-        textarea
-          height: 290px
-          line-height: 1.2
-      .scrapevent, .scrapdocument
-        display: none
-        .summary
-          p.name
-            margin: 10px 0
-        input.name
-          width: 350px
-          font-size: 2.4em
-        p.url
-          margin: 10px 0 0 70px
-          input.url
-            font-size: 1.2em
-            width: 350px
-      .scrapvideo
-        display: none
-        input.name
-          width: 440px
-          font-size: 1.8em
-          &.waiting
-            background:
-              position: 430px 15px
-              repeat: no-repeat
-              image: image-url('droom/spinner.gif')
-        
-      .caption
-        textarea
-          height: 80px
-          color: $mid
-      .upload
-        display: none
-        margin-top: 0
-        .uploadbox
-          width: 580px
-          height: 326px
-          border: 0
-          margin: 0
-          background-color: $mid
-          .img
-            width: 580px
-            height: 326px
-          .prompt
-            padding-top: 140px
-            .note
-              color: $dark
-          .progress_holder
-            top: 138px
-
-      &.image
-        .upload
-          display: block
-        p.body
-          display: none
-      &.event
-        margin-bottom: 10px
-        .scrapevent
-          display: block
-        .upload, .body, .scrapdocument, .scrapvideo
-          display: none
-      &.document
-        margin-bottom: 10px
-        .scrapdocument
-          display: block
-        .upload, .body, .scrapevent, .scrapvideo
-          display: none
-      &.video
-        .scrapvideo
-          display: block
-        .upload, .body, .scrapevent, .scrapdocument
-          display: none
-    .buttons
-      margin: 10px 20px 20px 20px
+  
 
 
 // uploader, scaler, cropper

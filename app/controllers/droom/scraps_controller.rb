@@ -3,6 +3,7 @@ module Droom
     respond_to :html, :js, :json, :atom
     layout :no_layout_if_pjax
   
+    before_filter :get_scraps, :only => [:index]
     load_and_authorize_resource
 
     def index
@@ -44,6 +45,10 @@ module Droom
     end
     
   protected
+
+    def get_scraps
+      @scraps = paginated(Droom::Scrap.all)
+    end
 
     def scrap_parameters
       params.require(:scrap).permit(:name, :body, :image, :description, :scraptype, :note, :event_attributes, :document_attributes)

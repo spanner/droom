@@ -1,0 +1,10 @@
+.controls
+  = link_to "&nbsp;".html_safe, '#', :class => "closer", :data => {:action => "close"}
+
+  - if preceding = @scrap.next_older
+    = link_to "&nbsp;".html_safe, droom.scrap_url(preceding, :js), :data => {:action => "stream"}, :class => "prev"
+
+  - if following = @scrap.next_younger
+    = link_to "&nbsp;".html_safe, droom.scrap_url(following, :js), :data => {:action => "stream"}, :class => "next"
+
+  

@@ -7,13 +7,12 @@ module Droom
     belongs_to :document, :class_name => "Droom::Document", :dependent => :destroy
     accepts_nested_attributes_for :document
 
-    has_upload :image, 
-               :geometry => "580x326#",
-               :styles => {
-                 :icon => "32x18#",
-                 :thumb => "160x90#",
-                 :precrop => "1200x1200^"
-               }
+    has_attached_file :image, 
+                      :styles => {
+                        :stream => "1280x1280>",
+                        :icon => "32x32#",
+                        :thumb => "160x90#"
+                      }
 
     before_save :get_youtube_thumbnail
 
@@ -29,6 +28,8 @@ module Droom
     }
     
     scope :visible_to, -> user { where("1=1") }
+
+    default_scope -> { order("created_at DESC").includes(:event, :document) }
 
     Droom.scrap_types.each do |t|
       define_method(:"#{t}?") { scraptype == t.to_s }

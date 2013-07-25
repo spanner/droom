@@ -1,6 +1,6 @@
-= link_to "video:", droom.scrap_url(scrap), :class => "thumb playable", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:action => "popup"}
-%p.caption
-  = link_to shorten(scrap.note, 90), droom.scrap_url(scrap), :class => "scrap", :data => {:action => "popup"}
+= link_to "video:", droom.scrap_url(scrap, :js), :class => "thumb playable", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:action => "stream"}
+%p
+  = link_to shorten(scrap.note, 90), droom.scrap_url(scrap, :js), :class => "scrap", :data => {:action => "stream"}
   = action_menulink(scrap, :class => "small")
   = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
 = action_menu(scrap)

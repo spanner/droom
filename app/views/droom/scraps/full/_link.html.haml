@@ -1,5 +1,6 @@
-.body.large
-  %p
-    = link_to scrap.url_without_protocol, scrap.url_with_protocol, :class => "icon link"
+.body
+  .text.large
+    %p
+      = link_to scrap.url_without_protocol, scrap.url_with_protocol, :class => "icon link"
 
 = render "droom/scraps/caption", :scrap => scrap

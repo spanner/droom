@@ -1,4 +1,8 @@
 #scraps.paginated{:data => {:refreshable => true, :url => scraps_path(:format => :js)}}
-  = render :partial => "thumb", :collection => @scraps
-  .pagination
-    = paginate @scraps
+  - if @scraps.any?
+    = render :partial => "thumb", :collection => @scraps
+    .pagination
+      = paginate @scraps
+  - else
+    = t :no_stream
+  

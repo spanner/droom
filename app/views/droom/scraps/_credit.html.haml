@@ -3,7 +3,7 @@
 %span.credit
   - if scrap.created_by
     = t :posted_by
-    = scrap.created_by.name
+    = scrap.created_by.informal_name
   - else
     = t :posted
   = time_ago_in_words scrap.created_at

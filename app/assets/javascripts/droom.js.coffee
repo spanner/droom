@@ -30,6 +30,7 @@ jQuery ($) ->
     # link actions
     
     @find_including_self('[data-action="popup"]').popup()
+    @find_including_self('[data-action="stream"]').stream_link()
     @find_including_self('[data-action="close"]').closes()
     @find_including_self('[data-action="affect"]').affects()
     @find_including_self('[data-action="reveal"]').reveals()
