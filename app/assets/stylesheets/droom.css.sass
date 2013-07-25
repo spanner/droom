@@ -40,7 +40,12 @@ $tool_button_width: 32px
 
 p.large
   font-size: 1.6em
-  
+
+a
+  text-decoration: none
+  &:hover
+    text-decoration: underline
+
 a.dropbox
   +big_icon_link("droom/dropbox.png")
   color: #4ea1ea
@@ -1048,7 +1053,7 @@ ul.suggestion_search
     &.event
       a
         background-position: 0 4px
-    &.person
+    &.user
       a
         background-position: 0 -46px
     &.venue
@@ -1079,7 +1084,6 @@ ul.downloads
 a.document
   display: inline-block
   padding: 8px 0 0 28px
-  font-size: 14px
   min-height: 20px
   line-height: 22px
   background: 
