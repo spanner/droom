@@ -6,6 +6,7 @@ module Droom
     layout :no_layout_if_pjax
     
     before_filter :get_events, :only => [:index]
+    before_filter :build_event, :only => [:create]
     load_and_authorize_resource
 
     def index
@@ -32,7 +33,7 @@ module Droom
     end
 
     def create
-      if @event.update_attributes(event_params)
+      if @event.save
         render :partial => "event"
       else
         respond_with @event
@@ -64,6 +65,11 @@ module Droom
         @direction = "future"
       end
       @events = paginated(@events)
+    end
+    
+    def build_event
+      @event = Droom::Event.new(event_params)
+      @event.created_by = current_user
     end
     
     def event_params

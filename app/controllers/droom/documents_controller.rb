@@ -58,6 +58,7 @@ module Droom
 
     def build_document
       @document = @folder.documents.build(document_params)
+      @document.created_by = current_user
     end
     
   end
