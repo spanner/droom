@@ -1,18 +1,22 @@
 - content_for :title do
   = t :group_admin
 
-#main.groups
-  %p.standfirst
+- content_for :standfirst do
+  %p
     = t :directory_introduction
+    
+    
 
-  - if current_user.admin?
-    %p.action
-      = link_to t(:add_group), droom.new_group_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
-      = link_to t(:add_person), droom.new_user_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
-
+#main.groups
   = render :partial => 'groups'
 
 - content_for :margin do
+  %p.action
+    - if can?(:create, Droom::Group)
+      = link_to t(:add_group), droom.new_group_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
+    - if can?(:create, Droom::User)
+      = link_to t(:add_person), droom.new_user_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
+
   #finder
     %form.filter{:action => droom.users_url(:format => :js), :autocomplete => 'off', :data => {:action => "filter"}}
       %p

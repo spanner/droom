@@ -30,12 +30,12 @@ module Droom
     end
 
     def update
-      @group.update_attributes(params[:group])
+      @group.update_attributes(group_params)
       render :partial => 'group'
     end
 
     def create
-      if @group.update_attributes(params[:group])
+      if @group.update_attributes(group_params)
         render :partial => "created"
       else
         respond_with @group
@@ -49,7 +49,7 @@ module Droom
 
   protected
   
-    def group_parameters
+    def group_params
       params.require(:group).permit(:name, :leader_id, :description)
     end
 

@@ -1,6 +1,6 @@
 #= require droom/lib/modernizr
 #= require jquery
-#= require jquery_ujs
+#= require droom/lib/jquery_ujs
 #= require droom/lib/ZeroClipboard
 #= require droom/lib/swipe
 #= require droom/lib/jquery.animate-colors
