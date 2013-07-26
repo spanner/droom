@@ -1,3 +1,5 @@
+require 'acts_as_list'
+
 module Droom
   class Permission < ActiveRecord::Base
     belongs_to :service
