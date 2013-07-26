@@ -3,7 +3,6 @@ module Droom
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
 
-    # slightly overcomplicated until cancan is updated for rails 4
     load_and_authorize_resource :folder, :class => Droom::Folder, :except => :index
     load_and_authorize_resource :document, :through => :folder, :class => Droom::Document, :shallow => true, :except => :index
     load_and_authorize_resource :only => :index

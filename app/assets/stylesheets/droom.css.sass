@@ -340,7 +340,7 @@ form.folder
 
 form.document
   .filepicker
-    +outset
+    +outset(40px)
     margin-top: 5px
     input[type="file"]
       display: none
@@ -485,8 +485,8 @@ a.dl, a.ul
   &.xls, &.xlsx
     background-position: 0 -300px
   &.minimal
-    width: 50px
-    height: 50px
+    width: 40px
+    height: 40px
     overflow: hidden
 
 span.icon
@@ -925,7 +925,6 @@ span.action
   display: inline-block
   
 *.action
-  font-size: 14px
   font-weight: normal
   a.add
     color: $green
@@ -1171,25 +1170,6 @@ input[type="submit"]
     +pale
 
 
-#mask
-  position: fixed
-  top: 0
-  left: 0
-  height: 100%
-  width: 100%
-  background-color: white
-  display: none
-  z-index: 200
-
-.mask
-  position: fixed
-  top: 0
-  left: 0
-  height: 100%
-  width: 100%
-  background-color: white
-  display: none
-  z-index: 190
 
 .overlay
   position: absolute
@@ -1279,6 +1259,19 @@ div.timepicker
 #search, .search_results
   position: relative
 
+#margin
+  form.filter
+    margin-top: 3px
+    p
+      margin: 0.2em 0
+    input[type="text"]
+      font-size: 1.2em
+      padding: 4px
+      width: 95%
+    input[type="search"]
+      font-size: 18px
+      width: 100%
+  .filtered_list
 
 $calendar_width: 280px
 $day_width: 40px
@@ -1406,7 +1399,7 @@ ul.setup
     max-height: 120px
 
 .note, .formnote
-  font-size: 0.8em
+  font-size: 90%
   line-height: 1.1
   color: $mid
   a, a:visited

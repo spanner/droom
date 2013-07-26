@@ -157,12 +157,12 @@
     background-image: image-url('droom/spinner.gif')
     background-position: 0 0
   
-=outset
+=outset($width: $datemark_width, $margin: $datemark_margin)
   position: relative
   float: left
-  width: $datemark_width
-  margin-left: - $datemark_width - $datemark_margin
-  margin-right: $datemark_margin
+  width: $width
+  margin-left: - $width - $margin
+  margin-right: $margin
 
 =hover
   &:hover
