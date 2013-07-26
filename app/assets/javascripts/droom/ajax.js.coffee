@@ -1,21 +1,12 @@
 ## Ajax transport
 #
-# We extend the standard rails jquery-ujs method with a standard response and failure handler. All our
-# remote operations are channelled through this class and use callbacks to affect the page during and 
-# after the request.
+# This is a wrapper around the standard jquer ujs ajax machinery. it gives us a more fine-grained set of callbacks
+# and a central place to do some universal work like setting pjax headers and telling elements to wait.
 #
-# This isn't very clever or complicated but it gives us a standard channel that handles requests in a 
-# consistent way. It applies a PJAX header and defines a simple callback interface that makes the rest 
-# of our code more readable. In most cases it also allows us to omit the [data-remote] and [data-type] 
-# attributes from links.
+# The value of the remote: calls becomes more clear when we need to add more callbacks, eg from a widget like the 
+# filepicker, but perhaps they can disappear now that we've hacked up the ujs a bit.
 #
-# ### Callbacks
-#
-# * *on_prepare* is called when the remote control is first created. No arguments.
-# * *on_request* is called before the remote call. Arguments: [xhr]
-# * *on_error* is called if the server returns an error. Arguments: [xhr]
-# * *on_success* is called if the request is successful. Arguments: [response]
-# * *on_complete* is called after the request, whether successful or not. Arguments: [status]
+
 #
 jQuery ($) ->
 
@@ -34,47 +25,68 @@ jQuery ($) ->
       @_options = $.extend {}, opts
       @_control.attr('data-remote', true)
       @_control.attr('data-type', 'html')
+      @_fily = false
+      
+      # catch the standard jquery_ujs events and route them to our status handlers, 
       @_control.on 'ajax:beforeSend', @pend
       @_control.on 'ajax:error', @fail
       @_control.on 'ajax:success', @receive
+      @_control.on 'ajax:filedata', @gotFiles
+      @_control.on 'ajax:progress', @progress
+
+      # which trigger our own more fine-grained remote:* events
+      @_control.on 'remote:prepare', @_options.on_prepare
+      @_control.on 'remote:begin', @_options.on_request
+      @_control.on 'remote:progress', @_options.on_progress
+      @_control.on 'remote:error', @_options.on_error
+      @_control.on 'remote:success', @_options.on_success
+      @_control.on 'remote:complete', @_options.on_complete
+      @_control.on 'remote:cancel', @_options.on_cancel
       @activate()
         
     activate: () => 
       @_control.find('a.cancel').click @cancel
-      @_options.on_prepare?()
+      @_control.trigger 'remote:prepare'
 
     pend: (event, xhr, settings) =>
       event.stopPropagation()
       event.preventDefault()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_control.addClass('waiting')
-      @_options.on_request?(xhr)
+      @_control.trigger 'remote:begin', xhr, settings
+      true
 
+    gotFiles: (event, elements) =>
+      @_control.trigger 'remote:upload'
+      true
+
+    progress: (e, prog) =>
+      @_control.trigger "remote:progress", prog
+    
     fail: (event, xhr, status) =>
       event.stopPropagation()
       @_control.removeClass('waiting').addClass('erratic')
-      @_options.on_error?(xhr)
-      @_options.on_complete?(status)
-  
+      @_control.trigger 'remote:error', xhr
+      @_control.trigger 'remote:complete', status
+
     # Note that there is no special provision here for a server side failure that results in a success response:
     # eg if validation fails and we get the form back again, this Remote will be considered successful and disappear.
     # In that case the function which triggered the remote operation is expected to do the right thing with the 
     # returned html. Usually in that kind of situation you'd be using a popup, which checks for a returned form and
     # treats it as another iteration within the same window.
     #
-    receive: (event, response, status) =>
+    receive: (event, data, status, xhr) =>
       event.stopPropagation()
       @_control.removeClass('waiting')
-      @_options.on_success?(response)
-      @_options.on_complete?(status)
+      @_control.trigger 'remote:success', data
+      @_control.trigger 'remote:complete', status
         
     cancel: (e) =>
       e.preventDefault() if e
-      @_options.on_cancel?()
+      @_control.trigger 'remote:cancel'
       @_form?.remove()
 
 
-  
 
 
 

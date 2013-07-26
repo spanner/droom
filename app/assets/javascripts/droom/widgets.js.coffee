@@ -86,80 +86,8 @@ jQuery ($) ->
       new TimePicker(@)
 
 
-  #todo: this can now make proper use of the remote mechanism and doesn't need to take over the whole form any more.
-  #
-  class FilePicker
-    constructor: (element) ->
-      @_container = $(element)
-      @_form = if form = @_container.attr("data-form") then $(form) else @_container.parent()
-      @_holder = @_form.parent()
-      @_link = @_container.find('a.ul')
-      @_filefield = @_container.find('input[type="file"]')
-      @_tip = @_container.find('p.tip')
-      @_link.click_proxy(@_filefield)
-      @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
-      @_filefield.bind 'change', @pick
-      @_file = null
-      @_filename = ""
-      @_ext = ""
-      @_fields = @_container.siblings('.metadata')
-      @_form.submit @submit
-      
-    pick: (e) =>
-      @_link.removeClass(@_extensions.join(' '))
-      if files = @_filefield[0].files
-        @_file = files.item(0)
-        @_tip.hide()
-        @showSelection() if @_file
 
-    submit: (e) =>
-      unless @_filefield.attr("disabled")
-        if @_file
-          e.preventDefault() if e
-          @_fields.hide()
-          @_notifier = $('<div class="notifier"></div>').appendTo @_form
-          @_label = $('<h3 class="filename"></h3>').appendTo @_notifier
-          @_progress = $('<div class="progress"></div>').appendTo @_notifier
-          @_bar = $('<div class="bar"></div>').appendTo @_progress
-          @_status = $('<div class="status"></div>').appendTo @_notifier
-          @_label.text(@_filename)
-          @send()
 
-    showSelection: =>
-      @_filename = @_file.name.split(/[\/\\]/).pop()
-      @_ext = @_filename.split('.').pop()
-      @_link.addClass(@_ext) if @_ext in @_extensions
-      $('input.name').val(@_filename)# if $('input.name').val() is ""
-
-    send: =>
-      formData = new FormData @_form.get(0)
-      @xhr = new XMLHttpRequest()
-      @xhr.onreadystatechange = @update
-      @xhr.upload.onprogress = @progress
-      @xhr.upload.onloadend = @finish
-      url = @_form.attr('action')
-      @xhr.open 'POST', url, true
-      @xhr.send formData
-
-    progress: (e) =>
-      @_status.text("Uploading. Please wait.")
-      if e.lengthComputable
-        full_width = @_progress.width()
-        progress_width = Math.round(full_width * e.loaded / e.total)
-        @_bar.width progress_width
-
-    update: =>
-      if @xhr.readyState == 4
-        if @xhr.status == 200
-          response = @xhr.responseText
-          @_form.remove()
-          @_holder.append(response)
-          @_holder.trigger "finished", response
-
-    finish: (e) =>
-      @_status.text("Indexing for search. Please wait.")
-      @_bar.css
-        "background-color": "green"
 
 
 
@@ -171,6 +99,54 @@ jQuery ($) ->
     this.bind "click", (e) ->
       e.preventDefault()
       $(target_selector).click()
+
+  class FilePicker
+    constructor: (element) ->
+      @_container = $(element)
+      @_form = @_container.parents('form')
+      @_link = @_container.find('a.ul')
+      @_filefield = @_container.find('input[type="file"]')
+      @_tip = @_container.find('p.tip')
+      @_extensions = ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'jpg', 'png']
+      @_file = null
+      @_filename = ""
+      @_ext = ""
+      @_fields = @_container.siblings('.metadata')
+      @_link.click_proxy @_filefield
+      @_filefield.bind 'change', @pick
+      @_form.bind 'remote:upload', @initProgress
+      @_form.bind 'remote:progress', @progress
+
+    pick: (e) =>
+      @_link.removeClass(@_extensions.join(' '))
+      if files = @_filefield[0].files
+        @_file = files.item(0)
+        if @_file
+          @_tip.hide()
+          @_filename = @_file.name.split(/[\/\\]/).pop()
+          @_ext = @_filename.split('.').pop()
+          @_link.addClass(@_ext) if @_ext in @_extensions
+          $('input.name').val(@_filename)# if $('input.name').val() is ""
+
+    initProgress: (e, xhr, settings) =>
+      if @_file
+        @_fields.hide()
+        @_notifier = $('<div class="notifier"></div>').appendTo @_form
+        @_label = $('<h3 class="filename"></h3>').appendTo @_notifier
+        @_progress = $('<div class="progress"></div>').appendTo @_notifier
+        @_bar = $('<div class="bar"></div>').appendTo @_progress
+        @_label.text(@_filename)
+      true
+
+    progress: (e, prog) =>
+      if prog.lengthComputable
+        full_width = @_progress.width()
+        progress_width = Math.round(full_width * prog.loaded / prog.total)
+        console.log "progress_width", progress_width
+        @_bar.width progress_width
+
+
+
 
 
 
@@ -215,6 +191,12 @@ jQuery ($) ->
       @_stars.removeClass('selected')
       @_stars.slice(0, i).addClass('selected')
       @_field.val(i)
+
+
+
+
+
+
 
 
   $.fn.password_form = ->
@@ -352,7 +334,7 @@ jQuery ($) ->
       @_request.abort() if @_request
       @_request = xhr
     
-    capture: (data, status, xhr) =>
+    capture: (e, data, status, xhr) =>
       @display(data)
       @_request = null
     
@@ -370,7 +352,6 @@ jQuery ($) ->
 
   $.fn.filter_form = (options) ->
     @each ->
-      console.log "filter_form", @
       new FilterForm @, options
     @
 

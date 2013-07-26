@@ -8,9 +8,9 @@ jQuery ($) ->
   #   $(link).popup()
   #
   # Display of the popup form is handled by the Popup class. The requests involved in retrieving, submitting and 
-  # resubmitting the form are built on the usual `remote_form` and `remote_link` methods, both of which just configure
-  # the rails_ujs remote links. All this is held together by callbacks triggered in the remote_link mechanism. The
-  # callbacks are defined anonymously as part of the `$().popup()` method below.
+  # resubmitting the form are built on the usual `remote` method, which just configures the rails_ujs remote links. 
+  # All this is held together by callbacks triggered in the remote_link mechanism. The callbacks are defined anonymously
+  # as part of the `$().popup()` method below.
   #
   # We don't attempt to update the page directly with a server response, but a `data-affected` attribute can be used to 
   # trigger a refresh event on any DOM element that should be updated after this action completes. If those elements
@@ -30,7 +30,9 @@ jQuery ($) ->
         on_request: @begin
         on_success: @receive
 
-    begin: (xhr) =>
+    begin: (event, xhr, settings) =>
+      console.log "begin", @_iteration
+      
       switch @_iteration
         when 0
           @prepare()
@@ -47,6 +49,7 @@ jQuery ($) ->
       $('<div class="popup" />')
 
     prepare: () =>
+      console.log "popup prepare"
       @_mask = $('<div class="mask" />').appendTo($('body'))
       @_container = @getContainer()
       @_container.bind 'close', @hide
@@ -54,25 +57,29 @@ jQuery ($) ->
       @_container.bind 'resize', @place
       @_container.insertAfter(@_mask).hide()
 
-    receive: (data) =>
+    receive: (event, data) =>
+      console.log "popup receive"
       if @_iteration == 0 || $(data).find('form').length
         @display(data)
       else
         @conclude(data)
         
     display: (data) =>
+      console.log "popup display"
       @_iteration++
       @_content = $(data)
       @_container.empty()
       @_container.append(@_content)
-      @_content.activate()
       @_header = @_content.find('.header')
+      console.log "popup iterating?", @_content.find('form')
       @_content.find('form').remote
         on_cancel: @hide
         on_success: @receive
+      @_content.activate()
       @show()
           
     conclude: (data) =>
+      console.log "popup conclude"
       if @_affected
         $(@_affected).trigger "refresh"
       if @_replaced
@@ -83,21 +90,25 @@ jQuery ($) ->
       @reset()
 
     show: (e) =>
+      console.log "popup show"
       e.preventDefault() if e
       @place()
       unless @_container.is(":visible")
         @_container.fadeTo 'fast', 1, () =>
-          @_container.find('[data-focus]').focus()
-        @_mask.fadeTo('fast', 0.8)
+          @_container.find('[autofocus]').focus()
+        @_mask.addClass('up')
         @_mask.bind "click", @hide
+        $('#droom').addClass('masked')
         $(window).bind "resize", @place
         @focus()
 
     hide: (e) =>
+      console.log "popup hide"
       e.preventDefault() if e
       @_container.fadeOut('fast')
-      @_mask.fadeOut('fast')
+      @_mask.removeClass('up')
       @_mask.unbind "click", @hide
+      $('#droom').removeClass('masked')
       $(window).unbind "resize", @place
       @_container.find('iframe.youtube').sendCommand('pauseVideo')
 

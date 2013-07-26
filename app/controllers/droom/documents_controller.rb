@@ -3,9 +3,9 @@ module Droom
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
 
-    load_and_authorize_resource :folder, :class => Droom::Folder, :except => :index
-    load_and_authorize_resource :document, :through => :folder, :class => Droom::Document, :shallow => true, :except => :index
-    load_and_authorize_resource :only => :index
+    before_filter :get_folder, :except => [:index]
+    before_filter :build_document, :only => [:create]
+    load_and_authorize_resource :document, :class => Droom::Document, :through => :folder, :shallow => true
     
     def index
       @documents = @documents.matching(params[:q]) unless params[:q].blank?
@@ -51,6 +51,14 @@ module Droom
     def document_params
       params.require(:document).permit(:name, :file, :description, :folder_id)
     end
+    
+    def get_folder
+      @folder = Droom::Folder.find(params[:folder_id])
+    end
 
+    def build_document
+      @document = @folder.documents.build(document_params)
+    end
+    
   end
 end
