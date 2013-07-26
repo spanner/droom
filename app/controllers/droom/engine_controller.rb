@@ -31,7 +31,7 @@ module Droom
       @page = params[:page] || default_page
       collection.page(@page).per(@show)
     end
-
+    
     def not_allowed(exception)
       respond_to do |format|
         format.html { render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false }

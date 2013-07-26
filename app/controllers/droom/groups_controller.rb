@@ -3,6 +3,7 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
 
+    before_filter :get_groups, :only => [:index]
     load_and_authorize_resource
 
     def index
@@ -18,6 +19,7 @@ module Droom
     end
 
     def show
+      @users = paginated(@group.users, 15)
       respond_with @group do |format|
         format.js {
           render :partial => 'droom/groups/group'
@@ -51,6 +53,10 @@ module Droom
   
     def group_params
       params.require(:group).permit(:name, :leader_id, :description)
+    end
+    
+    def get_groups
+      @groups = Droom::Group.shown_in_directory.accessible_by(current_ability).order("name ASC")
     end
 
   end

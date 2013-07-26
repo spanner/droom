@@ -1,13 +1,8 @@
 - group ||= @group
+- users = @users || group.users
 
-%div{:id => "group_#{group.id}", :class => "open", :data => {:action => "collapser", :refreshable => true, :url => group_path(group, :format => :js)} }
-
-  %h2.section
-    = link_to group.name, '#', :class => "name"
-    = action_menulink(group)
-  = action_menu(group)
-
-  %ul.people.detail
-    = render :partial => "droom/users/user", :collection => group.users, :locals => {:group => group}
-  %p.suffix.note
-    = t :group_members, :count => group.users.count
+.paginated
+  %ul.people
+    = render :partial => "droom/users/user", :collection => users
+  .pagination
+    = paginate users

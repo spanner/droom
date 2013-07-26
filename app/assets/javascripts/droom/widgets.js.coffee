@@ -650,7 +650,7 @@ jQuery ($) ->
     defaultSelector: () =>
       '.scrap'
       
-    receive: (r) =>
+    receive: (e, r) =>
       response = $(r)
       @sweep response
       response.activate()

@@ -122,13 +122,13 @@ jQuery ($) ->
       container = $(@).attr('data-replaced') || selector
       affected = $(@).attr('data-affected')
       $(@).remote
-        on_success: (r) =>
+        on_success: (e, r) =>
           replaced = $(@).self_or_ancestor(container).last()
           replacement = $(r).insertAfter(replaced)
           replaced?.remove()
           replacement.activate()
           $(affected).trigger('refresh')
-      $(@).click() if options['force']
+      $(@).click() if options['force'] || $(@).attr('data-autoload')?
 
 
 

@@ -200,7 +200,7 @@ h2.section
 .preview
   color: $mid
 
-div.event, div.document
+div.event, div.document, div.group
   position: relative
   clear: both
   margin-bottom: 30px
@@ -1233,6 +1233,20 @@ div.timepicker
       position: relative
       float: left
 
+.groups
+  .scrolled
+    width: 680px
+    margin-bottom: 50px
+    overflow: hidden
+  .scroller
+    margin-left: 5px
+    width: 1360px
+    .paginated
+      width: 680px
+      position: relative
+      float: left
+  
+
 #minicalendar
   position: relative
   overflow: hidden
@@ -1690,7 +1704,6 @@ ul.people
       height: 32px
       margin-right: 9px
       margin-top: 7px
-      +border-radius(8px)
       background:
         color: $mid
         repeat: no-repeat
@@ -2055,3 +2068,35 @@ ul.checklist
       margin-right: 10px
       &:last-child
         margin-right: 0
+
+.pagination
+  position: relative
+  clear: left
+  margin: 20px 0
+  font-size: 0.9em
+  span.current, span.gap, a
+    display: inline-block
+    float: left
+    width: 24px
+    height: 24px
+    padding: 4px
+    line-height: 26px
+    +border-radius(10px)
+    text-align: center
+    margin-right: 6px
+  a
+    border: 1px solid $pale
+    color: $dark
+    &:visited
+      color: $dark
+    &:hover
+      background-color: $link
+      border-color: $link
+      color: white
+  span.current
+    border: 1px solid $verypale
+    color: $mid
+  span.gap
+    border: 1px solid transparent
+    text-align: center
+    color: $mid

@@ -48,6 +48,10 @@ module Droom
       fragment = "%#{fragment}%"
       where('droom_groups.name like ?', fragment)
     }
+    
+    scope :shown_in_directory, -> {
+      where(:directory => true)
+    }
 
     default_scope -> { order("droom_groups.created_at ASC") }
 
