@@ -1,9 +1,9 @@
 module Droom
   class Scrap < ActiveRecord::Base
     belongs_to :created_by, :class_name => "Droom::User"
-    belongs_to :event, :class_name => "Droom::Event"
-    accepts_nested_attributes_for :event
 
+    belongs_to :event, :class_name => "Droom::Event", :dependent => :destroy
+    accepts_nested_attributes_for :event
     belongs_to :document, :class_name => "Droom::Document", :dependent => :destroy
     accepts_nested_attributes_for :document
 
@@ -16,6 +16,7 @@ module Droom
                       }
 
     before_save :get_youtube_thumbnail
+    after_save :name_associates
 
     scope :by_date, -> { order("droom_scraps.created_at DESC") }
 
@@ -34,7 +35,7 @@ module Droom
 
     Droom.scrap_types.each do |t|
       define_method(:"#{t}?") { scraptype == t.to_s }
-      scope t.pluralize.to_sym, -> { where(["scraptype == ?", t]) }
+      scope t.pluralize.to_sym, -> { where(:scraptype => t.to_s) }
     end
 
     def wordiness
@@ -85,10 +86,14 @@ module Droom
   protected
   
     def get_youtube_thumbnail
-      # youtube id is held in the 'body' column.
-      if scraptype == "video" && body?
-        self.image = URI("http://img.youtube.com/vi/#{body}/0.jpg")
+      if scraptype == "video" && youtube_id?
+        self.image = URI("http://img.youtube.com/vi/#{youtube_id}/0.jpg")
       end
+    end
+    
+    def name_associates
+      event.update_column(:name, name) if event?
+      document.update_column(:name, name) if document?
     end
     
   end

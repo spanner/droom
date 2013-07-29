@@ -18,6 +18,7 @@ jQuery ($) ->
       @place()
       @_container.bind "mousedown", @containEvent
       @_container.bind "touchstart", @containEvent
+      @_container.bind "refresh", @refresh
       $(window).bind "resize", @place
     
     place: (e) =>
@@ -36,6 +37,9 @@ jQuery ($) ->
         @_scraps.push scrap
       @_modified = true
     
+    refresh: (e) =>
+      # do something!
+
     goto: (scrap) =>
       @_swipe.slide @_scraps.indexOf(scrap)
     
@@ -44,6 +48,10 @@ jQuery ($) ->
 
     prev: () =>
       @_swipe.prev()
+    
+    afterSlide: () =>
+      @_container.find('iframe.youtube').each ->
+        $(@).attr('src', $(@).attr('src'))
       
     resetSwipe: () =>
       @_swipe?.kill()
@@ -51,6 +59,7 @@ jQuery ($) ->
         speed: 1000
         auto: false
         loop: false
+        callback: @afterSlide
       $.swipe = @_swipe
       @_modified = false
       

@@ -3,7 +3,7 @@
   %p.slug
     = @folder.path + "/"
 
-  .filepicker
+  .filepicker{:data => {:role => "filepicker"}}
     = link_to "choose file", "#", :class => "ul minimal #{@document.file_extension}", :data => {:action => "pick"}
     = f.file_field :file, :class => "file"
     %p.tip

@@ -102,7 +102,6 @@ jQuery ($) ->
       @_container = $(element)
       @_form = @_container.parents('form')
       @_link = @_container.find('a[data-action="pick"]')
-      @_tip = @_container.find('p.tip')
       @_filefield = @_container.find('input[type="file"]')
       @_file = null
       @_filename = ""
@@ -130,7 +129,6 @@ jQuery ($) ->
           @display()
 
     display: () =>
-      @_tip.hide()
       @_link.addClass(@_ext) if @_ext in @extensions()
       @_form.find('input.name').val(@_filename) if $('input.name').val() is @_previous_filename
 
@@ -170,6 +168,9 @@ jQuery ($) ->
         "background-image": @_original_background
 
 
+
+
+
   $.fn.image_picker = () ->
     @each ->
       new ImagePicker @
@@ -184,31 +185,6 @@ jQuery ($) ->
           "background-image": "url(#{reader.result})"
         @remover().show()
       reader.readAsDataURL(@_file)
-
-
-
-
-
-  $.fn.video_picker = () ->
-    @each ->
-      new VideoPicker @
-
-  class VideoPicker
-    constructor: (element) ->
-      @_container = $(element)
-      @_form = @_container.parents('form')
-      @_link = @_container.find('a[data-action="pick"]')
-      @_tip = @_container.find('p.tip')
-      @_filefield = @_container.find('input[type="file"]')
-      @_file = null
-      @_filename = ""
-      @_ext = ""
-      @_fields = @_container.siblings('.non-file-data')
-      @_form.bind 'remote:upload', @initProgress
-      @_form.bind 'remote:progress', @progress
-      @_link.bind 'click', @picker
-      @_filefield.bind 'change', @picked
-    
 
 
 
@@ -252,8 +228,6 @@ jQuery ($) ->
       @_stars.removeClass('selected')
       @_stars.slice(0, i).addClass('selected')
       @_field.val(i)
-
-
 
 
 
@@ -1047,7 +1021,7 @@ jQuery ($) ->
 
 
 
-  $.fn.video_picker = (options) ->
+  $.fn.youtube_suggester = (options) ->
     options = $.extend(
       submit_form: true
       threshold: 3
@@ -1062,9 +1036,10 @@ jQuery ($) ->
   class YoutubeSuggester extends Suggester
     constructor: () ->
       super
-      @target = $('textarea#scrap_body')
-      @caption = $('textarea#scrap_note')
-      @thumb = $('.scrapvideo .thumb')
+      @target = $('input#scrap_youtube_id')
+      @name_field = $('input#scrap_name')
+      @preview_holder = $('div.youtube_preview')
+      @thumb_holder = @prompt.siblings('.thumbnail')
 
     suggest: (suggestions) =>
       @unwait()
@@ -1079,15 +1054,25 @@ jQuery ($) ->
     select: (value, id) =>
       @hide()
       @prompt.trigger 'suggester.change'
-      @target.val(id)
+      @prompt.val(id)
       title = $("<div>#{value}</div>").find('.title')
-      @caption.val(title.text()) if @caption.val() is ""
-      $.get "/videos/#{id}.js", @preview, 'html'
+      console.log "name_field", @name_field, title
+      @name_field.val(title.text()) if @name_field.val() is ""
+      @get_preview(id)
+      @get_thumbnail(id)
       @options.afterSelect?.call(@, value)
     
-    preview: (html) =>
-      @thumb.empty().html(html)
-      
+    get_preview: (id) =>
+      $.get "/videos/#{id}.js", @show_preview, 'html'
+    
+    show_preview: (response) =>
+      @preview_holder.empty().show().html(response)
+
+    get_thumbnail: (id) =>
+      @thumb_holder.css
+        "background-image": "url('http://img.youtube.com/vi/#{id}/3.jpg')"
+
+
 
   # I've just lifted this out of the suggester so that it can be used in other pickers.
 
@@ -1105,10 +1090,12 @@ jQuery ($) ->
       @
 
     place: () =>
+      width = @hook.outerWidth() - 2
+      width = 300 if width < 300
       @drop.css
         top: @hook.position().top + @hook.outerHeight() - 2
         left: @hook.position().left
-        width: @hook.outerWidth() - 2
+        width: width
       
     populate: (items) =>
       @reset()

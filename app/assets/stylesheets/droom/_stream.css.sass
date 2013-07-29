@@ -55,8 +55,18 @@
             margin: 100px
             font-size: 3em
         &.event
+          .datemark
+            padding-top: 0
           .text
-            margin: 100px 100px 100px 100px
+            margin: 100px
+            p.name
+              font-size: 2em
+              line-height: 1.2
+        &.document
+          .filemark
+            padding-top: 0
+          .text
+            margin: 100px
             p.name
               font-size: 2em
               line-height: 1.2
@@ -176,7 +186,8 @@ span.credit
           position: absolute
           width: 32px
           height: 18px
-          left: -50px
+          left: -90px
+          top: 5px
       
     a.icon
       background:
@@ -244,6 +255,13 @@ div.popup
         font-size: 100%
         line-height: 1.2
 
+    div.youtube_preview
+      margin: 20px 0
+      display: none
+      iframe
+        width: 520px
+        height: 320px
+
     &.image
       .specifics.image
         display: inline-block
@@ -258,6 +276,8 @@ div.popup
           margin-top: 15px
       p.name, p.url
         width: 360px
+      div.youtube_preview
+        display: block
     &.event
       margin: 20px
       .specifics.event
@@ -294,11 +314,14 @@ div.popup
       height: 40px
       padding: 0 20px
       li
+        position: relative
         display: inline-block
+        overflow: hidden
         margin-right: 0
-        height: 32px
+        height: 40px
         font-size: 80%
         label
+          position: relative
           display: inline-block
           padding: 4px 6px 0 34px
           height: 36px
@@ -324,12 +347,11 @@ div.popup
           &.event
             background-position: 0 -280px
         input[type="radio"]
-          display: none
-        input[type="radio"] + label
-          +opacity(0.4)
+          position: absolute
+          visibility: hidden
         input[type="radio"]:checked + label
-          +opacity(1)
-          background-color: $palest
+          background-color: $coolgrey00
+          color: $dark
 
     // form components are flowed so that widths and floats can change as needed.
 
@@ -342,9 +364,13 @@ div.popup
         .datemark, .filemark
           margin-left: 5px
           margin-top: 10px
+        .filemark
+          margin-left: 10px
+          margin-top: 22px
+          min-height: 50px
       &.video, &.image
         width: 130px
 
     .buttons
-      margin: 10px 20px 20px 20px
+      margin: 10px 0 20px 0
 

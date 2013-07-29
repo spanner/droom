@@ -9,6 +9,7 @@ require "droom/searchability"
 require "droom/taggability"
 require "droom/folders"
 require "snail"
+require "youtube_it"
 
 module Droom
   # Droom configuration is handled by accessors on the Droom base module.
@@ -30,6 +31,7 @@ module Droom
                  :margin_dashboard_modules,
                  :panels,
                  :scrap_types,
+                 :default_scrap_type,
                  :use_forenames,
                  :use_biogs,
                  :use_separate_mobile_number,
@@ -118,6 +120,10 @@ module Droom
     
     def scrap_types
       @@scrap_types ||= %w{image video text quote link event document}
+    end
+    
+    def default_scrap_type
+      @@default_scrap_type ||= 'text'
     end
 
     def use_forenames?

@@ -64,7 +64,6 @@ jQuery ($) ->
     @find_including_self('.venuepicker').venue_picker()
     @find_including_self('.datepicker').date_picker()
     @find_including_self('.timepicker').time_picker()
-    @find_including_self('.filepicker').file_picker()
     @find_including_self('.person_selector').person_selector()
     @find_including_self('.person_picker').person_picker()
     @find_including_self('.group_picker').group_picker()
@@ -73,7 +72,9 @@ jQuery ($) ->
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('form.preferences').preferences_form()
     @find_including_self('form.scrap').scrap_form()
+    @find_including_self('[data-role="filepicker"]').file_picker()
     @find_including_self('[data-role="imagepicker"]').image_picker()
+    @find_including_self('[data-role="youtubepicker"]').youtube_suggester()
     
     # page widgets
     

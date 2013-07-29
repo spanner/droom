@@ -204,7 +204,7 @@ module Droom
     end
 
     def start_date=(value)
-      self.start = parse_date(value).to_date# + start_time
+      self.start = parse_date(value).to_date
     end
 
     def finish_time=(value)
@@ -215,7 +215,7 @@ module Droom
     end
 
     def finish_date=(value)
-      self.finish = parse_date(value).to_date# + finish_time
+      self.finish = parse_date(value).to_date
     end
 
     def duration

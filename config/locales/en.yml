@@ -34,6 +34,10 @@ en:
           url: "Link destination"
           body: "Body text"
         scrap:
+          name: "Title"
+          url: "Link destination"
+          body: "Body text or quote"
+          note: "Caption"
           scraptype_image: "Image"
           scraptype_text: "Text"
           scraptype_video: "Video"

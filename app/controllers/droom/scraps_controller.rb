@@ -54,21 +54,18 @@ module Droom
 
     def get_scraptype
       if params[:scrap]
-        Rails.logger.warn ">>> get_scraptype. params -> '#{params[:scrap][:scraptype]}'"
-        Rails.logger.warn ">>> permitted -> #{Droom.scrap_types.to_sentence}"
         @scraptype = params[:scrap][:scraptype] if Droom.scrap_types.include?(params[:scrap][:scraptype])
       end
-      @scraptype ||= 'text'
+      @scraptype ||= Droom.default_scrap_type
     end
 
     def scrap_params(scraptype=@scraptype)
-      Rails.logger.warn ">>> scrap_params(#{scraptype})"
       case scraptype.to_sym
       when :image then params.require(:scrap).permit(:name, :image, :note, :url, :scraptype)
       when :video then params.require(:scrap).permit(:name, :youtube_id, :note, :url, :scraptype)
       when :link then params.require(:scrap).permit(:name, :note, :url, :scraptype)
-      when :event then params.require(:scrap).permit(:name, :note, :url, :scraptype, :event_attributes => [:start])
-      when :document then params.require(:scrap).permit(:name, :note, :url, :scraptype, :document_attributes => [:file])
+      when :event then params.require(:scrap).permit(:name, :note, :url, :scraptype, :event_attributes => [:id, :calendar_id, :start_date])
+      when :document then params.require(:scrap).permit(:name, :note, :url, :scraptype, :document_attributes => [:id, :file, :folder_id])
       else params.require(:scrap).permit(:name, :body, :note, :url, :scraptype)
       end
     end

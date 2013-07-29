@@ -26,6 +26,8 @@ jQuery ($) ->
       @_iteration = 0
       @_affected = @_link.attr('data-affected')
       @_replaced = @_link.attr('data-replaced')
+      @_aftered = @_link.attr('data-appended')
+      @_befored = @_link.attr('data-prepended')
       @_link.remote
         on_request: @begin
         on_success: @receive
@@ -49,7 +51,6 @@ jQuery ($) ->
       $('<div class="popup" />')
 
     prepare: () =>
-      console.log "popup prepare"
       @_mask = $('<div class="mask" />').appendTo($('body'))
       @_container = @getContainer()
       @_container.bind 'close', @hide
@@ -58,20 +59,17 @@ jQuery ($) ->
       @_container.insertAfter(@_mask).hide()
 
     receive: (event, data) =>
-      console.log "popup receive"
       if @_iteration == 0 || $(data).find('form').length
         @display(data)
       else
         @conclude(data)
         
     display: (data) =>
-      console.log "popup display"
       @_iteration++
       @_content = $(data)
       @_container.empty()
       @_container.append(@_content)
       @_header = @_content.find('.header')
-      console.log "popup iterating?", @_content.find('form')
       @_content.find('form').remote
         on_cancel: @hide
         on_success: @receive
@@ -79,10 +77,17 @@ jQuery ($) ->
       @show()
           
     conclude: (data) =>
-      console.log "popup conclude"
       if @_affected
         $(@_affected).trigger "refresh"
-      if @_replaced
+      if @_aftered?
+        addition = $(data)
+        $(@_aftered).after(addition)
+        addition.activate().signal_confirmation()
+      if @_befored?
+        addition = $(data)
+        $(@_befored).before(addition)
+        addition.activate().signal_confirmation()
+      if @_replaced?
         replacement = $(data)
         $(@_replaced).after(replacement)
         $(@_replaced).remove()
@@ -90,7 +95,6 @@ jQuery ($) ->
       @reset()
 
     show: (e) =>
-      console.log "popup show"
       e.preventDefault() if e
       @place()
       unless @_container.is(":visible")
@@ -103,7 +107,6 @@ jQuery ($) ->
         @focus()
 
     hide: (e) =>
-      console.log "popup hide"
       e.preventDefault() if e
       @_container.fadeOut('fast')
       @_mask.removeClass('up')
