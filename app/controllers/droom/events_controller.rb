@@ -57,6 +57,9 @@ module Droom
   
     def get_events
       @events = Droom::Event.accessible_by(current_ability)
+      if Droom.separate_calendars?
+        @events = @events.in_calendar(Droom::Calendar.where(:name => "main").first_or_create)
+      end
       if params[:direction] == 'past'
         @events = @events.past.order('start DESC')
         @direction = "past"

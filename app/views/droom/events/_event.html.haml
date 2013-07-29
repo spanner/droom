@@ -53,7 +53,7 @@
         - if !full_attachments && event.folder.populated?
           %ul.folder
             = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true, :limit => 3, :for_more => event_url(event)}
-        = event.description.html_safe
+        = event.description.html_safe if event.description?
 
   - if full_attachments
     = render :partial => 'droom/events/attachments', :locals => {:event => event}

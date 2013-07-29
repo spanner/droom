@@ -6,6 +6,7 @@ module Droom
   class Document < ActiveRecord::Base
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
+    belongs_to :scrap, :dependent => :destroy
     has_many :dropbox_documents
     has_attached_file :file
 

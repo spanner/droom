@@ -67,7 +67,9 @@ module Droom
 
     scope :limited_to, -> limit { limit(limit) }
 
-    scope :at_venue, -> venue { where(["venue_id = ?", venue.id]) }
+    scope :at_venue, -> venue { where(:venue_id => venue.id) }
+
+    scope :in_calendar, -> calendar { where(:calendar_id => calendar.id) }
 
     scope :except_these_uuids, -> uuids {
       placeholders = uuids.map{'?'}.join(',')

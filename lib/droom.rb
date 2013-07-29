@@ -52,7 +52,8 @@ module Droom
                  :aws_bucket_name,
                  :all_events_public,
                  :all_documents_public,
-                 :password_pattern
+                 :password_pattern,
+                 :separate_calendars
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -215,6 +216,10 @@ module Droom
 
     def required_calendar_names
       @@required_calendar_names ||= %w{main stream}
+    end
+    
+    def separate_calendars?
+      !!@@separate_calendars
     end
     
     def password_pattern
