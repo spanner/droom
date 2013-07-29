@@ -58,7 +58,7 @@ jQuery ($) ->
     
     @find_including_self('a.inline, a.fetch').replace_with_remote_content()
     
-    # form widgets and input modification. These might move to [data-widget] markup.
+    # form widgets and input modification. These are moving to [data-role] markup.
     
     @find_including_self('.wysihtml').html_editable()
     @find_including_self('.venuepicker').venue_picker()
@@ -73,6 +73,7 @@ jQuery ($) ->
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('form.preferences').preferences_form()
     @find_including_self('form.scrap').scrap_form()
+    @find_including_self('[data-role="imagepicker"]').image_picker()
     
     # page widgets
     

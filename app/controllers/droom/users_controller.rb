@@ -4,6 +4,7 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
 
+    before_filter :build_user, :only => [:create]
     load_and_authorize_resource
 
     def index
@@ -31,18 +32,9 @@ module Droom
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
-      if @user.update_attributes(params[:user])
+      if @user.update_attributes(user_params)
         sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
-        respond_to do |format|
-          format.js { 
-            partial = params[:response_partial] || "user"
-            render :partial => "droom/users/#{partial}"
-          }
-          format.html {
-            flash[:notice] = @user != current_user ? t(:user_updated, :name => @user.name) : flash[:notice] = t(:your_preferences_saved)
-            render :partial => "droom/users/user"
-          }
-        end
+        render :partial => "droom/users/user"
       else
         render :edit
       end
@@ -60,16 +52,12 @@ module Droom
 
   protected
 
-    def remember_token_auth
-      if params[:auth_token] && user_signed_in?
-        current_user.remember_me = true 
-        sign_in current_user
-      end
-    end
-
     def user_params
-      params.require(:user).permit(:title, :name, :forename, :email, :password, :password_confirmation, :phone, :description, :admin, :preferences_attributes, :confirm, :old_id, :invite_on_creation, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code, :mobile, :dob, :organisation_id, :public, :private, :female, :image_file_name, :image_file_size, :image_updated_at, :image_upload_id, :image_scale_width, :image_scale_height, :image_offset_left, :image_offset_top)
+      params.require(:user).permit(:title, :name, :forename, :email, :password, :password_confirmation, :phone, :description, :admin, :preferences_attributes, :confirm, :old_id, :invite_on_creation, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code, :mobile, :dob, :organisation_id, :public, :private, :female, :image)
     end
 
+    def build_user
+      @user = Droom::User.new(user_params)
+    end
   end
 end
