@@ -30,10 +30,11 @@ en:
           description: "Mission and description"
         permission:
           service_id: "Service"
-        user:
+          name: "Title or link text"
+          url: "Link destination"
+          body: "Body text"
         scrap:
-          scraptype:
-            image: "Image"
+          scraptype_image: "Image"
           scraptype_text: "Text"
           scraptype_video: "Video"
           scraptype_link: "Link"
@@ -240,6 +241,7 @@ en:
     admin: "Admin"
     configuration: "Configuration"
     search: "Search"
+  no_attachments: "Nothing has been attached"
   no_invitations: "Nobody has been invited"
   page_title: "Page title"
   page_slug: "Slug"
@@ -324,6 +326,7 @@ en:
   quick_search: "Quick search"
   future_events: "Events coming up"
   event_name: "Event name"
+  search_youtube: "Search Youtube"
   slug_note: "Spaces and odd characters will be replaced with dashes"
   to: "to"
   venue_name: "Venue name"

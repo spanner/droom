@@ -124,15 +124,15 @@ jQuery ($) ->
       @_link.removeClass(@extensions().join(' '))
       if files = @_filefield[0].files
         if @_file = files.item(0)
+          @_previous_filename = @_filename ? ""
+          @_filename = @_file.name.split(/[\/\\]/).pop()
+          @_ext = @_filename.split('.').pop()
           @display()
 
     display: () =>
       @_tip.hide()
-      previous_filename = @_filename ? ""
-      @_filename = @_file.name.split(/[\/\\]/).pop()
-      @_ext = @_filename.split('.').pop()
       @_link.addClass(@_ext) if @_ext in @extensions()
-      @_form.find('input.name').val(@_filename) if $('input.name').val() is previous_filename
+      @_form.find('input.name').val(@_filename) if $('input.name').val() is @_previous_filename
 
     initProgress: (e, xhr, settings) =>
       if @_file?
@@ -150,22 +150,6 @@ jQuery ($) ->
         progress_width = Math.round(full_width * prog.loaded / prog.total)
         @_bar.width progress_width
 
-
-
-  $.fn.image_picker = () ->
-    @each ->
-      new ImagePicker @
-
-  class ImagePicker extends FilePicker
-    display: () =>
-      @_original_background ?= @_link.css("background-image")
-      reader = new FileReader()
-      reader.onload = (e) =>
-        @_link.css
-          "background-image": "url(#{reader.result})"
-        @remover().show()
-      reader.readAsDataURL(@_file)
-
     remover: () =>
       unless @_remover?
         @_remover = $('<a href="#" class="remover" />').insertAfter(@_link)
@@ -177,10 +161,55 @@ jQuery ($) ->
       old_ff = @_filefield
       @_filefield = old_ff.clone().insertAfter(old_ff)
       @_filefield.bind 'change', @picked
-      @_remover?.hide()
       old_ff.remove()
+      @_form.find('input.name').val("") if $('input.name').val() is @_filename
+      @_filename = ""
+      @_ext = ""
+      @_remover?.hide()
       @_link.css
         "background-image": @_original_background
+
+
+  $.fn.image_picker = () ->
+    @each ->
+      new ImagePicker @
+
+  class ImagePicker extends FilePicker
+    display: () =>
+      @_form.find('input.name').val(@_filename) if $('input.name').val() is @_previous_filename
+      @_original_background ?= @_link.css("background-image")
+      reader = new FileReader()
+      reader.onload = (e) =>
+        @_link.css
+          "background-image": "url(#{reader.result})"
+        @remover().show()
+      reader.readAsDataURL(@_file)
+
+
+
+
+
+  $.fn.video_picker = () ->
+    @each ->
+      new VideoPicker @
+
+  class VideoPicker
+    constructor: (element) ->
+      @_container = $(element)
+      @_form = @_container.parents('form')
+      @_link = @_container.find('a[data-action="pick"]')
+      @_tip = @_container.find('p.tip')
+      @_filefield = @_container.find('input[type="file"]')
+      @_file = null
+      @_filename = ""
+      @_ext = ""
+      @_fields = @_container.siblings('.non-file-data')
+      @_form.bind 'remote:upload', @initProgress
+      @_form.bind 'remote:progress', @progress
+      @_link.bind 'click', @picker
+      @_filefield.bind 'change', @picked
+    
+
 
 
   $.fn.score_picker = () ->

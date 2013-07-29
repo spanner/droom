@@ -10,6 +10,7 @@ module Droom
     has_attached_file :image, 
                       :styles => {
                         :stream => "1280x1280>",
+                        :popup => "1280x1280>",
                         :icon => "32x32#",
                         :thumb => "160x90#"
                       }

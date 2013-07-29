@@ -383,16 +383,11 @@ module Droom
 
     ## Ownership
     #
-    # Current user is pushed into here to make it available in models
-    # such as the UserActionObserver that sets ownership before save.
-    #
-    def self.current
-      Thread.current[:user]
-    end
-    def self.current=(user)
-      Thread.current[:user] = user
-    end
-     
+    has_many :scraps, :foreign_key => "created_by_id"
+    has_many :documents, :foreign_key => "created_by_id"
+
+
+
   protected
 
     def ensure_uid

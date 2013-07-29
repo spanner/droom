@@ -381,51 +381,73 @@ form.page
     width: 50%
     color: $mid
 
-form.user
-  .image
-    position: relative
-    width: 132px
-    height: 132px
-    margin-right: 20px
-    float: left
-    overflow: hidden
-    a.remover
-      display: block
+
+.image-upload
+  position: relative
+  width: 132px
+  height: 132px
+  margin-right: 20px
+  float: left
+  overflow: hidden
+  a.remover
+    display: block
+    position: absolute
+    top: 5px
+    right: 3px
+    width: 24px
+    height: 24px
+    background:
+      position: 0 -646px
+      image: image-url('droom/minisymbols.png')
+  a.box
+    display: block
+    width: 130px
+    height: 130px
+    border: 1px solid $pale
+    background:
+      color: white
+      position: center center
+      repeat: no-repeat
+      size: cover
+    input[type="file"]
       position: absolute
-      top: 5px
-      right: 3px
-      width: 24px
-      height: 24px
-      background:
-        position: 0 -646px
-        image: image-url('droom/minisymbols.png')
-    a.uploadbox
-      display: block
-      width: 130px
-      height: 130px
-      border: 1px solid $pale
-      background:
-        color: white
-        position: center center
-        repeat: no-repeat
-        size: cover
-      &.empty
-        background-image: image-url('droom/missing/thumb.png')
-      input[type="file"]
-        position: absolute
-        top: 200px
-        left: 0
-    .img
-      width: 130px
-      height: 130px
-    .prompt
-      padding-top: 30px
-      +small
-    .scaler
-      width: 100px
-    p.range
-      .slider
-        width: 70px
+      top: 200px
+      left: 0
+
+.youtube-search
+  position: relative
+  width: 132px
+  height: 132px
+  margin-right: 20px
+  float: left
+  overflow: hidden
+  a.remover
+    display: block
+    position: absolute
+    top: 5px
+    right: 3px
+    width: 24px
+    height: 24px
+    background:
+      position: 0 -646px
+      image: image-url('droom/minisymbols.png')
+  .thumbnail
+    display: block
+    width: 130px
+    height: 73px
+    border: 1px solid $pale
+    background:
+      color: white
+      position: center center
+      repeat: no-repeat
+      size: cover
+  input[type="text"]
+    width: 120px
+    padding: 5px
+    margin: 20px 0 0 0
+
+
+form.user
   p.name
     margin: 0
     input
@@ -1131,7 +1153,7 @@ li.more
     padding: 5px 0
     min-height: 22px
 
-input[type="text"], input[type="password"], input[type="email"], select, textarea
+input[type="text"], input[type="password"], input[type="email"], input[type="url"], select, textarea
   color: $input
   padding: 5px
   border: 1px solid $pale
@@ -1795,8 +1817,6 @@ div.popup
     margin-left: $datemark_width + $datemark_margin
   form.document
     margin-left: 60px
-  form.scrap
-    margin: 0
 
   div.notifier
     position: absolute

@@ -1,2 +1,7 @@
-#new_scrap
+#scrap
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2.titlebar
+      = t :add_scrap
+
   = render :partial => 'form'

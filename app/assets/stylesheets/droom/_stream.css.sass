@@ -195,4 +195,156 @@ span.credit
     span.attribution, span.caption
       color: $pale
       display: block
+
+
+// scrap-editing popups
+
+
+
+div.popup
+  form.scrap
+    margin: 20px
+
+
+    // visibility of form components depends on overall scraptype setting
+    // that will be applied to the form as a css class.
+
+    p.name, p.url
+      input
+        width: 100%
+
+    p.name
+      display: inline-block
+      margin-top: 0
+      float: left
+      input[type="text"]
+        font-size: 1.8em
+        font-weight: bold
+
+    p.url
+      display: inline-block
+      margin-top: 0
+      float: left
     
+    p.body
+      clear: left
+      display: none
+      textarea
+        width: 520px
+        background-color: white
+        font-size: 100%
+        height: 290px
+        
+    p.caption
+      clear: left
+      textarea
+        width: 520px
+        height: 80px
+        background-color: white
+        font-size: 100%
+        line-height: 1.2
+
+    &.image
+      .specifics.image
+        display: inline-block
+        .image-upload
+          margin-top: 12px
+      p.name, p.url
+        width: 360px
+    &.video
+      .specifics.video
+        display: inline-block
+        .youtube-search
+          margin-top: 15px
+      p.name, p.url
+        width: 360px
+    &.event
+      margin: 20px
+      .specifics.event
+        display: inline-block
+      p.name, p.url
+        width: 420px
+    &.document
+      margin: 20px
+      .specifics.document
+        display: inline-block
+      p.name, p.url
+        width: 420px
+    &.quote
+      .body
+        display: block
+      p.name, p.url
+        width: 520px
+    &.text
+      .body
+        display: block
+      p.name, p.url
+        width: 520px
+    &.link
+      p.name, p.url
+        width: 520px
+    
+
+    // The scraptype list is presented as a tab bar
+
+    ul.scraptypes
+      margin: -20px 0 20px -20px
+      background-color: $dark
+      width: 540px
+      height: 40px
+      padding: 0 20px
+      li
+        display: inline-block
+        margin-right: 0
+        height: 32px
+        font-size: 80%
+        label
+          display: inline-block
+          padding: 4px 6px 0 34px
+          height: 36px
+          line-height: 36px
+          color: white
+          overflow: hidden
+          font-size: 0.9em
+          cursor: pointer
+          background:
+            repeat: no-repeat
+            position: 0 8px
+            image: image-url('droom/scrap_icons.png')
+          &.text
+            background-position: 0 -40px
+          &.quote
+            background-position: 0 -88px
+          &.video
+            background-position: 0 -136px
+          &.image
+            background-position: 0 -184px
+          &.document
+            background-position: 0 -232px
+          &.event
+            background-position: 0 -280px
+        input[type="radio"]
+          display: none
+        input[type="radio"] + label
+          +opacity(0.4)
+        input[type="radio"]:checked + label
+          +opacity(1)
+          background-color: $palest
+
+    // form components are flowed so that widths and floats can change as needed.
+
+    .specifics
+      display: none
+      float: left
+      margin: 5px 20px 10px 0
+      &.document, &.event
+        width: 50px
+        .datemark, .filemark
+          margin-left: 5px
+          margin-top: 10px
+      &.video, &.image
+        width: 130px
+
+    .buttons
+      margin: 10px 20px 20px 20px
+
