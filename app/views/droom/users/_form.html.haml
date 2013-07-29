@@ -25,43 +25,44 @@
       %br
       = f.text_field :name, :required => true, :autofocus => true
 
-  .contacts
-    %p.email
-      = f.label :email
-      %br
-      = f.text_field :email, :required => true
+  .non-file-data
+    .contacts
+      %p.email
+        = f.label :email
+        %br
+        = f.text_field :email, :required => true
   
-    %p.phone
-      = f.label :phone, :class => "optional"
-      %br
-      = f.text_field :phone
-
-    - if Droom.use_separate_mobile_number
-      %p.secondary
-        = f.label :mobile, :class => "optional"
+      %p.phone
+        = f.label :phone, :class => "optional"
         %br
-        = f.text_field :mobile
+        = f.text_field :phone
 
-  - if admin?
-    - if Droom.use_organisations?
-      %p.organisation
-        = f.label :organisation_id
-        %br
-        = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+      - if Droom.use_separate_mobile_number
+        %p.secondary
+          = f.label :mobile, :class => "optional"
+          %br
+          = f.text_field :mobile
 
-    - if @user.new_record?
-      %p.admin
-        = f.check_box :invite_on_creation, :class => 'invite'
-        = f.label :invite_on_creation      
-        = f.check_box :admin_user
-        = f.label :admin_user
+    - if admin?
+      - if Droom.use_organisations?
+        %p.organisation
+          = f.label :organisation_id
+          %br
+          = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
 
-  - if Droom.use_biogs?
-    - @user.description = "<p></p>" unless @user.description?
-    .description.wysihtml
-      .toolbar#t1
-        = render 'droom/shared/toolbar'
-      = f.text_area :description
+      - if @user.new_record?
+        %p.admin
+          = f.check_box :invite_on_creation, :class => 'invite'
+          = f.label :invite_on_creation      
+          = f.check_box :admin_user
+          = f.label :admin_user
+
+    - if Droom.use_biogs?
+      - @user.description = "<p></p>" unless @user.description?
+      .description.wysihtml
+        .toolbar#t1
+          = render 'droom/shared/toolbar'
+        = f.text_area :description
 
   .buttons
     - if @user == current_user

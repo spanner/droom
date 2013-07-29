@@ -107,10 +107,10 @@ jQuery ($) ->
       @_file = null
       @_filename = ""
       @_ext = ""
-      @_fields = @_container.siblings('.metadata')
+      @_fields = @_container.siblings('.non-file-data')
       @_form.bind 'remote:upload', @initProgress
       @_form.bind 'remote:progress', @progress
-      @_link.click @picker
+      @_link.bind 'click', @picker
       @_filefield.bind 'change', @picked
     
     picker: (e) =>
@@ -135,7 +135,7 @@ jQuery ($) ->
       @_form.find('input.name').val(@_filename) if $('input.name').val() is previous_filename
 
     initProgress: (e, xhr, settings) =>
-      if @_file
+      if @_file?
         @_fields.hide()
         @_notifier = $('<div class="notifier"></div>').appendTo @_form
         @_label = $('<h3 class="filename"></h3>').appendTo @_notifier
@@ -145,7 +145,7 @@ jQuery ($) ->
       true
 
     progress: (e, prog) =>
-      if prog.lengthComputable
+      if @_file? and prog.lengthComputable
         full_width = @_progress.width()
         progress_width = Math.round(full_width * prog.loaded / prog.total)
         @_bar.width progress_width
