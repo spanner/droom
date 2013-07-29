@@ -9,7 +9,7 @@
   
   .specifics.image
     - if @scrap.image?
-      - img = @scrap.image.url(:popup)
+      - img = @scrap.image.url(:thumb)
     - else
       - img = image_url('droom/missing/scrap.png')
     .image-upload{:data => {:role => "imagepicker"}}
@@ -18,7 +18,7 @@
 
   .specifics.video
     - if @scrap.image?
-      - img = @scrap.image.url(:popup)
+      - img = @scrap.image.url(:thumb)
     - else
       - img = image_url('droom/missing/scrap.png')
     .youtube-search

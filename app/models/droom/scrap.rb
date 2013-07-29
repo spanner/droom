@@ -12,7 +12,7 @@ module Droom
                         :stream => "1280x1280>",
                         :popup => "1280x1280>",
                         :icon => "32x32#",
-                        :thumb => "160x90#"
+                        :thumb => "130x73#"
                       }
 
     before_save :get_youtube_thumbnail
@@ -34,7 +34,6 @@ module Droom
     default_scope -> { order("created_at DESC").includes(:event, :document) }
 
     Droom.scrap_types.each do |t|
-      define_method(:"#{t}?") { scraptype == t.to_s }
       scope t.pluralize.to_sym, -> { where(:scraptype => t.to_s) }
     end
 
