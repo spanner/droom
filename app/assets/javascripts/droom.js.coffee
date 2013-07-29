@@ -21,7 +21,7 @@
 
 jQuery ($) ->
   $.activate_with () ->
-    # console.log "activate", @
+    console.log "activate", @
     
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('[data-refreshable]').refresher()

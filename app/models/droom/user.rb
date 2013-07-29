@@ -158,7 +158,8 @@ module Droom
     ## Mugshot
     #
     include Paperclip::Croppable
-    has_attached_file :image, 
+    has_attached_file :image,
+                      :default_url => ActionController::Base.helpers.image_path("droom/missing/:style.png"),
                       :styles => {
                         :standard => "520x520#",
                         :icon => "32x32#",

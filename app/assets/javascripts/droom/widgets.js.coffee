@@ -301,7 +301,7 @@ jQuery ($) ->
       if @_options.fast
         @_form.find('input[type="search"]').bind 'keyup', @changed
         @_form.find('input[type="search"]').bind 'change', @changed
-        @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box widget
+        @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box control in webkit search fields
         @_form.find('input[type="text"]').bind 'keyup', @keyed
         @_form.find('input[type="text"]').bind 'change', @changed
         @_form.find('input[type="radio"]').bind 'click', @clicked
@@ -403,10 +403,14 @@ jQuery ($) ->
       if Modernizr.history
         $(window).bind 'popstate', @restoreState
 
-    capture: (data, status, xhr) =>
-      @saveState(data) if Modernizr.history
+    capture: (e, data, status, xhr) =>
       super
+      @saveState(data) if Modernizr.history
 
+    revert: (e) =>
+      super
+      @saveState(null) if Modernizr.history
+      
     saveState: (results) =>
       results ?= @_original_content
       term = @_prompt.val()

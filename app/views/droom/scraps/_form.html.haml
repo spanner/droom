@@ -11,16 +11,16 @@
   %div{:class => "fields #{@scrap.scraptype}"}
     .upload
       = f.file_field :image, :class => 'file_upload', :accept => "image"
-          .img
-            - if @scrap.image?
-              .existing
-                = link_to image_tag(@scrap.image.url(:cropped)), cropper.edit_upload_url(@scrap.image_upload, :for => "scrap", :offset_t => @scrap.image_offset_top, :offset_l => @scrap.image_offset_left, :scale_w => @scrap.image_scale_width, :scale_h => @scrap.image_scale_height), :data => {:action => "recrop"}, :title => "Click to adjust crop"
-                = link_to t(:detach_upload), '#', :class => 'detach'
-            .prompt
-              = link_to t(:click_to_upload), cropper.new_upload_url, :class => 'picker'
-              .droppable
-                .note
-                  = t :drop_to_upload
+        .img
+          - if @scrap.image?
+            .existing
+              = link_to image_tag(@scrap.image.url(:cropped)), cropper.edit_upload_url(@scrap.image_upload, :for => "scrap", :offset_t => @scrap.image_offset_top, :offset_l => @scrap.image_offset_left, :scale_w => @scrap.image_scale_width, :scale_h => @scrap.image_scale_height), :data => {:action => "recrop"}, :title => "Click to adjust crop"
+              = link_to t(:detach_upload), '#', :class => 'detach'
+          .prompt
+            = link_to t(:click_to_upload), cropper.new_upload_url, :class => 'picker'
+            .droppable
+              .note
+                = t :drop_to_upload
 
     .scrapvideo
       .icon
