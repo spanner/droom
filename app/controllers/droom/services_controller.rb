@@ -22,7 +22,7 @@ module Droom
     end
     
     def create
-      @service.update_attributes(params[:service])
+      @service.update_attributes(service_params)
       respond_with @service
     end
 
@@ -31,7 +31,7 @@ module Droom
     end
     
     def update
-      @service.update_attributes(params[:service])
+      @service.update_attributes(service_params)
       respond_with @service
     end
 
@@ -42,7 +42,7 @@ module Droom
 
   protected
 
-    def service_parameters
+    def service_params
       params.require(:service).permit(:name, :slug, :description)
     end
 
