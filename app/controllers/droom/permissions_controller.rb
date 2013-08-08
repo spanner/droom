@@ -21,7 +21,7 @@ module Droom
     end
     
     def create
-      @permission.update_attributes(permission_params)
+      @permission.save
       respond_with @service, @permission
     end
     
@@ -31,7 +31,7 @@ module Droom
 
     def update
       @permission.update_attributes(permission_params)
-      respond_with @permission
+      respond_with @service, @permission
     end
     
     def destroy

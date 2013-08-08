@@ -45,7 +45,8 @@ en:
           scraptype_quote: "Quote"
         service:
           name: "Name"
-          description: "Description"
+          description: "Notes"
+          slug: "Key"
         user:
           name: "Name"
           forename: "Forename"

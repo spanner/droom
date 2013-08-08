@@ -3,6 +3,7 @@ module Droom
     has_many :permissions, :dependent => :destroy, :order => "position ASC"
     before_save :set_slug
     after_create :create_basic_permissions
+    after_save :update_permissions
     validates :slug, :uniqueness => true
     
     def self.for_selection
@@ -12,13 +13,19 @@ module Droom
   protected
   
     def set_slug
-      Rails.logger.warn ">>> setting slug on service #{self.inspect}"
       self.slug ||= name.parameterize
     end
     
     def create_basic_permissions
       permissions.create(:name => 'login')
       permissions.create(:name => 'admin')
+    end
+    
+    def update_permissions
+      permissions.all.each do |p|
+        p.send :set_slug
+        p.save
+      end
     end
   end
 end

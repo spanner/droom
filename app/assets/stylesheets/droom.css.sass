@@ -1152,66 +1152,6 @@ li.more
     padding: 5px 0
     min-height: 22px
 
-input[type="text"], input[type="password"], input[type="email"], input[type="url"], select, textarea
-  color: $input
-  padding: 5px
-  border: 1px solid $pale
-  font-size: 1.2em
-  &.strong
-    font-weight: bold
-  &.destination
-    color: $blue
-  &.empty
-    color: $pale
-  &[disabled]
-    color: $pale
-    background-color: #fff
-    border-color: $verypale
-
-\::-webkit-input-placeholder
-  color: $pale
-\::-moz-placeholder
-  color: $pale
-\:-ms-input-placeholder
-  color: $pale
-
-input[type="submit"]
-  +button($green)
-  display: inline-block
-  &.unavailable
-    background-color: $mid
-    +opacity(0.5)
-    &:hover
-      background-color: $mid
-  &.waiting
-    background-color: $pale
-    &:hover
-      background-color: $pale
-
-#account
-  position: relative
-  clear: both
-  width: 600px
-  label
-    font-size: 1.1em
-    &.minor
-      font-size: 0.9em
-  input[type="text"], input[type="password"], input[type="email"]
-    width: 590px
-    padding: 4px
-    &.login
-      font-size: 2em
-    &.preferences
-      font-size: 2em
-    &.ok
-      border-color: $green
-    &.notok
-      border-color: $error
-  p.confirmation
-    display: none
-  span.reminder
-    float: right
-    +pale
 
 
 

@@ -16,6 +16,7 @@ module Droom
            :confirmable,
            :encryptable,
            :token_authenticatable,
+           :cocable,
            :encryptor => :sha512
     
     before_create :ensure_authentication_token
@@ -36,7 +37,8 @@ module Droom
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
 
-    def serializable_hash(options={})
+    def as_json_for_coca(options={})
+      Rails.logger.warn ">>> Doom::User.as_json_for_coca"
       ensure_uid
       ensure_authentication_token
       {
@@ -46,7 +48,8 @@ module Droom
         name: name,
         forename: forename,
         email: email,
-        permissions: permission_codes.join(',')
+        permissions: permission_codes.join(','),
+        image: thumbnail
       }
     end
 
@@ -157,7 +160,6 @@ module Droom
 
     ## Mugshot
     #
-    include Paperclip::Croppable
     has_attached_file :image,
                       :default_url => ActionController::Base.helpers.image_path("droom/missing/:style.png"),
                       :styles => {
@@ -373,7 +375,7 @@ module Droom
     has_many :permissions, :through => :user_permissions
     
     def permission_codes
-      permissions.map(&:slug)
+      permissions.map(&:slug).compact.uniq
     end
     
     def permitted?(key)

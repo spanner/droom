@@ -4,6 +4,7 @@ module Droom
     layout :no_layout_if_pjax
     
     load_and_authorize_resource :group, :class => Droom::Group
+    before_filter :build_membership, :only => [:create]
     load_and_authorize_resource :membership, :through => :group, :class => Droom::Membership
 
     def destroy
@@ -16,7 +17,6 @@ module Droom
         
     def new
       if params[:user_id]
-        @group = Droom::Group.find(params[:group_id])
         @user = Droom::User.find(params[:user_id])
         @membership = @group.memberships.create!(:user_id => @user.id, :group_id => @group.id)
         render :partial => "button"
@@ -36,8 +36,12 @@ module Droom
 
   protected
 
-    def membership_parameters
+    def membership_params
       params.require(:membership).permit(:group_id, :user_id)
+    end
+
+    def build_membership
+      @membership = @group.memberships.build(membership_params)
     end
 
   end
