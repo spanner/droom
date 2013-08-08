@@ -212,6 +212,7 @@ form.event, form.document
 
 div.event, form.event, div.project
   .summary
+    overflow: hidden
     .heading
       p.name
         margin: 0
@@ -1173,7 +1174,7 @@ div.kal
   padding: 10px
   background-color: white
   +box-shadow
-  z-index: 200
+  z-index: 300
   
 div.timepicker
   +box-shadow(0 2px 2px #444)
@@ -1840,7 +1841,7 @@ ul.checklist
   width: 10px
   background-color: white
   visibility: hidden
-  z-index: 120
+  z-index: 220
   +transition-property(opacity, visibility)
   +transition-duration(0.2s)
   +transition-timing-function(ease-in)
@@ -1850,7 +1851,7 @@ ul.checklist
     
 .panel
   position: absolute
-  z-index: 100
+  z-index: 200
   width: 280px
   padding: 10px
   background-color: white
@@ -1896,7 +1897,7 @@ ul.checklist
 
 .submenu
   position: absolute
-  z-index: 100
+  z-index: 200
   padding: 5px 10px
   background-color: white
   border: 1px solid $verypale

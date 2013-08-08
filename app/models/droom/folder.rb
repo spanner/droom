@@ -10,7 +10,7 @@ module Droom
     belongs_to :holder, :polymorphic => true
     has_many :documents, :dependent => :destroy
     has_many :personal_folders, :dependent => :destroy
-    acts_as_tree :order => "name ASC"
+    acts_as_tree :order => "droom_folders.name ASC"
 
     validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
 
