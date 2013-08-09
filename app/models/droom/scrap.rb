@@ -91,8 +91,8 @@ module Droom
     end
     
     def name_associates
-      event.update_column(:name, name) if event?
-      document.update_column(:name, name) if document?
+      event.update_column(:name, name) if event
+      document.update_column(:name, name) if document
     end
     
   end
