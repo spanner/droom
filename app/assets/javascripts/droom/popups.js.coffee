@@ -237,7 +237,8 @@ jQuery ($) ->
       @showing = false
 
       # Open on hover or click. Close with wobble catcher on exit. 
-      @links.bind "click", @toggle
+      @links.bind "click", @showOrGo
+      @links.bind "touchstart", @showOrGo
       $(@header).hover(@show, @hideSoon)
       $(@patch).hover(@show, @hideSoon)
       $(@container).hover(@show, @hideSoon)
@@ -272,6 +273,16 @@ jQuery ($) ->
         e.preventDefault()
         e.stopPropagation()
       if @showing then @hide() else @show()
+    
+    # We hit this method on click or touchstart. It has two purposes: to prevent annoying hover-based double taps,
+    # and to allow a click on the menu header *while it is showing* (probably because of a hover evet) to active the underlying link.
+    #
+    showOrGo: (e) =>
+      unless @showing
+        if e
+          e.preventDefault()
+          e.stopPropagation()
+        @show()
 
     hide: (e) =>
       window.clearTimeout @timer
