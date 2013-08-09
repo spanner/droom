@@ -204,6 +204,7 @@ en:
   events_on: "Events on %{day}"
   event_created: "Event '%{name}' created"
   event_introduction: ""
+  event_no_description: "No description available"
   expel: "remove from group"
   find_documents: "Find documents"
   find_people: "Find people"
