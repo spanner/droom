@@ -16,7 +16,7 @@ module Droom
                       }
 
     before_save :get_youtube_thumbnail
-    after_save :name_associates
+    before_validation :name_associates
 
     scope :by_date, -> { order("droom_scraps.created_at DESC") }
 
@@ -91,8 +91,8 @@ module Droom
     end
     
     def name_associates
-      event.update_column(:name, name) if event
-      document.update_column(:name, name) if document
+      event.name = name if event
+      document.name = name if document
     end
     
   end
