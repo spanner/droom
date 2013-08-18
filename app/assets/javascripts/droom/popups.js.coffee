@@ -257,16 +257,16 @@ jQuery ($) ->
         width: @header.outerWidth() - 2
       if offset.left > $(window).width() / 2
         @container.css
-          left: offset.left - (@container.outerWidth() - @header.outerWidth()) * 3 / 4
-          top: offset.top + @header.height() + 5
+          left: offset.left - (@container.outerWidth() - @header.outerWidth())
+          top: offset.top + @header.height()
       else
         @container.css
-          left: offset.left - (@container.outerWidth() - @header.outerWidth()) / 4
-          top: offset.top + @header.height() + 5
+          left: offset.left + 10
+          top: offset.top + @header.height()
 
       
     set: () =>
-      if @container.hasClass('here') then @show() else @hide()
+      if @header.hasClass('here') then @show() else @hide()
       
     toggle: (e) =>
       if e

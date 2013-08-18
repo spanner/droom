@@ -56,9 +56,6 @@
 
         - if event.description?
           = event.description.html_safe 
-        - else
-          %p
-            = t :event_no_description
 
   - if full_attachments
     = render :partial => 'droom/events/attachments', :locals => {:event => event}

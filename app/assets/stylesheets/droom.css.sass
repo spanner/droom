@@ -1871,8 +1871,6 @@ ul.checklist
   h4
     margin-left: 3px
     margin-bottom: 5px
-  form
-    margin-top: 24px
   p:first-child
     margin-top: 5px
   p:last-child
@@ -1898,18 +1896,15 @@ ul.checklist
 .submenu
   position: absolute
   z-index: 200
-  padding: 5px 10px
-  background-color: white
-  border: 1px solid $verypale
+  padding: 0
   visibility: hidden
   opacity: 0
-  +box-shadow(0 4px 4px $dark)
   +transition-property(opacity, visibility)
   +transition-duration(0.2s)
   +transition-timing-function(ease-in)
   &.up
     visibility: visible
-    opacity: 0.95
+    opacity: 1
 
 
 .pagination
