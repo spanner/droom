@@ -16,7 +16,7 @@
       
       // special case: if we're looking at a private folder that means we are allowed to see its children.
       - unless admin? || !folder.public?
-        - children = folder.children.populated.visible_to(current_user)
+        - children = folder.children.populated
 
       - if limit && limit < document_count + folder.children.count
         - children = children.limit(limit - document_count)

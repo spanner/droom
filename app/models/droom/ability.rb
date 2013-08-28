@@ -12,17 +12,11 @@ module Droom
         # Otherwise, most items are visible to all.
         #
         can :read, Droom::Event
+        can :read, Droom::Folder
+        can :read, Droom::Document
         can :read, Droom::User
         can :read, Droom::Scrap
         can :read, Droom::Venue
-        
-        # except folders, which when confidential are only visible to people associated with
-        # their holder (ie group member or event attender).
-        #
-        #todo: add personal-access condition: folder must be non-private or joined to us through holder.
-        # we may need to retain the personal-folder mechanism for this but the labelling will change.
-        #
-        can :read, Droom::Folder
         
         # If someone has been allowed to create something, they are always allowed to edit or remove it.
         #
@@ -42,7 +36,6 @@ module Droom
           can :create, Droom::Invitation
           can :create, Droom::GroupInvitation
           if user.permitted?('droom.attach')
-            # todo: scope to folders attached to own events
             can :create, Droom::AgendaCategory
             can :create, Droom::Document 
           end
