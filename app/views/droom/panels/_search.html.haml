@@ -1,7 +1,5 @@
 .panel{:data => {:panel => 'search'}}
 
-  = render :partial => "droom/shared/calendar_holder"
-
   %form#suggestions{:action => droom.suggestions_url(:format => :js)}
     %p
       %label{:for => 'term'}
