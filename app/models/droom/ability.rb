@@ -17,6 +17,7 @@ module Droom
         can :read, Droom::User
         can :read, Droom::Scrap
         can :read, Droom::Venue
+        can :read, Droom::User
         
         # If someone has been allowed to create something, they are always allowed to edit or remove it.
         #
