@@ -19,7 +19,7 @@
 # will replace the original event container and the small calendar display will be refreshed to show the possibly revised
 # date of the event.
 #
-# It is our hope that this simple non-architecture will make it easy to support a future pub-sub update.
+# With any luck this simple non-architecture will make it easy to support a future pub-sub update.
 
 jQuery ($) ->
 
