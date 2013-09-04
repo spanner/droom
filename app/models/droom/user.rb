@@ -38,6 +38,10 @@ module Droom
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
 
+    scope :in_name_order, -> {
+      order("family_name ASC, given_name ASC")
+    }
+
     def as_json_for_coca(options={})
       Rails.logger.warn ">>> Doom::User.as_json_for_coca"
       ensure_uid

@@ -3,6 +3,7 @@ class InternationalNames < ActiveRecord::Migration
     rename_column :droom_users, :name, :family_name
     rename_column :droom_users, :forename, :given_name
     add_column :droom_users, :chinese_name, :string
+    add_column :droom_users, :gender, :string, limit: 1
     
     Droom::User.reset_column_information
     Droom::User.all.each do |u|

@@ -8,7 +8,7 @@ module Droom
     load_and_authorize_resource
 
     def index
-      @users = @users.order('name ASC')
+      @users = @users.in_name_order
       @users = @users.matching(params[:q]) unless params[:q].blank?
       @users = paginated(@users, 50)
       respond_with @users do |format|
