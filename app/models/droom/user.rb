@@ -208,24 +208,77 @@ module Droom
     end
     
     
-    # Names and addresses
-    
-    def full_name
-      [forename, name].compact.join(' ').strip
-    end
-
-    def formal_name
-      [title, forename, name].compact.join(' ').strip
-    end
-    
+    ## Names
+    #
+    # With Anglo-Chinese Hong Kong names it is difficult to be sure of the right presentation.
+    #
+    # We hold the name in three fields: title, given name and family name. People with both a Chinese and an
+    # English forename are encouraged to enter their given name in the form Tai Wan, Jimmy. The family_name 
+    # should always be a single, usually Chinese, surname: Chan or Smith.
+    #
+    # When a comma is found in the given name, we assume that they have followed the chinese, english format.
+    # If not, we assume the whole name is Chinese.
+    #
+    # ### Polite informality
+    #
+    # People with an English forename would normally be addressed as Jimmy Chan. People with only a Chinese
+    # forename should be addressed as Chan Tai Wan.
+    #
     def informal_name
-      if Droom.use_forenames
-        forename
+      chinese, english = given_name.split(/,\s*/)
+      unless chinese_name?
+        english ||= chinese.split(/\s+/).first
+      end
+      if english
+        [english, family_name].join(' ')
       else
-        name
+        [family_name, chinese].join(' ')
       end
     end
-    
+  
+    def name
+      informal_name
+    end
+
+    # ### Formality
+    #
+    # The family name is held separately becaose for most purposes we will address people using the relatively 
+    # reliable 'Dr Chan' or 'Mr Smith'.
+    #
+  
+    def title
+      title = read_attribute(:title)
+      if title.blank?
+        title = (gender == 'f') ? 'Ms' : 'Mr'
+      end
+      title
+    end
+  
+    def formal_name
+      [title, family_name].compact.join(' ')
+    end
+  
+    # ### Completeness
+    #
+    # For record-keeping purposes we show the whole name: Chan Tai Wan, Jimmy.
+    #
+    def full_name
+      [family_name, given_name].compact.join(' ')
+    end
+
+    # ### Compatibility
+    #
+    # An HKID card will normally show only the translitered Chinese name: Chan Tai Wan
+    #
+    def official_name
+      chinese, english = given_name.split(/,\s*/)
+      [family_name, chinese].join(' ')
+    end
+
+    ## Addresses
+    #
+    # These will change soon to a simple text field with geolocation.
+    #
     def address
       Snail.new(
         :line_1 => post_line1,
