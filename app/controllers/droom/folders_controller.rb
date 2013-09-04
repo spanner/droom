@@ -1,6 +1,6 @@
 module Droom
   class FoldersController < Droom::EngineController
-    respond_to :html, :json, :js, :zip
+    respond_to :html, :json, :js
     layout :no_layout_if_pjax
   
     before_filter :get_root_folders, :only => [:index]
@@ -19,9 +19,6 @@ module Droom
       respond_with @folder do |format|
         format.js { 
           render :partial => 'droom/folders/folder' 
-        }
-        format.zip { 
-          send_file @folder.documents_zipped.path, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@folder.slug}.zip"
         }
       end
     end

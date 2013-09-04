@@ -41,7 +41,6 @@ Gem::Specification.new do |s|
   s.add_dependency "date_validator"
   s.add_dependency "uuidtools"
 
-  s.add_dependency "rubyzip"
   s.add_dependency "snail"
   s.add_dependency "vcard"
   s.add_dependency "rdiscount"

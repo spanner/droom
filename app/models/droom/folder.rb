@@ -1,4 +1,3 @@
-require 'zip/zip'
 require 'open-uri'
 require 'acts_as_tree'
 
@@ -59,18 +58,6 @@ module Droom
 
     def path
       "#{parent.path if parent}/#{slug}"
-    end
-
-    def documents_zipped
-      if self.documents.any?
-        tempfile = Tempfile.new("droom-temp-#{slug}-#{Time.now}.zip")
-        Zip::ZipOutputStream.open(tempfile.path) do |z|
-          self.documents.each do |doc|
-            z.add(doc.file_file_name, doc.original_file)
-          end
-        end
-        tempfile
-      end
     end
 
     def populated?
