@@ -9,7 +9,7 @@ module Droom
     has_many :events, -> { uniq }, :through => :group_invitations
 
     has_many :memberships, :dependent => :destroy
-    has_many :users, -> { uniq.order("name ASC") }, :through => :memberships
+    has_many :users, -> { uniq.order("family_name ASC, given_name ASC") }, :through => :memberships
 
     has_many :group_permissions, :dependent => :destroy
     has_many :permissions, -> { uniq }, :through => :group_permissions

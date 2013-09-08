@@ -46,9 +46,7 @@ module Droom
   protected
   
     def permitted_params
-      params[:user].slice(:forename, :name, :password, :password_confirmation)
-      # for rails 4
-      #params.require(:user).permit(:first_name, :last_name, :password, :password_confirmation)
+      params.require(:user).permit(:family_name, :given_name, :chinese_name, :password, :password_confirmation)
     end
 
   end

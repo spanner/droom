@@ -350,8 +350,9 @@ module Droom
       {
         :informal_name => informal_name,
         :formal_name => formal_name,
-        :forename => forename,
-        :name => name,
+        :family_namne => family_name,
+        :given_name => given_name,
+        :chinese_name => chinese_name,
         :email => email,
         :confirmation_url => Droom::Engine.routes.url_helpers.welcome_url(:id => self.id, :confirmation_token => self.confirmation_token, :host => ActionMailer::Base.default_url_options[:host]),
         :sign_in_url => Droom::Engine.routes.url_helpers.new_user_session_path(:host => ActionMailer::Base.default_url_options[:host]),
