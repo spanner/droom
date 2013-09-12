@@ -234,14 +234,22 @@ module Droom
         english ||= chinese.split(/\s+/).first
       end
       if english
-        [english, family_name].join(' ')
+        english
       else
-        [family_name, chinese].join(' ')
+        [family_name, given_name].join(' ')
       end
     end
   
     def name
-      informal_name
+      chinese, english = given_name.split(/,\s*/)
+      unless chinese_name?
+        english ||= chinese.split(/\s+/).first
+      end
+      if english
+        [english, family_name].join(' ')
+      else
+        [family_name, chinese].join(' ')
+      end
     end
 
     # ### Formality
