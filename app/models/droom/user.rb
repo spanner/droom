@@ -269,7 +269,14 @@ module Droom
     def formal_name
       [title, family_name].compact.join(' ')
     end
-  
+
+    # This is our best shot at a representation of how this person would normally be referred to. It combines
+    # the informal name (which includes some logic to show chinese, anglo and mixed names correctly) with the title.
+    #
+    def colloquial_name
+      [title, informal_name].compact.join(' ')
+    end
+
     # ### Completeness
     #
     # For record-keeping purposes we show the whole name: Chan Tai Wan, Jimmy.
