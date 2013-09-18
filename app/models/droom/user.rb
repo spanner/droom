@@ -229,14 +229,21 @@ module Droom
     # forename should be addressed as Chan Tai Wan.
     #
     def informal_name
+      # The standard form of the given name is Tai Wan, Ray
       chinese, english = given_name.split(/,\s*/)
+      # But some people are known only as Ray.
+      # Here we can't tell the difference between people with one chinese given name and one anglo given name
+      # but the order of names is reversed in the latter case. For now we assume that the presence of a chinese
+      # name indicates that the chinese word ordering should be used.
       unless chinese_name?
         english ||= chinese.split(/\s+/).first
       end
       if english
-        english
+        # People with an english name are called Ray Chan, by default
+        [english, family_name].join(' ')
       else
-        [family_name, given_name].join(' ')
+        # People without are called Chan Tai Wan
+        [family_name, chinese].join(' ')
       end
     end
   
