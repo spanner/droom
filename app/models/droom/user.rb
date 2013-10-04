@@ -236,7 +236,7 @@ module Droom
       # but the order of names is reversed in the latter case. For now we assume that the presence of a chinese
       # name indicates that the chinese word ordering should be used.
       unless chinese_name?
-        english ||= chinese.split(/\s+/).first
+        english ||= chinese.strip.split(/\s+/).first
       end
       if english
         # People with an english name are called Ray Chan, by default
@@ -264,6 +264,14 @@ module Droom
     # The family name is held separately becaose for most purposes we will address people using the relatively 
     # reliable 'Dr Chan' or 'Mr Smith'.
     #
+    
+    def title_ordinary?
+      ['Mr', 'Ms', 'Mrs', '', nil].include?(title)
+    end
+    
+    def title_if_it_matters
+      title unless title_ordinary?
+    end
   
     def title
       title = read_attribute(:title)
@@ -274,14 +282,19 @@ module Droom
     end
   
     def formal_name
-      [title, family_name].compact.join(' ')
+      if title?
+        [title, family_name].join(' ')
+      else
+        informal_name
+      end
     end
 
-    # This is our best shot at a representation of how this person would normally be referred to. It combines
-    # the informal name (which includes some logic to show chinese, anglo and mixed names correctly) with the title.
+    # This is our best shot at a representation of the usual third person form of this person's name. It combines
+    # the informal name (which includes some logic to show chinese, anglo and mixed names correctly) with the title,
+    # if the title is not ordinary.
     #
     def colloquial_name
-      [title, informal_name].compact.join(' ')
+      [title_if_it_matters, informal_name].compact.join(' ')
     end
 
     # ### Completeness
