@@ -1,8 +1,0 @@
-#main.people
-  %p
-    = link_to t(:download_vcards), people_url(:format => :vcf), :class => 'vcard download'
-    
-  = render :partial => "people"
-
-- content_for :title do 
-  = t :directory

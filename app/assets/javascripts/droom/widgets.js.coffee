@@ -303,12 +303,20 @@ jQuery ($) ->
         @unsubmittable()
 
 
-  # A captive form submits via an ajax request and pushes its results into the present page in the place 
-  # designated by its 'replacing' attribute.
+
+
+
+
+  # The basic captive form is a fairly dumb binding between form element and target element.
+  # The form is submitted over ajax and the response is displayed in the target.
   #
-  # If options['fast'] is true, the form will submit on every change to a text, radio or checkbox input.
+  # If options.fast is true then any change to an input or select within the form will trigger submission.
+  # If options.auto is true then the form will be submitted immediately; more commonly the target is already
+  # populated.
   #
-  #todo: This is very old now. Tidy it up with a more standard action structure, and fewer options.
+  #todo: this really needs debouncing.
+  #
+  # There is some slack in the internal structure here because subclasses do more intermediate work.
 
   $.fn.captive = (options) ->
     @each ->
@@ -319,7 +327,7 @@ jQuery ($) ->
     @default_options: {
       fast: false
       auto: false
-      historical: false
+      threshold: 3
     }
     
     constructor: (element, opts) ->
@@ -333,30 +341,26 @@ jQuery ($) ->
         on_submit: @prepare
         on_cancel: @cancel
         on_success: @capture
-      if @_options.fast
-        @_form.find('input[type="search"]').bind 'keyup', @changed
-        @_form.find('input[type="search"]').bind 'change', @changed
-        @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box control in webkit search fields
-        @_form.find('input[type="text"]').bind 'keyup', @keyed
-        @_form.find('input[type="text"]').bind 'change', @changed
-        @_form.find('input[type="radio"]').bind 'click', @clicked
-        @_form.find('input[type="checkbox"]').bind 'click', @clicked
+      @bindInputs() if @_options.fast
       @submit() if @_options.auto
-        
-    value: () =>
-      @_prompt ?= @_form.find('input[type="text"]').first()
-      @_prompt.val()
-      
+
+    bindInputs: () =>
+      @_form.find('input[type="search"]').bind 'keyup', @changed
+      @_form.find('input[type="search"]').bind 'change', @changed
+      @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box control in webkit search fields
+      @_form.find('input[type="text"]').bind 'keyup', @keyed
+      @_form.find('input[type="text"]').bind 'change', @changed
+      @_form.find('select').bind 'change', @changed
+      @_form.find('input[type="radio"]').bind 'click', @clicked
+      @_form.find('input[type="checkbox"]').bind 'click', @clicked
+
     keyed: (e) =>
       k = e.which
       if (k >= 32 and k <= 165) or k == 8
         @changed()
     
     changed: () =>
-      if @value() is "" and not @_options.auto
-        @revert()
-      else
-        @submit()
+      @submit()
           
     clicked: (e) =>
       @submit()
@@ -378,27 +382,36 @@ jQuery ($) ->
       @_container.empty().append(replacement).fadeTo("fast", 1)
       replacement.activate()
       replacement.find('a.cancel').click(@revert)
-        
-    revert: (e) =>
-      e.preventDefault() if e
-      @display(@_original_content)
-      @_prompt.val("")
 
+
+
+
+  # The filter form is a fast captive with only one input.
+  # It ought to have a cache too, since there is a simple key.
 
   $.fn.filter_form = (options) ->
     @each ->
       new FilterForm @, options
     @
 
-
   class FilterForm extends CaptiveForm
     @default_options: {
       fast: true
       into: "#found"
       auto: false
-      historical: true
     }
+
+    prompt: () =>
+      @_prompt ?= @_form.find('input[type="search"], input[type="text"]').first()
+
     value: () =>
+      @prompt().val()
+
+    changed: () =>
+      if @value() is "" and not @_options.auto
+        @revert()
+      else
+        @submit()
 
     capture: (data, status, xhr) =>
       $('#finder').addClass('up')
@@ -408,25 +421,22 @@ jQuery ($) ->
       $('#finder').removeClass('up')
       super
 
-    value: () =>
-      @_prompt ?= @_form.find('input[type="search"]').first()
-      @_prompt.val()
 
 
-
-  # The suggestions form is a fast captive with history support based on a single prompt field.
+  # The suggestions form is a fast filter form with history support
   #
   $.fn.suggestion_form = (options) ->
-    options = $.extend(
-      fast: true
-      auto: false
-      into: "#suggestion_box"
-    , options)
     @each ->
       new SuggestionForm @, options
     @
   
-  class SuggestionForm extends CaptiveForm
+  class SuggestionForm extends FilterForm
+    @default_options: {
+      fast: true
+      auto: false
+      into: "#suggestion_box"
+    }
+
     constructor: (element, opts) ->
       super
       @_prompt = @_form.find("input[type=\"text\"]")
@@ -506,6 +516,22 @@ jQuery ($) ->
       @_subprefs.slideDown()
     hide: () =>
        @_subprefs.slideUp()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   # HTML-editing support is provided by WysiHTML, which is an ugly but effective iframe-based solution.

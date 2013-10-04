@@ -1,9 +1,0 @@
-#person
-  .header
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      - if current_user.is_person?(@person)
-        = t :edit_your_profile
-      - else
-        = t :edit_person
-  = render :partial => 'form'
