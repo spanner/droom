@@ -1,7 +1,7 @@
 = form_for [@event, @invitation], :html => { :class => "invitation", :remote => true, :data => {:type => :html}} do |f|
   %p
     %input.person_selector.name{:type => "text", :placeholder => t(:type_name), :autocomplete => "off"}
-    = f.hidden_field :person_id, :class => "person_picker_target"
+    = f.hidden_field :user_id, :class => "person_picker_target"
 
   .buttons
     = f.submit t(:invite), :class => "submit"
