@@ -21,6 +21,18 @@ module Droom
       respond_with @user
     end
   
+    def new
+      respond_with @user
+    end
+
+    def create
+      if @user.update_attributes(user_params)
+        render :partial => "droom/users/user"
+      else
+        render :edit
+      end
+    end
+
     def edit
       respond_with @user
     end

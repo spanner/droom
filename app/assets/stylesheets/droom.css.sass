@@ -75,7 +75,19 @@ input.dropbox.revoke[type="submit"]
   line-height: 20px
   &:hover
     color: $hover
-  
+
+label
+  &.required
+    font-weight: bold
+  &.important
+    font-weight: bold
+  &.disabled
+    color: $pale
+  &.inline
+    display: inline-block
+    vertical-align: top
+    white-space: nowrap
+
 a.cancel, a.cancel:visited
   +pale
   +hover
@@ -167,7 +179,7 @@ h2.section
     margin-bottom: 0
   p
     margin-top: 0.1em
-  
+
 #help_page
   position: relative
   margin-left: 10px
@@ -448,6 +460,24 @@ form.page
 
 
 form.user
+  .image-upload
+    margin-top: 5px
+  p.names
+    margin: 0
+    span.name
+      display: inline-block
+      vertical-align: top
+      width: 134px
+      margin-right: 10px
+      input
+        width: 118px
+    span.chinese_name
+      display: inline-block
+      vertical-align: top
+      width: 76px
+      margin-right: 0
+      input
+        width: 70px
   p.name
     margin: 0
     input
@@ -458,11 +488,11 @@ form.user
     overflow: hidden
     p
       float: left
-      width: 184px
+      width: 180px
       margin-top: 0.5em
       margin-bottom: 0
       input
-        width: 155px
+        width: 167px
         font-size: 1em
         margin-top: 0
     p.email
@@ -472,6 +502,9 @@ form.user
     select
       width: 536px
       font-size: 1em
+  p.memberships
+    label.inline
+      margin-right: 10px
   div.description
     clear: both
     margin-top: 24px
