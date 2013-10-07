@@ -3,8 +3,9 @@ module Droom
     respond_to :js, :html
     layout :no_layout_if_pjax
     
-    load_and_authorize_resource :event
-    load_and_authorize_resource :invitation, :through => :event
+    load_and_authorize_resource :event, :class => Droom::Event
+    before_filter :build_invitation, only: [:create]
+    load_and_authorize_resource :invitation, :through => :event, :class => Droom::Invitation
     
     def destroy
       @invitation = @event.invitations.find_by_id(params[:id])
@@ -22,7 +23,7 @@ module Droom
     end
     
     def create
-      if @invitation.save
+      if @invitation.update_attributes(invitation_params)
         render :partial => "created"
       else
         respond_with @invitation
@@ -46,7 +47,11 @@ module Droom
 
   protected
   
-    def invitation_parameters
+    def build_invitation
+      @invitation = @event.invitations.build
+    end
+  
+    def invitation_params
       params.require(:invitation).permit(:event_id, :user_id)
     end
 
