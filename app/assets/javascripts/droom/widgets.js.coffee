@@ -338,7 +338,7 @@ jQuery ($) ->
       @_original_content = @_container.html()
       @_request = null
       @_form.remote
-        on_submit: @prepare
+        on_request: @prepare
         on_cancel: @cancel
         on_success: @capture
       @bindInputs() if @_options.fast

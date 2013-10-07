@@ -4,7 +4,7 @@
 
 %tr{:id => rowid, :class => cssclass}
   %td.name
-    = link_to user.full_name, edit_user_url(user), :data => {:action => "popup"}
+    = link_to user.informal_name, edit_user_url(user), :data => {:action => "popup"}
 
   %td.email
     = mail_to user.email

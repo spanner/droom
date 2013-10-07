@@ -32,7 +32,7 @@ module Droom
                  :panels,
                  :scrap_types,
                  :default_scrap_type,
-                 :use_forenames,
+                 :use_chinese_names,
                  :use_biogs,
                  :use_separate_mobile_number,
                  :use_titles,
@@ -127,8 +127,8 @@ module Droom
       @@default_scrap_type ||= 'text'
     end
 
-    def use_forenames?
-      !!@@use_forenames
+    def use_chinese_names?
+      !!@@use_chinese_names
     end
 
     def use_titles?

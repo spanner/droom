@@ -17,10 +17,11 @@
       = f.label :given_name, class: 'required'
       %br
       = f.text_field :given_name, :required => true
-    %span.chinese_name
-      = f.label :chinese_name, '中国姓名'
-      %br
-      = f.text_field :chinese_name, :required => true
+    - if Droom.use_chinese_names?
+      %span.chinese_name
+        = f.label :chinese_name, '中文姓名'
+        %br
+        = f.text_field :chinese_name, :required => true
 
   .non-file-data
     .contacts
@@ -34,7 +35,7 @@
         %br
         = f.text_field :phone
 
-      - if Droom.use_separate_mobile_number
+      - if Droom.use_separate_mobile_number?
         %p.secondary
           = f.label :mobile, :class => "optional"
           %br
@@ -59,8 +60,8 @@
         = f.label :group_ids, "Group memberships", class: "important"
         %br
         - Droom::Group.all.each do |group|
-          %label.inline{for: "group_ids_#{group.id}"}
-            = f.check_box :group_ids, {}, group.id
+          %label.inline{for: "user_group_ids_#{group.id}"}
+            = f.check_box :group_ids, {id: "user_group_ids_#{group.id}"}, group.id
             = group.name
 
     - if @user.new_record?
