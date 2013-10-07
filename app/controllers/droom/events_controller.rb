@@ -56,18 +56,12 @@ module Droom
   protected
   
     def get_events
-      @events = Droom::Event.accessible_by(current_ability)
+      events = Droom::Event.accessible_by(current_ability)
       if Droom.separate_calendars?
-        @events = @events.in_calendar(Droom::Calendar.where(:name => "main").first_or_create)
+        events = events.in_calendar(Droom::Calendar.where(:name => "main").first_or_create)
       end
-      if params[:direction] == 'past'
-        @events = @events.past.order('start DESC')
-        @direction = "past"
-      else
-        @events = @events.future_and_current.order('start ASC')
-        @direction = "future"
-      end
-      @events = paginated(@events)
+      @past_events = paginated(events.past.order('start DESC'))
+      @events = paginated(events.future_and_current.order('start ASC'))
     end
     
     def build_event

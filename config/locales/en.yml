@@ -352,6 +352,10 @@ en:
     zero: "No more documents"
     one: "one more document..."
     other: "%{count} more documents..."
+  more_subfolders_count:
+    zero: "No subfolders"
+    one: "and one subfolder..."
+    other: "and %{count} subfolders..."
   more: "more..."
   accept: "accept"
   reject: "reject"

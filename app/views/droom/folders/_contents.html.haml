@@ -1,5 +1,6 @@
 - limit ||= false
 - for_more ||= false
+- flat ||= false
 - document_count = folder.documents.count
 
 %ul.filing
@@ -13,17 +14,22 @@
     - else
       = render :partial => 'droom/documents/listing', :collection => folder.documents
       - children = folder.children
-      
-      // special case: if we're looking at a private folder that means we are allowed to see its children.
-      - unless admin? || !folder.public?
-        - children = folder.children.populated
-
-      - if limit && limit < document_count + folder.children.count
-        - children = children.limit(limit - document_count)
-        = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}
-        - if for_more
+      - if flat
+        - if children.any? && for_more
           %li.more
-            = link_to t(:more), for_more
-
+            = link_to t(:more_subfolders_count, :count => children.count), for_more
+        
       - else
-        = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}
+        // special case: if we're looking at a private folder that means we are allowed to see its children.
+        - unless admin? || !folder.public?
+          - children = folder.children.populated
+
+        - if limit && limit < document_count + folder.children.count
+          - children = children.limit(limit - document_count)
+          = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}
+          - if for_more
+            %li.more
+              = link_to t(:more), for_more
+
+        - else
+          = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}

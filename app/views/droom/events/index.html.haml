@@ -1,13 +1,21 @@
 #main.events
 
-
   %h2.section
-    = @direction == 'past' ? t(:past_events) : t(:future_events)
+    = t(:future_events)
     - if can?(:create, Droom::Event)
       %span.action
         = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
 
   = render :partial => 'events'
+
+  %h2.section
+    = t(:past_events)
+
+  .events_list
+    = render :partial => 'events', :locals => {:events => @past_events}
+
+
+
 
 
 
