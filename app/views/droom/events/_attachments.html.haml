@@ -5,7 +5,7 @@
   %h3
     = t :attachments
   - if folder.populated?
-    = render :partial => "droom/folders/contents", :locals => {:folder => folder}
+    = render :partial => "droom/folders/contents", :locals => {:folder => folder, :narrow => true}
   - else
     %p
       = t :no_attachments

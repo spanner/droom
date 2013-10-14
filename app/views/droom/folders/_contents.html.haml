@@ -1,6 +1,7 @@
 - limit ||= false
 - for_more ||= false
 - flat ||= false
+- narrow ||= false
 - document_count = folder.documents.count
 
 %ul.filing
@@ -12,7 +13,7 @@
           = link_to t(:more_documents_count, :count => document_count - limit), for_more
 
     - else
-      = render :partial => 'droom/documents/listing', :collection => folder.documents
+      = render :partial => 'droom/documents/listing', :collection => folder.documents, locals: {narrow: narrow}
       - children = folder.children
       - if flat
         - if children.any? && for_more
