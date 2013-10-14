@@ -1,5 +1,5 @@
 - group ||= @group
-- users = @users || group.users
+- users = @users || Droom::User.in_group(group).page(1)
 
 .paginated
   %ul.people
