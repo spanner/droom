@@ -21,13 +21,6 @@
 
 - content_for :title do
   = t :calendar
-
-- content_for :standfirst do
-  %p
-    - if @direction == 'past'
-      = t(:calendar_past_introduction, :url => droom.events_url(:direction => "future")).html_safe
-    - else
-      = t(:calendar_introduction, :url => droom.events_url(:direction => "past")).html_safe
     
 
 - content_for :margin do
