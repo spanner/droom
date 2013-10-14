@@ -50,7 +50,8 @@ jQuery ($) ->
         replacement.hide().insertAfter(@_container)
         @_container.remove()
         @_container = replacement
-        @_container.activate().fadeIn('fast')
+        @_container.activate().fadeIn 'fast', () =>
+          @_container.signal_confirmation()
       
 
   # ## Actions
