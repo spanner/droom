@@ -99,7 +99,6 @@
     white-space: nowrap
     +opacity(0.4)
     &:hover
-      overflow: visible
       +opacity(1)
 
 =big_icon_link($url)
@@ -125,24 +124,6 @@
     image: image-url($url)
   &:hover
     background-position: 0 -48px
-  
-=panel_icon($image: "droom/integration_buttons.png", $x: 0, $y: 0)
-  overflow: hidden
-  text-indent: 34px
-  line-height: 32px
-  width: 32px
-  height: 35px
-  margin: 0
-  margin-right: 3px
-  background: 
-    position: $x $y
-    repeat: no-repeat
-    image: image-url($image)
-  &:hover
-    background-position: $x $y - 48px
-  &.here
-    background-color: $palest
-    background-position: $x $y - 96px
 
 =blurred($color: $pale)
   text-shadow: $color 0 0 3px

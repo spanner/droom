@@ -1,15 +1,16 @@
-.divider
-#past_events{:data => {:refreshable => true, :url => droom.events_url(:limit => 4)}}
-  - calendar = Droom::Calendar.find_or_create_by_name('main')
-  - events = calendar.events.past.limit(4)
+- calendar = Droom::Calendar.find_or_create_by_name('main')
+- events = calendar.events.past.limit(4)
+- if events.any?
+  .divider
+  #past_events{:data => {:refreshable => true, :url => droom.events_url(:limit => 4)}}
 
-  %h2.section
-    = link_to t(:recent_events), main_app.calendar_url
-    - if can?(:create, Droom::Event)
-      %span.action
-        = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
+    %h2.section
+      = link_to t(:recent_events), main_app.calendar_url
+      - if can?(:create, Droom::Event)
+        %span.action
+          = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
 
-  - if events.any?
-    = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
-  - else
-    = t :no_past_events
+    - if events.any?
+      = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
+    - else
+      = t :no_past_events

@@ -27,7 +27,7 @@
     - else
       = link_to "text:", droom.scrap_url(scrap), :class => "icon text", :data => {:action => "stream", :scrap => scrap.id}
 
-    %p
+    %p.sample
       = link_to truncate(scrap.name, :length => 34), droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}
       = action_menulink(scrap, :class => "small")
       %span.caption

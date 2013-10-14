@@ -56,9 +56,12 @@ module Droom
       render :partial => "droom/preferences/radio_set", :locals => {:key => key, :values => values}
     end
 
-    def shorten(text, length=64)
+    def shorten(text, length=64, separator=" ")
+      text = strip_tags(text)
       length = length[:length] if length.is_a?(Hash)
-      truncate(strip_tags(text), {:length => length, :separator => " "})
+      content_tag :span, class: 'shortened', title: text do
+        truncate(text, {:length => length, :separator => separator})
+      end
     end
 
     def dropbox?
