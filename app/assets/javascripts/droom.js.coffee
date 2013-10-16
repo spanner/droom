@@ -1,9 +1,11 @@
 #= require droom/lib/modernizr
 #= require jquery
+#= require droom/lib/underscore
 #= require droom/lib/jquery_ujs
 #= require droom/lib/ZeroClipboard
 #= require droom/lib/swipe
 #= require droom/lib/jquery.animate-colors
+#= require droom/lib/jquery.deserialize
 #= require droom/lib/jquery.sortable
 #= require droom/lib/jquery.cookie
 #= require droom/lib/kalendae
@@ -70,7 +72,6 @@ jQuery ($) ->
     @find_including_self('.drag_sort').drag_sort()
     @find_including_self('form.password').password_form()
     @find_including_self('input[type="submit"]').submitter()
-    @find_including_self('form.preferences').preferences_form()
     @find_including_self('form.scrap').scrap_form()
     @find_including_self('[data-role="filepicker"]').file_picker()
     @find_including_self('[data-role="imagepicker"]').image_picker()

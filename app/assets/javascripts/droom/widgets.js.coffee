@@ -328,21 +328,30 @@ jQuery ($) ->
       fast: false
       auto: false
       threshold: 3
+      history: false
     }
     
     constructor: (element, opts) ->
       @_form = $(element)
       @_options = $.extend @constructor.default_options, opts
+      @_historical = !!(Modernizr.history and @_options.history or @_form.attr('data-historical'))
       @_selector = @_form.attr('data-target') || @_options.into
       @_container = $(@_selector)
+      @_original_qs = @serialize()
       @_original_content = @_container.html()
       @_request = null
+      @_inactive = false
+      @_cache = {}
       @_form.remote
         on_request: @prepare
         on_cancel: @cancel
         on_success: @capture
+      @submit_soon = _.debounce(@submit, 300)
       @bindInputs() if @_options.fast
       @submit() if @_options.auto
+      if @_historical
+        @saveState(@_original_content)
+        $(window).bind 'popstate', @restoreState
 
     bindInputs: () =>
       @_form.find('input[type="search"]').bind 'keyup', @changed
@@ -356,34 +365,68 @@ jQuery ($) ->
 
     keyed: (e) =>
       k = e.which
-      if (k >= 32 and k <= 165) or k == 8
-        @changed()
+      if k is 13
+        @submit(e)
+      if (k >= 46 and k <= 90) or (k >= 96 and k <= 111) or k is 8
+        @changed(e)
     
-    changed: () =>
-      @submit()
+    changed: (e) =>
+      @submit_soon() unless @_inactive
           
     clicked: (e) =>
-      @submit()
+      @submit_soon() unless @_inactive
+    
+    serialize: () =>
+      @_form.serialize()
       
     submit: (e) =>
-      @_form.submit()
+      e.preventDefault() if e
+      qs = @serialize()
+      if @_cache[qs]
+        @display(@_cache[qs])
+      else
+        @_form.submit()
       
     prepare: (xhr, settings) =>
       @_container.fadeTo "fast", 0.2
-      @_request.abort() if @_request
+      @_request?.abort()
       @_request = xhr
     
     capture: (e, data, status, xhr) =>
+      @_cache[@serialize()] = data
       @display(data)
       @_request = null
-    
+      @saveState(data) if @_historical
+
     display: (results) =>
       replacement = $(results)
       @_container.empty().append(replacement).fadeTo("fast", 1)
       replacement.activate()
       replacement.find('a.cancel').click(@revert)
 
+    revert: (e) =>
+      if @_historical
+        @restoreState(@_original_qs)
+      else
+        @display(@_original_content)
 
+    saveState: (results, qs) =>
+      qs ?= @serialize()
+      url = window.location.pathname + "?" + qs
+      title = document.title + ' search'
+      state = 
+        html: results
+        qs: qs
+      history.pushState state, title, url
+
+    restoreState: (e) =>
+      event = e.originalEvent
+      e.preventDefault() if e
+      if event.state? && event.state.html?
+        @display event.state.html
+        @_inactive = true
+        @_form.deserialize(event.state.qs)
+        @_inactive = false
 
 
   # The filter form is a fast captive with only one input.
@@ -399,6 +442,7 @@ jQuery ($) ->
       fast: true
       into: "#found"
       auto: false
+      history: false
     }
 
     prompt: () =>
@@ -435,87 +479,12 @@ jQuery ($) ->
       fast: true
       auto: false
       into: "#suggestion_box"
+      historical: true
     }
 
-    constructor: (element, opts) ->
-      super
-      @_prompt = @_form.find("input[type=\"text\"]")
-      @_param = @_prompt.attr('name')
-      @_original_term = decodeURIComponent($.urlParam(@_param))
-      if @_original_term and @_original_term isnt "false" and @_original_term isnt ""
-        @_prompt.val(@_original_term)
-        @submit()
-      if Modernizr.history
-        $(window).bind 'popstate', @restoreState
+    prompt: () =>
+      @_prompt ?= @_form.find("input[type=\"text\"]")
 
-    capture: (e, data, status, xhr) =>
-      super
-      @saveState(data) if Modernizr.history
-
-    revert: (e) =>
-      super
-      @saveState(null) if Modernizr.history
-      
-    saveState: (results) =>
-      results ?= @_original_content
-      term = @_prompt.val()
-      if term
-        url = window.location.pathname + "?" + encodeURIComponent(@_param) + "=" + encodeURIComponent(term)
-      else
-        url = window.location.pathname
-      state = 
-        html: results
-        term: term
-      history.pushState state, "Search results", url
-    
-    restoreState: (e) =>
-      event = e.originalEvent
-      if event.state? && event.state.html?
-        @display event.state.html
-        @_prompt.val(event.state.term)
-
-
-  # The preferences form is a simple captive that just displays a confirmation message, with or without some control
-  # links (eg to copy or delete dropboxed folders). It may also include a number of preference blocks, which take care
-  # of showing and hiding subsidiary options.
-
-  $.fn.preferences_form = (options) ->
-    options = $.extend(
-      fast: true
-      clearing: null
-      replacing: ".confirmation"
-    , options)
-    @each ->
-      $(@).find('span.preference').preferences_block()
-      new CaptiveForm @, options
-
-  # The preferences block is a very minimal subcontent toggle. If the first contained radio or checkbox element
-  # is checked, anything `.subpreference` is revealed. If its state changes, we show or hide.
-  #
-  # Note that to make this work with radio buttons we have applied a small hack to make sure they fire a change event
-  # on deselection. See $.trigger_change_on_deselect in utilities.js.
-
-  $.fn.preferences_block = ->
-    @each ->
-      new PreferenceBlock(@)
-
-  class PreferenceBlock
-    constructor: (element) ->
-      @_container = $(element)
-      @_input = @_container.find("> input")
-      @_subprefs = @_container.find('span.subpreference')
-      if @_subprefs.length
-        @_input.trigger_change_on_deselect()
-        @_input.change @set
-        @set()
-        
-    set: (e) =>
-      # let the event through...
-      if @_input.is(":checked") then @show() else @hide()
-    show: () =>
-      @_subprefs.slideDown()
-    hide: () =>
-       @_subprefs.slideUp()
 
 
 
