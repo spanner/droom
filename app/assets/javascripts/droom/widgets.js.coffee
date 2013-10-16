@@ -323,6 +323,30 @@ jQuery ($) ->
       new CaptiveForm @, options
     @
 
+  # The filter form is a fast captive with only one input.
+  # It ought to have a cache too, since there is a simple key.
+
+  $.fn.filter_form = (options) ->
+    @each ->
+      new CaptiveForm @, 
+        fast: true
+        into: "#found"
+        auto: false
+        history: false
+    @
+
+  # The suggestions form is a fast filter form with history support
+  #
+  $.fn.suggestion_form = (options) ->
+    @each ->
+      new CaptiveForm @, 
+        fast: true
+        auto: false
+        into: "#suggestion_box"
+        history: false
+    @
+  
+
   class CaptiveForm
     @default_options: {
       fast: false
@@ -427,72 +451,6 @@ jQuery ($) ->
         @_inactive = true
         @_form.deserialize(event.state.qs)
         @_inactive = false
-
-
-  # The filter form is a fast captive with only one input.
-  # It ought to have a cache too, since there is a simple key.
-
-  $.fn.filter_form = (options) ->
-    @each ->
-      new FilterForm @, options
-    @
-
-  class FilterForm extends CaptiveForm
-    @default_options: {
-      fast: true
-      into: "#found"
-      auto: false
-      history: false
-    }
-
-    prompt: () =>
-      @_prompt ?= @_form.find('input[type="search"], input[type="text"]').first()
-
-    value: () =>
-      @prompt().val()
-
-    changed: () =>
-      if @value() is "" and not @_options.auto
-        @revert()
-      else
-        @submit()
-
-    capture: (data, status, xhr) =>
-      $('#finder').addClass('up')
-      super
-
-    revert: (e) =>
-      $('#finder').removeClass('up')
-      super
-
-
-
-  # The suggestions form is a fast filter form with history support
-  #
-  $.fn.suggestion_form = (options) ->
-    @each ->
-      new SuggestionForm @, options
-    @
-  
-  class SuggestionForm extends FilterForm
-    @default_options: {
-      fast: true
-      auto: false
-      into: "#suggestion_box"
-      historical: true
-    }
-
-    prompt: () =>
-      @_prompt ?= @_form.find("input[type=\"text\"]")
-
-
-
-
-
-
-
-
-
 
 
 
