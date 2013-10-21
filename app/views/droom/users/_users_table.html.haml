@@ -1,7 +1,7 @@
 - groups = Droom::Group.all
 
 - if @users.any?
-  %table.main.toggles#users{:data => {:refreshable => true, :url => "#{users_path}.js"}}
+  %table.main.toggles#users{:data => {:refreshable => true, :url => "#{admin_users_path}.js"}}
     %thead
       %tr.rotated
         %th.action{:colspan => 2}
