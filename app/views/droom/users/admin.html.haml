@@ -1,0 +1,9 @@
+#main.users
+
+  %p.standfirst
+    = t(:users_admin_introduction)
+
+  = render :partial => "droom/users/users_table"
+
+- content_for :title do 
+  = t :user_admin

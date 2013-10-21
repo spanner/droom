@@ -14,19 +14,20 @@ module Droom
         can :read, Droom::Event
         can :read, Droom::Folder
         can :read, Droom::Document
-        can :read, Droom::User
         can :read, Droom::Scrap
         can :read, Droom::Venue
         can :read, Droom::User
         
-        # If someone has been allowed to create something, they are always allowed to edit or remove it.
-        #
-        can :manage, :all, :created_by_id => user.id
-        
         # And they can edit themselves
         #
         can :update, Droom::User, :id => user.id
+        cannot :edit, Droom::User
         
+        # If someone has been allowed to create something, they are always allowed to edit or remove it.
+        # This rule must sit after the user rules because they have no created_by_id column.
+        #
+        # can :manage, :all, :created_by_id => user.id
+
         # Then other abilities are determined by permissions. Permissions here are relatively abstract and 
         # not closely coupled to Cancan abilities. Here we make them concrete.
         #

@@ -1,6 +1,6 @@
 .panel{:data => {:panel => 'configuration'}}
   %p.controls
-    = t(:signed_in_as, :name => current_user.full_name).html_safe
+    = t(:signed_in_as, :name => current_user.name).html_safe
     = link_to t(:sign_out), Droom.sign_out_path, :method => :delete, :class => 'signout'
 
   %p

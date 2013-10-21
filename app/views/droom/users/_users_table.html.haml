@@ -12,7 +12,7 @@
             - if can?(:create, Droom::Group)
               = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
 
-          %form.filter{:action => droom.users_url(:format => :html), :autocomplete => 'off', :data => {:action => "table_filter"}}
+          %form.filter{:action => droom.admin_users_url(:format => :html), :autocomplete => 'off', :data => {:action => "table_filter"}}
             %p
               = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
               

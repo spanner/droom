@@ -11,7 +11,7 @@ require "droom/folders"
 require "snail"
 require "youtube_it"
 
-module Droom
+module Droom  
   # Droom configuration is handled by accessors on the Droom base module.
   # Boolean items also offer the interrogative form.
   

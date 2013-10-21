@@ -3,6 +3,7 @@ require 'dropbox_sdk'
 module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
+    
     before_filter :authenticate_user!
     before_filter :strengthen_parameters
     check_authorization

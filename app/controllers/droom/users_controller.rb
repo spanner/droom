@@ -17,6 +17,13 @@ module Droom
       end
     end
     
+    def admin
+      @users = @users.in_name_order
+      @users = @users.matching(params[:q]) unless params[:q].blank?
+      @users = paginated(@users, 50)
+      respond_with @users
+    end
+
     def show
       respond_with @user do |format|
         format.js { 

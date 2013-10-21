@@ -62,6 +62,7 @@ Droom::Engine.routes.draw do
   resources :users do
     get "invite", :on => :member, :as => :invite
     get "preferences", :on => :member, :as => :preferences
+    get "admin", :on => :collection
     resources :events do
       collection do
         get "feed/:auth_token.:format" => "events#index", :as => :feed
