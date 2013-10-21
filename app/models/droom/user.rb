@@ -21,7 +21,6 @@ module Droom
     
     before_create :ensure_authentication_token
     before_create :ensure_uid
-    after_create :invite_if_instructed
 
     def password_required?
       confirmed? && (!password.blank?)
@@ -42,7 +41,6 @@ module Droom
     }
 
     def as_json_for_coca(options={})
-      Rails.logger.warn ">>> Doom::User.as_json_for_coca"
       ensure_uid
       ensure_authentication_token
       {
@@ -397,13 +395,6 @@ module Droom
 
     # ### Invitation
     #
-    def invite_if_instructed
-      invite! if invite_on_creation?
-    end
-    
-    def invite_on_creation?
-      !!invite_on_creation && invite_on_creation != 0 && invite_on_creation != "0"
-    end
     
     def invite!
       self.send_confirmation_instructions
