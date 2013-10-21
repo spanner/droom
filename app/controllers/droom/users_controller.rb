@@ -77,7 +77,7 @@ module Droom
   protected
 
     def user_params
-      params.require(:user).permit(:title, :name, :forename, :email, :password, :password_confirmation, :phone, :description, :admin, :preferences_attributes, :confirm, :old_id, :invite_on_creation, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code, :mobile, :dob, :organisation_id, :public, :private, :female, :image)
+      params.require(:user).permit(:title, :family_name, :given_name, :chinese_name, :email, :password, :password_confirmation, :phone, :description, :admin, :preferences_attributes, :confirm, :old_id, :invite_on_creation, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code, :mobile, :dob, :organisation_id, :public, :private, :female, :image)
     end
 
     def build_user
