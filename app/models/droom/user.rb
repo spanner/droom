@@ -287,7 +287,7 @@ module Droom
     end
   
     def formal_name
-      if title_if_it_matters?
+      if title_if_it_matters
         [title, family_name, honours].join(' ')
       else
         informal_name
