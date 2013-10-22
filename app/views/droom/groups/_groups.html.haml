@@ -2,7 +2,7 @@
 
   - @groups.each do |group|
     %h2{class: "section #{'quiet' unless group.directory?}"}
-      = link_to group.name, group_url(group, :format => :js), :class => 'name', :data => {:remote => true, :action => 'replace', :affected => "#group_#{group.id}"}
+      = link_to group.name, group_url(group, :format => :js), :class => 'name', :data => {:remote => true, :autoload => group.directory?, :action => 'replace', :affected => "#group_#{group.id}"}
       = action_menulink(group)
     = action_menu(group)
 
