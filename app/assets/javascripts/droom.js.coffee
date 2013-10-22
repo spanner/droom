@@ -54,7 +54,7 @@ jQuery ($) ->
     
     # it's not very easy to add data attributes to kaminari pagination links
     
-    @find_including_self('.pagination a').page_turner()
+    @find_including_self('.pagination.sliding a').page_turner()
 
     # and some shortcuts for compatibility
     
