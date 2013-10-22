@@ -3,8 +3,8 @@ module Droom
     helper Droom::DroomHelper
     respond_to :html, :js
     layout :no_layout_if_pjax
-
-    before_filter :build_user, :only => [:create]
+    before_filter :get_view, only: [:update, :show]
+    before_filter :build_user, only: [:create]
     load_and_authorize_resource
 
     def index
@@ -28,7 +28,7 @@ module Droom
       respond_with @user do |format|
         format.js { 
           @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
-          render :partial => "droom/users/user" 
+          render :partial => "droom/users/#{@view}"
         }
       end
     end
@@ -43,7 +43,9 @@ module Droom
     def create
       @user.assign_attributes(user_params)
       if @user.save
-        render :partial => "droom/users/user"
+        respond_with @user do |format|
+          format.js { render :partial => "droom/users/#{@view}" }
+        end
       else
         render :edit
       end
@@ -62,9 +64,8 @@ module Droom
     def update
       if @user.update_attributes(user_params)
         sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
-        render :partial => "droom/users/user"
+        render :show
       else
-        Rails.logger.warn "user invalid: #{@user.errors.to_a.inspect}"
         render :edit
       end
     end
@@ -87,6 +88,11 @@ module Droom
 
     def build_user
       @user = Droom::User.new(user_params)
+    end
+    
+    def get_view
+      @view = params[:view] if %w{user tabled}.include?(params[:view])
+      @view ||= 'user'
     end
   end
 end

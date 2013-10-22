@@ -36,6 +36,10 @@ module Droom
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
 
+    def confirm=(value)
+      confirm! if value
+    end
+    
     scope :in_name_order, -> {
       order("family_name ASC, given_name ASC")
     }

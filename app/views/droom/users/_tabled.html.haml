@@ -1,0 +1,28 @@
+- tabled ||= nil
+- user ||= tabled || @user
+- rowid = "user_#{user.id}"
+- cssclass = "user"
+
+%tr{:id => rowid, :class => cssclass, data: {refreshable: true, url: user_url(user, view: 'tabled', format: :js)}}
+  %td.name
+    = link_to user.informal_name, edit_user_url(user), :data => {:action => "popup"}
+
+  %td.email
+    = mail_to user.email
+
+  %td.confirmed.toggle{:data => {:hoverable => true}}
+    - if user.confirmed?
+      %span.yes
+    - else
+      = link_to "&nbsp;", user_url(user, :user => { :confirm => true }, :format => :js), :class => "no", :method => :put, :remote => true, :data => {:action => "affect", :affected => "##{rowid}" }
+
+  %td.d.admin.toggle{:data => {:hoverable => true}}
+    - if user.admin?
+      = link_to "&nbsp;", user_url(user, :user => { :admin => false }, :format => :js), :class => "yes", :method => :put, :remote => true, :data => {:action => "affect", :affected => "##{rowid}" }
+    - else
+      = link_to "&nbsp;", user_url(user, :user => { :admin => true }, :format => :js), :class => "no", :method => :put, :remote => true, :data => {:action => "affect", :affected => "##{rowid}" }
+
+  - groups = Droom::Group.all
+  - groups.each_with_index do |group, i|
+    %td.toggle.group{:class => "g_#{group.id} #{'d' if i == groups.length-1}", :data => {:hoverable => true}}
+      = render :partial => "droom/memberships/toggle", :locals => {:group => group, :user => user}

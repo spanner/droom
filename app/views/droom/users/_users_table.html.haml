@@ -16,7 +16,7 @@
             %p
               = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
               
-        - %w{invited confirmed admin}.each do |col|
+        - %w{confirmed admin}.each do |col|
           %th{:class => "#{col} #{'d' if col=='admin'}"}
             - unless col == "name" || col == "email"
               %span.rotated
@@ -26,7 +26,7 @@
             %span.rotated
               = truncate(group.name, :length => 16)
 
-    = render :partial => 'tabled_user', :collection => @users
+    = render :partial => 'tabled', :collection => @users
 
 - else
   .everyone
