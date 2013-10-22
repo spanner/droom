@@ -35,6 +35,8 @@ module Droom
 
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
+    scope :this_month, -> { where("created_at > ?", Time.now - 1.month) }
+    scope :this_week, -> { where("created_at > ?", Time.now - 1.week) }
 
     def confirm=(value)
       confirm! if value
@@ -377,7 +379,8 @@ module Droom
       unless @messaging_groups
         @messaging_groups = {
           :unconfirmed => -> { Droom::User.unconfirmed},
-          :administrative => -> { Droom::User.administrative }
+          :administrative => -> { Droom::User.administrative },
+          :newly_added => -> { Droom::User.this_week }
         }
         Droom::Group.all.each do |group|
           @messaging_groups[group.slug.to_sym] = -> { Droom::User.in_group(group.id) }
@@ -387,6 +390,7 @@ module Droom
     end
 
     def for_email
+      ensure_confirmation_token!
       {
         :informal_name => informal_name,
         :formal_name => formal_name,
@@ -484,6 +488,10 @@ module Droom
 
 
   protected
+  
+    def ensure_confirmation_token
+      update_column :confirmation_token
+    end
 
     def ensure_uid
       self.uid ||= SecureRandom.uuid
