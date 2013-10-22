@@ -49,7 +49,7 @@ module Droom
     end
 
     def unlink_folder
-      user.remove_personal_folders(group.folder)
+      user.remove_personal_folders(group.folder) if user
     end
     
     def create_mailing_list_membership

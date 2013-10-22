@@ -20,7 +20,7 @@ module Droom
     def admin
       @users = @users.in_name_order
       @users = @users.matching(params[:q]) unless params[:q].blank?
-      @users = paginated(@users, 50)
+      @users = paginated(@users, 200)
       respond_with @users
     end
 

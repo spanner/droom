@@ -38,7 +38,7 @@ module Droom
     end
     
     def unlink_folder
-      user.remove_personal_folders(event.folder)
+      user.remove_personal_folders(event.folder) if user
     end
     
     def status
