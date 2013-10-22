@@ -72,7 +72,6 @@ Droom::Engine.routes.draw do
   
   resources :groups do
     resources :memberships
-    resources :users
     resources :group_permissions
   end
   

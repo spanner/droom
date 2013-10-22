@@ -1,7 +1,24 @@
-= form_for [@group, @membership], :html => {:remote => true, :data => {:type => :html}} do |f|
-  %input.person_picker{:type => "text", :placeholder => t(:person_name), :autocomplete => "off"}
-  = f.hidden_field :person_id, :class => "person_picker_target"
-  = link_to t(:cancel), "/", :class => 'cancel'
-  %p.formnote
-    =t :new_membership_instructions, :name => @group.name
+%p
+  %input#new_person{name: "how", type: "radio", value: "new", checked: true, data: {action: 'reveal', affected: '#new_user', converse: '#choose_user'}}
+  %label{for: "new_person"}
+    Invite a new person
+  %input#existing_person{name: "how", type: "radio", value: "existing", data: {action: 'reveal', affected: '#choose_user', converse: '#new_user'}}
+  %label{for: "existing_person"}
+    Choose someone already here
+
+#new_user
+  - user = Droom::User.new
+  = form_for [@group, @membership], :html => {:class => 'edit user'} do |f|
+    = f.fields_for :user, user do |uf|
+      = render partial: "droom/users/user_fields", locals: {f: uf, user: user}
+    .buttons
+      = f.submit t(:invite_to_group)
+      = t :or
+      = link_to t(:cancel), '#', :class => 'cancel'
   
+
+#choose_user
+  %p{style: "margin: 20px"}
+    The person-picker will be here shortly.
+    You can also add people to groups on the 
+    = link_to('user admin page', admin_users_url) + '.'

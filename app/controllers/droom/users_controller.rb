@@ -34,11 +34,15 @@ module Droom
     end
   
     def new
+      if params[:group_id].present?
+        @user.groups << Group.find(params[:group_id])
+      end
       respond_with @user
     end
 
     def create
-      if @user.update_attributes(user_params)
+      @user.assign_attributes(user_params)
+      if @user.save
         render :partial => "droom/users/user"
       else
         render :edit
@@ -60,13 +64,14 @@ module Droom
         sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
         render :partial => "droom/users/user"
       else
+        Rails.logger.warn "user invalid: #{@user.errors.to_a.inspect}"
         render :edit
       end
     end
 
     def destroy
       @user.destroy
-      respond_with @user
+      head :ok
     end
     
     def invite

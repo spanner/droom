@@ -16,6 +16,8 @@ module Droom
     after_destroy :destroy_permissions
     after_destroy :destroy_similar
     
+    accepts_nested_attributes_for :user
+
     validates :user, :presence => true
     validates :group, :presence => true
 

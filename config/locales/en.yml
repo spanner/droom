@@ -209,6 +209,8 @@ en:
   group: "group"
   group_admin: "Directory"
   group_created: "Group '%{name}' created"
+  invite_person: "invite a new person"
+  invite_to_group: "Invite and add to group"
   calendar: "Calendar"
   library: "Library" 
   networks: "Networks"
