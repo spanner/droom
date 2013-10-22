@@ -1,23 +1,19 @@
 #account
   %h1.pagetitle
-    =t :choose_new_password
+    =t :forgot_password
 
-  = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "password" }) do |f|
+  = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
     = devise_error_messages!
-    = f.hidden_field :reset_password_token
-    
-    = render "droom/users/password_fields", :f => f
-
-    %p.notice
-      = t :password_notice
+  
+    %p
+      = f.label :email
+      %br
+      = f.email_field :email, :class => 'login'
+      %span.note
+        = t :email_note
         
     .controls
       .save.button
         %p
-          = f.submit t(:set_password), :class => "submit"
-
-
-
-
-
+          = f.submit t(:send_reset_instructions), :class => "submit"
 
