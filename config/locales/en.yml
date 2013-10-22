@@ -22,6 +22,10 @@ en:
           start_date: "Date"
           calendar_id: "Calendar"
           private: "hidden unless attending"
+        group:
+          name: "Group name"
+          description: "Notes"
+          directory: "Show in directory"
         folder: 
           name: "Folder name"
         organisation:
