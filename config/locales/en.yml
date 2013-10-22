@@ -368,7 +368,7 @@ en:
   phone_unknown: "phone unknown"
   group_already_invited: "Already invited: select to reissue any missing personal invitations."
   users_introduction: "This is a list of everyone known to the data room. It may include many people who do not have access to the data room itself, but whom we authenticate for access to other services."
-  users_admin_introduction: "The main purpose of this page is to manage group membership, which also does a lot to control a person's access to different Croucher web services."
+  users_admin_introduction: "The main purpose of this page is to manage group membership, which also does a lot to control a person's access to our web services."
   your_invitations: "Your invitations"
   invitation_successful: "Success: %{name} has been invited."
   welcome_preamble: "Welcome to the data room. Before we do anything else, please choose a password for your account."
@@ -420,7 +420,7 @@ en:
     groups:
       unconfirmed: "Unconfirmed accounts"
       administrative: "Administrators"
-      newly_added: "Added this week"
+      newly_added: "Newly added"
     droom/user: "users"
 
   apps:
