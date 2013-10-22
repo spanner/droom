@@ -278,6 +278,7 @@ jQuery ($) ->
         @confirmation_field.attr('pattern', '').attr('required', false)
         @confirmation_holder.hide()
       else
+        console.log "checkPassword", @password_field.val(), @password_field.get(0).checkValidity()
         @confirmation_field.attr('pattern', @password_field.val()).attr('required', true)
         if @password_field.get(0).checkValidity()
           @confirmation_holder.show()
@@ -298,7 +299,6 @@ jQuery ($) ->
       if @blocked
         e.preventDefault()
       else
-        # might as well debounce, since we're here
         @submit.val('please wait')
         @unsubmittable()
 

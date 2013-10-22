@@ -13,7 +13,7 @@ Droom::Engine.routes.draw do
   # intermediate confirmation step to allow invitation without setting a password
   devise_scope :user do
     get "/users/:id/welcome/:confirmation_token" => "confirmations#show", :as => :welcome
-    put "/users/:id/confirm" => "confirmations#update", :as => :confirm_password
+    patch "/users/:id/confirm" => "confirmations#update", :as => :confirm_password
   end
 
   resources :services do

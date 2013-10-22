@@ -5,13 +5,13 @@
   %h1.pagetitle
     =t :welcome
 
-  = form_for resource, :url => confirm_password_path, :html => {:class => 'edit user'} do |f|
+  = form_for resource, :url => confirm_password_path, :html => {:class => 'edit user password'} do |f|
     = f.hidden_field :confirmation_token
     
     %p
       %strong
         = t :hello
-        = @user.name
+        = @user.formal_name
       = t :welcome_preamble
 
     = devise_error_messages!

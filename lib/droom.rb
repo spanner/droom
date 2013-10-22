@@ -223,7 +223,7 @@ module Droom
     end
     
     def password_pattern
-      @@password_pattern ||= "{,6}"
+      @@password_pattern ||= ".{6,}"
     end
     
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
