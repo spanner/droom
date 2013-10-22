@@ -947,6 +947,7 @@ div.menu
     li
       a
         color: white !important
+        min-height: 16px
         &.add
           +menu_link("droom/smalladd.png")
         &.edit
@@ -1952,7 +1953,6 @@ ul.checklist
     height: 24px
     padding: 4px
     line-height: 26px
-    +border-radius(10px)
     text-align: center
     margin-right: 6px
   a
@@ -1966,7 +1966,8 @@ ul.checklist
       color: white
   span.current
     border: 1px solid $verypale
-    color: $mid
+    background-color: $pale
+    color: white
   span.gap
     border: 1px solid transparent
     text-align: center

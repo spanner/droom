@@ -383,7 +383,7 @@ en:
     formats:
       natural: "%l:%M%P"
       natural_with_date: "%l:%M%P, %d %B %Y"
-      natural_with_year: "%d %B %Y"
+      natural_with_year: "%-d %B %Y"
       precise: "%H:%M"
       month_and_year: "%b %Y"
   date:
@@ -392,8 +392,8 @@ en:
       month_header: "%B %Y"
       natural: "%d %B"
       natural_full: "%l:%M%P, %d %B %Y"
-      natural_with_year: "%d %B %Y"
-      minimal_with_year: "%d %b %Y"
+      natural_with_year: "%-d %B %Y"
+      minimal_with_year: "%-d %b %Y"
       minicalendar_title: "%B %Y"
       minicalendar_month: "%B"
       year: "%Y"
