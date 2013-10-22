@@ -56,7 +56,11 @@ module Droom
     end
     
     def get_groups
-      @groups = Droom::Group.shown_in_directory.accessible_by(current_ability).order("name ASC")
+      if can? :manage, Droom::Group
+        @groups = Droom::Group.order("directory DESC, name ASC")
+      else
+        @groups = Droom::Group.shown_in_directory.accessible_by(current_ability).order("name ASC")
+      end
     end
 
   end

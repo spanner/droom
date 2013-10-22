@@ -211,6 +211,10 @@ div.event, div.document, div.group
   position: relative
   clear: both
   margin-bottom: 10px
+  &.quiet
+    color: $pale
+    a
+      color: $pale
 
 form.event, form.document
   position: relative
@@ -544,6 +548,9 @@ form.user
 h2.name
   font-size: 2em
   margin: 0
+
+h2.quiet
+  color: $pale
 
 a.dl, a.ul
   display: inline-block

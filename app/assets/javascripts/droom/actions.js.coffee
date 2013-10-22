@@ -122,6 +122,7 @@ jQuery ($) ->
     @each ->
       container = $(@).attr('data-replaced') || selector
       affected = $(@).attr('data-affected')
+      autoload = options['force'] || ($(@).attr('data-autoload')? && $(@).attr('data-autoload') isnt 'false')
       $(@).remote
         on_success: (e, r) =>
           replaced = $(@).self_or_ancestor(container).last()
@@ -129,7 +130,7 @@ jQuery ($) ->
           replaced?.remove()
           replacement.activate()
           $(affected).trigger('refresh')
-      $(@).click() if options['force'] || $(@).attr('data-autoload')?
+      $(@).click() if autoload
 
 
 
