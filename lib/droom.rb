@@ -36,6 +36,7 @@ module Droom
                  :use_biogs,
                  :use_separate_mobile_number,
                  :use_titles,
+                 :use_honours,
                  :use_organisations,
                  :enable_mailing_lists,
                  :mailman_table_name,
@@ -133,6 +134,10 @@ module Droom
 
     def use_titles?
       !!@@use_titles
+    end
+    
+    def use_honours?
+      !!@@use_honours
     end
     
     def use_biogs?

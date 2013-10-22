@@ -22,6 +22,11 @@
       = f.label :chinese_name, '中文姓名'
       %br
       = f.text_field :chinese_name
+  - if Droom.use_honours?
+    %span.honours
+      = f.label :honours
+      %br
+      = f.text_field :honours
 
 .non-file-data
   .contacts
