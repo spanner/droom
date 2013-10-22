@@ -386,7 +386,7 @@ module Droom
       {
         :informal_name => informal_name,
         :formal_name => formal_name,
-        :family_namne => family_name,
+        :family_name => family_name,
         :given_name => given_name,
         :chinese_name => chinese_name,
         :email => email,
