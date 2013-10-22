@@ -287,8 +287,8 @@ module Droom
     end
   
     def formal_name
-      if title?
-        [title, family_name].join(' ')
+      if title_if_it_matters?
+        [title, family_name, honours].join(' ')
       else
         informal_name
       end
@@ -299,7 +299,7 @@ module Droom
     # if the title is not ordinary.
     #
     def colloquial_name
-      [title_if_it_matters, informal_name].compact.join(' ')
+      [title_if_it_matters, informal_name, honours].compact.join(' ')
     end
 
     # ### Completeness

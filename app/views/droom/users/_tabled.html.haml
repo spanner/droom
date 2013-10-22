@@ -5,7 +5,7 @@
 
 %tr{:id => rowid, :class => cssclass, data: {refreshable: true, url: user_url(user, view: 'tabled', format: :js)}}
   %td.name
-    = link_to user.informal_name, edit_user_url(user), :data => {:action => "popup"}
+    = link_to user.informal_name, edit_user_url(user), :data => {:action => "popup", :affected => "##{rowid}"}
 
   %td.email
     = mail_to user.email
