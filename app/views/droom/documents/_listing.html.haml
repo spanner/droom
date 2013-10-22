@@ -1,6 +1,6 @@
 - document ||= listing
 - narrow ||= false
-- character_count = narrow ? 20 : 32
+- character_count = narrow ? 20 : 44
 
 %li.document{:id => "list_document_#{document.id}", data: {narrow: narrow}}
   = link_to shorten(document.name, character_count, ''), droom.folder_document_url(document.folder, document), :class => "document #{document.file_extension.downcase}"

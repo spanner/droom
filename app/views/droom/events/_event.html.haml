@@ -58,5 +58,6 @@
           = event.description.html_safe 
 
   - if full_attachments
-    = render :partial => 'droom/events/attachments', :locals => {:event => event}
-    = render :partial => 'droom/events/invitations', :locals => {:event => event}
+    .addenda
+      = render :partial => 'droom/events/attachments', :locals => {:event => event}
+      = render :partial => 'droom/events/invitations', :locals => {:event => event}

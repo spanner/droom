@@ -223,7 +223,6 @@ form.event, form.document
 
 div.event, form.event, div.project
   .summary
-    overflow: hidden
     .heading
       p.name
         margin: 0
@@ -241,10 +240,11 @@ div.event, form.event, div.project
         margin-top: 0
   .col
     float: left
-    width: 400px
+    width: 500px
     margin-right: 20px
     &:last-child
       margin-right: 0
+      width: 300px
 #margin
   ul.invitations
     padding: 0
@@ -1516,7 +1516,7 @@ ul.filing
   list-style: none
   li.document
     white-space: nowrap
-
+    overflow: hidden
 ul.folder
   position: relative
   float: right

@@ -5,5 +5,5 @@
   .paginated
     %ul.people
       = render :partial => "droom/users/user", :collection => users
-    .pagination
+    .pagination.sliding
       = paginate users
