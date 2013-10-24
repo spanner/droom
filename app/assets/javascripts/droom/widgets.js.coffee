@@ -366,6 +366,8 @@ jQuery ($) ->
       @_request = null
       @_inactive = false
       @_cache = {}
+      @_form.bind 'refresh', () =>
+        @_form.submit()
       @_form.remote
         on_request: @prepare
         on_cancel: @cancel
@@ -407,10 +409,11 @@ jQuery ($) ->
         parameters.push field.serialize() unless field.val() is ""
       parameters.join('&')
       
-    submit: (e) =>
+    submit: (e, nocache) =>
       e.preventDefault() if e
+      nocache ?= false
       qs = @serialize()
-      if @_cache[qs]
+      if !nocache and @_cache[qs]
         @display(@_cache[qs])
       else
         @_form.submit()
