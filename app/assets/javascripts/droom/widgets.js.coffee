@@ -401,7 +401,11 @@ jQuery ($) ->
       @submit_soon() unless @_inactive
     
     serialize: () =>
-      @_form.serialize()
+      parameters = []
+      @_form.find(":input").each (i, f) =>
+        field = $(f)
+        parameters.push field.serialize() unless field.val() is ""
+      parameters.join('&')
       
     submit: (e) =>
       e.preventDefault() if e
