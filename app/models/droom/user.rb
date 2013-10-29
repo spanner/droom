@@ -74,7 +74,6 @@ module Droom
     has_many :mailing_list_memberships, :through => :memberships
 
     def admit_to(groups)
-      Rails.logger.warn "... admit to #{@groups.map(&:name).to_sentence}"
       groups = [groups].flatten
       groups.each do |group|
         memberships.where(group_id: group.id).first_or_create
