@@ -19,7 +19,7 @@ module Droom
     end
 
     def show
-      @users = paginated(@group.users, 15)
+      @users = paginated(@group.users, 20)
       respond_with @group do |format|
         format.js {
           render :partial => 'droom/groups/group'
