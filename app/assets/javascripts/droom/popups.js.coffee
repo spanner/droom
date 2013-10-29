@@ -33,8 +33,6 @@ jQuery ($) ->
         on_success: @receive
 
     begin: (event, xhr, settings) =>
-      console.log "begin", @_iteration
-      
       switch @_iteration
         when 0
           @prepare()

@@ -278,7 +278,6 @@ jQuery ($) ->
         @confirmation_field.attr('pattern', '').attr('required', false)
         @confirmation_holder.hide()
       else
-        console.log "checkPassword", @password_field.val(), @password_field.get(0).checkValidity()
         @confirmation_field.attr('pattern', @password_field.val()).attr('required', true)
         if @password_field.get(0).checkValidity()
           @confirmation_holder.show()
@@ -1016,7 +1015,6 @@ jQuery ($) ->
       @prompt.trigger 'suggester.change'
       @prompt.val(id)
       title = $("<div>#{value}</div>").find('.title')
-      console.log "name_field", @name_field, title
       @name_field.val(title.text()) if @name_field.val() is ""
       @get_preview(id)
       @get_thumbnail(id)

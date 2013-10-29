@@ -97,7 +97,7 @@ module Droom
       group = group.id if group.is_a? Droom::Group
       select("droom_users.*")
         .joins("INNER JOIN droom_memberships as dm ON droom_users.id = dm.user_id")
-        .where("dm.user_id" => group)
+        .where("dm.group_id" => group)
     }
 
     ## Event invitations
