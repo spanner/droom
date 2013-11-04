@@ -17,6 +17,9 @@ module Droom
         can :read, Droom::Scrap
         can :read, Droom::Venue
         can :read, Droom::User
+        can :read, Droom::Group do |group|
+          user.member_of?(group)
+        end
         
         # And they can edit themselves
         #
