@@ -17,9 +17,7 @@ module Droom
         can :read, Droom::Scrap
         can :read, Droom::Venue
         can :read, Droom::User
-        can :read, Droom::Group do |group|
-          user.member_of?(group)
-        end
+        can :read, Droom::Group
         
         # And they can edit themselves
         #
@@ -32,7 +30,7 @@ module Droom
         # can :manage, :all, :created_by_id => user.id
 
         # Then other abilities are determined by permissions. Permissions here are relatively abstract and 
-        # not closely coupled to Cancan abilities. Here we make them concrete.
+        # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
         #
         if user.permitted?('droom.calendar')
           can :create, Droom::Event
