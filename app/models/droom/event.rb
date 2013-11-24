@@ -7,7 +7,7 @@ require 'time_of_day'
 
 module Droom
   class Event < ActiveRecord::Base
-    include Slugged
+    include Droom::Concerns::Slugged
 
     belongs_to :created_by, :class_name => "Droom::User"
 

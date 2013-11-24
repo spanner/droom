@@ -28,6 +28,7 @@ en:
           directory: "Show in directory"
         folder: 
           name: "Folder name"
+          slug: "Folder path"
         organisation:
           name: "Name"
           url: "Web link"

@@ -1,4 +1,4 @@
-module Slugged
+module Droom::Concerns::Slugged
   extend ActiveSupport::Concern
   
   def slug_from_name

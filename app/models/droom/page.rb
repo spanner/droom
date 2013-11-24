@@ -3,7 +3,7 @@
 #
 module Droom
   class Page < ActiveRecord::Base
-    include Slugged
+    include Droom::Concerns::Slugged
     
     before_validation :slug_from_name
     before_save :render_body

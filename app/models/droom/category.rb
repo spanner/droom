@@ -1,6 +1,6 @@
 module Droom
   class Category < ActiveRecord::Base
-    include Slugged
+    include Droom::Concerns::Slugged
 
     belongs_to :created_by, :class_name => "Droom::User"
     has_many :document_attachments

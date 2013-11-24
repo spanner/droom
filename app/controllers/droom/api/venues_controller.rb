@@ -3,11 +3,11 @@ module Droom::Api
 
     before_filter :get_venues, only: [:index]
     before_filter :build_venue, only: [:create]
-    load_and_authorize_resource
+    load_and_authorize_resource find_by: :slug, class: "Droom::Venue"
     after_filter :set_pagination_headers, only: [:index]
     
     def index
-      render json: @venues.includes(:awards, :notes)
+      render json: @venues
     end
 
     def show
@@ -53,7 +53,7 @@ module Droom::Api
       if @show == 'all'
         @venues = venues
       else
-        @venues = venues.page(@page).per(@show) unless 
+        @venues = venues.page(@page).per(@show) 
       end
     end
 

@@ -3,11 +3,11 @@ module Droom::Api
 
     before_filter :get_users, only: [:index]
     before_filter :build_user, only: [:create]
-    load_and_authorize_resource find_by: :uid
+    load_and_authorize_resource find_by: :uid, class: "Droom::User"
     after_filter :set_pagination_headers, only: [:index]
     
     def index
-      render json: @users.includes(:awards, :notes)
+      render json: @users
     end
 
     def show
@@ -53,7 +53,7 @@ module Droom::Api
       if @show == 'all'
         @users = users
       else
-        @users = users.page(@page).per(@show) unless 
+        @users = users.page(@page).per(@show) 
       end
     end
 

@@ -4,7 +4,7 @@ require 'acts_as_tree'
 module Droom
   class Folder < ActiveRecord::Base
     include ActsAsTree
-    include Slugged
+    include Droom::Concerns::Slugged
 
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
