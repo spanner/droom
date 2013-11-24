@@ -3,6 +3,7 @@ module Droom
     validates :family_name, :presence => true
     validates :given_name, :presence => true
     validates :email, :uniqueness => true, :presence => true
+    validates :uid, :uniqueness => true, :presence => true
 
     has_many :preferences, :foreign_key => "created_by_id"
     accepts_nested_attributes_for :preferences, :allow_destroy => true
@@ -322,25 +323,6 @@ module Droom
       chinese, english = given_name.split(/,\s*/)
       [family_name, chinese].join(' ')
     end
-
-    ## Addresses
-    #
-    # These will change soon to a simple text field with geolocation.
-    #
-    def address
-      Snail.new(
-        :line_1 => post_line1,
-        :line_2 => post_line2,
-        :city => post_city,
-        :region => post_region,
-        :postal_code => post_code,
-        :country => post_country
-      )
-    end
-    
-    def address?
-      post_line1? && post_city
-    end
     
     def to_vcf
       @vcard ||= Vcard::Vcard::Maker.make2 do |maker|
@@ -464,7 +446,9 @@ module Droom
     def set_pref(key, value)
       preferences.find_or_create_by_key(key).set(value)
     end
-    
+
+
+
     ## Permissions
     #
     # Permissions are usually assigned by way of group membership, but the effect of this is to create a user-permission
@@ -482,7 +466,7 @@ module Droom
     end
 
 
-    ## Ownership
+    ## Other ownership
     #
     has_many :scraps, :foreign_key => "created_by_id"
     has_many :documents, :foreign_key => "created_by_id"

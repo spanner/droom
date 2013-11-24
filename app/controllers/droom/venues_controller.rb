@@ -24,7 +24,7 @@ module Droom
   protected
   
     def venue_params
-      params.require(:venue).permit(:name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code, :old_id)
+      params.require(:venue).permit(:name, :lat, :lng, :address, :post_code, :country_code)
     end
 
   end

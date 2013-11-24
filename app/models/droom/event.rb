@@ -7,6 +7,7 @@ require 'time_of_day'
 
 module Droom
   class Event < ActiveRecord::Base
+    include Slugged
 
     belongs_to :created_by, :class_name => "Droom::User"
 
@@ -28,7 +29,6 @@ module Droom
     accepts_nested_attributes_for :event_set
 
     belongs_to :calendar
-
     has_many :scraps
 
     validates :start, :presence => true, :date => true
@@ -37,7 +37,7 @@ module Droom
     validates :name, :presence => true
 
     before_validation :set_uuid
-    before_save :ensure_slug
+    before_validation :slug_from_name_and_year
 
     ## Event retrieval in various ways
     #
@@ -189,7 +189,15 @@ module Droom
     def finish_date
       finish.to_date if finish
     end
-    
+
+    def month
+      start.strftime("%m")
+    end
+
+    def year
+      start.strftime("%Y")
+    end
+
     # And these setters will adjust the current value so that its date or time part corresponds to the given
     # value. The value is passed through the same parsing mechanism as above, so:
     #
@@ -227,7 +235,7 @@ module Droom
         0
       end
     end
-
+    
     def venue_name
       venue.name if venue
     end
@@ -348,10 +356,6 @@ module Droom
     end
 
   protected
-
-    def ensure_slug
-      ensure_presence_and_uniqueness_of(:slug, "#{start.strftime("%Y %m %d")} #{name}".parameterize)
-    end
 
     def set_uuid
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?

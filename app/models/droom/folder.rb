@@ -4,6 +4,7 @@ require 'acts_as_tree'
 module Droom
   class Folder < ActiveRecord::Base
     include ActsAsTree
+    include Slugged
 
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
@@ -14,7 +15,7 @@ module Droom
     validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
 
     before_validation :set_properties
-    before_validation :ensure_slug
+    before_validation :slug_from_name
     
     default_scope -> { includes(:documents) }
 

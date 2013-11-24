@@ -1,3 +1,3 @@
 class Droom::VenueSerializer < ActiveModel::Serializer
-  attributes :id, :uid, :title, :given_name, :family_name, :chinese_name, :email, :permission_codes, :thumbnail
+  attributes :id, :name, :definite_name, :address, :post_code, :country_code, :lat, :lng
 end

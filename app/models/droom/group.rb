@@ -1,5 +1,7 @@
 module Droom
   class Group < ActiveRecord::Base
+    include Slugged
+
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :leader, :class_name => 'Droom::User'
 
@@ -14,7 +16,7 @@ module Droom
     has_many :group_permissions, :dependent => :destroy
     has_many :permissions, -> { uniq }, :through => :group_permissions
     
-    before_validation :ensure_slug
+    before_validation :slug_from_name
     before_validation :ensure_mailing_list_name
 
     validates :slug, :uniqueness => true, :presence => true
@@ -94,12 +96,8 @@ module Droom
 
   protected
 
-    def ensure_slug
-      ensure_presence_and_uniqueness_of(:slug, name.parameterize)
-    end
-
     def ensure_mailing_list_name
-      ensure_presence_and_uniqueness_of(:mailing_list_name, slug)
+      ensure_presence_of_unique(:mailing_list_name, slug)
     end
   end
 end

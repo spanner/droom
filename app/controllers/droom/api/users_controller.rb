@@ -3,7 +3,7 @@ module Droom::Api
 
     before_filter :get_users, only: [:index]
     before_filter :build_user, only: [:create]
-    load_and_authorize_resource
+    load_and_authorize_resource find_by: :uid
     after_filter :set_pagination_headers, only: [:index]
     
     def index
@@ -57,8 +57,8 @@ module Droom::Api
       end
     end
 
-    def person_params
-      params.require(:person).permit(:title, :family_name, :given_name, :chinese_name, :user_uid, :phone, :email, :mobile, :address, :correspondence_address, :nationality, :gender, :hkid, :dob, :pob, :image, :employer, :post, :department, :employer_address, :country_code, :work_email, :work_phone, :msc_year, :mphil_year, :hpd_year, :graduated_from_code, :hidden)
+    def user_params
+      params.require(:user).permit(:title, :family_name, :given_name, :chinese_name, :honours, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female)
     end
 
   end
