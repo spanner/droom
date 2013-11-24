@@ -181,10 +181,13 @@ module Droom
                       }
 
     def thumbnail
-      image.url(:icon) if image?
+      image.url(:thumb) if image?
     end
     
-    
+    def icon
+      image.url(:icon) if image?
+    end
+ 
     # For suggestion box
     #
     scope :matching, -> fragment {
