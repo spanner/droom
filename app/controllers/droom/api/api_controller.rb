@@ -5,7 +5,7 @@ module Droom::Api
     skip_before_filter :require_data_room_permission
     prepend_before_filter :echo_auth
     before_filter :echo_user_status
-    after_filter :set_access_control_headers
+    before_filter :set_access_control_headers
 
   protected
     def echo_auth

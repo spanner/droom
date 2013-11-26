@@ -22,6 +22,22 @@ module Droom
     
     before_create :ensure_authentication_token
     before_create :ensure_uid
+    
+    # People are often invited into the system in batches or after offline contact. 
+    # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
+    # if you want to create a user account without sending out any messages yet.
+    #
+    # When you do want to invite that person, call user.resend_confirmation_token.
+    #
+    attr_accessor :defer_confirmation
+    
+    def defer_confirmation!
+      self.defer_confirmation = true
+    end
+    
+    def send_confirmation_notification?
+      super && !defer_confirmation
+    end
 
     def password_required?
       confirmed? && (!password.blank?)

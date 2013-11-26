@@ -20,8 +20,11 @@ module Droom::Api
     end
 
     def create
-      @user.update_attributes(user_params)
-      render json: @user
+      if @user.update_attributes(user_params)
+        render json: @user
+      else
+        Rails.logger.warn "new user unsaved: #{@user.errors.to_a.inspect}"
+      end
     end
 
     def destroy
@@ -58,7 +61,7 @@ module Droom::Api
     end
 
     def user_params
-      params.require(:user).permit(:title, :family_name, :given_name, :chinese_name, :honours, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female)
+      params.require(:user).permit(:uid, :title, :family_name, :given_name, :chinese_name, :honours, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female)
     end
 
   end
