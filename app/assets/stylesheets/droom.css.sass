@@ -962,15 +962,15 @@ div.menu
         color: white !important
         min-height: 16px
         &.add
-          +menu_link("droom/smalladd.png")
+          +menu_link("droom/menuadd.png")
         &.edit
-          +menu_link("droom/smalledit.png")
+          +menu_link("droom/menuedit.png")
         &.delete
-          +menu_link("droom/smalldelete.png")
+          +menu_link("droom/menudelete.png")
         &.download
-          +menu_link("droom/smalldownload.png")
+          +menu_link("droom/menudownload.png")
         &.send
-          +menu_link("droom/smalledit.png")
+          +menu_link("droom/menuedit.png")
 
 a.menu
   display: inline-block
@@ -984,7 +984,7 @@ a.menu
     color: transparent
     position: 0 0
     repeat: no-repeat
-    image: image-url('droom/asterisk.png')
+    image: image-url('droom/menu/asterisk.png')
   &:hover
     background-position: 0 -48px
     +opacity(1)
@@ -998,7 +998,7 @@ a.menu
       position: 0 -144px
       color: $blue
   &.small
-    background-image: image-url('droom/small_asterisk.png')
+    background-image: image-url('droom/menu/smallasterisk.png')
     width: 20px
     height: 18px
   
@@ -1938,12 +1938,33 @@ ul.checklist
       top: 10px
   ul
     +plain
+    color: $pale
     &.col
       float: left
       width: 130px
       margin-right: 10px
       &:last-child
         margin-right: 0
+  a.heading
+    font-weight: bold
+    color: $dark
+    +hover
+  a.shortcut
+    font-weight: normal
+    color: $pale
+    +hover
+  a.add
+    +icon_link("droom/panel/add.png")
+    color: $mid
+    +hover
+  a.edit
+    +icon_link("droom/panel/edit.png")
+    color: $mid
+    +hover
+  a.manage
+    +icon_link("droom/panel/manage.png")
+    color: $mid
+    +hover
 
 .submenu
   position: absolute
