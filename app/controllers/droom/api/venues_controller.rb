@@ -4,7 +4,7 @@ module Droom::Api
     before_filter :get_venues, only: [:index]
     before_filter :build_venue, only: [:create]
     load_and_authorize_resource find_by: :slug, class: "Droom::Venue"
-    after_filter :set_pagination_headers, only: [:index]
+    # after_filter :set_pagination_headers, only: [:index]
     
     def index
       render json: @venues
@@ -47,14 +47,15 @@ module Droom::Api
         @fragments = params[:q].split(/\s+/)
         @fragments.each { |frag| venues = venues.matching(frag) }
       end
+      @venues = venues
 
-      @show = params[:show] || 20
-      @page = params[:page] || 1
-      if @show == 'all'
-        @venues = venues
-      else
-        @venues = venues.page(@page).per(@show) 
-      end
+      # @show = params[:show] || 20
+      # @page = params[:page] || 1
+      # if @show == 'all'
+      #   @venues = venues
+      # else
+      #   @venues = venues.page(@page).per(@show) 
+      # end
     end
 
     def venue_params

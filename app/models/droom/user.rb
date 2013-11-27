@@ -21,7 +21,7 @@ module Droom
            :encryptor => :sha512
     
     before_create :ensure_authentication_token
-    before_create :ensure_uid
+    before_create :ensure_uid!
     
     # People are often invited into the system in batches or after offline contact. 
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
@@ -36,6 +36,7 @@ module Droom
     end
     
     def send_confirmation_notification?
+      Rails.logger.warn "  > in send_confirmation_notification?, defer_confirmation is #{defer_confirmation.inspect}"
       super && !defer_confirmation
     end
 
@@ -64,7 +65,7 @@ module Droom
     }
 
     def as_json_for_coca(options={})
-      ensure_uid
+      ensure_uid!
       ensure_authentication_token
       {
         uid: uid,
@@ -480,6 +481,10 @@ module Droom
     def permitted?(key)
       permission_codes.include?(key)
     end
+    
+    def permissions_elsewhere?
+      permission_codes.select{|pc| pc !~ /droom/}.any?
+    end
 
 
     ## Other ownership
@@ -495,8 +500,8 @@ module Droom
       update_column :confirmation_token
     end
 
-    def ensure_uid
-      self.uid ||= SecureRandom.uuid
+    def ensure_uid!
+      self.uid = SecureRandom.uuid if self.uid.blank?
     end
 
   end
