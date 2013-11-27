@@ -261,11 +261,7 @@ en:
   page_slug_explanation: "The 'slug' is a unique identifier that we use to build an address for this page. Users will find the page at /help/slug. If you leave this field blank we will derive a slug automatically from the page title."
   page_summary_explanation: "The page summary is a two- or three-line description that we use whenever this page appears in a list. You would normally see it on the help index page."
   page_youtube_explanation: "Soon there will be a little video-finding gadget here, but to start with please paste in a video id. The embedding will be handled automatically. Omit if not relevant."
-<<<<<<< HEAD
-  
   password_notice: "You must choose a password before you can proceed (unless you remember your old one: in that case you can just log in)."
-=======
->>>>>>> rails4
   person_title: "Title"
   person_forename: "Forename"
   person_name: "Name"
