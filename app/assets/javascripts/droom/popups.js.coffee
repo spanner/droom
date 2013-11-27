@@ -230,7 +230,9 @@ jQuery ($) ->
       @id = @container.attr('data-panel')
       @links = $("a[data-panel='#{@id}']")
       @header = $('#masthead').find("a[data-panel='#{@id}']")
-      @patch = $('<div class="patch" />').appendTo($('body'))
+      box = @header.offsetParent()
+      @container.appendTo(box )
+      @patch = $('<div class="patch" />').appendTo(box)
       @timer = null
       @showing = false
 
@@ -241,26 +243,29 @@ jQuery ($) ->
       $(@patch).hover(@show, @hideSoon)
       $(@container).hover(@show, @hideSoon)
 
-      # for remote control. To open remotely just trigger a show event on the panel.
+      # To open remotely just trigger a show event on the panel.
       @container.bind "show", @show
       @container.bind "hide", @hide
       @set()
       Panel.remember(@)
     
     setup: () =>
+      position = @header.position()
       offset = @header.offset()
+      console.log "header offset", @header.offset()
+      console.log "header position", @header.position()
       @patch.css
-        left: offset.left + 1
-        top: offset.top + @header.height() - 3
+        left: position.left + 1
+        top: position.top + @header.height() - 3
         width: @header.outerWidth() - 2
       if offset.left > $(window).width() / 2
         @container.css
-          left: offset.left - (@container.outerWidth() - @header.outerWidth())
-          top: offset.top + @header.height()
+          left: position.left - (@container.outerWidth() - @header.outerWidth() - 50)
+          top: position.top + @header.height()
       else
         @container.css
-          left: offset.left + 10
-          top: offset.top + @header.height()
+          left: position.left - 40
+          top: position.top + @header.height()
 
       
     set: () =>
