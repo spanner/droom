@@ -1,14 +1,20 @@
 = form_for @folder, :html => {:class => 'edit folder'} do |f|
   = f.hidden_field :parent_id
   
+  %p.name
+    = f.label :name
+    %br
+    = f.text_field :name, :required => true, :class => "name", :placeholder => t("activerecord.attributes.droom.folder.name"), :autofocus => true
+
   %p.slug
     %strong<
-      - if @folder.parent
-        = @folder.parent.path + "/"
-      - else
-        \/
-      %br
-    = f.text_field :name, :required => true, :class => "name", :placeholder => t(:"activerecord.attributes.droom.folder.name"), :autofocus => true
+    - if @folder.parent
+      = @folder.parent.path + "/"
+    - else
+      \/
+    %br
+    = f.text_field :slug, :class => "slug", :placeholder => t("activerecord.attributes.droom.folder.slug")
+          
 
   .buttons
     = f.submit t(:save_folder)

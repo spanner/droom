@@ -3,19 +3,24 @@ require 'geocoder'
 
 module Droom
   class Venue < ActiveRecord::Base
+    include Droom::Concerns::Slugged
+
     belongs_to :created_by, :class_name => "Droom::User"
     has_many :events, :dependent => :nullify
 
-    default_scope -> { order('name asc') }
+    before_validation :slug_from_name
 
-    geocoded_by :full_address, :latitude  => :lat, :longitude => :lng
-    # before_validation :convert_gridref
+    geocoded_by :name_and_address, :latitude  => :lat, :longitude => :lng
     before_validation :geocode
     # reverse_geocoded_by :lat, :lng
 
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_venues.name like ?', fragment)
+    }
+    
+    scope :in_name_order, -> {
+      order('name ASC')
     }
 
     def self.visible_to(user=nil)
@@ -27,7 +32,7 @@ module Droom
       self.all.map{|v| [v.proper_name, v.id] }
     end
 
-    def proper_name
+    def definite_name
       if prepend_article?
         "the #{name}"
       else
@@ -43,8 +48,8 @@ module Droom
       'venue'
     end
     
-    # Snail is a library that abstracts away - as far as possible - the vagaries of international address formats. Here we map our data columns onto Snail's abstract representations so that they can be rendered into the correct format for their country.
-    def address
+    #todo: remove after migrations complete
+    def postal_address
       Snail.new(
         :line_1 => post_line1,
         :line_2 => post_line2,
@@ -55,13 +60,12 @@ module Droom
       )
     end
     
-    def full_address
-      [name, address].map(&:to_s).join("\n")
+    def name_and_address
+      [name, address, post_code].compact.join("\n")
     end
 
-    def address?
-      post_line1? && post_city
-    end
+
+
 
     def as_json(options={})
       json = {
@@ -104,12 +108,6 @@ module Droom
       self.as_ri_cal_calendar.to_s
     end
 
-    # We only go back to google for a new map location if there has been a change of address, but there are many places in which that could happen.
-    #
-    def address_changed?
-      name_changed? || post_line1_changed? || post_line2_changed? || post_city_changed? || post_region_changed?  || post_code_changed? || post_country_changed?
-    end
-
   private
 
     def convert_gridref
@@ -119,6 +117,6 @@ module Droom
         end
       end
     end
-
+    
   end
 end

@@ -82,4 +82,9 @@ Droom::Engine.routes.draw do
     get "/register", :on => :collection, :action => :create
   end
 
+  namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
+    resources :users
+    resources :venues
+  end
+
 end

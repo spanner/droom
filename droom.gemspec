@@ -20,6 +20,9 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 4.0.0"
   s.add_dependency "jquery-rails"
 
+  s.add_dependency "active_model_serializers"
+  s.add_dependency "api-pagination"
+
   s.add_dependency "devise", "~> 3.0.0"
   s.add_dependency "devise-encryptable"
   s.add_dependency "coca", "~> 0.4.0"

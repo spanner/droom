@@ -3,6 +3,7 @@ module Droom
     validates :family_name, :presence => true
     validates :given_name, :presence => true
     validates :email, :uniqueness => true, :presence => true
+    validates :uid, :uniqueness => true, :presence => true
 
     has_many :preferences, :foreign_key => "created_by_id"
     accepts_nested_attributes_for :preferences, :allow_destroy => true
@@ -20,7 +21,24 @@ module Droom
            :encryptor => :sha512
     
     before_create :ensure_authentication_token
-    before_create :ensure_uid
+    before_create :ensure_uid!
+    
+    # People are often invited into the system in batches or after offline contact. 
+    # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
+    # if you want to create a user account without sending out any messages yet.
+    #
+    # When you do want to invite that person, call user.resend_confirmation_token.
+    #
+    attr_accessor :defer_confirmation
+    
+    def defer_confirmation!
+      self.defer_confirmation = true
+    end
+    
+    def send_confirmation_notification?
+      Rails.logger.warn "  > in send_confirmation_notification?, defer_confirmation is #{defer_confirmation.inspect}"
+      super && !defer_confirmation
+    end
 
     def password_required?
       confirmed? && (!password.blank?)
@@ -47,7 +65,7 @@ module Droom
     }
 
     def as_json_for_coca(options={})
-      ensure_uid
+      ensure_uid!
       ensure_authentication_token
       {
         uid: uid,
@@ -181,10 +199,13 @@ module Droom
                       }
 
     def thumbnail
-      image.url(:icon) if image?
+      image.url(:thumb) if image?
     end
     
-    
+    def icon
+      image.url(:icon) if image?
+    end
+ 
     # For suggestion box
     #
     scope :matching, -> fragment {
@@ -319,25 +340,6 @@ module Droom
       chinese, english = given_name.split(/,\s*/)
       [family_name, chinese].join(' ')
     end
-
-    ## Addresses
-    #
-    # These will change soon to a simple text field with geolocation.
-    #
-    def address
-      Snail.new(
-        :line_1 => post_line1,
-        :line_2 => post_line2,
-        :city => post_city,
-        :region => post_region,
-        :postal_code => post_code,
-        :country => post_country
-      )
-    end
-    
-    def address?
-      post_line1? && post_city
-    end
     
     def to_vcf
       @vcard ||= Vcard::Vcard::Maker.make2 do |maker|
@@ -461,7 +463,9 @@ module Droom
     def set_pref(key, value)
       preferences.find_or_create_by_key(key).set(value)
     end
-    
+
+
+
     ## Permissions
     #
     # Permissions are usually assigned by way of group membership, but the effect of this is to create a user-permission
@@ -477,9 +481,13 @@ module Droom
     def permitted?(key)
       permission_codes.include?(key)
     end
+    
+    def permissions_elsewhere?
+      permission_codes.select{|pc| pc !~ /droom/}.any?
+    end
 
 
-    ## Ownership
+    ## Other ownership
     #
     has_many :scraps, :foreign_key => "created_by_id"
     has_many :documents, :foreign_key => "created_by_id"
@@ -492,8 +500,8 @@ module Droom
       update_column :confirmation_token
     end
 
-    def ensure_uid
-      self.uid ||= SecureRandom.uuid
+    def ensure_uid!
+      self.uid = SecureRandom.uuid if self.uid.blank?
     end
 
   end

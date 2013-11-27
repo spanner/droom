@@ -1,7 +1,6 @@
 require "droom/monkeys"
 require "droom/cropper"
 require "droom/lazy_hash"
-require "droom/model_helpers"
 require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
