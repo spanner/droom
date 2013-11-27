@@ -1,34 +1,32 @@
 #main.folders{:data => {:panel => false}}
-  %p.standfirst
-    = t :library_introduction
   
-  - if admin?
-    %p.action
-      = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
-      %br
-      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
-      %br
-      %span.note
-        = t :unattached_folder_note
-      
-
   = render :partial => 'folders'
 
 - content_for :title do
   = t :library
 
+- content_for :standfirst do
+  %p
+    = t :library_introduction
+
 
 - content_for :margin do
-  #finder
-    %h3
-      = t :find_documents
+  - if admin?
+    %p.action
+      = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
+      %br
+      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
 
-    %form.filter{:action => droom.documents_url(:format => :js), :data => {:action => "filter"}}
+  #finder
+    %form.filter{:action => droom.documents_url(:format => :js), :autocomplete => 'off', :data => {:action => "filter"}}
       %p
-        = text_field_tag :q, params[:q], :placeholder => t(:by_name)
-    
+        = search_field_tag :q, params[:q], :results => 5, :autosave => 'document_filter'
+
     .scroller
       #found
-        %p.waiting
-          = t :loading_documents
+        %p.note
+          Type a fragment of a filename or title here to see everything that matches.
+
+
+
   

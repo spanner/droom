@@ -1,8 +1,11 @@
 #= require droom/lib/modernizr
 #= require jquery
-#= require jquery_ujs
+#= require droom/lib/underscore
+#= require droom/lib/jquery_ujs
 #= require droom/lib/ZeroClipboard
+#= require droom/lib/swipe
 #= require droom/lib/jquery.animate-colors
+#= require droom/lib/jquery.deserialize
 #= require droom/lib/jquery.sortable
 #= require droom/lib/jquery.cookie
 #= require droom/lib/kalendae
@@ -16,7 +19,6 @@
 #= require droom/widgets
 #= require droom/stream
 #= require droom/map
-#= require cropper
 #= require_self
 
 jQuery ($) ->
@@ -35,6 +37,7 @@ jQuery ($) ->
     @find_including_self('[data-action="affect"]').affects()
     @find_including_self('[data-action="reveal"]').reveals()
     @find_including_self('[data-action="remove"]').removes()
+    @find_including_self('[data-action="remove_all"]').removes_all()
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="column_toggle"]').column_expander()
     @find_including_self('[data-action="toggle"]').toggle()
@@ -45,33 +48,34 @@ jQuery ($) ->
     @find_including_self('[data-action="slide"]').sliding_link()
     @find_including_self('[data-action="fit"]').self_sizes()
     @find_including_self('form[data-action="filter"]').filter_form()
+    @find_including_self('div[data-panel]').panel()
     @find_including_self('[data-menu]').action_menu()
-    @find_including_self('td[data-hoverable]').hover_column()
+    @find_including_self('table[data-hoverable]').hover_table()
     
     # it's not very easy to add data attributes to kaminari pagination links
     
-    @find_including_self('.pagination a').page_turner()
+    @find_including_self('.pagination.sliding a').page_turner()
 
     # and some shortcuts for compatibility
     
     @find_including_self('a.inline, a.fetch').replace_with_remote_content()
     
-    # form widgets and input modification. These might move to [data-widget] markup.
+    # form widgets and input modification. These are moving to [data-role] markup.
     
     @find_including_self('.wysihtml').html_editable()
     @find_including_self('.venuepicker').venue_picker()
     @find_including_self('.datepicker').date_picker()
     @find_including_self('.timepicker').time_picker()
-    @find_including_self('.filepicker').file_picker()
     @find_including_self('.person_selector').person_selector()
     @find_including_self('.person_picker').person_picker()
     @find_including_self('.group_picker').group_picker()
     @find_including_self('.drag_sort').drag_sort()
-    # @find_including_self('input.password').password_field()
     @find_including_self('form.password').password_form()
     @find_including_self('input[type="submit"]').submitter()
-    @find_including_self('form.preferences').preferences_form()
     @find_including_self('form.scrap').scrap_form()
+    @find_including_self('[data-role="filepicker"]').file_picker()
+    @find_including_self('[data-role="imagepicker"]').image_picker()
+    @find_including_self('[data-role="youtubepicker"]').youtube_suggester()
     
     # page widgets
     
@@ -81,5 +85,9 @@ jQuery ($) ->
     @find_including_self('form.fancy').captive()
     @find_including_self('li.folder').folder()
     @find_including_self('form#suggestions').suggestion_form()
-    @find_including_self('.panel').panel()
+
+    # stream slides
+
+    @find_including_self('.scrap.preload').add_to_stream()
+    
     @

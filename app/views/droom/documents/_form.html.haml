@@ -1,14 +1,17 @@
 = form_for [@folder, @document], :html => { :multipart => true, :class => 'edit document', :remote => true, :data => {:type => :html}} do |f|
 
-  .filepicker
-    = link_to "choose file", "#", :class => "ul minimal #{@document.file_extension}"
+  %p.slug
+    = @folder.path + "/"
+
+  .filepicker{:data => {:role => "filepicker"}}
+    = link_to "choose file", "#", :class => "ul minimal #{@document.file_extension}", :data => {:action => "pick"}
     = f.file_field :file, :class => "file"
     %p.tip
       = t :click_to_choose_file
 
-  .metadata
+  .non-file-data
     %p.name
-      = f.text_field :name, :class => 'name', :placeholder => t(:"activerecord.attributes.droom.document.name")
+      = f.text_field :name, :class => 'name', :placeholder => t(:"activerecord.attributes.droom.document.name"), :autofocus => true
     %p.description
       = f.text_area :description, :class => 'description', :placeholder => t(:"activerecord.attributes.droom.document.description")
 

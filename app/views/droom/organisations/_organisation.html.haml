@@ -19,4 +19,4 @@
 
     - if organisation.people.any?
       %ul.people
-        = render :partial => "droom/people/person", :collection => organisation.people.order("name ASC")
+        = render :partial => "droom/users/user", :collection => organisation.users.in_name_order

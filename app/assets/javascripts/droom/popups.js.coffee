@@ -8,9 +8,9 @@ jQuery ($) ->
   #   $(link).popup()
   #
   # Display of the popup form is handled by the Popup class. The requests involved in retrieving, submitting and 
-  # resubmitting the form are built on the usual `remote_form` and `remote_link` methods, both of which just configure
-  # the rails_ujs remote links. All this is held together by callbacks triggered in the remote_link mechanism. The
-  # callbacks are defined anonymously as part of the `$().popup()` method below.
+  # resubmitting the form are built on the usual `remote` method, which just configures the rails_ujs remote links. 
+  # All this is held together by callbacks triggered in the remote_link mechanism. The callbacks are defined anonymously
+  # as part of the `$().popup()` method below.
   #
   # We don't attempt to update the page directly with a server response, but a `data-affected` attribute can be used to 
   # trigger a refresh event on any DOM element that should be updated after this action completes. If those elements
@@ -26,11 +26,13 @@ jQuery ($) ->
       @_iteration = 0
       @_affected = @_link.attr('data-affected')
       @_replaced = @_link.attr('data-replaced')
+      @_aftered = @_link.attr('data-appended')
+      @_befored = @_link.attr('data-prepended')
       @_link.remote
         on_request: @begin
         on_success: @receive
 
-    begin: (xhr) =>
+    begin: (event, xhr, settings) =>
       switch @_iteration
         when 0
           @prepare()
@@ -54,7 +56,7 @@ jQuery ($) ->
       @_container.bind 'resize', @place
       @_container.insertAfter(@_mask).hide()
 
-    receive: (data) =>
+    receive: (event, data) =>
       if @_iteration == 0 || $(data).find('form').length
         @display(data)
       else
@@ -65,17 +67,25 @@ jQuery ($) ->
       @_content = $(data)
       @_container.empty()
       @_container.append(@_content)
-      @_content.activate()
       @_header = @_content.find('.header')
       @_content.find('form').remote
         on_cancel: @hide
         on_success: @receive
+      @_content.activate()
       @show()
           
     conclude: (data) =>
       if @_affected
         $(@_affected).trigger "refresh"
-      if @_replaced
+      if @_aftered?
+        addition = $(data)
+        $(@_aftered).after(addition)
+        addition.activate().signal_confirmation()
+      if @_befored?
+        addition = $(data)
+        $(@_befored).before(addition)
+        addition.activate().signal_confirmation()
+      if @_replaced?
         replacement = $(data)
         $(@_replaced).after(replacement)
         $(@_replaced).remove()
@@ -87,19 +97,21 @@ jQuery ($) ->
       @place()
       unless @_container.is(":visible")
         @_container.fadeTo 'fast', 1, () =>
-          @_container.find('[data-focus]').focus()
-        @_mask.fadeTo('fast', 0.8)
+          @_container.find('[autofocus]').focus()
+        @_mask.addClass('up')
         @_mask.bind "click", @hide
+        $('#droom').addClass('masked')
         $(window).bind "resize", @place
+        @focus()
 
     hide: (e) =>
       e.preventDefault() if e
       @_container.fadeOut('fast')
-      @_mask.fadeOut('fast')
+      @_mask.removeClass('up')
       @_mask.unbind "click", @hide
+      $('#droom').removeClass('masked')
       $(window).unbind "resize", @place
       @_container.find('iframe.youtube').sendCommand('pauseVideo')
-      
 
     reset: () =>
       @hide()
@@ -127,7 +139,8 @@ jQuery ($) ->
       else
         @_container.css placement
 
-
+    focus: () =>
+      @_container.find('[autofocus]').focus()
 
   # Popup forms will usually contain one or more .column divs. The columns are a standard width and
   # the number of columns determines the width of the popup. Columns can also be hidden, initially,
@@ -195,14 +208,14 @@ jQuery ($) ->
       @place()
       ActionMenu.hideAll()
       @_link.addClass('up')
-      $(@_selector).stop().slideDown 'fast'
+      $(@_selector).first().stop().slideDown 'fast'
       $(document).bind "click", @hide
     
     hide: (e) =>
-      $(@_selector).stop().slideUp 'fast', () =>
+      $(@_selector).first().stop().slideUp 'fast', () =>
         @_link.removeClass('up')
       $(document).unbind "click", @hide
-      
+
 
 
   class Panel
@@ -214,37 +227,86 @@ jQuery ($) ->
 
     constructor: (element) ->
       @container = $(element)
-      @id = @container.attr('id')
+      @id = @container.attr('data-panel')
       @links = $("a[data-panel='#{@id}']")
-      Panel.remember(@)
-      @links.bind "click", @toggle
+      @header = $('#masthead').find("a[data-panel='#{@id}']")
+      @patch = $('<div class="patch" />').appendTo($('body'))
+      @timer = null
+      @showing = false
+
+      # Open on hover or click. Close with wobble catcher on exit. 
+      @links.bind "click", @showOrGo
+      @links.bind "touchstart", @showOrGo
+      $(@header).hover(@show, @hideSoon)
+      $(@patch).hover(@show, @hideSoon)
+      $(@container).hover(@show, @hideSoon)
+
+      # for remote control. To open remotely just trigger a show event on the panel.
       @container.bind "show", @show
+      @container.bind "hide", @hide
       @set()
-        
+      Panel.remember(@)
+    
+    setup: () =>
+      offset = @header.offset()
+      @patch.css
+        left: offset.left + 1
+        top: offset.top + @header.height() - 3
+        width: @header.outerWidth() - 2
+      if offset.left > $(window).width() / 2
+        @container.css
+          left: offset.left - (@container.outerWidth() - @header.outerWidth())
+          top: offset.top + @header.height()
+      else
+        @container.css
+          left: offset.left + 10
+          top: offset.top + @header.height()
+
+      
     set: () =>
-      if @container.hasClass('here') then @show() else @hide()
+      if @header.hasClass('here') then @show() else @hide()
       
     toggle: (e) =>
       if e
         e.preventDefault()
         e.stopPropagation()
-      if @container.is(":visible") then @revert() else @show()
+      if @showing then @hide() else @show()
+    
+    # We hit this method on click or touchstart. It has two purposes: to prevent annoying hover-based double taps,
+    # and to allow a click on the menu header *while it is showing* (probably because of a hover evet) to active the underlying link.
+    #
+    showOrGo: (e) =>
+      unless @showing
+        if e
+          e.preventDefault()
+          e.stopPropagation()
+        @show()
 
     hide: (e) =>
-      @container.fadeOut()
-      @links.removeClass('here')
-      $(document).unbind "click", @hide
-    
+      window.clearTimeout @timer
+      @container.removeClass('up')
+      @patch.removeClass('up')
+      @header.removeClass('up')
+      @showing = false
+          
+    hideSoon: () =>
+      @timer = window.setTimeout @hide, 500
+      
     show: (e) =>
-      Panel.hideAll()
-      @container.stop().fadeIn()
-      @links.addClass('here')
-      # $(document).bind("click", @hide)
-  
+      window.clearTimeout @timer
+      unless @showing
+        @setup()
+        Panel.hideAll()
+        @container.addClass('up')
+        @patch.addClass('up')
+        @header.addClass('up')
+        @showing = true
+        @container.find('input[autofocus]').first().focus()
+
     revert: (e) =>
       Panel.hideAll()
-      
-      
+
+
   $.fn.panel = ->
     @each ->
       new Panel(@)

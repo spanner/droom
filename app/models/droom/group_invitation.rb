@@ -1,7 +1,5 @@
 module Droom
   class GroupInvitation < ActiveRecord::Base
-    attr_accessible :event_id, :group_id
-    
     belongs_to :created_by, :class_name => "User"
     belongs_to :group
     belongs_to :event
@@ -9,24 +7,23 @@ module Droom
     after_save :create_personal_invitations
     validates_uniqueness_of :group_id, :scope => :event_id
     
-    scope :to_event, lambda { |event|
+    scope :to_event, -> event {
       where("droom_group_invitations.event_id = ?", event.id)
     }
     
-    scope :for_group, lambda { |group|
+    scope :for_group, -> group {
       where("droom_group_invitations.group_id = ?", group.id)
     }
     
-    
     def create_personal_invitations
-      group.people.each do |person|
-        create_personal_invitation_for(person)
+      group.users.each do |user|
+        create_personal_invitation_for(user)
       end
     end
 
-    def create_personal_invitation_for(person)
-      event.invitations.find_or_create_by_person_id(person.id) if person.member_of?(group)
+    def create_personal_invitation_for(user)
+      invitations.where(:user_id => user.id, :event_id => event.id).first_or_create
     end
-    
+
   end
 end

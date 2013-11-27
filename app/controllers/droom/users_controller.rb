@@ -3,66 +3,96 @@ module Droom
     helper Droom::DroomHelper
     respond_to :html, :js
     layout :no_layout_if_pjax
-    before_filter :authenticate_user!
-    before_filter :require_admin!, :only => [:index, :new, :create, :destroy]
-    before_filter :get_user, :only => [:show, :edit, :update, :destroy, :welcome]
-    before_filter :require_self_or_admin!, :only => [:edit, :update]
-    before_filter :remember_token_auth
+    before_filter :get_view, only: [:update, :show]
+    before_filter :build_user, only: [:create]
+    load_and_authorize_resource
 
     def index
-      @everyone = Droom::Person.all + Droom::User.unpersoned
-    end
-  
-    def edit
-      respond_with @user
+      @users = @users.in_name_order
+      @users = @users.matching(params[:q]) unless params[:q].blank?
+      @users = paginated(@users, 50)
+      respond_with @users do |format|
+        format.js { render :partial => 'droom/users/users' }
+        format.vcf { render :vcf => @users.map(&:to_vcf) }
+      end
     end
     
-    # This has to handle small preference updates over js and large account-management forms over html.
-    #
-    def update
-      if @user.update_attributes(params[:user])
-        sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session unless we refresh it with the new one
-        respond_to do |format|
-          format.js { 
-            partial = params[:response_partial] || "confirmation"
-            render :partial => "droom/users/#{partial}"
-          }
-          format.html {
-            if current_user.admin? && @user != current_user
-              flash[:notice] = t(:user_updated, :name => @user.name)
-            else
-              flash[:notice] = t(:your_preferences_saved)
-            end
-            redirect_to droom.dashboard_url
-          }
+    def admin
+      @users = @users.in_name_order
+      @users = @users.matching(params[:q]) unless params[:q].blank?
+      @users = paginated(@users, 200)
+      respond_with @users
+    end
+
+    def show
+      respond_with @user do |format|
+        format.js { 
+          @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
+          render :partial => "droom/users/#{@view}"
+        }
+      end
+    end
+  
+    def new
+      if params[:group_id].present?
+        @user.groups << Group.find(params[:group_id])
+      end
+      respond_with @user
+    end
+
+    def create
+      @user.assign_attributes(user_params)
+      if @user.save
+        respond_with @user do |format|
+          format.js { render :partial => "droom/users/#{@view}" }
         end
       else
         render :edit
       end
     end
 
+    def edit
+      respond_with @user
+    end
+    
+    def preferences
+      respond_with @user
+    end
+    
+    # This has to handle small preference updates over js and large account-management forms over html.
+    #
+    def update
+      if @user.update_attributes(user_params)
+        sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
+        render :show
+      else
+        render :edit
+      end
+    end
+
+    def destroy
+      @user.destroy
+      head :ok
+    end
+    
+    def invite
+      @user.invite!
+      render :partial => "droom/users/user"
+    end
+
   protected
 
-    def get_user
-      if current_user.admin? && params[:id]
-        @user = User.find(params[:id])
-      else
-        @user = current_user
-      end
-    end
-  
-  private
-
-    def require_self_or_admin!
-      raise Droom::PermissionDenied unless current_user && (current_user.admin? || @user == current_user)
+    def user_params
+      params.require(:user).permit(:title, :family_name, :given_name, :chinese_name, :honours, :email, :password, :password_confirmation, :phone, :description, :admin, :preferences_attributes, :confirm, :old_id, :invite_on_creation, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code, :mobile, :dob, :organisation_id, :public, :private, :female, :image, :group_ids)
     end
 
-    def remember_token_auth
-      if params[:auth_token] && user_signed_in?
-        current_user.remember_me = true 
-        sign_in current_user
-      end
+    def build_user
+      @user = Droom::User.new(user_params)
     end
-
+    
+    def get_view
+      @view = params[:view] if %w{user tabled}.include?(params[:view])
+      @view ||= 'user'
+    end
   end
 end

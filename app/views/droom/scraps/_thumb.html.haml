@@ -1,5 +1,37 @@
 - scrap ||= thumb
 - if Droom.scrap_types.include? scrap.scraptype
   %div{:class => "scrap #{scrap.scraptype}", :id => "scrap_#{scrap.id}"}
-    = render :partial => "droom/scraps/thumbs/#{scrap.scraptype}", :locals => {:scrap => scrap}
+
+    - if scrap.scraptype == 'document' && scrap.document
+      = link_to "document:", droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}, :class => "#{scrap.document.file_extension} icon"
+
+    - elsif scrap.scraptype == 'event' && scrap.event
+      .datemark
+        %span.mon= scrap.event.start.strftime('%b')
+        %span.dom= scrap.event.start.strftime('%d')
+        - if scrap.event.start.year != Date.today.year
+          %span.year= scrap.event.start.strftime('%Y')
+
+    - elsif scrap.scraptype == 'image' && scrap.image?
+      = link_to "image:", droom.scrap_url(scrap), :class => "thumb", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:action => "stream", :scrap => scrap.id}
+
+    - elsif scrap.scraptype == 'link' && scrap.url?
+      = link_to "link:", scrap.url_with_protocol, :class => "icon link", :data => {:action => "stream", :scrap => scrap.id}
+      
+    - elsif scrap.scraptype == 'quote' && scrap.url?
+      = link_to "quote:", droom.scrap_url(scrap), :class => "icon quote", :data => {:action => "stream", :scrap => scrap.id}
+      
+    - elsif scrap.scraptype == 'video' && scrap.youtube_id?
+      = link_to "video:", droom.scrap_url(scrap), :class => "thumb playable", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:action => "stream", :scrap => scrap.id}
+
+    - else
+      = link_to "text:", droom.scrap_url(scrap), :class => "icon text", :data => {:action => "stream", :scrap => scrap.id}
+
+    %p.sample
+      = link_to truncate(scrap.name, :length => 34), droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}
+      = action_menulink(scrap, :class => "small")
+      %span.caption
+        = shorten(scrap.note, 40)
+      = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
+    = action_menu(scrap)
 

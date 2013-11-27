@@ -1,0 +1,11 @@
+- event ||= @event
+- folder ||= event.folder
+
+.col.attachments
+  %h3
+    = t :attachments
+  - if folder.populated?
+    = render :partial => "droom/folders/contents", :locals => {:folder => folder, :narrow => false}
+  - else
+    %p
+      = t :no_attachments

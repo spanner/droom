@@ -1,0 +1,33 @@
+- user ||= @user
+
+#user
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2.titlebar
+      = user.formal_name
+    
+  .user
+    .mugshot.full{:style => "background-image: url(#{user.image.url('thumb')})"}
+    .detail
+      %h3
+        = user.formal_name
+
+      %p.contact
+        - if user.organisation
+          %strong
+            = user.organisation.name
+            %br
+        - if user.email?
+          = mail_to user.email
+        - if user.email? && user.phone?
+          = t :or
+        - if user.phone?
+          = user.phone
+
+      - if Droom.use_biogs?
+        .description
+          - if user.description?
+            = sanitize(user.description.html_safe)
+          - else
+            %p
+              = t :no_user_description

@@ -8,10 +8,8 @@
       - else
         \/
       %br
-    = f.text_field :name, :required => true, :class => "name", :placeholder => t(:"activerecord.attributes.droom.folder.name")
-    %br
-    %span.formnote
-      = t :slug_note
+    = f.text_field :name, :required => true, :class => "name", :placeholder => t(:"activerecord.attributes.droom.folder.name"), :autofocus => true
+
   .buttons
     = f.submit t(:save_folder)
     = t :or

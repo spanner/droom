@@ -3,9 +3,8 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
 
-    before_filter :build_group, :only => [:new, :create]
-    before_filter :get_group, :only => [:show, :edit, :update, :destroy]
-    before_filter :get_groups, :only => :index
+    before_filter :get_groups, :only => [:index]
+    load_and_authorize_resource
 
     def index
       respond_with @groups do |format|
@@ -20,6 +19,7 @@ module Droom
     end
 
     def show
+      @users = paginated(@group.users, 20)
       respond_with @group do |format|
         format.js {
           render :partial => 'droom/groups/group'
@@ -32,12 +32,12 @@ module Droom
     end
 
     def update
-      @group.update_attributes(params[:group])
+      @group.update_attributes(group_params)
       render :partial => 'group'
     end
 
     def create
-      if @group.save
+      if @group.update_attributes(group_params)
         render :partial => "created"
       else
         respond_with @group
@@ -50,17 +50,17 @@ module Droom
     end
 
   protected
-
-    def build_group
-      @group = Droom::Group.new(params[:group])
+  
+    def group_params
+      params.require(:group).permit(:name, :leader_id, :description)
     end
-
-    def get_group
-      @group = Droom::Group.find(params[:id])
-    end
-
+    
     def get_groups
-      @groups = current_user.admin? ? Droom::Group.all : Droom::Group.visible_to(current_user)
+      if can? :manage, Droom::Group
+        @groups = Droom::Group.order("directory DESC, name ASC")
+      else
+        @groups = Droom::Group.shown_in_directory.accessible_by(current_ability).order("name ASC")
+      end
     end
 
   end

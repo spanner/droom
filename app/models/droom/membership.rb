@@ -1,33 +1,29 @@
 module Droom
   class Membership < ActiveRecord::Base
-    attr_accessible :group_id, :person_id
-
-    belongs_to :person
+    belongs_to :user
     belongs_to :group
     belongs_to :created_by, :class_name => "User"
 
     has_one :mailing_list_membership, :dependent => :destroy
 
     after_create :link_folder
-    after_create :make_mailing_list_membership
-    after_create :update_person_status
+    after_create :create_mailing_list_membership
     after_create :create_invitations
+    after_create :create_permissions
+
     after_destroy :unlink_folder
-    after_destroy :update_person_status
     after_destroy :destroy_invitations
+    after_destroy :destroy_permissions
     after_destroy :destroy_similar
     
-    validates :person, :presence => true
+    accepts_nested_attributes_for :user
+
+    validates :user, :presence => true
     validates :group, :presence => true
 
-    scope :of_group, lambda { |group|
+    scope :of_group, -> group {
       where(["group_id = ?", group.id])
     }
-    
-    scope :privileged, select('droom_memberships.*')
-                         .joins('inner join droom_groups as dg on droom_memberships.group_id = dg.id')
-                         .where('dg.privileged' => true)
-                         .group('droom_memberships.id')
 
     def current?
       expires and expires > Time.now
@@ -43,46 +39,51 @@ module Droom
     # This is sometimes useful if a configuration change means we're looking at a different mailman table.
     #
     def self.repair_mailing_list_memberships
-      self.all.each { |m| m.send :make_mailing_list_membership }
+      self.all.each { |m| m.send :create_mailing_list_membership }
     end
 
   protected
 
     def link_folder
-      person.add_personal_folders(group.folder)
+      user.add_personal_folders(group.folder)
     end
 
     def unlink_folder
-      person.remove_personal_folders(group.folder)
-    end
-
-    def unlink_folder
-      person.remove_personal_folders(group.folder)
+      user.remove_personal_folders(group.folder) if user
     end
     
-    def make_mailing_list_membership
-      self.mailing_list_membership = Droom::MailingListMembership.find_or_create_by_address_and_listname(person.email, group.mailing_list_name)
-    end
-
-    def update_person_status
-      person.send :update_status
+    def create_mailing_list_membership
+      self.mailing_list_membership = Droom::MailingListMembership.find_or_create_by_address_and_listname(user.email, group.mailing_list_name)
     end
 
     def create_invitations
       group.group_invitations.each do |gi|
-        gi.create_personal_invitation_for(person)
+        gi.create_personal_invitation_for(user)
+      end
+    end
+
+    def create_permissions
+      group.group_permissions.each do |gp|
+        gp.create_permission_for(user)
       end
     end
 
     def destroy_invitations
       group.group_invitations.each do |gi|
-        gi.invitations.for_person(person).destroy_all
+        gi.invitations.for_user(user).destroy_all
       end
     end
 
-    # it's easy to end up with multiple similar membership objects.
+    def destroy_permissions
+      group.group_permissions.each do |gp|
+        gp.user_permissions.for_user(user).destroy_all
+      end
+    end
+
+    # it's possible to end up with multiple similar membership objects: here we
+    # assume that when one is deleted, all should be.
     def destroy_similar
-      group.memberships.where(:person_id => person.id).destroy_all
+      group.memberships.where(:user_id => user.id).destroy_all
     end
 
   end

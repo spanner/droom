@@ -3,13 +3,11 @@
 #
 module Droom
   class Page < ActiveRecord::Base
-    attr_accessible :title, :slug, :summary, :body, :video_id
-    
     before_validation :ensure_slug
     before_save :render_body
     validates :slug, :uniqueness => true, :presence => true
     validates :title, :presence => true
-    default_scope order('title ASC')
+    default_scope -> { order('title ASC') }
   
   protected
 

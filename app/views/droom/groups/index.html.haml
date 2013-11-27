@@ -1,29 +1,28 @@
 - content_for :title do
   = t :group_admin
 
-#groups.main
-
-  %p.standfirst
+- content_for :standfirst do
+  %p
     = t :directory_introduction
-
-  - if current_user.admin?
-    %p.action
-      = link_to t(:add_group), droom.new_group_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
-      = link_to t(:add_person), droom.new_person_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
-
-  = render :partial => 'groups'
+    
 
 - content_for :margin do
-  #finder
-    %h3
-      = t :find_people
+  %p.action
+    - if can?(:create, Droom::Group)
+      = link_to t(:add_group), droom.new_group_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
+    - if can?(:create, Droom::User)
+      = link_to t(:add_person), droom.new_user_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.groups"}
 
-    %form.filter{:action => droom.people_url(:format => :js), :data => {:action => "filter"}}
+  #finder
+    %form.filter{:action => droom.users_url(:format => :js), :autocomplete => 'off', :data => {:action => "filter"}}
       %p
-        = text_field_tag :q, params[:q], :placeholder => t(:by_name_or_email)
+        = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
 
     .scroller
       #found
-        %p.waiting
-          = t :loading_people
+        %p.note
+          Type a fragment of name, email or phone number here to see everyone that matches.
   
+
+#groups
+  = render :partial => 'groups'

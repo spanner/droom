@@ -1,0 +1,21 @@
+- event ||= false
+- group ||= false
+
+- if can?(:edit, user)
+  .menu{:data => {:for => "user_#{user.id}"}}
+    %ul.actions
+      %li
+        = link_to t(:edit_profile), droom.edit_user_url(user), :class => 'edit', :data => {:action => "popup", :replaced => "#user_#{user.id}"}
+      %li
+        = link_to t(:edit_account), droom.edit_user_url(user), :class => 'edit', :data => {:action => "popup", :replaced => "#user_#{user.id}"}
+      %li
+        = link_to t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
+
+      - if event && invitation = user.invitation_to(event)
+        %li
+          = link_to t(:uninvite), droom.event_invitation_url(event, invitation), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}"}
+
+      - if group && membership = user.membership_of(group)
+        %li
+          = link_to t(:expel), droom.membership_url(membership), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}"}
+        

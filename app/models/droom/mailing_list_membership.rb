@@ -61,7 +61,6 @@
 
 module Droom
   class MailingListMembership < ActiveRecord::Base
-    attr_accessible :address, :listname, :digest, :not_metoo, :nomail, :plain, :ack
     #
     ## Configuration
     #

@@ -4,10 +4,9 @@ require 'yomu'
 
 module Droom
   class Document < ActiveRecord::Base
-    attr_accessible :name, :file, :description, :folder, :folder_id
-
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
+    belongs_to :scrap, :dependent => :destroy
     has_many :dropbox_documents
     has_attached_file :file
 
@@ -16,38 +15,36 @@ module Droom
 
     validates :file, :presence => true
 
-    scope :all_private, where("private = 1")
-    scope :not_private, where("private <> 1 OR private IS NULL")
-    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
-    scope :not_public, where("public <> 1 OR private = 1)")
+    scope :all_private, -> { where("private = 1") }
+    scope :not_private, -> { where("private <> 1 OR private IS NULL") }
+    scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
+    scope :not_public, -> { where("public <> 1 OR private = 1)") }
 
-    scope :visible_to, lambda { |person|
-      if person
+    scope :visible_to, -> user {
+      if user
         select('droom_documents.*')
           .joins('LEFT OUTER JOIN droom_folders AS df ON droom_documents.folder_id = df.id')
           .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON df.id = dpf.folder_id')
-          .where(["(droom_documents.public = 1 OR dpf.person_id = ?)", person.id])
+          .where(["(droom_documents.public = 1 OR dpf.user_id = ?)", user.id])
           .group('droom_documents.id')
       else
         all_public
       end
     }
 
-    scope :matching, lambda { |fragment|
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_documents.name LIKE :f OR droom_documents.file_file_name LIKE :f', :f => fragment)
     }
     
-    scope :in_folders, lambda{ |folders|
+    scope :in_folders, -> folders{
       placeholders = folders.map { "?" }.join(',')
       where(["folder_id IN(#{placeholders})", *folders.map(&:id)])
     }
 
-    scope :by_date, order("droom_documents.updated_at DESC, droom_documents.created_at DESC")
+    scope :by_date, -> { order("droom_documents.updated_at DESC, droom_documents.created_at DESC") }
 
-    scope :latest, lambda {|limit|
-      order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit)
-    }
+    scope :latest, -> limit { order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit) }
 
     def attach_to(holder)
       self.folder = holder.folder
@@ -100,7 +97,7 @@ module Droom
     end
 
     def copy_to_dropbox(user)
-      dropbox_documents.create(:person_id => user.person.id)
+      dropbox_documents.create(:user => user)
     end
 
     def mark_dropbox_documents_deleted

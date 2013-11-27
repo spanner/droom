@@ -1,18 +1,19 @@
 module Droom
   class Group < ActiveRecord::Base
-    attr_accessible :name, :leader_id, :description
-
     belongs_to :created_by, :class_name => "Droom::User"
-    belongs_to :leader, :class_name => 'Person'
+    belongs_to :leader, :class_name => 'Droom::User'
 
     has_folder
 
-    has_many :group_invitations, :dependent => :destroy, :uniq => true
-    has_many :events, :through => :group_invitations
+    has_many :group_invitations, :dependent => :destroy
+    has_many :events, -> { uniq }, :through => :group_invitations
 
     has_many :memberships, :dependent => :destroy
-    has_many :people, :through => :memberships, :uniq => true
+    has_many :users, -> { uniq.order("family_name ASC, given_name ASC") }, :through => :memberships
 
+    has_many :group_permissions, :dependent => :destroy
+    has_many :permissions, -> { uniq }, :through => :group_permissions
+    
     before_validation :ensure_slug
     before_validation :ensure_mailing_list_name
 
@@ -23,19 +24,19 @@ module Droom
       [:name, :description]
     end
 
-    scope :all_private, where("private = 1")
-    scope :not_private, where("private <> 1 OR private IS NULL")
-    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
-    scope :not_public, where("public <> 1 OR private = 1)")
+    scope :all_private, -> { where("private = 1") }
+    scope :not_private, -> { where("private <> 1 OR private IS NULL") }
+    scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
+    scope :not_public, -> { where("public <> 1 OR private = 1)") }
 
-    scope :visible_to, lambda { |person|
-      if person
-        if person.admin?
+    scope :visible_to, -> user {
+      if user
+        if user.admin?
           scoped({})
         else
           select('droom_groups.*')
             .joins('INNER JOIN droom_memberships as dm on droom_groups.id = dm.group_id')
-            .where(['dm.person_id = ?', person.id])
+            .where(['dm.user_id = ?', user.id])
             .group('droom_groups.id')
         end
       else
@@ -43,23 +44,27 @@ module Droom
       end
     }
 
-    scope :matching, lambda { |fragment| 
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_groups.name like ?', fragment)
     }
+    
+    scope :shown_in_directory, -> {
+      where(:directory => true)
+    }
 
-    default_scope order("droom_groups.created_at ASC")
+    default_scope -> { order("droom_groups.created_at ASC") }
 
-    def admit(person)
-      self.people << person
+    def admit(user)
+      self.users << user
     end
 
     def attach(doc)
       # self.documents << doc
     end
 
-    def membership_for(person)
-      self.memberships.for(person).first
+    def membership_for(user)
+      self.memberships.for(user).first
     end
 
     def invite_to(event)

@@ -1,4 +1,5 @@
-.scrap{:id => "scrap_#{@scrap.id}"}
-  = render "droom/scraps/heading", :scrap => @scrap
-  = render :partial => "droom/scraps/full/#{@scrap.scraptype}", :locals => {:scrap => @scrap}
+- scrap ||= @scrap
+
+.scrap{:id => "scrap_#{scrap.id}"}
+  = render :partial => "droom/scraps/full/#{scrap.scraptype}", :locals => {:scrap => scrap}
 

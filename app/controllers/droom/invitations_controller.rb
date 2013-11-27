@@ -3,11 +3,10 @@ module Droom
     respond_to :js, :html
     layout :no_layout_if_pjax
     
-    before_filter :get_event
-    before_filter :build_invitation, :only => [:new]
-    before_filter :find_or_build_invitation, :only => [:create]
-    before_filter :get_invitation, :only => [:accept, :refuse, :toggle]
-
+    load_and_authorize_resource :event, :class => Droom::Event
+    before_filter :build_invitation, only: [:create]
+    load_and_authorize_resource :invitation, :through => :event, :class => Droom::Invitation
+    
     def destroy
       @invitation = @event.invitations.find_by_id(params[:id])
       @invitation.destroy if @invitation
@@ -24,7 +23,7 @@ module Droom
     end
     
     def create
-      if @invitation.save
+      if @invitation.update_attributes(invitation_params)
         render :partial => "created"
       else
         respond_with @invitation
@@ -47,24 +46,13 @@ module Droom
     end
 
   protected
-    
-    def get_event
-      @event = Droom::Event.find(params[:event_id])
-    end
-    
+  
     def build_invitation
-      @invitation = @event.invitations.build(params[:invitation])
+      @invitation = @event.invitations.build
     end
-    
-    def find_or_build_invitation
-      @person = Droom::Person.find(params[:invitation][:person_id])
-      unless @invitation = @event.invitations.for_person(@person).first()
-        @invitation = @event.invitations.build(params[:invitation])
-      end
-    end
-
-    def get_invitation
-      @invitation = @event.invitations.find(params[:id])
+  
+    def invitation_params
+      params.require(:invitation).permit(:event_id, :user_id)
     end
 
   end

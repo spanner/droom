@@ -1,11 +1,9 @@
 module Droom
   class PagesController < Droom::EngineController
     respond_to :html
-    before_filter :require_admin!, :except => [:index, :show]
-    before_filter :get_pages
-    before_filter :get_page, :only => [:show, :edit, :update, :destroy]
-    before_filter :build_page, :only => [:new, :create]
     layout :no_layout_if_pjax
+
+    load_and_authorize_resource
   
     def index
       respond_with(@pages) do |format|
@@ -46,16 +44,9 @@ module Droom
 
   protected
 
-    def get_pages
-      @pages = Page.all
-    end
-  
-    def get_page
-      @page = Page.find_by_slug(params[:slug]) || Page.find(params[:id])
+    def page_parameters
+      params.require(:page).permit(:title, :slug, :summary, :body, :video_id)
     end
 
-    def build_page
-      @page = Page.new(params[:page])
-    end
   end
 end

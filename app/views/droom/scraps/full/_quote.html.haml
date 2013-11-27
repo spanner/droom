@@ -1,8 +1,5 @@
-.body{:style => "font-size: #{"%.2f" % scrap.text_size}em"}
-  = simple_format(scrap.body).html_safe
-  %p.attribution
-    = scrap.note
+.body.quote
+  .text
+    = simple_format(scrap.body).html_safe
 
-.caption
-  %p.attribution
-    = render "droom/scraps/credit", :scrap => scrap
+= render "droom/scraps/caption", :scrap => scrap

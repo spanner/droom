@@ -1,18 +1,17 @@
-require 'dav4rack'
-require 'dav4rack/resources/file_resource'
 require "droom/monkeys"
+require "droom/cropper"
 require "droom/lazy_hash"
 require "droom/model_helpers"
 require "droom/renderers"
 require "droom/engine"
 require "droom/validators"
-require "droom/dav_resource"
 require "droom/searchability"
 require "droom/taggability"
 require "droom/folders"
 require "snail"
+require "youtube_it"
 
-module Droom
+module Droom  
   # Droom configuration is handled by accessors on the Droom base module.
   # Boolean items also offer the interrogative form.
   
@@ -22,6 +21,7 @@ module Droom
                  :searchable_classes,
                  :yt_client,
                  :layout,
+                 :devise_layout,
                  :email_layout,
                  :email_host,
                  :email_from,
@@ -31,20 +31,18 @@ module Droom
                  :margin_dashboard_modules,
                  :panels,
                  :scrap_types,
-                 :dav_root,
-                 :dav_subdomain,
-                 :use_forenames,
+                 :default_scrap_type,
+                 :use_chinese_names,
                  :use_biogs,
                  :use_separate_mobile_number,
                  :use_titles,
+                 :use_honours,
                  :use_organisations,
                  :enable_mailing_lists,
                  :mailman_table_name,
                  :mailing_lists_active_by_default,
                  :mailing_lists_digest_by_default,
                  :show_venue_map,
-                 :default_document_private,
-                 :default_event_private,
                  :dropbox_app_key,
                  :dropbox_app_secret,
                  :dropbox_app_name,
@@ -53,8 +51,10 @@ module Droom
                  :required_calendar_names,
                  :stream_shared,
                  :aws_bucket_name,
-                 :calendar_closed,
-                 :password_pattern
+                 :all_events_public,
+                 :all_documents_public,
+                 :password_pattern,
+                 :separate_calendars
   
   class DroomError < StandardError; end
   class PermissionDenied < DroomError; end
@@ -65,7 +65,11 @@ module Droom
     end
     
     def layout
-      @@layout ||= "droom/application"
+      @@layout ||= "application"
+    end
+
+    def devise_layout
+      @@devise_layout ||= "application"
     end
 
     def email_host
@@ -73,7 +77,7 @@ module Droom
     end
 
     def email_layout
-      @@email_layout ||= "droom/email"
+      @@email_layout ||= "email"
     end
 
     def email_from
@@ -113,29 +117,27 @@ module Droom
     end
     
     def panels
-      @@panels ||= %w{dropbox email rss devices readers account suggestions admin}
+      @@panels ||= %w{configuration search admin}
     end
     
     def scrap_types
       @@scrap_types ||= %w{image video text quote link event document}
     end
-
-    # base path of DAV directory tree, relative to rails root.
-    def dav_root
-      @@dav_root ||= "webdav"
+    
+    def default_scrap_type
+      @@default_scrap_type ||= 'text'
     end
 
-    # subdomain constraint applied when routing to dav.
-    def dav_subdomain
-      @@dav_subdomain ||= /dav/
-    end
-
-    def use_forenames?
-      !!@@use_forenames
+    def use_chinese_names?
+      !!@@use_chinese_names
     end
 
     def use_titles?
       !!@@use_titles
+    end
+    
+    def use_honours?
+      !!@@use_honours
     end
     
     def use_biogs?
@@ -161,6 +163,14 @@ module Droom
     def calendar_closed?
       !!@@calendar_closed
     end
+    
+    def all_events_public?
+      !!@@all_events_public
+    end
+    
+    def all_documents_public?
+      !!@@all_documents_public
+    end
 
     def dropbox_app_name
       @@dropbox_app_name ||= 'droom'
@@ -185,7 +195,7 @@ module Droom
     def suggestible_classes
       @@suggestible_classes ||= {
         "event" => "Droom::Event", 
-        "person" => "Droom::Person", 
+        "user" => "Droom::User", 
         "document" => "Droom::Document",
         "group" => "Droom::Group",
         "venue" => "Droom::Venue"
@@ -193,7 +203,7 @@ module Droom
     end
 
     def add_suggestible_class(label, klass=nil)
-      klass ||= label.titlecase
+      klass ||= label.camelize
       suggestible_classes[label] = klass.to_s
     end
 
@@ -211,6 +221,10 @@ module Droom
 
     def required_calendar_names
       @@required_calendar_names ||= %w{main stream}
+    end
+    
+    def separate_calendars?
+      !!@@separate_calendars
     end
     
     def password_pattern
@@ -232,11 +246,6 @@ module Droom
         :dropbox => {
           :strategy => "clicked",
           :events? => true,
-        },
-        :dav => {
-          :enabled? => false,
-          :strategy => "clicked",
-          :everything? => false,
         }
       })
     end

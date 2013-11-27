@@ -1,25 +1,24 @@
 require 'snail'
+require 'geocoder'
 
 module Droom
   class Venue < ActiveRecord::Base
-    attr_accessible :name, :lat, :lng, :post_line1, :post_line2, :post_city, :post_country, :post_code, :old_id
-    
     belongs_to :created_by, :class_name => "Droom::User"
     has_many :events, :dependent => :nullify
 
-    default_scope :order => 'name asc'
+    default_scope -> { order('name asc') }
 
     geocoded_by :full_address, :latitude  => :lat, :longitude => :lng
     # before_validation :convert_gridref
     before_validation :geocode
     # reverse_geocoded_by :lat, :lng
 
-    scope :matching, lambda { |fragment| 
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_venues.name like ?', fragment)
     }
 
-    def self.visible_to(person=nil)
+    def self.visible_to(user=nil)
       self.scoped({})
     end
 

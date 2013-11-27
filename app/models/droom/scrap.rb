@@ -1,45 +1,40 @@
 module Droom
   class Scrap < ActiveRecord::Base
     belongs_to :created_by, :class_name => "Droom::User"
-    belongs_to :event, :class_name => "Droom::Event"
-    accepts_nested_attributes_for :event
 
+    belongs_to :event, :class_name => "Droom::Event", :dependent => :destroy
+    accepts_nested_attributes_for :event
     belongs_to :document, :class_name => "Droom::Document", :dependent => :destroy
     accepts_nested_attributes_for :document
 
-    has_upload :image, 
-               :geometry => "580x326#",
-               :styles => {
-                 :icon => "32x18#",
-                 :thumb => "160x90#",
-                 :precrop => "1200x1200^"
-               }
+    has_attached_file :image, 
+                      :styles => {
+                        :stream => "1280x1280>",
+                        :popup => "1280x1280>",
+                        :icon => "32x32#",
+                        :thumb => "130x73#"
+                      }
 
-    attr_accessible :name, :body, :image, :description, :scraptype, :note, :created_by, :event, :event_attributes, :document, :document_attributes
     before_save :get_youtube_thumbnail
+    before_validation :name_associates
 
-    scope :by_date, order("droom_scraps.created_at DESC")
+    scope :by_date, -> { order("droom_scraps.created_at DESC") }
 
-    scope :later_than, lambda { |scrap| 
-      where(["created_at > ?", scrap.created_at]).order("droom_scraps.created_at ASC") 
-    }
-    
-    scope :earlier_than, lambda { |scrap| 
-      where(["created_at < ?", scrap.created_at]).order("droom_scraps.created_at DESC") 
-    }
+    scope :later_than, -> scrap { where(["created_at > ?", scrap.created_at]).order("droom_scraps.created_at ASC")  }
 
-    scope :matching, lambda { |fragment|
+    scope :earlier_than, -> scrap { where(["created_at < ?", scrap.created_at]).order("droom_scraps.created_at DESC")  }
+
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_scraps.name LIKE :f OR droom_scraps.body LIKE :f OR droom_scraps.note LIKE :f', :f => fragment)
     }
     
-    scope :visible_to, lambda { |person|
-      where("1=1")
-    }
+    scope :visible_to, -> user { where("1=1") }
+
+    default_scope -> { order("created_at DESC").includes(:event, :document) }
 
     Droom.scrap_types.each do |t|
-      define_method(:"#{t}?") { scraptype == t.to_s }
-      scope t.pluralize.to_sym, where(["scraptype == ?", t])
+      scope t.pluralize.to_sym, -> { where(:scraptype => t.to_s) }
     end
 
     def wordiness
@@ -90,10 +85,14 @@ module Droom
   protected
   
     def get_youtube_thumbnail
-      # youtube id is held in the 'body' column.
-      if scraptype == "video" && body?
-        self.image = URI("http://img.youtube.com/vi/#{body}/0.jpg")
+      if scraptype == "video" && youtube_id?
+        self.image = URI("http://img.youtube.com/vi/#{youtube_id}/0.jpg")
       end
+    end
+    
+    def name_associates
+      event.name = name if event
+      document.name = name if document
     end
     
   end

@@ -36,11 +36,19 @@ $tool_button_width: 32px
 @import droom/toolbar
 @import lib/kalendae
 @import droom/popups
+@import droom/stream
 
+p.quitelarge
+  font-size: 1.4em
 
 p.large
   font-size: 1.6em
-  
+
+a
+  text-decoration: none
+  &:hover
+    text-decoration: underline
+
 a.dropbox
   +big_icon_link("droom/dropbox.png")
   color: #4ea1ea
@@ -63,14 +71,26 @@ a.dropboxer
 
 input.dropbox.revoke[type="submit"]
   +icon_link("droom/revoke_small.png")
-  background-color: none
+  background-color: transparent
   color: $blue
   padding: 0
   height: auto
   line-height: 20px
   &:hover
     color: $hover
-  
+
+label
+  &.required
+    font-weight: bold
+  &.important
+    font-weight: bold
+  &.disabled
+    color: $pale
+  &.inline
+    display: inline-block
+    vertical-align: top
+    white-space: nowrap
+
 a.cancel, a.cancel:visited
   +pale
   +hover
@@ -84,6 +104,7 @@ a.toggle
   &.showing
     background-position: 0 -64px
     &:hover
+      color: $hover
       background-position: 0 -96px
 
 .unavailable
@@ -91,7 +112,7 @@ a.toggle
   +pale
 
 .suffix
-  clear: both
+  clear: left
 
 a.autofetch
   display: inline-block
@@ -138,24 +159,13 @@ p.stretcher
     font-size: 1em
   span.dom
     font-size: 2em
-    letter-spacing: -0.1em
-    margin-left: -4px
-    margin-top: -2px
   span.year
     font-size: 1em
-    margin-top: -2px
   &.editing
     +box-shadow
     a, a:visited
       color: $dark
 
-
-h2.section
-  font-size: 1.25em
-  line-height: 26px
-  clear: both
-  margin-top: 2em
-  
 .relations
   position: relative
   
@@ -164,7 +174,7 @@ h2.section
     margin-bottom: 0
   p
     margin-top: 0.1em
-  
+
 #help_page
   position: relative
   margin-left: 10px
@@ -197,10 +207,14 @@ h2.section
 .preview
   color: $mid
 
-div.event, div.document
+div.event, div.document, div.group
   position: relative
   clear: both
-  margin-bottom: 30px
+  margin-bottom: 10px
+  &.quiet
+    color: $pale
+    a
+      color: $pale
 
 form.event, form.document
   position: relative
@@ -224,50 +238,60 @@ div.event, form.event, div.project
     .detail
       p
         margin-top: 0
-
-ul.invitations
-  padding: 0
-  list-style: none
-  li.invitation
-    text-indent: 20px
-    background:
-      repeat: no-repeat
-      position: 0 0
-      image: image-url('droom/acceptance.png')
-    &.refused
-      color: $mid
-      text-decoration: line-through
-      background-position: 0 -32px
-      a
+  .col
+    float: left
+    width: 500px
+    margin-right: 20px
+    &:last-child
+      margin-right: 0
+      width: 300px
+#margin
+  ul.invitations
+    padding: 0
+    margin-bottom: 2em
+    margin-top: 0.25em
+    li.invitation
+      list-style: none
+      text-indent: 20px
+      margin-left: -20px
+      background:
+        repeat: no-repeat
+        position: 0 0
+        image: image-url('droom/acceptance.png')
+      &.refused
         color: $mid
-    &.accepted
-      background-position: 0 -64px
-      a
-        color: $green
-    span.action
-      display: inline-block
-      margin: 0 0 0 10px
-      text-indent: 0
-      a.accept, a.refuse
-        display: inline-block
-        text-indent: 20px
-        height: 16px
-        width: 16px
-        line-height: 16px
-        overflow: hidden
-        background:
-          position: 0 0
-          repeat: no-repeat
-          image: image-url("droom/acceptance.png")
-      a.accept
-        background-position: 0 -162px
-      a.refuse
-        background-position: 0 -130px
-      a.waiting
-        background-image: image-url('droom/spinner.gif')
-        background-position: 0 0
+        text-decoration: line-through
+        background-position: 0 -32px
         a
-          color: $pale
+          color: $mid
+      &.accepted
+        background-position: 0 -64px
+        a
+          color: $green
+      span.action
+        display: inline-block
+        margin: 0 0 0 10px
+        text-indent: 0
+        a.accept, a.refuse
+          display: inline-block
+          text-indent: 20px
+          height: 16px
+          width: 16px
+          line-height: 16px
+          overflow: hidden
+          background:
+            position: 0 0
+            repeat: no-repeat
+            image: image-url("droom/acceptance.png")
+        a.accept
+          background-position: 0 -162px
+        a.refuse
+          background-position: 0 -130px
+        a.waiting
+          background-image: image-url('droom/spinner.gif')
+          background-position: 0 0
+          a
+            color: $pale
 
 form.invitation
   min-height: 200px
@@ -288,7 +312,7 @@ span.admin.documents
 .interjected
   margin: 10px 0
 
-.people
+.users
   .person_picker
     font-size: 1.8em
 
@@ -330,8 +354,10 @@ form.folder
     font-size: 2em
 
 form.document
+  p.slug
+    margin: 0
   .filepicker
-    +outset
+    +outset(40px)
     margin-top: 5px
     input[type="file"]
       display: none
@@ -370,45 +396,105 @@ form.page
     width: 50%
     color: $mid
 
-form.person
-  .image
+
+.image-upload
+  position: relative
+  width: 132px
+  height: 132px
+  margin-right: 20px
+  float: left
+  overflow: hidden
+  a.remover
+    display: block
+    position: absolute
+    top: 5px
+    right: 3px
+    width: 24px
+    height: 24px
+    background:
+      position: 0 -646px
+      image: image-url('droom/minisymbols.png')
+  a.box
+    display: block
     width: 130px
     height: 130px
-    margin-right: 20px
-    float: left
-    .uploadbox
-      width: 130px
-      height: 130px
-      border: 4px solid white
-      +box-shadow(1px 2px 5px $mid)
-      margin-top: -4px
-      margin-left: -4px
-    .img
-      width: 130px
-      height: 130px
-    .prompt
-      padding-top: 30px
-      +small
-    .scaler
-      width: 100px
-    p.range
-      .slider
+    border: 1px solid $pale
+    background:
+      color: white
+      position: center center
+      repeat: no-repeat
+      size: cover
+    input[type="file"]
+      position: absolute
+      top: 200px
+      left: 0
+
+.youtube-search
+  position: relative
+  width: 132px
+  height: 132px
+  margin-right: 20px
+  float: left
+  a.remover
+    display: block
+    position: absolute
+    top: 5px
+    right: 3px
+    width: 24px
+    height: 24px
+    background:
+      position: 0 -646px
+      image: image-url('droom/minisymbols.png')
+  .thumbnail
+    display: block
+    width: 130px
+    height: 73px
+    border: 1px solid $pale
+    background:
+      color: white
+      position: center center
+      repeat: no-repeat
+      size: cover
+  input[type="text"]
+    width: 120px
+    padding: 5px
+    margin: 20px 0 0 0
+
+
+form.user
+  .image-upload
+    margin-top: 5px
+  p.names
+    margin: 0
+    span.name
+      display: inline-block
+      vertical-align: top
+      width: 134px
+      margin-right: 10px
+      input
+        width: 118px
+    span.chinese_name, span.honours
+      display: inline-block
+      vertical-align: top
+      width: 76px
+      margin-right: 0
+      input
         width: 70px
   p.name
     margin: 0
     input
-      width: 375px
+      width: 360px
       font-size: 1.5em
       font-weight: bold
   .contacts
     overflow: hidden
     p
       float: left
-      width: 184px
+      width: 180px
       margin-top: 0.5em
       margin-bottom: 0
       input
-        width: 170px
+        width: 167px
         font-size: 1em
         margin-top: 0
     p.email
@@ -418,7 +504,12 @@ form.person
     select
       width: 536px
       font-size: 1em
-
+  p.memberships
+    label.inline
+      margin-right: 10px
+  div.description
+    clear: both
+    margin-top: 24px
   .user, .buttons
     clear: left
       
@@ -431,8 +522,8 @@ form.person
     position: relative
     margin-top: 0.5em
 
-form.group
-  input[type="text"], textarea
+form.group, form.service, form.permission
+  input[type="text"], textarea, select
     width: 520px
     font-size: 1em
   textarea
@@ -453,30 +544,32 @@ form.user
       font-size: 1.5em
       font-weight: bold
 
- 
+
 h2.name
   font-size: 2em
   margin: 0
 
+h2.quiet
+  color: $pale
+
 a.dl, a.ul
   display: inline-block
-  min-height: 50px
-  padding-top: 4px
-  text-indent: 60px
-  line-height: 50px
+  min-height: 40px
+  text-indent: 40px
+  line-height: 40px
   background:
-    position: 0 -10px
+    position: 0 0
     repeat: no-repeat
-    image: image-url('droom/medium_icons.png')
+    image: image-url('droom/small_icons.png')
   &.pdf
-    background-position: 0 -110px
+    background-position: 0 -100px
   &.doc, &.docx
-    background-position: 0 -210px
+    background-position: 0 -200px
   &.xls, &.xlsx
-    background-position: 0 -310px
+    background-position: 0 -300px
   &.minimal
-    width: 50px
-    height: 50px
+    width: 40px
+    height: 40px
     overflow: hidden
 
 span.icon
@@ -501,10 +594,12 @@ li.person
     
 div.document
   h2.name
-    font-size: 1.75em
+    font-size: 1.1em
     line-height: 1
+    a.dl
+      margin-left: -40px
     + p.description
-      margin-top: -20px
+      margin-top: -4px
   p.attachment
     margin: 0
     color: $mid
@@ -650,79 +745,99 @@ table.people
     width: 80px
 
 
-table.users
+table.toggles
   margin-top: 40px
   border-collapse: collapse
-  thead
-    th
-      max-width: 24px
-      height: 50px
-      padding-top: 36px
-      padding-left: 6px
-      span.rotated
-        display: block
-        line-height: 1
-        white-space: nowrap
-        +rotate(-75deg)
-    th.spacer
-      padding: 10px
-    th.note
-      font-weight: normal
-      height: 20px
-      color: $pale
-      font-size: 85%
-      padding: 5px
-      border-bottom: 1px solid $pale
+  tr.rotated
+    td, th
+      position: relative
+      height: 120px
+      width: 32px
       text-align: center
-      &.spacer
-        border: none
-  tbody
-    td
-      padding-top: 15px
-    td.hover
-      background-color: $palest
-    tr:hover
-      td
-        background-color: $palest
-        border-color: $palest
-    td[data-hoverable]:hover
-      background-color: $pale
-    td.name
-      min-width: 140px
-      min-height: 36px
+      a.menu
+        visibility: hidden
+      &:hover
+        a.menu
+          visibility: visible
+      &.spacer, &.action
+        width: auto
+        text-align: left
+    span.rotated
+      display: inline-block
+      position: absolute
+      top: 120px
+      left: 10px
       line-height: 1
-      text-align: left
-    td.email
-      +small
-      +pale
-      line-height: 1.8em
-      text-align: left
-    td.spacer
-      padding: 10px
+      white-space: nowrap
+      +apply-origin(top left, false)
+      +rotate(-90deg)
+        
+  th
+    font-weight: normal
+    a.menu
+      visibility: hidden
+    &:hover
+      a.menu
+        visibility: visible
+    h4
+      margin: 0
+      line-height: 1.1
+  td, th
+    border: 1px solid $verypale
+    padding: 4px
+  th.action, th.spacer
+    border: 0
+  th.action
+    form.filter
+      position: absolute
+      bottom: 10px
+      input[type="search"]
+        width: 200px
+  th.d, td.d
+    border-right-color: $text
+  td.hover
+    background-color: $coolgrey0
+  tr:hover
     td
-      width: 30px
-      text-align: center
-      span, a.yes, a.no
-        +icon("droom/minisymbols.png")
-        &.yes
-          background-position: 0 -384px
-        &.no
-          background-position: 0 -528px
-        &.not_applicable
-          background-position: 0 -600px
-        &.waiting
-          background-image: image-url('droom/spinner.gif')
-          background-position: 2px 2px
-      span.no, span.yes
+      background-color: $coolgrey0
+    td.hover
+      background-color: $coolgrey1
+  td.name
+    min-width: 140px
+    min-height: 36px
+    line-height: 1
+    text-align: left
+    a
+      color: $dark
+      +hover
+  td.spacer
+    padding: 10px
+  td.toggle
+    min-height: 32px
+    text-align: center
+    span.no, span.yes, a.yes, a.no
+      +icon("droom/minisymbols.png")
+      margin: 5px 0 0 3px
+      &.yes
+        background-position: 0 -384px
+      &.no
+        background-position: 0 -528px
         +opacity(0.3)
-      a.no
         &:hover
-          background-position: 0 -648px
-      a.yes
-        &:hover
-          background-position: 0 -480px
-      
-      
+          +opacity(1)
+      &.not_applicable
+        background-position: 0 -600px
+      &.waiting
+        background-image: image-url('droom/spinner.gif')
+        background-position: 2px 2px
+    span.no, span.yes
+      +opacity(0.3)
+    a.no:hover
+      background-position: 0 -648px
+    a.yes:hover
+      background-position: 0 -480px
+    
+    
       
 table.groups
   margin-bottom: 25px
@@ -842,6 +957,7 @@ div.menu
     li
       a
         color: white !important
+        min-height: 16px
         &.add
           +menu_link("droom/smalladd.png")
         &.edit
@@ -895,13 +1011,11 @@ a.menu
 span.action
   display: inline-block
   
-p.action, span.action
-  font-size: 14px
+*.action
   font-weight: normal
   a.add
     color: $green
     font-weight: normal
-    font-size: 16px
     white-space: nowrap
     +icon_link("droom/add.png")
     &:hover
@@ -909,7 +1023,6 @@ p.action, span.action
   a.edit
     color: $blue
     font-weight: normal
-    font-size: 16px
     white-space: nowrap
     +icon_link("droom/edit.png")
     &:hover
@@ -917,7 +1030,6 @@ p.action, span.action
   a.delete
     color: $darkred
     font-weight: normal
-    font-size: 16px
     white-space: nowrap
     +icon_link("droom/delete.png")
     &:hover
@@ -925,7 +1037,6 @@ p.action, span.action
   a.revert
     color: $mid
     font-weight: normal
-    font-size: 16px
     white-space: nowrap
     &:hover
       color: $warmred
@@ -969,7 +1080,6 @@ ul.dropdown
       background:
         position: 6px 11px
         repeat: no-repeat
-        scroll: scroll
       &.hover
         color: white
         background-color: $active
@@ -1025,12 +1135,11 @@ ul.suggestion_search
       cursor: hand
       background:
         repeat: no-repeat
-        scroll: scroll
         image: image-url('droom/object_icons.png')
     &.event
       a
         background-position: 0 4px
-    &.person
+    &.user
       a
         background-position: 0 -46px
     &.venue
@@ -1061,7 +1170,6 @@ ul.downloads
 a.document
   display: inline-block
   padding: 8px 0 0 28px
-  font-size: 14px
   min-height: 20px
   line-height: 22px
   background: 
@@ -1087,79 +1195,8 @@ li.more
     padding: 5px 0
     min-height: 22px
 
-input[type="text"], input[type="password"], input[type="email"], select, textarea
-  color: $input
-  padding: 5px
-  border: 1px solid $pale
-  &.strong
-    font-weight: bold
-  &.destination
-    color: $blue
-  &.empty
-    color: $pale
-  &[disabled]
-    color: $pale
-    background-color: #fff
-    border-color: $verypale
-
-input[type="submit"]
-  +button($green)
-  display: inline-block
-  &.unavailable
-    background-color: $mid
-    +opacity(0.5)
-    &:hover
-      background-color: $mid
-  &.waiting
-    background-color: $pale
-    &:hover
-      background-color: $pale
-
-#account
-  position: relative
-  clear: both
-  width: 600px
-  label
-    font-size: 1.1em
-    &.minor
-      font-size: 0.9em
-  input[type="text"], input[type="password"], input[type="email"]
-    width: 590px
-    padding: 4px
-    &.login
-      font-size: 2em
-    &.preferences
-      font-size: 2em
-    &.ok
-      border-color: $green
-    &.notok
-      border-color: $error
-  p.confirmation
-    display: none
-  span.reminder
-    float: right
-    +pale
 
 
-#mask
-  position: fixed
-  top: 0
-  left: 0
-  height: 100%
-  width: 100%
-  background-color: white
-  display: none
-  z-index: 200
-
-.mask
-  position: fixed
-  top: 0
-  left: 0
-  height: 100%
-  width: 100%
-  background-color: white
-  display: none
-  z-index: 190
 
 .overlay
   position: absolute
@@ -1179,7 +1216,7 @@ div.kal
   padding: 10px
   background-color: white
   +box-shadow
-  z-index: 200
+  z-index: 300
   
 div.timepicker
   +box-shadow(0 2px 2px #444)
@@ -1187,7 +1224,7 @@ div.timepicker
   display: none
   height: 191px
   width: 60px
-  overflow-x: none
+  overflow-x: hidden
   overflow-y: auto
   background: #fff
   border: 1px solid #aaa
@@ -1210,12 +1247,38 @@ div.timepicker
       background: $link
       color: #fff
 
+#stream, .search_results, .suggestion_search
+  .scrolled
+    width: 320px
+  .scroller
+    margin-left: 5px
+    width: 640px
+    .paginated
+      width: 320px
+      position: relative
+      float: left
+
+.groups
+  .scrolled
+    width: 680px
+    margin-bottom: 50px
+    overflow: hidden
+  .scroller
+    margin-left: 5px
+    width: 1360px
+    .paginated
+      width: 680px
+      position: relative
+      float: left
+  
+
 #minicalendar
   position: relative
   overflow: hidden
-  width: 222px
+  width: 280px
+  margin: 0
   .scroller
-    width: 500px
+    width: 600px
     height: 260px
     table
       position: relative
@@ -1236,7 +1299,25 @@ div.timepicker
 
 #search, .search_results
   position: relative
-  
+
+#margin
+  form.filter
+    margin-top: 3px
+    p
+      margin: 0.2em 0
+    input[type="text"]
+      font-size: 1.2em
+      padding: 4px
+      width: 95%
+    input[type="search"]
+      font-size: 18px
+      width: 100%
+  .filtered_list
+
+$calendar_width: 280px
+$day_width: 40px
+$box: $day_width - 2
+
 table.minimonth
   font-style: normal
   border-collapse: collapse
@@ -1245,7 +1326,7 @@ table.minimonth
     width: 1px
     color: white
   color: $text
-  margin: 5px 0
+  margin: 0
   h3
     font-size: 1.2em
     line-height: 22px
@@ -1264,9 +1345,9 @@ table.minimonth
       color: white
     vertical-align: top
     text-align: center
-    height: 32px
-    width: 30px
-    line-height: 32px
+    height: $box
+    width: $box
+    line-height: $box
     padding: 0
     overflow: hidden
   td.m
@@ -1275,8 +1356,8 @@ table.minimonth
       overflow: hidden
       font-size: 1.4em
       line-height: 1
-      width: 32px
-      height: 32px
+      width: $box
+      height: $box
       text-indent: 50px
       background:
         position: 5px 5px
@@ -1359,7 +1440,7 @@ ul.setup
     max-height: 120px
 
 .note, .formnote
-  font-size: 0.8em
+  font-size: 90%
   line-height: 1.1
   color: $mid
   a, a:visited
@@ -1432,27 +1513,13 @@ a.expander
     &:hover
       background-position: 0 -96px
 
-.search
-  position: relative
-  float: right
-  width: 342px
-  margin: 5px
-  p.input
-    margin: 0
-  p.controls
-    clear: left
-  input[type="text"]
-    position:relative
-    font-size: 1.5em
-    width: 275px
-    float: left
-    +border-radius(100px)
-    padding: 10px 30px
 
 ul.filing
   padding: 0
   list-style: none
-
+  li.document
+    white-space: nowrap
+    overflow: hidden
 ul.folder
   position: relative
   float: right
@@ -1465,6 +1532,10 @@ ul.folder
     a.folder
       font-weight: bold
       color: $text
+  li.more
+    +small
+    a
+      padding-left: 28px
 
 ul#folders, div.attachments
   padding-left: 0
@@ -1533,45 +1604,6 @@ input.search_box
         color: transparent
         position: 0 -96px
         repeat: no-repeat
-
-nav.icons
-  position: relative
-  display: inline-block
-  a
-    display: inline-block
-    float: left
-  a.dropbox
-    +panel_icon("droom/integration_buttons.png", 0, 0)
-  a.rss                              
-    +panel_icon("droom/integration_buttons.png", -32px, 0)
-  a.email                            
-    +panel_icon("droom/integration_buttons.png", -64px, 0)
-  a.readers                          
-    +panel_icon("droom/integration_buttons.png", -96px, 0)
-  a.vcal                          
-    +panel_icon("droom/integration_buttons.png", -128px, 0)
-  a.account                            
-    +panel_icon("droom/integration_buttons.png", -160px, 0)
-  a.signout                          
-    +panel_icon("droom/integration_buttons.png", -192px, 0)
-  a.keywords
-    +panel_icon("droom/integration_buttons.png", -224px, 0)
-  a.suggestions                          
-    +panel_icon("droom/integration_buttons.png", -256px, 0)
-  a.devices
-    +panel_icon("droom/integration_buttons.png", -288px, 0)
-  a.networks
-    +panel_icon("droom/integration_buttons.png", -320px, 0)
-  a.admin
-    +panel_icon("droom/integration_buttons.png", -356px, 0)
-    &.here
-      background-color: $blue
-  span.spacer
-    display: inline-block
-    float: left
-    width: 64px
-    height: 32px
-
 
 
 /* -------- map infowindows -------- */
@@ -1659,17 +1691,18 @@ span.preference
     margin: 3px 0 3px 20px
 
 ul.documents
-  margin: 20px 0 32px -2px
+  margin: 20px 0 0 -2px
   padding: 0
   list-style: none
 
 ul.people
-  margin: 20px 0 32px -2px
+  margin: 20px 0 0 -2px
   padding: 0
   list-style: none
   li.person
     display: inline-block
-    width: 190px
+    vertical-align: top
+    width: 250px
     height: 48px
     line-height: 1.1
     margin-bottom: 10px
@@ -1682,8 +1715,7 @@ ul.people
       width: 32px
       height: 32px
       margin-right: 9px
-      border: 2px solid white
-      +box-shadow(1px 2px 5px $mid)
+      margin-top: 12px
       background:
         color: $mid
         repeat: no-repeat
@@ -1694,7 +1726,7 @@ ul.people
         position: absolute
         overflow: hidden
         top: -6px
-        right: -10px
+        right: -6px
         width: 14px
         height: 14px
         text-indent: 20px
@@ -1736,7 +1768,6 @@ ul.people
       height: 70px
       background:
         repeat: no-repeat
-        scroll: scroll
   .document
     a.icon
       background:
@@ -1761,125 +1792,18 @@ ul.people
     a.icon
       background-position: 0 -196px
 
-// streams and scraps
-
-a.minidatemark
-  display: block
-  float: left
-  width: 28px
-  margin-right: 12px
-  span
-    display: block
-    line-height: 1
-    text-align: center
-  span.mon
-    text-transform: uppercase
-    font-size: 0.9em
-  span.dom
-    font-size: 1.8em
-    letter-spacing: -0.1em
-    margin-left: -1px
-    margin-top: 0
-  span.year
-    font-size: 0.9em
-    margin-top: 0
-
-#stream, .search_results, .suggestion_search
-  .scrolled
-    width: 320px
-  .scroller
-    margin-left: 5px
-    width: 640px
-    .paginated
-      width: 320px
-      position: relative
-      float: left
-  .scrap
-    position: relative
-    clear: left
-    &.document
-      a.icon
-        background:
-          position: 3px 0
-          image: image-url('droom/icons.png')
-        &.pdf
-          background-position: 3px -48px
-        &.doc, &.docx
-          background-position: 3px -96px
-        &.xls, &.xlsx
-          background-position: 3px -144px
-    a.thumb
-      height: 18px
-    a.icon
-      height: 32px
-    a.thumb, a.icon
-      display: block
-      float: left
-      width: 32px
-      margin-right: 8px
-      margin-bottom: 25px
-      margin-top: 0
-      overflow: hidden
-      text-indent: 50px
-      line-height: 32px
-      +border-radius(3px)
-      background:
-        repeat: no-repeat
-        position: 0 0
-      &.playable
-        &:before
-          content: image-url('droom/playable.png')
-          position: absolute
-          width: 32px
-          height: 18px
-          left: -50px
-      
-    a.icon
-      background:
-        image: image-url('droom/dark_scrap_icons.png')
-      &.text
-        background-position: 0 -48px
-      &.quote
-        background-position: 0 -96px
-      &.link
-        background: none
-    a
-      color: $mid
-      +hover
-      &:hover, &.hover
-        color: $hover
-    p.caption, p.scrapevent, p.scrapdocument
-      overflow: hidden
-      line-height: 1.2
-    span.attribution, span.caption
-      color: $pale
-      display: block
-
-#stream
-  .scrap
-    margin-bottom: 25px
-    
-
-span.credit
-  display: block
-  font-size: 90%
-  font-weight: bold
-  color: $mid
-  margin-top: 4px
 
 div.popup
-  #event, #document, #person, #group, #membership, #folder
+  #event, #document, #user, #group, #membership, #folder
     width: 580px
-  .scrap
-    width: 580px
+    > p
+      margin: 10px 20px 0 20px
   
 div.popup
   form.event
     margin-left: $datemark_width + $datemark_margin
   form.document
     margin-left: 60px
-  form.scrap
-    margin: 0
 
   div.notifier
     position: absolute
@@ -1889,7 +1813,7 @@ div.popup
     background-color: white
     padding: 20px 140px
 
-  div.person
+  div.user
     margin: 20px 20px
     div.mugshot
       position: relative
@@ -1899,8 +1823,7 @@ div.popup
       height: 130px
       margin-right: 20px
       margin-bottom: 10px
-      border: 2px solid white
-      +box-shadow(1px 2px 5px $mid)
+      +border-radius(8px)
       background:
         color: $mid
         repeat: no-repeat
@@ -1914,357 +1837,8 @@ div.popup
       p.contact
         +pale
         margin-top: 0
-
-  div.body
-    position: relative
-    margin-top: 0
-    overflow: hidden
-    height: 326px
-    p
-      margin: 20px 20px
-      font-size: 1.5em
-      line-height: 1.25
-    &.image
-      overflow: hidden
-    p.attribution
-      color: lighten($mid, 10)
-      
-  div.scrapdocument
-    .filepicker
-      margin-top: 5px
-      input[type="file"]
-        display: none
-      p.tip
-        font-size: 0.65em
-        line-height: 1.1
-        color: $pale
-        margin: 0 5px
-
-  div.scrapvideo
-    position: relative
-    margin: 0 20px 0 20px
-    overflow: auto
-    padding-top: 10px
-    background-color: white
-    height: 316px
-    .thumb
-      margin: 10px 0
-      img.main_thumb, iframe.thumb
-        float: left
-        width: 265px
-        height: 200px
-        margin: 0 10px 0 70px
-      p
-        float: left
-        margin: 0
-        width: 170px
-      
-    .icon
-      width: 60px
-      height: 60px
-      background:
-        image: url("droom/youtube_icon.png")
-        size: 60px
-      float: left
-      margin: 10px 10px 0 0
-      
-  div.scrapevent, div.scrapdocument
-    position: relative
-    margin: 0
-    overflow: auto
-    padding-top: 126px
-    background-color: white
-    height: 200px
-    .datemark, .filemark
-      float: left
-      width: 50px
-      margin: 15px 10px 0 10px
-      color: $input
-    p.name
-      margin-bottom: 0
-      margin-top: 20px
-      line-height: 1.2
-      a.dl, .eventname
-        font-size: 1.4em
-        max-height: 50px
-      span.note
-        display: block
-        margin-left: 50px
-    p.practicalities
-      margin-top: 2px
-
-  div.caption
-    p.scrapnote
-      min-height: 2em
-    p.action
-      float: right
-    p
-      color: $text
-      margin: 10px 20px
-      span.credit
-        font-size: 80%
-        color: $mid
-
-  form.scrap
-    ul.scraptypes
-      padding: 0
-      margin: 0
-      li
-        display: inline-block
-        margin-right: 3px
-        font-size: 80%
-        label
-          display: inline-block
-          height: 32px
-          line-height: 28px
-          padding-left: 34px
-          color: white
-          overflow: hidden
-          font-size: 0.9em
-          cursor: pointer
-          background:
-            repeat: no-repeat
-            position: 0 0
-            image: image-url('droom/scrap_icons.png')
-          &.text
-            background-position: 0 -48px
-          &.quote
-            background-position: 0 -96px
-          &.video
-            background-position: 0 -144px
-          &.image
-            background-position: 0 -192px
-          &.document
-            background-position: 0 -240px
-          &.event
-            background-position: 0 -288px
-        input[type="radio"]
-          display: none
-        input[type="radio"] + label
-          +opacity(0.4)
-        input[type="radio"]:checked + label
-          +opacity(1)
-
-    .fields
-      min-height: 180px
-      .name
-        input[type="text"]
-          width: 532px
-          font-size: 1.25em
-          font-weight: bold
-      .body, .caption
-        textarea
-          width: 532px
-          background-color: white
-          font-size: 100%
-      .body
-        textarea
-          height: 290px
-          line-height: 1.2
-      .scrapevent, .scrapdocument
-        display: none
-        .summary
-          p.name
-            margin: 10px 0
-        input.name
-          width: 350px
-          font-size: 2.4em
-        p.url
-          margin: 10px 0 0 70px
-          input.url
-            font-size: 1.2em
-            width: 350px
-      .scrapvideo
-        display: none
-        input.name
-          width: 440px
-          font-size: 1.8em
-          &.waiting
-            background:
-              position: 430px 15px
-              repeat: no-repeat
-              image: image-url('droom/spinner.gif')
-        
-      .caption
-        textarea
-          height: 80px
-          color: $mid
-      .upload
-        display: none
-        margin-top: 0
-        .uploadbox
-          width: 580px
-          height: 326px
-          border: 0
-          margin: 0
-          background-color: $mid
-          .img
-            width: 580px
-            height: 326px
-          .prompt
-            padding-top: 140px
-            .note
-              color: $dark
-          .progress_holder
-            top: 138px
-
-      &.image
-        .upload
-          display: block
-        p.body
-          display: none
-      &.event
-        margin-bottom: 10px
-        .scrapevent
-          display: block
-        .upload, .body, .scrapdocument, .scrapvideo
-          display: none
-      &.document
-        margin-bottom: 10px
-        .scrapdocument
-          display: block
-        .upload, .body, .scrapevent, .scrapvideo
-          display: none
-      &.video
-        .scrapvideo
-          display: block
-        .upload, .body, .scrapevent, .scrapdocument
-          display: none
-    .buttons
-      margin: 10px 20px 20px 20px
-
-
-// uploader, scaler, cropper
-.uploadbox
-  position: relative
-  overflow: hidden
-  background-color: $mid
-  input
-    position: absolute
-    top: 1000px
-    left: 0
-  .prompt
-    text-align: center
-    padding: 20px
-    line-height: 1.25
-    a
-      color: white
-      +glow_on_hover
-    .note
-      color: $pale
-      margin-top: 2px
-  .img
-    position: absolute
-    top: 0
-    left: 0
-    &:empty
-      display: none
-  &.hover
-    .img
-    .prompt
-      a
-        color: white
-        text-shadow: 0 0 3px white
-      
-  a.detach
-    position: absolute
-    top: 10px
-    right: 5px
-    width: 24px
-    height: 24px
-    text-indent: 50px
-    overflow: hidden
-    background:
-      repeat: no-repeat
-      position: 0 -648px
-      image: image-url('droom/minisymbols.png')
-
-  .progress_holder
-    position: absolute
-    overflow: hidden
-    top: 10%
-    left: 10%
-    width: 80%
-    height: 32px
-    border: 1px solid $mid
-    background-color: $verypale
-    z-index: 900
-    +border-radius
-    .progress
-      position: relative
-      width: 0%
-      height: 100%
-      background-color: $pale
-    .commentary 
-      position: absolute
-      top: 0
-      left: 0
-      width: 100%
-      font-size: 1em
-      line-height: 1
-      padding: 1em
-      text-align: center
-  .waiter
-    position: absolute
-    overflow: hidden
-    top: 150px
-    left: 410px
-    width: 32px
-    height: 32px
-    background: transparent image-url('cropper/upload_spinner.gif') no-repeat center center scroll
-    display: none
-  .preview
-    position: absolute
-    top: 0
-    left: 0
-    cursor: move
-    img
-      width: 100%
-      height: 100%
-  .scaler
-    position: absolute
-    overflow: hidden
-    top: 60%
-    left: 10%
-    width: 80%
-    height: 40px
-    color: white
-    p.range
-      position: relative
-      margin: 0 auto
-      overflow: hidden
-      .slider
-        display: block
-        position: relative
-        float: left
-        width: 100%
-        height: 40px
-        background: transparent image-url('cropper/scale.png') no-repeat 0 20px
-        .scale
-          display: block
-          width: 100%
-          height: 100%
-        .marker
-          display: block
-          position: absolute
-          background-color: white
-          +box-shadow
-          top: 9px
-          left: 50px
-          width: 12px
-          height: 24px
-          cursor: move
-          z-index: 1000
-
-.overflow
-  position: absolute
-  overflow: hidden
-  top: 0
-  left: 0
-  +opacity(0.3)
-  img
-    width: 100%
-    height: 100%
+      div.description
+        min-height: 80px
 
 
 ul.checklist
@@ -2278,3 +1852,140 @@ ul.checklist
     display: block
     margin-left: 20px
     overflow: hidden
+
+
+
+#controls
+  a
+    display: inline-block
+    height: 42px
+    width: 40px
+    margin: 0 2px 0 0
+    text-indent: 50px
+    overflow: hidden
+    border: 1px solid transparent
+    background:
+      position: 4px 6px
+      repeat: no-repeat
+    +transition-property(border-color, box-shadow)
+    +transition-duration(0.2s)
+    +transition-timing-function(ease-in)
+    &:hover
+      background-position: 4px -58px
+    &.config
+      background-image: image-url('droom/config_menu.png')
+    &.search
+      background-image: image-url('droom/search_menu.png')
+    &.admin
+      background-image: image-url('droom/admin_menu.png')
+    &.up
+      border-color: $verypale
+      +box-shadow(0 3px 16px #666)
+
+.patch
+  position: absolute
+  height: 10px
+  width: 10px
+  background-color: white
+  visibility: hidden
+  z-index: 220
+  +transition-property(opacity, visibility)
+  +transition-duration(0.2s)
+  +transition-timing-function(ease-in)
+  &.up
+    visibility: visible
+    opacity: 1.0
+    
+.panel
+  position: absolute
+  z-index: 200
+  width: 280px
+  padding: 10px
+  background-color: white
+  border: 1px solid $verypale
+  visibility: hidden
+  opacity: 0
+  +box-shadow(0 4px 4px $dark)
+  +transition-property(opacity, visibility)
+  +transition-duration(0.2s)
+  +transition-timing-function(ease-in)
+  &.up
+    visibility: visible
+    opacity: 0.95
+  input[type="text"], input[type="password"], input[type="email"], select, textarea
+    width: 260px
+    margin: 0 3px
+  h4
+    margin-left: 3px
+    margin-bottom: 5px
+  p:first-child
+    margin-top: 5px
+  p:last-child
+    margin-bottom: 5px
+  p.controls
+    margin: 0 0 8px 0
+    +small
+    +pale
+    a.signout
+      display: block
+      position: absolute
+      right: 10px
+      top: 10px
+  ul
+    +plain
+    &.col
+      float: left
+      width: 130px
+      margin-right: 10px
+      &:last-child
+        margin-right: 0
+
+.submenu
+  position: absolute
+  z-index: 200
+  padding: 0
+  visibility: hidden
+  opacity: 0
+  +transition-property(opacity, visibility)
+  +transition-duration(0.2s)
+  +transition-timing-function(ease-in)
+  &.up
+    visibility: visible
+    opacity: 1
+
+
+.pagination
+  position: relative
+  clear: left
+  margin: 20px 0
+  font-size: 0.9em
+  &.upper
+    margin: 0 0 30px 0
+  &.lower
+    margin: 20px 0 0
+    
+  span.current, span.gap, a
+    display: inline-block
+    width: 24px
+    height: 24px
+    padding: 4px
+    line-height: 26px
+    text-align: center
+    margin-right: 2px
+  a
+    border: 1px solid $pale
+    color: $dark
+    &:visited
+      color: $dark
+    &:hover
+      background-color: $link
+      border-color: $link
+      color: white
+  span.current
+    border: 1px solid $verypale
+    background-color: $pale
+    color: white
+  span.gap
+    border: 1px solid transparent
+    text-align: center
+    color: $mid

@@ -2,9 +2,9 @@
   .header
     = link_to "X", '#', :class => "closer", :data => {:action => "close"}
     %h2.titlebar
-      = t :account_settings
-      - unless @user == current_user
-        = t :for
-        = @user.name
+      - if @user == current_user
+        = t :edit_your_profile
+      - else
+        = t :edit_user
 
   = render :partial => 'form'

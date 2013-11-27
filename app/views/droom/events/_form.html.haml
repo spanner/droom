@@ -15,7 +15,7 @@
 
   .summary
     %p.name
-      = f.text_field :name, :class => 'name', :placeholder => t(:event_name)
+      = f.text_field :name, :class => 'name', :placeholder => t(:event_name), :autofocus => true
 
     %p.practicalities
       = f.text_field :start_time, :class => "timepicker start", :value => (I18n.l(@event.start_time, :format => :precise) if @event.start_time), :placeholder => t(:event_time)
@@ -25,10 +25,6 @@
       %span.venue
         %span.name
           = f.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off"
-
-    %p.visibility
-      = f.check_box :private
-      = f.label :private
 
     .description.wysihtml
       .toolbar#t1

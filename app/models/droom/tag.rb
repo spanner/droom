@@ -1,9 +1,9 @@
 # Tags are simple one-word descriptors. There is no hierarchy or other structure among them.
-# They are strictly catalogue data, used to locate people but not treated as part of the person record.
+# They are strictly catalogue data, used to locate people but not treated as part of the user record.
 
 module Droom
   class Tag < ActiveRecord::Base
-    # They are attached to people through many-to-many taggings.
+    # They are attached to people and other things through many-to-many taggings.
     #
     has_many :taggings
     has_many :taggees, :through => :taggings
@@ -14,24 +14,25 @@ module Droom
     # There is a tag-suggesting mechanism in the front end to encourage tag reuse and consistency.
     # It rests on this simple scope, which returns all tags matching a given string fragment.
     #
-    scope :matching, lambda { |fragment| 
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('tags.name like ?', fragment)
     }
   
     # The public-facing search engine is faceted and relies on a similar but broader suggestion mechanism
     # that offers both tags and institutions. In that situation we only want to display tags that will give
-    # give results, so we limit the suggestions to only those tags that have been applied to a person.
+    # give results, so we limit the suggestions to only those tags that have been applied to a user.
     #
-    scope :in_use, 
+    scope :in_use, -> {
       joins("INNER JOIN taggings ON taggings.tag_id = tags.id")
       .group('tags.id')
       .having('count(taggings.tag_id) > 0')
+    }
 
     # This returns a list of all the tags attached to any of a given set of objects.
     # In future it will support cloud-weighting. 
     #
-    scope :attached_to_any_of, lambda {|these|
+    scope :attached_to_any_of, -> these {
       these = [these].flatten
       type = these.first.class.to_s
       placeholders = these.map{"?"}.join(',')
@@ -86,7 +87,7 @@ module Droom
     # display logic can be found in the [application_helper](../controllers/application_helper.html).
     #
     attr_accessor :cloud_size
-    scope :with_usage_count, lambda { |limit|
+    scope :with_usage_count, -> limit {
       select("tags.*, count(tt.id) AS weight").joins("INNER JOIN taggings as tt ON tt.tag_id = tags.id").group("tt.tag_id").order("weight DESC").limit(limit)
     }
 

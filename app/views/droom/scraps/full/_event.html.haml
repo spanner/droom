@@ -1,20 +1,21 @@
 - if event = scrap.event
-  .body.scrapevent
-    .datemark
-      %span.mon= event.start.strftime('%b')
-      %span.dom= event.start.strftime('%d')
-      - if event.start.year != Date.today.year
-        %span.year= event.start.strftime('%Y')
+  .body.event
+    .text
+      .datemark
+        %span.mon= event.start.strftime('%b')
+        %span.dom= event.start.strftime('%d')
+        - if event.start.year != Date.today.year
+          %span.year= event.start.strftime('%Y')
 
-    .summary
-      %p.name
-        - if scrap.event.url
-          = link_to scrap.event.name, scrap.event.url_with_protocol, :class => "eventname"
-          %br
-          %span.note
-            = link_to shorten("&rarr; #{scrap.event.url_with_protocol}".html_safe), scrap.event.url_with_protocol
-        - else
-          %span.eventname
-            = scrap.event.name
+      .summary
+        %p.name
+          - if scrap.event.url
+            = link_to scrap.event.name, scrap.event.url_with_protocol, :class => "eventname"
+            %br
+            %span.note
+              = link_to shorten("&rarr; #{scrap.event.url_with_protocol}".html_safe), scrap.event.url_with_protocol
+          - else
+            %span.eventname
+              = scrap.event.name
 
   = render "droom/scraps/caption", :scrap => scrap

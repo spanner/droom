@@ -5,9 +5,9 @@ div.popup
   left: 100px
   width: 580px
   padding: 0
-  z-index: 250
+  z-index: 6000
   min-height: 200px
-  background-color: $palest
+  background-color: $coolgrey00
   +box_shadow(1px 3px 8px #52555f)
   .header
     position: relative
@@ -42,15 +42,6 @@ div.popup
       repeat: no-repeat
     &:hover
       background-position: 0 -32px
-  .scrolled
-    overflow: hidden
-  .scroller
-    overflow: hidden
-    margin: 0
-    width: 1200px
-    .scrap
-      float: left
-      width: 580px
   form
     margin: 20px
     
@@ -84,3 +75,29 @@ div.popup
     span.prev
       background-position: 0 -160px
       margin-left: 0
+
+
+div.mask
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background-color: rgba(255,255,255,0.6)
+  z-index: 5000
+  opacity: 0
+  visibility: hidden
+  +transition-property(opacity, visibility)
+  +transition-duration(0.5s)
+  +transition-timing-function(ease-in)
+  &.up
+    opacity: 1
+    visibility: visible
+
+#droom
+  +transition-property(-webkit-filter)
+  +transition-duration(0.25s)
+  +transition-timing-function(ease-in)
+  &.masked
+    +filter(blur(5px))
+  

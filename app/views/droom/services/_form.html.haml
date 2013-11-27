@@ -1,0 +1,18 @@
+= form_for [@service], :html => { :multipart => true, :class => 'edit service', :remote => true, :data => {:type => :html}} do |f|
+
+  %p.name
+    = f.label :name
+    = f.text_field :name, :class => 'name'
+
+  %p.slug
+    = f.label :slug
+    = f.text_field :slug, :class => 'slug'
+
+  %p.description
+    = f.label :description
+    = f.text_area :description, :class => 'description'
+
+  .buttons
+    = f.submit t(:save_service)
+    = t :or
+    = link_to t(:cancel), "/", :class => 'cancel'

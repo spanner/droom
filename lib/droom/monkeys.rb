@@ -1,14 +1,15 @@
 class Array
   def to_ics
-    to_rical.to_s
+    to_icalendar.to_ical
   end
   
-  def to_rical
-    RiCal.Calendar do |cal|
-      self.flatten.each do |item|
-        cal.add_subcomponent(item.to_rical) if item.respond_to?(:to_rical)
-      end
+  def to_icalendar
+    cal = Icalendar::Calendar.new
+    self.flatten.each do |item|
+      p "adding event #{item.inspect}"
+      cal.add_event(item.icalendar_event) if item.respond_to? :icalendar_event
     end
+    cal
   end
 end
 

@@ -1,9 +1,9 @@
 - if user_signed_in?
   %p.controls
     = t(:signed_in_as, :name => current_user.full_name).html_safe
+    %br
     = link_to t(:preferences), droom.edit_user_url(current_user), :data => {:action => "popup"}
-    - if current_person
-      = link_to t(:profile), droom.edit_person_url(current_person), :data => {:action => "popup", :affected => ".people_list"}
+    = link_to t(:profile), droom.edit_user_url(current_user), :data => {:action => "popup", :affected => ".people_list"}
     = link_to t(:help_pages), "/help"
     = link_to t(:sign_out), Droom.sign_out_path, :method => :delete
     - if admin?

@@ -17,33 +17,38 @@ Gem::Specification.new do |s|
 
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "rails", "~> 3.2.11"
+  s.add_dependency "rails", "~> 4.0.0"
   s.add_dependency "jquery-rails"
-  s.add_dependency 'paperclip'
-  s.add_dependency 'msg'
-  s.add_dependency 'acts_as_tree'
-  s.add_dependency 'enumerize'
-  s.add_dependency 'geocoder'
-  s.add_dependency 'chronic'
-  s.add_dependency 'time_of_day'
-  s.add_dependency 'kaminari'
-  s.add_dependency 'haml'
-  s.add_dependency "uuidtools"
+
+  s.add_dependency "devise", "~> 3.0.0"
+  s.add_dependency "devise-encryptable"
+  s.add_dependency "coca", "~> 0.4.0"
+  s.add_dependency "cancan"
+  s.add_dependency "msg", "~> 0.4.0"
+
+  s.add_dependency "acts_as_tree"
+  s.add_dependency "acts_as_list"
+  s.add_dependency "kaminari"
+  s.add_dependency "haml"
+
+  s.add_dependency "paperclip"
+  s.add_dependency "fog"
+
+  s.add_dependency "geocoder"
+  s.add_dependency "icalendar"
+  s.add_dependency "chronic"
+  s.add_dependency "time_of_day"
   s.add_dependency "date_validator"
-  s.add_dependency "dav4rack"
-  s.add_dependency "ri_cal"
+  s.add_dependency "uuidtools"
+
   s.add_dependency "snail"
   s.add_dependency "vcard"
-  s.add_dependency "chronic"
-  s.add_dependency "dynamic_form"
-  s.add_dependency "acts_as_list"
-  s.add_dependency 'rdiscount'
-  s.add_dependency 'devise'
-  s.add_dependency 'devise-encryptable'
-  s.add_dependency 'yomu'
-  # s.add_dependency 'ruby-saml-idp'
+  s.add_dependency "rdiscount"
+  s.add_dependency "yomu"
+  s.add_dependency "youtube_it"
+  s.add_dependency "dropbox-sdk"
   
-  s.add_development_dependency "sqlite3"
+  s.add_development_dependency "mysql2"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "shoulda-matchers"
   s.add_development_dependency "factory_girl_rails"

@@ -1,0 +1,74 @@
+- user ||= @user
+- if user.image?
+  - img = user.image.url(:thumb)
+- else
+  - img = image_url('droom/missing/user.png')
+
+.image-upload{:data => {:role => "imagepicker"}}
+  %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
+  = f.file_field :image
+
+%p.names
+  %span.name
+    = f.label :family_name, class: 'required'
+    %br
+    = f.text_field :family_name, :required => true, :autofocus => true
+  %span.name
+    = f.label :given_name, class: 'required'
+    %br
+    = f.text_field :given_name, :required => true
+  - if Droom.use_chinese_names?
+    %span.chinese_name
+      = f.label :chinese_name, '中文姓名'
+      %br
+      = f.text_field :chinese_name
+  - if Droom.use_honours?
+    %span.honours
+      = f.label :honours
+      %br
+      = f.text_field :honours
+
+.non-file-data
+  .contacts
+    %p.email
+      = f.label :email, class: 'required'
+      %br
+      = f.text_field :email, :required => true
+
+    %p.phone
+      = f.label :phone, :class => "optional"
+      %br
+      = f.text_field :phone
+
+    - if Droom.use_separate_mobile_number?
+      %p.secondary
+        = f.label :mobile, :class => "optional"
+        %br
+        = f.text_field :mobile
+
+  - if admin?
+    - if Droom.use_organisations?
+      %p.organisation
+        = f.label :organisation_id
+        %br
+        = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+
+  - if Droom.use_biogs?
+    - user.description = "<p></p>" unless user.description?
+    .description.wysihtml
+      .toolbar#t1
+        = render 'droom/shared/toolbar'
+      = f.text_area :description
+
+  - if admin? && user.persisted?
+    %p.memberships
+      = f.label :group_ids, "Group memberships", class: "important"
+      %br
+      - Droom::Group.all.each do |group|
+        %label.inline{for: "user_group_ids_#{group.id}"}
+          = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
+          = group.name
+
+  - if user.new_record?
+    %p.formnote
+      = t :new_user_note

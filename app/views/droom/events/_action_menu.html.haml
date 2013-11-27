@@ -10,6 +10,6 @@
       %li
         = link_to t(:invite_group), droom.new_event_group_invitation_url(event), :class => "add", :data => {:action => "popup", :affected => "#event_#{event.id}"}
       %li
-        = link_to t(:invite_person), droom.new_event_invitation_url(event), :class => "add", :data => {:action => "popup", :affected => ".people"}
+        = link_to t(:invite_user), droom.new_event_invitation_url(event), :class => "add", :data => {:action => "popup", :affected => ".users"}
       %li
         = link_to t(:delete_event), droom.event_url(event), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#event_#{event.id}", :affected => ".minimonth", :confirm => t(:confirm_delete_event, :name => event.name)}

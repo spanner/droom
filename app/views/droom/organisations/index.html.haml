@@ -9,7 +9,7 @@
     %h3
       = t :find_people
 
-    %form.filter{:action => droom.people_url(:format => :js), :data => {:action => "filter"}}
+    %form.filter{:action => droom.users_url(:format => :js), :data => {:action => "filter"}}
       %p
         = text_field_tag :q, params[:q], :placeholder => t(:by_name_or_email)
 

@@ -1,43 +1,30 @@
 module Droom
   class EventsController < Droom::EngineController
     require "uri"
-    require "ri_cal"
-    respond_to :html, :json, :rss, :ics, :js, :zip
+    require "icalendar"
+    respond_to :html, :json, :ics, :js
     layout :no_layout_if_pjax
-
-    before_filter :authenticate_user!
-    before_filter :require_admin!, :except => [:index, :show]
-    before_filter :numerical_parameters
-    before_filter :get_event, :only => [:show, :edit, :update, :destroy]
-    before_filter :find_or_create_calendar, :only => :new
-    before_filter :build_event, :only => [:new, :create]
-    before_filter :get_calendar, :only => [:index, :calendar]
-    before_filter :find_events, :only => [:index, :calendar]
+    
+    before_filter :get_events, :only => [:index]
+    before_filter :build_event, :only => [:create]
+    load_and_authorize_resource
 
     def index
       respond_with @events do |format|
-        format.js {
-          render :partial => 'droom/events/events'
-        }
+        format.js { render :partial => 'droom/events/events' }
       end
     end
 
     def calendar
       respond_with @events do |format|
-        format.js {
-          render :partial => 'droom/events/calendar'
-        }
+        format.js { render :partial => 'droom/events/calendar' }
       end
     end
 
     def show
       respond_with @event do |format|
-        format.js { 
-          render :partial => 'droom/events/event' 
-        }
-        format.zip { 
-          send_file @event.documents_zipped.path, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@event.slug}.zip"
-        }
+        format.js { render :partial => 'droom/events/event' }
+        format.zip { send_file @event.documents_zipped.path, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@event.slug}.zip" }
       end
     end
 
@@ -47,19 +34,14 @@ module Droom
 
     def create
       if @event.save
-        render :partial => "created"
+        render :partial => "event"
       else
         respond_with @event
       end
     end
 
-    def edit
-      
-    end
-
     def update
-      @event.update_attributes(params[:event])
-      if @event.save
+      if @event.update_attributes(event_params)
         render :partial => "event"
       else
         respond_with @event
@@ -72,63 +54,23 @@ module Droom
     end
 
   protected
-
+  
+    def get_events
+      events = Droom::Event.accessible_by(current_ability)
+      if Droom.separate_calendars?
+        events = events.in_calendar(Droom::Calendar.where(:name => "main").first_or_create)
+      end
+      @past_events = paginated(events.past.order('start DESC'))
+      @events = paginated(events.future_and_current.order('start ASC'))
+    end
+    
     def build_event
-      params[:event] ||= {}
-      params[:event][:calendar_id] ||= @calendar.id if @calendar
-      @event = Droom::Event.new({:start => Time.now.floor(30.minutes)}.merge(params[:event]))
+      @event = Droom::Event.new(event_params)
+      @event.created_by = current_user
     end
-
-    def get_event
-      @event = Droom::Event.find(params[:id])
-    end
-
-    def find_events
-      if params[:direction] == 'past'
-        @events = @calendar.events.past.order('start DESC')
-        @direction = "past"
-      else
-        @events = @calendar.events.future_and_current.order('start ASC')
-        @direction = "future"
-      end
-      unless current_user.admin?
-        if current_person
-          @events = @events.visible_to(current_person)
-        else
-          @events = @events.all_public
-        end
-      end
-      
-      @show = params[:show] || 10
-      @page = params[:page] || 1
-      @events = @events.page(@page).per(@show)
-    end
-
-    def get_calendar
-      @calendar = Droom::Calendar.find_by_id(params[:calendar_id]) || find_or_create_calendar
-    end
-
-    def find_or_create_calendar
-      name = if Droom.required_calendar_names.include?(params[:calendar]) then params[:calendar] else "main" end
-      @calendar = Droom::Calendar.find_or_create_by_name(name)
-    end
-
-    # months can be passed around either as names or numbers
-    # any date part can be 'now' or 'next' for ease of linking
-    # and everything is converted to_i to save clutter later
-    def month_names
-      ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    end
-
-    def numerical_parameters
-      if params[:month] && month_names.include?(params[:month].titlecase)
-        params[:month] = month_names.index(params[:month].titlecase)
-      end
-      [:year, :month, :mday].select{|p| params[p] }.each do |p|
-        params[p] = Date.today.send(p) if params[p] == 'now'
-        params[p] = (Date.today + 1.send(p == :mday ? :day : p)).send(p) if params[p] == 'next'
-        params[p] = params[p].to_i
-      end
+    
+    def event_params
+      params.require(:event).permit(:name, :description, :event_set_id, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue_id, :venue_name)
     end
 
   end

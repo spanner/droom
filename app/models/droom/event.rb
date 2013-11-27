@@ -1,18 +1,19 @@
 require 'open-uri'
 require 'uuidtools'
 require 'chronic'
-require 'ri_cal'
+require 'icalendar'
+require 'date_validator'
+require 'time_of_day'
 
 module Droom
   class Event < ActiveRecord::Base
-    attr_accessible :start, :finish, :name, :description, :event_set_id, :created_by_id, :uuid, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue, :venue_id, :private, :public, :venue_name, :calendar_id
 
     belongs_to :created_by, :class_name => "Droom::User"
 
     has_folder #... and subfolders via agenda_categories
 
     has_many :invitations, :dependent => :destroy
-    has_many :people, :through => :invitations
+    has_many :users, :through => :invitations
 
     has_many :group_invitations, :dependent => :destroy
     has_many :groups, :through => :group_invitations
@@ -30,11 +31,6 @@ module Droom
 
     has_many :scraps
 
-    belongs_to :master, :class_name => 'Event'
-    has_many :occurrences, :class_name => 'Event', :foreign_key => 'master_id', :dependent => :destroy
-    has_many :recurrence_rules, :dependent => :destroy, :conditions => {:active => true}
-    accepts_nested_attributes_for :recurrence_rules, :allow_destroy => true
-
     validates :start, :presence => true, :date => true
     validates :finish, :date => {:after => :start, :allow_nil => true}
     validates :uuid, :presence => true, :uniqueness => true
@@ -42,91 +38,58 @@ module Droom
 
     before_validation :set_uuid
     before_save :ensure_slug
-    after_save :update_occurrences
-
-    scope :primary, where("master_id IS NULL")
-    scope :recurrent, where(:conditions => "master_id IS NOT NULL")
 
     ## Event retrieval in various ways
     #
     # Events differ from other models in that they are visible to all unless marked 'private'.
     # The documents attached to them are only visible to all if marked 'public'.
     #
-    scope :all_private, where("private = 1")
-    scope :not_private, where("private <> 1 OR private IS NULL")
-    scope :all_public, where("public = 1 AND private <> 1 OR private IS NULL")
-    scope :not_public, where("public <> 1 OR private = 1)")
+    scope :all_private, -> { where("private = 1") }
+    scope :not_private, -> { where("private <> 1 OR private IS NULL") }
+    scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
+    scope :not_public, -> { where("public <> 1 OR private = 1)") }
 
-    # events are visible by default. Private events are made invisible except to the people
-    # invited to them.
+    scope :after, -> datetime { where(['start > ?', datetime]) }
 
-    scope :visible_to, lambda { |person|
-      if person
-        select('droom_events.*')
-          .joins('LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id')
-          .where(["(NOT(droom_events.private = 1) OR droom_invitations.person_id = ?)", person.id])
-          .group('droom_events.id')
-      else
-        all_public
-      end
-    }
+    scope :before, -> datetime { where(['start < :date AND (finish IS NULL or finish < :date)', :date => datetime]) }
 
-    scope :after, lambda { |datetime| # datetime. eg calendar.occurrences.after(Time.now)
-      where(['start > ?', datetime])
-    }
+    scope :between, -> start, finish { where(['start > :start AND start < :finish AND (finish IS NULL or finish < :finish)', :start => start, :finish => finish]) }
 
-    scope :before, lambda { |datetime| # datetime. eg calendar.occurrences.before(Time.now)
-      where(['start < :date AND (finish IS NULL or finish < :date)', :date => datetime])
-    }
+    scope :future_and_current, -> { where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now]) }
 
-    scope :between, lambda { |start, finish| # datetimable objects. eg. Event.between(reader.last_login, Time.now)
-      where(['start > :start AND start < :finish AND (finish IS NULL or finish < :finish)', :start => start, :finish => finish])
-    }
-
-    scope :future_and_current, lambda {
-      where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now])
-    }
-
-    scope :finished, lambda {
-      where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.now])
-    }
+    scope :finished, -> { where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.now]) }
     
-    scope :unbegun, lambda {
-      where(['start > :now', :now => Time.now])
-    }
+    scope :unbegun, -> { where(['start > :now', :now => Time.now])}
 
-    scope :by_finish, order("finish ASC")
+    scope :by_finish, -> { order("finish ASC") }
 
-    scope :coincident_with, lambda { |start, finish| # datetimable objects.
-      where(['(start < :finish AND finish > :start) OR (finish IS NULL AND start > :start AND start < :finish)', {:start => start, :finish => finish}])
-    }
+    scope :coincident_with, -> start, finish { where(['(start < :finish AND finish > :start) OR (finish IS NULL AND start > :start AND start < :finish)', {:start => start, :finish => finish}]) }
 
-    scope :limited_to, lambda { |limit|
-      limit(limit)
-    }
+    scope :limited_to, -> limit { limit(limit) }
 
-    scope :at_venue, lambda { |venue| # EventVenue object
-      where(["venue_id = ?", venue.id])
-    }
+    scope :at_venue, -> venue { where(:venue_id => venue.id) }
 
-    scope :except_these_uuids, lambda { |uuids| # array of uuid strings
+    scope :in_calendar, -> calendar { where(:calendar_id => calendar.id) }
+
+    scope :except_these_uuids, -> uuids {
       placeholders = uuids.map{'?'}.join(',')
       where(["uuid NOT IN (#{placeholders})", *uuids])
     }
 
-    scope :without_invitations_to, lambda { |person| # Person object
+    scope :without_invitations_to, -> user {
       select("droom_events.*")
-        .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.person_id = #{sanitize(person.id)}")
+        .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.user_id = #{sanitize(user.id)}")
         .group("droom_events.id")
         .having("COUNT(droom_invitations.id) = 0")
     }
 
-    scope :with_documents, 
+    scope :with_documents, -> {
       select("droom_events.*")
         .joins("INNER JOIN droom_document_attachments ON droom_events.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Event'")
         .group("droom_events.id")
+    }
 
-    scope :matching, lambda { |fragment| 
+    scope :matching, -> fragment { 
       fragment = "%#{fragment}%"
       where('droom_events.name like :f OR droom_events.description like :f', :f => fragment)
     }
@@ -181,8 +144,8 @@ module Droom
 
     ## Instance methods
     #
-    def invite(person)
-      self.people << person
+    def invite(user)
+      self.users << user
     end
 
     def attach(doc)
@@ -243,7 +206,7 @@ module Droom
     end
 
     def start_date=(value)
-      self.start = parse_date(value).to_date# + start_time
+      self.start = parse_date(value).to_date
     end
 
     def finish_time=(value)
@@ -254,7 +217,7 @@ module Droom
     end
 
     def finish_date=(value)
-      self.finish = parse_date(value).to_date# + finish_time
+      self.finish = parse_date(value).to_date
     end
 
     def duration
@@ -283,27 +246,26 @@ module Droom
       cats
     end
 
-    def attended_by?(person)
-      person && person.invited_to?(self)
+    def attended_by?(user)
+      user && user.invited_to?(self)
     end
 
-    def visible_to?(user_or_person)
+    def visible_to?(user)
       return true if self.public?
       return false if self.private?# || Droom.events_private_by_default?
       return true
     end
     
-    def detail_visible_to?(user_or_person)
+    def detail_visible_to?(user)
       return true if self.public?
-      return false unless user_or_person
-      return true if user_or_person.admin?
-      return true if user_or_person.privileged?
-      return true if user_or_person.person.invited_to?(self)
+      return false unless user
+      return true if user.admin?
+      return true if user.invited_to?(self)
       return false if self.private?
       return true
     end
     
-    def has_people?
+    def has_anyone?
       invitations.any?
     end
 
@@ -326,42 +288,39 @@ module Droom
     def finished?
       start < Time.now && (!finish || finish < Time.now)
     end
-
-    def recurs?
-      master || occurrences.any?
-    end
-
-    def recurrence
-      recurrence_rules.first.to_s
-    end
-
-    def add_recurrence(rule)
-      self.recurrence_rules << Droom::RecurrenceRule.from(rule)
-    end
     
     def url_with_protocol
-      url =~ /^https?:\/\// ? url : "http://#{url}"
-    end
-
-    def url_without_protocol
-      url.sub(/^https?:\/\//, '')
-    end
-
-    def to_rical
-      RiCal.Event do |cal_event|
-        cal_event.uid = uuid
-        cal_event.summary = name
-        cal_event.description = description if description
-        cal_event.dtstart =  (all_day? ? start_date : start) if start
-        cal_event.dtend = (all_day? ? finish_date : finish) if finish
-        cal_event.url = url_with_protocol if url
-        cal_event.rrules = recurrence_rules.map(&:to_rical) if recurrence_rules.any?
-        cal_event.location = venue.name if venue
+      if url? && url !~ /^https?:\/\//
+        "http://#{url}"
+      else
+        url
       end
     end
 
+    def url_without_protocol
+      if url?
+        url.sub(/^https?:\/\//, '')
+      else
+        ""
+      end
+    end
+
+    def icalendar_event
+      event = Icalendar::Event.new
+      event.uid = uuid
+      event.summary = name
+      event.description = description if description?
+      event.dtstart = (all_day? ? start_date : start) if start?
+      event.dtend = (all_day? ? finish_date : finish) if finish?
+      event.url = url_with_protocol if url?
+      event.location = venue.name if venue
+      event
+    end
+
     def to_ics
-      to_rical.to_s
+      cal = Icalendar::Calendar.new
+      cal.add_event(icalendar_event)
+      cal.to_ical
     end
 
     def as_json(options={})
@@ -396,25 +355,6 @@ module Droom
 
     def set_uuid
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
-    end
-
-    # doesn't yet observe exceptions
-    def update_occurrences
-      occurrences.destroy_all
-      if recurrence_rules.any?
-        recurrence_horizon = Time.now + 10.years
-        to_rical.occurrences(:before => recurrence_horizon).each do |occ|
-          occurrences.create!({
-            :name => self.name,
-            :url => self.url_with_protocol,
-            :description => self.description,
-            :venue => self.venue,
-            :start => occ.dtstart,
-            :finish => occ.dtend,
-            :uuid => nil
-          }) unless occ.dtstart == self.start
-        end
-      end
     end
 
     def parse_date(value)

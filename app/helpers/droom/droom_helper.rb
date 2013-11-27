@@ -3,18 +3,24 @@ require 'dropbox_sdk'
 module Droom
   module DroomHelper
 
+    def allowed?(permission_code)
+      current_user.admin? || current_user.permitted?(permission_code)
+    end
+
     def action_menulink(thing, html_options={})
-      classname = thing.class.to_s.downcase.underscore.split('/').last
-      html_options.reverse_merge!({
-        :class => "",
-        :data => {:menu => "#{classname}_#{thing.id}"}
-      })
-      html_options[:class] << " menu"
-      link_to t(:edit), "#", html_options if editable?(thing)
+      if can?(:edit, thing)
+        classname = thing.class.to_s.downcase.underscore.split('/').last
+        html_options.reverse_merge!({
+          :class => "",
+          :data => {:menu => "#{classname}_#{thing.id}"}
+        })
+        html_options[:class] << " menu"
+        link_to t(:edit), "#", html_options if editable?(thing)
+      end
     end
     
     def action_menu(thing, locals={})
-      if editable?(thing)
+      if can?(:edit, thing)
         type = thing.class.to_s.downcase.underscore
         classname = type.split('/').last
         locals[classname.to_sym] = thing
@@ -34,10 +40,6 @@ module Droom
       DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
     end
 
-    def current_person
-      current_user.person if user_signed_in?
-    end
-
     def admin?
       current_user && current_user.admin?
     end
@@ -54,9 +56,12 @@ module Droom
       render :partial => "droom/preferences/radio_set", :locals => {:key => key, :values => values}
     end
 
-    def shorten(text, length=64)
+    def shorten(text, length=64, separator=" ")
+      text = strip_tags(text)
       length = length[:length] if length.is_a?(Hash)
-      truncate(strip_tags(text), {:length => length, :separator => " "})
+      content_tag :span, class: 'shortened', title: text do
+        truncate(text, {:length => length, :separator => separator})
+      end
     end
 
     def dropbox?
@@ -91,7 +96,7 @@ module Droom
 
     def nav_link_to(name, url, options={})
       options[:class] ||= ""
-      options[:class] << "here" if (request.path == url) || (request.path =~ /^#{url}/)
+      options[:class] << "here" if (request.path == url) || (url != "/" && request.path =~ /^#{url}/)
       link_to name, url, options
     end
 

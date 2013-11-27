@@ -4,6 +4,11 @@
   &:active
     color: $active
 
+=inverted($color: $text)
+  color: $color
+  &:hover
+    color: $link
+
 =pale
   color: $pale
   a, a:visited
@@ -50,6 +55,8 @@
     color: lighten($pale, 15)
     +background-image(linear-gradient(darken($pale, 10), lighten($pale, 3), $pale, darken($pale, 15)))
     +opacity(0.75)
+  &.waiting
+    +opacity(0.25)
 
 =small
   font-size: 80%
@@ -76,9 +83,8 @@
   display: inline-block
   text-indent: 18px
   margin-top: 0
-  line-height: 14px
   min-height: 16px
-  font-size: 14px
+  line-height: 16px
   background:
     color: transparent
     position: 0 0
@@ -93,7 +99,6 @@
     white-space: nowrap
     +opacity(0.4)
     &:hover
-      overflow: visible
       +opacity(1)
 
 =big_icon_link($url)
@@ -119,24 +124,6 @@
     image: image-url($url)
   &:hover
     background-position: 0 -48px
-  
-=panel_icon($image: "droom/integration_buttons.png", $x: 0, $y: 0)
-  overflow: hidden
-  text-indent: 34px
-  line-height: 32px
-  width: 32px
-  height: 35px
-  margin: 0
-  margin-right: 3px
-  background: 
-    position: $x $y
-    repeat: no-repeat
-    image: image-url($image)
-  &:hover
-    background-position: $x $y - 48px
-  &.here
-    background-color: $palest
-    background-position: $x $y - 96px
 
 =blurred($color: $pale)
   text-shadow: $color 0 0 3px
@@ -151,12 +138,12 @@
     background-image: image-url('droom/spinner.gif')
     background-position: 0 0
   
-=outset
+=outset($width: $datemark_width, $margin: $datemark_margin)
   position: relative
   float: left
-  width: $datemark_width
-  margin-left: - $datemark_width - $datemark_margin
-  margin-right: $datemark_margin
+  width: $width
+  margin-left: - $width - $margin
+  margin-right: $margin
 
 =hover
   &:hover

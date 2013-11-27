@@ -1,6 +1,0 @@
-= link_to "video:", droom.scrap_url(scrap), :class => "thumb playable", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:action => "popup"}
-%p.caption
-  = link_to shorten(scrap.note, 90), droom.scrap_url(scrap), :class => "scrap", :data => {:action => "popup"}
-  = action_menulink(scrap, :class => "small")
-  = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
-= action_menu(scrap)

@@ -1,2 +1,10 @@
 .groups{:data => {:refreshable => true, :url => "#{groups_path}.js"}}
-  = render :partial => 'group', :collection => @groups
+
+  - @groups.each do |group|
+    %h2{class: "section #{'quiet' unless group.directory?}"}
+      = link_to group.name, group_url(group, :format => :js), :class => 'name', :data => {:remote => true, :autoload => group.directory?, :action => 'replace', :affected => "#group_#{group.id}"}
+      = action_menulink(group)
+    = action_menu(group)
+
+    %div.group{:id => "group_#{group.id}", :data => {:refreshable => true, :url => group_path(group, :format => :js)} }
+

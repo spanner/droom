@@ -1,12 +1,18 @@
 #main.documents{:data => {:panel => false}}
   = render :partial => 'documents_table'
 
-
-- content_for :filter do
-  %form.search{:action => documents_url, :id => "document_search"}
-    %p.input
-      = text_field_tag :q, params[:q], :name => 'q', :class => 'search', :placeholder => t(:search), :data => {:action => "filter"}
-
 - content_for :title do 
   = t :library
-  
+
+- content_for :margin do
+  #finder
+    %form.filter{:action => droom.documents_url(:format => :js), :autocomplete => 'off', :data => {:action => "filter"}}
+      %p
+        = search_field_tag :q, params[:q], :results => 5, :autosave => 'document_filter'
+
+    .scroller
+      #found
+        %p.note
+          Type a fragment of a filename or title here to see everything that matches.
+
+

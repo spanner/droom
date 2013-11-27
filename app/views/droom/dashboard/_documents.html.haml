@@ -1,4 +1,4 @@
-- documents = Droom::Document.visible_to(current_user.person).latest(5)
+- documents = Droom::Document.latest(5)
 
 %h2.section
   = link_to t(:latest_documents), droom.documents_url

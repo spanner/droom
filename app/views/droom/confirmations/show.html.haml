@@ -5,35 +5,18 @@
   %h1.pagetitle
     =t :welcome
 
-  = form_for resource, :url => confirm_password_path, :html => {:class => 'edit user'} do |f|
+  = form_for resource, :url => confirm_password_path, :html => {:class => 'edit user password'} do |f|
     = f.hidden_field :confirmation_token
     
     %p
       %strong
         = t :hello
-        = @user.name
+        = @user.formal_name
       = t :welcome_preamble
 
     = devise_error_messages!
 
-    %p
-      = f.label :password, t(:password_instructions)
-      %br
-      = f.password_field :password, :autocomplete => "off", :class => 'preferences password required', :required => true
-      %br
-      %span.formnote
-        = t :password_requirements
-
-    %p{:class => 'confirmation'}
-      = f.label :password_confirmation, t(:password_confirmation_instructions)
-      %br
-      = f.password_field :password_confirmation, :class => 'preferences required'
-      %br
-      %span.formnote
-        = t :password_confirmation_requirements
-
-    %p.password_notice
-      Please choose a password before you proceed.
+    = render "droom/users/password_fields", :f => f
         
     .controls
       .save.button

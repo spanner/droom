@@ -5,8 +5,9 @@
 
   %h2.section
     = link_to t(:future_events), main_app.calendar_url
-    %span.action
-      = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
+    - if can?(:create, Droom::Event)
+      %span.action
+        = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
 
   - if events.any?
     = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}

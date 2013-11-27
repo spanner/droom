@@ -14,15 +14,6 @@ FactoryGirl.define do
       finish "2009-11-03 18:30:00"
     end
     
-    factory :repeating_event do
-      name "Repeating Event"
-      start "2009-11-03 18:30:00"
-      finish "2009-11-03 20:00:00"
-      after(:create) { |event|
-        event.recurrence_rules.create(:period => "weekly", :interval => "1", :basis => 'count', :limiting_count => "4")
-      }
-    end
-
     factory :spanning_event do
       name "Simple Event"
       start "2009-11-03 09:00:00"

@@ -19,7 +19,7 @@
 # will replace the original event container and the small calendar display will be refreshed to show the possibly revised
 # date of the event.
 #
-# It is our hope that this simple non-architecture will make it easy to support a future pub-sub update.
+# With any luck this simple non-architecture will make it easy to support a future pub-sub update.
 
 jQuery ($) ->
 
@@ -50,7 +50,8 @@ jQuery ($) ->
         replacement.hide().insertAfter(@_container)
         @_container.remove()
         @_container = replacement
-        @_container.activate().fadeIn('fast')
+        @_container.activate().fadeIn 'fast', () =>
+          @_container.signal_confirmation()
       
 
   # ## Actions
@@ -73,6 +74,23 @@ jQuery ($) ->
       $(@).remote
         on_success: (response) =>
           $(@).parents(removed).first().fadeOut 'fast', () ->
+            $(@).remove()
+            $(affected).trigger "refresh"
+
+  # The 'remove_all' action takes out on success anything matching the given selector:
+  #
+  #   link_to t(:remove), service_url(service), :method => 'delete', :data => { :removes => "s_#{service.id}" }
+  #
+  # ...on success takes out every DOM element with the class "s_1".
+  #
+  $.fn.removes_all = () ->
+    @each ->
+      removed = $(@).attr('data-removed')
+      affected = $(@).attr('data-affected')
+      
+      $(@).remote
+        on_success: (response) =>
+          $(removed).fadeOut 'fast', () ->
             $(@).remove()
             $(affected).trigger "refresh"
 
@@ -104,14 +122,15 @@ jQuery ($) ->
     @each ->
       container = $(@).attr('data-replaced') || selector
       affected = $(@).attr('data-affected')
+      autoload = options['force'] || ($(@).attr('data-autoload')? && $(@).attr('data-autoload') isnt 'false')
       $(@).remote
-        on_success: (r) =>
+        on_success: (e, r) =>
           replaced = $(@).self_or_ancestor(container).last()
           replacement = $(r).insertAfter(replaced)
           replaced?.remove()
           replacement.activate()
           $(affected).trigger('refresh')
-      $(@).click() if options['force']
+      $(@).click() if autoload
 
 
 
@@ -341,13 +360,17 @@ jQuery ($) ->
 
 
 
-  $.fn.hover_column = ->
+  $.fn.hover_table = ->
+    @each ->
+      $(@).find('td').hover_cell()
+    
+  $.fn.hover_cell = ->
     @each ->
       classes = @className.split(' ').join('.')
       $(@).bind "mouseenter", (e) ->
-        $("td.#{classes}").addClass('hover')
+        $(".#{classes}").addClass('hover')
       $(@).bind "mouseleave", (e) ->
-        $("td.#{classes}").removeClass('hover')
+        $(".#{classes}").removeClass('hover')
 
 
 
@@ -429,7 +452,7 @@ jQuery ($) ->
           index = child.index() + offset
           id = parseInt(child.attr('id').split("person_")[1], 10)
           $.ajax
-            url: "/people/#{id}"
+            url: "/users/#{id}"
             type: "PUT"
             dataType: "JSON"
             data:

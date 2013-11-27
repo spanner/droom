@@ -34,6 +34,19 @@ unless Array::empty?
   Array::empty = ()->
     @length == 0
 
+# Returns true if this array contains that thing.
+
+unless Array::contains?
+  Array::contains = (thing)->
+    @indexOf(thing) != -1
+
+# Returns the position of that thing in this array, for the few browsers that don't already know how to do that.
+unless Array::indexOf?
+  Array::indexOf = (elt)->
+    for item, i in this
+      return i if item is elt
+    return -1
+
 # Removes one instance of the supplied thing from an array
 
 unless Array::remove?

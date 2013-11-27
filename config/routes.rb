@@ -1,31 +1,33 @@
 Droom::Engine.routes.draw do 
-  
-  match '/' => DAV4Rack::Handler.new(
-    :root => Rails.root.to_s, 
-    :root_uri_path => '/',
-    :resource_class => Droom::DavResource,
-    :log_to => [(Rails.root + 'log/dav.log').to_s, Logger::DEBUG]
-  ), :anchor => false, :constraints => { :subdomain => Droom.dav_subdomain }
+  root :to => "dashboard#index", :as => :dashboard
+
+  get '/help/:slug' => 'pages#show', :as => 'help_page'
+  get '/help' => 'pages#index', :as => 'help'
+  get '/videos.:format' => 'youtube#index', :as => "videos"
+  get '/videos/:yt_id.:format' => 'youtube#show', :as => "video"
+  get '/suggestions.:format'  => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}
+  get '/suggestions/:type.:format'  => 'suggestions#index', :defaults => {:format => 'json'}
 
   devise_for :users, :class_name => 'Droom::User', :module => :devise, :controllers => {:confirmations => 'droom/confirmations'}
-
+  
   # intermediate confirmation step to allow invitation without setting a password
   devise_scope :user do
-    get "/users/:id/welcome/:confirmation_token" => "user_confirmations#show", :as => :welcome
-    put "/users/:id/confirm" => "user_confirmations#update", :as => :confirm_password
+    get "/users/:id/welcome/:confirmation_token" => "confirmations#show", :as => :welcome
+    patch "/users/:id/confirm" => "confirmations#update", :as => :confirm_password
   end
-  
 
-  resources :users
+  resources :services do
+    resources :permissions
+  end
+
   resources :documents
   resources :preferences
-  resources :calendars
   resources :invitations
   resources :memberships
 
   resources :scraps do
     collection do
-      match "feed/:auth_token.:format" => "scraps#index", :as => :feed
+      get "feed/:auth_token.:format" => "scraps#index", :as => :feed
     end
   end
 
@@ -42,7 +44,7 @@ Droom::Engine.routes.draw do
     resources :agenda_categories
     collection do
       get "calendar"
-      match "feed/:auth_token.:format" => "events#feed", :as => :feed
+      get "feed/:auth_token.:format" => "events#feed", :as => :feed
     end
   end
   
@@ -54,21 +56,23 @@ Droom::Engine.routes.draw do
   end
   
   resources :organisations do
-    resources :people
+    resources :users
   end
   
-  resources :people do
+  resources :users do
     get "invite", :on => :member, :as => :invite
+    get "preferences", :on => :member, :as => :preferences
+    get "admin", :on => :collection
     resources :events do
       collection do
-        match "feed/:auth_token.:format" => "events#index", :as => :feed
+        get "feed/:auth_token.:format" => "events#index", :as => :feed
       end
     end
   end
   
   resources :groups do
     resources :memberships
-    resources :people
+    resources :group_permissions
   end
   
   resources :venues
@@ -77,15 +81,5 @@ Droom::Engine.routes.draw do
   resources :dropbox_tokens do
     get "/register", :on => :collection, :action => :create
   end
-  
 
-  match '/help/:slug', :to => 'pages#show', :as => 'help_page'
-  match '/help', :to => 'pages#index', :as => 'help'
-  
-  match '/videos.:format', :to => 'youtube#index', :as => "videos"
-  match '/videos/:yt_id.:format', :to => 'youtube#show', :as => "video"
-  match '/suggestions.:format', :to => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}
-  match '/suggestions/:type.:format', :to => 'suggestions#index', :defaults => {:format => 'json'}
-
-  root :to => "dashboard#index", :as => :dashboard
 end

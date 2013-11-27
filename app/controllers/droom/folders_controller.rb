@@ -1,12 +1,11 @@
 module Droom
   class FoldersController < Droom::EngineController
-    respond_to :html, :json, :js, :zip
+    respond_to :html, :json, :js
     layout :no_layout_if_pjax
   
-    before_filter :authenticate_user!
-    before_filter :find_folders, :only => [:index]
-    before_filter :get_folder, :only => [:show, :edit, :update, :destroy, :dropbox]
-    before_filter :build_folder, :only => [:new, :create]
+    before_filter :get_root_folders, :only => [:index]
+    before_filter :get_parent_folder, :only => [:new, :create]
+    load_and_authorize_resource
     
     def index
       respond_with @folders do |format|
@@ -21,9 +20,6 @@ module Droom
         format.js { 
           render :partial => 'droom/folders/folder' 
         }
-        format.zip { 
-          send_file @folder.documents_zipped.path, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@folder.slug}.zip"
-        }
       end
     end
     
@@ -32,7 +28,7 @@ module Droom
     end
 
     def create
-      @folder.update_attributes(params[:folder])
+      @folder.update_attributes(folder_params)
       respond_with @folder do |format|
         format.js { render :partial => "droom/folders/folder" }
       end
@@ -43,7 +39,7 @@ module Droom
     end
     
     def update
-      @folder.update_attributes(params[:folder])
+      @folder.update_attributes(folder_params)
       respond_with @folder do |format|
         format.js { render :partial => "droom/folders/folder" }
       end
@@ -59,48 +55,37 @@ module Droom
       render :partial => "folder"
     end
 
-    def dav
-      @folder.copy_to_dav
-      respond_with @folder
-    end
-    
     def with_parent
       
     end
     
   protected
+  
+    def folder_params
+      params.require(:folder).permit(:name, :parent_id)
+    end
     
-    def build_folder
+    def get_root_folders
+      @folders = Droom::Folder.roots
+    end
+    
+    def get_parent_folder
       if @parent = Droom::Folder.find_by_id(params[:folder_id])
-        @folder = @parent.children.build(params[:folder])
+        @folder = @parent.children.build
       else
-        @folder = Droom::Folder.new(params[:folder])
+        @folder = Droom::Folder.new
       end
     end
-
-    def get_folder
-      @folder = Droom::Folder.find(params[:id])
-    end
-
-    def find_folders
-      if current_user.admin?
-        @folders = Droom::Folder.roots
-      else
-        @folders = Droom::Folder.visible_to(current_user.person).roots.populated
-      end
-    end
-    
+ 
     def get_folder_tree
-      @folders = current_user.admin? ? Droom::Folder.all : Droom::Folder.visible_to(current_user.person).populated
-      @roots = []
-      @children = @folders.each_with_object({}) do |folder, hash|
-        parent = folder.parent_id || 'root'
-        hash[parent] ||= []
-        hash[parent] << folder
+      @child_map = Droom::Folder.non_roots.each_with_object({}) do |f, children|
+        children[f.parent_id] ||= []
+        children[f.parent_id].push(f)
       end
-      @roots = @children['root']
+      @document_map = Droom::Document.all.each_with_object({}) do |d, contents|
+        contents[d.folder_id] ||= []
+        contents[d.folder_id].push(d)
+      end
     end
-    
-    
   end
 end

@@ -1,0 +1,4 @@
+- scrap ||= @scrap || preload
+
+.scrap.preload{:data => {:scrap => scrap.id}}
+  = render :partial => "droom/scraps/full/#{scrap.scraptype}", :locals => {:scrap => scrap}

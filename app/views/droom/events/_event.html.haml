@@ -1,31 +1,21 @@
 - @seen_events ||= []
-- brief ||= false
-- show_header ||= false
 - event ||= @event
-- full_attachments ||= @event == event
-- brief = false if full_attachments
-- closed ||= false
-- open ||= !closed || event == @event
+- open ||= event == @event
 - open = true if pageclass == 'events'
+- full_attachments ||= false
 
 - event_master_id = event.master_id || event.id
 - if @seen_events[event_master_id]
   - repeating = true 
   - brief = true
 - @seen_events[event_master_id] = true;
+
 - cssclasses = ['event']
 - cssclasses << 'repeat' if repeating
-- cssclasses << 'private' if event.private?
-- cssclasses << 'public' if event.public?
+/ - cssclasses << 'private' if event.private?
+/ - cssclasses << 'public' if event.public?
 - cssclasses << 'open' if open
-- cssclasses << 'closed' if closed
-- cssclasses << 'invited' if event.attended_by?(current_person)
-
-- if show_header 
-  - header = month_header_for(event.start_date)
-  - if header != @event_header
-    %p.note
-      = @event_header = header
+- cssclasses << 'invited' if event.attended_by?(current_user)
 
 %div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:action => "collapser", :refreshable => true, :url => event_path(event, :format => :js)} }
   .datemark
@@ -37,50 +27,37 @@
   .summary
     .heading
       %h2.name<
-        - if event.description? || event.has_documents? || event.has_people?
-          = link_to event.name, event_url(event), :class => "name"
-        - else
-          = event.name
+        = link_to event.name, event_url(event), :class => "name"
         = action_menulink(event)
       = action_menu(event)
         
-      %p.practicalities
-        %time
-          = l(event.start_time, :format => :natural)
-        - if event.finish?
-          = t :to
-          = l(event.finish_time, :format => :natural)
-        - if event.venue
-          %span.location
-            = t(:at)
-            - if event.venue.url
-              = link_to event.venue.proper_name + ".", event.venue.url
-            - elsif Droom.show_venue_map
-              = link_to event.venue.proper_name + ".", venues_url(:id => event.venue.id)
-            - else
-              = event.venue.proper_name + "."
-
-        - unless full_attachments
-          - if event.has_documents?
-            %span.attachments
-              = link_to t(:attachment_count, :count => event.all_documents.count), droom.event_url(event)
-          - elsif brief && event.description?
-            = link_to t(:more), droom.event_url(event)
-            
-    - unless brief
       .detail
-        = event.description.html_safe
+        - if !full_attachments && event.folder.populated?
+          %ul.folder
+            = render :partial => "droom/folders/folder", :object => event.folder, :locals => {:title => t(:attachments), :open => true, :flat => true, :limit => 3, :for_more => event_url(event)}
 
-      - if full_attachments && event.detail_visible_to?(current_person)
-        .invitations
-          - if event.invitations.any?
-            %h2
-              = t :attending
-            = render :partial => 'droom/events/invitations', :locals => {:event => event}
-        .attachments
-          - if event.folder.populated?
-            %h2
-              = t(:attachments)
-              = action_menulink(event.folder)
-            = action_menu(event.folder)
-            = render :partial => "droom/folders/attachments", :locals => {:folder => event.folder, :title => t(:attachments), :open => true}
+        %p.practicalities
+          %time
+            = l(event.start_time, :format => :natural)
+
+          - if event.finish?
+            = t :to
+            = l(event.finish_time, :format => :natural)
+
+          - if event.venue
+            %span.location
+              = t(:at)
+              - if event.venue.url
+                = link_to event.venue.proper_name + ".", event.venue.url
+              - elsif Droom.show_venue_map?
+                = link_to event.venue.proper_name + ".", venues_url(:id => event.venue.id)
+              - else
+                = event.venue.proper_name + "."
+
+        - if event.description?
+          = event.description.html_safe 
+
+  - if full_attachments
+    .addenda
+      = render :partial => 'droom/events/attachments', :locals => {:event => event}
+      = render :partial => 'droom/events/invitations', :locals => {:event => event}

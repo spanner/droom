@@ -1,48 +1,21 @@
-source "http://rubygems.org"
+source "https://rubygems.org"
 
-# Declare your gem's dependencies in droom.gemspec.
-# Bundler will treat runtime dependencies like base dependencies, and
-# development dependencies will be added by default to the :development group.
+gem "msg", :path => "/var/www/gems/msg"
+gem "coca", :path => "/var/www/gems/coca"
 gemspec
 
-# jquery-rails is used by the dummy application
-gem "jquery-rails"
-gem "haml"
-gem "geocoder"
-gem 'devise'
-gem 'devise-encryptable'
-gem "paperclip"#, '~> 3.1.0'
-gem "debugger"
-gem "ri_cal", :git => "git://github.com/quasor/ri_cal.git"
-gem "date_validator"
-gem 'time_of_day'
-gem "rubyzip"
-gem "snail"
-gem "vcard"
-gem "chronic"
-gem "dynamic_form"
-gem 'acts_as_list'
-gem 'rdiscount'
-gem 'acts_as_tree'
-gem 'dropbox-sdk'
-gem 'devise'
-gem 'devise-encryptable'
-gem 'kaminari'
-gem 'youtube_it'
-gem 'yomu'
-
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails'
+  gem 'coffee-rails'
   gem 'compass-rails'
   gem 'therubyracer', :platforms => :ruby
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
 end
 
 group :test, :development do
   gem 'mysql2'
   gem 'haml'
-  gem 'paperclip'#, "~> 3.1.0"
+  gem 'paperclip'
   gem "launchy"
   gem "capybara"
   gem "rspec-rails", ">= 2.6.0"

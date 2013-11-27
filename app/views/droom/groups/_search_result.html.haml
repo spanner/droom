@@ -8,7 +8,7 @@
   - else
     = link_to group.name, path
   %span.note
-    = t :group_members, :count => group.people.count
+    = t :group_members, :count => group.users.count
   .excerpt
     - if hit and (highlights = hit.highlights.select{|hl| hl.field_name != :name}).any?
       = render :partial => "droom/shared/excerpt", :locals => { :highlights => highlights }

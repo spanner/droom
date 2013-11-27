@@ -1,0 +1,7 @@
+#service
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2
+      = t :add_service
+      
+  = render :partial => 'form'

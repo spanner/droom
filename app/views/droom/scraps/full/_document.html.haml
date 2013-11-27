@@ -1,6 +1,7 @@
 - if document = scrap.document
-  .body.scrapdocument
-    %p.name
-      = link_to document.name, droom.folder_document_url(document.folder, document), :class => "dl #{document.file_extension}"
+  .body.document
+    .text
+      %p.name
+        = link_to document.name, droom.folder_document_url(document.folder, document), :class => "dl #{document.file_extension}"
 
   = render "droom/scraps/caption", :scrap => scrap

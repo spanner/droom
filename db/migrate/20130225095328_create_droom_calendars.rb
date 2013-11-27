@@ -1,7 +1,6 @@
 class CreateDroomCalendars < ActiveRecord::Migration
   def change
     create_table :droom_calendars do |t|
-      t.integer :id
       t.string  :name
       t.string  :slug
       t.boolean :events_private, :default => false
