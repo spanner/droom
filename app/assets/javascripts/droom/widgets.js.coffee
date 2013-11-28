@@ -603,7 +603,7 @@ jQuery ($) ->
       @_bar = $('<div class="starbar" />').appendTo(@_container)
       @_mask = $('<div class="starmask" />').appendTo(@_container)
       @_bar.css
-        width: @_rating/5 * 80
+        width: @_rating / 5 * 80
 
   $.fn.star_rating = () ->
     @each ->

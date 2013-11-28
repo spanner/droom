@@ -1,6 +1,6 @@
 .panel{:data => {:panel => 'search'}}
 
-  %form#suggestions{:action => droom.suggestions_url(:format => :js)}
+  %form#suggestions{:action => droom.suggestions_url}
     %p
       %label{:for => 'term'}
         = t :quick_search

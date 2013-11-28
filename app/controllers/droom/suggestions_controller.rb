@@ -1,8 +1,10 @@
 module Droom
   class SuggestionsController < Droom::EngineController
-    respond_to :json, :js
-    before_filter :get_classes
+    respond_to :html, :json, :js
+    layout false
+
     skip_authorization_check
+    before_filter :get_classes
     
     def index
       fragment = params[:term]

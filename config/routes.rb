@@ -5,8 +5,9 @@ Droom::Engine.routes.draw do
   get '/help' => 'pages#index', :as => 'help'
   get '/videos.:format' => 'youtube#index', :as => "videos"
   get '/videos/:yt_id.:format' => 'youtube#show', :as => "video"
-  get '/suggestions.:format'  => 'suggestions#index', :as => "suggestions", :defaults => {:format => 'json'}
-  get '/suggestions/:type.:format'  => 'suggestions#index', :defaults => {:format => 'json'}
+
+  match '/suggestions'  => 'suggestions#index', :as => "suggestions", :via => [:get, :options]
+  match '/suggestions/:type'  => 'suggestions#index', :via => [:get, :options]
 
   devise_for :users, :class_name => 'Droom::User', :module => :devise, :controllers => {:confirmations => 'droom/confirmations'}
   

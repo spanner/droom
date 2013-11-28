@@ -98,21 +98,21 @@ en:
   year: "YEAR"
   access_control: "Access control"
   add_event: "add an event"
-  add_document: "add a document"
+  add_document: "add document"
   add_document_to: "Add a document to the"
-  add_folder: "add a folder"
+  add_folder: "add folder"
   add_root_folder: "add a new root folder"
   add_member: "add group member"
   add_member_to: Add a member to the
-  add_page: "add a page"
+  add_page: "add page"
   add_permission: "add a permission"
-  add_person: add a person
-  add_group: "add a group"
-  add_permission: "add a permission"
-  add_service: "add a service"
-  add_subfolder: add a sub-folder
+  add_person: invite user
+  add_group: "add group"
+  add_permission: "add permission"
+  add_service: "add service"
+  add_subfolder: add sub-folder
   add_to_stream: "add to stream"
-  add_user: "add a person"
+  add_user: "add user"
   added_to: "has been added to '%{group}'."
   by: "by"
   by_name: "Search by name or filename"
@@ -346,6 +346,7 @@ en:
   of_the: "of the"
   preferred_name_explanation: "This is the name by which we will address you. To change your directory entry, please edit your profile."
   no_people: "Sorry: there are no directory entries accessible by your account."
+  no_results: "Sorry: nothing to show here."
   no_stream: "Nothing yet to show here."
   quick_search: "Quick search"
   search_still_dumb: "This is a very basic title search. Full-text coming soon."
@@ -354,6 +355,7 @@ en:
   scrap_title: "Title (optional)"
   unattached_folder_note: "A folder not attached to anything is visible to everyone and can be used to share documents of general interest."
   user_admin: "User admin"
+  sign_out: "Sign out"
   stream: "Stream"
   uninvite: "uninvite"
   more_documents_count:
