@@ -1,7 +1,7 @@
 .panel{:data => {:panel => 'configuration'}}
-  %p.controls
+  %p.account_controls
     = t(:signed_in_as, :name => current_user.name).html_safe
-    = link_to t(:sign_out), Droom.sign_out_path, :method => :delete, :class => 'signout'
+    = link_to t(:sign_out), droom.destroy_user_session_url, :method => :delete, :class => 'signout'
 
   %p
     = link_to t(:edit_your_profile), droom.edit_user_url(current_user), :data => {:action => "popup", :affected => ".people_list"}
