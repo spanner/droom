@@ -35,8 +35,8 @@ module Droom::Api
         if params[:venue][:slug].present?
           @venue = Droom::Venue.where(slug: params[:venue][:slug]).first
         end
-        if params[:user][:name].present?
-          @venue ||= Droom::Venue.where(name: params[:user][:name]).first
+        if params[:venue][:name].present?
+          @venue ||= Droom::Venue.where(name: params[:venue][:name]).first
         end
       end
       @venue ||= Droom::Venue.create(venue_params)
