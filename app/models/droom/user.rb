@@ -20,8 +20,8 @@ module Droom
            :cocable,
            :encryptor => :sha512
     
-    before_create :ensure_authentication_token
-    before_create :ensure_uid!
+    before_save :ensure_authentication_token
+    before_save :ensure_uid!
     
     # People are often invited into the system in batches or after offline contact. 
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
@@ -34,10 +34,13 @@ module Droom
     def defer_confirmation!
       self.defer_confirmation = true
     end
+
+    def defer_confirmation?
+      !!self.defer_confirmation
+    end
     
     def send_confirmation_notification?
-      Rails.logger.warn "  > in send_confirmation_notification?, defer_confirmation is #{defer_confirmation.inspect}"
-      super && !defer_confirmation
+      super && !defer_confirmation?
     end
 
     def password_required?
@@ -501,7 +504,7 @@ module Droom
     end
 
     def ensure_uid!
-      self.uid = SecureRandom.uuid if self.uid.blank?
+      self.uid = SecureRandom.uuid unless self.uid?
     end
 
   end

@@ -107,16 +107,6 @@ module Droom
     def to_ical
       self.as_ri_cal_calendar.to_s
     end
-
-  private
-
-    def convert_gridref
-      if post_code_changed?
-        if post_code.is_gridref?
-          self.lat, self.lng = post_code.to_latlng
-        end
-      end
-    end
     
   end
 end
