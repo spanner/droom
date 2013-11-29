@@ -20,8 +20,8 @@ module Droom
            :cocable,
            :encryptor => :sha512
     
+    before_validation :ensure_uid!
     before_save :ensure_authentication_token
-    before_save :ensure_uid!
     
     # People are often invited into the system in batches or after offline contact. 
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+

@@ -2,7 +2,7 @@ module Droom::Api
   class UsersController < Droom::Api::ApiController
 
     before_filter :get_users, only: [:index]
-    before_filter :build_user, only: [:create]
+    before_filter :find_or_create_user, only: [:create]
     load_and_authorize_resource find_by: :uid, class: "Droom::User"
     # after_filter :set_pagination_headers, only: [:index]
     
@@ -20,10 +20,12 @@ module Droom::Api
     end
 
     def create
-      if @user.update_attributes(user_params)
+      if @user && @user.persisted?
         render json: @user
       else
-        Rails.logger.warn "new user unsaved: #{@user.errors.to_a.inspect}"
+        render json: {
+          errors: @user.errors.to_a
+        }
       end
     end
 
@@ -34,13 +36,16 @@ module Droom::Api
 
   protected
 
-    def find_person
-      @user = Droom::User.where(uid: params[:id]).first
-      raise ActiveRecord::RecordNotFound unless @user
-    end
-    
-    def build_user
-      @user = Droom::User.new
+    def find_or_create_user
+      if params[:user]
+        if params[:user][:uid].present?
+          @user = Droom::User.where(uid: params[:user][:uid]).first
+        end
+        if params[:user][:email].present?
+          @user ||= Droom::User.where(email: params[:user][:email]).first
+        end
+      end
+      @user ||= Droom::User.create(user_params)
     end
 
     def get_users
@@ -58,7 +63,7 @@ module Droom::Api
       # if @show == 'all'
       #   @users = users
       # else
-      #   @users = users.page(@page).per(@show) 
+      #   @users = users.page(@page).per(@show)
       # end
     end
 

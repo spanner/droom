@@ -2,7 +2,7 @@ module Droom::Api
   class VenuesController < Droom::Api::ApiController
 
     before_filter :get_venues, only: [:index]
-    before_filter :build_venue, only: [:create]
+    before_filter :find_or_create_venue, only: [:create]
     load_and_authorize_resource find_by: :slug, class: "Droom::Venue"
     # after_filter :set_pagination_headers, only: [:index]
     
@@ -20,7 +20,6 @@ module Droom::Api
     end
 
     def create
-      @venue.update_attributes(venue_params)
       render json: @venue
     end
 
@@ -31,9 +30,16 @@ module Droom::Api
 
   protected
 
-    def find_person
-      @venue = Droom::Venue.where(uid: params[:id]).first
-      raise ActiveRecord::RecordNotFound unless @venue
+    def find_or_create_venue
+      if params[:venue]
+        if params[:venue][:slug].present?
+          @venue = Droom::Venue.where(slug: params[:venue][:slug]).first
+        end
+        if params[:user][:name].present?
+          @venue ||= Droom::Venue.where(name: params[:user][:name]).first
+        end
+      end
+      @venue ||= Droom::Venue.create(venue_params)
     end
     
     def build_venue
