@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "geocoder"
   s.add_dependency "icalendar"
+  s.add_dependency "chronic"
   s.add_dependency "tod"
   s.add_dependency "date_validator"
   s.add_dependency "uuidtools"
