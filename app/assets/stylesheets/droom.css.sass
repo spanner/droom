@@ -327,7 +327,7 @@ form.event
   div.datemark
     background-color: white
     border: 1px solid $pale
-    padding:0
+    padding: 0
     margin-top: 1px
     margin-left: -$datemark_width
     margin-right: $datemark_margin - 4px
@@ -481,20 +481,27 @@ form.user
     margin-top: 5px
   p.names
     margin: 0
+    span.title
+      display: inline-block
+      vertical-align: top
+      width: 71px
+      margin-right: 10px
+      input
+        width: 53px
     span.name
       display: inline-block
       vertical-align: top
-      width: 134px
+      width: 100px
       margin-right: 10px
       input
-        width: 118px
+        width: 82px
     span.chinese_name, span.honours
       display: inline-block
       vertical-align: top
-      width: 76px
+      width: 71px
       margin-right: 0
       input
-        width: 70px
+        width: 53px
   p.name
     margin: 0
     input
@@ -505,7 +512,7 @@ form.user
     overflow: hidden
     p
       float: left
-      width: 180px
+      width: 185px
       margin-top: 0.5em
       margin-bottom: 0
       input
@@ -513,7 +520,7 @@ form.user
         font-size: 1em
         margin-top: 0
     p.email
-      margin-right: 20px
+      margin-right: 15px
   p.organisation
     clear: left
     select
@@ -974,15 +981,15 @@ div.menu
         color: white !important
         min-height: 16px
         &.add
-          +menu_link("droom/menuadd.png")
+          +menu_link("droom/menu/smalladd.png")
         &.edit
-          +menu_link("droom/menuedit.png")
+          +menu_link("droom/menu/smalledit.png")
         &.delete
-          +menu_link("droom/menudelete.png")
+          +menu_link("droom/menu/smalldelete.png")
         &.download
-          +menu_link("droom/menudownload.png")
+          +menu_link("droom/menu/smalldownload.png")
         &.send
-          +menu_link("droom/menuedit.png")
+          +menu_link("droom/menu/smalledit.png")
 
 a.menu
   display: inline-block
