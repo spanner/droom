@@ -76,6 +76,7 @@ jQuery ($) ->
           
     conclude: (data) =>
       if @_affected
+        console.log "affected:", $(@_affected).get(0), $(@_affected).first().attr('data-url')
         $(@_affected).trigger "refresh"
       if @_aftered?
         addition = $(data)

@@ -4,7 +4,7 @@
   .header
     = link_to "X", '#', :class => "closer", :data => {:action => "close"}
     %h2.titlebar
-      = user.formal_name
+      = user.colloquial_name
     
   .user
     .mugshot.full{:style => "background-image: url(#{user.image.url('thumb')})"}

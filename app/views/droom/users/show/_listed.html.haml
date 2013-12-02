@@ -1,4 +1,5 @@
-- user ||= @user
+- listed ||= nil
+- user ||= listed || @user
 - invitation ||= @invitation
 - membership ||= false
 - event ||= false
@@ -17,22 +18,23 @@
 - if membership
   - group = membership.group
 
-%li{:id => "user_#{user.id}", :class => cssclass, :data => {:refreshable => true, :url => droom.user_path(user, :format => :js, :invitation_id => invitation ? invitation.id : nil)} }
-  %span.mugshot{:style => "background-image: url(#{img})"}
+%li{id: "user_#{user.id}", class: cssclass, data: {refreshable: true, url: droom.user_path(user, view: 'listed', invitation_id: invitation ? invitation.id : nil)} }
+  %span.mugshot{style: "background-image: url(#{img})"}
     - if invitation
       - if editable?(invitation)
-        = link_to invitation.status, toggle_event_invitation_url(event, invitation), :class => "invitation #{invitation.status}", :data => {:action => "affect", :method => "put", :affected => "#user_#{user.id}"}
+        = link_to invitation.status, toggle_event_invitation_url(event, invitation), class: "invitation #{invitation.status}", data: {action: "affect", method: "put", affected: "#user_#{user.id}"}
       - else
-        %span{:class => "invitation #{invitation.status}"}
+        %span{class: "invitation #{invitation.status}"}
+
   %span.contact
     %span.name
-      = link_to truncate(user.colloquial_name, :length => 32), user_url(user), :data => {:action => "popup"}
-      = action_menulink(user, :class => "small")
+      = link_to truncate(user.colloquial_name, length: 32), user_url(user), data: {action: "popup"}
+      = action_menulink(user, class: "small")
     %br
     %span.note
       - if user.email? || user.phone?
         - if user.email?
-          = mail_to truncate(user.email, :length => 32)
+          = mail_to truncate(user.email, length: 32)
         - if user.email? && user.phone?
           %br
         - if user.phone?
@@ -41,4 +43,4 @@
       - else
         = t :contact_information_unavailable
         
-    = action_menu(user, :event => event, :group => group)
+    = action_menu(user, event: event, group: group)

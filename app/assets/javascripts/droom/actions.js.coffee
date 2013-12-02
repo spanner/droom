@@ -42,8 +42,14 @@ jQuery ($) ->
       e.preventDefault()
       $.ajax @_url,
         dataType: "html"
+        beforeSend: @prep
         success: @replace
     
+    prep: (xhr, settings) =>
+      xhr.setRequestHeader('X-PJAX', 'true')
+      @_container.addClass('waiting')
+      true
+
     replace: (data, textStatus, jqXHR) =>
       replacement = $(data)
       @_container.fadeOut 'fast', () =>

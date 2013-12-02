@@ -18,7 +18,8 @@ module Droom
            :encryptable,
            :token_authenticatable,
            :cocable,
-           :encryptor => :sha512
+           :encryptor => :sha512,
+           :reconfirmable => false
     
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
@@ -409,17 +410,17 @@ module Droom
     end
 
 
-    # ### Invitation
-    #
-    
-    def invite!
-      self.send_confirmation_instructions
-    end
-    
-    def invited?
-      !!self.confirmation_sent_at
-    end
-  
+    # # ### Invitation
+    # #
+    # 
+    # def invite!
+    #   self.send_confirmation_instructions
+    # end
+    # 
+    # def invited?
+    #   !!self.confirmation_sent_at
+    # end
+    #   
 
 
     ## Preferences
@@ -496,13 +497,8 @@ module Droom
     has_many :documents, :foreign_key => "created_by_id"
 
 
-
   protected
   
-    def ensure_confirmation_token
-      update_column :confirmation_token
-    end
-
     def ensure_uid!
       self.uid = SecureRandom.uuid unless self.uid?
     end

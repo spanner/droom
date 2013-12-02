@@ -25,12 +25,8 @@ module Droom
     end
 
     def show
-      respond_with @user do |format|
-        format.js { 
-          @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
-          render :partial => "droom/users/#{@view}"
-        }
-      end
+      @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
+      respond_with @user
     end
   
     def new
@@ -41,14 +37,8 @@ module Droom
     end
 
     def create
-      @user.assign_attributes(user_params)
-      if @user.save
-        respond_with @user do |format|
-          format.js { render :partial => "droom/users/#{@view}" }
-        end
-      else
-        render :edit
-      end
+      @user.update_attributes(user_params)
+      respond_with @user
     end
 
     def edit

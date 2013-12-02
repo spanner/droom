@@ -41,7 +41,8 @@ module Droom
     end
 
     def no_layout_if_pjax
-      if request.headers['X-PJAX'] || request.format == 'js'
+      Rails.logger.warn "pjax header: #{request.headers['X-PJAX'].inspect}"
+      if request.headers['X-PJAX']
         false
       else
         Droom.layout
