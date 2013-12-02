@@ -7,7 +7,7 @@
       %li
         = link_to t(:edit_profile), droom.edit_user_url(user), :class => 'edit', :data => {:action => "popup", :replaced => "#user_#{user.id}"}
       %li
-        = link_to t(:edit_account), droom.edit_user_url(user), :class => 'edit', :data => {:action => "popup", :replaced => "#user_#{user.id}"}
+        = link_to t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :replaced => "#user_#{user.id}"}
       %li
         = link_to t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
 

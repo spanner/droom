@@ -3,7 +3,7 @@ module Droom
     helper Droom::DroomHelper
     respond_to :html, :js
     layout :no_layout_if_pjax
-    before_filter :get_view, only: [:update, :show]
+    before_filter :set_view, only: [:show, :edit]
     before_filter :build_user, only: [:create]
     load_and_authorize_resource
 
@@ -90,9 +90,9 @@ module Droom
       @user = Droom::User.new(user_params)
     end
     
-    def get_view
-      @view = params[:view] if %w{user tabled}.include?(params[:view])
-      @view ||= 'user'
+    def set_view
+      @view = params[:view] if %w{listed tabled profile preferences}.include?(params[:view])
+      @view ||= 'profile'
     end
   end
 end

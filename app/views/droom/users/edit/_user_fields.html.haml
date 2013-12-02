@@ -9,10 +9,11 @@
   = f.file_field :image
 
 %p.names
-  %span.title
-    = f.label :title
-    %br
-    = f.text_field :title
+  - if Droom.use_titles?
+    %span.title
+      = f.label :title
+      %br
+      = f.text_field :title
   %span.name
     = f.label :family_name, class: 'required'
     %br

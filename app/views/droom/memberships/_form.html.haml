@@ -10,7 +10,7 @@
   - user = Droom::User.new
   = form_for [@group, @membership], :html => {:class => 'edit user'} do |f|
     = f.fields_for :user, user do |uf|
-      = render partial: "droom/users/user_fields", locals: {f: uf, user: user}
+      = render partial: "droom/users/edit/user_fields", locals: {f: uf, user: user}
     .buttons
       = f.submit t(:invite_to_group)
       = t :or
