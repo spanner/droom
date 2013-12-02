@@ -13,4 +13,5 @@
     - if events.any?
       = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
     - else
-      = t :no_past_events
+      %p.nothing
+        = t :no_past_events

@@ -12,7 +12,8 @@
   - if events.any?
     = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
   - else
-    = t :no_future_events
+    %p.nothing
+      = t :no_future_events
   
   - if calendar.events.future_and_current.count > 8
     %p

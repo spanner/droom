@@ -345,6 +345,8 @@ en:
   venue_post_code: "Post Code"
   of_the: "of the"
   preferred_name_explanation: "This is the name by which we will address you. To change your directory entry, please edit your profile."
+  no_future_events: "We have no current or future events to display."
+  no_past_events: "We have no past events to display."
   no_people: "Sorry: there are no directory entries accessible by your account."
   no_results: "Sorry: nothing to show here."
   no_stream: "Nothing yet to show here."
