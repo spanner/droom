@@ -1,3 +1,5 @@
+require 'chronic'
+
 module Droom
   class SuggestionsController < Droom::EngineController
     respond_to :html, :json, :js
