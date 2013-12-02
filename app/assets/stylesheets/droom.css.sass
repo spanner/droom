@@ -28,7 +28,7 @@ $input: $blue !default
 $admin: $blue
 
 $datemark_width: 50px
-$datemark_margin: 5px
+$datemark_margin: 10px
 $tool_button_height: 32px
 $tool_button_width: 32px
 
@@ -145,22 +145,23 @@ p.stretcher
   +outset
   text-align: right
   color: $mid
-  line-height: 3em
   padding-top: 5px
   a, a:visited
     color: $mid
     +hover
   span
     display: block
-    line-height: 1
     text-align: center
   span.mon
     text-transform: uppercase
     font-size: 1em
+    line-height: 1
   span.dom
     font-size: 2em
+    line-height: 1
   span.year
     font-size: 1em
+    line-height: 1
   &.editing
     +box-shadow
     a, a:visited
@@ -219,7 +220,7 @@ div.event, div.document, div.group
 form.event, form.document
   position: relative
   width: 495px
-  margin-left: 55px
+  margin-left: $datemark_width + $datemark_margin
 
 div.event, form.event, div.project
   .summary
@@ -319,21 +320,28 @@ span.admin.documents
 form.event
   p.name
     margin: 0
-  a.datepicker
-    color: $input
+  div.datemark
+    background-color: white
+    border: 1px solid $pale
+    padding: 5px 1px
+    margin-top: 1px
+    margin-left: -$datemark_width
+    margin-right: $datemark_margin - 4px
   input.name
     width: 470px
-    font-size: 3em
+    height: 46px
+    font-size: 2.5em
   p.practicalities
-    margin: 0
+    margin: 7px 0 0 0
   input.timepicker
-    font-size: 1.2em
     width: 50px
+    font-size: 1.2em
+    padding: 4px
     &.start
       font-weight: bold
   input.venuepicker
     font-size: 1.2em
-    width: 303px
+    width: 315px
     padding: 4px
   .description
     margin-top: 0.5em
@@ -1077,7 +1085,7 @@ ul.dropdown
   li
     a, a:visited
       display: block
-      padding: 8px 8px 8px 25px
+      padding: 8px
       cursor: hand
       color: $dark
       background:
@@ -1091,6 +1099,9 @@ ul.dropdown
         color: $active
         background-color: white
         background-position: 6px -132px
+    &.person, &.event, &.document, &.venue
+      a
+        padding: 8px 8px 8px 25px
     &.person
       a
         background-image: image-url('droom/person_bullet.png')

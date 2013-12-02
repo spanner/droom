@@ -1,9 +1,8 @@
 require 'open-uri'
 require 'uuidtools'
-require 'chronic'
 require 'icalendar'
 require 'date_validator'
-require 'time_of_day'
+require 'tod'
 
 module Droom
   class Event < ActiveRecord::Base
@@ -175,7 +174,7 @@ module Droom
     # The `time_of_day` gem makes time handling a bit more intuitive by concealing the date part of a Time object.
     #
     def start_time
-      start.time_of_day if start
+      start.to_time_of_day if start
     end
 
     def start_date
@@ -183,7 +182,7 @@ module Droom
     end
     
     def finish_time
-      finish.time_of_day if finish
+      finish.to_time_of_day if finish
     end
 
     def finish_date
@@ -209,24 +208,24 @@ module Droom
     #
     # If the time is set before the date, we default to that time today. Times default to 00:00 in the usual way.
     #
-    def start_time=(value)
-      self.start = (start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
-    end
-
-    def start_date=(value)
-      self.start = parse_date(value).to_date
-    end
-
-    def finish_time=(value)
-      if value && !value.blank?
-        time_portion = parse_date(value).seconds_since_midnight
-        self.finish = (finish_date || start_date || Date.today).to_time + time_portion
-      end
-    end
-
-    def finish_date=(value)
-      self.finish = parse_date(value).to_date
-    end
+    # def start_time=(value)
+    #   self.start = (start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
+    # end
+    # 
+    # def start_date=(value)
+    #   self.start = parse_date(value).to_date
+    # end
+    # 
+    # def finish_time=(value)
+    #   if value && !value.blank?
+    #     time_portion = parse_date(value).seconds_since_midnight
+    #     self.finish = (finish_date || start_date || Date.today).to_time + time_portion
+    #   end
+    # end
+    # 
+    # def finish_date=(value)
+    #   self.finish = parse_date(value).to_date
+    # end
 
     def duration
       if finish
@@ -241,7 +240,7 @@ module Droom
     end
 
     def venue_name=(name)
-      self.venue = Droom::Venue.find_or_create_by_name(name)
+      self.venue = Droom::Venue.find_or_create_by(name: name)
     end
 
     def find_or_create_agenda_category(category)
@@ -366,7 +365,7 @@ module Droom
       when Numeric
         Time.at(value)
       when String
-        Chronic.parse(value)
+        Time.zone.parse(value)
       else
         value
       end

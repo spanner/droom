@@ -1050,7 +1050,7 @@ jQuery ($) ->
 
     place: () =>
       width = @hook.outerWidth() - 2
-      width = 300 if width < 300
+      # width = 160 if width < 160
       @drop.css
         top: @hook.position().top + @hook.outerHeight() - 2
         left: @hook.position().left

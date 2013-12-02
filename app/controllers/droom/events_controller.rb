@@ -1,3 +1,5 @@
+require 'tod'
+
 module Droom
   class EventsController < Droom::EngineController
     require "uri"
@@ -6,6 +8,7 @@ module Droom
     layout :no_layout_if_pjax
     
     before_filter :get_events, :only => [:index]
+    before_filter :composite_dates, :only => [:update, :create]
     before_filter :build_event, :only => [:create]
     load_and_authorize_resource
 
@@ -69,8 +72,24 @@ module Droom
       @event.created_by = current_user
     end
     
+    def composite_dates
+      if params[:event]
+        if params[:event][:start_date].present?
+          date = Time.zone.parse(params[:event][:start_date])
+          if params[:event][:start_time].present?
+            start_time = TimeOfDay.parse(params[:event][:start_time])
+            params[:event][:start] = start_time.on date
+          end
+          if params[:event][:finish_time].present?
+            finish_time = TimeOfDay.parse(params[:event][:finish_time])
+            params[:event][:finish] = finish_time.on date
+          end
+        end
+      end
+    end
+    
     def event_params
-      params.require(:event).permit(:name, :description, :event_set_id, :all_day, :master_id, :url, :start_date, :start_time, :finish_date, :finish_time, :venue_id, :venue_name)
+      params.require(:event).permit(:name, :description, :event_set_id, :calendar_id, :all_day, :master_id, :url, :start, :finish, :venue_id, :venue_name)
     end
 
   end
