@@ -385,6 +385,9 @@ en:
   invitation_successful: "Success: %{name} has been invited."
   welcome_preamble: "Welcome to the data room. Before we do anything else, please choose a password for your account."
   hello_name: "Hello %{name}."
+  uk: "UK"
+  uk_time: "UK time"
+  other: "other"
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"

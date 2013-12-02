@@ -818,6 +818,7 @@ jQuery ($) ->
       submit_form: false
       threshold: 1
       type: 'venue'
+      width: 300
     , options)
     @each ->
       new Suggester(@, options)
@@ -893,6 +894,7 @@ jQuery ($) ->
         empty_field: false
         submit_form: false
         preload: false
+        width: "auto"
         threshold: 2
         limit: 10
         afterSuggest: null
@@ -907,6 +909,7 @@ jQuery ($) ->
       @dropdown = new Dropdown @prompt,
         on_select: @select
         on_keyup: @get
+        width: @options.width
       @button = @form.find("a.search")
       @previously = null
       @request = null
@@ -1049,8 +1052,8 @@ jQuery ($) ->
       @
 
     place: () =>
-      width = @hook.outerWidth() - 2
-      # width = 160 if width < 160
+      unless width = @options.width
+        width = @hook.outerWidth() - 2
       @drop.css
         top: @hook.position().top + @hook.outerHeight() - 2
         left: @hook.position().left

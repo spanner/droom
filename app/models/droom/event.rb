@@ -171,8 +171,16 @@ module Droom
     # For interface purposes we often want to separate date and time parts. These getters will return the 
     # corresponding Date or Time object.
     #
-    # The `time_of_day` gem makes time handling a bit more intuitive by concealing the date part of a Time object.
+    # The `tod` gem makes time handling a bit more intuitive by concealing the date part of a Time object.
     #
+    
+    def start
+      tz = timezone || Time.zone
+      if start = read_attribute(:start)
+        start.in_time_zone(tz)
+      end
+    end
+    
     def start_time
       start.to_time_of_day if start
     end
@@ -181,6 +189,13 @@ module Droom
       start.to_date if start
     end
     
+    def finish
+      tz = timezone || Time.zone
+      if finish = read_attribute(:finish)
+        finish.in_time_zone(tz)
+      end
+    end
+
     def finish_time
       finish.to_time_of_day if finish
     end
@@ -196,36 +211,6 @@ module Droom
     def year
       start.strftime("%Y")
     end
-
-    # And these setters will adjust the current value so that its date or time part corresponds to the given
-    # value. The value is passed through the same parsing mechanism as above, so:
-    #
-    #   event.start = "Tuesday at 11pm"       -> next Tuesday at 11pm
-    #   event.start_time = "8pm"              -> next Tuesday at 8pm
-    #   event.start_date = "Wednesday"        -> next Wednesday at 8pm
-    #   event.start_date = "26 February 2016" -> 26/2/16 at 8pm
-    #   event.start_time = "18:00"            -> 26/2/16 at 6pm
-    #
-    # If the time is set before the date, we default to that time today. Times default to 00:00 in the usual way.
-    #
-    # def start_time=(value)
-    #   self.start = (start_date || Date.today).to_time + parse_date(value).seconds_since_midnight
-    # end
-    # 
-    # def start_date=(value)
-    #   self.start = parse_date(value).to_date
-    # end
-    # 
-    # def finish_time=(value)
-    #   if value && !value.blank?
-    #     time_portion = parse_date(value).seconds_since_midnight
-    #     self.finish = (finish_date || start_date || Date.today).to_time + time_portion
-    #   end
-    # end
-    # 
-    # def finish_date=(value)
-    #   self.finish = parse_date(value).to_date
-    # end
 
     def duration
       if finish

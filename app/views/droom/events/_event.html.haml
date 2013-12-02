@@ -42,7 +42,10 @@
 
           - if event.finish?
             = t :to
-            = l(event.finish_time, :format => :natural)
+            %time
+              = l(event.finish_time, :format => :natural)
+          - if event.timezone == "London"
+            = "(#{t(:uk_time)})"
 
           - if event.venue
             %span.location

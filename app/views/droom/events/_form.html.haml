@@ -18,13 +18,17 @@
       = f.text_field :name, :class => 'name', :placeholder => t(:event_name), :autofocus => true
 
     %p.practicalities
-      = f.text_field :start_time, :class => "timepicker start", :value => (I18n.l(@event.start_time, :format => :precise) if @event.start_time), :placeholder => t(:event_time)
-      = t :to
-      = f.text_field :finish_time, :class => "timepicker finish", :value => (I18n.l(@event.finish_time, :format => :precise) if @event.finish_time), :placeholder => t(:finish_time)
-      = t :at
+      %span.times
+        = f.text_field :start_time, :class => "timepicker start", :value => (I18n.l(@event.start_time, :format => :precise) if @event.start_time), :placeholder => t(:event_time)
+        = t :to
+        = f.text_field :finish_time, :class => "timepicker finish", :value => (I18n.l(@event.finish_time, :format => :precise) if @event.finish_time), :placeholder => t(:finish_time)
+        = t :at
       %span.venue
-        %span.name
-          = f.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off"
+        = f.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off",  data: {role: "venuepicker", width: 300}
+      %span.timezone
+        = f.check_box :timezone, {id: "event_timezone_UK"}, "London", "Hong Kong"
+        %label{for: "event_timezone_UK"} 
+          = t :uk_time
 
     .description.wysihtml
       .toolbar#t1

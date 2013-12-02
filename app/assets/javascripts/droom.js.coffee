@@ -63,7 +63,6 @@ jQuery ($) ->
     # form widgets and input modification. These are moving to [data-role] markup.
     
     @find_including_self('.wysihtml').html_editable()
-    @find_including_self('.venuepicker').venue_picker()
     @find_including_self('.datepicker').date_picker()
     @find_including_self('.timepicker').time_picker()
     @find_including_self('.person_selector').person_selector()
@@ -76,6 +75,7 @@ jQuery ($) ->
     @find_including_self('[data-role="filepicker"]').file_picker()
     @find_including_self('[data-role="imagepicker"]').image_picker()
     @find_including_self('[data-role="youtubepicker"]').youtube_suggester()
+    @find_including_self('[data-role="venuepicker"]').venue_picker()
     
     # page widgets
     

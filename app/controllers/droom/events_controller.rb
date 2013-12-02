@@ -72,24 +72,34 @@ module Droom
       @event.created_by = current_user
     end
     
+    # NB. the stored timezone parameter is just an interface convenience: we use it to check boxes in the form. 
+    # The event start and finish dates are stored as datetimes with zones.
+    #
     def composite_dates
       if params[:event]
         if params[:event][:start_date].present?
+          # We adjust the given datetimes so that they are considered to happen in the given zone, if there is one. 
+          # If none is given, everything happen within the configured time zone for the application.
           date = Time.zone.parse(params[:event][:start_date])
+          timezone = ActiveSupport::TimeZone.new(params[:event][:timezone]) if params[:event][:timezone].present?
+          timezone ||= Time.zone
+          
+          # This is done without changing the apparent time: it is already correct with the given zone and no translation is required.
+          date = date.change(offset: timezone) if timezone
           if params[:event][:start_time].present?
             start_time = TimeOfDay.parse(params[:event][:start_time])
-            params[:event][:start] = start_time.on date
+            params[:event][:start] = start_time.on(date, timezone)
           end
           if params[:event][:finish_time].present?
             finish_time = TimeOfDay.parse(params[:event][:finish_time])
-            params[:event][:finish] = finish_time.on date
+            params[:event][:finish] = finish_time.on(date, timezone)
           end
         end
       end
     end
     
     def event_params
-      params.require(:event).permit(:name, :description, :event_set_id, :calendar_id, :all_day, :master_id, :url, :start, :finish, :venue_id, :venue_name)
+      params.require(:event).permit(:name, :description, :event_set_id, :calendar_id, :all_day, :master_id, :url, :start, :finish, :timezone, :venue_id, :venue_name)
     end
 
   end
