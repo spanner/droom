@@ -26,7 +26,7 @@
             %span.rotated
               = truncate(group.name, :length => 16)
 
-    = render :partial => 'tabled', :collection => @users
+    = render :partial => 'droom/users/show/tabled', :collection => @users
 
 - else
   .everyone

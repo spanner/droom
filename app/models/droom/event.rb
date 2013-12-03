@@ -7,6 +7,7 @@ require 'tod'
 module Droom
   class Event < ActiveRecord::Base
     include Droom::Concerns::Slugged
+    include ActionView::Helpers::SanitizeHelper
 
     belongs_to :created_by, :class_name => "Droom::User"
 
@@ -296,15 +297,20 @@ module Droom
         ""
       end
     end
+    
+    def plain_description
+      strip_tags(description)
+    end
 
     def icalendar_event
       event = Icalendar::Event.new
       event.uid = uuid
       event.summary = name
-      event.description = description if description?
+      event.description = plain_description if description?
       event.dtstart = (all_day? ? start_date : start) if start?
       event.dtend = (all_day? ? finish_date : finish) if finish?
       event.url = url_with_protocol if url?
+      event.attendees = invitations.accepted.map{|inv| "mailto:#{inv.user.email}"} if invitations.accepted.any?
       event.location = venue.name if venue
       event
     end

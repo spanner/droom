@@ -1,18 +1,16 @@
 #events
 
-  = render :partial => 'events'
-
-  - if can?(:create, Droom::Event)
-    %p.action
+  %p.action
+    - if can?(:create, Droom::Event)
       = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => "#events"}
+
+  = render :partial => 'events'
 
   %h2.section
     = t(:past_events)
 
   .events_list
     = render :partial => 'events', :locals => {:events => @past_events}
-
-
 
 
 - content_for :title do
@@ -22,4 +20,3 @@
 - content_for :margin do
   = render :partial => "droom/shared/calendar_holder"
   = render :partial => "droom/invitations/invitations"
-  = render :partial => "droom/events/scrap_events"
