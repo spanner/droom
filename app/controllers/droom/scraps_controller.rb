@@ -45,7 +45,7 @@ module Droom
   protected
 
     def get_scraps
-      @scraps = paginated(Droom::Scrap.all)
+      @scraps = paginated(Droom::Scrap.order("created_at DESC") )
     end
 
     def build_scrap

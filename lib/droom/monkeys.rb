@@ -6,7 +6,6 @@ class Array
   def to_icalendar
     cal = Icalendar::Calendar.new
     self.flatten.each do |item|
-      p "adding event #{item.inspect}"
       cal.add_event(item.icalendar_event) if item.respond_to? :icalendar_event
     end
     cal

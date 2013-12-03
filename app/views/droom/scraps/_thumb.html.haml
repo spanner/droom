@@ -28,10 +28,10 @@
       = link_to "text:", droom.scrap_url(scrap), :class => "icon text", :data => {:action => "stream", :scrap => scrap.id}
 
     %p.sample
-      = link_to truncate(scrap.name, :length => 34), droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}
+      = link_to scrap.name, droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}
       = action_menulink(scrap, :class => "small")
       %span.caption
-        = shorten(scrap.note, 40)
+        = shorten(scrap.note, 72)
       = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
     = action_menu(scrap)
 

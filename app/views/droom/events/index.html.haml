@@ -1,12 +1,10 @@
-#main.events
-
-  %h2.section
-    = t(:future_events)
-    - if can?(:create, Droom::Event)
-      %span.action
-        = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
+#events
 
   = render :partial => 'events'
+
+  - if can?(:create, Droom::Event)
+    %p.action
+      = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => "#events"}
 
   %h2.section
     = t(:past_events)
@@ -17,11 +15,11 @@
 
 
 
-
-
 - content_for :title do
   = t :calendar
     
 
 - content_for :margin do
+  = render :partial => "droom/shared/calendar_holder"
   = render :partial => "droom/invitations/invitations"
+  = render :partial => "droom/events/scrap_events"

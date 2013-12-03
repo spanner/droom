@@ -30,12 +30,18 @@ module Droom
     }
     
     scope :visible_to, -> user { where("1=1") }
-
-    default_scope -> { order("created_at DESC").includes(:event, :document) }
+    
+    scope :with_future_or_current_event, -> {
+      joins(:event)
+        .where(["droom_scraps.scraptype = 'event' AND (droom_events.finish > :now) OR (droom_events.finish IS NULL AND droom_events.start > :now)", :now => Time.zone.now])
+        .order('droom_events.start ASC')
+    }
 
     Droom.scrap_types.each do |t|
       scope t.pluralize.to_sym, -> { where(:scraptype => t.to_s) }
     end
+
+    default_scope -> { includes(:event, :document) }
 
     def wordiness
       if body.length < 48

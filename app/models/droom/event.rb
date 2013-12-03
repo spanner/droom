@@ -54,15 +54,15 @@ module Droom
 
     scope :between, -> start, finish { where(['start > :start AND start < :finish AND (finish IS NULL or finish < :finish)', :start => start, :finish => finish]) }
 
-    scope :future_and_current, -> { where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.now]) }
+    scope :future_and_current, -> { where(['(finish > :now) OR (finish IS NULL AND start > :now)', :now => Time.zone.now]) }
 
-    scope :finished, -> { where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.now]) }
+    scope :finished, -> { where(['(finish < :now) OR (finish IS NULL AND start < :now)', :now => Time.zone.now]) }
     
-    scope :unbegun, -> { where(['start > :now', :now => Time.now])}
+    scope :unbegun, -> { where(['start > :now', :now => Time.zone.now])}
 
     scope :by_finish, -> { order("finish ASC") }
 
-    scope :coincident_with, -> start, finish { where(['(start < :finish AND finish > :start) OR (finish IS NULL AND start > :start AND start < :finish)', {:start => start, :finish => finish}]) }
+    scope :coincident_with, -> start, finish { where(['(start < :finish AND finish >= :start) OR (finish IS NULL AND start >= :start AND start < :finish)', {:start => start, :finish => finish}]) }
 
     scope :limited_to, -> limit { limit(limit) }
 
@@ -96,7 +96,7 @@ module Droom
     # All of these class methods also return scopes.
     #
     def self.in_the_last(period)           # seconds. eg calendar.occurrences.in_the_last(1.week)
-      finish = Time.now
+      finish = Time.zone.now
       start = finish - period
       between(start, finish)
     end
@@ -158,7 +158,7 @@ module Droom
     #   event.start = "Tuesday at 11pm"
     #   event.start = "12/12/1969 at 10pm"
     #   event.start = "1347354111"
-    #   event.start = Time.now + 1.hour
+    #   event.start = Time.zone.now + 1.hour
     #
     def start=(value)
       write_attribute :start, parse_date(value)
@@ -274,11 +274,11 @@ module Droom
     end
 
     def continuing?
-      finish && start < Time.now && finish > Time.now
+      finish && start < Time.zone.now && finish > Time.zone.now
     end
 
     def finished?
-      start < Time.now && (!finish || finish < Time.now)
+      start < Time.zone.now && (!finish || finish < Time.zone.now)
     end
     
     def url_with_protocol
@@ -340,7 +340,9 @@ module Droom
     end
 
   protected
-
+    
+    # This is mostly for ical/webcal distributions but we also use it in the API.
+    #
     def set_uuid
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
     end

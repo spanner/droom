@@ -1,4 +1,9 @@
 - events ||= @events
 
 .events_list{:data => {:refreshable => true, :url => "#{events_path}.js"}}
-  = render :partial => 'droom/events/event', :collection => events
+  - if events.any?
+    = render :partial => 'droom/events/event', :collection => events
+  - else
+    %p.nothing
+      = t :no_events
+  

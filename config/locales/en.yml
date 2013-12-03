@@ -222,6 +222,7 @@ en:
   library: "Library" 
   networks: "Networks"
   next: "Next"
+  no_events: "No events to display."
   normal_RSS_link: "normal RSS link"
   personal_RSS_link: "personal link"
   previous: "Previous"
@@ -342,6 +343,7 @@ en:
   search_youtube: "Search Youtube"
   save_user: "Save user"
   slug_note: "Spaces and odd characters will be replaced with dashes"
+  stream_events: "Stream events"
   to: "to"
   venue_name: "Venue name"
   venue_post_code: "Post Code"
@@ -407,6 +409,10 @@ en:
       natural_with_year: "%-d %B %Y"
       precise: "%H:%M"
       month_and_year: "%b %Y"
+      minicalendar_title: "%B %Y"
+      minicalendar_month: "%B"
+      year: "%Y"
+      month: "%B %Y"
   date:
     formats:
       dashed_short_date_format: "%d-%m-%Y"

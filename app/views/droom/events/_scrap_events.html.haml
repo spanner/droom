@@ -1,0 +1,8 @@
+- scraps = Droom::Scrap.with_future_or_current_event
+
+- if scraps.any?
+  #stream
+    %h2.section
+      = t :stream_events
+  
+    = render partial: 'droom/scraps/thumb', collection: scraps
