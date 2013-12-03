@@ -76,7 +76,6 @@ jQuery ($) ->
           
     conclude: (data) =>
       if @_affected
-        console.log "affected:", $(@_affected).get(0), $(@_affected).first().attr('data-url')
         $(@_affected).trigger "refresh"
       if @_aftered?
         addition = $(data)
@@ -253,8 +252,6 @@ jQuery ($) ->
     setup: () =>
       position = @header.position()
       offset = @header.offset()
-      console.log "header offset", @header.offset()
-      console.log "header position", @header.position()
       @patch.css
         left: position.left + 1
         top: position.top + @header.height() - 3
