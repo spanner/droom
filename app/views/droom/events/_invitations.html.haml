@@ -1,13 +1,9 @@
 - event ||= @event
 
 .col
-  %h3
-    = t :invitations
-
   - if event.invitations.any?
+    %h3
+      = t :invitations
     %ul.people{ :"data-url" => "#{event_invitations_path(event)}.js", :"data-refreshable" => true}
       - event.invitations.each do |invitation|
-        = render :partial => "droom/users/user", :object => invitation.user, :locals => {:invitation => invitation}
-  - else
-    %p
-      = t :no_invitations
+        = render :partial => "droom/users/show/listed", :object => invitation.user, :locals => {:invitation => invitation}

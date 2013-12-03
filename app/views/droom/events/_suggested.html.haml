@@ -5,8 +5,11 @@
   = link_to event.name, event_url(event)
   %span.note
     = l event.start_time, :format => :natural
+    - if event.timezone == "London"
+      = "(#{t(:uk_time)})"
     = t :on
     = l event.start_date, :format => date_format
     - if event.venue
       = t :at
       = event.venue.definite_name
+
