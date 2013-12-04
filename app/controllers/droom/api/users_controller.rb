@@ -15,7 +15,7 @@ module Droom::Api
     end
 
     def update
-      @user.update_attributes(user_params)
+      @user.assign_attributes(user_params)
       render json: @user
     end
 
@@ -68,7 +68,7 @@ module Droom::Api
     end
 
     def user_params
-      params.require(:user).permit(:uid, :title, :family_name, :given_name, :chinese_name, :honours, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :defer_confirmation)
+      params.require(:user).permit(:uid, :title, :family_name, :given_name, :chinese_name, :honours, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation)
     end
 
   end

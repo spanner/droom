@@ -23,14 +23,16 @@ module Droom
     
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
+    after_save :send_confirmation_if_directed
     
     # People are often invited into the system in batches or after offline contact. 
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
     # if you want to create a user account without sending out any messages yet.
     #
-    # When you do want to invite that person, call user.resend_confirmation_token.
+    # When you do want to invite that person, call user.resend_confirmation_token or
+    # self the send_confirmation flag on a save.
     #
-    attr_accessor :defer_confirmation
+    attr_accessor :defer_confirmation, :send_confirmation
     
     def defer_confirmation!
       self.defer_confirmation = true
@@ -40,6 +42,16 @@ module Droom
       !!self.defer_confirmation
     end
     
+    # Called after save by our own late-confirmation mechanism.
+    # If the send_confirmation flag has been set, we affirm.
+    #
+    def send_confirmation?
+      !!self.send_confirmation
+    end
+    
+    # Called on create by devise's automatic confirmation mechanism.
+    # If the defer_confirmation flag has been set, we decline.
+    #
     def send_confirmation_notification?
       super && !defer_confirmation?
     end
@@ -61,7 +73,7 @@ module Droom
     scope :this_week, -> { where("created_at > ?", Time.now - 1.week) }
 
     def confirm=(value)
-      confirm! if value
+      self.confirm! if value
     end
     
     scope :in_name_order, -> {
@@ -410,19 +422,6 @@ module Droom
     end
 
 
-    # # ### Invitation
-    # #
-    # 
-    # def invite!
-    #   self.send_confirmation_instructions
-    # end
-    # 
-    # def invited?
-    #   !!self.confirmation_sent_at
-    # end
-    #   
-
-
     ## Preferences
     #
     # User settings are held as an association with Preference objects, which are simple key:value pairs.
@@ -501,6 +500,10 @@ module Droom
   
     def ensure_uid!
       self.uid = SecureRandom.uuid unless self.uid?
+    end
+    
+    def send_confirmation_if_directed
+      self.send_confirmation_instructions if send_confirmation?
     end
 
   end
