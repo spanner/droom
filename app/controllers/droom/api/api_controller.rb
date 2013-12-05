@@ -5,12 +5,16 @@ module Droom::Api
     protect_from_forgery with: :null_session
     skip_before_filter :require_data_room_permission
     before_filter :set_access_control_headers
-    # prepend_before_filter :echo_auth
-    # before_filter :echo_user_status
+    prepend_before_filter :echo_auth
+    before_filter :echo_user_status
     
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
     rescue_from "Cancan::AccessDenied", with: :not_allowed
     rescue_from "Droom::Error", with: :blew_up
+
+    def current_ability
+      @current_ability ||= Droom::Ability.new(current_user)
+    end
 
   protected
 
