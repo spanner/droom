@@ -59,6 +59,18 @@ module Droom
     def password_required?
       confirmed? && (!password.blank?)
     end
+    
+    # Without a password they can only get in by token auth, which gives us some scope for
+    # remote confirmation and authentication and allows us to issue invitations to satellite
+    # services without requiring data room confirmation first.
+    #
+    def confirmation_required?
+      false
+    end
+    
+    def confirmed=(value)
+      self.confirmed_at = Time.now if value
+    end
 
     def password_match?
       self.errors[:password] << "can't be blank" if password.blank?
