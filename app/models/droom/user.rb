@@ -335,13 +335,11 @@ module Droom
       end
       title
     end
-  
+    
+    # This shuold be a reasonable formal first-person form of address.
+    #
     def formal_name
-      if title_if_it_matters
-        [title, family_name, honours].join(' ')
-      else
-        informal_name
-      end
+      [title, family_name].join(' ')
     end
 
     # This is our best shot at a representation of the usual third person form of this person's name. It combines
