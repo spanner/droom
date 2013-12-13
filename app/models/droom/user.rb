@@ -27,7 +27,7 @@ module Droom
     # if you want to create a user account without sending out any messages yet.
     #
     # When you do want to invite that person, call user.resend_confirmation_token or
-    # self the send_confirmation flag on a save.
+    # set the send_confirmation flag on a save.
     #
     attr_accessor :defer_confirmation, :send_confirmation
     
@@ -75,6 +75,29 @@ module Droom
       self.errors[:password_confirmation] << "does not match password" if password != password_confirmation
       password == password_confirmation && !password.blank?
     end
+
+    # Our old user accounts store passwords as salted sha512 digests. Current best practice uses BCrypt
+    # so we are migrating user accounts across in this rescue block if we hear BCrypt grumbling about the old hash.
+  
+    def valid_password?(password)
+      begin
+        super(password)
+      rescue BCrypt::Errors::InvalidHash
+        Rails.logger.warn "...trying sha512 on password input"
+        stretches = 10
+        salt = self.password_salt
+        pepper = nil
+        old_digest = Devise::Encryptable::Encryptors::Sha512.digest(password, stretches, salt, pepper)
+        if old_digest == self.encrypted_password   
+          self.password = password
+          self.save
+          return true
+        else
+          # Doesn't match the old format either: password is just wrong.
+          return false
+        end
+      end
+    end 
 
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
