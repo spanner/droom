@@ -11,14 +11,11 @@ module Droom
     ## Authentication
     #
     devise :database_authenticatable,
+           :token_authenticatable,
            :recoverable,
            :rememberable,
            :trackable,
            :confirmable,
-           :encryptable,
-           :token_authenticatable,
-           :cocable,
-           :encryptor => :sha512,
            :reconfirmable => false
     
     before_validation :ensure_uid!

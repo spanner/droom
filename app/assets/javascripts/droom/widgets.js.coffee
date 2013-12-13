@@ -259,7 +259,6 @@ jQuery ($) ->
       @fields.attr('data-strict', false)
       @unsubmittable()
       @confirmation_holder.hide()
-      console.log 'password form', @
 
     checkForm: () =>
       @fields.removeClass('invalid').addClass('valid')
