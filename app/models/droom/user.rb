@@ -11,7 +11,6 @@ module Droom
     ## Authentication
     #
     devise :database_authenticatable,
-           :token_authenticatable,
            :recoverable,
            :rememberable,
            :trackable,
@@ -98,6 +97,12 @@ module Droom
         end
       end
     end 
+    
+    def ensure_authentication_token
+      if authentication_token.blank?
+        self.authentication_token = generate_authentication_token
+      end
+    end
 
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
@@ -534,6 +539,15 @@ module Droom
     
     def send_confirmation_if_directed
       self.send_confirmation_instructions if send_confirmation?
+    end
+
+  private
+  
+    def generate_authentication_token
+      loop do
+        token = Devise.friendly_token
+        break token unless User.where(authentication_token: token).first
+      end
     end
 
   end

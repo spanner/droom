@@ -1,5 +1,5 @@
 module Droom::Api
-  class ApiController < ApplicationController
+  class ApiController < Droom::EngineController
     respond_to :json
 
     protect_from_forgery with: :null_session
@@ -47,22 +47,5 @@ module Droom::Api
       params[:controller].sub("Controller", "").underscore.split('/').last
     end
 
-    def set_access_control_headers
-      headers['Access-Control-Allow-Origin'] = '*'
-      headers["Access-Control-Allow-Headers"] = %w{Origin Accept Content-Type X-Requested-With X-CSRF-Token}.join(",")
-      headers["Access-Control-Allow-Methods"] = %{GET PATCH POST}
-    end
-
-    def set_pagination_headers
-      if results = instance_variable_get("@#{name_from_controller}")
-        if results.respond_to? :total_count
-          headers["X-Pagination"] = {
-            limit: results.limit_value,
-            offset: results.offset_value,
-            total_count: results.total_count
-          }.to_json
-        end
-      end
-    end
   end
 end

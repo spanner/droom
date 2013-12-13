@@ -1,9 +1,9 @@
 module Droom::Api
   class UsersController < Droom::Api::ApiController
-
+    skip_before_filter :authenticate_user!
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
-    load_and_authorize_resource find_by: :uid, class: "Droom::User"
+    load_resource find_by: :uid, class: "Droom::User"
     # after_filter :set_pagination_headers, only: [:index]
     
     def index
