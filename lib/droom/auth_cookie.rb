@@ -10,7 +10,7 @@ module Droom
 
     # Sets the cookie, referencing the given resource.id (e.g. User)
     def set(resource, options={})
-      @cookies[cookie_name] = cookie_options.merge(options).merge(:value => encoded_value(resource))
+      @cookies[cookie_name] = cookie_options.merge(options).merge(:value => set_auth_values(resource))
     end
 
     # Unsets the cookie via the HTTP response.
@@ -62,8 +62,9 @@ module Droom
       Settings.auth.cookie_name
     end
 
-    def encoded_value(resource)
-      signer.encode [ resource.uid, resource.authentication_token, Time.now ]
+    # Note that this is destructive to all previous authentication tokens even if the cookie is not eventually set.
+    def set_auth_values(resource)
+      signer.encode [ resource.uid, resource.reset_authentication_token!, Time.now ]
     end
 
     def cookie_options

@@ -56,7 +56,13 @@ module Droom
     end
     
     def authenticate_token(token)
-      Devise.secure_compare(authentication_token, token)
+      Devise.secure_compare(self.authentication_token, token)
+    end
+
+    def reset_authentication_token!
+      token = Devise.friendly_token
+      self.update_column(:authentication_token, token)
+      token
     end
     
     # Without a password they can only get in by token auth, which gives us some scope for

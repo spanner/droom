@@ -15,14 +15,14 @@ module Droom::Api
     end
     
     def authenticate
-      Rails.logger.warn "~~~> auth!, #{@user.inspect}"
+      Rails.logger.debug "authenticating uid: #{params[:id]} vs #{params[:token]}"
       if @user && @user.authenticate_token(params[:token])
         render json: @user
       else
-        head :not_found
+        head :unauthorized
       end
     end
-
+  
     def update
       @user.update_attributes(user_params)
       render json: @user

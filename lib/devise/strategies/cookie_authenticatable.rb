@@ -37,3 +37,5 @@ module Devise::Strategies
     end
   end
 end
+
+Warden::Strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)

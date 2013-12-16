@@ -32,6 +32,7 @@ module Droom
       Warden::Strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
 
       Warden::Manager.after_set_user do |user, warden, options|
+        warden.env["devise.skip_storage"] = true
         Droom::AuthCookie.new(warden.cookies).set(user)
       end
 
