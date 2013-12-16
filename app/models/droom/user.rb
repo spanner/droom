@@ -11,9 +11,8 @@ module Droom
     ## Authentication
     #
     devise :database_authenticatable,
+           :cookie_authenticatable,
            :recoverable,
-           :rememberable,
-           :trackable,
            :confirmable,
            :reconfirmable => false
     
@@ -54,6 +53,10 @@ module Droom
 
     def password_required?
       confirmed? && (!password.blank?)
+    end
+    
+    def authenticate_token(token)
+      Devise.secure_compare(authentication_token, token)
     end
     
     # Without a password they can only get in by token auth, which gives us some scope for

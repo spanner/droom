@@ -23,9 +23,13 @@ Gem::Specification.new do |s|
   s.add_dependency "active_model_serializers"
   s.add_dependency "api-pagination"
 
+  s.add_dependency 'settingslogic'
+  s.add_dependency 'request_store'
+
   s.add_dependency "devise"
   s.add_dependency "devise-encryptable"
   s.add_dependency "cancan"
+
   s.add_dependency "msg", "~> 0.4.0"
 
   s.add_dependency "acts_as_tree"
@@ -42,6 +46,7 @@ Gem::Specification.new do |s|
   s.add_dependency "tod"
   s.add_dependency "date_validator"
   s.add_dependency "uuidtools"
+  s.add_dependency "signed_json"
 
   s.add_dependency "snail"
   s.add_dependency "vcard"

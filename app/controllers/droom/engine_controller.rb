@@ -67,16 +67,5 @@ module Droom
       end
     end
 
-    # Login anywhere sets a cookie that should work everywhere by providing the same
-    # uid/token pair. No need for an additional save.
-
-    # def authenticate_user_from_cookie!
-    #   user_email = params[:user_email].presence
-    #   user = user_email && User.find_by(email: user_email)
-    #   if user && Devise.secure_compare(user.authentication_token, params[:user_token])
-    #     sign_in user, store: false
-    #   end
-    # end
-
   end
 end

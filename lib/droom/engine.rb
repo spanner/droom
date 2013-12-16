@@ -28,6 +28,16 @@ module Droom
       Devise::ConfirmationsController.layout Droom.devise_layout
       Devise::UnlocksController.layout Droom.devise_layout
       Devise::PasswordsController.layout Droom.devise_layout
+      
+      Warden::Strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
+
+      Warden::Manager.after_set_user do |user, warden, options|
+        Droom::AuthCookie.new(warden.cookies).set(user)
+      end
+
+      Warden::Manager.before_logout do |user, warden, options|
+        Droom::AuthCookie.new(warden.cookies).unset
+      end
     end
     
   end

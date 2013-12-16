@@ -84,7 +84,9 @@ Droom::Engine.routes.draw do
   end
 
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
-    resources :users
+    resources :users do
+      get :authenticate, on: :member
+    end
     resources :venues
   end
 

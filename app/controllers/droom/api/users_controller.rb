@@ -13,6 +13,15 @@ module Droom::Api
     def show
       render json: @user
     end
+    
+    def authenticate
+      Rails.logger.warn "~~~> auth!, #{@user.inspect}"
+      if @user && @user.authenticate_token(params[:token])
+        render json: @user
+      else
+        head :not_found
+      end
+    end
 
     def update
       @user.update_attributes(user_params)
