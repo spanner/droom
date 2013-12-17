@@ -242,16 +242,18 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = "/droom/users/auth"
 
   config.warden do |manager|
-    Rails.logger.debug "---> droom devise init is adding cookie strategies to warden config"
     manager.strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
     manager.default_strategies :cookie_authenticatable, :database_authenticatable, scope: :user
   end
 
-  # Set shared domain cookie on sign in.
+  # Set shared domain cookie (and get rid of session user) on sign in.
   #
-  Warden::Manager.after_set_user do |user, warden, options|
+  Warden::Manager.after_authentication do |user, warden, options|
     Rails.logger.debug "!!! after_set_user is setting auth cookie"
     Droom::AuthCookie.new(warden.cookies).set(user)
+    Rails.logger.debug "!!! ...and clearing session user"
+    warden.raw_session.delete "warden.user.user.key"
+    warden.session_serializer.delete(:user, user)
   end
 
   # Unset shared domain cookie on sign out.
@@ -261,12 +263,12 @@ Devise.setup do |config|
     Droom::AuthCookie.new(warden.cookies).unset
   end
   
-  # Session-stored user is a one-time value: after the initial sign-in redirect, we delete it and rely on the domain cookie.
-  #
-  Warden::Manager.after_fetch do |user, warden, options|
-    Rails.logger.debug "!!! after_fetch is removing session data"
-    warden.raw_session.delete "warden.user.user.key"
-    warden.session_serializer.delete(:user, user)
-  end
+  # # Session-stored user is a one-time value: after the initial sign-in redirect, we delete it and rely on the domain cookie.
+  # #
+  # Warden::Manager.after_fetch do |user, warden, options|
+  #   Rails.logger.debug "!!! after_fetch is removing session data"
+  #   warden.raw_session.delete "warden.user.user.key"
+  #   warden.session_serializer.delete(:user, user)
+  # end
   
 end

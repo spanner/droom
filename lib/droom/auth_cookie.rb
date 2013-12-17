@@ -9,12 +9,18 @@ module Droom
     end
 
     # Sets the cookie, referencing the given resource.id (e.g. User)
-    def set(resource, options={})
-      @cookies[cookie_name] = cookie_options.merge(options).merge(:value => set_auth_values(resource))
+    def set(resource, opts={})
+      cookie_values = cookie_options.merge(opts).merge(:value => set_auth_values(resource))
+      
+      Rails.logger.debug "!!! setting auth cookie #{cookie_name} with values #{cookie_values.inspect}"
+
+      @cookies[cookie_name] = cookie_values
     end
 
     # Unsets the cookie via the HTTP response.
     def unset
+      Rails.logger.debug "!!! deleting auth cookie #{cookie_name} with options #{cookie_options.inspect}"
+      
       @cookies.delete cookie_name, cookie_options
     end
 
@@ -44,6 +50,10 @@ module Droom
     # Whether the cookie was set since the given Time
     def set_since?(time)
       created_at && created_at >= time
+    end
+    
+    def store?
+      false
     end
 
   private
