@@ -20,16 +20,16 @@ module Droom
 
     # The id of the resource (e.g. User) referenced in the cookie.
     def uid
-      value[0]
+      values[0]
     end
 
     def token
-      value[1]
+      values[1]
     end
 
     # The Time at which the cookie was created.
     def created_at
-      valid? ? Time.at(value[2]) : nil
+      valid? ? DateTime.parse(values[2]) : nil
     end
 
     # Whether the cookie appears valid.

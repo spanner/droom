@@ -1,14 +1,7 @@
-require 'signed_json'
-require 'devise/strategies/cookie_authenticatable'
-require 'devise/models/cookie_authenticatable'
-
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-
-  config.warden do |manager|
-    manager.default_strategies.unshift :cookie_authenticatable
-  end
+  Rails.logger.debug "---> droom devise initializer is loading"
   
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -247,5 +240,33 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = "/droom/users/auth"
+
+  config.warden do |manager|
+    Rails.logger.debug "---> droom devise init is adding cookie strategies to warden config"
+    manager.strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
+    manager.default_strategies :cookie_authenticatable, :database_authenticatable, scope: :user
+  end
+
+  # Set shared domain cookie on sign in.
+  #
+  Warden::Manager.after_set_user do |user, warden, options|
+    Rails.logger.debug "!!! after_set_user is setting auth cookie"
+    Droom::AuthCookie.new(warden.cookies).set(user)
+  end
+
+  # Unset shared domain cookie on sign out.
+  #
+  Warden::Manager.before_logout do |user, warden, options|
+    Rails.logger.debug "!!! before_logout is removing auth cookie"
+    Droom::AuthCookie.new(warden.cookies).unset
+  end
+  
+  # Session-stored user is a one-time value: after the initial sign-in redirect, we delete it and rely on the domain cookie.
+  #
+  Warden::Manager.after_fetch do |user, warden, options|
+    Rails.logger.debug "!!! after_fetch is removing session data"
+    warden.raw_session.delete "warden.user.user.key"
+    warden.session_serializer.delete(:user, user)
+  end
   
 end

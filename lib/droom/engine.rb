@@ -3,7 +3,8 @@ require 'msg'
 require 'paperclip'
 require 'fog'
 require 'devise'
-require 'devise-encryptable'
+require 'devise-encryptable' #TODO only until passwords have migrated to bcrypt
+require 'devise/strategies/cookie_authenticatable'
 require 'cancan'
 require 'kaminari'
 require 'icalendar'
@@ -28,17 +29,6 @@ module Droom
       Devise::ConfirmationsController.layout Droom.devise_layout
       Devise::UnlocksController.layout Droom.devise_layout
       Devise::PasswordsController.layout Droom.devise_layout
-      
-      Warden::Strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
-
-      Warden::Manager.after_set_user do |user, warden, options|
-        warden.env["devise.skip_storage"] = true
-        Droom::AuthCookie.new(warden.cookies).set(user)
-      end
-
-      Warden::Manager.before_logout do |user, warden, options|
-        Droom::AuthCookie.new(warden.cookies).unset
-      end
     end
     
   end

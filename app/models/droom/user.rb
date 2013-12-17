@@ -38,14 +38,14 @@ module Droom
     end
     
     # Called after save by our own late-confirmation mechanism.
-    # If the send_confirmation flag has been set, we affirm.
+    # If the send_confirmation flag has been set, we confirm.
     #
     def send_confirmation?
       !!self.send_confirmation
     end
     
-    # Called on create by devise's automatic confirmation mechanism.
-    # If the defer_confirmation flag has been set, we decline.
+    # Called on create by devise's immediate confirmation mechanism.
+    # If the defer_confirmation flag has been set, we postpone.
     #
     def send_confirmation_notification?
       super && !defer_confirmation?
@@ -55,14 +55,24 @@ module Droom
       confirmed? && (!password.blank?)
     end
     
+    ## Auth tokens
+    #
+    # Are no longer supported by devise but we use them for domain-cookie auth.
+    
     def authenticate_token(token)
       Devise.secure_compare(self.authentication_token, token)
     end
 
     def reset_authentication_token!
-      token = Devise.friendly_token
+      token = generate_authentication_token
       self.update_column(:authentication_token, token)
       token
+    end
+    
+    def ensure_authentication_token
+      if authentication_token.blank?
+        self.authentication_token = generate_authentication_token
+      end
     end
     
     # Without a password they can only get in by token auth, which gives us some scope for
@@ -85,7 +95,7 @@ module Droom
     end
 
     # Our old user accounts store passwords as salted sha512 digests. Current best practice uses BCrypt
-    # so we are migrating user accounts across in this rescue block if we hear BCrypt grumbling about the old hash.
+    # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
   
     def valid_password?(password)
       begin
@@ -107,12 +117,6 @@ module Droom
       end
     end 
     
-    def ensure_authentication_token
-      if authentication_token.blank?
-        self.authentication_token = generate_authentication_token
-      end
-    end
-
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
     scope :this_month, -> { where("created_at > ?", Time.now - 1.month) }
