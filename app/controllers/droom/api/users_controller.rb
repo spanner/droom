@@ -24,10 +24,10 @@ module Droom::Api
     end
   
     def deauthenticate
-      Rails.logger.warn "deauthenticating #{@user.inspect}"
-      if @user && @user.authenticate_token(params[:token])
-        @user.clear_session_id!
-        render json: @user
+      Rails.logger.warn "deauthenticating #{current_user.inspect}"
+      if current_user
+        current_user.clear_session_id!
+        render json: current_user
       else
         head :unauthorized
       end
