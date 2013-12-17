@@ -1,6 +1,7 @@
 module Droom::Api
   class UsersController < Droom::Api::ApiController
     skip_before_filter :authenticate_user!
+    skip_before_action :verify_authenticity_token
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
     load_resource find_by: :uid, class: "Droom::User"
@@ -15,8 +16,17 @@ module Droom::Api
     end
     
     def authenticate
-      Rails.logger.debug "authenticating uid: #{params[:id]} vs #{params[:token]}"
       if @user && @user.authenticate_token(params[:token])
+        render json: @user
+      else
+        head :unauthorized
+      end
+    end
+  
+    def deauthenticate
+      Rails.logger.warn "deauthenticating #{@user.inspect}"
+      if @user && @user.authenticate_token(params[:token])
+        @user.clear_session_id!
         render json: @user
       else
         head :unauthorized

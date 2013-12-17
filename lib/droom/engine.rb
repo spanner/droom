@@ -4,7 +4,6 @@ require 'paperclip'
 require 'fog'
 require 'devise'
 require 'devise-encryptable' #TODO only until passwords have migrated to bcrypt
-require 'devise/strategies/cookie_authenticatable'
 require 'cancan'
 require 'kaminari'
 require 'icalendar'

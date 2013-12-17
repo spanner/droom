@@ -1,3 +1,6 @@
+require 'devise/strategies/header_token_authenticatable'
+require 'devise/strategies/cookie_authenticatable'
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -242,33 +245,34 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = "/droom/users/auth"
 
   config.warden do |manager|
+    # for shared-cookie auth
     manager.strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
-    manager.default_strategies :cookie_authenticatable, :database_authenticatable, scope: :user
+    # for token auth in api requests
+    manager.strategies.add(:header_token_authenticatable, Devise::Strategies::HeaderTokenAuthenticatable)
+    manager.default_strategies :header_token_authenticatable, :cookie_authenticatable, :database_authenticatable, scope: :user
   end
 
-  # Set shared domain cookie (and get rid of session user) on sign in.
+  # Set shared domain cookie on sign in.
   #
   Warden::Manager.after_authentication do |user, warden, options|
-    Rails.logger.debug "!!! after_set_user is setting auth cookie"
+    warden.raw_session["session_validity_check"] = user.reset_session_id!
     Droom::AuthCookie.new(warden.cookies).set(user)
-    Rails.logger.debug "!!! ...and clearing session user"
-    warden.raw_session.delete "warden.user.user.key"
-    warden.session_serializer.delete(:user, user)
   end
 
   # Unset shared domain cookie on sign out.
   #
   Warden::Manager.before_logout do |user, warden, options|
-    Rails.logger.debug "!!! before_logout is removing auth cookie"
     Droom::AuthCookie.new(warden.cookies).unset
+    user.clear_session_id!
   end
-  
-  # # Session-stored user is a one-time value: after the initial sign-in redirect, we delete it and rely on the domain cookie.
-  # #
-  # Warden::Manager.after_fetch do |user, warden, options|
-  #   Rails.logger.debug "!!! after_fetch is removing session data"
-  #   warden.raw_session.delete "warden.user.user.key"
-  #   warden.session_serializer.delete(:user, user)
-  # end
-  
+    
+  # Sign out unless session id is valid, if user retrieved from session
+  #
+  Warden::Manager.after_fetch do |user, warden, options|
+    unless user.session_id == warden.raw_session["session_validity_check"]
+      warden.logout
+      throw :warden, message: :unauthenticated
+    end
+  end
+
 end

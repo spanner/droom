@@ -4,8 +4,8 @@ module Droom::Api
 
     protect_from_forgery with: :null_session
     skip_before_filter :require_data_room_permission
-    before_filter :set_access_control_headers
     prepend_before_filter :echo_auth
+    before_filter :set_access_control_headers
     before_filter :echo_user_status
     
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
@@ -46,6 +46,6 @@ module Droom::Api
     def name_from_controller
       params[:controller].sub("Controller", "").underscore.split('/').last
     end
-
+  
   end
 end

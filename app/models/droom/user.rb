@@ -55,6 +55,22 @@ module Droom
       confirmed? && (!password.blank?)
     end
     
+    ## Session ID
+    #
+    # Allows us to invalidate a session by remote control if someone signs out on a satellite site.
+    
+    def reset_session_id!
+      Rails.logger.warn "+++ User.reset_session_id!"
+      token = generate_authentication_token
+      self.update_column(:session_id, token)
+      token
+    end
+    
+    def clear_session_id!
+      Rails.logger.warn "xxx User.clear_session_id!"
+      self.update_column(:session_id, "")
+    end
+    
     ## Auth tokens
     #
     # Are no longer supported by devise but we use them for domain-cookie auth.
