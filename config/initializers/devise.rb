@@ -263,7 +263,7 @@ Devise.setup do |config|
   #
   Warden::Manager.before_logout do |user, warden, options|
     Droom::AuthCookie.new(warden.cookies).unset
-    user.clear_session_id!
+    user.clear_session_id! if user
   end
     
   # Sign out unless session id is valid, if user retrieved from session
