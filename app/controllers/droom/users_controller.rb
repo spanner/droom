@@ -45,10 +45,6 @@ module Droom
       respond_with @user
     end
     
-    def preferences
-      respond_with @user
-    end
-    
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update

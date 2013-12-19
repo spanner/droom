@@ -4,12 +4,12 @@
     = link_to t(:sign_out), droom.destroy_user_session_url, :method => :delete, :class => 'signout'
 
   %p
-    = link_to t(:edit_your_profile), droom.edit_user_url(current_user), :data => {:action => "popup", :affected => ".people_list"}
+    = link_to t(:edit_your_profile), droom.edit_user_url(current_user, view: 'profile'), :data => {:action => "popup", :affected => ".people_list"}
     %br
     %span.note
       = t(:edit_your_profile_note)
   %p
-    = link_to t(:edit_your_preferences), droom.preferences_user_url(current_user), :data => {:action => "popup"}
+    = link_to t(:edit_your_preferences), droom.edit_user_url(current_user, view: 'preferences'), :data => {:action => "popup", :affected => ".people_list"}
     %br
     %span.note
       = t(:edit_your_preferences_note)
