@@ -31,7 +31,7 @@
       = link_to scrap.name, droom.scrap_url(scrap), :data => {:action => "stream", :scrap => scrap.id}
       = action_menulink(scrap, :class => "small")
       %span.caption
-        = shorten(scrap.note, 72)
+        = shorten(scrap.note, 160)
       = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
     = action_menu(scrap)
 
