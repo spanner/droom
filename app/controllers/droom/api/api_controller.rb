@@ -2,7 +2,7 @@ module Droom::Api
   class ApiController < Droom::EngineController
     respond_to :json
 
-    protect_from_forgery with: :null_session
+    # protect_from_forgery with: :null_session
     skip_before_filter :require_data_room_permission
     prepend_before_filter :echo_auth
     before_filter :set_access_control_headers

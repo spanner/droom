@@ -1,6 +1,5 @@
 class Droom::UserSerializer < ActiveModel::Serializer
-  attributes :id, 
-             :uid, 
+  attributes :uid, 
              :authentication_token, 
              :title,
              :given_name,
@@ -9,14 +8,30 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :honours,
              :email,
              :phone,
-             :thumbnail,
-             :icon,
+             :images,
              :confirmed,
              :permission_codes,
-             :person_uid
+             :person_uid,
+             :unconfirmed_email
 
   def confirmed
     object.confirmed?
+  end
+
+  def images
+    if object.image?
+      {
+        icon: object.image.url(:icon),
+        thumbnail: object.image.url(:thumbnail),
+        standard: object.image.url(:standard)
+      }
+    else
+      {
+        icon: "",
+        thumbnail: "",
+        standard: ""
+      }
+    end
   end
 
 end

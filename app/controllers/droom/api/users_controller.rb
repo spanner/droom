@@ -16,7 +16,13 @@ module Droom::Api
     end
     
     def authenticate
-      if @user && @user.authenticate_token(params[:token])
+      # This usually happens before the client is in a position to set the auth header token, 
+      # (because we're only at the initial auth stage) so we expect token in params.
+      token = params[:token]
+      if token.blank?
+        token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
+      end
+      if @user && token.present? && @user.authenticate_token(token)
         render json: @user
       else
         head :unauthorized
