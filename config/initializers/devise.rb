@@ -1,6 +1,11 @@
+require 'devise/strategies/header_token_authenticatable'
+require 'devise/strategies/cookie_authenticatable'
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  Rails.logger.debug "---> droom devise initializer is loading"
+  
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
@@ -70,7 +75,8 @@ Devise.setup do |config|
   # Notice that if you are skipping storage for all authentication paths, you
   # may want to disable generating routes to Devise's sessions controller by
   # passing :skip => :sessions to `devise_for` in your config/routes.rb
-  config.skip_session_storage = [:http_auth]
+  # config.skip_session_storage = [:http_auth]
+  config.skip_session_storage = [:http_auth, :token_auth]
 
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 10. If
@@ -236,5 +242,37 @@ Devise.setup do |config|
   #
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
-  config.omniauth_path_prefix = "/droom/users/auth"
+  # config.omniauth_path_prefix = "/droom/users/auth"
+
+  config.warden do |manager|
+    # for shared-cookie auth
+    manager.strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
+    # for token auth in api requests
+    manager.strategies.add(:header_token_authenticatable, Devise::Strategies::HeaderTokenAuthenticatable)
+    manager.default_strategies :header_token_authenticatable, :cookie_authenticatable, :database_authenticatable, scope: :user
+  end
+
+  # Set shared domain cookie on sign in.
+  #
+  Warden::Manager.after_authentication do |user, warden, options|
+    warden.raw_session["session_validity_check"] = user.reset_session_id!
+    Droom::AuthCookie.new(warden.cookies).set(user)
+  end
+
+  # Unset shared domain cookie on sign out.
+  #
+  Warden::Manager.before_logout do |user, warden, options|
+    Droom::AuthCookie.new(warden.cookies).unset
+    user.clear_session_id! if user
+  end
+    
+  # Sign out unless session id is valid, if user retrieved from session
+  #
+  Warden::Manager.after_fetch do |user, warden, options|
+    unless user.session_id == warden.raw_session["session_validity_check"]
+      warden.logout
+      throw :warden, message: :unauthenticated
+    end
+  end
+
 end

@@ -3,7 +3,7 @@ require 'msg'
 require 'paperclip'
 require 'fog'
 require 'devise'
-require 'devise-encryptable'
+require 'devise-encryptable' #TODO only until passwords have migrated to bcrypt
 require 'cancan'
 require 'kaminari'
 require 'icalendar'
@@ -14,6 +14,7 @@ module Droom
     isolate_namespace Droom
 
     initializer "droom.integration" do
+      Devise.parent_controller = "Droom::EngineController"
       ActiveRecord::Base.send :include, Droom::Taggability
       ActiveRecord::Base.send :include, Droom::Folders
       ActiveSupport.on_load :action_controller do

@@ -4,9 +4,8 @@ module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
     
-    before_filter :authenticate_user!
-    before_filter :strengthen_parameters
-    check_authorization
+    before_filter :authenticate_user_from_token!, unless: :devise_controller?
+    before_filter :authenticate_user!, unless: :devise_controller?
     
     rescue_from CanCan::AccessDenied, :with => :not_allowed
     
@@ -15,17 +14,7 @@ module Droom
     end
     
   protected
-    
-    # Until cancan is updated for rails 4, we intervene so that
-    # strong-parameter permissions are applied before cancan gets there.
-    # Each controller has to define a [resource]_params method.
-    
-    def strengthen_parameters
-      resource = controller_path.singularize.gsub('/', '_').to_sym
-      method = "#{resource}_params"
-      params[resource] &&= send(method) if respond_to?(method, true)
-    end
-    
+        
     def paginated(collection, default_show=10, default_page=1)
       @show = params[:show] || default_show
       @page = params[:page] || default_page
@@ -49,5 +38,34 @@ module Droom
       end
     end
     
+    def set_access_control_headers
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers["Access-Control-Allow-Headers"] = %w{Origin Accept Content-Type X-Requested-With X-CSRF-Token}.join(",")
+      headers["Access-Control-Allow-Methods"] = %{GET PATCH POST}
+    end
+
+    def set_pagination_headers
+      if results = instance_variable_get("@#{name_from_controller}")
+        if results.respond_to? :total_count
+          headers["X-Pagination"] = {
+            limit: results.limit_value,
+            offset: results.offset_value,
+            total_count: results.total_count
+          }.to_json
+        end
+      end
+    end
+
+    # Token auth is expected only over json from a remote service.
+    # Have to supply uid parameter too to obviate miniscule risk of timing attack.
+    #
+    def authenticate_user_from_token!
+      uid = params[:uid].presence
+      user = uid && User.find_by(uid: uid)
+      if user && Devise.secure_compare(user.authentication_token, params[:user_token])
+        sign_in user, store: false
+      end
+    end
+
   end
 end

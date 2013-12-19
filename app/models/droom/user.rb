@@ -11,15 +11,9 @@ module Droom
     ## Authentication
     #
     devise :database_authenticatable,
+           :cookie_authenticatable,
            :recoverable,
-           :rememberable,
-           :trackable,
-           :confirmable,
-           :encryptable,
-           :token_authenticatable,
-           :cocable,
-           :encryptor => :sha512,
-           :reconfirmable => false
+           :confirmable
     
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
@@ -30,7 +24,7 @@ module Droom
     # if you want to create a user account without sending out any messages yet.
     #
     # When you do want to invite that person, call user.resend_confirmation_token or
-    # self the send_confirmation flag on a save.
+    # set the send_confirmation flag on a save.
     #
     attr_accessor :defer_confirmation, :send_confirmation
     
@@ -43,14 +37,14 @@ module Droom
     end
     
     # Called after save by our own late-confirmation mechanism.
-    # If the send_confirmation flag has been set, we affirm.
+    # If the send_confirmation flag has been set, we confirm.
     #
     def send_confirmation?
       !!self.send_confirmation
     end
     
-    # Called on create by devise's automatic confirmation mechanism.
-    # If the defer_confirmation flag has been set, we decline.
+    # Called on create by devise's immediate confirmation mechanism.
+    # If the defer_confirmation flag has been set, we postpone.
     #
     def send_confirmation_notification?
       super && !defer_confirmation?
@@ -58,6 +52,42 @@ module Droom
 
     def password_required?
       confirmed? && (!password.blank?)
+    end
+    
+    ## Session ID
+    #
+    # Allows us to invalidate a session by remote control if someone signs out on a satellite site.
+    
+    def reset_session_id!
+      Rails.logger.warn "+++ User.reset_session_id!"
+      token = generate_authentication_token
+      self.update_column(:session_id, token)
+      token
+    end
+    
+    def clear_session_id!
+      Rails.logger.warn "xxx User.clear_session_id!"
+      self.update_column(:session_id, "")
+    end
+    
+    ## Auth tokens
+    #
+    # Are no longer supported by devise but we use them for domain-cookie auth.
+    
+    def authenticate_token(token)
+      Devise.secure_compare(self.authentication_token, token)
+    end
+
+    def reset_authentication_token!
+      token = generate_authentication_token
+      self.update_column(:authentication_token, token)
+      token
+    end
+    
+    def ensure_authentication_token
+      if authentication_token.blank?
+        self.authentication_token = generate_authentication_token
+      end
     end
     
     # Without a password they can only get in by token auth, which gives us some scope for
@@ -79,6 +109,29 @@ module Droom
       password == password_confirmation && !password.blank?
     end
 
+    # Our old user accounts store passwords as salted sha512 digests. Current best practice uses BCrypt
+    # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
+  
+    def valid_password?(password)
+      begin
+        super(password)
+      rescue BCrypt::Errors::InvalidHash
+        Rails.logger.warn "...trying sha512 on password input"
+        stretches = 10
+        salt = self.password_salt
+        pepper = nil
+        old_digest = Devise::Encryptable::Encryptors::Sha512.digest(password, stretches, salt, pepper)
+        if old_digest == self.encrypted_password   
+          self.password = password
+          self.save
+          return true
+        else
+          # Doesn't match the old format either: password is just wrong.
+          return false
+        end
+      end
+    end 
+    
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
     scope :this_month, -> { where("created_at > ?", Time.now - 1.month) }
@@ -514,6 +567,15 @@ module Droom
     
     def send_confirmation_if_directed
       self.send_confirmation_instructions if send_confirmation?
+    end
+
+  private
+  
+    def generate_authentication_token
+      loop do
+        token = Devise.friendly_token
+        break token unless User.where(authentication_token: token).first
+      end
     end
 
   end

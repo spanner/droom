@@ -9,7 +9,7 @@ Droom::Engine.routes.draw do
   match '/suggestions'  => 'suggestions#index', :as => "suggestions", :via => [:get, :options]
   match '/suggestions/:type'  => 'suggestions#index', :via => [:get, :options]
 
-  devise_for :users, :class_name => 'Droom::User', :module => :devise, :controllers => {:confirmations => 'droom/confirmations'}
+  devise_for :users, :class_name => 'Droom::User', :module => :devise, :controllers => {:confirmations => 'droom/confirmations', :sessions => 'droom/sessions'}
   
   # intermediate confirmation step to allow invitation without setting a password
   devise_scope :user do
@@ -84,7 +84,10 @@ Droom::Engine.routes.draw do
   end
 
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
-    resources :users
+    resources :users do
+      get :authenticate, on: :member
+      delete :deauthenticate, on: :collection
+    end
     resources :venues
   end
 

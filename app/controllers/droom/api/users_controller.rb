@@ -1,9 +1,10 @@
 module Droom::Api
   class UsersController < Droom::Api::ApiController
-
+    skip_before_filter :authenticate_user!
+    skip_before_action :verify_authenticity_token
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
-    load_and_authorize_resource find_by: :uid, class: "Droom::User"
+    load_resource find_by: :uid, class: "Droom::User"
     # after_filter :set_pagination_headers, only: [:index]
     
     def index
@@ -13,7 +14,31 @@ module Droom::Api
     def show
       render json: @user
     end
-
+    
+    def authenticate
+      # This usually happens before the client is in a position to set the auth header token, 
+      # (because we're only at the initial auth stage) so we expect token in params.
+      token = params[:token]
+      if token.blank?
+        token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
+      end
+      if @user && token.present? && @user.authenticate_token(token)
+        render json: @user
+      else
+        head :unauthorized
+      end
+    end
+  
+    def deauthenticate
+      Rails.logger.warn "deauthenticating #{current_user.inspect}"
+      if current_user
+        current_user.clear_session_id!
+        render json: current_user
+      else
+        head :unauthorized
+      end
+    end
+  
     def update
       @user.update_attributes(user_params)
       render json: @user
