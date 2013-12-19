@@ -32,6 +32,7 @@ module Droom
     end
 
     def new
+      @event.start = Time.zone.now.change(hour: 10)
       respond_with @event
     end
 
@@ -99,7 +100,7 @@ module Droom
     end
     
     def event_params
-      params.require(:event).permit(:name, :description, :event_set_id, :calendar_id, :all_day, :master_id, :url, :start, :finish, :timezone, :venue_id, :venue_name)
+      params.require(:event).permit(:name, :description, :event_set_id, :event_type_id, :calendar_id, :all_day, :master_id, :url, :start, :finish, :timezone, :venue_id, :venue_name)
     end
 
   end

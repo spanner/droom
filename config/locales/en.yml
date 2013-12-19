@@ -108,6 +108,7 @@ en:
   add_permission: "add a permission"
   add_person: invite user
   add_group: "add group"
+  add_new_user: "Invite a new data room user"
   add_permission: "add permission"
   add_service: "add service"
   add_subfolder: add sub-folder
@@ -209,6 +210,7 @@ en:
   event_introduction: ""
   event_no_description: "No description available"
   expel: "remove from group"
+  file_under: "File under"
   find_documents: "Find documents"
   find_people: "Find people"
   folder: "folder"

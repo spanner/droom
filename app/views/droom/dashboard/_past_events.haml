@@ -1,9 +1,9 @@
 - calendar = Droom::Calendar.find_or_create_by_name('main')
-- events = calendar.events.past.limit(4)
+- events ||= calendar.events.past.limit(10)
+
 - if events.any?
   .divider
-  #past_events{:data => {:refreshable => true, :url => droom.events_url(:limit => 4)}}
-
+  #past_events
     %h2.section
       = link_to t(:recent_events), main_app.calendar_url
       - if can?(:create, Droom::Event)

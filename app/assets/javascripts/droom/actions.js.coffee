@@ -27,9 +27,12 @@ jQuery ($) ->
   #
   # refreshable, affected rules, etc.
 
-  $.fn.refresher = () ->
+  $.fn.refresher = ->
     @each ->
       new Refresher @
+
+  $.fn.refresh = ->
+    @trigger('refresh')
 
   class Refresher
     constructor: (element) ->

@@ -11,7 +11,8 @@ module Droom
 
     belongs_to :created_by, :class_name => "Droom::User"
 
-    has_folder #... and subfolders via agenda_categories
+    belongs_to :event_type
+    has_folder :within => :event_type #... and subfolders via agenda_categories
 
     has_many :invitations, :dependent => :destroy
     has_many :users, :through => :invitations
@@ -35,9 +36,11 @@ module Droom
     validates :finish, :date => {:after => :start, :allow_nil => true}
     validates :uuid, :presence => true, :uniqueness => true
     validates :name, :presence => true
+    validates :event_type_id, :presence => true
 
     before_validation :set_uuid
     before_validation :slug_from_name_and_year
+    before_validation :defalt_event_type
 
     ## Event retrieval in various ways
     #
@@ -209,6 +212,10 @@ module Droom
       start.strftime("%m")
     end
 
+    def month_name
+      start.strftime("%b")
+    end
+
     def year
       start.strftime("%Y")
     end
@@ -344,6 +351,10 @@ module Droom
         :id => id
       }
     end
+    
+    def folder_name
+      "#{name} (#{month_name} #{year})"
+    end
 
   protected
     
@@ -351,6 +362,10 @@ module Droom
     #
     def set_uuid
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
+    end
+
+    def defalt_event_type
+      self.event_type ||= Droom::EventType.default
     end
 
     def parse_date(value)

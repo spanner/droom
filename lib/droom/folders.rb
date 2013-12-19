@@ -74,17 +74,17 @@ module Droom
         Droom::Document.in_folders(folder.family)
       end
 
-      #
       # Here we refer to the class variable defined during `has_folder` configuration. If it exists, we will put our folder 
       # inside that of the named associate. The containing folder might be created as a side effect.
+      # if it looks like an association name, we ask the associate for a folder. Otherwise we'll just use it as a name.
       #
       def get_parent_folder
-        pfh = self.class.class_variable_get(:"@@parent_folder_holder")
-        if pfh && holder = send(pfh.to_sym)
-          holder.folder
+        parent_folder_option = self.class.class_variable_get(:"@@parent_folder_holder")
+        if parent_folder_option && respond_to?(parent_folder_option.to_sym) && folder_holder = send(parent_folder_option.to_sym)
+          folder_holder.folder
         else
-          # otherwise we want a root folder like /Events
-          Droom::Folder.where(:slug => self.class.to_s.titlecase.split('/').last.pluralize, :parent_id => nil).first_or_create
+          slug = parent_folder_option || self.class.to_s.titlecase.split('/').last.pluralize
+          Droom::Folder.where(:slug => slug, :parent_id => nil).first_or_create
         end
       end
 

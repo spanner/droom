@@ -104,17 +104,17 @@ module Droom
 
     def set_properties
       if holder
-        self.name ||= holder.name
+        if holder.respond_to?(:folder_name)
+          self.name ||= holder.folder_name
+        else
+          self.name ||= holder.name
+        end
         self.slug ||= holder.slug
       end
       # folders originally only had slugs, so this happens from time to time
       self.name ||= self.slug
       self.public = !holder && (!parent || parent.public?)
       true
-    end
-
-    def ensure_slug
-      ensure_presence_and_uniqueness_of(:slug, name.parameterize)
     end
 
   end

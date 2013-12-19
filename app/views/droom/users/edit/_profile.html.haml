@@ -6,6 +6,8 @@
     %h2.titlebar
       - if @user == current_user
         = t :edit_your_profile
+      - elsif @user.new_record?
+        = t :add_new_user
       - else
         = t :edit_profile_of, name: @user.name
 

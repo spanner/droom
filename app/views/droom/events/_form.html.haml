@@ -35,12 +35,13 @@
         = render 'droom/shared/toolbar'
       = f.text_area :description, :id => 'd1'
 
-    - if admin?
-      %p.calendar
-        = f.label :calendar_id
-        = f.select :calendar_id, Droom::Calendar.all.collect{|cal| [cal.name, cal.id]}
-
+    %p.event_type
+      = f.label :event_type_id, t(:file_under)
+      = f.select :event_type_id, Droom::EventType.for_selection
+      
+    
     .buttons
       = f.submit t(:save_event)
+      %br
       = t :or
       = link_to t(:cancel), "/", :class => 'cancel'
