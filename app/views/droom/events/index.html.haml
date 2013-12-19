@@ -1,10 +1,13 @@
 #calendar
   %p.navigation
-    - if @direction == "past"
-      = link_to "Show future events", events_url
-    - else
-      = link_to "Show past events", events_url(direction: "past")
-  
+    = link_to_unless_current "Future events", events_url(direction: "future")
+    \|
+    = link_to_unless_current "Past events", events_url(direction: "past")
+    - 4.times do |i|
+      - year = Date.today.year + 1 - i
+      \|
+      = link_to_unless_current year, events_url(year: year)
+      
   = render :partial => 'events'
 
   %p.action
@@ -13,7 +16,12 @@
       = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => "#events"}
 
 - content_for :title do
-  = t :calendar
+  - if @year
+    = t(:events_in, period: @year)
+  - elsif @direction == "past"
+    = t(:past_events)
+  - else
+    = t(:calendar)
     
 - content_for :margin do
   = render :partial => "droom/shared/calendar_holder"

@@ -64,7 +64,10 @@ module Droom
       if Droom.separate_calendars?
         events = events.in_calendar(Droom::Calendar.where(:name => "main").first_or_create)
       end
-      if params[:direction] == 'past'
+      if params[:year].present?
+        @year = params[:year].to_i
+        @events = paginated(events.in_year(@year))
+      elsif params[:direction] == 'past'
         @direction = 'past'
         @events = paginated(events.past.order('start DESC'))
       else

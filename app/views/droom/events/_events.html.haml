@@ -6,5 +6,13 @@
     %p.nothing
       = t :no_events
 
-= page_entries_info @events, entry_name: @direction == 'past' ? "past event" : "future event"
+- if @year
+  - entry_name = t(:events_in, period: @year)
+- elsif @direction == 'past'
+  - entry_name = t(:past_events)
+- else
+  - entry_name = t(:future_events)
+
+%p.note
+  = page_entries_info @events, entry_name: entry_name
 = paginate @events

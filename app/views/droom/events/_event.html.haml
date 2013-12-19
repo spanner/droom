@@ -21,7 +21,7 @@
   .datemark
     %span.mon= event.start.strftime('%b')
     %span.dom= event.start.strftime('%d')
-    - if event.start.year != Date.today.year
+    - if @year || event.start.year != Date.today.year
       %span.year= event.start.strftime('%Y')
 
   .summary
