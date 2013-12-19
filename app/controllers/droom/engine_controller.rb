@@ -16,8 +16,8 @@ module Droom
   protected
         
     def paginated(collection, default_show=10, default_page=1)
-      @show = params[:show] || default_show
-      @page = params[:page] || default_page
+      @show = (params[:show] || default_show).to_i
+      @page = (params[:page] || default_page).to_i
       collection.page(@page).per(@show)
     end
     

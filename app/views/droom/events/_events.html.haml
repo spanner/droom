@@ -5,4 +5,6 @@
   - else
     %p.nothing
       = t :no_events
-  
+
+= page_entries_info @events, entry_name: @direction == 'past' ? "past event" : "future event"
+= paginate @events

@@ -64,8 +64,13 @@ module Droom
       if Droom.separate_calendars?
         events = events.in_calendar(Droom::Calendar.where(:name => "main").first_or_create)
       end
-      @past_events = paginated(events.past.order('start DESC'))
-      @events = paginated(events.future_and_current.order('start ASC'))
+      if params[:direction] == 'past'
+        @direction = 'past'
+        @events = paginated(events.past.order('start DESC'))
+      else
+        @direction = 'future'
+        @events = paginated(events.future_and_current.order('start ASC'))
+      end
     end
     
     def build_event
