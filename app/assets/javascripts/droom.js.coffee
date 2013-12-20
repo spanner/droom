@@ -49,7 +49,6 @@ jQuery ($) ->
     @find_including_self('[data-action="fit"]').self_sizes()
     @find_including_self('form[data-action="filter"]').filter_form()
     @find_including_self('div[data-panel]').panel()
-    @find_including_self('[data-menu]').action_menu()
     @find_including_self('table[data-hoverable]').hover_table()
     
     # it's not very easy to add data attributes to kaminari pagination links

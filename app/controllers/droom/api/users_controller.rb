@@ -76,7 +76,9 @@ module Droom::Api
 
     def get_users
       users = Droom::User.in_name_order
-      
+      if params[:person_uid].present?
+        users = users.where(person_uid: params[:person_uid])
+      end
       if params[:q].present?
         @fragments = params[:q].split(/\s+/)
         @fragments.each { |frag| users = users.matching(frag) }
