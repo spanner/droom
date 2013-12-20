@@ -97,7 +97,7 @@ module Droom::Api
 
     def user_params
       #TODO: close this right down once users have been imported
-      params.require(:user).permit(:uid, :title, :family_name, :given_name, :chinese_name, :honours, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :encrypted_password, :created_at, :updated_at, :confirmed_at, :authentication_token, :password_salt)
+      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :encrypted_password, :created_at, :updated_at, :confirmed_at, :authentication_token, :password_salt)
     end
 
   end
