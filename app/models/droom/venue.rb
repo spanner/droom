@@ -22,6 +22,8 @@ module Droom
     scope :in_name_order, -> {
       order('name ASC')
     }
+    
+    default_scope -> {order('name ASC')}
 
     def self.visible_to(user=nil)
       self.scoped({})
