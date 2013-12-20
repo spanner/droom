@@ -57,8 +57,9 @@ module Droom
 
     default_scope -> { order("droom_groups.created_at ASC") }
 
-    def admit(user)
-      self.users << user
+    def admit(users)
+      users = *[users].flatten
+      self.users << users
     end
 
     def attach(doc)
