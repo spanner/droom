@@ -172,6 +172,49 @@ jQuery ($) ->
 
 
 
+  # The action menu is a simple popup submenu used to hide editing links.
+  #
+  $.fn.action_menu = ->
+    @each ->
+      new ActionMenu(@)
+    @
+
+  class ActionMenu
+    @menus: $()
+    @remember: (menu) ->
+      @menus.push(menu)
+    @hideAll: () ->
+      menu.hide() for menu in @menus
+
+    constructor: (element) ->
+      @_link = $(element)
+      @_selector = "[data-for=\"#{@_link.attr('data-menu')}\"]"
+      @_link.click @toggle
+      ActionMenu.remember(@)
+
+    place: =>
+      pos = @_link.position()
+      $(@_selector).css
+        top: pos.top + 20
+        left: pos.left
+
+    toggle: (e) =>
+      if e
+        e.preventDefault() 
+        e.stopPropagation()
+      if @_link.hasClass('up') then @hide() else @show()
+
+    show: (e) =>
+      @place()
+      ActionMenu.hideAll()
+      @_link.addClass('up')
+      $(@_selector).first().stop().slideDown 'fast'
+      $(document).bind "click", @hide
+    
+    hide: (e) =>
+      $(@_selector).first().stop().slideUp 'fast', () =>
+        @_link.removeClass('up')
+      $(document).unbind "click", @hide
 
 
 
