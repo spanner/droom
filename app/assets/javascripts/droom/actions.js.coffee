@@ -154,6 +154,66 @@ jQuery ($) ->
           e.preventDefault() if e
 
 
+
+
+
+  # The setter action sets a single boolean object property by putting a single parameter to the link href.
+  # :property and :url data- attributes are required. True/false state is signalled by yes/no css class that
+  # presumably also affects apperance.
+  #
+  # As usual success can trigger the refreshment of other elements selected by the data-affected attribute.
+  #
+  #   %a{:data => {:action => 'setter', :property => 'featured', url: "/api/threads/27/posts/32"}}
+  #
+  # will toggle on and off the 'featured' property of the resource at that address.
+  #
+  $.fn.setter = () ->
+    @each ->
+      new Setter(@)
+  
+  class Setter
+    constructor: (element, @_root, @_property) ->
+      @_link = $(element)
+      @_root ?= @_link.attr('data-object')
+      @_property ?= @_link.attr('data-property')
+      @_positive = @_link.attr('data-positive') ? true
+      @_negative = @_link.attr('data-negative') ? false
+      @_link.bind "click", @toggle
+
+    data: (e) =>
+      data = {}
+      value = if @_link.hasClass('yes') then @_negative else @_positive
+      data[@_root] = {}
+      data[@_root][@_property] = value 
+      data['_method'] = "PUT"
+      data
+
+    toggle: (e) =>
+      e.preventDefault() if e
+      value = !@_link.hasClass('yes')
+      data = {}
+      @_link.addClass('waiting')
+      $.ajax
+        url: @_link.attr('href')
+        type: "POST"
+        data: @data()
+        success: @update
+        error: @error
+
+    error: (xhr, status, error) =>
+      @_link.removeClass('waiting').signal_error()
+
+    update: (response) =>
+      @_link.removeClass('waiting')
+      if response['attributes'][@_property]
+        @_link.addClass('yes').removeClass('no')
+      else
+        @_link.addClass('no').removeClass('yes')
+      @_link.signal_confirmation()
+
+
+
+
   # The toggle action shows or hides the affected elements with cookie-based persistence across page
   # views. A link like this:
   #

@@ -40,6 +40,7 @@ jQuery ($) ->
     @find_including_self('[data-action="remove_all"]').removes_all()
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="column_toggle"]').column_expander()
+    @find_including_self('[data-action="setter"]').setter()
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-action="twister"]').twister()
     @find_including_self('[data-action="alternate"]').alternator()

@@ -41,14 +41,14 @@ jQuery ($) ->
         input.change() if $(@).is(":checked")
 
   $.easing.glide = (x, t, b, c, d) ->
-    -c * ((t=t/d-1)*t*t*t - 1) + b
+    -c * ((t=t / d-1)*t*t*t - 1) + b
 
   $.easing.boing = (x, t, b, c, d, s) ->
     s ?= 1.70158;
-    c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b
+    c*((t=t / d-1)*t*((s+1)*t + s) + 1) + b
 
   $.easing.expo = (x, t, b, c, d) ->
-    (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b
+    (t==d) ? b+c : c * (-Math.pow(2, -10 * t / d) + 1) + b
 
   $.add_stylesheet = (path) ->
     if document.createStyleSheet

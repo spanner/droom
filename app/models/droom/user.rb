@@ -13,6 +13,7 @@ module Droom
     devise :database_authenticatable,
            :cookie_authenticatable,
            :recoverable,
+           :trackable,
            :confirmable
     
     before_validation :ensure_uid!
