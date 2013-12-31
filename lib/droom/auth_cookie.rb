@@ -24,18 +24,13 @@ module Droom
       @cookies.delete cookie_name, cookie_options
     end
 
-    # The id of the resource (e.g. User) referenced in the cookie.
-    def uid
-      values[0]
-    end
-
     def token
-      values[1]
+      values[0]
     end
 
     # The Time at which the cookie was created.
     def created_at
-      valid? ? DateTime.parse(values[2]) : nil
+      valid? ? DateTime.parse(values[1]) : nil
     end
 
     # Whether the cookie appears valid.
@@ -64,7 +59,7 @@ module Droom
       begin
         @values = signer.decode(@cookies[cookie_name])
       rescue SignedJson::Error
-        [nil, nil, nil]
+        [nil, nil]
       end
     end
 
@@ -74,7 +69,7 @@ module Droom
 
     # Note that this is destructive to all previous authentication tokens even if the cookie is not eventually set.
     def set_auth_values(resource)
-      signer.encode [ resource.uid, resource.reset_authentication_token!, Time.now ]
+      signer.encode [ resource.reset_authentication_token!, Time.now ]
     end
 
     def cookie_options

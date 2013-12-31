@@ -104,11 +104,30 @@ a.external
 a.toggle
   +icon_link("droom/toggle.png")
   color: $blue
+  &:hover
+    color: $hover
   &.showing
     background-position: 0 -64px
     &:hover
       color: $hover
       background-position: 0 -96px
+
+a.setter
+  +icon_link("droom/setter.png")
+  &.yes
+    color: $green
+    background-position: 0 0
+    &:hover
+      background-position: 0 -32px
+  &.no
+    color: $pale
+    background-position: 0 -64px
+    &:hover
+      background-position: 0 -96px
+  &:hover
+    color: $hover
+
+
 
 .unavailable
   +small

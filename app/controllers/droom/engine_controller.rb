@@ -4,10 +4,9 @@ module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
     
-    before_filter :authenticate_user_from_token!, unless: :devise_controller?
     before_filter :authenticate_user!, unless: :devise_controller?
-    
-    rescue_from CanCan::AccessDenied, :with => :not_allowed
+
+    rescue_from "CanCan::AccessDenied", :with => :not_allowed
     
     def current_ability
       @current_ability ||= Droom::Ability.new(current_user)
@@ -53,17 +52,6 @@ module Droom
             total_count: results.total_count
           }.to_json
         end
-      end
-    end
-
-    # Token auth is expected only over json from a remote service.
-    # Have to supply uid parameter too to obviate miniscule risk of timing attack.
-    #
-    def authenticate_user_from_token!
-      uid = params[:uid].presence
-      user = uid && User.find_by(uid: uid)
-      if user && Devise.secure_compare(user.authentication_token, params[:user_token])
-        sign_in user, store: false
       end
     end
 

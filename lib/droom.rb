@@ -57,6 +57,7 @@ module Droom
                  :separate_calendars
   
   class DroomError < StandardError; end
+  class AuthRequired < DroomError; end
   class PermissionDenied < DroomError; end
 
   class << self

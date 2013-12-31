@@ -16,7 +16,8 @@
       %br
       = f.email_field :email, :required => true, :autofocus => true
 
-    = render "droom/users/edit/password_fields", :f => f, :user => user
+    = render "droom/users/edit/password_fields", f: f, user: user
+    = render "droom/users/edit/memberships", f: f, user: user
 
     .buttons
       - if @user == current_user

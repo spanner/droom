@@ -1,12 +1,13 @@
 module Droom::Api
   class UsersController < Droom::Api::ApiController
-    skip_before_filter :authenticate_user!#, only: [:authenticate]
+    skip_before_filter :authenticate_user!, only: [:authenticate]
+    skip_before_filter :authenticate_user_from_header_token!, only: [:authenticate]
     skip_before_action :verify_authenticity_token
+
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
-    load_resource find_by: :uid, class: "Droom::User"
-    # authorize_resource except: [:authenticate]
-    # after_filter :set_pagination_headers, only: [:index]
+    load_and_authorize_resource find_by: :uid, class: "Droom::User", except: [:authenticate]
+    after_filter :set_pagination_headers, only: [:index]
     
     def index
       render json: @users
@@ -16,24 +17,31 @@ module Droom::Api
       render json: @user
     end
     
+    # This is a almost always a preliminary call at the initial auth stage, 
+    # so the client is not yet setting auth headers. We look for a token in params too.
+    #
     def authenticate
-      # This usually happens before the client is in a position to set the auth header token, 
-      # (because we're only at the initial auth stage) so we expect token in params.
-      token = params[:token]
+      token = params[:tok]
       if token.blank?
         token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
       end
-      if @user && token.present? && @user.authenticate_token(token)
+      if @user = Droom::User.find_by(authentication_token: token)
         render json: @user
       else
         head :unauthorized
       end
     end
   
+    # whereas deauth can only happen to an authenticated user, so we can
+    # observe the header token in the usual way and close the auth session.
+    #
     def deauthenticate
       Rails.logger.warn "deauthenticating #{current_user.inspect}"
       if current_user
+        # to invalidate data room session, if there is one
         current_user.clear_session_id!
+        # and any SSO cookie, though that should have been deleted by the client
+        current_user.reset_authentication_token!
         render json: current_user
       else
         head :unauthorized
@@ -84,15 +92,13 @@ module Droom::Api
         @fragments.each { |frag| users = users.matching(frag) }
       end
 
-      @users = users
-
-      # @show = params[:show] || 20
-      # @page = params[:page] || 1
-      # if @show == 'all'
-      #   @users = users
-      # else
-      #   @users = users.page(@page).per(@show)
-      # end
+      @show = params[:show] || 20
+      @page = params[:page] || 1
+      if @show == 'all'
+        @users = users
+      else
+        @users = users.page(@page).per(@show)
+      end
     end
 
     def user_params
