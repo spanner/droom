@@ -178,6 +178,7 @@ jQuery ($) ->
       @_property ?= @_link.attr('data-property')
       @_positive = @_link.attr('data-positive') ? true
       @_negative = @_link.attr('data-negative') ? false
+      @_affected = @_link.attr('data-affected')
       @_link.bind "click", @toggle
 
     data: (e) =>
@@ -205,11 +206,12 @@ jQuery ($) ->
 
     update: (response) =>
       @_link.removeClass('waiting')
-      if response['attributes'][@_property]
+      if response[@_property]
         @_link.addClass('yes').removeClass('no')
       else
         @_link.addClass('no').removeClass('yes')
-      @_link.signal_confirmation()
+      $(@_affected).refresh()
+      
 
 
 

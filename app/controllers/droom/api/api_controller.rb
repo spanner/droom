@@ -22,7 +22,7 @@ module Droom::Api
 
     def authenticate_user_from_header_token!
       token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
-      if token && user = User.find_by(authentication_token: token)
+      if token && user = Droom::User.find_by(authentication_token: token)
         sign_in user, store: false
       else
         raise Droom::AuthRequired, "authentication required"
