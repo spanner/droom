@@ -80,7 +80,7 @@ module Droom
       #
       def get_parent_folder
         parent_folder_option = self.class.class_variable_get(:"@@parent_folder_holder")
-        if parent_folder_option && respond_to?(parent_folder_option.to_sym)# && folder_holder = send(parent_folder_option.to_sym)
+        if parent_folder_option && respond_to?(parent_folder_option.to_sym) && folder_holder = send(parent_folder_option.to_sym)
           folder_holder.folder
         else
           slug = parent_folder_option || self.class.to_s.titlecase.split('/').last.pluralize
