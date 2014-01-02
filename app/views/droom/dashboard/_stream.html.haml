@@ -1,6 +1,6 @@
 #stream
   %h2.section
-    = link_to t(:stream_title), droom.scraps_url
+    = t(:stream_title)
     - if admin? || Droom.stream_shared?
       %span.action
         = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add minimal", :data => {:action => "popup", :prepended => ".preload", :affected => "#scraps"}
