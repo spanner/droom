@@ -54,7 +54,8 @@ module Droom
                  :all_events_public,
                  :all_documents_public,
                  :password_pattern,
-                 :separate_calendars
+                 :separate_calendars,
+                 :second_time_zone
   
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
@@ -226,6 +227,10 @@ module Droom
     
     def separate_calendars?
       !!@@separate_calendars
+    end
+    
+    def second_time_zone?
+      !!@@second_time_zone
     end
     
     def password_pattern

@@ -40,7 +40,7 @@ module Droom
 
     before_validation :set_uuid
     before_validation :slug_from_name_and_year
-    before_validation :defalt_event_type
+    before_validation :set_default_event_type
 
     ## Event retrieval in various ways
     #
@@ -364,7 +364,7 @@ module Droom
       self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
     end
 
-    def defalt_event_type
+    def set_default_event_type
       self.event_type ||= Droom::EventType.default
     end
 

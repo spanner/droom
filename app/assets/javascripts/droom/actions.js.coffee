@@ -283,7 +283,7 @@ jQuery ($) ->
            path: '/'
 
 
-  # The collapser is a self-expanding unit. Basically a toggle. #todo: amalgamate!
+  # The collapser is a self-expanding unit. Basically, a toggle. #todo: amalgamate!
 
   $.fn.collapser = (options) ->
     @each ->
