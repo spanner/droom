@@ -28,7 +28,7 @@ module Devise
 
       def resource
         # returns nil when user is missing.
-        @resource ||= mapping.to.where(:uid => cookie.uid, :authentication_token => cookie.token).first
+        @resource ||= mapping.to.where(:authentication_token => cookie.token).first
       end
 
       def pass
