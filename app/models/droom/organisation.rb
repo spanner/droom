@@ -3,6 +3,8 @@ module Droom
     has_many :users
     belongs_to :owner, :class_name => 'Droom::User'
     belongs_to :created_by, :class_name => 'Droom::User'
+    
+    default_scope -> {order("name ASC")}
 
     def self.for_selection
       organisations = self.order("name asc").map{|f| [f.name, f.id] }

@@ -19,9 +19,7 @@ module Droom
     end
 
     def calendar
-      respond_with @events do |format|
-        format.js { render :partial => 'droom/events/calendar' }
-      end
+      respond_with @events
     end
 
     def show
