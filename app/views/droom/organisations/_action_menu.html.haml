@@ -4,6 +4,6 @@
       %li
         = link_to t(:edit_organisation), droom.edit_organisation_url(organisation), :class => 'edit', :data => {:action => "popup", :replaced => "#organisation_#{organisation.id}"}
       %li
-        = link_to t(:add_person), droom.new_organisation_person_url(organisation), :class => 'add', :data => {:action => "popup", :affected => "#organisation_#{organisation.id}"}
+        = link_to t(:add_user), droom.new_organisation_user_url(organisation), :class => 'add', :data => {:action => "popup", :affected => "#organisation_#{organisation.id}"}
       %li
         = link_to t(:delete_organisation), droom.organisation_url(organisation), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#organisation_#{organisation.id}", :affected => ".minimonth", :confirm => t(:confirm_delete_organisation, :name => organisation.name)}

@@ -4,13 +4,13 @@
   .header
     = link_to "X", '#', :class => "closer", :data => {:action => "close"}
     %h2.titlebar
-      = user.colloquial_name
+      = t :profile
     
   .user
     .mugshot.full{:style => "background-image: url(#{user.image.url('thumb')})"}
     .detail
       %h3
-        = user.formal_name
+        = user.colloquial_name
 
       %p.contact
         - if user.organisation

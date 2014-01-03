@@ -31,7 +31,10 @@ module Droom
   
     def new
       if params[:group_id].present?
-        @user.groups << Group.find(params[:group_id])
+        @user.groups << Droom::Group.find(params[:group_id])
+      end
+      if params[:organisation_id].present? && Droom.use_organisations?
+        @user.organisation = Droom::Organisation.find(params[:organisation_id])
       end
       respond_with @user
     end
