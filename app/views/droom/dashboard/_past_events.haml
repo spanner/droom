@@ -1,5 +1,5 @@
 - calendar = Droom::Calendar.find_or_create_by_name('main')
-- events ||= calendar.events.past.limit(10)
+- events ||= calendar.events.past.limit(5)
 
 - if events.any?
   .divider
@@ -12,6 +12,10 @@
 
     - if events.any?
       = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
+      - if calendar.events.past.count > 5
+        %p
+          = link_to t(:more_in_calendar), main_app.calendar_url(direction: "past")
+
     - else
       %p.nothing
         = t :no_past_events

@@ -1,7 +1,7 @@
 .divider
-#events{:data => {:refreshable => true, :url => droom.events_url(:limit => 8)}}
+#events{:data => {:refreshable => true, :url => droom.events_url(:limit => 5)}}
   - calendar = Droom::Calendar.find_or_create_by_name('main')
-  - events = calendar.events.future_and_current.order('start ASC').limit(8)
+  - events = calendar.events.future_and_current.order('start ASC').limit(5)
 
   %h2.section
     = link_to t(:future_events), main_app.calendar_url
@@ -15,6 +15,6 @@
     %p.nothing
       = t :no_future_events
   
-  - if calendar.events.future_and_current.count > 8
+  - if calendar.events.future_and_current.count > 5
     %p
       = link_to t(:more_in_calendar), main_app.calendar_url
