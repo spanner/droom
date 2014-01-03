@@ -119,11 +119,7 @@ jQuery ($) ->
       @_iteration = 0
 
     place: (e) =>
-      cols = @_container.find("div.column").not('.hidden').length
-      if cols
-        width = (cols * 280) + 40
-      else 
-        width = @_container.children().first().width() || 580
+      width = @_container.children().first().width() || 580
       w = $(window)
       height_limit = w.height() - 100
       height = [@_container.height(), height_limit].min()
