@@ -419,13 +419,10 @@ jQuery ($) ->
       
     prepare: (xhr, settings) =>
       @_container.fadeTo "fast", 0.2
-      @_request?.abort()
-      @_request = xhr
     
     capture: (e, data, status, xhr) =>
       @_cache[@serialize()] = data
       @display(data)
-      @_request = null
       @saveState(data) if @_historical
 
     display: (results) =>
@@ -435,10 +432,7 @@ jQuery ($) ->
       replacement.find('a.cancel').click(@revert)
 
     revert: (e) =>
-      if @_historical
-        @restoreState(@_original_qs)
-      else
-        @display(@_original_content)
+      @display(@_original_content)
 
     saveState: (results, qs) =>
       qs ?= @serialize()
