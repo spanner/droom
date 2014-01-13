@@ -1478,6 +1478,15 @@ ul.filing
       top: 0
       right: 0
 
+.no-touch
+  ul.filing
+    li.document
+      span.action
+        visibility: hidden
+      &:hover
+        span.action
+          visibility: visible
+
 ul.folder
   position: relative
   float: right
