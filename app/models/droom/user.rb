@@ -471,7 +471,6 @@ module Droom
     end
 
     def for_email(token=nil)
-      self.ensure_confirmation_token!
       {
         :informal_name => informal_name,
         :formal_name => formal_name,
