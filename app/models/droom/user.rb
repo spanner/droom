@@ -470,7 +470,7 @@ module Droom
       @messaging_groups
     end
 
-    def for_email
+    def for_email(token=nil)
       self.ensure_confirmation_token!
       {
         :informal_name => informal_name,
@@ -479,9 +479,9 @@ module Droom
         :given_name => given_name,
         :chinese_name => chinese_name,
         :email => email,
-        :confirmation_url => Droom::Engine.routes.url_helpers.welcome_url(:id => self.id, :confirmation_token => self.confirmation_token, :host => ActionMailer::Base.default_url_options[:host]),
-        :sign_in_url => Droom::Engine.routes.url_helpers.new_user_session_path(:host => ActionMailer::Base.default_url_options[:host]),
-        :password_reset_url => Droom::Engine.routes.url_helpers.edit_user_password_url(:reset_password_token => self.reset_password_token, :host => ActionMailer::Base.default_url_options[:host])
+        :confirmation_url => Droom::Engine.routes.url_helpers.welcome_url(:id => self.id, :confirmation_token => token, :host => ActionMailer::Base.default_url_options[:host]),
+        :password_reset_url => Droom::Engine.routes.url_helpers.edit_user_password_url(:reset_password_token => token, :host => ActionMailer::Base.default_url_options[:host]),
+        :sign_in_url => Droom::Engine.routes.url_helpers.new_user_session_path(:host => ActionMailer::Base.default_url_options[:host])
       }
     end
 
