@@ -3,7 +3,7 @@ module Droom
     helper Droom::DroomHelper
     respond_to :html, :js
     layout :no_layout_if_pjax
-    before_filter :set_view, only: [:show, :edit]
+    before_filter :set_view, only: [:show, :edit, :update]
     before_filter :build_user, only: [:create]
     load_and_authorize_resource
 
@@ -51,12 +51,9 @@ module Droom
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
-      if @user.update_attributes(user_params)
-        sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
-        render :show
-      else
-        render :edit
-      end
+      @user.update_attributes(user_params)
+      sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
+      respond_with @user
     end
 
     def destroy
