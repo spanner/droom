@@ -2,67 +2,72 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  activerecord:
-    attributes:
-      droom:
-        document:
-          category: "Category"
-          name: "Name"
-          filename: "Filename"
-          filesize: "Size"
-          created_at: "Created"
-          attached_to: "Attached to"
-          name: "Document name"
-          description: "Document description"
-        event:
-          name: "Event name"
-          venue_name: "Choose or add a location"
-          start_time: "Time"
-          finish_time: "Finish (optional)"
-          start_date: "Date"
-          calendar_id: "Calendar"
-          private: "hidden unless attending"
-        group:
-          name: "Group name"
-          description: "Notes"
-          directory: "Show in directory"
-        folder: 
-          name: "Folder name"
-          slug: "Folder path"
-        organisation:
-          name: "Name"
-          url: "Web link"
-          description: "Mission and description"
-        permission:
-          service_id: "Service"
-          name: "Title or link text"
-          url: "Link destination"
-          body: "Body text"
-        scrap:
-          name: "Title"
-          url: "Link destination"
-          body: "Body text or quote"
-          note: "Caption"
-          scraptype_image: "Image"
-          scraptype_text: "Text"
-          scraptype_video: "Video"
-          scraptype_link: "Link"
-          scraptype_quote: "Quote"
-        service:
-          name: "Name"
-          description: "Notes"
-          slug: "Key"
-        user:
-          given_name: "Given name"
-          family_name: "Family name"
-          chinese_name: "中国姓名"
-          email: "Private email address"
-          phone: "Telephone"
-          mobile: "Mobile/cell"
-          address: "Postal address"
-          dob: "Date of birth"
-          organisation_id: "Organisation"
-          group_ids: "Group memberships"
+  helpers:
+    label:
+      document:
+        category: "Category"
+        name: "Name"
+        filename: "Filename"
+        filesize: "Size"
+        created_at: "Created"
+        attached_to: "Attached to"
+        name: "Document name"
+        description: "Document description"
+      event:
+        name: "Event name"
+        venue_name: "Choose or add a location"
+        start_time: "Time"
+        finish_time: "Finish (optional)"
+        start_date: "Date"
+        calendar_id: "Calendar"
+        private: "hidden unless attending"
+      group:
+        name: "Group name"
+        description: "Notes"
+        directory: "Show in directory"
+      folder: 
+        name: "Folder name"
+        slug: "Folder path"
+      organisation:
+        name: "Name"
+        url: "Web link"
+        description: "Mission and description"
+      permission:
+        service_id: "Service"
+        name: "Title or link text"
+        url: "Link destination"
+        body: "Body text"
+      scrap:
+        name: "Title"
+        url: "Link destination"
+        body: "Body text or quote"
+        note: "Caption"
+        scraptype_image: "Image"
+        scraptype_text: "Text"
+        scraptype_video: "Video"
+        scraptype_link: "Link"
+        scraptype_quote: "Quote"
+      service:
+        name: "Name"
+        description: "Notes"
+        slug: "Key"
+      user:
+        given_name: "Given name"
+        family_name: "Family name"
+        chinese_name: "中国姓名"
+        email: "Private email address"
+        phone: "Telephone"
+        mobile: "Mobile/cell"
+        address: "Postal address"
+        dob: "Date of birth"
+        organisation_id: "Organisation"
+        group_ids: "Group memberships"
+        send_confirmation: "Invite now"
+        admin: "Administrator?"
+        gender: "Gender:"
+        gender_f: "female"
+        gender_m: "male"
+        group_ids: "Groups"
   preferences:
     dropbox:
       strategy:
@@ -112,7 +117,7 @@ en:
   add_service: "Add service"
   add_subfolder: Add sub-folder
   add_to_stream: "add to stream"
-  add_user: "Add User"
+  add_user: "Add Person"
   added_to: "has been added to '%{group}'."
   by: "by"
   by_name: "Search by name or filename"
@@ -150,16 +155,16 @@ en:
   confirm_uninvite_person: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   contact_information_unavailable: "No contact"
   copy_to_dropbox: "Copy folder to dropbox"
-  delete_event: "remove event"
-  delete_folder: "delete folder"
-  delete_group: "delete group"
-  delete_scrap: "remove"
-  delete_user: "delete person"
-  delete_service: "delete service"
-  delete_permission: "delete permission"
+  delete_event: "Delete Event"
+  delete_folder: "Delete Folder"
+  delete_group: "Delete Group"
+  delete_scrap: "Remove"
+  delete_user: "Delete Person"
+  delete_service: "Delete Service"
+  delete_permission: "Delete Permission"
   confirm_delete_scrap: "Are you sure you want to remove this %{type} scrap?"
   containing: "containing"
-  detach_upload: "detach upload"
+  detach_upload: "Detach Upload"
   dropbox_access_revoked: "We have detached from your dropbox. You can delete the hkfx folder."
   attachment_count: 
     zero: "No documents attached."

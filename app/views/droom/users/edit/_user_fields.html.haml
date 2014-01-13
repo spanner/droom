@@ -24,7 +24,7 @@
     = f.text_field :given_name, :required => true
   - if Droom.use_chinese_names?
     %span.chinese_name
-      = f.label :chinese_name, '中文姓名'
+      = f.label :chinese_name
       %br
       = f.text_field :chinese_name
   - if Droom.use_honours?

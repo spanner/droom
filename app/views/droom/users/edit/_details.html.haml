@@ -1,0 +1,17 @@
+- user ||= @user
+- if admin?
+  %p.gender
+    = f.label :gender, class: "important"
+    = f.radio_button :gender, "f"
+    = f.label :gender, t(:"helpers.label.user.gender_f"), value: "f"
+    = f.radio_button :gender, "m"
+    = f.label :gender, t(:"helpers.label.user.gender_m"), value: "m"
+
+  %p.status
+    = f.check_box :admin
+    = f.label :admin
+
+  - if user.new_record?
+    %p.confirmation
+      = f.check_box :send_confirmation
+      = f.label :send_confirmation
