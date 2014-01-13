@@ -1,4 +1,5 @@
 - user ||= @user
+- view ||= 'listed'
 
 #edit_user
   .header
@@ -12,7 +13,8 @@
         = t :edit_profile_of, name: @user.name
 
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
-
+    = hidden_field_tag :view, view
+    
     = render partial: "droom/users/edit/user_fields", locals: {f: f, user: user}
     = render partial: "droom/users/edit/details", locals: {f: f, user: user}
     = render partial: "droom/users/edit/memberships", locals: {f: f, user: user}
