@@ -11,6 +11,14 @@ module Droom
     def self.for_selection
       self.all.map{|c| [c.name, c.id] }
     end
+    
+    def default_calendar
+      where(:name => "main").first_or_create
+    end
+    
+    def stream_calendar
+      where(:name => "stream").first_or_create
+    end
 
   end
 end

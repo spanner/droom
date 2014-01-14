@@ -60,7 +60,7 @@ module Droom
     def get_events
       events = Droom::Event.accessible_by(current_ability)
       if Droom.separate_calendars?
-        events = events.in_calendar(Droom::Calendar.where(:name => "main").first_or_create)
+        events = events.in_calendar(Droom::Calendar.default_calendar)
       end
       if params[:year].present?
         @year = params[:year].to_i

@@ -11,9 +11,9 @@
 
   .non-file-data
     %p.name
-      = f.text_field :name, :class => 'name', :placeholder => t(:"activerecord.attributes.droom.document.name"), :autofocus => true
+      = f.text_field :name, :class => 'name', :placeholder => t(:"helpers.label.document.name"), :autofocus => true
     %p.description
-      = f.text_area :description, :class => 'description', :placeholder => t(:"activerecord.attributes.droom.document.description")
+      = f.text_area :description, :class => 'description', :placeholder => t(:"helpers.label.document.description")
 
     .buttons
       = f.submit t(:save_document)

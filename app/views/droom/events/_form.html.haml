@@ -1,3 +1,5 @@
+- @event.calendar = Droom::Calendar
+
 = form_for @event, :html => {:class => 'edit event', :remote => true, :data => {:type => :html}} do |f|
   .datemark.datepicker
     %a{:href => "#"}
@@ -35,11 +37,16 @@
       .toolbar#t1
         = render 'droom/shared/toolbar'
       = f.text_area :description, :id => 'd1'
-
-    %p.event_type
+    
+    %p.admin
       = f.label :event_type_id, t(:file_under)
-      = f.select :event_type_id, Droom::EventType.for_selection
-      
+      = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
+      - if admin?
+        %br
+        = f.label :calendar_id
+        = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
+      - else
+        = f.hidden_field :calendar_id
     
     .buttons
       = f.submit t(:save_event)
