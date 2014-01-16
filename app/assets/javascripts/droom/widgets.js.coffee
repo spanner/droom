@@ -387,6 +387,7 @@ jQuery ($) ->
       @_form.find('select').bind 'change', @changed
       @_form.find('input[type="radio"]').bind 'click', @clicked
       @_form.find('input[type="checkbox"]').bind 'click', @clicked
+      @_form.bind 'refresh', @changed
 
     keyed: (e) =>
       k = e.which
