@@ -373,6 +373,7 @@ jQuery ($) ->
         on_success: @capture
       @submit_soon = _.debounce(@submit, 300)
       @bindInputs() if @_options.fast
+      @_form.bind 'refresh', @changed
       @submit() if @_options.auto
       if @_historical
         @saveState(@_original_content)
@@ -387,7 +388,6 @@ jQuery ($) ->
       @_form.find('select').bind 'change', @changed
       @_form.find('input[type="radio"]').bind 'click', @clicked
       @_form.find('input[type="checkbox"]').bind 'click', @clicked
-      @_form.bind 'refresh', @changed
 
     keyed: (e) =>
       k = e.which
