@@ -12,11 +12,11 @@ module Droom
       self.all.map{|c| [c.name, c.id] }
     end
     
-    def default_calendar
+    def self.default_calendar
       where(:name => "main").first_or_create
     end
     
-    def stream_calendar
+    def self.stream_calendar
       where(:name => "stream").first_or_create
     end
 
