@@ -7,7 +7,6 @@ module Droom::Api
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
     load_and_authorize_resource find_by: :uid, class: "Droom::User", except: [:authenticate]
-    after_filter :set_pagination_headers, only: [:index]
     
     def index
       render json: @users
@@ -83,22 +82,10 @@ module Droom::Api
     end
 
     def get_users
-      users = Droom::User.in_name_order
-      if params[:person_uid].present?
-        users = users.where(person_uid: params[:person_uid])
-      end
-      if params[:q].present?
-        @fragments = params[:q].split(/\s+/)
-        @fragments.each { |frag| users = users.matching(frag) }
-      end
-
-      @show = params[:show] || 20
-      @page = params[:page] || 1
-      if @show == 'all'
-        @users = users
-      else
-        @users = users.page(@page).per(@show)
-      end
+      @users = Droom::User.in_name_order
+      @users = users.where(person_uid: params[:person_uid]) if params[:person_uid].present?
+      @users = users.matching(params[:q]) if params[:q].present?
+      @users
     end
 
     def user_params
