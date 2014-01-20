@@ -83,8 +83,8 @@ module Droom::Api
 
     def get_users
       @users = Droom::User.in_name_order
-      @users = users.where(person_uid: params[:person_uid]) if params[:person_uid].present?
-      @users = users.matching(params[:q]) if params[:q].present?
+      @users = @users.where(person_uid: params[:person_uid]) if params[:person_uid].present?
+      @users = @users.matching(params[:q]) if params[:q].present?
       @users
     end
 
