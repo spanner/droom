@@ -1,4 +1,4 @@
-- @event.calendar = Droom::Calendar
+- @event.calendar ||= Droom::Calendar.default_calendar
 
 = form_for @event, :html => {:class => 'edit event', :remote => true, :data => {:type => :html}} do |f|
   .datemark.datepicker
