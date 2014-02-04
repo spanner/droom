@@ -1,12 +1,12 @@
 module Droom::Api
   class UsersController < Droom::Api::ApiController
-    skip_before_filter :authenticate_user!, only: [:authenticate]
-    skip_before_filter :authenticate_user_from_header_token!, only: [:authenticate]
-    skip_before_action :verify_authenticity_token
+
+    before_filter :authenticate_user_from_header_token
+    before_filter :require_local_or_authenticated_request
 
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
-    load_and_authorize_resource find_by: :uid, class: "Droom::User", except: [:authenticate]
+    load_resource find_by: :uid, class: "Droom::User"
     
     def index
       render json: @users
@@ -16,20 +16,20 @@ module Droom::Api
       render json: @user
     end
     
-    # This is a almost always a preliminary call at the initial auth stage, 
-    # so the client is not yet setting auth headers. We look for a token in params too.
-    #
-    def authenticate
-      token = params[:tok]
-      if token.blank?
-        token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
-      end
-      if @user = Droom::User.find_by(authentication_token: token)
-        render json: @user
-      else
-        head :unauthorized
-      end
-    end
+    # # This is a almost always a preliminary call at the initial auth stage, 
+    # # so the client is not yet setting auth headers. We look for a token in params too.
+    # #
+    # def authenticate
+    #   token = params[:tok]
+    #   if token.blank?
+    #     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
+    #   end
+    #   if @user = Droom::User.find_by(authentication_token: token)
+    #     render json: @user
+    #   else
+    #     head :unauthorized
+    #   end
+    # end
   
     # whereas deauth can only happen to an authenticated user, so we can
     # observe the header token in the usual way and close the auth session.

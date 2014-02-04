@@ -2,13 +2,8 @@ module Droom::Api
   class ApiController < Droom::EngineController
 
     respond_to :json
-
-    # protect_from_forgery with: :null_session
-    skip_before_filter :require_data_room_permission
-    prepend_before_filter :authenticate_user_from_header_token!
-    prepend_before_filter :echo_auth
     before_filter :set_access_control_headers
-    before_filter :echo_user_status
+    skip_before_action :verify_authenticity_token
     
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
     rescue_from "Droom::AuthRequired", with: :request_authentication
@@ -19,14 +14,26 @@ module Droom::Api
     end
 
   protected
+    
+    def require_local_or_authenticated_request
+      assert_local_request unless user_signed_in?
+    end
+    
+    def assert_local_request
+      raise CanCan::AccessDenied if (Rails.env.production? || Rails.env.staging?) && (request.host != 'localhost' || request.port != Settings.api_port)
+    end
 
-    def authenticate_user_from_header_token!
+    def authenticate_user_from_header_token
       token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
       if token && user = Droom::User.find_by(authentication_token: token)
         sign_in user, store: false
-      else
-        raise Droom::AuthRequired, "authentication required"
+        true
       end
+      false
+    end
+
+    def authenticate_user_from_header_token!
+      raise(Droom::AuthRequired, "authentication required") unless authenticate_user_from_header_token
     end
 
     def not_found(exception)
@@ -60,6 +67,10 @@ module Droom::Api
     
     def name_from_controller
       params[:controller].sub("Controller", "").underscore.split('/').last
+    end
+    
+    def api_controller?
+      true
     end
 
   end
