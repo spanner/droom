@@ -3,8 +3,8 @@ module Droom
     belongs_to :created_by, :class_name => "Droom::User"
     after_create :delete_previous
     
-    scope :by_date, order("created_at DESC")
-    scope :other_than, lambda { |token| where "id <> ?", token.id }
+    scope :by_date, -> {order("created_at DESC")}
+    scope :other_than, -> token { where "id <> ?", token.id }
     
     def dropbox_session
       unless @dbsession
