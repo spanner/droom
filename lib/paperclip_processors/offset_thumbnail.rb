@@ -66,20 +66,12 @@ module Paperclip
       dst
     end
 
-    # Returns the command ImageMagick's +convert+ needs to transform the image
-    # into the thumbnail.
+    # Returns the arguments to ImageMagick's +convert+ that will transform the image into the thumbnail.
     def transformation_command
       trans = []
       trans << "-coalesce" if animated?
       trans << "-resize" << %["#{scale}"] unless scale.nil? || scale.empty?
       trans << "-crop" << %["#{crop_and_offset}"] << "+repage"
-      
-      Rails.logger.warn %{
-OffsetCrop: 
-  scale is '#{scale}'
-  crop_and_offset is '#{crop_and_offset}'
-  trans is `#{trans}`
-      }
       trans
     end
 

@@ -14,7 +14,6 @@ module Droom
         @suggestions = []
       else
         if @types.include?('event') && fragment.length > 6 && span = Chronic.parse(fragment, :guess => false)
-          Rails.logger.warn "event span is #{span.inspect}"
           @suggestions = Droom::Event.falling_within(span).accessible_by(current_ability)
           @title = span.width > 86400 ? "Events in #{fragment}" : "Events on #{fragment}"
         else
