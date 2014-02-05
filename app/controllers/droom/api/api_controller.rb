@@ -3,10 +3,11 @@ module Droom::Api
 
     respond_to :json
     before_filter :set_access_control_headers
+    skip_before_filter :authenticate_user!
+    skip_before_filter :require_data_room_permission
     skip_before_action :verify_authenticity_token
     
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
-    rescue_from "Droom::AuthRequired", with: :request_authentication
     rescue_from "Droom::Error", with: :blew_up
 
     def current_ability
@@ -15,25 +16,8 @@ module Droom::Api
 
   protected
     
-    def require_local_or_authenticated_request
-      assert_local_request unless user_signed_in?
-    end
-    
     def assert_local_request
       raise CanCan::AccessDenied if (Rails.env.production? || Rails.env.staging?) && (request.host != 'localhost' || request.port != Settings.api_port)
-    end
-
-    def authenticate_user_from_header_token
-      token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
-      if token && user = Droom::User.find_by(authentication_token: token)
-        sign_in user, store: false
-        true
-      end
-      false
-    end
-
-    def authenticate_user_from_header_token!
-      raise(Droom::AuthRequired, "authentication required") unless authenticate_user_from_header_token
     end
 
     def not_found(exception)
@@ -48,10 +32,6 @@ module Droom::Api
       render json: { errors: exception.message }.to_json, status: :internal_server_error
     end
     
-    def request_authentication
-      request_http_token_authentication(Settings.auth.realm)
-    end
-
     def echo_auth
       Rails.logger.warn "??? token_and_options: #{ActionController::HttpAuthentication::Token.token_and_options(request).inspect}"
       Rails.logger.warn "    token auth header is #{request.headers["HTTP_AUTHORIZATION"]}"
@@ -72,6 +52,5 @@ module Droom::Api
     def api_controller?
       true
     end
-
   end
 end

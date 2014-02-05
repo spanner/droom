@@ -1,8 +1,7 @@
 module Droom::Api
   class UsersController < Droom::Api::ApiController
 
-    before_filter :authenticate_user_from_header_token
-    before_filter :require_local_or_authenticated_request
+    before_filter :assert_local_request
 
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
@@ -15,33 +14,28 @@ module Droom::Api
     def show
       render json: @user
     end
-    
-    # # This is a almost always a preliminary call at the initial auth stage, 
-    # # so the client is not yet setting auth headers. We look for a token in params too.
-    # #
-    # def authenticate
-    #   token = params[:tok]
-    #   if token.blank?
-    #     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
-    #   end
-    #   if @user = Droom::User.find_by(authentication_token: token)
-    #     render json: @user
-    #   else
-    #     head :unauthorized
-    #   end
-    # end
   
-    # whereas deauth can only happen to an authenticated user, so we can
-    # observe the header token in the usual way and close the auth session.
+    # This is a almost always a preliminary call at the initial auth stage, 
+    # so the client is not yet setting auth headers. We look for a token in params too.
+    #
+    def authenticate
+      token = params[:tok]
+      if @user = Droom::User.find_by(authentication_token: token)
+        render json: @user
+      else
+        head :unauthorized
+      end
+    end
+  
+    # deauth is used to achieve single-sign-out. It changes the auth token and session id
+    # so that neither the data room session cookie nor the domain auth cookie can identify a user.
     #
     def deauthenticate
-      Rails.logger.warn "deauthenticating #{current_user.inspect}"
-      if current_user
-        # to invalidate data room session, if there is one
-        current_user.clear_session_id!
-        # and any SSO cookie, though that should have been deleted by the client
-        current_user.reset_authentication_token!
-        render json: current_user
+      token = params[:tok]
+      if @user = Droom::User.find_by(authentication_token: token)
+        @user.clear_session_id!
+        @user.reset_authentication_token!
+        render json: @user
       else
         head :unauthorized
       end

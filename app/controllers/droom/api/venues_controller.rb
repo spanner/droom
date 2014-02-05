@@ -1,6 +1,5 @@
 module Droom::Api
   class VenuesController < Droom::Api::ApiController
-    skip_before_filter :authenticate_user!
     before_filter :get_venues, only: [:index]
     before_filter :find_or_create_venue, only: [:create]
     load_resource find_by: :slug, class: "Droom::Venue"

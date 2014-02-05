@@ -11,7 +11,7 @@ Droom::Engine.routes.draw do
 
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
     get '/authenticate/:tok' => 'users#authenticate', as: 'authenticate'
-    put '/deauthenticate' => 'users#deauthenticate', as: 'deauthenticate'
+    get '/deauthenticate/:tok' => 'users#deauthenticate', as: 'deauthenticate'
     resources :users
     resources :events
     resources :venues

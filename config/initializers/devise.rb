@@ -1,4 +1,3 @@
-require 'devise/strategies/header_token_authenticatable'
 require 'devise/strategies/cookie_authenticatable'
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
@@ -247,9 +246,7 @@ Devise.setup do |config|
   config.warden do |manager|
     # for shared-cookie auth
     manager.strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
-    # for token auth in api requests
-    manager.strategies.add(:header_token_authenticatable, Devise::Strategies::HeaderTokenAuthenticatable)
-    manager.default_strategies :header_token_authenticatable, :cookie_authenticatable, :database_authenticatable, scope: :user
+    manager.default_strategies :cookie_authenticatable, :database_authenticatable, scope: :user
   end
 
   # Set shared domain cookie on sign in.

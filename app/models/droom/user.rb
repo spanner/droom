@@ -14,7 +14,8 @@ module Droom
            :cookie_authenticatable,
            :recoverable,
            :trackable,
-           :confirmable
+           :confirmable,
+           :rememberable
     
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
