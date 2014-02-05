@@ -14,7 +14,8 @@ module Droom
     after_destroy :mark_dropbox_documents_deleted
 
     validates :file, :presence => true
-
+    do_not_validate_attachment_file_type :file
+    
     scope :all_private, -> { where("private = 1") }
     scope :not_private, -> { where("private <> 1 OR private IS NULL") }
     scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
