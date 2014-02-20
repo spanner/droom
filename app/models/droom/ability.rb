@@ -19,6 +19,7 @@ module Droom
           can :read, Droom::Venue
           can :read, Droom::User
           can :read, Droom::Group
+          can :read, Droom::Organisation
         
           # And they can edit themselves
           #
