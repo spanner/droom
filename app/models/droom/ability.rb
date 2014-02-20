@@ -3,6 +3,9 @@ module Droom
     include CanCan::Ability
 
     def initialize(user)
+      # invitation only:
+      # no unauthenticated access allowed.
+      
       if user
         if user.admin?
           # An admin flag on the user table overrides this whole mechanism to make all things possible.
@@ -26,8 +29,8 @@ module Droom
           can :update, Droom::User, :id => user.id
           cannot :edit, Droom::User
         
-          # If someone has been allowed to create something, they are always allowed to edit or remove it.
-          # This rule must sit after the user rules because they have no created_by_id column.
+          # If someone has been allowed to create something, they are generally allowed to edit or remove it.
+          # This rule must sit after the user rules because users have no created_by_id column.
           #
           # can :manage, :all, :created_by_id => user.id
 
