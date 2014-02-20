@@ -372,7 +372,7 @@ jQuery ($) ->
         on_request: @prepare
         on_cancel: @cancel
         on_success: @capture
-      @submit_soon = _.debounce(@submit, 300)
+      @submit_soon = _.debounce(@submit, 500)
       @bindInputs() if @_options.fast
       @_form.bind 'refresh', @changed
       @submit() if @_options.auto

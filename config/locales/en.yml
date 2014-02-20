@@ -55,7 +55,7 @@ en:
         given_name: "Given name"
         family_name: "Family name"
         chinese_name: "中国姓名"
-        email: "Private email address"
+        email: "Email"
         phone: "Telephone"
         mobile: "Mobile/cell"
         address: "Postal address"
