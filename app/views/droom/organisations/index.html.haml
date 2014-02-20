@@ -2,20 +2,18 @@
   = t :directory
 
 - content_for :standfirst do
-  = t :organisations_introduction
+  = t :organisations_introduction, org_count: @organisations.count, person_count: Droom::User.count
 
 - content_for :margin do
   #finder
-    %h3
-      = t :find_people
-
     %form.filter{:action => droom.users_url(:format => :js), :data => {:action => "filter"}}
       %p
-        = text_field_tag :q, params[:q], :placeholder => t(:by_name_or_email)
+        = search_field_tag :q, params[:q], :results => 5, :autosave => 'person_filter'
 
     .scroller
       #found
-  
+        %p.note
+          = t :find_people_notes
 
 
 #main.organisations
