@@ -8,6 +8,7 @@ module Droom
     load_and_authorize_resource
     
     def index
+      @folders = @folders.populated unless current_user.admin?
       respond_with @folders do |format|
         format.js {
           render :partial => 'droom/folders/folders'

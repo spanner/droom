@@ -337,6 +337,7 @@ jQuery ($) ->
   # The suggestions form is a fast filter form with history support
   #
   $.fn.suggestion_form = (options) ->
+    console.log "suggestion_form", @
     @each ->
       new CaptiveForm @, 
         fast: true
