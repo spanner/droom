@@ -17,12 +17,14 @@ Droom::Engine.routes.draw do
     resources :venues
   end
 
-  devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/confirmations', sessions: 'droom/sessions'}
+  devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/confirmations', sessions: 'droom/sessions', passwords: 'droom/passwords'}
   
   # intermediate confirmation step to allow invitation without setting a password
   devise_scope :user do
     get "/users/:id/welcome/:confirmation_token" => "confirmations#show", as: :welcome
     patch "/users/:id/confirm" => "confirmations#update", as: :confirm_password
+    get "/users/passwords/show" => "passwords#show"
+    get "/users/passwords/completed" => "passwords#completed"
   end
 
   resources :services do
@@ -62,6 +64,7 @@ Droom::Engine.routes.draw do
   
   resources :users do
     get "invite", on: :member, as: :invite
+    get "password_reset_confirmation", on: :member, as: :password_reset_confirmation
     get "preferences", on: :member, as: :preferences
     get "admin", on: :collection
     resources :events

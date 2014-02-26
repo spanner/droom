@@ -20,3 +20,12 @@ Paperclip.interpolates :category_and_slug do |attachment, style|
   fragment = "#{fragment}/#{attachment.instance.category.slug}" if attachment.instance.category
   fragment
 end
+
+require 'paperclip/media_type_spoof_detector'
+module Paperclip
+  class MediaTypeSpoofDetector
+    def spoofed?
+      false
+    end
+  end
+end

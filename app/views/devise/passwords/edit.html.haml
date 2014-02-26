@@ -2,14 +2,14 @@
   %h1.pagetitle
     =t :choose_new_password
 
+  %p
+    = t :password_reset_welcome
+
   = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "password" }) do |f|
     = devise_error_messages!
     = f.hidden_field :reset_password_token
     
-    = render "droom/users/password_fields", :f => f
-
-    %p.notice
-      = t :password_notice
+    = render "droom/users/edit/password_fields", f: f, user: resource
         
     .controls
       .save.button

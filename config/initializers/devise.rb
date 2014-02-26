@@ -249,9 +249,10 @@ Devise.setup do |config|
     manager.default_strategies :cookie_authenticatable, :database_authenticatable, scope: :user
   end
 
-  # Set shared domain cookie on sign in.
+  # Set shared domain cookie on sign in or any other user-identifying step
   #
-  Warden::Manager.after_authentication do |user, warden, options|
+  Warden::Manager.after_set_user do |user, warden, options|
+    Rails.logger.warn ">> after_set_user hit, setting cookie for #{user.inspect}"
     warden.raw_session["session_validity_check"] = user.reset_session_id!
     Droom::AuthCookie.new(warden.cookies).set(user)
   end
@@ -266,7 +267,9 @@ Devise.setup do |config|
   # Sign out unless session id is valid, if user retrieved from session
   #
   Warden::Manager.after_fetch do |user, warden, options|
+    Rails.logger.warn "<< after_fetch hit, checking validity of #{user.session_id} vs #{warden.raw_session["session_validity_check"]}"
     unless user.session_id == warden.raw_session["session_validity_check"]
+      Rails.logger.warn ">> Fail!"
       warden.logout
       throw :warden, message: :unauthenticated
     end
