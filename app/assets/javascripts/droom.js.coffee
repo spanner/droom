@@ -64,7 +64,7 @@ jQuery ($) ->
     # form widgets and input modification. These are moving to [data-role] markup.
     
     @find_including_self('.wysihtml').html_editable()
-    @find_including_self('.datepicker').date_picker()
+    @find_including_self('[data-role="datepicker"]').date_picker()
     @find_including_self('.timepicker').time_picker()
     @find_including_self('.person_selector').person_selector()
     @find_including_self('.person_picker').person_picker()

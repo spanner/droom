@@ -74,6 +74,8 @@ module Droom
 
     scope :in_calendar, -> calendar { where(:calendar_id => calendar.id) }
 
+    scope :added_since, -> date { where("created_at > ?", date)}
+
     scope :except_these_uuids, -> uuids {
       placeholders = uuids.map{'?'}.join(',')
       where(["uuid NOT IN (#{placeholders})", *uuids])

@@ -1,7 +1,7 @@
 - @event.calendar ||= Droom::Calendar.default_calendar
 
 = form_for @event, :html => {:class => 'edit event', :remote => true, :data => {:type => :html}} do |f|
-  .datemark.datepicker
+  .datemark{data: {role: "datepicker"}}
     %a{:href => "#"}
       - if @event.start
         %span.mon= @event.start.strftime('%b')

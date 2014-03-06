@@ -29,7 +29,7 @@
     - event = @scrap.event ||= @scrap.build_event(:start => Time.now.floor(30.minutes))
     = f.fields_for :event, event do |ef|
       = ef.hidden_field :calendar_id, :value => Droom::Calendar.stream_calendar
-      .datemark.datepicker
+      .datemark{data: {role: "datepicker"}}
         %a{:href => "#"}
           %span.mon= event.start.strftime('%b')
           %span.dom= event.start.strftime('%d')
