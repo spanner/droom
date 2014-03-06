@@ -17,7 +17,7 @@
 
 %div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:action => "collapser", :refreshable => true, :url => event_path(event, :format => :js)} }
   - url = can?(:edit, event) ? edit_event_url(event) : event_url(event)
-  - link_to url do
+  = link_to url do
     .datemark
       %span.mon= event.start.strftime('%b')
       %span.dom= event.start.strftime('%d')
