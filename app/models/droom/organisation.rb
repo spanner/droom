@@ -4,6 +4,8 @@ module Droom
     belongs_to :owner, :class_name => 'Droom::User'
     belongs_to :created_by, :class_name => 'Droom::User'
     
+    scope :added_since, -> date { where("created_at > ?", date)}
+
     default_scope -> {order("name ASC")}
 
     def self.for_selection

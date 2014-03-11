@@ -510,6 +510,10 @@ module Droom
       end
     end
 
+    def pref?(key)
+      !!pref(key)
+    end
+
     # `User#preference(key)` always returns a preference object and is used to build control panels. If no preference
     # is saved for the given key, we return a new (unsaved) one with that key and the default value.
     #

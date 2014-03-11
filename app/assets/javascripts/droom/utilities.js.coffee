@@ -109,6 +109,16 @@ jQuery ($) ->
       history.back()
       true
 
+  $.fn.disable = ->
+    @each ->
+      $(@).addClass('disabled').find('input, select, textarea').attr('disabled', true)
+  
+  $.fn.enable = ->
+    @each ->
+      $(@).removeClass('disabled').find('input, select, textarea').attr('disabled', false)
+  
+  
+
   $.activations = []
   
   $.activate_with = (fn) ->

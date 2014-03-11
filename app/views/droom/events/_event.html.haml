@@ -12,17 +12,16 @@
 
 - cssclasses = ['event']
 - cssclasses << 'repeat' if repeating
-/ - cssclasses << 'private' if event.private?
-/ - cssclasses << 'public' if event.public?
 - cssclasses << 'open' if open
 - cssclasses << 'invited' if event.attended_by?(current_user)
 
 %div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:action => "collapser", :refreshable => true, :url => event_path(event, :format => :js)} }
-  .datemark
-    %span.mon= event.start.strftime('%b')
-    %span.dom= event.start.strftime('%d')
-    - if @year || event.start.year != Date.today.year
-      %span.year= event.start.strftime('%Y')
+  = link_to event_url(event) do
+    .datemark
+      %span.mon= event.start.strftime('%b')
+      %span.dom= event.start.strftime('%d')
+      - if @year || event.start.year != Date.today.year
+        %span.year= event.start.strftime('%Y')
 
   .summary
     .heading
