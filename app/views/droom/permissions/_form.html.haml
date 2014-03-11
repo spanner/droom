@@ -1,10 +1,10 @@
 = form_for [@service, @permission], :html => { :multipart => true, :class => 'edit permission', :remote => true, :data => {:type => :html}} do |f|
 
   %p.name
-    = f.text_field :name, :class => 'name', :placeholder => t(:"activerecord.attributes.droom.service.name"), :autofocus => true
+    = f.text_field :name, :class => 'name', :placeholder => t("helpers.label.droom.service.name"), :autofocus => true
 
   %p.description
-    = f.text_area :description, :class => 'description', :placeholder => t(:"activerecord.attributes.droom.service.description")
+    = f.text_area :description, :class => 'description', :placeholder => t("helpers.label.droom.service.description")
 
   %p.service
     = f.label :service_id

@@ -14,7 +14,7 @@
           - else
             - order = "asc"
             - cssclass = 'sorter'
-          = link_to t(:"activerecord.attributes.droom.document.#{col}"), documents_path(:sort => col, :order => order, :format => :js), :class => cssclass, :remote => true
+          = link_to t(:"helpers.label.droom.document.#{col}"), documents_path(:sort => col, :order => order, :format => :js), :class => cssclass, :remote => true
 
 
   - if @documents.any?
