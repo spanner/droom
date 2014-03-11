@@ -4,7 +4,7 @@
   %p.name
     = f.label :name
     %br
-    = f.text_field :name, :required => true, :class => "name", :placeholder => t("helpers.label.folder.name"), :autofocus => true
+    = f.text_field :name, required: true, class: "name", placeholder: t("helpers.label.folder.name"), autofocus: true, data: {role: 'name'}
 
   %p.slug
     %strong<
@@ -13,7 +13,7 @@
     - else
       \/
     %br
-    = f.text_field :slug, :class => "slug", :placeholder => t("helpers.label.folder.slug")
+    = f.text_field :slug, :class => "slug", :placeholder => t("helpers.label.folder.slug"), data: {role: 'slug'}
 
   .buttons
     = f.submit t(:save_folder)

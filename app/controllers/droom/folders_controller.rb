@@ -40,7 +40,11 @@ module Droom
     end
     
     def update
-      @folder.update_attributes(folder_params)
+      if @folder.update_attributes(folder_params)
+        Rails.logger.warn "√√  folder updated: #{@folder.inspect}"
+      else
+        Rails.logger.warn "xx  folder save problems: #{@folder.errors.to_a.inspect}"
+      end
       respond_with @folder do |format|
         format.js { render :partial => "droom/folders/folder" }
       end
@@ -63,7 +67,7 @@ module Droom
   protected
   
     def folder_params
-      params.require(:folder).permit(:name, :parent_id)
+      params.require(:folder).permit(:name, :slug, :parent_id)
     end
     
     def get_root_folders

@@ -18,6 +18,12 @@ jQuery ($) ->
     return false unless results
     results[1] or null
 
+  # Returns true if the keycode is a meaningful text-editing action.
+  #
+  $.significantKeypress = (kc) ->
+    #enter        delete,      backspace,    alphanumerics,    number pad,        punctuation
+    (kc is 13) or (kc is 8) or (kc is 46) or (47 < kc < 91) or (96 < kc < 112) or (kc > 145)
+
   # This sends a command to the youtube API event listener in an iframe player.
   # commands include pauseVideo, playVideo, etc.
 

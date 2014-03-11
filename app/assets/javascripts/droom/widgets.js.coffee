@@ -554,6 +554,37 @@ jQuery ($) ->
         @_container.removeClass('open')
 
 
+
+  $.fn.slug_field = ->
+    @each ->
+      new SlugField(@)
+      
+  class SlugField
+    constructor: (element) ->
+      @_field = $(element)
+      @_form = @_field.parents('form')
+      selector = @_field.attr('data-base') or 'input[data-role="name"]'
+      @_base = @_form.find(selector)
+      @_base.bind "keyup", @update
+      @_previous_base = @_base.val()
+      @set()
+    
+    update: (e) =>
+      @set() if $.significantKeypress(e.which)
+      
+    set: () =>
+      old_base = @_previous_base
+      old_slug = @_field.val()
+      new_base = @_base.val()
+      # if no slug, or if slug looks like it was set automatically
+      if old_slug is "" or old_slug is @slugify(old_base)
+        @_field.val @slugify(new_base)
+      @_previous_base = new_base
+
+    slugify: (string) =>
+      string.replace(/[^\w\d]+/g, '-').toLowerCase()
+
+
   # The Calendar widget is a display of one calendar month in the usual tabular format.
   # Here we wrap it in a scrolling div to support movement from one month to another and
   # hook it up to the suggestion box, if that's on the page, so that clicking a day or month
