@@ -47,6 +47,9 @@ module Droom
     # Events differ from other models in that they are visible to all unless marked 'private'.
     # The documents attached to them are only visible to all if marked 'public'.
     #
+    
+    default_scope -> { order(:start) }
+    
     scope :all_private, -> { where("private = 1") }
     scope :not_private, -> { where("private <> 1 OR private IS NULL") }
     scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
