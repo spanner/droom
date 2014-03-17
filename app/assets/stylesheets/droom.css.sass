@@ -1203,18 +1203,19 @@ div.timepicker
       position: relative
       float: left
 
-.groups
-  .scrolled
-    width: 680px
-    margin-bottom: 50px
-    overflow: hidden
-  .scroller
-    margin-left: 5px
-    width: 1360px
-    .paginated
+#groups
+  section.group
+    margin-bottom: 40px
+    .scrolled
       width: 680px
-      position: relative
-      float: left
+      border-bottom: 1px solid white
+    .scroller
+      margin-left: 5px
+      width: 1360px
+      .paginated
+        width: 680px
+        position: relative
+        float: left
   
 
 #minicalendar
@@ -1658,7 +1659,7 @@ ul.documents
   list-style: none
 
 ul.people
-  margin: 20px 0 0 -2px
+  margin: 10px 0 0 -2px
   padding: 0
   list-style: none
   li.person
@@ -1677,7 +1678,7 @@ ul.people
       width: 32px
       height: 32px
       margin-right: 9px
-      margin-top: 0
+      margin-top: 11px
       background:
         color: $mid
         repeat: no-repeat
@@ -1706,7 +1707,6 @@ ul.people
     span.contact
       display: block
       overflow: hidden
-      padding-top: 4px
       span.name
         font-size: 1em
 

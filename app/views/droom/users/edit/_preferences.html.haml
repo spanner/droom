@@ -18,6 +18,11 @@
 
     = render "droom/users/edit/password_fields", f: f, user: user
     = render "droom/users/edit/memberships", f: f, user: user
+    
+    - unless @user.confirmed?
+      %p.confirmation
+        = f.check_box :send_confirmation
+        = f.label :send_confirmation
 
     .buttons
       - if @user == current_user

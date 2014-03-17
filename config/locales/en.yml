@@ -68,6 +68,7 @@ en:
         gender_f: "female"
         gender_m: "male"
         group_ids: "Groups"
+        send_confirmation: "Send an invitation message when saved"
   preferences:
     dropbox:
       strategy:

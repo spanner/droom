@@ -6,12 +6,3 @@
     = f.label :gender, t(:"helpers.label.user.gender_f"), value: "f"
     = f.radio_button :gender, "m"
     = f.label :gender, t(:"helpers.label.user.gender_m"), value: "m"
-
-  %p.status
-    = f.check_box :admin
-    = f.label :admin
-
-  - unless user.confirmed?
-    %p.confirmation
-      = f.check_box :send_confirmation
-      = f.label :send_confirmation

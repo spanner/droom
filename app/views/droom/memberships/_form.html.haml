@@ -11,11 +11,13 @@
   = form_for [@group, @membership], :html => {:class => 'edit user'} do |f|
     = f.fields_for :user, user do |uf|
       = render partial: "droom/users/edit/user_fields", locals: {f: uf, user: user}
+      %p.admin
+        = uf.check_box :send_confirmation
+        = uf.label :send_confirmation
     .buttons
       = f.submit t(:invite_to_group)
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'
-  
 
 #choose_user
   %p{style: "margin: 20px"}

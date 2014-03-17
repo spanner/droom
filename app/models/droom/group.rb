@@ -51,6 +51,10 @@ module Droom
       where('droom_groups.name like ?', fragment)
     }
     
+    scope :not_shown_in_directory, -> {
+      where(:directory => false)
+    }
+    
     scope :shown_in_directory, -> {
       where(:directory => true)
     }
