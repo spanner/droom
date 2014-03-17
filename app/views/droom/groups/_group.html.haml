@@ -1,9 +1,15 @@
 - group ||= @group
 - users = @users || Droom::User.in_group(group).page(1)
 
-.scroller
-  .paginated
-    %ul.people
-      = render partial: "droom/users/show/listed", collection: users
-    .pagination.sliding<
-      = paginate users
+%div.group{:id => "group_#{group.id}", :data => {:refreshable => true, :url => group_path(group, :format => :js)} }
+  %h2
+    = group.name
+    = action_menulink(group)
+  = action_menu(group)
+
+  .scroller
+    .paginated
+      %ul.people
+        = render partial: "droom/users/show/listed", collection: users
+      .pagination.sliding<
+        = paginate users

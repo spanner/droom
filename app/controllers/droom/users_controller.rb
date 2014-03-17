@@ -51,9 +51,13 @@ module Droom
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
-      @user.update_attributes(user_params)
-      sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
-      respond_with @user
+      if @user.update_attributes(user_params)
+        sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
+        flash[:notice] = "Thank you. Your account has been updated."
+        redirect_to droom.dashboard_url
+      else
+        respond_with @user
+      end
     end
 
     def destroy

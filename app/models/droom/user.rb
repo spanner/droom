@@ -49,7 +49,10 @@ module Droom
     # If the defer_confirmation flag has been set, we postpone.
     #
     def send_confirmation_notification?
-      super && !defer_confirmation?
+      Rails.logger.warn "send_confirmation_notification?"
+      yn = super && !defer_confirmation?
+      Rails.logger.warn "send_confirmation_notification?, #{yn.inspect}"
+      yn
     end
 
     def password_required?
@@ -89,14 +92,6 @@ module Droom
       if authentication_token.blank?
         self.authentication_token = generate_authentication_token
       end
-    end
-    
-    # Without a password they can only get in by token auth, which gives us some scope for
-    # remote confirmation and authentication and allows us to issue invitations to satellite
-    # services without requiring data room confirmation first.
-    #
-    def confirmation_required?
-      false
     end
     
     def confirmed=(value)

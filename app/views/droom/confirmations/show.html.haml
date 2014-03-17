@@ -1,23 +1,18 @@
-- content_for :pagetitle do
+- content_for :title do
   = t :welcome
 
+-content_for :standfirst do
+  %p
+    %strong
+      Hello
+      = @user.formal_name.strip + "."
+    = t :welcome_preamble
+
 #account
-  %h1.pagetitle
-    =t :welcome
+  = form_for resource, :html => {:class => 'edit user password'} do |f|
 
-  = form_for resource, :url => confirm_password_path, :html => {:class => 'edit user password'} do |f|
-    = f.hidden_field :confirmation_token
-    
-    %p
-      %strong
-        = t :hello
-        = @user.formal_name
-      = t :welcome_preamble
+    = render "droom/users/edit/password_fields", :f => f
 
-    = devise_error_messages!
-
-    = render "droom/users/password_fields", :f => f
-        
     .controls
       .save.button
         = f.submit t(:continue), :class => "submit"

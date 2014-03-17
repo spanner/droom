@@ -69,6 +69,7 @@ en:
         gender_m: "male"
         group_ids: "Groups"
         send_confirmation: "Send an invitation message when saved"
+        defer_confirmation: "Send no email"
   preferences:
     dropbox:
       strategy:
@@ -410,7 +411,7 @@ en:
   users_admin_introduction: "The main purpose of this page is to manage group membership, which also does a lot to control a person's access to our web services."
   your_invitations: "Your invitations"
   invitation_successful: "Success: %{name} has been invited."
-  welcome_preamble: "Welcome to the data room. Before we do anything else, please choose a password for your account."
+  welcome_preamble: "Welcome to the Croucher Foundation. We notice that this is the first time you have used your Croucher Foundation account so before we go any further, please choose a password."
   hello_name: "Hello %{name}."
   uk: "UK"
   uk_time: "UK time"

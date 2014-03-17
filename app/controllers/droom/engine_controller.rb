@@ -27,11 +27,15 @@ module Droom
     end
 
     def no_layout_if_pjax
-      if request.headers['X-PJAX']
+      if pjax?
         false
       else
         Droom.layout
       end
+    end
+    
+    def pjax?
+      request.headers['X-PJAX']
     end
     
     def set_access_control_headers
