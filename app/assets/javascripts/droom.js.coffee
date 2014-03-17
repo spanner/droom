@@ -8,7 +8,7 @@
 #= require droom/lib/jquery.deserialize
 #= require droom/lib/jquery.sortable
 #= require droom/lib/jquery.cookie
-#= require droom/lib/kalendae
+#= require droom/lib/jquery.datepicker
 #= require droom/lib/wysihtml5
 #= require droom/lib/parser_rules/advanced
 #= require droom/extensions

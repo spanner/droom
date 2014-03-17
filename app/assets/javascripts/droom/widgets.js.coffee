@@ -4,52 +4,51 @@
 
 jQuery ($) ->
 
-  ## Form Widgets
-  #
-  # These attach to a form element and provide a nicer interface by which to update its content.
-
-  class DatePicker
-    constructor: (element) ->
-      @_container = $(element)
-      @_trigger = @_container.find('a')
-      @_field = @_container.find('input')
-      @_holder = @_container.find('div.kal')
-      @_mon = @_container.find('span.mon')
-      @_dom = @_container.find('span.dom')
-      @_year = @_container.find('span.year')
-      @_kal = new Kalendae @_holder[0]
-      @_holder.hide()
-      @_trigger.click @toggle
-      @_container.click @contain
-      @_kal.subscribe 'change', () =>
-        @hide()
-        @_field.val(@_kal.getSelected())
-        [year, month, day] = @_kal.getSelected().split('-')
-        @_year.text(year)
-        @_dom.text(day)
-        @_mon.text(Kalendae.moment.monthsShort[parseInt(month, 10) - 1])
-
-    contain: (e) =>
-      e.stopPropagation() if e
-
-    toggle: (e) =>
-      e.preventDefault() if e
-      if @_holder.is(':visible') then @hide() else @show()
-
-    show: () =>
-      @_holder.fadeIn "fast", () =>
-        @_container.addClass('editing')
-        $(document).bind "click", @hide
-              
-    hide: () =>
-      $(document).unbind "click", @hide
-      @_container.removeClass('editing')
-      @_holder.fadeOut("fast")
-
-  $.fn.date_picker = () ->
+  $.fn.date_picker = ()->
     @each ->
       new DatePicker(@)
-    @
+
+  class DatePicker
+    @month_names: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    constructor: (element) ->
+      @_container = $(element)
+      if @_container.is("input")
+        @_field = @_container
+        @_event = 'focus'
+        @_simple = true
+      else
+        @_field = @_container.find('input')
+        @_event = 'click'
+        @_simple = false
+        @_mon = @_container.find('span.mon')
+        @_dom = @_container.find('span.dom')
+        @_year = @_container.find('span.year')
+      initial_date = @getDate()
+      @_container.DatePicker
+        calendars: 1
+        date: initial_date 
+        current: initial_date 
+        view: 'days' 
+        position: 'bottom'
+        showOn: @_event
+        onChange: @setDate
+
+    getDate: () =>
+      if value = @_field.val()
+        new Date(Date.parse(value))
+
+    setDate: (date) =>
+      if date
+        $('.datepicker').hide()
+        d = $.zeroPad(date.getDate())
+        m = DatePicker.month_names[date.getMonth()]
+        y = date.getFullYear()
+        dateString = [y, m, d].join('-')
+        @_field.val(dateString)
+        unless @_simple
+          @_dom.text(d)
+          @_mon.text(m)
+          @_year.text(y)
 
 
   class TimePicker
