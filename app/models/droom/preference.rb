@@ -3,7 +3,7 @@
 module Droom
   class Preference < ActiveRecord::Base
     belongs_to :created_by, :class_name => "Droom::User"
-    validates :key, :presence => true, :uniqueness => true
+    validates :key, :presence => true, :uniqueness => {:scope => :created_by_id}
     
     def set(value)
       if boolean?
