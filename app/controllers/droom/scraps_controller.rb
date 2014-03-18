@@ -64,7 +64,7 @@ module Droom
       when :image then params.require(:scrap).permit(:name, :image, :note, :url, :scraptype)
       when :video then params.require(:scrap).permit(:name, :youtube_id, :note, :url, :scraptype)
       when :link then params.require(:scrap).permit(:name, :note, :url, :scraptype)
-      when :event then params.require(:scrap).permit(:name, :note, :url, :scraptype, :event_attributes => [:id, :calendar_id, :start_date])
+      when :event then params.require(:scrap).permit(:name, :note, :url, :scraptype, :event_attributes => [:id, :calendar_id, :start])
       when :document then params.require(:scrap).permit(:name, :note, :url, :scraptype, :document_attributes => [:id, :file, :folder_id])
       else params.require(:scrap).permit(:name, :body, :note, :url, :scraptype)
       end
