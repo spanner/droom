@@ -24,7 +24,6 @@ jQuery ($) ->
         @_dom = @_container.find('span.dom')
         @_year = @_container.find('span.year')
       initial_date = @getDate()
-      console.log 'datepicker', @_container, @_field
       @_container.DatePicker
         calendars: 1
         date: initial_date 
@@ -798,10 +797,9 @@ jQuery ($) ->
           old.remove()
           @init()
     
-    # This use of moment depends on the loading of Kalendae, which we use for the date-picker widget above.
-    #
     monthName: () =>
-      Kalendae.moment.months[@_month-1]
+      months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      months[@_month-1]
       
     searchForm: =>
       @_form ?= $('#suggestions')
