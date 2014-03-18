@@ -48,8 +48,8 @@ module Droom
       controller.controller_name
     end
 
-    def preference_checkbox(key)
-      render :partial => "droom/preferences/checkbox", :locals => {:key => key}
+    def preference_checkbox(key, options={})
+      render :partial => "droom/preferences/checkbox", :locals => options.merge({:key => key})
     end
 
     def preference_radio_set(key, *values)

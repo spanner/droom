@@ -53,8 +53,15 @@ module Droom
     def update
       if @user.update_attributes(user_params)
         sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
-        flash[:notice] = "Thank you. Your account has been updated."
-        redirect_to droom.dashboard_url
+        respond_with @user do |f|
+          f.html {
+            flash[:notice] = "Thank you. Your account has been updated."
+            redirect_to droom.dashboard_url
+          }
+          f.js {
+            render partial: "droom/users/show/profile"
+          }
+        end
       else
         respond_with @user
       end
