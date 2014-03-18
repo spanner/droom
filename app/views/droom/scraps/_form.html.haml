@@ -34,7 +34,7 @@
           %span.mon= event.start.strftime('%b')
           %span.dom= event.start.strftime('%d')
           %span.year= event.start.strftime('%Y')
-        = ef.hidden_field :start
+        = ef.hidden_field :start, value: event.start.strftime('%Y-%b-%d')
 
   .specifics.document
     - document = @scrap.document ||= @scrap.build_document()

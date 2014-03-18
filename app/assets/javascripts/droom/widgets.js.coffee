@@ -24,6 +24,7 @@ jQuery ($) ->
         @_dom = @_container.find('span.dom')
         @_year = @_container.find('span.year')
       initial_date = @getDate()
+      console.log 'datepicker', @_container, @_field
       @_container.DatePicker
         calendars: 1
         date: initial_date 

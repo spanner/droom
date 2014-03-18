@@ -1,5 +1,11 @@
 jQuery ($) ->
 
+  $.zeroPad = (n, width) ->
+    width ?= 2
+    n = n + ''
+    n = "0#{n}" while n.length < width
+    n
+
   ## Utilities
   # **$.makeGuid** is a neat little rfc4122 generator cribbed from 
   # http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript

@@ -174,7 +174,7 @@ module Droom
     def finish=(value)
       write_attribute :finish, parse_date(value)
     end
-    
+
     # For interface purposes we often want to separate date and time parts. These getters will return the 
     # corresponding Date or Time object.
     #
