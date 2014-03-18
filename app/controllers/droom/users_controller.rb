@@ -63,6 +63,7 @@ module Droom
           }
         end
       else
+        Rails.logger.warn "update failed: #{@user.errors.to_a.inspect}"
         respond_with @user
       end
     end
