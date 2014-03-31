@@ -543,6 +543,10 @@ module Droom
       permissions.map(&:slug).compact.uniq
     end
     
+    def permission_codes=(codes)
+      #TODO
+    end
+    
     def permitted?(key)
       permission_codes.include?(key)
     end

@@ -6,6 +6,7 @@ jQuery ($) ->
 
   $.fn.date_picker = ()->
     @each ->
+      console.log "datepicker", element
       new DatePicker(@)
 
   class DatePicker
