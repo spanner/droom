@@ -72,7 +72,7 @@ module Droom::Api
           @user ||= Droom::User.where(email: params[:user][:email]).first
         end
       end
-      @user ||= Droom::User.create(user_params)
+      @user ||= Droom::User.create(user_params.merge(defer_confirmation: true))
     end
 
     def get_users
