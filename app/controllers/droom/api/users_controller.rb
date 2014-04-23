@@ -50,9 +50,7 @@ module Droom::Api
       if @user && @user.persisted?
         render json: @user
       else
-        render json: {
-          errors: @user.errors.to_a
-        }
+        render json: { errors: @user.errors.to_a }
       end
     end
 
@@ -72,7 +70,8 @@ module Droom::Api
           @user ||= Droom::User.where(email: params[:user][:email]).first
         end
       end
-      @user ||= Droom::User.create(user_params.merge(defer_confirmation: true))
+      params = user_params
+      @user ||= Droom::User.create(user_params)
     end
 
     def get_users

@@ -49,7 +49,14 @@ module Droom
     # If the defer_confirmation flag has been set, we postpone.
     #
     def send_confirmation_notification?
+      Rails.logger.warn "??  confirmed? #{confirmed?}"
+      Rails.logger.warn "??  confirmation_required? #{confirmation_required?} -> #{email}"
+      Rails.logger.warn "??  send_confirmation_notification? #{super} && #{!defer_confirmation?}"
       super && !defer_confirmation?
+    end
+    
+    def active_for_authentication?
+      true
     end
 
     def password_required?
@@ -96,7 +103,7 @@ module Droom
     end
     
     def confirmed=(value)
-      self.confirmed_at = Time.now if value
+      self.confirmed_at = Time.now if value.present? and value != "false"
     end
 
     def password_match?
@@ -133,10 +140,6 @@ module Droom
     scope :administrative, -> { where(:admin => true) }
     scope :this_month, -> { where("created_at > ?", Time.now - 1.month) }
     scope :this_week, -> { where("created_at > ?", Time.now - 1.week) }
-
-    def confirm=(value)
-      self.confirm! if value
-    end
     
     scope :in_name_order, -> {
       order("family_name ASC, given_name ASC")
@@ -531,7 +534,6 @@ module Droom
     #
     has_many :scraps, :foreign_key => "created_by_id"
     has_many :documents, :foreign_key => "created_by_id"
-
 
   protected
   

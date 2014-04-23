@@ -1,4 +1,4 @@
-module Droom::User
+module Droom::Users
   class ConfirmationsController < Devise::ConfirmationsController
 
     # We used to intervene here in several steps but by encrypting the stored token 
@@ -10,13 +10,13 @@ module Droom::User
     # render instead.
     #
     def show
-      self.resource = resource_class.confirm_by_token(params[:confirmation_token])
-      if resource && resource.confirmed?
+      @resource = self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+      if @resource && @resource.confirmed?
         # the confirmation call worked, ie the token was correct
-        sign_in(resource_name, resource)
+        sign_in(resource_name, @resource)
         render
       else
-        render :template => "droom/confirmations/failure" 
+        render :template => "droom/users/confirmations/failure" 
       end
     end
 
