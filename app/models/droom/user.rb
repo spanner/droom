@@ -280,6 +280,8 @@ module Droom
                         :thumb => "130x130#"
                       }
 
+    do_not_validate_attachment_file_type :image
+
     def thumbnail
       image.url(:thumb) if image?
     end
