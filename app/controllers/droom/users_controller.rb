@@ -18,8 +18,12 @@ module Droom
     end
         
     def admin
-      @users = @users.in_name_order.in_any_directory_group
-      @users = @users.matching(params[:q]) unless params[:q].blank?
+      @users = @users.in_name_order
+      if params[:q].blank?
+        @users = @users.in_any_directory_group
+      else
+        @users = @users.matching(params[:q])
+      end
       @users = paginated(@users, 100)
       respond_with @users
     end

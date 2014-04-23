@@ -119,7 +119,7 @@ en:
   add_service: "Add service"
   add_subfolder: Add sub-folder
   add_to_stream: "add to stream"
-  add_user: "Add Person"
+  add_user: "Add user"
   added_to: "has been added to '%{group}'."
   backto: "what you were doing before"
   by: "by"
@@ -409,7 +409,7 @@ en:
   phone_unknown: "phone unknown"
   group_already_invited: "Already invited: select to reissue any missing personal invitations."
   users_introduction: "This is a list of everyone known to the data room. It may include many people who do not have access to the data room itself, but whom we authenticate for access to other services."
-  users_admin_introduction: "The main purpose of this page is to manage group membership, which also does a lot to control a person's access to our web services."
+  users_admin_introduction: "The main purpose of this page is to manage group membership, which also does a lot to control a person's access to our web services. To begin with only people with interesting group memberships are shown, but if you enter some search text below then the list will also show ungrouped people who match that string. It's a quick way to bring people into groups."
   your_invitations: "Your invitations"
   invitation_successful: "Success: %{name} has been invited."
   welcome_preamble: "Welcome to the Croucher Foundation. We notice that this is the first time you have used your Croucher Foundation account so before we go any further, please choose a password."

@@ -326,11 +326,20 @@ jQuery ($) ->
 
   $.fn.filter_form = (options) ->
     @each ->
-      new CaptiveForm @, 
+      new CaptiveForm @,
         fast: true
         into: "#found"
         auto: false
         history: false
+    @
+
+  $.fn.table_filter_form = (options) ->
+    @each ->
+      new CaptiveForm @,
+        fast: true
+        into: "table"
+        auto: false
+        history: true
     @
 
   # The suggestions form is a fast filter form with history support
@@ -381,7 +390,7 @@ jQuery ($) ->
     bindInputs: () =>
       @_form.find('input[type="search"]').bind 'keyup', @changed
       @_form.find('input[type="search"]').bind 'change', @changed
-      @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box control in webkit search fields
+      # @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box control in webkit search fields
       @_form.find('input[type="text"]').bind 'keyup', @keyed
       @_form.find('input[type="text"]').bind 'change', @changed
       @_form.find('select').bind 'change', @changed

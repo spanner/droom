@@ -48,6 +48,7 @@ jQuery ($) ->
     @find_including_self('[data-action="slide"]').sliding_link()
     @find_including_self('[data-action="fit"]').self_sizes()
     @find_including_self('form[data-action="filter"]').filter_form()
+    @find_including_self('form[data-action="table_filter"]').table_filter_form()
     @find_including_self('div[data-panel]').panel()
     @find_including_self('[data-menu]').action_menu()
     @find_including_self('table[data-hoverable]').hover_table()
