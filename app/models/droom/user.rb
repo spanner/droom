@@ -49,10 +49,7 @@ module Droom
     # If the defer_confirmation flag has been set, we postpone.
     #
     def send_confirmation_notification?
-      Rails.logger.warn "send_confirmation_notification?"
-      yn = super && !defer_confirmation?
-      Rails.logger.warn "send_confirmation_notification?, #{yn.inspect}"
-      yn
+      super && !defer_confirmation?
     end
 
     def password_required?

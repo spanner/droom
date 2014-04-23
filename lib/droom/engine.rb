@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'msg'
 require 'paperclip'
 require 'fog'
 require 'devise'

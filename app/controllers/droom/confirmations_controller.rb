@@ -11,6 +11,12 @@ module Droom
         sign_in(resource_name, resource)
         render
       elsif user_signed_in?
+        
+        # if the user has droom access, do the usual
+        # if not, we merely thank.
+        #
+        # We also need to strip out MSG or at least teach it to do the right thing with non-droom users. argh.
+        
         redirect_to after_sign_in_path_for(current_user)
       else
         render :template => "droom/confirmations/failure" 

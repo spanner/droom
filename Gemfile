@@ -1,7 +1,5 @@
 source "https://rubygems.org"
 
-gem "msg", :path => "/var/www/gems/msg"
-gem "coca", :path => "/var/www/gems/coca"
 gemspec
 
 group :assets do

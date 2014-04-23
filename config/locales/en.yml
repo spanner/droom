@@ -466,12 +466,6 @@ en:
       password:
         confirmation: "The password and its confirmation do not match"
         too_short: "Your password must have at least 6 letters"
-  msg:
-    groups:
-      unconfirmed: "Unconfirmed accounts"
-      administrative: "Administrators"
-      newly_added: "Newly added"
-    droom/user: "users"
 
   apps:
     data_room: "Data<br />Room"

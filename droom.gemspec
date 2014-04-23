@@ -30,8 +30,6 @@ Gem::Specification.new do |s|
   s.add_dependency "devise-encryptable"
   s.add_dependency "cancan"
 
-  s.add_dependency "msg", "~> 0.4.0"
-
   s.add_dependency "acts_as_tree"
   s.add_dependency "acts_as_list"
   s.add_dependency "kaminari"

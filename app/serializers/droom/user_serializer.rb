@@ -15,10 +15,15 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :confirmed,
              :permission_codes,
              :person_uid,
-             :unconfirmed_email
+             :unconfirmed_email,
+             :password_set
 
   def confirmed
     object.confirmed?
+  end
+  
+  def password_set
+    object.encrypted_password?
   end
 
   def images
