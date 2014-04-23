@@ -780,7 +780,7 @@ table.people
 
 
 table.toggles
-  margin-top: 40px
+  margin: 40px 0
   border-collapse: collapse
   tr.rotated
     td, th
@@ -805,9 +805,11 @@ table.toggles
       white-space: nowrap
       +apply-origin(top left, false)
       +rotate(-90deg)
-        
   th
     font-weight: normal
+    a, a:visited
+      color: $dark
+      +hover
     a.menu
       visibility: hidden
     &:hover

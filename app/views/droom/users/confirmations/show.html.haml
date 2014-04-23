@@ -1,0 +1,13 @@
+-content_for :title do
+  = t :welcome
+
+%p
+  %strong
+    =t :hello
+    = @resource.formal_name.strip + "."
+
+- if @resource.password_set?
+  = render "droom/users/confirmations/after_confirmation", user: @resource
+
+- else
+  = render "droom/users/confirmations/password_required", user: @resource

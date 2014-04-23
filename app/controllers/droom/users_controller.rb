@@ -16,11 +16,11 @@ module Droom
         format.vcf { render :vcf => @users.map(&:to_vcf) }
       end
     end
-    
+        
     def admin
-      @users = @users.in_name_order
+      @users = @users.in_name_order.in_any_directory_group
       @users = @users.matching(params[:q]) unless params[:q].blank?
-      @users = paginated(@users, 200)
+      @users = paginated(@users, 100)
       respond_with @users
     end
 
@@ -71,11 +71,6 @@ module Droom
     def destroy
       @user.destroy
       head :ok
-    end
-    
-    def invite
-      @user.invite!
-      render :partial => "droom/users/user"
     end
 
   protected

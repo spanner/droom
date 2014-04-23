@@ -14,6 +14,7 @@
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
     = render partial: "droom/users/edit/user_fields", locals: {f: f, user: user}
     = render partial: "droom/users/edit/details", locals: {f: f, user: user}
+    = render partial: "droom/users/edit/memberships", locals: {f: f, user: user}
 
     .buttons
       - if user == current_user

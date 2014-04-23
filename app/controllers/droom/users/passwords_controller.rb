@@ -1,4 +1,4 @@
-module Droom
+module Droom::Users
   class PasswordsController < Devise::PasswordsController
     respond_to :html, :json
     before_filter :set_access_control_headers

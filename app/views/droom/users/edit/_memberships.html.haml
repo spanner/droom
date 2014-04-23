@@ -1,6 +1,6 @@
 - user ||= @user
 
-- if admin? && user.persisted?
+- if admin?
   %p.admin
     = f.check_box :admin
     = f.label :admin

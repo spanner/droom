@@ -20,7 +20,7 @@ module Droom
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
     after_save :send_confirmation_if_directed
-    
+
     # People are often invited into the system in batches or after offline contact. 
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
     # if you want to create a user account without sending out any messages yet.
@@ -54,6 +54,10 @@ module Droom
 
     def password_required?
       confirmed? && (!password.blank?)
+    end
+    
+    def password_set?
+      encrypted_password?
     end
     
     ## Session ID
@@ -164,6 +168,10 @@ module Droom
     has_many :memberships, :dependent => :destroy
     has_many :groups, :through => :memberships
     has_many :mailing_list_memberships, :through => :memberships
+
+    scope :in_any_directory_group, -> {
+      joins(:groups).where(droom_groups: {directory: true}).group("droom_users.id")
+    }
 
     def admit_to(groups)
       groups = [groups].flatten
@@ -438,45 +446,6 @@ module Droom
     end
 
 
-    ## Messaging
-    #
-    # Messaging groups are normally scopes passed through when receives_messages is called,
-    # but anything will work that can be called on the class and return a set of instances.
-    # Here we're overriding the getter so as to offer sending by group membership as well as
-    # the usual scoping.
-    #
-    
-    receives_messages
-    
-    def self.messaging_groups
-      unless @messaging_groups
-        @messaging_groups = {
-          :unconfirmed => -> { Droom::User.unconfirmed},
-          :administrative => -> { Droom::User.administrative },
-          :newly_added => -> { Droom::User.this_week }
-        }
-        Droom::Group.all.each do |group|
-          @messaging_groups[group.slug.to_sym] = -> { Droom::User.in_group(group.id) }
-        end
-      end
-      @messaging_groups
-    end
-
-    def for_email(token=nil)
-      {
-        :informal_name => informal_name,
-        :formal_name => formal_name,
-        :family_name => family_name,
-        :given_name => given_name,
-        :chinese_name => chinese_name,
-        :email => email,
-        :confirmation_url => Droom::Engine.routes.url_helpers.welcome_url(:id => self.id, :confirmation_token => token, :host => ActionMailer::Base.default_url_options[:host]),
-        :password_reset_url => Droom::Engine.routes.url_helpers.edit_user_password_url(:reset_password_token => token, :host => ActionMailer::Base.default_url_options[:host]),
-        :sign_in_url => Droom::Engine.routes.url_helpers.new_user_session_path(:host => ActionMailer::Base.default_url_options[:host])
-      }
-    end
-
-
     ## Preferences
     #
     # User settings are held as an association with Preference objects, which are simple key:value pairs.
@@ -552,6 +521,9 @@ module Droom
       permission_codes.select{|pc| pc !~ /droom/}.any?
     end
 
+    def data_room_user?
+      admin? || permitted?('droom.login')
+    end
 
     ## Other ownership
     #

@@ -23,7 +23,7 @@ class Droom::UserSerializer < ActiveModel::Serializer
   end
   
   def password_set
-    object.encrypted_password?
+    object.password_set?
   end
 
   def images

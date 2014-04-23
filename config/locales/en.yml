@@ -385,6 +385,7 @@ en:
   set_password: "Set password"
   quick_search: "Quick search"
   search_still_dumb: "This is a very basic title search. Full-text coming soon."
+  set_password_preamble: "We notice this is the first time that your account has been used. Before we go any further, please choose a password to secure the account."
   show_future_events: "future events"
   show_past_events: "past events"
   scrap_title: "Title (optional)"
