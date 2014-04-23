@@ -18,8 +18,8 @@ module Droom
     
     accepts_nested_attributes_for :user
 
-    validates :user, :presence => true
-    validates :group, :presence => true
+    # validates :user, :presence => true
+    # validates :group, :presence => true
 
     scope :of_group, -> group {
       where(["group_id = ?", group.id])
