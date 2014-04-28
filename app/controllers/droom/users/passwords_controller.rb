@@ -14,11 +14,11 @@ module Droom::Users
     end
 
     def after_resetting_password_path_for(resource)
-      {action: :completed}
+      droom.complete_confirmation_url
     end
 
     def after_sending_reset_password_instructions_path_for(resource_name)
-      {action: :show}
+      droom.show_confirmation_url
     end
 
     def remember_original_destination
