@@ -50,9 +50,6 @@ module Droom
     # If the defer_confirmation flag has been set, we postpone.
     #
     def send_confirmation_notification?
-      Rails.logger.warn "??  confirmed? #{confirmed?}"
-      Rails.logger.warn "??  confirmation_required? #{confirmation_required?} -> #{email}"
-      Rails.logger.warn "??  send_confirmation_notification? #{super} && #{!defer_confirmation?}"
       super && !defer_confirmation?
     end
     
