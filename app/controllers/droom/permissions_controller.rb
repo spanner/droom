@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
 
     load_and_authorize_resource :service, :class => Droom::Service
-    before_filter :build_permission, :only => [:create]
     load_and_authorize_resource :permission, :through => :service, :class => Droom::Permission
 
     def index
@@ -43,10 +42,6 @@ module Droom
   
     def permission_params
       params.require(:permission).permit(:name, :description)
-    end
-    
-    def build_permission
-      @permission = @service.permissions.build(permission_params)
     end
     
   end

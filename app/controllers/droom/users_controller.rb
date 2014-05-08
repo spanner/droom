@@ -4,7 +4,6 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     before_filter :set_view, only: [:show, :edit, :update]
-    before_filter :build_user, only: [:create]
     load_and_authorize_resource
 
     def index
@@ -83,10 +82,6 @@ module Droom
       params.require(:user).permit(:title, :family_name, :given_name, :chinese_name, :honours, :email, :password, :password_confirmation, :phone, :description, :admin, :gender, :preferences_attributes, :confirm, :old_id, :send_confirmation, :defer_confirmation, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :image, group_ids: [], preferences_attributes: [:id, :_destroy, :uuid, :key, :value])
     end
 
-    def build_user
-      @user = Droom::User.new(user_params)
-    end
-    
     def set_view
       @view = params[:view] if %w{listed tabled profile preferences}.include?(params[:view])
       @view ||= 'profile'

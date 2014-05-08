@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
     
     load_and_authorize_resource :group, :class => Droom::Group
-    before_filter :build_membership, :only => [:create]
     load_and_authorize_resource :membership, :through => :group, :class => Droom::Membership
 
     def destroy
@@ -39,10 +38,6 @@ module Droom
     def membership_params
       permitted_user_attributes = [:title, :family_name, :given_name, :chinese_name, :email, :password, :password_confirmation, :phone, :description, :admin, :preferences_attributes, :confirm, :old_id, :invite_on_creation, :post_line1, :post_line2, :post_city, :post_region, :post_country, :post_code, :mobile, :dob, :organisation_id, :public, :private, :female, :image, :send_confirmation]
       params.require(:membership).permit(:group_id, :user_id, user_attributes: permitted_user_attributes)
-    end
-
-    def build_membership
-      @membership = @group.memberships.build(membership_params)
     end
 
   end

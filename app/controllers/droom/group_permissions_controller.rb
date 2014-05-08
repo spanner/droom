@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
     
     load_and_authorize_resource :group, :class => Droom::Group
-    before_filter :build_group_permission, :only => [:create]
     load_and_authorize_resource :group_permission, :through => :group, :class => Droom::GroupPermission
     
     def create
@@ -21,10 +20,6 @@ module Droom
   
     def group_permission_params
       params.require(:group_permission).permit(:permission_id, :group_id)
-    end
-
-    def build_group_permission
-      @group_permission = @group.group_permissions.build(group_permission_params)
     end
 
   end

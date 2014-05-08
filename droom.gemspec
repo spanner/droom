@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "rails", "~> 4.0.0"
+  s.add_dependency "rails", "~> 4.1.0"
   s.add_dependency "jquery-rails"
 
   s.add_dependency "active_model_serializers"
@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "devise"
   s.add_dependency "devise-encryptable"
-  s.add_dependency "cancan"
+  s.add_dependency "cancancan"
 
   s.add_dependency "acts_as_tree"
   s.add_dependency "acts_as_list"

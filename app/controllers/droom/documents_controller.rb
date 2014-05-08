@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
 
     before_filter :get_folder, :except => [:index]
-    before_filter :build_document, :only => [:create]
     load_and_authorize_resource :document, :class => Droom::Document, :through => :folder, :shallow => true
     
     def index
@@ -54,11 +53,6 @@ module Droom
     
     def get_folder
       @folder = Droom::Folder.find(params[:folder_id])
-    end
-
-    def build_document
-      @document = @folder.documents.build(document_params)
-      @document.created_by = current_user
     end
     
   end

@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
     
     load_and_authorize_resource :event, :class => Droom::Event
-    before_filter :build_invitation, only: [:create]
     load_and_authorize_resource :invitation, :through => :event, :class => Droom::Invitation
     
     def destroy
@@ -46,11 +45,7 @@ module Droom
     end
 
   protected
-  
-    def build_invitation
-      @invitation = @event.invitations.build
-    end
-  
+    
     def invitation_params
       params.require(:invitation).permit(:event_id, :user_id)
     end
