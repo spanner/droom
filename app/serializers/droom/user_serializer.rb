@@ -18,7 +18,8 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :unconfirmed_email,
              :password_set,
              :country_code,
-             :institution_code
+             :institution_code,
+             :employer
 
   def confirmed
     object.confirmed?
