@@ -34,7 +34,7 @@ module Droom
       end
 
       def remove_tag(word=nil)
-        tag = Tag.find_by_title(word) if word && !word.blank?
+        tag = Tag.find_by(title: word) if word && !word.blank?
         self.tags.delete(tag) if tag
       end
     

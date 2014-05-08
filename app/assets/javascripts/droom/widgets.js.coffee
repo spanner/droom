@@ -846,6 +846,7 @@ jQuery ($) ->
     @
 
   $.fn.venue_picker = (options) ->
+    console.log "venue_picker", @
     options = $.extend(
       submit_form: false
       threshold: 1
@@ -954,6 +955,8 @@ jQuery ($) ->
       @prompt.bind "paste", @get
       @form.submit @hide
       @get(null, true) if @options.preload
+
+      console.log "suggester", @
       @
 
     reset: () =>

@@ -1,4 +1,4 @@
-- calendar = Droom::Calendar.find_or_create_by_name('main')
+- calendar = Droom::Calendar.where(name: 'main').first_or_create
 - events ||= calendar.events.past.limit(5)
 
 - if events.any?

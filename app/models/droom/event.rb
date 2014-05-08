@@ -236,11 +236,11 @@ module Droom
     end
 
     def venue_name=(name)
-      self.venue = Droom::Venue.find_or_create_by(name: name)
+      self.venue = Droom::Venue.where(name: name).first_or_create
     end
 
     def find_or_create_agenda_category(category)
-      agenda_categories.find_or_create_by_category_id(category.id)
+      agenda_categories.where(category_id: category.id).first_or_create
     end
         
     def categories_for_selection

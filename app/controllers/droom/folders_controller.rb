@@ -75,7 +75,7 @@ module Droom
     end
     
     def get_parent_folder
-      if @parent = Droom::Folder.find_by_id(params[:folder_id])
+      if @parent = Droom::Folder.find_by(id: params[:folder_id])
         @folder = @parent.children.build
       else
         @folder = Droom::Folder.new

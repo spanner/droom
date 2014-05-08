@@ -190,7 +190,7 @@ module Droom
     end
     
     def membership_of(group)
-      memberships.find_by_group_id(group.id)
+      memberships.find_by(group_id: group.id)
     end
     
     scope :in_group, -> group {
@@ -206,7 +206,7 @@ module Droom
     has_many :events, :through => :invitations
 
     def invite_to(event)
-      invitations.find_or_create_by_event_id(event.id) if event
+      invitations.where(event_id: event.id).first_or_create if event
     end
     
     def uninvite_from(event)
@@ -467,7 +467,7 @@ module Droom
     #     = link_to "copy to dropbox", dropbox_folder_url(folder)
     #
     def pref(key)
-      if pref = preferences.find_by_key(key)
+      if pref = preferences.find_by(key: key)
         pref.value
       else
         Droom.user_default(key)
@@ -495,7 +495,7 @@ module Droom
     #   user.set_pref("email:enabled", true)
     #
     def set_pref(key, value)
-      preferences.find_or_create_by_key(key).set(value)
+      preferences.where(key: key).first_or_create.set(value)
     end
 
 

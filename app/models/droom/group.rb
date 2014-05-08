@@ -75,11 +75,11 @@ module Droom
     end
 
     def invite_to(event)
-      group_invitations.find_or_create_by_event_id(event.id)
+      group_invitations.where(event_id: event.id).first_or_create
     end
 
     def uninvite_from(event)
-      group_invitation = group_invitations.find_by_event_id(event.id)
+      group_invitation = group_invitations.find_by(event_id: event.id)
       group_invitation.invitations.to_event(event).each do |invitation|
         invitation.destroy!
       end

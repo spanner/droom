@@ -53,7 +53,7 @@ module Droom
     end
     
     def create_mailing_list_membership
-      self.mailing_list_membership = Droom::MailingListMembership.find_or_create_by_address_and_listname(user.email, group.mailing_list_name)
+      self.mailing_list_membership = Droom::MailingListMembership.where(address: user.email, listname: group.mailing_list_name).first_or_create
     end
 
     def create_invitations

@@ -1,6 +1,6 @@
 module Droom
   class Service < ActiveRecord::Base
-    has_many :permissions, :dependent => :destroy, :order => "position ASC"
+    has_many :permissions, -> {order(:position)}, :dependent => :destroy
     before_save :set_slug
     after_create :create_basic_permissions
     after_save :update_permissions

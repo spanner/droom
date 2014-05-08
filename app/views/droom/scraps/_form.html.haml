@@ -39,7 +39,7 @@
   .specifics.document
     - document = @scrap.document ||= @scrap.build_document()
     = f.fields_for :document, document do |df|
-      = df.hidden_field :folder_id, :value => Droom::Folder.find_or_create_by_slug("Stream").id
+      = df.hidden_field :folder_id, :value => Droom::Folder.where(slug: "Stream").first_or_create.id
       .filemark.filepicker{:data => {:role => "filepicker"}}
         = link_to "choose file", "#", :class => "ul minimal #{document.file_extension}", :data => {:action => "pick"}
         = df.file_field :file, :class => "file"

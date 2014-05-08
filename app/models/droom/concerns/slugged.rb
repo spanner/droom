@@ -10,10 +10,10 @@ module Droom::Concerns::Slugged
   end
 
   def ensure_presence_of_unique(column, base, skope=self.class.all)
-    unless self.send :"#{column}?"
+    unless self.send "#{column}?".to_sym
       value = base
       addendum = 0
-      value = "#{base}_#{addendum+=1}" while skope.send :"find_by_#{column}", value
+      value = "#{base}_#{addendum+=1}" while skope.find_by(column => value)
       self.send :"#{column}=", value
     end
   end

@@ -7,8 +7,7 @@ module Droom
     load_and_authorize_resource :invitation, :through => :event, :class => Droom::Invitation
     
     def destroy
-      @invitation = @event.invitations.find_by_id(params[:id])
-      @invitation.destroy if @invitation
+      @invitation.destroy
       head :ok
     end
     

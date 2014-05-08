@@ -73,9 +73,9 @@ module Droom
     #
     def self.for(name, or_create=true)
       if or_create
-        find_or_create_by_name(name)
+        where(name: name).first_or_create
       else
-        find_by_name(name)
+        find_by(name: name)
       end
     end
 

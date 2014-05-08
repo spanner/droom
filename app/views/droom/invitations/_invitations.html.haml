@@ -1,7 +1,7 @@
 - invitations ||= false
 - if invitations || current_user
   - invitations ||= current_user.invitations.future
-  - if invitations && invitations.any?
+  - if invitations && invitations.length > 0
     %h2.section
       = t :your_invitations
     %ul.invitations
