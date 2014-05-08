@@ -16,7 +16,9 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :permission_codes,
              :person_uid,
              :unconfirmed_email,
-             :password_set
+             :password_set,
+             :country_code,
+             :institution_code
 
   def confirmed
     object.confirmed?
