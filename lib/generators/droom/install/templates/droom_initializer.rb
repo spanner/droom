@@ -2,7 +2,6 @@
 #Droom.email_layout = "email"
 #Droom.use_forenames = false
 #Droom.show_venue_map = false
-#Droom.home_country = 'gb'
 #Droom.main_dashboard_modules = %w{welcome future_events past_events documents}
 #Droom.margin_dashboard_modules = %w{calendar invitations stream}
 #Droom.home_url = Settings.host

@@ -8,8 +8,6 @@ require "droom/validators"
 require "droom/searchability"
 require "droom/taggability"
 require "droom/folders"
-require "snail"
-require "youtube_it"
 
 module Droom  
   # Droom configuration is handled by accessors on the Droom base module.
@@ -104,10 +102,6 @@ module Droom
 
     def root_path
       @@root_path ||= "dashboard#index"
-    end
-
-    def home_country
-      Snail.home_country = @@home_country ||= 'gb'
     end
 
     def main_dashboard_modules
