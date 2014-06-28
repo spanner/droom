@@ -111,7 +111,6 @@ jQuery ($) ->
       @_mask.unbind "click", @hide
       $('#droom').removeClass('masked')
       $(window).unbind "resize", @place
-      @_container.find('iframe.youtube').sendCommand('pauseVideo')
 
     reset: () =>
       @hide()

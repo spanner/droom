@@ -49,20 +49,12 @@ jQuery ($) ->
     prev: () =>
       @_swipe.prev()
     
-    afterSlide: () =>
-      @stopVideos()
-
-    stopVideos: () =>
-      @_container.find('iframe.youtube').each ->
-        $(@).attr('src', $(@).attr('src'))
-      
     resetSwipe: () =>
       @_swipe?.kill()
       @_swipe = new Swipe @_container[0],
         speed: 1000
         auto: false
         loop: false
-        callback: @afterSlide
       $.swipe = @_swipe
       @_modified = false
       
@@ -77,7 +69,6 @@ jQuery ($) ->
 
     hide: () =>
       if @_showing
-        @stopVideos()
         @_container.fadeOut('fast')
         $(document).unbind "mousedown", @hide
         $(document).unbind "touchstart", @hide

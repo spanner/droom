@@ -123,7 +123,7 @@ module Droom
     end
     
     def scrap_types
-      @@scrap_types ||= %w{image video text quote link event document}
+      @@scrap_types ||= %w{image text quote link event document}
     end
     
     def default_scrap_type

@@ -16,15 +16,6 @@
       %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
       = f.file_field :image
 
-  .specifics.video
-    - if @scrap.image?
-      - img = @scrap.image.url(:thumb)
-    - else
-      - img = image_url('droom/missing/scrap.png')
-    .youtube-search
-      .thumbnail.playable{:style => "background-image: url(#{img})"}
-      = f.text_field :youtube_id, :placeholder => t(:search_youtube), :data => {:role => "youtubepicker"}
-
   .specifics.event
     - event = @scrap.event ||= @scrap.build_event(:start => Time.now.floor(30.minutes))
     = f.fields_for :event, event do |ef|
@@ -61,8 +52,6 @@
       = f.label :body
       %br
       = f.text_area :body, :class => 'body'
-    
-    %div.youtube_preview
     
     %p.caption
       = f.label :caption

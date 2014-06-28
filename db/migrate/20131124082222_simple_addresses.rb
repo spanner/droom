@@ -11,15 +11,6 @@ class SimpleAddresses < ActiveRecord::Migration
     remove_column :droom_users, :post_city
     remove_column :droom_users, :post_region
     remove_column :droom_users, :post_country
-    
-    Droom::Venue.reset_column_information
-    Droom::Venue.each do |venue|
-      if venue.respond_to?(:postal_address)
-        venue.address = venue.postal_address.to_s
-      end
-      # also sets slug
-      venue.save
-    end
 
   end
 end

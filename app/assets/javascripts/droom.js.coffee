@@ -75,7 +75,6 @@ jQuery ($) ->
     @find_including_self('form.scrap').scrap_form()
     @find_including_self('[data-role="filepicker"]').file_picker()
     @find_including_self('[data-role="imagepicker"]').image_picker()
-    @find_including_self('[data-role="youtubepicker"]').youtube_suggester()
     @find_including_self('[data-role="venuepicker"]').venue_picker()
     @find_including_self('[data-role="slug"]').slug_field()
     

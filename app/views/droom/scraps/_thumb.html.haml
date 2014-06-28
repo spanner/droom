@@ -21,9 +21,6 @@
     - elsif scrap.scraptype == 'quote' && scrap.url?
       = link_to "quote:", droom.scrap_url(scrap), :class => "icon quote", :data => {:action => "stream", :scrap => scrap.id}
       
-    - elsif scrap.scraptype == 'video' && scrap.youtube_id?
-      = link_to "video:", droom.scrap_url(scrap), :class => "thumb playable", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:action => "stream", :scrap => scrap.id}
-
     - else
       = link_to "text:", droom.scrap_url(scrap), :class => "icon text", :data => {:action => "stream", :scrap => scrap.id}
 

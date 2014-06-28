@@ -1,4 +1,3 @@
-require 'snail'
 require 'geocoder'
 
 module Droom
@@ -50,24 +49,9 @@ module Droom
       'venue'
     end
     
-    #todo: remove after migrations complete
-    def postal_address
-      Snail.new(
-        :line_1 => post_line1,
-        :line_2 => post_line2,
-        :city => post_city,
-        :region => post_region,
-        :postal_code => post_code,
-        :country => post_country
-      )
-    end
-    
     def name_and_address
       [name, address, post_code].compact.join("\n")
     end
-
-
-
 
     def as_json(options={})
       json = {

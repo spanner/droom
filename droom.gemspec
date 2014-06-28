@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'request_store'
 
   s.add_dependency "devise"
-  s.add_dependency "devise-encryptable"
   s.add_dependency "cancancan"
 
   s.add_dependency "msg"
@@ -48,11 +47,9 @@ Gem::Specification.new do |s|
   s.add_dependency "uuidtools"
   s.add_dependency "signed_json"
 
-  s.add_dependency "snail"
   s.add_dependency "vcard"
   s.add_dependency "rdiscount"
   s.add_dependency "yomu"
-  s.add_dependency "youtube_it"
   s.add_dependency "dropbox-sdk"
   
   s.add_development_dependency "mysql2"

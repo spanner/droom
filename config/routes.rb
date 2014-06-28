@@ -3,8 +3,6 @@ Droom::Engine.routes.draw do
 
   get '/help/:slug' => 'pages#show', as: 'help_page'
   get '/help' => 'pages#index', as: 'help'
-  get '/videos.:format' => 'youtube#index', as: "videos"
-  get '/videos/:yt_id.:format' => 'youtube#show', as: "video"
 
   match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options]
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]
