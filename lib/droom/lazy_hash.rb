@@ -49,6 +49,16 @@ module Droom
       end
     end
     
+    def get_or_set(path, default_value)
+      key, subkeys = split_path(path)
+      if subkeys.any?
+        self[key] ||= Droom::LazyHash.new
+        self[key].get_or_set(subkeys, default_value)
+      else
+        self[key] ||= default_value
+      end
+    end
+    
     # *set* will set the value at the named bucket. Note that you should only ever do this from an 
     # initializer or some other thread-global event that can be relied upon always to have run. Never call
     # LazyHash#set at runtime unless what you want is a local, non-thread-global nested hash construction.
@@ -65,7 +75,7 @@ module Droom
     
     #
     def split_path(key)
-      keys = key.is_a?(Array) ? key : key.to_s.split('.')
+      keys = key.is_a?(Array) ? key.dup : key.to_s.split('.')
       keys.any? ? [keys.shift.to_sym, keys] : [nil, []]
     end
 

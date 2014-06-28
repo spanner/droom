@@ -535,6 +535,7 @@ jQuery ($) ->
   class Folder
     constructor: (element) ->
       @_container = $(element)
+      @_label = @_container.attr('data-label')
       @_list = @_container.children('ul.filing')
       if @_list[0]
         @_container.children('a.folder').click @toggle
@@ -542,7 +543,14 @@ jQuery ($) ->
       
     set: (e) =>
       e.preventDefault() if e
-      if @_container.hasClass('open') then @show() else @hide()
+      @_state = localStorage?.getItem("show_folder_#{@_label}")
+      @_state ?= @_container.hasClass('open') ? "open" : "closed"
+      if @_state is "open"
+        @_container.addClass("open")
+        @_list.show()
+      else
+        @_container.removeClass("open")
+        @_list.hide()
 
     toggle: (e) =>
       if e
@@ -552,14 +560,15 @@ jQuery ($) ->
 
     show: (e) =>
       e.preventDefault() if e
+      localStorage?.setItem("show_folder_#{@_label}", "open")
       @_container.addClass('open')
       @_list.stop().slideDown("fast")
       
     hide: (e) =>
       e.preventDefault() if e
+      localStorage?.setItem("show_folder_#{@_label}", "closed")
       @_list.stop().slideUp "normal", () =>
         @_container.removeClass('open')
-
 
 
   $.fn.slug_field = ->
@@ -846,7 +855,6 @@ jQuery ($) ->
     @
 
   $.fn.venue_picker = (options) ->
-    console.log "venue_picker", @
     options = $.extend(
       submit_form: false
       threshold: 1
