@@ -38,12 +38,6 @@ module Droom
       request.headers['X-PJAX']
     end
     
-    def set_access_control_headers
-      headers['Access-Control-Allow-Origin'] = '*'
-      headers["Access-Control-Allow-Headers"] = %w{Origin Accept Content-Type X-Requested-With X-CSRF-Token}.join(",")
-      headers["Access-Control-Allow-Methods"] = %{GET PATCH POST}
-    end
-
     def set_pagination_headers
       if results = instance_variable_get("@#{name_from_controller}")
         if results.respond_to? :total_count
