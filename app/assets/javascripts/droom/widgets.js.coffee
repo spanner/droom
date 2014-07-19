@@ -382,10 +382,17 @@ jQuery ($) ->
       @submit_soon = _.debounce(@submit, 500)
       @bindInputs() if @_options.fast
       @_form.bind 'refresh', @changed
-      @submit() if @_options.auto
+      if @_options.auto
+        @submit() 
+      else
+        @bindLinks()
       if @_historical
         @saveState(@_original_content)
         $(window).bind 'popstate', @restoreState
+
+    bindLinks: () =>
+      @_container.find('a.cancel').click(@revert)
+      @_container.find('.pagination a').click @page
 
     bindInputs: () =>
       @_form.find('input[type="search"]').bind 'keyup', @changed
@@ -416,7 +423,15 @@ jQuery ($) ->
         field = $(f)
         parameters.push field.serialize() unless field.val() is ""
       parameters.join('&')
-      
+
+    page: (e) =>
+      e.preventDefault() if e
+      a = $(e.target)
+      href = a.attr('href')
+      p = $.urlParam('page', href)
+      @_form.find('input[name="page"]').val(p)
+      @submit()
+
     submit: (e, nocache) =>
       e.preventDefault() if e
       nocache ?= false
@@ -439,6 +454,9 @@ jQuery ($) ->
       @_container.empty().append(replacement).fadeTo("fast", 1)
       replacement.activate()
       replacement.find('a.cancel').click(@revert)
+      @bindLinks()
+      $("html, body").animate({ scrollTop: 0 }, "slow")
+      
 
     revert: (e) =>
       @display(@_original_content)

@@ -19,8 +19,9 @@ jQuery ($) ->
   # **$.urlParam** is a query string parser used to restore history from one or more query string parameters.
   # It's regex based and deeply suspect. If you can populate and read a form field, do that instead.
   #
-  $.urlParam = (name) ->
-    results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(window.location.href)
+  $.urlParam = (name, url) ->
+    url ?= window.location.href
+    results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(url)
     return false unless results
     results[1] or null
 
