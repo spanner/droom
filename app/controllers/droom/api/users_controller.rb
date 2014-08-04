@@ -23,7 +23,7 @@ module Droom::Api
       if @user = Droom::User.find_by(authentication_token: token)
         render json: @user
       else
-        head :unauthorized
+        render json: { errors: "Token not recognised" }, status: :unauthorized
       end
     end
   
