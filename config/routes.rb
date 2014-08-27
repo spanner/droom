@@ -1,9 +1,6 @@
 Droom::Engine.routes.draw do 
   root to: "dashboard#index", as: :dashboard
 
-  get '/help/:slug' => 'pages#show', as: 'help_page'
-  get '/help' => 'pages#index', as: 'help'
-
   match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options]
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]
 
@@ -72,7 +69,6 @@ Droom::Engine.routes.draw do
   end
   
   resources :venues
-  resources :pages
 
   resources :dropbox_tokens do
     get "/register", on: :collection, action: :create
