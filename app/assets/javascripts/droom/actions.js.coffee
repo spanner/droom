@@ -206,10 +206,10 @@ jQuery ($) ->
 
     update: (response) =>
       @_link.removeClass('waiting')
-      if response[@_property]
-        @_link.addClass('yes').removeClass('no')
-      else
+      if @_link.hasClass('yes')
         @_link.addClass('no').removeClass('yes')
+      else
+        @_link.addClass('yes').removeClass('no')
       $(@_affected).refresh()
       
 
