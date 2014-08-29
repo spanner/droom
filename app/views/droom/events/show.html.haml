@@ -1,6 +1,10 @@
 - content_for :title do
   = link_to t(:calendar), droom.events_url
 
+- content_for :margin do
+  %h3
+    Past events of this type
+
 - content_for :standfirst do
   %p
     = t :event_introduction

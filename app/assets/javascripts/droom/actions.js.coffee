@@ -344,7 +344,6 @@ jQuery ($) ->
       @_converse = @_input.attr('data-converse')
       @_input.bind "click", @set
       @set()
-      console.log "revealer", element
       
     set: () =>
       if @_input.is(":checked") then @show() else @hide()

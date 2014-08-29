@@ -9,7 +9,7 @@ module Droom
     
     before_filter :get_events, :only => [:index]
     before_filter :composite_dates, :only => [:update, :create]
-    before_filter :build_event, :only => [:create]
+    before_filter :build_event, :only => [:new, :create]
     load_and_authorize_resource
 
     def index

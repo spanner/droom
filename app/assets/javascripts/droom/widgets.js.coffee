@@ -456,7 +456,6 @@ jQuery ($) ->
       replacement.find('a.cancel').click(@revert)
       @bindLinks()
       $("html, body").animate({ scrollTop: 0 }, "slow")
-      
 
     revert: (e) =>
       @display(@_original_content)
@@ -981,8 +980,6 @@ jQuery ($) ->
       @prompt.bind "paste", @get
       @form.submit @hide
       @get(null, true) if @options.preload
-
-      console.log "suggester", @
       @
 
     reset: () =>

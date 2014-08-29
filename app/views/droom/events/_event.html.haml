@@ -35,7 +35,7 @@
           .attachments
             %h3
               = link_to t(:attachments), event_url(event)
-            = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :limit => 2, :for_more => event_url(event)}
+            = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :limit => 3, :for_more => event_url(event)}
 
         %p.practicalities
           %time
