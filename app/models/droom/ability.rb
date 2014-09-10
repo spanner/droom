@@ -12,8 +12,8 @@ module Droom
           #
           can :manage, :all
 
-        else
-          # Otherwise, most items are visible to all.
+        elsif user.permitted?('droom.login')
+          # Otherwise, most items are visible to everyone, provided they are allowed to log in here.
           #
           can :read, Droom::Event
           can :read, Droom::Folder
@@ -34,7 +34,7 @@ module Droom
           #
           # can :manage, :all, :created_by_id => user.id
 
-          # Then other abilities are determined by permissions. Permissions here are relatively abstract and 
+          # Then other abilities are determined by permissions. Our permissions are relatively abstract and 
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
           #
           if user.permitted?('droom.calendar')
