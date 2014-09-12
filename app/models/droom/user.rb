@@ -485,7 +485,7 @@ module Droom
     # is saved for the given key, we return a new (unsaved) one with that key and the default value.
     #
     def preference(key)
-      pref = preferences.find_or_initialize_by_key(key)
+      pref = preferences.where(key: key).first_or_initialize
       pref.value = Droom.user_default(key) unless pref.persisted?
       pref
     end
