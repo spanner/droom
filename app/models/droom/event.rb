@@ -67,6 +67,8 @@ module Droom
 
     scope :by_finish, -> { order("finish ASC") }
 
+    scope :by_date_descending, -> { order("start DESC, finish DESC") }
+
     scope :coincident_with, -> start, finish { where(['(start < :finish AND finish >= :start) OR (finish IS NULL AND start >= :start AND start < :finish)', {:start => start, :finish => finish}]) }
 
     scope :limited_to, -> limit { limit(limit) }
