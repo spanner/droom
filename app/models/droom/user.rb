@@ -36,14 +36,14 @@ module Droom
     end
 
     def defer_confirmation?
-      !!self.defer_confirmation
+      defer_confirmation && defer_confirmation != "false"
     end
     
     # Called after save by our own late-confirmation mechanism.
     # If the send_confirmation flag has been set, we confirm.
     #
     def send_confirmation?
-      !!self.send_confirmation
+      send_confirmation && send_confirmation != "false"
     end
     
     # Called on create by devise's immediate confirmation mechanism.
