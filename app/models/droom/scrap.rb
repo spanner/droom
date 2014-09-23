@@ -14,6 +14,7 @@ module Droom
                         :icon => "32x32#",
                         :thumb => "130x73#"
                       }
+    do_not_validate_attachment_file_type :image
 
     before_save :get_youtube_thumbnail
     before_validation :name_associates
