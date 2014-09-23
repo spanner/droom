@@ -27,7 +27,11 @@ module Droom
   protected
   
     def organisation_params
-      params.require(:organisation).permit(:name, :description, :owner, :owner_id, :url)
+      if params[:organisation]
+        params.require(:organisation).permit(:name, :description, :owner, :owner_id, :url)
+      else
+        {}
+      end
     end
 
   end

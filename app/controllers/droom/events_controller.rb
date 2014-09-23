@@ -106,7 +106,11 @@ module Droom
     end
     
     def event_params
-      params.require(:event).permit(:name, :description, :event_set_id, :event_type_id, :calendar_id, :all_day, :master_id, :url, :start, :finish, :timezone, :venue_id, :venue_name)
+      if params[:event]
+        params.require(:event).permit(:name, :description, :event_set_id, :event_type_id, :calendar_id, :all_day, :master_id, :url, :start, :finish, :timezone, :venue_id, :venue_name)
+      else
+        {}
+      end
     end
 
   end

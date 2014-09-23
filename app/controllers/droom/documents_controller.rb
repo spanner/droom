@@ -48,7 +48,11 @@ module Droom
   protected
     
     def document_params
-      params.require(:document).permit(:name, :file, :description, :folder_id)
+      if params[:document]
+        params.require(:document).permit(:name, :file, :description, :folder_id)
+      else
+        {}
+      end
     end
     
     def get_folder
