@@ -40,11 +40,7 @@ module Droom
     end
     
     def update
-      if @folder.update_attributes(folder_params)
-        Rails.logger.warn "√√  folder updated: #{@folder.inspect}"
-      else
-        Rails.logger.warn "xx  folder save problems: #{@folder.errors.to_a.inspect}"
-      end
+      @folder.update_attributes(folder_params)
       respond_with @folder do |format|
         format.js { render :partial => "droom/folders/folder" }
       end
