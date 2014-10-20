@@ -8,8 +8,4 @@
   = action_menu(group)
 
   .scroller
-    .paginated
-      %ul.people
-        = render partial: "droom/users/show/listed", collection: users
-      .pagination.sliding<
-        = paginate users
+    = render partial: "droom/groups/users", locals: {group: group, users: users}

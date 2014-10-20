@@ -31,11 +31,6 @@
       = action_menu(event)
         
       .detail
-        - if !full_attachments && event.folder.populated?
-          .attachments
-            %h3
-              = link_to t(:attachments), event_url(event)
-            = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :limit => 3, :for_more => event_url(event)}
 
         %p.practicalities
           %time
@@ -57,6 +52,10 @@
                 = link_to event.venue.definite_name + ".", venues_url(:id => event.venue.id)
               - else
                 = event.venue.definite_name + "."
+
+        - if !full_attachments && event.folder.populated?
+          .attachments
+            = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :limit => 3, :for_more => event_url(event)}
 
         - if event.description?
           = event.description.html_safe 

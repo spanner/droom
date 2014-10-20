@@ -1,20 +1,21 @@
 .divider
-#events{:data => {:refreshable => true, :url => droom.events_url(:limit => 5)}}
-  - calendar = Droom::Calendar.where(name: 'main').first_or_create
-  - events = calendar.events.future_and_current.order('start ASC').limit(5)
+%section
+  #events{:data => {:refreshable => true, :url => droom.events_url(:limit => 5)}}
+    - calendar = Droom::Calendar.where(name: 'main').first_or_create
+    - events = calendar.events.future_and_current.order('start ASC').limit(5)
 
-  %h2.section
-    = link_to t(:future_events), main_app.calendar_url
-    - if can?(:create, Droom::Event)
-      %span.action
-        = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
+    %h2.section
+      = link_to t(:future_events), main_app.calendar_url
+      - if can?(:create, Droom::Event)
+        %span.action
+          = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
 
-  - if events.any?
-    = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
-  - else
-    %p.nothing
-      = t :no_future_events
+    - if events.any?
+      = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
+    - else
+      %p.nothing
+        = t :no_future_events
   
-  - if calendar.events.future_and_current.count > 5
-    %p
-      = link_to t(:more_in_calendar), main_app.calendar_url
+    - if calendar.events.future_and_current.count > 5
+      %p
+        = link_to t(:more_in_calendar), main_app.calendar_url

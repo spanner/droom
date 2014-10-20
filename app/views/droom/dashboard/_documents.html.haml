@@ -1,9 +1,12 @@
 - documents = Droom::Document.latest(5)
 
-%h2.section
-  = link_to t(:latest_documents), droom.documents_url
+.divider
+%section
+  #documents
+    %h2.section
+      = link_to t(:latest_documents), droom.documents_url
 
-- if documents.any?
-  = render :partial => "droom/documents/document", :collection => documents, :locals => {:closed => true}
-- else
-  = t :no_documents
+    - if documents.any?
+      = render :partial => "droom/documents/document", :collection => documents, :locals => {:closed => true}
+    - else
+      = t :no_documents

@@ -3,19 +3,20 @@
 
 - if events.any?
   .divider
-  #past_events
-    %h2.section
-      = link_to t(:recent_events), main_app.calendar_url
-      - if can?(:create, Droom::Event)
-        %span.action
-          = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
+  %section
+    #past_events
+      %h2.section
+        = link_to t(:recent_events), main_app.calendar_url
+        - if can?(:create, Droom::Event)
+          %span.action
+            = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
 
-    - if events.any?
-      = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
-      - if calendar.events.past.count > 5
-        %p
-          = link_to t(:more_past_events), main_app.calendar_url(direction: "past")
+      - if events.any?
+        = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
+        - if calendar.events.past.count > 5
+          %p
+            = link_to t(:more_past_events), main_app.calendar_url(direction: "past")
 
-    - else
-      %p.nothing
-        = t :no_past_events
+      - else
+        %p.nothing
+          = t :no_past_events

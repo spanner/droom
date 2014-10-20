@@ -22,7 +22,7 @@ module Droom
       @users = paginated(@group.users, 20)
       respond_with @group do |format|
         format.js {
-          render :partial => 'droom/groups/group'
+          render :partial => 'droom/groups/users'
         }
       end
     end
