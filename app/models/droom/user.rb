@@ -396,7 +396,7 @@ module Droom
       title
     end
     
-    # This shuold be a reasonable formal first-person form of address.
+    # This should be a reasonable formal first-person form of address.
     #
     def formal_name
       [title, family_name].join(' ')
@@ -407,7 +407,7 @@ module Droom
     # if the title is not ordinary.
     #
     def colloquial_name
-      [title_if_it_matters, informal_name, honours].compact.join(' ')
+      [title_if_it_matters, informal_name].compact.join(' ')
     end
 
     # ### Completeness
