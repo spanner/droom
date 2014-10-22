@@ -21,6 +21,7 @@ module Droom
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
     after_save :send_confirmation_if_directed
+    after_save :confirmed_if_password_set
 
     # People are often invited into the system in batches or after offline contact. 
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
@@ -544,6 +545,10 @@ module Droom
     
     def send_confirmation_if_directed
       self.send_confirmation_instructions if send_confirmation?
+    end
+
+    def confirmed_if_password_set
+      self.update_column(:confirmed_at, Time.now) if password_set? && !confirmed?
     end
 
   private
