@@ -71,6 +71,23 @@ module Droom
       end
     end
 
+    ## Confirmation
+    #
+    # This is the destination of the password-setting form that can appear if a user accepts a role invitation
+    # and has not yet set a password. A destination should have been provided along with the passwords.
+    #
+    def set_password
+      if @user = Droom::User.find_by(authentication_token: params[:tok])
+        @user.assign_attributes(password_params.merge(confirmed: true))
+        @user.save
+        sign_in @user
+        flash[:notice] = t(:password_set)
+        respond_with @user, location: params[:destination].present? ? params[:destination] : after_sign_in_path_for(@user)
+      else
+        raise ActiveRecord::RecordNotFound, "Sorry: User credentials not recognised."
+      end
+    end
+
     def destroy
       @user.destroy
       head :ok
@@ -80,6 +97,10 @@ module Droom
 
     def user_params
       params.require(:user).permit(:title, :family_name, :given_name, :chinese_name, :honours, :email, :password, :password_confirmation, :phone, :description, :admin, :gender, :preferences_attributes, :confirm, :old_id, :send_confirmation, :defer_confirmation, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :image, group_ids: [], preferences_attributes: [:id, :_destroy, :uuid, :key, :value])
+    end
+
+    def password_params
+      params.require(:user).permit(:password, :password_confirmation)
     end
 
     def set_view

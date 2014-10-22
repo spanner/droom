@@ -61,6 +61,7 @@ Droom::Engine.routes.draw do
   resources :users do
     get "preferences", on: :member, as: :preferences
     get "admin", on: :collection
+    put :set_password, on: :member
     resources :events
   end
   
