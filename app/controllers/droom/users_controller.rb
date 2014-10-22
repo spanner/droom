@@ -4,7 +4,8 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     before_filter :set_view, only: [:show, :edit, :update]
-    load_and_authorize_resource
+    load_and_authorize_resource except: [:set_password]
+    skip_before_filter :authenticate_user!, only: [:set_password]
 
     def index
       @users = @users.in_name_order
@@ -68,6 +69,23 @@ module Droom
       else
         Rails.logger.warn "update failed: #{@user.errors.to_a.inspect}"
         respond_with @user
+      end
+    end
+
+    ## Confirmation
+    #
+    # This is the destination of the password-setting form that can appear if a user accepts a role invitation
+    # and has not yet set a password. A destination should have been provided along with the passwords.
+    #
+    def set_password
+      if @user = Droom::User.find_by(authentication_token: params[:tok])
+        @user.assign_attributes(password_params.merge(confirmed: true))
+        @user.save
+        sign_in @user
+        flash[:notice] = t(:password_set)
+        respond_with @user, location: params[:destination].present? ? params[:destination] : after_sign_in_path_for(@user)
+      else
+        raise ActiveRecord::RecordNotFound, "Sorry: User credentials not recognised."
       end
     end
 
