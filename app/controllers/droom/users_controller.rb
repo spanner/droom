@@ -100,7 +100,7 @@ module Droom
     end
 
     def set_view
-      @view = params[:view] if %w{listed tabled profile preferences}.include?(params[:view])
+      @view = params[:view] if %w{listed tabled profile preferences my_profile}.include?(params[:view])
       @view ||= 'profile'
     end
   end

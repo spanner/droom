@@ -1,0 +1,18 @@
+.user#my_profile{:data => {:refreshable => true, :url => droom.user_path(current_user, view: 'my_profile')}}
+  .mugshot.full{:style => "background-image: url(#{current_user.image.url('thumb')})"}
+  .detail
+    %h3
+      = link_to current_user.colloquial_name, droom.edit_user_url(current_user, view: 'profile'), data: {action: "popup", affected: "#my_profile"}
+
+    %p.contact
+      = link_to droom.edit_user_url(current_user, view: 'profile'), data: {action: "popup", affected: "#my_profile"} do
+        - if current_user.organisation
+          %strong
+            = current_user.organisation.name
+            %br
+        - if current_user.email?
+          = current_user.email
+        - if current_user.email? && current_user.phone?
+          = t :or
+        - if current_user.phone?
+          = current_user.phone
