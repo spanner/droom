@@ -4,8 +4,8 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     before_filter :set_view, only: [:show, :edit, :update]
+    skip_before_filter :require_password, only: [:set_password]
     load_and_authorize_resource except: [:set_password]
-    skip_before_filter :authenticate_user!, only: [:set_password]
 
     def index
       @users = @users.in_name_order
@@ -78,15 +78,10 @@ module Droom
     # and has not yet set a password. A destination should have been provided along with the passwords.
     #
     def set_password
-      if @user = Droom::User.find_by(authentication_token: params[:tok])
-        @user.assign_attributes(password_params.merge(confirmed: true))
-        @user.save
-        sign_in @user
-        flash[:notice] = t(:password_set)
-        respond_with @user, location: params[:destination].present? ? params[:destination] : after_sign_in_path_for(@user)
-      else
-        raise ActiveRecord::RecordNotFound, "Sorry: User credentials not recognised."
-      end
+      current_user.update_attributes(password_params.merge(confirmed: true))
+      flash[:notice] = t(:password_set)
+      sign_in current_user, :bypass => true
+      respond_with current_user, location: '/'
     end
 
     def destroy

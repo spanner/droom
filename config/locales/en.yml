@@ -334,6 +334,8 @@ en:
   password_leave_same: "Leave this field blank to keep your existing password."
   password_confirmation_requirements: "We will not be able to remind you of your password but you can always set a new one if you forget it."
   password_requirements: "Ideally your password should include numbers and punctuation, and should not resemble a dictionary word."
+  password_requirement: "At least six characters"
+  password_set: "Thank you. Your password has been set and your account is fully active."
   remove: "Remove"
   search: Search
   save: "Save"

@@ -89,7 +89,6 @@ module Droom
     end
 
     def reset_authentication_token!
-      $cache.delete "/api/authenticate/#{authentication_token}" if $cache && authentication_token
       token = generate_authentication_token
       self.update_column(:authentication_token, token)
       token

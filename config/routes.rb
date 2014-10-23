@@ -61,7 +61,7 @@ Droom::Engine.routes.draw do
   resources :users do
     get "preferences", on: :member, as: :preferences
     get "admin", on: :collection
-    put :set_password, on: :member
+    put :set_password, on: :collection
     resources :events
   end
   
@@ -75,5 +75,7 @@ Droom::Engine.routes.draw do
   resources :dropbox_tokens do
     get "/register", on: :collection, action: :create
   end
+  
+  put "/set_password" => "users#set_password", as: :set_my_password
 
 end

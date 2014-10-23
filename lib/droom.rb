@@ -58,6 +58,7 @@ module Droom
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
   class PermissionDenied < DroomError; end
+  class PasswordRequired < DroomError; end
 
   class << self
     def home_url
