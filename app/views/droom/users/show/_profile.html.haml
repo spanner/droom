@@ -24,10 +24,6 @@
         - if user.phone?
           = user.phone
 
-      - if Droom.use_biogs?
+      - if Droom.use_biogs? && user.description?
         .description
-          - if user.description?
-            = sanitize(user.description.html_safe)
-          - else
-            %p
-              = t :no_user_description
+          = sanitize(user.description.html_safe)
