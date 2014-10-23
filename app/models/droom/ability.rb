@@ -26,6 +26,7 @@ module Droom
         
           # And they can edit themselves
           #
+          can :edit, Droom::User, :id => user.id
           can :update, Droom::User, :id => user.id
           cannot :edit, Droom::User
         
@@ -62,10 +63,6 @@ module Droom
         
           if user.permitted?('droom.stream')
             can :create, Droom::Scrap
-          end
-
-          if user.permitted?('droom.pages')
-            can :create, Droom::Page
           end
 
           # Some models are purely administrative.
