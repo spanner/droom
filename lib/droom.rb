@@ -53,7 +53,8 @@ module Droom
                  :all_documents_public,
                  :password_pattern,
                  :separate_calendars,
-                 :second_time_zone
+                 :second_time_zone,
+                 :require_droom_login
   
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
@@ -231,6 +232,11 @@ module Droom
     def password_pattern
       @@password_pattern ||= ".{6,}"
     end
+    
+    def require_droom_login?
+      !!@@require_droom_login
+    end
+    
     
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
     # doesn't exist you just get back the default value, or nil if there isn't one. This is where you

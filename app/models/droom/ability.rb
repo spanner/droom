@@ -12,7 +12,7 @@ module Droom
           #
           can :manage, :all
 
-        elsif user.permitted?('droom.login')
+        elsif !Droom.require_droom_login? || user.permitted?('droom.login')
           # Otherwise, most items are visible to everyone, provided they are allowed to log in here.
           #
           can :read, Droom::Event
