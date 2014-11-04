@@ -87,7 +87,7 @@ module Droom
     end
     
     def editable?(thing)
-      admin? || current_user == thing.created_by
+      admin? || current_user == thing || thing.respond_to?(:created_by) && current_user == thing.created_by
     end
 
     def deletable?(thing)

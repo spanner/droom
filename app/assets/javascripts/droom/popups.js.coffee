@@ -299,7 +299,7 @@ jQuery ($) ->
         @patch.addClass('up')
         @header.addClass('up')
         @showing = true
-        @container.find('input[autofocus]').first().focus()
+        @container.find('input[autofocus]').get(0).focus()
 
     revert: (e) =>
       Panel.hideAll()
