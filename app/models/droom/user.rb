@@ -98,6 +98,7 @@ module Droom
       if authentication_token.blank?
         self.authentication_token = generate_authentication_token
       end
+      authentication_token
     end
     
     def confirmed=(value)

@@ -64,7 +64,7 @@ module Droom
 
     # Note that this is destructive to all previous authentication tokens even if the cookie is not eventually set.
     def set_auth_values(resource)
-      signer.encode [ resource.reset_authentication_token!, Time.now ]
+      signer.encode [ resource.ensure_authentication_token, Time.now ]
     end
 
     def cookie_options
