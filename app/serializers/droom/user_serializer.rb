@@ -11,6 +11,8 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :honours,
              :email,
              :phone,
+             :mobile,
+             :country_code,
              :images,
              :confirmed,
              :permission_codes,
