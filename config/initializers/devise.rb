@@ -247,9 +247,9 @@ Devise.setup do |config|
     manager.default_strategies :cookie_authenticatable, :database_authenticatable, scope: :user
   end
 
-  # Set shared domain cookie on sign in or any other user-identifying step
+  # Set shared domain cookie and (revocable) session id on sign in
   #
-  Warden::Manager.after_set_user do |user, warden, options|
+  Warden::Manager.after_authentication do |user, warden, options|
     warden.raw_session["session_validity_check"] = user.reset_session_id!
     Droom::AuthCookie.new(warden.cookies).set(user)
   end

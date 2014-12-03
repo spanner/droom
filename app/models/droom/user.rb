@@ -77,6 +77,7 @@ module Droom
     end
     
     def clear_session_id!
+      Rails.logger.warn "--- clear_session_id!"
       self.update_column(:session_id, "")
     end
     
