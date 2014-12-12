@@ -26,7 +26,7 @@ module Droom
           # If someone has been allowed to create something, they are generally allowed to edit or remove it.
           # This rule must sit after the user rules because users have no created_by_id column.
           #
-          # can :manage, :all, :created_by_id => user.id
+          can :manage, [Droom::Event, Droom::Document, Droom::Scrap], :created_by_id => user.id
 
           # Then other abilities are determined by permissions. Our permissions are relatively abstract and 
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
@@ -37,10 +37,7 @@ module Droom
             can :create, Droom::Venue
             can :create, Droom::Invitation
             can :create, Droom::GroupInvitation
-            if user.permitted?('droom.attach')
-              can :create, Droom::AgendaCategory
-              can :create, Droom::Document 
-            end
+            can :create, Droom::AgendaCategory
           end
 
           if user.permitted?('droom.directory')
