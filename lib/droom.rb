@@ -54,7 +54,8 @@ module Droom
                  :password_pattern,
                  :separate_calendars,
                  :second_time_zone,
-                 :require_droom_login
+                 :require_droom_login,
+                 :default_permissions
   
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
@@ -235,6 +236,10 @@ module Droom
     
     def require_droom_login?
       !!@@require_droom_login
+    end
+    
+    def default_permissions
+      @@default_permissions ||= %w{droom.login droom.calendar droom.directory droom.attach droom.library}
     end
     
     

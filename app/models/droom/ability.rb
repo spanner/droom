@@ -3,18 +3,11 @@ module Droom
     include CanCan::Ability
 
     def initialize(user)
-      # invitation only:
-      # no unauthenticated access allowed.
-      
       if user
         if user.admin?
-          # An admin flag on the user table overrides this whole mechanism to make all things possible.
-          #
           can :manage, :all
 
         elsif !Droom.require_droom_login? || user.permitted?('droom.login')
-          # Otherwise, most items are visible to everyone, provided they are allowed to log in here.
-          #
           can :read, Droom::Event
           can :read, Droom::Folder
           can :read, Droom::Document

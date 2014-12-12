@@ -512,19 +512,19 @@ module Droom
     
     has_many :user_permissions
     has_many :permissions, :through => :user_permissions
-    
+
     def permission_codes
       permissions.map(&:slug).compact.uniq
     end
-    
+
     def permission_codes=(codes)
       #TODO
     end
-    
+
     def permitted?(key)
       permission_codes.include?(key)
     end
-    
+
     def permissions_elsewhere?
       permission_codes.select{|pc| pc !~ /droom/}.any?
     end
