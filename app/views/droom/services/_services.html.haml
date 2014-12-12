@@ -22,8 +22,8 @@
         - service.permissions.each_with_index do |perm, i|
           %td{:class => "s_#{service.id} p_#{perm.id} #{'d' if i == width-1}".strip}
             = action_menulink(perm, :class => "small")
-            %span.rotated{title: "#{service.slug}.#{perm.slug}"}
-              = perm.name
+            %span.rotated
+              = perm.slug
             = action_menu(perm)
 
     - @groups.each do |group|
