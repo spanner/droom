@@ -1,4 +1,4 @@
-- if editable?(organisation)
+- if can? :edit, organisation
   .menu{:data => {:for => "organisation_#{organisation.id}"}}
     %ul.actions
       %li

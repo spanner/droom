@@ -543,7 +543,7 @@ jQuery ($) ->
   # These stand alone and usually encapsulate some interaction with the user.
 
   # The *folder* action is just a display convention that shows and hides the contents of a folder
-  # when its link is clicked. It could perhaps become a subclass of the generic toggle mechanism and benefit from its persistence.
+  # when its link is clicked.
       
   $.fn.folder = ->
     @each ->
@@ -557,17 +557,26 @@ jQuery ($) ->
       if @_list[0]
         @_container.children('a.folder').click @toggle
         @set()
+      else
+        @_container.children('a.folder').remote
+          on_success: @replace
       
     set: (e) =>
       e.preventDefault() if e
       @_state = localStorage?.getItem("show_folder_#{@_label}")
-      @_state ?= @_container.hasClass('open') ? "open" : "closed"
+      @_state = "open" if @_container.hasClass('open')
       if @_state is "open"
         @_container.addClass("open")
         @_list.show()
       else
         @_container.removeClass("open")
         @_list.hide()
+
+    replace: (e, response) =>
+      replacement = $(response)
+      @_container.after(replacement)
+      @_container.remove()
+      replacement.activate()
 
     toggle: (e) =>
       if e
@@ -586,6 +595,8 @@ jQuery ($) ->
       localStorage?.setItem("show_folder_#{@_label}", "closed")
       @_list.stop().slideUp "normal", () =>
         @_container.removeClass('open')
+
+
 
 
   $.fn.slug_field = ->

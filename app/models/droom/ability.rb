@@ -7,7 +7,7 @@ module Droom
         if user.admin?
           can :manage, :all
 
-        elsif !Droom.require_droom_login? || user.permitted?('droom.login')
+        elsif !Droom.require_login_permission? || user.permitted?('droom.login')
           can :read, Droom::Event
           can :read, Droom::Folder
           can :read, Droom::Document
@@ -32,23 +32,23 @@ module Droom
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
           #
           if user.permitted?('droom.calendar')
-            can :create, Droom::Event
-            can :create, Droom::EventSet
-            can :create, Droom::Venue
-            can :create, Droom::Invitation
-            can :create, Droom::GroupInvitation
-            can :create, Droom::AgendaCategory
+            can :manage, Droom::Event
+            can :manage, Droom::EventSet
+            can :manage, Droom::Venue
+            can :manage, Droom::Invitation
+            can :manage, Droom::GroupInvitation
+            can :manage, Droom::AgendaCategory
           end
 
           if user.permitted?('droom.directory')
-            can :create, Droom::Group
-            can :create, Droom::Organisation
-            can :create, Droom::User
+            can :manage, Droom::Group
+            can :manage, Droom::Organisation
+            can :manage, Droom::User
           end
         
           if user.permitted?('droom.library')
-            can :create, Droom::Folder
-            can :create, Droom::Document
+            can :manage, Droom::Folder
+            can :manage, Droom::Document
           end
         
           if user.permitted?('droom.stream')

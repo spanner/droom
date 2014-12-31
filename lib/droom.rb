@@ -54,7 +54,7 @@ module Droom
                  :password_pattern,
                  :separate_calendars,
                  :second_time_zone,
-                 :require_droom_login,
+                 :require_login_permission,
                  :default_permissions
   
   class DroomError < StandardError; end
@@ -234,8 +234,8 @@ module Droom
       @@password_pattern ||= ".{6,}"
     end
     
-    def require_droom_login?
-      !!@@require_droom_login
+    def require_login_permission?
+      !!@@require_login_permission
     end
     
     def default_permissions

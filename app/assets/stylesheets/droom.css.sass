@@ -1496,6 +1496,7 @@ ul#folders, div.attachments
   padding-left: 0
   li
     list-style: none
+
   li.folder
     margin: 4px 0
     ul.filing
@@ -1511,19 +1512,22 @@ ul#folders, div.attachments
       padding: 4px 0
     &.root
       > a.folder
-        font-size: 140%
+        font-size: 125%
+        text-indent: 28px
     &.open
       > a.folder
         background-position: 0 -192px
         &:hover
           background-position: 0 -240px
-    &.empty
+    &.auto
       > a.folder
-        color: $pale
-        background-position: 0 -144px
+        color: $green
+        background-position: 0 -96px
       &.open
         > a.folder
-          background-position: 0 -336px
+          background-position: 0 -288px
+    &.empty
+      opacity: 0.5
 
 input.search_box
   font-size: 1.5em

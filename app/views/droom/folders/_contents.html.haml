@@ -21,12 +21,13 @@
             = link_to t(:more_subfolders_count, :count => children.count), for_more
         
       - else
-        // special case: if we're looking at a private folder that means we are allowed to see its children.
+        / special case: if we're looking at a private folder that means we are allowed to see its children.
         - unless admin? || !folder.public?
           - children = folder.children.populated
 
         - if limit && limit < document_count + folder.children.count
           - children = children.limit(limit - document_count)
+          - children = children.populated unless can?(:edit, folder)
           = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}
           - if for_more
             %li.more

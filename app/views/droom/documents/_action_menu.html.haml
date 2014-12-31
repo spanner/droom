@@ -1,4 +1,4 @@
-- if editable?(document)
+- if can? :edit, document
   .menu{:data =>{:for => "document_#{document.id}"}}
     %ul.actions
       %li

@@ -7,7 +7,7 @@
 
 
 - content_for :margin do
-  - if admin?
+  - if can?(:manage, Droom::Folder)
     %p.action
       = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
       %br

@@ -1,4 +1,4 @@
-- if editable?(folder)
+- if can? :edit, folder
   .menu{:data =>{:for => "folder_#{folder.id}"}}
     %ul.actions
       %li

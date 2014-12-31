@@ -1,4 +1,4 @@
-- if editable?(scrap)
+- if can? :edit, scrap
   .menu{:data => {:for => "scrap_#{scrap.id}"}}
     %ul.actions
       %li

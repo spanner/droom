@@ -138,6 +138,7 @@ jQuery ($) ->
     $.activations.push fn
   
   $.fn.activate = () ->
+    console.log "droom activate", @
     $.each $.activations, (i, fn) =>
       fn.apply(@)
     @

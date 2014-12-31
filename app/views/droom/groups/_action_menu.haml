@@ -1,4 +1,4 @@
-- if editable?(group)
+- if can? :edit, group
   .menu{:data => {:for => "group_#{group.id}"}}
     %ul.actions
       %li

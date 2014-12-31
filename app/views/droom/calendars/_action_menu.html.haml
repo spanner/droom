@@ -1,5 +1,5 @@
 - cal ||= calendar
-- if editable?(cal)
+- if can? :edit, cal
   .menu{:data => {:for => "calendar_#{calendar.id}"}}
     %ul.actions
       %li= link_to t(:edit_calendar), droom.edit_calendar_url(cal), :class => 'edit', :data => {:action => "popup", :replaced => "#calendar_#{calendar.id}", :affected => "#calendars"}

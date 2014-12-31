@@ -35,6 +35,10 @@ module Droom
       end
     }
     
+    def automatic?
+      holder || !parent && (name == "Events" || name == "Groups")
+    end
+    
     def visible_to?(user)
       return true if self.public?
       return false unless user

@@ -15,7 +15,7 @@ module Droom
           :data => {:menu => "#{classname}_#{thing.id}"}
         })
         html_options[:class] << " menu"
-        link_to t(:edit), "#", html_options if editable?(thing)
+        link_to t(:edit), "#", html_options if can?(:edit, thing)
       end
     end
     
@@ -68,10 +68,6 @@ module Droom
       current_user and !!current_user.dropbox_token
     end
     
-    def show_dropbox_links?
-      dropbox?# && preference is 'clicked'
-    end
-    
     def dropbox_auth_url
       dbs = dropbox_session
       # get an auth link address, with our register action as the callback
@@ -82,18 +78,6 @@ module Droom
       authorization_url
     end
     
-    def visible?(thing)
-      admin? || privileged? || current_user.can_see?(thing)
-    end
-    
-    def editable?(thing)
-      admin? || current_user == thing || thing.respond_to?(:created_by) && current_user == thing.created_by
-    end
-
-    def deletable?(thing)
-      admin? || current_user == thing.created_by
-    end
-
     def nav_link_to(name, url, options={})
       options[:class] ||= ""
       options[:class] << "here" if (request.path == url) || (url != "/" && request.path =~ /^#{url}/)

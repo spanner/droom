@@ -14,11 +14,6 @@ jQuery ($) ->
     @each ->
       new Remote @, opts
   
-  $.fn.silent = (opts) ->
-    @each ->
-      
-      new Remote
-
   class Remote
     constructor: (element, opts) ->
       @_control = $(element)

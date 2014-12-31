@@ -1,4 +1,4 @@
-- if editable?(event)
+- if can? :edit, event
   .menu{:data => {:for => "event_#{event.id}"}}
     %ul.actions
       %li
