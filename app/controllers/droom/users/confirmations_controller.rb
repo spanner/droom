@@ -16,7 +16,7 @@ module Droom::Users
         sign_in(resource_name, @resource)
         render
       else
-        render :template => "droom/users/confirmations/failure" 
+        render :template => "droom/users/confirmations/failure"
       end
     end
 
