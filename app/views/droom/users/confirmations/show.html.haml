@@ -1,13 +1,9 @@
 -content_for :title do
-  = t :welcome
-
-%p
-  %strong
-    =t :hello
-    = @resource.formal_name.strip + "."
+  =t :hello
+  = @resource.formal_name.strip
 
 - if @resource.password_set?
-  = render "droom/users/confirmations/after_confirmation", user: @resource
+  = render partial: "droom/users/confirmations/after_confirmation", locals: {user: @resource}
 
 - else
-  = render "droom/users/confirmations/password_required", user: @resource
+  = render partial: "droom/users/confirmations/password_required", locals: {user: @resource}

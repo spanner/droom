@@ -30,6 +30,9 @@ module Droom
     # When you do want to invite that person, call user.resend_confirmation_token or
     # set the send_confirmation flag on a save.
     #
+    # defer_confirmation is also set by remote services that send out their own invitations,
+    # eg. when a new user is invited to screen an application round.
+    #
     attr_accessor :defer_confirmation, :send_confirmation
     
     def defer_confirmation!
@@ -57,7 +60,9 @@ module Droom
     def active_for_authentication?
       true
     end
-
+    
+    # Only invoke password-confirmation validation when a password is being set.
+    #
     def password_required?
       confirmed? && (!password.blank?)
     end
@@ -66,9 +71,13 @@ module Droom
       encrypted_password?
     end
     
+    def lacks_password?
+      !password_set?
+    end
+    
     ## Session ID
     #
-    # Allows us to invalidate a session by remote control if someone signs out on a satellite site.
+    # Allows us to invalidate a session by remote control when the user signs out on a satellite site.
     
     def reset_session_id!
       token = generate_authentication_token
@@ -530,7 +539,7 @@ module Droom
     end
 
     def data_room_user?
-      admin? || permitted?('droom.login')
+      !Droom.require_login_permission || admin? || permitted?('droom.login')
     end
 
     ## Other ownership

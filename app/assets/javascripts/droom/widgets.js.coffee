@@ -239,6 +239,7 @@ jQuery ($) ->
 
   class PasswordForm
     constructor: (element, opts) ->
+      console.log "password form", element
       @options = $.extend
         length: 6
       , opts

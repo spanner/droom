@@ -4,6 +4,8 @@ module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
 
+    before_action :request_password_if_not_set
+
     rescue_from "CanCan::AccessDenied", :with => :not_allowed
     
     def current_ability
@@ -47,6 +49,13 @@ module Droom
             total_count: results.total_count
           }.to_json
         end
+      end
+    end
+    
+    def request_password_if_not_set
+      if user_signed_in? && current_user.lacks_password?
+        @omit_navigation = true
+        render template: "droom/users/password_required", locals: {destination: request.path}
       end
     end
 

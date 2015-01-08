@@ -3,8 +3,8 @@ module Droom
     helper Droom::DroomHelper
     respond_to :html, :js
     layout :no_layout_if_pjax
-    before_filter :set_view, only: [:show, :edit, :update]
-    skip_before_filter :require_password, only: [:set_password]
+    before_action :set_view, only: [:show, :edit, :update]
+    skip_before_action :request_password_if_not_set, only: [:set_password]
     load_and_authorize_resource except: [:set_password]
 
     def index
@@ -44,6 +44,10 @@ module Droom
     end
 
     def create
+      # block the automatic devise confirmation message
+      @user.defer_confirmation = true
+      # then send confirmation once the user has been saved and her permissions are known
+      @user.send_confirmation = true
       @user.update_attributes(user_params)
       respond_with @user
     end
@@ -74,14 +78,20 @@ module Droom
 
     ## Confirmation
     #
-    # This is the destination of the password-setting form that can appear if a user accepts a role invitation
-    # and has not yet set a password. A destination should have been provided along with the passwords.
+    # This is the destination of the password-setting form that intervenes when a new user arrives who has not yet
+    # set a password. Normally this would only happen when they hit the confirmation link, which checks the account 
+    # then redirects to the dashboard.
     #
     def set_password
       current_user.update_attributes(password_params.merge(confirmed: true))
-      flash[:notice] = t(:password_set)
       sign_in current_user, :bypass => true
-      respond_with current_user, location: '/'
+      if current_user.data_room_user?
+        flash[:notice] = t(:password_set)
+        respond_with current_user, location: params[:destination].presence || "/"
+      else
+        @omit_navigation = true
+        render
+      end
     end
 
     def destroy
