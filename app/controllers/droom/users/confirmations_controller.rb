@@ -12,6 +12,8 @@ module Droom::Users
       if @resource && @resource.confirmed?
         sign_in(resource_name, @resource)
         render
+      elsif user_signed_in?
+        redirect_to droom.dashboard_url
       else
         render :template => "droom/users/confirmations/failure"
       end
