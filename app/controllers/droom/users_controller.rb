@@ -87,7 +87,7 @@ module Droom
       sign_in current_user, :bypass => true
       if current_user.data_room_user?
         flash[:notice] = t(:password_set)
-        respond_with current_user, location: params[:destination].presence || "/"
+        redirect_to params[:destination].presence || droom.dashboard_url
       else
         @omit_navigation = true
         render
