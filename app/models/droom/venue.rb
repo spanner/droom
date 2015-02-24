@@ -1,4 +1,4 @@
-require 'geocoder'
+# require 'geocoder'
 
 module Droom
   class Venue < ActiveRecord::Base
@@ -9,8 +9,8 @@ module Droom
 
     before_validation :slug_from_name
 
-    geocoded_by :name_and_address, :latitude  => :lat, :longitude => :lng
-    before_validation :geocode
+    # geocoded_by :name_and_address, :latitude  => :lat, :longitude => :lng
+    # before_validation :geocode
     # reverse_geocoded_by :lat, :lng
 
     scope :matching, -> fragment {
