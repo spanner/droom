@@ -2,7 +2,7 @@ module Droom
   class User < ActiveRecord::Base
     validates :family_name, :presence => true
     validates :given_name, :presence => true
-    validates :email, :uniqueness => true, :presence => true
+    # validates :email, :uniqueness => true, :presence => true
     validates :uid, :uniqueness => true, :presence => true
 
     has_many :preferences, :foreign_key => "created_by_id"
@@ -86,7 +86,6 @@ module Droom
     end
     
     def clear_session_id!
-      Rails.logger.warn "--- clear_session_id!"
       self.update_column(:session_id, "")
     end
     
@@ -154,22 +153,6 @@ module Droom
       order("family_name ASC, given_name ASC")
     }
 
-    def as_json_for_coca(options={})
-      ensure_uid!
-      ensure_authentication_token
-      {
-        uid: uid,
-        authentication_token: authentication_token,
-        title: title,
-        given_name: given_name,
-        family_name: family_name,
-        chinese_name: chinese_name,
-        email: email,
-        permissions: permission_codes.join(','),
-        image: thumbnail
-      }
-    end
-
     ## Organisation affiliation
     #
     belongs_to :organisation
@@ -217,7 +200,7 @@ module Droom
     has_many :events, :through => :invitations
 
     def invite_to(event)
-      invitations.where(event_id: event.id).first_or_create if event
+      invitations.where(event_id: event.id).first_or_create if event && invitable?
     end
     
     def uninvite_from(event)
@@ -230,6 +213,10 @@ module Droom
     
     def invitation_to(event)
       invitations.to_event(event).first
+    end
+    
+    def invitable?
+      email?
     end
     
     scope :personally_invited_to_event, -> event {
@@ -554,7 +541,7 @@ module Droom
     end
     
     def send_confirmation_if_directed
-      self.send_confirmation_instructions if send_confirmation?
+      self.send_confirmation_instructions if email? && send_confirmation?
     end
 
     def confirmed_if_password_set
