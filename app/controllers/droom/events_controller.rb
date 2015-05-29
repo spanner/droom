@@ -94,11 +94,11 @@ module Droom
           # This is done without changing the apparent time: it is already correct with the given zone and no translation is required.
           date = date.change(offset: timezone) if timezone
           if params[:event][:start_time].present?
-            start_time = TimeOfDay.parse(params[:event][:start_time])
+            start_time = Tod::TimeOfDay.parse(params[:event][:start_time])
             params[:event][:start] = start_time.on(date, timezone)
           end
           if params[:event][:finish_time].present?
-            finish_time = TimeOfDay.parse(params[:event][:finish_time])
+            finish_time = Tod::TimeOfDay.parse(params[:event][:finish_time])
             params[:event][:finish] = finish_time.on(date, timezone)
           end
         end

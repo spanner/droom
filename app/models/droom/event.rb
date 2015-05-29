@@ -191,7 +191,7 @@ module Droom
     end
     
     def start_time
-      start.to_time_of_day if start
+      Tod::TimeOfDay(start) if start
     end
 
     def start_date
@@ -206,7 +206,7 @@ module Droom
     end
 
     def finish_time
-      finish.to_time_of_day if finish
+      Tod::TimeOfDay(finish) if finish
     end
 
     def finish_date
