@@ -1,8 +1,10 @@
 - user ||= suggested
 
 %li.user
-  = link_to user.colloquial_name, user_url(user), :data => {:action => "popup"}
-  %span.note
+  %span.suggestion
+    = link_to user_url(user), data: {:action => "popup"} do
+      = user.colloquial_name
+    %br
     - if user.phone? || user.email?
       - if user.phone?
         = user.phone

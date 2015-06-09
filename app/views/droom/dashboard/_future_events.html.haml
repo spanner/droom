@@ -16,6 +16,3 @@
       %p.nothing
         = t :no_future_events
   
-    - if calendar.events.future_and_current.count > 5
-      %p
-        = link_to t(:more_in_calendar), main_app.calendar_url

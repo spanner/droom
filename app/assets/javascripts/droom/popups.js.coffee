@@ -226,7 +226,7 @@ jQuery ($) ->
       @links = $("a[data-panel='#{@id}']")
       @header = $('#masthead').find("a[data-panel='#{@id}']")
       box = @header.offsetParent()
-      @container.appendTo(box )
+      @container.appendTo(box)
       @patch = $('<div class="patch" />').appendTo(box)
       @timer = null
       @showing = false
@@ -247,18 +247,14 @@ jQuery ($) ->
     setup: () =>
       position = @header.position()
       offset = @header.offset()
+      top = position.top + @header.outerHeight()
       @patch.css
         left: position.left + 1
-        top: position.top + @header.height() - 3
+        top: top - 3
         width: @header.outerWidth() - 2
-      if offset.left > $(window).width() / 2
-        @container.css
-          left: position.left - (@container.outerWidth() - @header.outerWidth() - 50)
-          top: position.top + @header.height()
-      else
-        @container.css
-          left: position.left - 40
-          top: position.top + @header.height()
+      @container.css
+        left: -16
+        top: top - 1
 
       
     set: () =>
@@ -288,7 +284,7 @@ jQuery ($) ->
       @showing = false
           
     hideSoon: () =>
-      @timer = window.setTimeout @hide, 500
+      # @timer = window.setTimeout @hide, 500
       
     show: (e) =>
       window.clearTimeout @timer
@@ -299,7 +295,7 @@ jQuery ($) ->
         @patch.addClass('up')
         @header.addClass('up')
         @showing = true
-        @container.find('input[autofocus]').get(0).focus()
+        @container.find('input[autofocus]').get(0)?.focus()
 
     revert: (e) =>
       Panel.hideAll()
