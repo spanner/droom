@@ -443,8 +443,8 @@
         var cal = $('#' + options.id);
         if (options.extraHeight === false) {
           var divs = $(el).find('div');
-          options.extraHeight = divs.get(0).offsetHeight + divs.get(1).offsetHeight;  // heights from top/bottom borders
-          options.extraWidth = divs.get(2).offsetWidth + divs.get(3).offsetWidth;     // widths from left/right borders
+          options.extraHeight = 0; //divs.get(0).offsetHeight + divs.get(1).offsetHeight;  // heights from top/bottom borders
+          options.extraWidth = 0; //divs.get(2).offsetWidth + divs.get(3).offsetWidth;     // widths from left/right borders
         }
         var tbl = cal.find('table:first').get(0);
         var width = tbl.offsetWidth;
@@ -807,7 +807,7 @@
         return this.each(function(){
           if (!$(this).data('datepicker')) {
             options.el = this;
-            
+        
             options.date = normalizeDate(options.mode, options.date);
             
             if (!options.current) {

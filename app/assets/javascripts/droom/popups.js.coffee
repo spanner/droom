@@ -256,7 +256,6 @@ jQuery ($) ->
         left: -16
         top: top - 1
 
-      
     set: () =>
       if @header.hasClass('here') then @show() else @hide()
       
@@ -284,7 +283,7 @@ jQuery ($) ->
       @showing = false
           
     hideSoon: () =>
-      # @timer = window.setTimeout @hide, 500
+      @timer = window.setTimeout @hide, 500
       
     show: (e) =>
       window.clearTimeout @timer

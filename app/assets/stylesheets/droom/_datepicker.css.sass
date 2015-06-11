@@ -1,0 +1,130 @@
+//= require datepicker/base
+@import variables
+
+div.datepicker
+  display: none
+  position: absolute
+  background-color: white
+  padding: 16px 10px
+  font-size: 14px
+  z-index: 7000
+  margin-top: 4px
+  min-width: 252px
+  min-height: 240px
+  +box-shadow(1px 2px 5px $dark)
+  &:before
+    display: inline-block
+    position: absolute
+    width: 24px
+    height: 16px
+    top: -16px
+    left: 20px
+    content: image-url('droom/pointer_upwards.png')
+
+  .datepickerSpace div
+    width: 8px
+
+  table
+    border-collapse: collapse
+    th, td
+      a
+        padding: 6px 8px
+        color: $mid
+        &:hover
+          color: $link
+    thead
+      tr
+        th
+          a.datepickerMonth
+            font-size: 1.4em
+            white-space: nowrap
+            padding: 5px 0 20px 0
+            min-width: 180px
+            cursor: pointer
+      tr.datepickerDoW
+        th
+          font-weight: bold
+          color: $pale
+
+    tbody.datepickerDays 
+      td
+        &.datepickerFuture a
+          color: $mid
+        &.datepickerToday a
+          color: $mid
+          font-weight: bold
+          background-color: $verypale
+        &.datepickerSelected a
+          background-color: $link
+          color: white
+        a
+          color: $pale
+          cursor: pointer
+          display: inline-block
+          width: 32px
+          height: 32px
+          padding: 6px
+          box-sizing: border-box
+          border-radius: 32px
+          text-align: center
+          &:hover
+            background-color: $green
+            color: white
+        &.datepickerNotInMonth a
+          background-color: white
+          color: $pale
+
+    tbody.datepickerMonths, tbody.datepickerYears
+      td
+        a
+          color: $pale
+          cursor: pointer
+          display: inline-block
+          width: 64px
+          height: 32px
+          padding: 6px
+          margin: 10px 0
+          box-sizing: border-box
+          border-radius: 32px
+          text-align: center
+          &:hover
+            background-color: $green
+            color: white
+
+
+// Crude but effective mode-switching taken from base.css
+
+.datepickerBorderT, .datepickerBorderB, .datepickerBorderL, .datepickerBorderR, .datepickerBorderTL, .datepickerBorderTR, .datepickerBorderBL, .datepickerBorderBR
+  display:none
+
+.datepickerHidden
+  display: none
+
+table.datepickerViewDays tbody.datepickerMonths, table.datepickerViewDays tbody.datepickerYears
+  display: none
+
+table.datepickerViewMonths tbody.datepickerDays, table.datepickerViewMonths tbody.datepickerYears, table.datepickerViewMonths tr.datepickerDoW
+  display: none
+
+table.datepickerViewYears tbody.datepickerDays, table.datepickerViewYears tbody.datepickerMonths, table.datepickerViewYears tr.datepickerDoW
+  display: none
+
+td.datepickerDisabled a, td.datepickerDisabled.datepickerNotInMonth a
+  color: $pale
+  &:hover
+    color: $mid
+
+a.datepickerGoNext, a.datepickerGoPrev, a.datepickerMonth
+  text-align: center
+  height: 20px
+  line-height: 20px
+  float: left
+
+div.datepicker th a.datepickerGoNext, div.datepicker th a.datepickerGoPrev
+  width: 20px
+  color: $pale
+  display: none
+
+div.datepicker .datepickerFirstView th a.datepickerGoPrev, div.datepicker .datepickerLastView th a.datepickerGoNext
+  display: block
+

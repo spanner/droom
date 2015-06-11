@@ -6,9 +6,12 @@
 
     %h2.section
       = link_to t(:future_events), main_app.calendar_url
+      - if calendar.events.future_and_current.count > 5
+        %span.addendum
+          =t(:click_for_more, count: calendar.events.future_and_current.count - 5)
       - if can?(:create, Droom::Event)
         %span.action
-          = link_to t(:add_event), droom.new_event_url, :class => "add minimal", :data => {:action => "popup", :affected => "#events"}
+          = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => "#events"}
 
     - if events.any?
       = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}

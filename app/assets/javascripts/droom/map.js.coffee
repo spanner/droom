@@ -135,8 +135,6 @@ jQuery ($) ->
             lat: position.lat()
             lng: position.lng()
         dataType: 'json'
-        success: () ->
-          console.log "venue updated"
         
     remove: (e) =>
       e.preventDefault() if e

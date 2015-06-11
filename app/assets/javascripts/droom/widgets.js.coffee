@@ -14,23 +14,21 @@ jQuery ($) ->
       @_container = $(element)
       if @_container.is("input")
         @_field = @_container
-        @_event = 'focus'
-        @_simple = true
+        event = 'focus'
       else
         @_field = @_container.find('input')
-        @_event = 'click'
-        @_simple = false
+        event = 'click'
         @_mon = @_container.find('span.mon')
         @_dom = @_container.find('span.dom')
         @_year = @_container.find('span.year')
       initial_date = @getDate()
       @_container.DatePicker
         calendars: 1
-        date: initial_date 
-        current: initial_date 
-        view: 'days' 
+        date: initial_date
+        current: initial_date
+        view: 'days'
         position: 'bottom'
-        showOn: @_event
+        showOn: event
         onChange: @setDate
 
     getDate: () =>
@@ -45,10 +43,9 @@ jQuery ($) ->
         y = date.getFullYear()
         dateString = [y, m, d].join('-')
         @_field.val(dateString)
-        unless @_simple
-          @_dom.text(d)
-          @_mon.text(m)
-          @_year.text(y)
+        @_dom?.text(d)
+        @_mon?.text(m)
+        @_year?.text(y)
 
 
   class TimePicker
@@ -239,7 +236,6 @@ jQuery ($) ->
 
   class PasswordForm
     constructor: (element, opts) ->
-      console.log "password form", element
       @options = $.extend
         length: 6
       , opts
