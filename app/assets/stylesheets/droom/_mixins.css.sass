@@ -142,3 +142,25 @@
   margin: 0
   padding: 0
   list-style: none
+
+=column($width: 300px, $margin: 20px)
+  display: inline-block
+  vertical-align: top
+  width: $width
+  margin-right: $margin
+  input[type="text"], input[type="email"], input[type="date"], input[type="password"], textarea
+    width: $width - 18px
+  select
+    width: $width - 2px
+  &:last-child, &.last
+    margin-right: 0
+  span.subcol
+    display: inline-block
+    vertical-align: top
+    $subwidth: $width/2 - 5px
+    width: $subwidth
+    margin-right: $margin / 2
+    input[type="text"], input[type="email"], input[type="date"], input[type="password"], textarea
+      width: $subwidth - 18px
+    &:last-child, &.last
+      margin-right: 0

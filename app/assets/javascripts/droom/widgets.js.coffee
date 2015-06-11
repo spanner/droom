@@ -299,6 +299,78 @@ jQuery ($) ->
 
 
 
+  $.fn.password_fieldset = ->
+    @each ->
+      new PasswordFieldset(@)
+    @
+
+  class PasswordFieldset
+    constructor: (element) ->
+      @fieldset = $(element)
+      @password_field = @fieldset.find('input[data-role="password"]')
+      @confirmation_block = @fieldset.find('[data-role="confirmation"]')
+      @confirmation_field = @confirmation_block.find('input')
+      @password_field.bind 'keyup', @checkPassword
+      @confirmation_field.bind 'keyup', @checkConfirmation
+      # The submitter is optional: if there is a submit button contained within this fieldset,
+      # we guess that it is a simple password form whose submittability is up to us.
+      @submitter = @fieldset.find('input[type="submit"]')
+      @set()
+
+    set: () =>
+      @unconfirmable()
+      @unsubmittable()
+
+    checkPassword: () =>
+      if @empty() and !@required
+        @confirmation_field.attr('pattern', '').attr('required', false)
+        @unconfirmable()
+      else
+        # this has been hacked down a bit to work in ie7 & 8
+        if @password_field.val().length >= 6
+          @password_field.addClass('valid').removeClass('invalid')
+          @confirmable()
+        else
+          @password_field.removeClass('valid').addClass('invalid')
+          @unconfirmable()
+        @checkConfirmation()
+
+    checkConfirmation: () =>
+      if @confirmed()
+        @confirmation_field.addClass('valid').removeClass('invalid')
+        @submittable()
+      else if @confirmation_field.val().length
+        @confirmation_field.removeClass('valid').addClass('invalid')
+        @unsubmittable()
+      else 
+        @confirmation_field.removeClass('valid').removeClass('invalid')
+        @unsubmittable()
+
+    required: () =>
+      !!@password_field.attr('required')
+
+    confirmed: () =>
+      @confirmation_field.val() is @password_field.val() and @password_field.val().length >= 6
+
+    empty: () =>
+      @password_field.val() == ""
+
+    valid: () =>
+      @confirmed() and (not @empty() or not @required())
+
+    confirmable: () =>
+      @confirmation_block.enable()
+
+    unconfirmable: () =>
+      @confirmation_block.disable()
+
+    submittable: () =>
+      @submitter.enable()
+
+    unsubmittable: () =>
+      @submitter.disable()
+
+
 
 
 
