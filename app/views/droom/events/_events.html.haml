@@ -1,4 +1,5 @@
 - events ||= @events
+
 #events{:data => {:refreshable => true, :url => droom.events_url(:js)}}
   - if events.any?
     = render :partial => 'droom/events/event', :collection => events
@@ -6,13 +7,4 @@
     %p.nothing
       = t :no_events
 
-- if @year
-  - entry_name = t(:events_in, period: @year)
-- elsif @direction == 'past'
-  - entry_name = t(:past_events)
-- else
-  - entry_name = t(:future_events)
-
-%p.note
-  = page_entries_info @events, entry_name: entry_name
 = paginate @events

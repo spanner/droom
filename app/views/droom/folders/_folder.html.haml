@@ -4,6 +4,7 @@
 - open ||= false
 - limit ||= false
 - for_more ||= false
+- omit_menu ||= false
 - flat ||= false
 - stem ||= ""
 - narrow ||= false
@@ -22,7 +23,9 @@
 
 %li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: true, url: url, label: folder.slug} }<
   = link_to shorten(title, length), url, class: "folder"
-  = action_menulink(folder)
+  - unless omit_menu
+    = action_menulink(folder)
   - unless defer_contents
     = render partial: "droom/folders/contents", locals: {folder: folder, limit: limit, for_more: for_more, flat: flat, narrow: narrow}
-  = action_menu(folder)
+  - unless omit_menu
+    = action_menu(folder)

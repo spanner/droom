@@ -33,8 +33,15 @@ module Droom
     # defer_confirmation is also set by remote services that send out their own invitations,
     # eg. when a new user is invited to screen an application round.
     #
-    attr_accessor :defer_confirmation, :send_confirmation
-    
+    attr_accessor :defer_confirmation, :send_confirmation, :confirming
+
+    # send_confirmation_notification? is called by devise's immediate confirmation mechanism.
+    # If the defer_confirmation flag has been set, we postpone.
+    #
+    def send_confirmation_notification?
+      super && !defer_confirmation?
+    end
+
     def defer_confirmation!
       self.defer_confirmation = true
     end
@@ -43,20 +50,17 @@ module Droom
       defer_confirmation && defer_confirmation != "false"
     end
     
-    # Called after save by our own late-confirmation mechanism.
+    # send_confirmation? is called after save by our own later confirmation mechanism.
     # If the send_confirmation flag has been set, we confirm.
     #
+    def send_confirmation!
+      self.send_confirmation = true
+    end
+
     def send_confirmation?
       send_confirmation && send_confirmation != "false"
     end
-    
-    # Called on create by devise's immediate confirmation mechanism.
-    # If the defer_confirmation flag has been set, we postpone.
-    #
-    def send_confirmation_notification?
-      super && !defer_confirmation?
-    end
-    
+
     def active_for_authentication?
       true
     end
@@ -541,7 +545,11 @@ module Droom
     end
     
     def send_confirmation_if_directed
-      self.send_confirmation_instructions if email? && send_confirmation?
+      unless confirming
+        # a slightly rubbish way to avoid the double hit caused by devise updating the confirmation token.
+        self.confirming = true
+        self.send_confirmation_instructions if email? && send_confirmation?
+      end
     end
 
     def confirmed_if_password_set
