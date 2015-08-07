@@ -4,7 +4,7 @@ jQuery ($) ->
   #
   # This is the modal overlay we use for most creation and editing tasks. No special setup is required: any link can
   # be turned into a popup-form-generator just by calling
-  #   
+  #
   #   $(link).popup()
   #
   # Display of the popup form is handled by the Popup class. The requests involved in retrieving, submitting and 

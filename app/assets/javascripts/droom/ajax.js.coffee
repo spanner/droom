@@ -31,7 +31,8 @@ jQuery ($) ->
 
       # which trigger our own more fine-grained remote:* events
       @_control.on 'remote:prepare', @_options.on_prepare
-      @_control.on 'remote:begin', @_options.on_request
+      # we are hitting this directly so that the return value has effect:
+      # @_control.on 'remote:begin', @_options.on_request
       @_control.on 'remote:progress', @_options.on_progress
       @_control.on 'remote:error', @_options.on_error
       @_control.on 'remote:success', @_options.on_success
@@ -48,8 +49,8 @@ jQuery ($) ->
       event.preventDefault()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_control.addClass('waiting')
-      @_control.trigger 'remote:begin', xhr, settings
-      true
+      # @_control.trigger 'remote:begin', xhr, settings
+      @_options.on_request?(xhr, settings) ? true
 
     gotFiles: (event, elements) =>
       @_control.trigger 'remote:upload'
