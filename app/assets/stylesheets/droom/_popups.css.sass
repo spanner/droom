@@ -8,7 +8,7 @@ div.popup
   z-index: 6000
   min-height: 200px
   background-color: $coolgrey00
-  +box_shadow(1px 3px 8px #52555f)
+  box_shadow: 1px 3px 8px #52555f
   .header
     position: relative
     height: 28px
@@ -87,9 +87,7 @@ div.mask
   z-index: 5000
   opacity: 0
   visibility: hidden
-  +transition-property(opacity, visibility)
-  +transition-duration(0.5s)
-  +transition-timing-function(ease-in)
+  transition: opacity 0.5s ease-in
   &.up
     opacity: 1
     visibility: visible
