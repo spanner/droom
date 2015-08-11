@@ -1,0 +1,13 @@
+%section#enquiries.paginated{:data => {:refreshable => true, :url => droom.enquiries_url(:limit => 5)}}
+  %h2.section
+    = link_to t(:latest_enquiries), '#'
+    - if can?(:create, Droom::Enquiry)
+      %span.action
+        = link_to t(:test), droom.test_enquiries_url, :class => "add", :data => {:action => "popup", :affected => "#enquiries"}
+
+  %ul.enquiries
+    = render :partial => "droom/enquiries/listing", :collection => @enquiries
+
+  .pagination.sliding
+    = paginate @enquiries
+  

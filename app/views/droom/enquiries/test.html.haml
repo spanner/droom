@@ -1,0 +1,7 @@
+#enquire
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2.titlebar
+      = t :test_enquiry
+
+  = render :partial => 'droom/enquiries/form'

@@ -55,13 +55,19 @@ module Droom
             can :create, Droom::Scrap
           end
 
+          if user.permitted?('droom.enquiry')
+            can :manage, Droom::Enquiry
+          end
+
           # Some models are purely administrative.
           #
           can :create, Droom::DropboxToken
           can :create, Droom::DropboxDocument
           can :create, Droom::MailingListMembership
-        
         end
+      else
+        can :new, Droom::Enquiry
+        can :create, Droom::Enquiry
       end
     end
   end

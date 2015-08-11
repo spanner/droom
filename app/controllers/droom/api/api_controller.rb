@@ -3,6 +3,7 @@ module Droom::Api
 
     respond_to :json
     before_filter :set_access_control_headers
+    before_filter :assert_local_request
     skip_before_filter :authenticate_user!
     skip_before_filter :require_data_room_permission
     skip_before_action :verify_authenticity_token

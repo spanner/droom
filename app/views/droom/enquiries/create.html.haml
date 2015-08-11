@@ -1,0 +1,7 @@
+#enquiry
+  %h1
+    Message sent
+  %p
+    Thank you for your enquiry. It was dispatched at
+    = l @enquiry.created_at, format: :natural_on_date
+    and we will respond as soon as possible.

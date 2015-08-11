@@ -1,0 +1,12 @@
+- content_for :title do
+  Enquiry archive
+
+%p.note
+  = succeed ":" do
+    Received at
+    = l @enquiry.created_at, format: :natural_on_date
+    from
+    = mail_to @enquiry.email, @enquiry.name, class: 'email'
+
+.message
+  = simple_format @enquiry.message

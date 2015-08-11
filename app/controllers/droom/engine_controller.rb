@@ -37,6 +37,7 @@ module Droom
     end
     
     def pjax?
+      Rails.logger.warn "??  pjax? #{request.headers['X-PJAX'].inspect}"
       request.headers['X-PJAX']
     end
     

@@ -1,0 +1,20 @@
+- time = @resource.created_at || Time.now
+
+%p{style: "font-size: 75%"}
+  = succeed ':' do
+    Enquiry received from
+    = "#{@resource.name} <#{@resource.email}>"
+    at
+    = l time, format: :natural_on_date
+
+%div{style: "margin: 1em 0"}
+  = simple_format @resource.message
+
+%p{style: "color: #666; font-size: 75%"}
+  %strong
+    IP address:
+  = @resource.request.remote_ip
+  %br
+  %strong
+    User agent:
+  = @resource.request.user_agent

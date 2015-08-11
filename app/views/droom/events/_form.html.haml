@@ -20,9 +20,11 @@
     %p.practicalities
       %span.times
         = f.text_field :start_time, :class => "timepicker start", :value => (I18n.l(@event.start_time, :format => :precise) if @event.start_time), :placeholder => t(:event_time)
-        = t :to
+        %span.interlabel
+          = t :to
         = f.text_field :finish_time, :class => "timepicker finish", :value => (I18n.l(@event.finish_time, :format => :precise) if @event.finish_time), :placeholder => t(:finish_time)
-        = t :at
+        %span.interlabel
+          = t :at
       %span.venue
         = f.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off",  data: {role: "venuepicker", width: 300}
       - if Droom.second_time_zone?
@@ -36,16 +38,18 @@
         = render 'droom/shared/toolbar'
       = f.text_area :description, :id => 'd1'
     
-    %p.admin
-      = f.label :event_type_id, t(:file_under)
-      = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
-      - if admin?
-        %br
-        = f.label :calendar_id
-        = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
-      - else
-        = f.hidden_field :calendar_id
-    
+    - if admin?
+      %p.admin
+        - if Droom::EventType.count > 1
+          = f.label :event_type_id, t(:file_under)
+          = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
+        - if Droom::Calendar.count > 1
+          %br
+          = f.label :calendar_id
+          = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
+        - else
+          = f.hidden_field :calendar_id
+
     .buttons
       = f.submit t(:save_event)
       %br

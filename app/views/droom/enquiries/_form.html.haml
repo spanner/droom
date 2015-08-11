@@ -1,0 +1,16 @@
+= form_for @enquiry, url: droom.enquiries_url, html: {class: "enquire"} do |f|
+
+  %p.robot
+    = f.text_area :robot, placeholder: t("placeholders.enquiry.robot")
+
+  %p.person<
+    %span.name>
+      = f.text_field :name, required: true, placeholder: t("placeholders.enquiry.name")
+    %span.email>
+      = f.email_field :email, required: true, placeholder: t("placeholders.enquiry.email")
+
+  %p.message
+    = f.text_area :message, required: true, placeholder: t("placeholders.enquiry.message")
+
+  .buttons
+    = f.submit t(:send_message)

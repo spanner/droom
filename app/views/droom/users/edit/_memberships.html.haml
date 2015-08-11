@@ -5,9 +5,12 @@
     = f.check_box :admin
     = f.label :admin
 
-  %p.memberships
-    = f.label(:group_ids, class: "important") + ":"
-    - Droom::Group.all.each do |group|
-      %label.inline{for: "user_group_ids_#{group.id}"}
-        = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
-        = group.name
+- if admin?
+  - groups = Droom::Group.all
+  - if groups.any?
+    %p.memberships
+      = f.label(:group_ids, class: "important") + ":"
+      - groups.each do |group|
+        %label.inline{for: "user_group_ids_#{group.id}"}
+          = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
+          = group.name

@@ -79,7 +79,7 @@ input.dropbox.revoke[type="submit"]
 
 label
   &.required
-    font-weight: bold
+    font-weight: normal
   &.important
     font-weight: bold
   &.disabled
@@ -166,7 +166,6 @@ p.stretcher
   padding-top: 5px
   a, a:visited
     color: $mid
-    +hover
   span
     display: block
     text-align: center
@@ -176,6 +175,7 @@ p.stretcher
     line-height: 1
   span.dom
     font-size: 2em
+    font-weight: bold
     line-height: 1
   span.year
     font-size: 1em
@@ -313,6 +313,16 @@ div.event, form.event, div.project
           background-position: 0 0
           a
             color: $pale
+  ul.enquiries
+    font-size: 90%
+    padding-left: 0
+    li.enquiry
+      margin-bottom: 1em
+      padding-bottom: 1em
+      border-bottom: 1px solid $pale
+      a.email
+        color: $pale
+
 
 form.invitation
   min-height: 200px
@@ -338,30 +348,31 @@ span.admin.documents
     font-size: 1.8em
 
 form.event
+  span.interlabel
+    display: inline-block
+    padding: 8px
   p.name
     margin: 0
   div.datemark
-    background-color: white
-    border: 1px solid $pale
+    border: none
     padding: 4px 0
     margin-top: 1px
     margin-left: -$datemark_width
     margin-right: $datemark_margin - 4px
   input.name
     width: 470px
-    height: 45px
-    font-size: 2.5em
+    font-size: 1.5em
   p.practicalities
-    margin: 7px 0 0 0
+    margin: 10px 0
   input.timepicker
-    width: 50px
+    width: 70px
     font-size: 1.2em
     padding: 4px
     &.start
       font-weight: bold
   input.venuepicker
     font-size: 1.2em
-    width: 200px
+    width: 250px
     padding: 4px
   .description
     margin-top: 0.5em
@@ -479,57 +490,40 @@ form.document
 form.user
   .image-upload
     margin-top: 2px
-  p.names
+  p
     margin: 0
+    margin-bottom: 10px
+  p.names
+    input[type="text"]
+      width: 100%
     span.title
       display: inline-block
       vertical-align: top
-      width: 71px
+      width: 64px
       margin-right: 10px
-      input
-        width: 53px
     span.name
       display: inline-block
       vertical-align: top
-      width: 100px
+      width: 114px
       margin-right: 10px
-      input
-        width: 82px
     span.chinese_name, span.honours
       display: inline-block
       vertical-align: top
-      width: 71px
+      width: 64px
       margin-right: 0
-      input
-        width: 53px
-  p.email
-    input[type="email"]
-      width: 520px
-      font-weight: bold
-      font-size: 1.4em
-  p.name
-    margin: 0
-    input
-      width: 360px
-      font-size: 1.5em
-      font-weight: bold
   .contacts
     overflow: hidden
-    p
-      float: left
-      width: 185px
-      margin-top: 0.5em
-      margin-bottom: 0
-      input
-        width: 167px
-        font-size: 1em
-        margin-top: 0
     p.email
-      margin-right: 15px
+      width: 386px
+    p.phone, p.mobile
+      float: left
+      width: 188px
+      margin-right: 10px
+      &:last-child
+        margin-right: 0
   p.organisation
     clear: left
     select
-      width: 536px
       font-size: 1em
   p.memberships
     label.inline
@@ -542,13 +536,14 @@ form.user
       
   .description
     textarea
-      width: 520px
       height: 150px
       font-size: 1em
 
   p.gender, p.status, p.confirmation
     float: left
     margin-right: 25px
+  p.admin
+    float: right
 
   p.memberships
     clear: left
@@ -564,16 +559,6 @@ form.group, form.service, form.permission
     font-size: 1em
   textarea
     height: 120px
-  p.name
-    margin: 0
-    input[type="text"]
-      font-size: 1.5em
-      font-weight: bold
-
-form.user
-  input[type="text"], input[type="password"]
-    width: 520px
-    font-size: 1em
   p.name
     margin: 0
     input[type="text"]
@@ -1807,7 +1792,6 @@ div.popup
       div.description
         min-height: 80px
 
-
 ul.checklist
   font-size: 80%
   list-style: none
@@ -1819,5 +1803,22 @@ ul.checklist
     display: block
     margin-left: 20px
     overflow: hidden
+
+#enquire
+  margin: 1em 0
+  p
+    span
+      display: inline-block
+      vertical-align: top
+      width: 48%
+      margin-right: 3.5%
+      &:last-child
+        margin-right: 0
+    &.message
+      textarea
+        width: 99.5%
+        height: 200px
+    &.robot
+      display: none
 
 

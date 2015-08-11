@@ -31,6 +31,9 @@ Droom::Engine.routes.draw do
   resources :invitations
   resources :memberships
   resources :scraps
+  resources :enquiries do
+    get "test", on: :collection
+  end
 
   resources :calendars, only: [:show]
   resources :events do
@@ -77,5 +80,6 @@ Droom::Engine.routes.draw do
   end
   
   put "/set_password" => "users#set_password", as: :set_my_password
+  get "/enquire" => "enquiries#new", as: "enquire"
 
 end
