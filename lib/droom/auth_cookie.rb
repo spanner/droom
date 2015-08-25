@@ -1,6 +1,9 @@
 require 'signed_json'
 require "active_support/core_ext/hash/slice"
 
+# NB. there is vital callback glue in droom/config/initializers/devise.rb
+#
+
 module Droom
   class AuthCookie
 

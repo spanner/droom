@@ -2,7 +2,6 @@ module Droom::Api
   class UsersController < Droom::Api::ApiController
 
     before_filter :assert_local_request
-
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
     load_resource find_by: :uid, class: "Droom::User"
@@ -15,7 +14,7 @@ module Droom::Api
       render json: @user
     end
   
-    # This is a almost always a preliminary call at the initial auth stage, 
+    # This is a almost always a preliminary call at the initial auth stage,
     # so the client is not yet setting auth headers. We look for a token in params too.
     #
     def authenticate
