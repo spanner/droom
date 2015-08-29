@@ -34,12 +34,12 @@
     %span.note
       - if user.email? || user.phone?
         - if user.email?
-          = mail_to truncate(user.email, length: 32)
+          = mail_to user.email, truncate(user.email, length: 32)
         - if user.email? && user.phone?
           %br
         - if user.phone?
           = user.phone
-        
+
       - else
         = t :contact_information_unavailable
         
