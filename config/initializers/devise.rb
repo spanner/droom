@@ -264,7 +264,7 @@ Devise.setup do |config|
   # Sign out if user was retrieved from session and session id is not valid.
   #
   Warden::Manager.after_fetch do |user, warden, options|
-    unless user.session_id == warden.raw_session["session_validity_check"]
+    if warden.raw_session["session_validity_check"].present? && user.session_id != warden.raw_session["session_validity_check"]
       warden.logout
       throw :warden, message: :unauthenticated
     end
