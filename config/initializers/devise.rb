@@ -1,5 +1,19 @@
 require 'devise/strategies/cookie_authenticatable'
 
+module Warden
+  class SessionSerializer
+    def user_serialize(user)
+      Rails.logger.warn "user_serialize(#{user})"
+      user
+    end
+
+    def user_deserialize(key)
+      Rails.logger.warn "user_deserialize(#{key})"
+      key
+    end
+  end
+end
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -250,7 +264,6 @@ Devise.setup do |config|
   # Set shared domain cookie and (revocable) session id on sign in.
   #
   Warden::Manager.after_authentication do |user, warden, options|
-    warden.raw_session["session_validity_check"] = user.reset_session_id!
     Droom::AuthCookie.new(warden.cookies).set(user)
   end
 
@@ -258,16 +271,17 @@ Devise.setup do |config|
   #
   Warden::Manager.before_logout do |user, warden, options|
     Droom::AuthCookie.new(warden.cookies).unset
-    user.clear_session_id! if user
+    user.reset_session_id! if user
   end
-    
-  # Sign out if user was retrieved from session and session id is not valid.
-  #
-  Warden::Manager.after_fetch do |user, warden, options|
-    if warden.raw_session["session_validity_check"].present? && user.session_id != warden.raw_session["session_validity_check"]
-      warden.logout
-      throw :warden, message: :unauthenticated
-    end
-  end
+
+  # # Sign out if user was retrieved from session and session id is not valid.
+  # # Note that we should not kill the whole precess here: cookie auth might could succeed even though this old local session is no good.
+  # #
+  # Warden::Manager.after_fetch do |user, warden, options|
+  #   Rails.logger.warn "after_fetch! #{user.session_id}, #{warden.raw_session['session_validity_check']}"
+  #   if warden.raw_session["session_validity_check"].present? && user.session_id != warden.raw_session["session_validity_check"]
+  #     warden.logout
+  #   end
+  # end
 
 end

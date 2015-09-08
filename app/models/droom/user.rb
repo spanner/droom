@@ -23,7 +23,7 @@ module Droom
     after_save :send_confirmation_if_directed
     after_save :confirmed_if_password_set
 
-    # People are often invited into the system in batches or after offline contact. 
+    # People are often invited into the system in batches or after offline contact.
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
     # if you want to create a user account without sending out any messages yet.
     #
@@ -92,7 +92,13 @@ module Droom
     def clear_session_id!
       self.update_column(:session_id, "")
     end
-    
+
+    # Tell devise to tell warden to salt the session cookie with our session_id.
+    # If the session_id changes, eg due to remote logout, the session will no longer succeed in describing a user.
+    def authenticatable_salt
+      session_id
+    end
+
     ## Auth tokens
     #
     # Are no longer native to devise but we use them for domain-cookie auth.

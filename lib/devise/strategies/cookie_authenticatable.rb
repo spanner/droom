@@ -10,6 +10,7 @@ module Devise
 
       def authenticate!
         if fresh? && resource && validate(resource)
+          Rails.logger.warn "√√  cookie authenticated! #{resource.inspect}"
           success!(resource)
         else
           pass

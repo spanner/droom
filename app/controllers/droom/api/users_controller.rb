@@ -32,7 +32,7 @@ module Droom::Api
     def deauthenticate
       token = params[:tok]
       if @user = Droom::User.find_by(authentication_token: token)
-        @user.clear_session_id!
+        @user.reset_session_id!
         @user.reset_authentication_token!
         render json: @user
       else
