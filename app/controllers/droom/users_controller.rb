@@ -10,6 +10,7 @@ module Droom
     def index
       @users = @users.in_name_order
       @users = @users.matching(params[:q]) unless params[:q].blank?
+      @users = @users.where(email: params[:email]) unless params[:email].blank?
       @users = paginated(@users, 50)
       respond_with @users do |format|
         format.js { render :partial => 'droom/users/users' }
