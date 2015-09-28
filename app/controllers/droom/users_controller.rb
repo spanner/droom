@@ -8,7 +8,7 @@ module Droom
     load_and_authorize_resource except: [:set_password]
 
     def index
-      @users = @users.in_name_order
+      @users = @users.in_name_order.include(:permissions)
       @users = @users.matching(params[:q]) unless params[:q].blank?
       @users = @users.where(email: params[:email]) unless params[:email].blank?
       @users = paginated(@users, 50)
@@ -17,7 +17,7 @@ module Droom
         format.vcf { render :vcf => @users.map(&:to_vcf) }
       end
     end
-        
+
     def admin
       @users = @users.in_name_order
       if params[:q].blank?
