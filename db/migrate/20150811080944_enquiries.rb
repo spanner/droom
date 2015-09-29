@@ -8,6 +8,6 @@ class Enquiries < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :droom_enquries, :closed
+    add_index :droom_enquiries, :closed
   end
 end
