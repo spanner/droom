@@ -1,9 +1,11 @@
 - scrap ||= thumb
+- url = droom.noticeboard_url + "#scrap_#{scrap.id}"
+
 - if Droom.scrap_types.include? scrap.scraptype
   %div{:class => "scrap #{scrap.scraptype}", :id => "scrap_#{scrap.id}"}
 
     - if scrap.scraptype == 'document' && scrap.document
-      = link_to "document:", droom.scrap_url(scrap), :data => {:scrap => scrap.id}, :class => "#{scrap.document.file_extension} icon"
+      = link_to "document:", url, :data => {:scrap => scrap.id}, :class => "#{scrap.document.file_extension} icon"
 
     - elsif scrap.scraptype == 'event' && scrap.event
       .datemark
@@ -13,19 +15,19 @@
           %span.year= scrap.event.start.strftime('%Y')
 
     - elsif scrap.scraptype == 'image' && scrap.image?
-      = link_to "image:", droom.scrap_url(scrap), :class => "thumb", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:scrap => scrap.id}
+      = link_to "image:", url, :class => "thumb", :style =>"background-image: url('#{scrap.image.url(:icon)}')", :data => {:scrap => scrap.id}
 
     - elsif scrap.scraptype == 'link' && scrap.url?
       = link_to "link:", scrap.url_with_protocol, :class => "icon link", :data => {:scrap => scrap.id}
       
     - elsif scrap.scraptype == 'quote' && scrap.url?
-      = link_to "quote:", droom.scrap_url(scrap), :class => "icon quote", :data => {:scrap => scrap.id}
+      = link_to "quote:", url, :class => "icon quote", :data => {:scrap => scrap.id}
       
     - else
-      = link_to "text:", droom.scrap_url(scrap), :class => "icon text", :data => {:scrap => scrap.id}
+      = link_to "text:", url, :class => "icon text", :data => {:scrap => scrap.id}
 
     %p.sample
-      = link_to scrap.name, droom.scrap_url(scrap), :data => {:scrap => scrap.id}
+      = link_to scrap.name, url, :data => {:scrap => scrap.id}
       = action_menulink(scrap, :class => "small")
       %span.caption
         = shorten(scrap.note, 160)
