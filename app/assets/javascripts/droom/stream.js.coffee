@@ -88,9 +88,6 @@ jQuery ($) ->
       @_stream.show(this)
 
 
-
-
-
   $.fn.scrap_form = () ->
     @each ->
       new ScrapForm(@)

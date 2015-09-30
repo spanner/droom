@@ -1,0 +1,8 @@
+#noticeboard{:data => {:refreshable => true, :url => scraps_path(:format => :js)}}
+
+  - if @scraps.any?
+    = render :partial => "notice", :collection => @scraps
+
+  - else
+    = t :no_notices
+  

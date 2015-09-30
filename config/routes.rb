@@ -80,6 +80,7 @@ Droom::Engine.routes.draw do
   end
   
   put "/set_password" => "users#set_password", as: :set_my_password
-  get "/enquire" => "enquiries#new", as: "enquire"
+  get "/enquire" => "enquiries#new", as: :enquire
+  get "/noticeboard" => "scraps#index", as: :noticeboard
 
 end

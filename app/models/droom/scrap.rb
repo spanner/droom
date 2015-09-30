@@ -7,10 +7,9 @@ module Droom
     belongs_to :document, :class_name => "Droom::Document", :dependent => :destroy
     accepts_nested_attributes_for :document
 
-    has_attached_file :image, 
+    has_attached_file :image,
                       :styles => {
-                        :stream => "1280x1280>",
-                        :popup => "1280x1280>",
+                        :notice => "960x",
                         :icon => "32x32#",
                         :thumb => "130x73#"
                       }
@@ -20,6 +19,8 @@ module Droom
     before_validation :name_associates
 
     scope :by_date, -> { order("droom_scraps.created_at DESC") }
+
+    scope :latest, -> limit { order("droom_scraps.created_at DESC").limit(limit) }
 
     scope :later_than, -> scrap { where(["created_at > ?", scrap.created_at]).order("droom_scraps.created_at ASC")  }
 
@@ -65,11 +66,11 @@ module Droom
     end
     
     def url_with_protocol
-      body =~ /^https?:\/\// ? body : "http://#{body}"
+      url =~ /^https?:\/\// ? url : "http://#{url}"
     end
 
     def url_without_protocol
-      body.sub(/^https?:\/\//, '')
+      url.sub(/^https?:\/\//, '')
     end
 
     def as_search_result

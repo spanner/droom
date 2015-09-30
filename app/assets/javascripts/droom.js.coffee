@@ -87,8 +87,5 @@ jQuery ($) ->
     @find_including_self('li.folder').folder()
     @find_including_self('form#suggestions').suggestion_form()
 
-    # stream slides
 
-    @find_including_self('.scrap.preload').add_to_stream()
-    
     @

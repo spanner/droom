@@ -9,9 +9,9 @@ module Droom
     load_and_authorize_resource
 
     def index
-      @scraps = paginated(@scraps, 8)
+      @scraps = paginated(@scraps, 50)
       respond_with(@scraps) do |format|
-        format.js { render :partial => 'droom/scraps/stream' }
+        format.js { render :partial => 'droom/scraps/noticeboard' }
       end
     end
   
@@ -49,7 +49,7 @@ module Droom
     end
 
     def build_scrap
-      @scrap = current_user.scraps.build(:scraptype => @scraptype)
+      @scrap = current_user.scraps.build(scraptype: @scraptype)
     end
 
     def get_scraptype
@@ -61,12 +61,12 @@ module Droom
 
     def scrap_params(scraptype=@scraptype)
       case scraptype.to_sym
-      when :image then params.require(:scrap).permit(:name, :image, :note, :url, :scraptype)
-      when :video then params.require(:scrap).permit(:name, :youtube_id, :note, :url, :scraptype)
-      when :link then params.require(:scrap).permit(:name, :note, :url, :scraptype)
-      when :event then params.require(:scrap).permit(:name, :note, :url, :scraptype, :event_attributes => [:id, :calendar_id, :start])
-      when :document then params.require(:scrap).permit(:name, :note, :url, :scraptype, :document_attributes => [:id, :file, :folder_id])
-      else params.require(:scrap).permit(:name, :body, :note, :url, :scraptype)
+      when :image then params.require(:scrap).permit(:name, :image, :note, :url, :scraptype, :size)
+      when :video then params.require(:scrap).permit(:name, :youtube_id, :note, :url, :scraptype, :size)
+      when :link then params.require(:scrap).permit(:name, :note, :url, :scraptype, :size)
+      when :event then params.require(:scrap).permit(:name, :body, :note, :url, :scraptype, :size, :event_attributes => [:id, :calendar_id, :start])
+      when :document then params.require(:scrap).permit(:name, :body, :note, :url, :scraptype, :size, :document_attributes => [:id, :file, :folder_id])
+      else params.require(:scrap).permit(:name, :body, :note, :url, :scraptype, :size)
       end
     end
 

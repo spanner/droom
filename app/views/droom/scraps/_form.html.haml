@@ -6,7 +6,7 @@
       %li{:data => {:action => 'tab', :selector => ".#{type}"}}
         = f.radio_button :scraptype, type
         = f.label :"scraptype_#{type}", type, :class => cssclass
-  
+
   .specifics.image
     - if @scrap.image?
       - img = @scrap.image.url(:thumb)
@@ -38,25 +38,30 @@
           = t :click_to_choose_file
 
   .non-image-data
-    %p.name
-      = f.label :name
-      %br
-      = f.text_field :name, :class => 'name'
-
-    %p.url
-      = f.label :url
-      %br
-      = f.url_field :url, :class => 'url'
+    .floatable
+      %p.name
+        = f.text_field :name, :class => 'name', placeholder: t("placeholders.scrap.name")
+      %p.url
+        = f.url_field :url, :class => 'url', placeholder: t("placeholders.scrap.url")
     
-    %p.body
-      = f.label :body
-      %br
-      = f.text_area :body, :class => 'body'
+    %p.text
+      = f.text_area :body, :class => 'text', placeholder: t("placeholders.scrap.body")
     
     %p.caption
-      = f.label :caption
-      %br
-      = f.text_area :note, :class => 'note'
+      = f.text_field :note, :class => 'note', placeholder: t("placeholders.scrap.caption")
+
+    %p.options
+      %strong
+        Noticeboard:
+    
+      = f.radio_button :size, 1
+      = f.label :size, "Normal", value: 1, class: "inline"
+
+      = f.radio_button :size, 2
+      = f.label :size, "Large", value: 2, class: "inline"
+
+      = f.radio_button :size, 3
+      = f.label :size, "Very large", value: 3, class: "inline"
 
     .buttons
       = f.submit t(:save)

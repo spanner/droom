@@ -1,0 +1,15 @@
+- if event = notice.event
+  .event
+    .datemark
+      %span.mon= event.start.strftime('%b')
+      %span.dom= event.start.strftime('%d')
+      - if event.start.year != Date.today.year
+        %span.year= event.start.strftime('%Y')
+
+    .content
+      %h2
+        - if notice.event.url
+          = link_to notice.event.name, notice.event.url_with_protocol, :class => "eventname"
+        - else
+          = notice.event.name
+      = simple_format(notice.body)

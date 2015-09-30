@@ -1,119 +1,3 @@
-.streamer
-  position: fixed
-  overflow: hidden
-  z-index: 4000
-  display: none
-  left: 0
-  top: 0
-  width: 1024px
-  height: 720px
-  background-color: $coolgrey00
-  .scroller
-    width: 10000px
-    height: 720px
-    .scrap
-      position: relative
-      display: inline-block
-      overflow: hidden
-      width: 1024px
-      height: 720px
-      float: left
-      .caption
-        position: absolute
-        bottom: 0
-        left: 0
-        width: 1024px
-        height: 144px
-        background-color: white
-        p
-          color: $text
-          margin: 30px 60px
-          span.credit
-            font-size: 80%
-            color: $mid
-      .body
-        position: absolute
-        top: 0
-        left: 0
-        width: 1024px
-        height: 576px
-        overflow: scroll
-        .text
-          margin: 30px 100px 0 60px
-        &.image
-          background:
-            position: center center
-            size: cover
-            repeat: no-repeat
-        &.video
-          iframe
-            width: 100%
-            height: 100%
-        &.text
-        &.link
-          .text
-            margin: 100px
-            font-size: 3em
-        &.event
-          .datemark
-            padding-top: 0
-            margin-top: 6px
-          .text
-            margin: 100px
-            p.name
-              font-size: 2em
-              line-height: 1.2
-        &.document
-          .filemark
-            padding-top: 0
-          .text
-            margin: 100px
-            p.name
-              font-size: 2em
-              line-height: 1.2
-  a.next, a.prev
-    display: none
-    position: absolute
-    top: 300px
-    width: 60px
-    height: 60px
-    background: 
-      position: center center
-      repeat: no-repeat
-  a.prev
-    left: 20px
-    background-image: image-url('droom/stream/prev.png')
-  a.next
-    right: 20px
-    background-image: image-url('droom/stream/next.png')
-  a.closer
-    display: none
-    position: absolute
-    top: 20px
-    right: 20px
-    height: 60px
-    width: 60px
-    background: 
-      position: center center
-      repeat: no-repeat
-      image: image-url('droom/stream/closer.png')
-
-.touch
-  .streamer
-    a.closer
-      display: block
-
-.no-touch
-  .streamer
-    top: 5%
-    left: 5%
-    box-shadow: 0 3px 16px #666
-    &:hover
-      a.next, a.prev, a.closer
-        display: block
-
-
-
 // streams and scraps
 
 a.minidatemark
@@ -145,10 +29,9 @@ span.credit
 
 
 
-
-#stream
-  .preload
-    display: none
+.latest_notices
+  ul
+    padding-left: 0
   .scrap
     position: relative
     clear: left
@@ -197,11 +80,6 @@ span.credit
         background-position: 0 -96px
       &.link
         background: none
-    a
-      color: $mid
-      +hover
-      &:hover, &.hover
-        color: $hover
     span.attribution, span.caption
       color: $pale
       display: block
@@ -215,6 +93,14 @@ div.popup
   form.scrap
     margin: 20px
 
+    .floatable
+      display: inline-block
+      float: left
+      p
+        margin-top: 0
+
+    p
+      margin: 20px 0
 
     // visibility of form components depends on overall scraptype setting
     // that will be applied to the form as a css class.
@@ -222,24 +108,12 @@ div.popup
     p.name, p.url
       input
         width: 100%
-
-    p.name
-      display: inline-block
-      margin-top: 0
-      float: left
-      input[type="text"]
-        font-size: 1.8em
-        font-weight: bold
-
-    p.url
-      display: inline-block
-      float: left
     
-    p.body
+    p.text
       clear: left
       display: none
       textarea
-        width: 520px
+        width: 540px
         background-color: white
         font-size: 100%
         height: 290px
@@ -247,7 +121,7 @@ div.popup
     p.caption
       clear: left
       textarea
-        width: 520px
+        width: 540px
         height: 80px
         background-color: white
         font-size: 100%
@@ -257,57 +131,60 @@ div.popup
       margin: 20px 0
       display: none
       iframe
-        width: 520px
+        width: 540px
         height: 320px
 
     &.image
       .specifics.image
         display: inline-block
-        .image-upload
-          margin-top: 12px
       p.name, p.url
-        width: 360px
+        width: 380px
     &.video
       .specifics.video
         display: inline-block
         .youtube-search
           margin-top: 15px
       p.name, p.url
-        width: 360px
+        width: 380px
       div.youtube_preview
         display: block
     &.event
       margin: 20px
       .specifics.event
         display: inline-block
+      .text
+        display: block
       p.name, p.url
         width: 420px
     &.document
+      .text
+        display: block
       margin: 20px
       .specifics.document
         display: inline-block
       p.name, p.url
         width: 420px
     &.quote
-      .body
+      .text
         display: block
-      p.name, p.url
-        width: 520px
+      p.name
+        display: none
+      p.url
+        width: 540px
     &.text
-      .body
+      .text
         display: block
       p.name, p.url
-        width: 520px
+        width: 540px
     &.link
       p.name, p.url
-        width: 520px
+        width: 540px
     
 
     // The scraptype list is presented as a tab bar
 
     ul.scraptypes
-      margin: -20px 0 12px -20px
-      background-color: #2f343b
+      margin: -20px 0 20px -20px
       width: 560px
       height: 40px
       padding: 0 0 0 20px
@@ -321,29 +198,34 @@ div.popup
         label
           position: relative
           display: inline-block
-          padding: 4px 6px 0 34px
+          padding: 4px 6px 0 40px
           height: 36px
           line-height: 36px
-          color: white
           overflow: hidden
           font-size: 0.9em
           cursor: pointer
           background:
             repeat: no-repeat
-            position: 0 8px
+            position: 4px 8px
             image: image-url('droom/scrap_icons.png')
           &.text
-            background-position: 0 -40px
+            background-position: 4px -40px
           &.quote
-            background-position: 0 -88px
+            background-position: 4px -88px
           &.video
-            background-position: 0 -136px
+            background-position: 4px -136px
           &.image
-            background-position: 0 -184px
+            background-position: 4px -184px
           &.document
-            background-position: 0 -232px
+            background-position: 4px -232px
           &.event
-            background-position: 0 -280px
+            background-position: 4px -280px
+        input[type="radio"]
+          position: absolute
+          visibility: hidden
+
+    ul.scraptypes
+      li
         input[type="radio"]
           position: absolute
           visibility: hidden
@@ -351,16 +233,23 @@ div.popup
           background-color: $coolgrey00
           color: $dark
 
+
     // form components are flowed so that widths and floats can change as needed.
 
     .specifics
       display: none
       float: left
-      margin: 5px 20px 10px 0
+      margin: 0 20px 10px 0
+      .image-upload 
+        width: 140px
+        height: 140px
+        a.box
+          width: 138px
+          height: 138px
       &.document, &.event
-        width: 50px
+        width: 80px
         .datemark
-          margin-left: 0
+          margin-left: 20px
           margin-top: 20px
           margin-bottom: 25px
         .filemark
@@ -368,7 +257,7 @@ div.popup
           margin-top: 22px
           min-height: 50px
       &.video, &.image
-        width: 130px
+        width: 140px
 
     .buttons
       margin: 10px 0 20px 0

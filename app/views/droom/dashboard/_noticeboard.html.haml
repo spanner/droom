@@ -1,0 +1,16 @@
+- limit ||= 4
+- notices ||= Droom::Scrap.latest(limit)
+
+%section.latest_notices{:data => {:refreshable => true, :url => scraps_path(:format => :js)}}
+  %h2.section
+    = link_to t(:Noticeboard), droom.noticeboard_url
+    - if can? :create, Droom::Scrap
+      %span.action
+        = link_to t(:add), droom.new_scrap_url, :class => "add", :data => {:action => "popup", :affected => "#noticeboard"}
+
+  - if notices.any?
+    %ul
+      = render partial: "droom/scraps/thumb", collection: notices
+
+  - else
+    No notices.

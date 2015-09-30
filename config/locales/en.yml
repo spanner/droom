@@ -111,6 +111,7 @@ en:
   add_root_folder: "Add root folder"
   add_member: "Add group member"
   add_member_to: Add a member to the
+  add_notice: "Add a notice"
   add_page: "Add page"
   add_permission: "Add a permission"
   add_group: "Add group"
@@ -167,6 +168,8 @@ en:
   delete_permission: "Delete Permission"
   confirm_delete_scrap: "Are you sure you want to remove this %{type} scrap?"
   containing: "containing"
+  close_symbol: "✕"
+  delete_symbol: "✕"
   detach_upload: "Detach Upload"
   dropbox_access_revoked: "We have detached from your dropbox. You can delete the hkfx folder."
   attachment_count: 
@@ -205,6 +208,7 @@ en:
   edit_organisation: "Edit organisation"
   edit_permission: "Edit permission"
   edit_service: "Edit service"
+  edit_symbol: "⚙"
   edit_user: "Edit user"
   edit_your_preferences: "Edit your account settings"
   edit_your_preferences_note: "These are administrative settings like your password and private email address. "
@@ -296,6 +300,11 @@ en:
   person_post_country: "Country"
   person_post_code: "Post code"
   placeholders:
+    scrap:
+      name: "Heading"
+      url: "Link destination"
+      body: "Body text or quote"
+      caption: "Optional caption"
     user:
       address: "Postal address"
       chinese_name: "中国姓名"
@@ -392,6 +401,7 @@ en:
   no_people: "Sorry: there are no directory entries accessible by your account."
   no_results: "Sorry: nothing to show here."
   no_stream: "Nothing yet to show here."
+  Noticeboard: "Latest Notices"
   recent_events: "Past events"
   save_profile: "Save changes"
   save_your_profile: "Save changes"

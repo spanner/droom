@@ -1,0 +1,3 @@
+.content
+  - if document = notice.document
+    = link_to document.name, droom.folder_document_url(document.folder, document), :class => "dl #{document.file_extension}"

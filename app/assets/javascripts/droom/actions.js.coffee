@@ -54,13 +54,14 @@ jQuery ($) ->
       true
 
     replace: (data, textStatus, jqXHR) =>
+      console.log "refreshing", @_container
       replacement = $(data)
       @_container.fadeOut 'fast', () =>
         replacement.hide().insertAfter(@_container)
         @_container.remove()
         @_container = replacement
-        @_container.activate().fadeIn 'fast', () =>
-          @_container.signal_confirmation()
+        @_container.fadeIn 'fast', () =>
+          @_container.activate().signal_confirmation()
       
 
   # ## Actions
@@ -79,7 +80,7 @@ jQuery ($) ->
     @each ->
       removed = $(@).attr('data-removed') || ".holder"
       affected = $(@).attr('data-affected')
-      
+      console.log "remover", @
       $(@).remote
         on_success: (response) =>
           $(@).parents(removed).first().fadeOut 'fast', () ->
