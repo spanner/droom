@@ -17,7 +17,8 @@ module Droom
     def headers
       {
         :to => Settings.enquiries.mail_to,
-        :subject => Settings.enquiries.mail_subject
+        :subject => Settings.enquiries.mail_subject,
+        :from => Settings.enquiries.mail_from
       }
     end
 
