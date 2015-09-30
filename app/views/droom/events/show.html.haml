@@ -3,7 +3,10 @@
 
 - content_for :margin do
   %h3
-    Past events of this type
+    Other events of this type
+
+  = render :partial => 'droom/events/minimal', collection: Droom::Event.of_type(@event.event_type).other_than(@event).by_date_descending
+  
 
 - content_for :standfirst do
   %p

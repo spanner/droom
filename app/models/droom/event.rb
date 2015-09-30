@@ -75,9 +75,13 @@ module Droom
 
     scope :at_venue, -> venue { where(:venue_id => venue.id) }
 
+    scope :of_type, -> event_type { where(:event_type_id => event_type.id) }
+
     scope :in_calendar, -> calendar { where(:calendar_id => calendar.id) }
 
     scope :added_since, -> date { where("created_at > ?", date)}
+
+    scope :other_than, -> event { where.not(id: event.id) }
 
     scope :except_these_uuids, -> uuids {
       placeholders = uuids.map{'?'}.join(',')
@@ -101,6 +105,8 @@ module Droom
       fragment = "%#{fragment}%"
       where('droom_events.name like :f OR droom_events.description like :f', :f => fragment)
     }
+
+
 
     # All of these class methods also return scopes.
     #
