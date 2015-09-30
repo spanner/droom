@@ -2,8 +2,9 @@
 - enquiry ||= listing || @enquiry
 
 %li.enquiry
-  = link_to shorten(enquiry.message, 72), droom.enquiry_url(enquiry)
+  = link_to shorten(enquiry.message, 200), droom.enquiry_url(enquiry), class: "message"
   %br
-  from
-  = mail_to enquiry.email, enquiry.name, class: 'email'
-  = time_ago_in_words(enquiry.created_at) + ' ' + t(:ago)
+  %span.enquirer
+    from
+    = mail_to enquiry.email, enquiry.name, class: 'email'
+    = time_ago_in_words(enquiry.created_at) + ' ' + t(:ago)
