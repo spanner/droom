@@ -80,7 +80,6 @@ jQuery ($) ->
     @each ->
       removed = $(@).attr('data-removed') || ".holder"
       affected = $(@).attr('data-affected')
-      console.log "remover", @
       $(@).remote
         on_success: (response) =>
           $(@).parents(removed).first().fadeOut 'fast', () ->

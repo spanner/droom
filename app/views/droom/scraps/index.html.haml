@@ -1,4 +1,4 @@
-%h1.pagetitle
+- content_for :title do
   = t(:noticeboard_title)
   - if can? :create, Droom::Scrap
     %span.addendum.action
