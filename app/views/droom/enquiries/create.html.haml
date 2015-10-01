@@ -1,7 +1,5 @@
 #confirmation
   %h1.confirmed
-    Message sent
+    = t :enquiry_sent
   %p
-    Thank you for your enquiry. It was dispatched at
-    = l @enquiry.created_at, format: :natural_on_date
-    and we will respond as soon as possible.
+    = t :enquiry_acknowledment
