@@ -3,6 +3,7 @@
   - if can? :create, Droom::Scrap
     %span.addendum.action
       = link_to t(:add_notice), droom.new_scrap_url, :class => "add", :data => {:action => "popup", :affected => "#noticeboard"}
-  
+
+= render :partial => "noticeboard_introduction"
 = render :partial => "noticeboard"
 

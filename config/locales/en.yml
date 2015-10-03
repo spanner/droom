@@ -402,6 +402,7 @@ en:
   no_results: "Sorry: nothing to show here."
   no_stream: "Nothing yet to show here."
   Noticeboard: "Latest Notices"
+  noticeboard_introduction: 'Introductory text for the noticeboard.'
   recent_events: "Past events"
   save_profile: "Save changes"
   save_your_profile: "Save changes"

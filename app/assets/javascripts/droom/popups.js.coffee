@@ -253,7 +253,7 @@ jQuery ($) ->
         top: top - 3
         width: @header.outerWidth() - 2
       @container.css
-        left: -16
+        right: -16
         top: top - 1
 
     set: () =>
