@@ -5,7 +5,8 @@ module Droom
     skip_authorization_check
     
     def index
-      
+      authorize! :read, :dashboard
+      render
     end
     
   end

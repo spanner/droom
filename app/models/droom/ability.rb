@@ -8,6 +8,8 @@ module Droom
           can :manage, :all
 
         elsif !Droom.require_login_permission? || user.permitted?('droom.login')
+          
+          can :read, :dashboard
           can :read, Droom::Event
           can :read, Droom::Folder
           can :read, Droom::Document
@@ -31,6 +33,7 @@ module Droom
           # Then other abilities are determined by permissions. Our permissions are relatively abstract and 
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
           #
+
           if user.permitted?('droom.calendar')
             can :manage, Droom::Event
             can :manage, Droom::EventSet
