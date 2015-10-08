@@ -6,7 +6,7 @@ module Droom
 
     before_action :request_password_if_not_set
 
-    rescue_from "CanCan::AccessDenied", :with => :not_allowed
+    # rescue_from "CanCan::AccessDenied", :with => :not_allowed
     
     def current_ability
       @current_ability ||= Droom::Ability.new(current_user)
