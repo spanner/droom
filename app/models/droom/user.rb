@@ -131,29 +131,6 @@ module Droom
       password == password_confirmation && !password.blank?
     end
 
-    # Our old user accounts store passwords as salted sha512 digests. Current best practice uses BCrypt
-    # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
-  
-    def valid_password?(password)
-      begin
-        super(password)
-      rescue BCrypt::Errors::InvalidHash
-        Rails.logger.warn "...trying sha512 on password input"
-        stretches = 10
-        salt = self.password_salt
-        pepper = nil
-        old_digest = Devise::Encryptable::Encryptors::Sha512.digest(password, stretches, salt, pepper)
-        if old_digest == self.encrypted_password   
-          self.password = password
-          self.save
-          return true
-        else
-          # Doesn't match the old format either: password is just wrong.
-          return false
-        end
-      end
-    end 
-    
     scope :unconfirmed, -> { where("confirmed_at IS NULL") }
     scope :administrative, -> { where(:admin => true) }
     scope :this_month, -> { where("created_at > ?", Time.now - 1.month) }
@@ -167,6 +144,7 @@ module Droom
     #
     belongs_to :organisation
     has_many :organisations, :foreign_key => :owner_id
+
 
     ## Group memberships
     #
@@ -204,6 +182,7 @@ module Droom
         .where("dm.group_id" => group)
     }
 
+
     ## Event invitations
     #
     has_many :invitations, :dependent => :destroy
@@ -232,6 +211,7 @@ module Droom
     scope :personally_invited_to_event, -> event {
       joins('LEFT OUTER JOIN droom_invitations on droom_users.id = droom_invitations.user_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
     }
+
 
     ## Folder permissions
     #
@@ -279,6 +259,7 @@ module Droom
       dropbox_token.dropbox_client if dropbox_token
     end
 
+
     ## Mugshot
     #
     has_attached_file :image,
@@ -299,16 +280,81 @@ module Droom
       image.url(:icon) if image?
     end
  
-    # For suggestion box
+ 
+    ## Address book
+    #
+    # Can hold multiple emails, phones and addresses for each user.
+    # Address book data is simple and always nested.
+    #
+    has_many :emails
+    accepts_nested_attributes_for :emails, :allow_destroy => true
+    has_many :phones
+    accepts_nested_attributes_for :phones, :allow_destroy => true
+    has_many :addresses
+    accepts_nested_attributes_for :addresses, :allow_destroy => true
+    
+    # The only difficulty is to support devise login using any known email address.
+    #
+    scope :find_by_linked_email, -> email {
+      joins(:droom_emails).where(droom_email: {email: email})
+    }
+
+    def self.find_first_by_auth_conditions(warden_conditions)
+      conditions = warden_conditions.dup
+      if email = conditions.delete(:email)
+        # two stages because a bulky outer join would be required.
+        find_by(email: email) || find_by_linked_email(email).first
+      else
+        super
+      end
+    end
+
+    # While we are in transition address book getters will defer to columns on the user model.
+    #
+    def email
+      unless email = read_attribute(:email)
+        email = default_email.email if default_email
+      end
+      email
+    end
+    
+    def default_email
+      emails.default.first
+    end
+
+    def phone
+      unless phone = read_attribute(:phone)
+        phone = default_phone.phone if default_phone
+      end
+      phone
+    end
+
+    def default_phone
+      phones.default.first
+    end
+
+    def address
+      unless address = read_attribute(:address)
+        address = default_address.address if default_address
+      end
+      address
+    end
+
+    def default_address
+      addresses.default.first
+    end
+
+
+    ## Suggestion box
     #
     scope :matching, -> fragment {
       where('droom_users.given_name LIKE :f OR droom_users.family_name LIKE :f OR droom_users.chinese_name LIKE :f OR droom_users.title LIKE :f OR droom_users.email LIKE :f OR droom_users.phone LIKE :f OR CONCAT(droom_users.given_name, " ", droom_users.family_name) LIKE :f OR CONCAT(droom_users.family_name, " ", droom_users.given_name) LIKE :f', :f => "%#{fragment}%")
     }
-    
+
     scope :matching_in_col, -> col, fragment {
       where("droom_users.#{col} LIKE :f", :f => "%#{fragment}%")
     }
-    
+
     def as_suggestion
       {
         :type => 'person',
@@ -317,7 +363,7 @@ module Droom
         :id => id
       }
     end
-    
+
     def as_search_result
       {
         :type => 'person',
@@ -326,21 +372,21 @@ module Droom
         :id => id
       }
     end
-    
-    
+
+
     # For select box
     #
     def self.for_selection
       self.published.map{|p| [p.name, p.id] }
     end
-    
-    
+
+
     ## Names
     #
     # With Anglo-Chinese Hong Kong names it is difficult to be sure of the right presentation.
     #
     # We hold the name in three fields: title, given name and family name. People with both a Chinese and an
-    # English forename are encouraged to enter their given name in the form Tai Wan, Jimmy. The family_name 
+    # English forename are encouraged to enter their given name in the form Tai Wan, Jimmy. The family_name
     # should always be a single, usually Chinese, surname: Chan or Smith.
     #
     # When a comma is found in the given name, we assume that they have followed the chinese, english format.
@@ -515,7 +561,7 @@ module Droom
     #
     # Permissions are usually assigned by way of group membership, but the effect of this is to create a user-permission
     # object. Additional user-permission objects can be created: all we need to do here is return that set.
-    
+
     has_many :user_permissions
     has_many :permissions, :through => :user_permissions
 
@@ -544,12 +590,15 @@ module Droom
     has_many :scraps, :foreign_key => "created_by_id"
     has_many :documents, :foreign_key => "created_by_id"
 
+
+
+
   protected
-  
+
     def ensure_uid!
       self.uid = SecureRandom.uuid unless self.uid?
     end
-    
+
     def send_confirmation_if_directed
       unless confirming
         # a slightly rubbish way to avoid the double hit caused by devise updating the confirmation token.
@@ -563,7 +612,7 @@ module Droom
     end
 
   private
-  
+
     def generate_authentication_token
       loop do
         token = Devise.friendly_token

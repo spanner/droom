@@ -300,6 +300,12 @@ en:
   person_post_country: "Country"
   person_post_code: "Post code"
   placeholders:
+    email:
+      email: "Email address"
+    phone:
+      phone: "Phone number"
+    address:
+      address: "Postal address"
     scrap:
       name: "Heading"
       url: "Link destination"

@@ -3,8 +3,6 @@ module Droom
     include CanCan::Ability
 
     def initialize(user)
-      Rails.logger.warn "Droom ability class init with #{user.inspect}"
-
       if user
         if user.admin?
           can :manage, :all
