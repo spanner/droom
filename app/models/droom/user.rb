@@ -295,7 +295,7 @@ module Droom
     # The only difficulty is to support devise login using any known email address.
     #
     scope :find_by_linked_email, -> email {
-      joins(:droom_emails).where(droom_email: {email: email})
+      joins(:emails).where(droom_emails: {email: email})
     }
 
     def self.find_first_by_auth_conditions(warden_conditions)
@@ -307,8 +307,12 @@ module Droom
         super
       end
     end
+    
+    def self.find_by_any_email(emails)
+      find_by_linked_email(emails).first
+    end
 
-    # While we are in transition address book getters will defer to columns on the user model.
+    # While we are in transition, address book getters will defer to columns on the user model.
     #
     def email
       unless email = read_attribute(:email)

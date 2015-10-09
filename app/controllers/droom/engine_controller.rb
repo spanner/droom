@@ -3,15 +3,8 @@ require 'dropbox_sdk'
 module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
-
     before_action :request_password_if_not_set
 
-    # rescue_from "CanCan::AccessDenied", :with => :not_allowed
-    
-    def current_ability
-      @current_ability ||= Droom::Ability.new(current_user)
-    end
-    
   protected
         
     def paginated(collection, default_show=10, default_page=1)
