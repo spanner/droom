@@ -25,14 +25,9 @@
 
 .non-file-data
   .contacts
-    %p.email
-      = f.text_field :email, :required => true, placeholder: t("placeholders.user.email")
-
-    %p.phone
-      = f.text_field :phone, placeholder: t("placeholders.user.phone")
-
-    %p.mobile
-      = f.text_field :mobile, placeholder: t("placeholders.user.mobile")
+    = render "droom/users/edit/emails", f: f, user: user
+    = render "droom/users/edit/phones", f: f, user: user
+    = render "droom/users/edit/addresses", f: f, user: user
 
   - if admin?
     - if Droom.use_organisations?

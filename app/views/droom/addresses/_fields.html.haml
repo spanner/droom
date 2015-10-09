@@ -3,18 +3,17 @@
 - address ||= fields || @address
 - user = @user || current_user
 
-= fields_for :user do |uf|
+= fields_for user do |uf|
   = uf.fields_for :addresses, address, :child_index => fields_counter || 'field_counter' do |f|
 
     %fieldset.repeating
-      .controls
-        = link_to t(:remove), '#', :class => "remove", :data => {:action => "remove", :removed => "fieldset"}
-        - if address.persisted?
-          = f.hidden_field :_destroy, :class => 'destroy'
-
       %p.twocol.reversed
         %span.col>
-          = f.text_field :address, :placeholder => t("placeholders.address.address"), required: true
+          = f.text_area :address, :placeholder => t("placeholders.address.address"), required: true
         %span.col.last>
-          = f.select :address_type_id, Droom::AddressType.for_selection_without_phone_types
+          = f.select :address_type_id, Droom::AddressType.for_selection(:address)
 
+      .controls
+        = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
+        - if address.persisted?
+          = f.hidden_field :_destroy, data: {role: "destroy"}

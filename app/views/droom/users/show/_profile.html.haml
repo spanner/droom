@@ -16,14 +16,9 @@
         - if user.organisation
           %strong
             = user.organisation.name
-            %br
-        - if user.email?
-          = mail_to user.email
-        - if user.email? && user.phone?
-          = t :or
-        - if user.phone?
-          = user.phone
 
       - if Droom.use_biogs? && user.description?
         .description
           = sanitize(user.description.html_safe)
+
+      = render "droom/users/show/contacts", user: user

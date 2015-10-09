@@ -103,7 +103,37 @@ module Droom
   protected
 
     def user_params
-      params.require(:user).permit(:title, :family_name, :given_name, :chinese_name, :honours, :email, :password, :password_confirmation, :phone, :description, :admin, :gender, :preferences_attributes, :confirm, :old_id, :send_confirmation, :defer_confirmation, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :image, group_ids: [], preferences_attributes: [:id, :_destroy, :uuid, :key, :value])
+      params.require(:user).permit(
+        :title,
+        :family_name,
+        :given_name,
+        :chinese_name,
+        :honours,
+        :email,
+        :password,
+        :password_confirmation,
+        :phone,
+        :description,
+        :admin,
+        :gender,
+        :preferences_attributes,
+        :confirm,
+        :old_id,
+        :send_confirmation,
+        :defer_confirmation,
+        :address,
+        :post_code,
+        :country_code,
+        :mobile,
+        :organisation_id,
+        :female,
+        :image,
+        group_ids: [],
+        emails_attributes: [:id, :_destroy, :email, :address_type_id, :default],
+        phones_attributes: [:id, :_destroy, :phone, :address_type_id, :default],
+        addresses_attributes: [:id, :_destroy, :address, :address_type_id, :default],
+        preferences_attributes: [:id, :_destroy, :uuid, :key, :value]
+      )
     end
 
     def password_params

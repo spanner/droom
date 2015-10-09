@@ -6,16 +6,14 @@ module Droom
 
     validates :name, presence: true
 
-    scope :not_phones, -> {
-      where(phones_only: false)
+    scope :meant_for, -> purpose {
+      where("relevance IS NULL OR relevance = ?", purpose)
     }
 
-    def self.for_selection
-      self.order(:name).map{|type| [type.name, type.id] }
-    end
-
-    def self.for_selection_without_phone_types
-      self.not_phones.order(:name).map{|type| [type.name, type.id] }
+    def self.for_selection(purpose=nil)
+      types = self.order(:name)
+      types = types.meant_for(purpose.to_s) if purpose
+      types.map{|type| [type.name, type.id] }
     end
 
     def slug

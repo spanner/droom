@@ -62,7 +62,7 @@ jQuery ($) ->
         @_container = replacement
         @_container.fadeIn 'fast', () =>
           @_container.activate().signal_confirmation()
-      
+
 
   # ## Actions
   #

@@ -3,7 +3,7 @@
 module Droom
   class PhonesController < Droom::EngineController
     layout false
-    load_resource :user
+    load_resource :user, class: "Droom::User"
     load_and_authorize_resource through: :user
   end
 end

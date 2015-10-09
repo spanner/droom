@@ -1,0 +1,7 @@
+- user ||= @user
+
+#address_fields.nested_set
+  = render :partial => 'droom/addresses/fields', :collection => user.addresses
+
+%p.action
+  = link_to t(:add_address), droom.new_user_address_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#address_fields'}

@@ -7,7 +7,7 @@
     = link_to t(:edit_your_profile), droom.edit_user_url(current_user, view: 'profile'), :data => {:action => "popup", :affected => ".people_list"}
     %br
     %span.note
-      = t(:edit_your_profile_note)
+      = t(:edit_your_profile_note, url: droom.user_url(current_user, view: 'profile')).html_safe
   %p
     = link_to t(:edit_your_preferences), droom.edit_user_url(current_user, view: 'preferences'), :data => {:action => "popup", :affected => ".people_list"}
     %br

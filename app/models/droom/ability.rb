@@ -25,6 +25,8 @@ module Droom
           can :update, Droom::User, :id => user.id
           # cannot :edit, Droom::User
         
+          can :new, [Droom::Email, Droom::Phone, Droom::Address], :user_id => user.id
+
           # If someone has been allowed to create something, they are generally allowed to edit or remove it.
           # This rule must sit after the user rules because users have no created_by_id column.
           #

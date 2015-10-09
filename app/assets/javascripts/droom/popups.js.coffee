@@ -73,7 +73,7 @@ jQuery ($) ->
         on_success: @receive
       @_content.activate()
       @show()
-          
+
     conclude: (data) =>
       if @_affected
         $(@_affected).trigger "refresh"

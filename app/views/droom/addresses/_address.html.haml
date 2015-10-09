@@ -1,0 +1,5 @@
+- cssclass = "address "
+- cssclass << address.address_type.slug if address.address_type
+
+%li{class: cssclass}
+  = address.address

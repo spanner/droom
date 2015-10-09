@@ -1,13 +1,5 @@
-- education ||= @education
+- cssclass = "phone "
+- cssclass << phone.address_type.slug if phone.address_type
 
-%li.education
-  %span.period
-    = education.year_from
-    \-
-    - if education.year_to == 0
-      = t :now
-    - else
-      = education.year_to
-    \:
-  %span.description
-    = education.description
+%li{class: cssclass}
+  = phone.phone

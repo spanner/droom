@@ -1,0 +1,6 @@
+- user ||= @user
+
+%ul.contacts
+  = render partial: "droom/emails/email", collection: user.emails
+  = render partial: "droom/phones/phone", collection: user.phones
+  = render partial: "droom/addresses/address", collection: user.addresses

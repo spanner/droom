@@ -49,36 +49,39 @@ Droom::Engine.routes.draw do
     resources :documents
     resources :agenda_categories
   end
-  
+
   resources :documents#, only: [:index, :show]
   resources :folders do
     get "dropbox", on: :member, as: :dropbox
     resources :documents
     resources :folders
   end
-  
+
   resources :organisations do
     resources :users
   end
-  
+
   resources :users do
     get "preferences", on: :member, as: :preferences
     get "admin", on: :collection
     put :set_password, on: :collection
     resources :events
+    resources :emails
+    resources :phones
+    resources :addresses
   end
-  
+
   resources :groups do
     resources :memberships
     resources :group_permissions
   end
-  
+
   resources :venues
 
   resources :dropbox_tokens do
     get "/register", on: :collection, action: :create
   end
-  
+
   put "/set_password" => "users#set_password", as: :set_my_password
   get "/enquire" => "enquiries#new", as: :enquire
   get "/noticeboard" => "scraps#index", as: :noticeboard

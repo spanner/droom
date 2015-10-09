@@ -30,17 +30,5 @@
     %span.name
       = link_to truncate(user.colloquial_name, length: 32), user_url(user), data: {action: "popup"}
       = action_menulink(user, class: "small")
-    %br
-    %span.note
-      - if user.email? || user.phone?
-        - if user.email?
-          = mail_to user.email, truncate(user.email, length: 32)
-        - if user.email? && user.phone?
-          %br
-        - if user.phone?
-          = user.phone
-
-      - else
-        = t :contact_information_unavailable
-        
+    = render "droom/users/show/contacts", user: user
     = action_menu(user, event: event, group: group)
