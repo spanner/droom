@@ -70,7 +70,7 @@ module Droom::Api
         end
       end
       params = user_params
-      @user ||= Droom::User.create(user_params)
+      @user ||= Droom::User.create(user_params.merge(defer_confirmation: true))
     end
 
     def get_users

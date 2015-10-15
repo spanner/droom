@@ -7,14 +7,14 @@ module Droom
     def show
       if self.resource = resource_class.confirm_by_token(params[:confirmation_token])
         if resource.confirmed?
-          redirect_to after_sign_in_path_for(resource) 
+          redirect_to after_sign_in_path_for(resource)
         else
           render
         end
       elsif user_signed_in?
         redirect_to after_sign_in_path_for(current_user)
       else
-        render :template => "devise/confirmations/failure" 
+        render :template => "devise/confirmations/failure"
       end
     end
 
