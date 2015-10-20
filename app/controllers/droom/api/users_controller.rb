@@ -70,6 +70,8 @@ module Droom::Api
         end
       end
       params = user_params
+      # remotely created users are never for the data room.
+      user_params[:defer_confirmation] = true
       @user ||= Droom::User.create(user_params)
     end
 
