@@ -36,10 +36,14 @@ module Droom
     attr_accessor :defer_confirmation, :send_confirmation, :confirming
 
     # send_confirmation_notification? is called by devise's immediate confirmation mechanism.
-    # If the defer_confirmation flag has been set, we postpone.
+    # If the defer_confirmation flag has been set as usual, we postpone.
     #
     def send_confirmation_notification?
-      super && !defer_confirmation?
+      super && really_send_confirmation?
+    end
+
+    def really_send_confirmation?
+      !defer_confirmation?
     end
 
     def defer_confirmation!
