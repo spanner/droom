@@ -5,7 +5,7 @@ module Droom
     helper Droom::DroomHelper
 
   protected
-        
+
     def paginated(collection, default_show=10, default_page=1)
       @show = (params[:show] || default_show).to_i
       @page = (params[:page] || default_page).to_i
@@ -29,7 +29,6 @@ module Droom
     end
     
     def pjax?
-      Rails.logger.warn "??  pjax? #{request.headers['X-PJAX'].inspect}"
       request.headers['X-PJAX']
     end
     

@@ -5,7 +5,6 @@ module Droom
     layout :no_layout_if_pjax
     before_action :set_view, only: [:show, :edit, :update]
     before_action :self_unless_admin, only: [:edit, :update]
-    skip_before_action :request_password_if_not_set, only: [:set_password]
     load_and_authorize_resource except: [:set_password]
 
     def index
