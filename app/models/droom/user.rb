@@ -7,7 +7,7 @@ module Droom
 
     has_many :preferences, :foreign_key => "created_by_id"
     accepts_nested_attributes_for :preferences, :allow_destroy => true
-    
+
     ## Authentication
     #
     devise :database_authenticatable,
@@ -17,7 +17,7 @@ module Droom
            :confirmable,
            :rememberable,
            :reconfirmable => false
-    
+
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
     after_save :send_confirmation_if_directed
@@ -295,12 +295,19 @@ module Droom
 
     do_not_validate_attachment_file_type :image
 
+    def image_url(style=:original, decache=true)
+      if image?
+        url = image.url(style, decache)
+        url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
+      end
+    end
+
     def thumbnail
-      image.url(:thumb) if image?
+      image_url(:thumb)
     end
     
     def icon
-      image.url(:icon) if image?
+      image_url(:icon)
     end
  
     # For suggestion box

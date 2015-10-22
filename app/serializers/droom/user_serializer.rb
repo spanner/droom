@@ -31,9 +31,9 @@ class Droom::UserSerializer < ActiveModel::Serializer
   def images
     if object.image?
       {
-        icon: object.image.url(:icon),
-        thumbnail: object.image.url(:thumbnail),
-        standard: object.image.url(:standard)
+        icon: object.image_url(:icon),
+        thumbnail: object.image_url(:thumbnail),
+        standard: object.image_url(:standard)
       }
     else
       {
