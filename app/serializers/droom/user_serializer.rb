@@ -1,14 +1,15 @@
 require 'active_model_serializers'
 
 class Droom::UserSerializer < ActiveModel::Serializer
-  attributes :uid, 
-             :authentication_token, 
+  attributes :uid,
+             :authentication_token,
              :title,
              :given_name,
              :family_name,
              :chinese_name,
              :colloquial_name,
              :honours,
+             :affiliation,
              :email,
              :phone,
              :mobile,
