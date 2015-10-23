@@ -45,9 +45,9 @@ module Droom
     end
 
     def create
-      # block the automatic devise confirmation message
+      # add marker to block the automatic devise confirmation message
       @user.defer_confirmation!
-      # then send confirmation once the user is saved and permissions are known
+      # add marker to send confirmation once the user is saved and permissions are known
       @user.send_confirmation!
       @user.update_attributes(user_params)
       respond_with @user

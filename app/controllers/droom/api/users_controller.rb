@@ -26,7 +26,7 @@ module Droom::Api
       end
     end
   
-    # deauth is used to achieve single-sign-out. It changes the auth token and session id
+    # Deauth is used to achieve single-sign-out. It changes the auth token and session id
     # so that neither the data room session cookie nor the domain auth cookie can identify a user.
     #
     def deauthenticate
@@ -70,8 +70,9 @@ module Droom::Api
         end
       end
       params = user_params
-      # remotely created users are never for the data room.
+      # remotely created users are never for the data room but can set send_confirmation if that's what they want.
       user_params[:defer_confirmation] = true
+      Rails.logger.warn "---> creating user with #{user_params.inspect}"
       @user ||= Droom::User.create(user_params)
     end
 
