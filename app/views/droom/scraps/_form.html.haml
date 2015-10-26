@@ -44,24 +44,24 @@
       %p.url
         = f.url_field :url, :class => 'url', placeholder: t("placeholders.scrap.url")
     
-    %p.text
-      = f.text_area :body, :class => 'text', placeholder: t("placeholders.scrap.body")
-    
+    .text.wysihtml
+      .toolbar#t1
+        = render 'droom/shared/toolbar'
+      = f.text_area :body, :class => 'text', placeholder: t("placeholders.scrap.body"), :id => 'd1'
+
     %p.caption
       = f.text_field :note, :class => 'note', placeholder: t("placeholders.scrap.caption")
 
-    %p.options
-      %strong
-        Noticeboard:
-    
-      = f.radio_button :size, 1
-      = f.label :size, "Normal", value: 1, class: "inline"
+    - if admin?
+      %p.admin
+        = f.radio_button :size, 1
+        = f.label :size, "Normal", value: 1, class: "inline"
 
-      = f.radio_button :size, 2
-      = f.label :size, "Large", value: 2, class: "inline"
+        = f.radio_button :size, 2
+        = f.label :size, "Large", value: 2, class: "inline"
 
-      = f.radio_button :size, 3
-      = f.label :size, "Very large", value: 3, class: "inline"
+        = f.radio_button :size, 3
+        = f.label :size, "Very large", value: 3, class: "inline"
 
     .buttons
       = f.submit t(:save)

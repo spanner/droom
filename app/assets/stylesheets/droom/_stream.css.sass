@@ -87,8 +87,6 @@ span.credit
 
 // scrap-editing popups
 
-
-
 div.popup
   form.scrap
     margin: 20px
@@ -109,7 +107,7 @@ div.popup
       input
         width: 100%
     
-    p.text
+    div.text
       clear: left
       display: none
       textarea
@@ -134,11 +132,20 @@ div.popup
         width: 540px
         height: 320px
 
+    p.admin
+      clear: both
+      float: right
+      margin: 5px 10px
+      label
+        display: inline-block
+
     &.image
       .specifics.image
         display: inline-block
       p.name, p.url
         width: 380px
+      div.text
+        display: block
     &.video
       .specifics.video
         display: inline-block
@@ -164,6 +171,8 @@ div.popup
         display: inline-block
       p.name, p.url
         width: 420px
+      input.name
+        font-size: 1.5rem
     &.quote
       .text
         display: block

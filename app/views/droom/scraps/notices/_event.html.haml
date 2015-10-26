@@ -12,4 +12,7 @@
           = link_to notice.event.name, notice.event.url_with_protocol, :class => "eventname"
         - else
           = notice.event.name
-      = simple_format(notice.body)
+      - if notice.body?
+        .notice_body
+          = sanitize(notice.body)
+      

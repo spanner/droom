@@ -61,9 +61,9 @@ module Droom
 
     def scrap_params(scraptype=@scraptype)
       case scraptype.to_sym
-      when :image then params.require(:scrap).permit(:name, :image, :note, :url, :scraptype, :size)
+      when :image then params.require(:scrap).permit(:name, :image, :body, :note, :url, :scraptype, :size)
       when :video then params.require(:scrap).permit(:name, :youtube_id, :note, :url, :scraptype, :size)
-      when :link then params.require(:scrap).permit(:name, :note, :url, :scraptype, :size)
+      when :link then params.require(:scrap).permit(:name, :body, :note, :url, :scraptype, :size)
       when :event then params.require(:scrap).permit(:name, :body, :note, :url, :scraptype, :size, :event_attributes => [:id, :calendar_id, :start])
       when :document then params.require(:scrap).permit(:name, :body, :note, :url, :scraptype, :size, :document_attributes => [:id, :file, :folder_id])
       else params.require(:scrap).permit(:name, :body, :note, :url, :scraptype, :size)

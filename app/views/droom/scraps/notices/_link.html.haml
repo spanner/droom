@@ -1,3 +1,5 @@
 .content
   %p
     = link_to notice.url_without_protocol.gsub(/\//, "/&#8203;").html_safe, notice.url_with_protocol, :class => "biglink"
+  - if notice.body?
+    = sanitize(notice.body)

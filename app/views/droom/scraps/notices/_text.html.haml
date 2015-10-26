@@ -1,4 +1,5 @@
 .content
   %h2
     = notice.name
-  = simple_format(notice.body).html_safe
+  - if notice.body?
+    = sanitize(notice.body)
