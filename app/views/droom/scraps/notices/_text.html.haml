@@ -1,5 +1,9 @@
 .content
   %h2
-    = notice.name
+    - if notice.url?
+      = link_to notice.url_with_protocol do
+        = notice.name
+    - else
+      = notice.name
   - if notice.body?
     = sanitize(notice.body)
