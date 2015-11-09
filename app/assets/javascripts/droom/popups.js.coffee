@@ -61,7 +61,7 @@ jQuery ($) ->
         @display(data)
       else
         @conclude(data)
-        
+
     display: (data) =>
       @_iteration++
       @_content = $(data)
@@ -136,6 +136,7 @@ jQuery ($) ->
 
     focus: () =>
       @_container.find('[autofocus]').focus()
+
 
   # Popup forms will usually contain one or more .column divs. The columns are a standard width and
   # the number of columns determines the width of the popup. Columns can also be hidden, initially,
