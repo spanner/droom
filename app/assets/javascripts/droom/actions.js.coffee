@@ -54,14 +54,13 @@ jQuery ($) ->
       true
 
     replace: (data, textStatus, jqXHR) =>
-      console.log "refreshing", @_container
       replacement = $(data)
       @_container.fadeOut 'fast', () =>
         replacement.hide().insertAfter(@_container)
         @_container.remove()
         @_container = replacement
         @_container.fadeIn 'fast', () =>
-          @_container.activate().signal_confirmation()
+          @_container.activate()
 
 
   # ## Actions
