@@ -1,12 +1,17 @@
+- omit_headings ||= false
+- omit_blocks ||= false
+
 %header
   %ul.commands
     %li.command{:"data-wysihtml5-command" => "bold"}
     %li.command{:"data-wysihtml5-command" => "italic"}
-    %li.command{:"data-wysihtml5-command" => "insertUnorderedList"}
-    %li.command{:"data-wysihtml5-command" => "insertOrderedList"}
+    - unless omit_blocks
+      %li.command{:"data-wysihtml5-command" => "insertUnorderedList"}
+      %li.command{:"data-wysihtml5-command" => "insertOrderedList"}
     %li.command{:"data-wysihtml5-command" => "createLink"}
-    %li.command{:"data-wysihtml5-command" => "formatBlock", :"data-wysihtml5-command-value" => "h1"}
-    %li.command{:"data-wysihtml5-command" => "formatBlock", :"data-wysihtml5-command-value" => "h2"}
+    - unless omit_headings
+      %li.command{:"data-wysihtml5-command" => "formatBlock", :"data-wysihtml5-command-value" => "h1"}
+      %li.command{:"data-wysihtml5-command" => "formatBlock", :"data-wysihtml5-command-value" => "h2"}
     %li.command{:"data-wysihtml5-action" => "change_view"}
 
 %div{:"data-wysihtml5-dialog" => "createLink", :style => "display: none"}
