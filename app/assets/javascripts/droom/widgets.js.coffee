@@ -415,13 +415,22 @@ jQuery ($) ->
   #
   $.fn.suggestion_form = (options) ->
     @each ->
-      new CaptiveForm @, 
+      new CaptiveForm @,
         fast: true
         auto: false
         into: "#suggestion_box"
         history: false
     @
-  
+
+  $.fn.faceting_search = (options) ->
+    defaults = 
+      fast: ".facet"
+      history: true
+      threshold: 4
+    @each ->
+      new CaptiveForm @, _.extend(defaults, options)
+    @
+
 
   class CaptiveForm
     @default_options: {
@@ -449,10 +458,10 @@ jQuery ($) ->
         on_cancel: @cancel
         on_success: @capture
       @submit_soon = _.debounce(@submit, 500)
-      @bindInputs() if @_options.fast
+      @bindInputs(@_options.fast) if @_options.fast
       @_form.bind 'refresh', @changed
       if @_options.auto
-        @submit() 
+        @submit()
       else
         @bindLinks()
       if @_historical
@@ -463,15 +472,17 @@ jQuery ($) ->
       @_container.find('a.cancel').click(@revert)
       @_container.find('.pagination a').click @page
 
-    bindInputs: () =>
-      @_form.find('input[type="search"]').bind 'keyup', @changed
-      @_form.find('input[type="search"]').bind 'change', @changed
-      # @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box control in webkit search fields
-      @_form.find('input[type="text"]').bind 'keyup', @keyed
-      @_form.find('input[type="text"]').bind 'change', @changed
-      @_form.find('select').bind 'change', @changed
-      @_form.find('input[type="radio"]').bind 'click', @clicked
-      @_form.find('input[type="checkbox"]').bind 'click', @clicked
+    bindInputs: (selector) =>
+      if typeof selector is "string"
+        @_form.find(selector).bind 'change', @changed
+      else
+        @_form.find('input[type="search"]').bind 'keyup', @changed
+        @_form.find('input[type="search"]').bind 'change', @changed
+        @_form.find('input[type="text"]').bind 'keyup', @keyed
+        @_form.find('input[type="text"]').bind 'change', @changed
+        @_form.find('select').bind 'change', @changed
+        @_form.find('input[type="radio"]').bind 'click', @clicked
+        @_form.find('input[type="checkbox"]').bind 'click', @clicked
 
     keyed: (e) =>
       k = e.which
