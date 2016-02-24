@@ -23,7 +23,7 @@
           %td{:class => "s_#{service.id} p_#{perm.id} #{'d' if i == width-1}".strip}
             = action_menulink(perm, :class => "small")
             %span.rotated
-              = perm.slug
+              = perm.name
             = action_menu(perm)
 
     - @groups.each do |group|
