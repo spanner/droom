@@ -56,7 +56,8 @@ jQuery ($) ->
       @_container.bind 'resize', @place
       @_container.insertAfter(@_mask).hide()
 
-    receive: (event, data) =>
+    receive: (e, data) =>
+      e?.stopPropagation()
       if @_iteration == 0 || $(data).find('form').not('.button_to').length
         @display(data)
       else
