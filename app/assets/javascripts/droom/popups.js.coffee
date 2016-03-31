@@ -28,6 +28,7 @@ jQuery ($) ->
       @_replaced = @_link.attr('data-replaced')
       @_aftered = @_link.attr('data-appended')
       @_befored = @_link.attr('data-prepended')
+      @_reporter = @_link.attr('data-reporter')
       @_link.remote
         on_request: @begin
         on_success: @receive
@@ -91,6 +92,8 @@ jQuery ($) ->
         $(@_replaced).after(replacement)
         $(@_replaced).remove()
         replacement.activate().signal_confirmation()
+      if @_reporter?
+        $(@_reporter).html(data).show().signal_confirmation().delay(5000).slideUp()
       @reset()
 
     show: (e) =>
