@@ -100,7 +100,7 @@ module Droom
     # Tell devise to tell warden to salt the session cookie with our session_id.
     # If the session_id changes, eg due to remote logout, the session will no longer succeed in describing a user.
     def authenticatable_salt
-      session_id
+      session_id.presence || reset_session_id!
     end
 
     ## Auth tokens
