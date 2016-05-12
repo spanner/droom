@@ -10,6 +10,9 @@
       = flash[:notice]
 
   = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
+    - if params[:backto].present?
+      = hidden_field_tag :backto, CGI.escape(params[:backto])
+
     %p
       = f.label :email
       %br
