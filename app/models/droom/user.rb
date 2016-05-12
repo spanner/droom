@@ -16,6 +16,9 @@ module Droom
            :trackable,
            :confirmable,
            :rememberable,
+           :session_limitable,
+           :timeoutable,
+           :zxcvbnable,
            :reconfirmable => false
 
     before_validation :ensure_uid!

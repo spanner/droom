@@ -2,7 +2,8 @@ require 'rubygems'
 require 'paperclip'
 require 'fog'
 require 'devise'
-require 'devise-encryptable' #TODO only until passwords have migrated to bcrypt
+require 'devise_security_extension'
+require 'devise_zxcvbn'
 require 'cancan'
 require 'kaminari'
 require 'icalendar'
@@ -28,6 +29,6 @@ module Droom
       Devise::UnlocksController.layout Droom.devise_layout
       Devise::PasswordsController.layout Droom.devise_layout
     end
-    
+
   end
 end

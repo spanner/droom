@@ -28,8 +28,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'request_store'
 
   s.add_dependency "devise"
-  # only for mopping up old accounts
-  s.add_dependency "devise-encryptable"
+  s.add_dependency "devise_security_extension"
+  s.add_dependency "devise_zxcvbn"
   s.add_dependency "cancancan"
 
   s.add_dependency "acts_as_tree"
