@@ -19,7 +19,12 @@ module Droom
            :session_limitable,
            :timeoutable,
            :zxcvbnable,
-           :reconfirmable => false
+           :lockable,
+           reconfirmable: false,
+           lock_strategy: :failed_attempts,
+           maximum_attempts: 10,
+           unlock_strategy: :both,
+           unlock_in: 10.minutes
 
     before_validation :ensure_uid!
     before_save :ensure_authentication_token

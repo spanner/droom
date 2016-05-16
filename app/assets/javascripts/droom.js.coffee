@@ -69,7 +69,6 @@ jQuery ($) ->
     @find_including_self('.person_picker').person_picker()
     @find_including_self('.group_picker').group_picker()
     @find_including_self('.drag_sort').drag_sort()
-    @find_including_self('form.password').password_form()
     @find_including_self('fieldset[data-role="password"]').password_fieldset()
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('form.scrap').scrap_form()

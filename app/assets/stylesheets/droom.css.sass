@@ -494,6 +494,7 @@ form.user
   p.names
     input[type="text"]
       width: 100%
+      box-sizing: border-box
     span.title
       display: inline-block
       vertical-align: top
@@ -511,8 +512,11 @@ form.user
       margin-right: 0
   .contacts
     overflow: hidden
+    input[type="text"], input[type="email"]
+      width: 100%
+      box-sizing: border-box
     p.email
-      width: 386px
+      width: 442px
     p.phone, p.mobile
       float: left
       width: 188px
@@ -565,11 +569,11 @@ form.group, form.service, form.permission
 
 p.set_password
   span.col
-    +column(180px)
+    +column(220px)
     label:
       display: block
   span.col.button
-    +column(80px)
+    +column(10px)
 
 h2.name
   font-size: 2em
