@@ -19,9 +19,13 @@ module Droom::Api
     #
     def authenticate
       token = params[:tok]
-      if @user = Droom::User.find_by(authentication_token: token)
+      @user = Droom::User.find_by(authentication_token: token)
+      if @user && !@user.timedout?
         render json: @user
       else
+        if @user
+          @user.reset_authentication_token!
+        end
         render json: { errors: "Token not recognised" }, status: :unauthorized
       end
     end
