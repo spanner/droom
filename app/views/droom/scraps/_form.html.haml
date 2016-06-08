@@ -11,7 +11,8 @@
     - if @scrap.image?
       - img = @scrap.image.url(:thumb)
     - else
-      - img = image_url('droom/missing/scrap.png')
+      - img = ""
+
     .image-upload{:data => {:role => "imagepicker"}}
       %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
       = f.file_field :image
