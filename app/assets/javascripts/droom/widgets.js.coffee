@@ -229,6 +229,134 @@ jQuery ($) ->
 
 
 
+  $.fn.password_fieldset = ->
+    @each ->
+      new PasswordFieldset(@)
+    @
+
+  class PasswordFieldset
+    constructor: (element) ->
+      @fieldset = $(element)
+      @password_field = @fieldset.find('input[data-role="password"]')
+      @confirmation_block = @fieldset.find('[data-role="confirmation"]')
+      @confirmation_field = @confirmation_block.find('input')
+      @confirmation_field.bind 'input', @checkConfirmation
+      @submitter = @fieldset.parents('form').find('input[type="submit"]')
+      meter_holder = @fieldset.find('[data-role="meter"]')
+      if meter_holder.length
+        @meter = new PasswordMeter(meter_holder)
+      $.withZxcbvn =>
+        @checkPassword()
+        @password_field.bind 'input', @checkPassword
+      @set()
+
+    set: () =>
+      @unconfirmable()
+      @unsubmittable()
+
+    checkPassword: () =>
+      # no password is ok if password is not required
+      if @empty()
+        @unconfirmable()
+        @password_field.removeClass('valid invalid')
+        @meter?.clear()
+        unless @required()
+          @confirmation_field.attr('pattern', '').attr('required', false)
+
+      # but if password is given, it must be long enough and strong enough
+      else
+        password = @password_field.val()
+        ok = false
+        if password.length < 6
+          @meter?.tooShort()
+        else
+          result = zxcvbn(password)
+          ok = result.score >= 3
+          @meter?.display(result)
+        if ok
+          @password_field.removeClass('invalid').addClass('valid')
+          @confirmable()
+        else
+          @password_field.removeClass('valid').addClass('invalid')
+          @unconfirmable()
+
+    # ... and confirmed.
+    checkConfirmation: () =>
+      if @checkPassword() and @confirmed()
+        @confirmation_field.addClass('valid').removeClass('invalid')
+        @submittable()
+      else
+        @confirmation_field.removeClass('valid').addClass('invalid')
+        @unsubmittable()
+
+    required: () =>
+      !!@password_field.attr('required')
+
+    confirmed: () =>
+      @confirmation_field.val() is @password_field.val()
+
+    empty: () =>
+      @password_field.val() == ""
+
+    valid: () =>
+      @confirmed() and (not @empty() or not @required())
+
+    confirmable: () =>
+      @confirmation_field.attr('pattern', @password_field.val())
+      @confirmation_block.enable()
+
+    unconfirmable: () =>
+      @confirmation_block.disable()
+
+    submittable: () =>
+      @submitter.enable()
+
+    unsubmittable: () =>
+      @submitter.disable()
+
+
+  $.fn.password_meter = ->
+    @each ->
+      new PasswordMeter(@)
+    @
+
+  class PasswordMeter
+    constructor: (element) ->
+      @_container = $(element)
+      @_warnings = @_container.find('[data-role="warnings"]')
+      @_suggestions = @_container.find('[data-role="suggestions"]')
+      @_gauge = @_container.find('[data-role="gauge"]')
+      @_score = @_container.find('[data-role="score"]')
+      @_notes = @_container.find('[data-role="notes"]')
+
+    clear: () =>
+      @_warnings.text("")
+      @_container.removeClass('s0 s1 s2 s3 s4 acceptable')
+      @_notes.text("")
+
+    tooShort: () =>
+      @clear()
+      @_container.addClass('s0')
+      @_warnings.text("Password too short.")
+
+    display: (result) =>
+      if result.score < 3
+        warning = "Password not strong enough."
+        warning += " #{result.feedback.warning}." if result.feedback?.warning
+        @_warnings.text(warning)
+        @_suggestions.text(result.feedback?.suggestions)
+      else if result.score == 3
+        @_warnings.text("Password strength is adequate.")
+      else 
+        @_warnings.text("Password strength is good.")
+      @_score.text(result.score)
+      @_notes.text("Time to crack " + result.crack_times_display.offline_slow_hashing_1e4_per_second)
+      cssclass = "s#{result.score}"
+      cssclass += " acceptable" if result.score >= 3
+      @_container.removeClass('s0 s1 s2 s3 s4 acceptable').addClass(cssclass)
+
+
+
 
 
 

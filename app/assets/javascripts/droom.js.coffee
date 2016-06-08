@@ -3,6 +3,7 @@
 #= require droom/lib/underscore
 #= require droom/lib/jquery_ujs
 #= require droom/lib/ZeroClipboard
+#= require droom/lib/assets
 #= require droom/lib/swipe
 #= require droom/lib/jquery.animate-colors
 #= require droom/lib/jquery.deserialize
@@ -76,7 +77,7 @@ jQuery ($) ->
     @find_including_self('[data-role="imagepicker"]').image_picker()
     @find_including_self('[data-role="venuepicker"]').venue_picker()
     @find_including_self('[data-role="slug"]').slug_field()
-    
+
     # page widgets
     
     @find_including_self('#map').init_map()
