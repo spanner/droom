@@ -18,7 +18,7 @@
 - if membership
   - group = membership.group
 
-%li{id: "user_#{user.id}",{style: listyle, class: liclass, data: {refreshable: true, url: droom.user_path(user, view: 'listed', invitation_id: invitation ? invitation.id : nil)} }
+%li{id: "user_#{user.id}", style: listyle, class: liclass, data: {refreshable: true, url: droom.user_path(user, view: 'listed', invitation_id: invitation ? invitation.id : nil)} }
   %span.mugshot
     - if invitation
       - if can? :edit, invitation
