@@ -65,11 +65,13 @@ module Droom
     end
     
     def url_with_protocol
-      body =~ /^https?:\/\// ? body : "http://#{body}"
+      if body?
+        body =~ /^https?:\/\// ? body : "http://#{body}"
+      end
     end
 
     def url_without_protocol
-      body.sub(/^https?:\/\//, '')
+      body.sub(/^https?:\/\//, '') if body?
     end
 
     def as_search_result
