@@ -4,8 +4,8 @@ module Droom::Api
     before_filter :assert_local_request
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
-    load_resource find_by: :uid, class: "Droom::User"
-    
+    load_resource find_by: :uid, class: "Droom::User", except: [:authenticate]
+
     def index
       render json: @users
     end

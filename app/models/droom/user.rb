@@ -294,7 +294,7 @@ module Droom
     ## Mugshot
     #
     has_attached_file :image,
-                      :default_url => ActionController::Base.helpers.image_path("droom/missing/:style.png"),
+                      :default_url => nil,
                       :styles => {
                         :standard => "520x520#",
                         :icon => "32x32#",
