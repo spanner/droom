@@ -51,7 +51,7 @@ module Droom
     scope :not_private, -> { where("private <> 1 OR private IS NULL") }
     scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
     scope :not_public, -> { where("public <> 1 OR private = 1)") }
-    scope :not_private_nor_of_private_type, -> { joins(:event_type).where.not(private: true, event_types: {private: true}) }
+    scope :not_private_nor_of_private_type, -> { joins(:event_type).where.not(private: true, droom_event_types: {private: true}) }
 
     scope :after, -> datetime { where(['start > ?', datetime]) }
 
