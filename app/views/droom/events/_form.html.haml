@@ -50,6 +50,9 @@
         = f.hidden_field :calendar_id
 
     .buttons
+      = f.check_box :private
+      = f.label :private
+      %br
       = f.submit t(:save_event)
       %br
       = t :or

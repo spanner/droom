@@ -15,7 +15,7 @@ module Droom
 
     validates :file, :presence => true
     do_not_validate_attachment_file_type :file
-    
+
     scope :all_private, -> { where("private = 1") }
     scope :not_private, -> { where("private <> 1 OR private IS NULL") }
     scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
@@ -46,6 +46,10 @@ module Droom
     scope :by_date, -> { order("droom_documents.updated_at DESC, droom_documents.created_at DESC") }
 
     scope :latest, -> limit { order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit) }
+
+    def private?
+      !!read_attribute(:private) || (folder && folder.private?)
+    end
 
     def attach_to(holder)
       self.folder = holder.folder

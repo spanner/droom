@@ -47,11 +47,11 @@ module Droom
     # Events differ from other models in that they are visible to all unless marked 'private'.
     # The documents attached to them are only visible to all if marked 'public'.
     #
-    
     scope :all_private, -> { where("private = 1") }
     scope :not_private, -> { where("private <> 1 OR private IS NULL") }
     scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
     scope :not_public, -> { where("public <> 1 OR private = 1)") }
+    scope :not_private_nor_of_private_type, -> { joins(:event_type).where.not(private: true, event_types: {private: true}) }
 
     scope :after, -> datetime { where(['start > ?', datetime]) }
 
@@ -97,7 +97,7 @@ module Droom
         .group("droom_events.id")
     }
 
-    scope :matching, -> fragment { 
+    scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_events.name like :f OR droom_events.description like :f', :f => fragment)
     }
@@ -269,7 +269,11 @@ module Droom
       return false if self.private?
       return true
     end
-    
+
+    def private?
+      !!read_attribute(:private) || (event_type && event_type.private?)
+    end
+
     def has_anyone?
       invitations.any?
     end

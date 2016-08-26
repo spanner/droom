@@ -5,7 +5,7 @@ module Droom
 
     before_filter :get_folder, :except => [:index]
     load_and_authorize_resource :document, :class => Droom::Document, :through => :folder, :shallow => true
-    
+
     def index
       @documents = @documents.matching(params[:q]) unless params[:q].blank?
       @documents = paginated(@documents)
@@ -32,7 +32,7 @@ module Droom
     end
     
     def edit
-      render 
+      render
     end
     
     def update

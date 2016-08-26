@@ -1,31 +1,34 @@
 - folder ||= @folder
-- standalone ||= false
-- title ||= folder.name || folder.slug
-- open ||= false
-- limit ||= false
-- for_more ||= false
-- omit_menu ||= false
-- flat ||= false
-- stem ||= ""
-- narrow ||= false
-- length = narrow ? 32 : 96
-- url = droom.folder_path(folder)
 
-- if @folder
-  - open = true if folder == @folder || folder.ancestor_of?(@folder)
-- defer_contents ||= !open
-- cssclass = "folder"
-- cssclass << " open" if open
-- cssclass << " root" if folder.loose?
-- cssclass << " empty" unless folder.populated?
-- cssclass << " standalone" if standalone
-- cssclass << " auto" if folder.automatic? && can?(:edit, folder)
+- if !folder.private_or_holder_private? || can?(:read, :private_objects)
 
-%li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: true, url: url, label: folder.slug} }<
-  = link_to shorten(title, length), url, class: "folder"
-  - unless omit_menu
-    = action_menulink(folder)
-  - unless defer_contents
-    = render partial: "droom/folders/contents", locals: {folder: folder, limit: limit, for_more: for_more, flat: flat, narrow: narrow}
-  - unless omit_menu
-    = action_menu(folder)
+  - standalone ||= false
+  - title ||= folder.name || folder.slug
+  - open ||= false
+  - limit ||= false
+  - for_more ||= false
+  - omit_menu ||= false
+  - flat ||= false
+  - stem ||= ""
+  - narrow ||= false
+  - length = narrow ? 32 : 96
+  - url = droom.folder_path(folder)
+
+  - if @folder
+    - open = true if folder == @folder || folder.ancestor_of?(@folder)
+  - defer_contents ||= !open
+  - cssclass = "folder"
+  - cssclass << " open" if open
+  - cssclass << " root" if folder.loose?
+  - cssclass << " empty" unless folder.populated?
+  - cssclass << " standalone" if standalone
+  - cssclass << " auto" if folder.automatic? && can?(:edit, folder)
+
+  %li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: true, url: url, label: folder.slug} }<
+    = link_to shorten(title, length), url, class: "folder"
+    - unless omit_menu
+      = action_menulink(folder)
+    - unless defer_contents
+      = render partial: "droom/folders/contents", locals: {folder: folder, limit: limit, for_more: for_more, flat: flat, narrow: narrow}
+    - unless omit_menu
+      = action_menu(folder)

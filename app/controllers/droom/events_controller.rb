@@ -62,6 +62,9 @@ module Droom
       if Droom.separate_calendars?
         events = events.in_calendar(Droom::Calendar.default_calendar)
       end
+      unless can?(:read, :private_objects)
+        @events = @events.not_private_nor_of_private_type
+      end
       if params[:year].present?
         @year = params[:year].to_i
         @events = paginated(events.in_year(@year).order('start ASC'))

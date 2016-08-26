@@ -23,6 +23,7 @@ module Droom
     scope :not_private, -> { where("#{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
     scope :all_public, -> { where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
     scope :not_public, -> { where("#{table_name}.public <> 1 OR #{table_name}.private = 1)") }
+
     scope :by_name, -> { order("#{table_name}.name ASC") }
     scope :visible_to, -> user {
       if user
@@ -46,6 +47,10 @@ module Droom
       return true if user.has_folder?(self)
       return false if self.private?
       return true
+    end
+
+    def private?
+      !!read_attribute(:private) || (holder && holder.private?)
     end
 
     # A root folder is created automatically for each class that has_folders,

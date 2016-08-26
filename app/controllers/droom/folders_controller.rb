@@ -18,8 +18,8 @@ module Droom
   
     def show
       respond_with @folder do |format|
-        format.js { 
-          render :partial => 'droom/folders/folder' 
+        format.js {
+          render :partial => 'droom/folders/folder'
         }
       end
     end
