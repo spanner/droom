@@ -1,6 +1,6 @@
 - folder ||= @folder
 
-- if !folder.private_or_holder_private? || can?(:read, :private_objects)
+- if !folder.private? || can?(:read, :private_objects)
 
   - standalone ||= false
   - title ||= folder.name || folder.slug
