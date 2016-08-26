@@ -20,7 +20,7 @@ en:
         finish_time: "Finish (optional)"
         start_date: "Date"
         calendar_id: "Calendar"
-        private: "hidden unless attending"
+        private: "hidden from normal users"
       group:
         name: "Group name"
         description: "Notes"
