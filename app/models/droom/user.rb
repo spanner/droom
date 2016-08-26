@@ -546,6 +546,14 @@ module Droom
       #TODO
     end
 
+    def permit!(key)
+      permissions.where(slug: key).first_or_create
+    end
+
+    def unpermit!(key)
+      permissions.where(slug: key).destroy_all
+    end
+
     def permitted?(key)
       permission_codes.include?(key)
     end

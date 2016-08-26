@@ -1,5 +1,8 @@
 - calendar = Droom::Calendar.where(name: 'main').first_or_create
-- events ||= calendar.events.past.limit(5)
+- if can?(:read, :private_objects)
+  - events = calendar.events.past.limit(6)
+- else
+  - events = calendar.events.past.not_private_nor_of_private_type.limit(6)
 
 - if events.any?
   .divider
