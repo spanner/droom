@@ -2,6 +2,8 @@ require 'rubygems'
 require 'paperclip'
 require 'fog'
 require 'devise'
+require 'devise_security_extension'
+require 'devise_zxcvbn'
 require 'cancan'
 require 'kaminari'
 require 'icalendar'
@@ -27,6 +29,6 @@ module Droom
       Devise::UnlocksController.layout Droom.devise_layout
       Devise::PasswordsController.layout Droom.devise_layout
     end
-    
+
   end
 end

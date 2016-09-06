@@ -13,7 +13,9 @@ module Droom
 
     # Sets the cookie, referencing the given resource.id (e.g. User)
     def set(resource, opts={})
-      cookie_values = cookie_options.merge(opts).merge(:value => set_auth_values(resource))
+      cookie_string = set_auth_values(resource)
+      Rails.logger.warn "cookie_string -> #{cookie_string}"
+      cookie_values = cookie_options.merge(opts).merge(:value => cookie_string)
       @cookies[cookie_name] = cookie_values
     end
 
@@ -44,7 +46,7 @@ module Droom
     def set_since?(time)
       created_at && created_at >= time
     end
-    
+
     def store?
       false
     end
@@ -67,7 +69,7 @@ module Droom
 
     # Note that this is destructive to all previous authentication tokens even if the cookie is not eventually set.
     def set_auth_values(resource)
-      signer.encode [ resource.ensure_authentication_token, Time.now ]
+      signer.encode([resource.ensure_authentication_token, Time.now])
     end
 
     def cookie_options

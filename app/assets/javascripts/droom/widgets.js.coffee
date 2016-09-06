@@ -229,76 +229,6 @@ jQuery ($) ->
 
 
 
-
-  $.fn.password_form = ->
-    @each ->
-      new PasswordForm(@)
-
-  class PasswordForm
-    constructor: (element, opts) ->
-      @options = $.extend
-        length: 6
-      , opts
-      @form = $(element)
-      @password_field = @form.find('input.password')
-      @confirmation_field = @form.find('input.password_confirmation')
-      @fields = @form.find('input')
-      @confirmation_holder = @confirmation_field.parents("p")
-      @submit = @form.find('.submit')
-      @required = @password_field.attr('required')
-
-      @fields.bind 'keyup', @checkForm
-      @password_field.bind 'keyup', @checkPassword
-      @fields.bind 'invalid', @invalidField
-      @form.bind 'submit', @submitIfValid
-      
-      @fields.attr('data-strict', false)
-      @unsubmittable()
-      @confirmation_holder.hide()
-
-    checkForm: () =>
-      @fields.removeClass('invalid').addClass('valid')
-      if @form.get(0).checkValidity() then @submittable() else @unsubmittable()
-    
-    invalidField: () ->
-      # note thin arrow: `this` is the failing input element
-      field = $(@)
-      field.removeClass('valid')
-      if !field.attr('data-strict') and !field.val() or field.val() is ""
-        field.addClass('empty')
-      else
-        field.addClass("invalid")
-      
-    checkPassword: () =>
-      if @password_field.val() == "" and !@required
-        @confirmation_field.attr('pattern', '').attr('required', false)
-        @confirmation_holder.hide()
-      else
-        @confirmation_field.attr('pattern', @password_field.val()).attr('required', true)
-        if @password_field.get(0).checkValidity()
-          @confirmation_holder.show()
-        else
-          @confirmation_holder.hide()
-          
-    submittable: () =>
-      @submit.removeClass("unavailable")
-      @blocked = false
-
-    unsubmittable: () =>
-      @submit.addClass("unavailable")
-      @blocked = true
-
-    submitIfValid: (e) =>
-      @fields.attr('data-strict', true)
-      @checkForm()
-      if @blocked
-        e.preventDefault()
-      else
-        @submit.val('please wait')
-        @unsubmittable()
-
-
-
   $.fn.password_fieldset = ->
     @each ->
       new PasswordFieldset(@)
@@ -310,11 +240,14 @@ jQuery ($) ->
       @password_field = @fieldset.find('input[data-role="password"]')
       @confirmation_block = @fieldset.find('[data-role="confirmation"]')
       @confirmation_field = @confirmation_block.find('input')
-      @password_field.bind 'keyup', @checkPassword
-      @confirmation_field.bind 'keyup', @checkConfirmation
-      # The submitter is optional: if there is a submit button contained within this fieldset,
-      # we guess that it is a simple password form whose submittability is up to us.
-      @submitter = @fieldset.find('input[type="submit"]')
+      @confirmation_field.bind 'input', @checkConfirmation
+      @submitter = @fieldset.parents('form').find('input[type="submit"]')
+      meter_holder = @fieldset.find('[data-role="meter"]')
+      if meter_holder.length
+        @meter = new PasswordMeter(meter_holder)
+      $.withZxcbvn =>
+        @checkPassword()
+        @password_field.bind 'input', @checkPassword
       @set()
 
     set: () =>
@@ -322,35 +255,45 @@ jQuery ($) ->
       @unsubmittable()
 
     checkPassword: () =>
-      if @empty() and !@required
-        @confirmation_field.attr('pattern', '').attr('required', false)
+      # no password is ok if password is not required
+      if @empty()
         @unconfirmable()
+        @password_field.removeClass('valid invalid')
+        @meter?.clear()
+        unless @required()
+          @confirmation_field.attr('pattern', '').attr('required', false)
+
+      # but if password is given, it must be long enough and strong enough
       else
-        # this has been hacked down a bit to work in ie7 & 8
-        if @password_field.val().length >= 6
-          @password_field.addClass('valid').removeClass('invalid')
+        password = @password_field.val()
+        ok = false
+        if password.length < 6
+          @meter?.tooShort()
+        else
+          result = zxcvbn(password)
+          ok = result.score >= 3
+          @meter?.display(result)
+        if ok
+          @password_field.removeClass('invalid').addClass('valid')
           @confirmable()
         else
           @password_field.removeClass('valid').addClass('invalid')
           @unconfirmable()
-        @checkConfirmation()
 
+    # ... and confirmed.
     checkConfirmation: () =>
-      if @confirmed()
+      if @checkPassword() and @confirmed()
         @confirmation_field.addClass('valid').removeClass('invalid')
         @submittable()
-      else if @confirmation_field.val().length
+      else
         @confirmation_field.removeClass('valid').addClass('invalid')
-        @unsubmittable()
-      else 
-        @confirmation_field.removeClass('valid').removeClass('invalid')
         @unsubmittable()
 
     required: () =>
       !!@password_field.attr('required')
 
     confirmed: () =>
-      @confirmation_field.val() is @password_field.val() and @password_field.val().length >= 6
+      @confirmation_field.val() is @password_field.val()
 
     empty: () =>
       @password_field.val() == ""
@@ -359,6 +302,7 @@ jQuery ($) ->
       @confirmed() and (not @empty() or not @required())
 
     confirmable: () =>
+      @confirmation_field.attr('pattern', @password_field.val())
       @confirmation_block.enable()
 
     unconfirmable: () =>
@@ -369,6 +313,48 @@ jQuery ($) ->
 
     unsubmittable: () =>
       @submitter.disable()
+
+
+  $.fn.password_meter = ->
+    @each ->
+      new PasswordMeter(@)
+    @
+
+  class PasswordMeter
+    constructor: (element) ->
+      @_container = $(element)
+      @_warnings = @_container.find('[data-role="warnings"]')
+      @_suggestions = @_container.find('[data-role="suggestions"]')
+      @_gauge = @_container.find('[data-role="gauge"]')
+      @_score = @_container.find('[data-role="score"]')
+      @_notes = @_container.find('[data-role="notes"]')
+
+    clear: () =>
+      @_warnings.text("")
+      @_container.removeClass('s0 s1 s2 s3 s4 acceptable')
+      @_notes.text("")
+
+    tooShort: () =>
+      @clear()
+      @_container.addClass('s0')
+      @_warnings.text("Password too short.")
+
+    display: (result) =>
+      if result.score < 3
+        warning = "Password not strong enough."
+        warning += " #{result.feedback.warning}." if result.feedback?.warning
+        @_warnings.text(warning)
+        @_suggestions.text(result.feedback?.suggestions)
+      else if result.score == 3
+        @_warnings.text("Password strength is adequate.")
+      else 
+        @_warnings.text("Password strength is good.")
+      @_score.text(result.score)
+      @_notes.text("Time to crack " + result.crack_times_display.offline_slow_hashing_1e4_per_second)
+      cssclass = "s#{result.score}"
+      cssclass += " acceptable" if result.score >= 3
+      @_container.removeClass('s0 s1 s2 s3 s4 acceptable').addClass(cssclass)
+
 
 
 
@@ -415,13 +401,22 @@ jQuery ($) ->
   #
   $.fn.suggestion_form = (options) ->
     @each ->
-      new CaptiveForm @, 
+      new CaptiveForm @,
         fast: true
         auto: false
         into: "#suggestion_box"
         history: false
     @
-  
+
+  $.fn.faceting_search = (options) ->
+    defaults = 
+      fast: ".facet"
+      history: true
+      threshold: 4
+    @each ->
+      new CaptiveForm @, _.extend(defaults, options)
+    @
+
 
   class CaptiveForm
     @default_options: {
@@ -449,10 +444,10 @@ jQuery ($) ->
         on_cancel: @cancel
         on_success: @capture
       @submit_soon = _.debounce(@submit, 500)
-      @bindInputs() if @_options.fast
+      @bindInputs(@_options.fast) if @_options.fast
       @_form.bind 'refresh', @changed
       if @_options.auto
-        @submit() 
+        @submit()
       else
         @bindLinks()
       if @_historical
@@ -463,15 +458,17 @@ jQuery ($) ->
       @_container.find('a.cancel').click(@revert)
       @_container.find('.pagination a').click @page
 
-    bindInputs: () =>
-      @_form.find('input[type="search"]').bind 'keyup', @changed
-      @_form.find('input[type="search"]').bind 'change', @changed
-      # @_form.find('input[type="search"]').bind 'click', @changed  # for the clear-box control in webkit search fields
-      @_form.find('input[type="text"]').bind 'keyup', @keyed
-      @_form.find('input[type="text"]').bind 'change', @changed
-      @_form.find('select').bind 'change', @changed
-      @_form.find('input[type="radio"]').bind 'click', @clicked
-      @_form.find('input[type="checkbox"]').bind 'click', @clicked
+    bindInputs: (selector) =>
+      if typeof selector is "string"
+        @_form.find(selector).bind 'change', @changed
+      else
+        @_form.find('input[type="search"]').bind 'keyup', @changed
+        @_form.find('input[type="search"]').bind 'change', @changed
+        @_form.find('input[type="text"]').bind 'keyup', @keyed
+        @_form.find('input[type="text"]').bind 'change', @changed
+        @_form.find('select').bind 'change', @changed
+        @_form.find('input[type="radio"]').bind 'click', @clicked
+        @_form.find('input[type="checkbox"]').bind 'click', @clicked
 
     keyed: (e) =>
       k = e.which

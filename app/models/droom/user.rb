@@ -6,7 +6,7 @@ module Droom
 
     has_many :preferences, :foreign_key => "created_by_id"
     accepts_nested_attributes_for :preferences, :allow_destroy => true
-    
+
     ## Authentication
     #
     devise :database_authenticatable,
@@ -15,12 +15,20 @@ module Droom
            :trackable,
            :confirmable,
            :rememberable,
-           :reconfirmable => false
-    
+           :session_limitable,
+           :timeoutable,
+           :zxcvbnable,
+           :lockable,
+           reconfirmable: false,
+           lock_strategy: :failed_attempts,
+           maximum_attempts: 10,
+           unlock_strategy: :both,
+           unlock_in: 10.minutes
+
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
     after_save :send_confirmation_if_directed
-    after_save :confirmed_if_password_set
+    # after_save :confirmed_if_password_set
 
     # People are often invited into the system in batches or after offline contact.
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
@@ -35,10 +43,14 @@ module Droom
     attr_accessor :defer_confirmation, :send_confirmation, :confirming
 
     # send_confirmation_notification? is called by devise's immediate confirmation mechanism.
-    # If the defer_confirmation flag has been set, we postpone.
+    # If the defer_confirmation flag has been set as usual, we postpone.
     #
     def send_confirmation_notification?
-      super && !defer_confirmation?
+      super && really_send_confirmation?
+    end
+
+    def really_send_confirmation?
+      !defer_confirmation?
     end
 
     def defer_confirmation!
@@ -95,7 +107,7 @@ module Droom
     # Tell devise to tell warden to salt the session cookie with our session_id.
     # If the session_id changes, eg due to remote logout, the session will no longer succeed in describing a user.
     def authenticatable_salt
-      session_id
+      session_id.presence || reset_session_id!
     end
 
     ## Auth tokens
@@ -262,7 +274,7 @@ module Droom
     ## Mugshot
     #
     has_attached_file :image,
-                      :default_url => ActionController::Base.helpers.image_path("droom/missing/:style.png"),
+                      :default_url => nil,
                       :styles => {
                         :standard => "520x520#",
                         :icon => "32x32#",
@@ -271,12 +283,19 @@ module Droom
 
     do_not_validate_attachment_file_type :image
 
+    def image_url(style=:original, decache=true)
+      if image?
+        url = image.url(style, decache)
+        url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
+      end
+    end
+
     def thumbnail
-      image.url(:thumb) if image?
+      image_url(:thumb)
     end
     
     def icon
-      image.url(:icon) if image?
+      image_url(:icon)
     end
  
  

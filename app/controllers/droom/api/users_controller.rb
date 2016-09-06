@@ -4,8 +4,8 @@ module Droom::Api
     before_filter :assert_local_request
     before_filter :get_users, only: [:index]
     before_filter :find_or_create_user, only: [:create]
-    load_resource find_by: :uid, class: "Droom::User"
-    
+    load_resource find_by: :uid, class: "Droom::User", except: [:authenticate]
+
     def index
       render json: @users
     end
@@ -26,7 +26,7 @@ module Droom::Api
       end
     end
   
-    # deauth is used to achieve single-sign-out. It changes the auth token and session id
+    # Deauth is used to achieve single-sign-out. It changes the auth token and session id
     # so that neither the data room session cookie nor the domain auth cookie can identify a user.
     #
     def deauthenticate
@@ -70,7 +70,10 @@ module Droom::Api
         end
       end
       params = user_params
-      @user ||= Droom::User.create(user_params.merge(defer_confirmation: true))
+      # remotely created users are not usually meant to access the data room, but can set send_confirmation if that's what they want.
+      params[:defer_confirmation] = true
+      Rails.logger.warn "---> creating user with #{params.inspect}"
+      @user ||= Droom::User.create(params)
     end
 
     def get_users
@@ -85,7 +88,7 @@ module Droom::Api
     end
 
     def user_params
-      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image)
+      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :affiliation, :email, :phone, :description, :address, :post_code, :country_code, :mobile, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image)
     end
 
   end

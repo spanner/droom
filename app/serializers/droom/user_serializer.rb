@@ -1,14 +1,15 @@
 require 'active_model_serializers'
 
 class Droom::UserSerializer < ActiveModel::Serializer
-  attributes :uid, 
-             :authentication_token, 
+  attributes :uid,
+             :authentication_token,
              :title,
              :given_name,
              :family_name,
              :chinese_name,
              :colloquial_name,
              :honours,
+             :affiliation,
              :email,
              :phone,
              :mobile,
@@ -31,9 +32,9 @@ class Droom::UserSerializer < ActiveModel::Serializer
   def images
     if object.image?
       {
-        icon: object.image.url(:icon),
-        thumbnail: object.image.url(:thumbnail),
-        standard: object.image.url(:standard)
+        icon: object.image_url(:icon),
+        thumbnail: object.image_url(:thumbnail),
+        standard: object.image_url(:standard)
       }
     else
       {

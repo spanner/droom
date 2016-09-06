@@ -5,11 +5,13 @@ module Droom
     layout :no_layout_if_pjax
     before_action :set_view, only: [:show, :edit, :update]
     before_action :self_unless_admin, only: [:edit, :update]
+    skip_before_action :request_password_if_not_set, only: [:set_password]
     load_and_authorize_resource except: [:set_password]
 
     def index
-      @users = @users.in_name_order
-      @users = @users.matching(params[:q]) if params[:q].present?
+      @users = @users.in_name_order.include(:permissions)
+      @users = @users.matching(params[:q]) unless params[:q].blank?
+      @users = @users.where(email: params[:email]) unless params[:email].blank?
       @users = paginated(@users, 50)
       respond_with @users do |format|
         format.js { render :partial => 'droom/users/users' }
@@ -44,9 +46,9 @@ module Droom
     end
 
     def create
-      # block the automatic devise confirmation message
+      # add marker to block the automatic devise confirmation message
       @user.defer_confirmation!
-      # then send confirmation once the user is saved and permissions are known
+      # add marker to send confirmation once the user is saved and permissions are known
       @user.send_confirmation!
       @user.update_attributes(user_params)
       respond_with @user
@@ -108,6 +110,7 @@ module Droom
         :given_name,
         :chinese_name,
         :honours,
+		affiliation,
         :email,
         :password,
         :password_confirmation,

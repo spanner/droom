@@ -459,6 +459,7 @@ form.user
   p.names
     input[type="text"]
       width: 100%
+      box-sizing: border-box
     span.title
       display: inline-block
       vertical-align: top
@@ -474,6 +475,19 @@ form.user
       vertical-align: top
       width: 64px
       margin-right: 0
+  .contacts
+    overflow: hidden
+    input[type="text"], input[type="email"]
+      width: 100%
+      box-sizing: border-box
+    p.email
+      width: 442px
+    p.phone, p.mobile
+      float: left
+      width: 188px
+      margin-right: 10px
+      &:last-child
+        margin-right: 0
   p.organisation
     clear: left
     select
@@ -523,11 +537,11 @@ form.group, form.service, form.permission
 
 p.set_password
   span.col
-    +column(180px)
+    +column(220px)
     label:
       display: block
   span.col.button
-    +column(80px)
+    +column(10px)
 
 h2.name
   font-size: 2em
@@ -752,7 +766,7 @@ table.toggles
   tr.rotated
     td, th
       position: relative
-      height: 120px
+      height: 90px
       width: 32px
       text-align: center
       a.menu
@@ -766,12 +780,12 @@ table.toggles
     span.rotated
       display: inline-block
       position: absolute
-      top: 120px
+      top: 90px
       left: 10px
       line-height: 1
       white-space: nowrap
-      transform-origin: top left
       transform: rotate(-90deg)
+      transform-origin: top left
   th
     font-weight: normal
     a, a:visited
@@ -1648,7 +1662,7 @@ ul.people
       margin-right: 9px
       margin-top: 11px
       background:
-        color: $mid
+        color: $pale
         repeat: no-repeat
         position: center center
         size: cover
