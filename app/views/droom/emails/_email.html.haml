@@ -2,4 +2,5 @@
 - cssclass << email.address_type.slug if email.address_type
 
 %li{class: cssclass}
-  = email.email
+  = mail_to email.email, truncate(email.email, length: 20)
+  

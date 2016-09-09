@@ -1,3 +1,5 @@
+require 'digest'
+
 module Droom
   class User < ActiveRecord::Base
     validates :family_name, :presence => true
@@ -72,10 +74,6 @@ module Droom
       send_confirmation && send_confirmation != "false"
     end
 
-    def active_for_authentication?
-      true
-    end
-    
     # Only invoke password-confirmation validation when a password is being set.
     #
     def password_required?
@@ -313,57 +311,52 @@ module Droom
     
     # The only difficulty is to support devise login using any known email address.
     #
-    scope :find_by_linked_email, -> email {
+    scope :from_email, -> email {
       joins(:emails).where(droom_emails: {email: email})
     }
 
-    def self.find_first_by_auth_conditions(warden_conditions)
-      conditions = warden_conditions.dup
-      if email = conditions.delete(:email)
-        # two stages because a bulky outer join would be required.
-        find_by(email: email) || find_by_linked_email(email).first
-      else
-        super
-      end
+    def self.find_for_database_authentication(conditions)
+      from_email(conditions.first).first
     end
-    
+
+    def self.active_for_authentication?
+      emails.any?
+    end
+
     def self.find_by_any_email(emails)
-      find_by_linked_email(emails).first
+      from_email(emails).first
     end
 
-    # While we are in transition, address book getters will defer to columns on the user model.
-    #
     def email
-      unless email = read_attribute(:email)
-        email = default_email.email if default_email
+      if email_record = emails.by_preference.first
+        email_record.email
       end
-      email
-    end
-    
-    def default_email
-      emails.default.first
     end
 
-    def phone
-      unless phone = read_attribute(:phone)
-        phone = default_phone.phone if default_phone
-      end
-      phone
+    def email?
+      email.present?
     end
 
-    def default_phone
-      phones.default.first
+    def email=(email)
+      if email && email.present?
+        if persisted?
+          emails.create(email: email) unless emails.where(email: email).any?
+        else
+          self.pending_email = email
+        end
+      end
     end
 
     def address
-      unless address = read_attribute(:address)
-        address = default_address.address if default_address
+      if address_record = addresses.by_preference.first
+        address_record.address
       end
-      address
     end
 
-    def default_address
-      addresses.default.first
+    def phone
+      if phone_record = phones.by_preference.first
+        phone_record.phone
+      end
     end
 
 

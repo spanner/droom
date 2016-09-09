@@ -4,7 +4,7 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     before_action :set_view, only: [:show, :edit, :update]
-    before_action :self_unless_admin, only: [:edit, :update]
+    # before_action :self_unless_admin, only: [:edit, :update]
     skip_before_action :request_password_if_not_set, only: [:set_password]
     load_and_authorize_resource except: [:set_password]
 
@@ -110,7 +110,7 @@ module Droom
         :given_name,
         :chinese_name,
         :honours,
-		affiliation,
+        :affiliation,
         :email,
         :password,
         :password_confirmation,
@@ -148,7 +148,7 @@ module Droom
     end
 
     def self_unless_admin
-      @user = current_user unless @user && @user.admin?
+      @user = current_user unless @user && current_user.admin?
     end
   end
 end
