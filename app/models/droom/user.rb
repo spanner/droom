@@ -30,7 +30,6 @@ module Droom
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
     after_save :send_confirmation_if_directed
-    # after_save :confirmed_if_password_set
 
     # People are often invited into the system in batches or after offline contact.
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
@@ -288,6 +287,16 @@ module Droom
       end
     end
 
+    def image_url=(address)
+      if address.present?
+        begin
+          self.image = URI(address)
+        rescue OpenURI::HTTPError => e
+          Rails.logger.warn "Cannot read image url #{address} because: #{e}. Skipping."
+        end
+      end
+    end
+
     def thumbnail
       image_url(:thumb)
     end
@@ -328,36 +337,85 @@ module Droom
     end
 
     def email
-      if email_record = emails.by_preference.first
+      if email_record = emails.preferred.first
         email_record.email
       end
     end
 
     def email?
-      email.present?
+      emails.any?
     end
 
     def email=(email)
+      add_email(email)
+    end
+
+    def add_email(email, address_type=nil)
       if email && email.present?
         if persisted?
-          emails.create(email: email) unless emails.where(email: email).any?
+          emails.where(email: email).first_or_create(address_type: address_type)
         else
-          self.pending_email = email
+          self.emails.build(email: email, address_type: address_type)
         end
       end
     end
 
     def address
-      if address_record = addresses.by_preference.first
+      if address_record = addresses.preferred.first
         address_record.address
       end
     end
 
+    def address?
+      addresses.any?
+    end
+
+    def address=(address)
+      add_address(address)
+    end
+
+    def correspondence_address=(address)
+      add_address(address, AddressType.where(name: "Correspondence").first_or_create)
+    end
+
+    def add_address(address, address_type=nil)
+      if address && address.present?
+        if persisted?
+          self.addresses.where(address: address).first_or_create(address_type: address_type)
+        else
+          self.phones.build(address: address, address_type: address_type)
+        end
+      end
+    end
+
     def phone
-      if phone_record = phones.by_preference.first
+      if phone_record = phones.preferred.first
         phone_record.phone
       end
     end
+
+    def phone?
+      phones.any?
+    end
+
+    def phone=(phone)
+      add_phone(phone)
+    end
+
+    def mobile=(phone)
+      add_phone(phone, AddressType.where(name: "Mobile").first_or_create)
+    end
+
+    def add_phone(phone, address_type=nil)
+      if phone && phone.present?
+        if persisted?
+          self.phones.where(phone: phone).first_or_create(address_type: address_type)
+        else
+          self.phones.build(phone: phone, address_type: address_type)
+        end
+      end
+    end
+
 
 
     ## Suggestion box
@@ -604,8 +662,6 @@ module Droom
     #
     has_many :scraps, :foreign_key => "created_by_id"
     has_many :documents, :foreign_key => "created_by_id"
-
-
 
 
   protected

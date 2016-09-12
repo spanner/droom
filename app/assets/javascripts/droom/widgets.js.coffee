@@ -243,6 +243,9 @@ jQuery ($) ->
       @confirmation_field.bind 'input', @checkConfirmation
       @submitter = @fieldset.parents('form').find('input[type="submit"]')
       meter_holder = @fieldset.find('[data-role="meter"]')
+      
+      console.log "required password?", @required()
+      
       if meter_holder.length
         @meter = new PasswordMeter(meter_holder)
       $.withZxcbvn =>
@@ -252,7 +255,7 @@ jQuery ($) ->
 
     set: () =>
       @unconfirmable()
-      @unsubmittable()
+      @unsubmittable() if @required()
 
     checkPassword: () =>
       # no password is ok if password is not required

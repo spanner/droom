@@ -2,4 +2,8 @@
 - cssclass << address.address_type.slug if address.address_type
 
 %li{class: cssclass}
-  = address.address
+  %svg.icon.small
+    - icon = address.address_type ? address.address_type.slug : "unknown"
+    %use{"xlink:href" => "#address_type_#{icon}_symbol"}
+  %span.contact
+    = address.address

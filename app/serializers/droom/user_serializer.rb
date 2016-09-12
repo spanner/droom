@@ -10,14 +10,13 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :colloquial_name,
              :honours,
              :affiliation,
-             :email,
-             :phone,
-             :mobile,
+             :emails,
+             :phones,
+             :addresses,
              :country_code,
              :images,
              :confirmed,
              :permission_codes,
-             :person_uid,
              :unconfirmed_email,
              :password_set
 
@@ -27,6 +26,18 @@ class Droom::UserSerializer < ActiveModel::Serializer
   
   def password_set
     object.password_set?
+  end
+
+  def emails
+    object.emails.by_preference.map(&:email)
+  end
+
+  def phones
+    object.phones.by_preference.map(&:phone)
+  end
+
+  def addresses
+    object.addresses.by_preference.map(&:address)
   end
 
   def images

@@ -13,8 +13,12 @@
     %p
       = t :account_preamble
 
+    %p
+      = t :account_emails
     = render "droom/users/edit/emails", f: f, user: user
 
+    %p
+      = t :account_password
     = render "droom/users/edit/password_fields", f: f, user: user
     
     - unless @user.confirmed?

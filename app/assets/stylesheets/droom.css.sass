@@ -535,13 +535,88 @@ form.group, form.service, form.permission
       font-size: 1.5em
       font-weight: bold
 
-p.set_password
+p.manage_password
   span.col
-    +column(220px)
+    +column(230px)
     label:
       display: block
+    &.password_quality
+      +column(38px)
+      span.meter
+        width: 36px
+        height: 36px
+        border: 1px solid $verypale
+      &.acceptable
+        span.meter
+          &:after
+            left: 12px
+
+p.set_password
+  +clearfix
+  span.col
+    +column(320px, 20px)
   span.col.button
-    +column(10px)
+    +column(200px)
+    input[type="submit"]
+      padding: 12px 20px
+
+.password_quality
+  clear: left
+  min-height: 3em
+  color: $red
+  span.meter
+    background-color: transparent
+  &.s0
+    color: $red
+    span.meter
+      background-color: $red
+  &.s1
+    color: orange
+    span.meter
+      background-color: orange
+  &.s2
+    color: #c7d434
+    span.meter
+      background-color: #c7d434
+  &.s3
+    color: #8dc63d
+    span.meter
+      background-color: #8dc63d
+  &.s4
+    color: $green
+    span.meter
+      background-color: $green
+  &.acceptable
+    span.meter
+      &:after
+        display: block
+        content: "✓"
+        color: white
+        position: absolute
+        top: 0
+        left: 9px
+
+  span.meter, span.instructions
+    display: inline-block
+    float: left
+    vertical-align: top
+    height: 32px
+    line-height: 36px
+
+  span.meter
+    width: 32px
+    margin-right: 8px
+    background-color: white
+    border-radius: 50%
+    position: relative
+
+  span.notes
+    display: block
+    clear: left
+    color: $mid
+    +small
+    padding-left: 40px
+
 
 h2.name
   font-size: 2em
