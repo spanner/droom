@@ -19,7 +19,7 @@
 
     %p
       = t :account_password
-    = render "droom/users/edit/password_fields", f: f, user: user
+    = render "droom/users/edit/admin_password_fields", f: f, user: user
     
     - unless @user.confirmed?
       %p.confirmation
