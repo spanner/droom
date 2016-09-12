@@ -9,7 +9,7 @@
     %fieldset.repeating
       %p.twocol.reversed
         %span.col>
-          = f.text_field :phone, :placeholder => t("placeholders.phone.phone"), required: true
+          = f.text_field :phone, :placeholder => t("placeholders.phone.phone")
         %span.col.last>
           = f.select :address_type_id, Droom::AddressType.for_selection(:phone)
 

@@ -514,15 +514,7 @@ module Droom
     def title_if_it_matters
       title unless title_ordinary?
     end
-  
-    def title
-      title = read_attribute(:title)
-      if title.blank?
-        title = (gender == 'f') ? 'Ms' : 'Mr'
-      end
-      title
-    end
-    
+
     # This should be a reasonable formal first-person form of address.
     #
     def formal_name

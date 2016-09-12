@@ -1,7 +1,9 @@
 - user ||= @user
+- user.emails.build(address_type: Droom::AddressType.default) unless user.emails.any?
 
 #email_fields.nested_set
   = render :partial => 'droom/emails/fields', :collection => user.emails
 
-%p.action
-  = link_to t(:add_email), droom.new_user_email_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#email_fields'}
+- unless user.new_record?
+  %p.action
+    = link_to t(:add_email), droom.new_user_email_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#email_fields'}
