@@ -9,10 +9,10 @@ module Droom
     load_and_authorize_resource except: [:set_password]
 
     def index
-      @users = @users.in_name_order.include(:permissions)
+      @users = @users.in_name_order.includes(:permissions)
       @users = @users.matching(params[:q]) unless params[:q].blank?
       @users = @users.where(email: params[:email]) unless params[:email].blank?
-      @users = paginated(@users, 50)
+      @users = paginated(@users, 10)
       respond_with @users do |format|
         format.js { render :partial => 'droom/users/users' }
         format.vcf { render :vcf => @users.map(&:to_vcf) }
