@@ -30,5 +30,5 @@
     %span.name
       = link_to truncate(user.colloquial_name, length: 32), user_url(user), data: {action: "popup"}
       = action_menulink(user)
-    = render "droom/users/show/contacts", user: user
+    = mail_to user.email
     = action_menu(user, event: event, group: group)
