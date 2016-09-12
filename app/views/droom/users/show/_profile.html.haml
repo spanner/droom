@@ -1,4 +1,8 @@
 - user ||= @user
+- if user.image?
+  - mugstyle =  "background-image: url(#{user.image.url('thumb')})"
+- else
+  - mugstyle =  ""
 
 #user
   .header
@@ -7,7 +11,7 @@
       = t :profile
     
   .user
-    .mugshot.full{:style => "background-image: url(#{user.image.url('thumb')})"}
+    .mugshot.full{style: mugstyle}
     .detail
       %h3
         = user.colloquial_name

@@ -31,4 +31,8 @@
       = link_to truncate(user.colloquial_name, length: 32), user_url(user), data: {action: "popup"}
       = action_menulink(user)
     = mail_to user.email
+    - if user.phone?
+      %br
+      = user.phone
+    
     = action_menu(user, event: event, group: group)
