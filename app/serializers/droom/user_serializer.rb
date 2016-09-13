@@ -10,8 +10,11 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :colloquial_name,
              :honours,
              :affiliation,
+             :email,
              :emails,
+             :phone,
              :phones,
+             :address,
              :addresses,
              :country_code,
              :images,
@@ -32,12 +35,24 @@ class Droom::UserSerializer < ActiveModel::Serializer
     object.emails.by_preference.map(&:email)
   end
 
+  def email
+    emails.first
+  end
+
   def phones
     object.phones.by_preference.map(&:phone)
   end
 
+  def phone
+    phones.first
+  end
+
   def addresses
     object.addresses.by_preference.map(&:address)
+  end
+
+  def address
+    addresses.first
   end
 
   def images
