@@ -428,6 +428,14 @@ module Droom
       where("droom_users.#{col} LIKE :f", :f => "%#{fragment}%")
     }
 
+    scope :matching_name, -> fragment {
+      where("droom_users.family_name LIKE :f", :f => "%#{fragment}%")
+    }
+
+    scope :matching_email, -> fragment {
+      joins(:emails).where("droom_emails.email LIKE :f", :f => "%#{fragment}%")
+    }
+
     def as_suggestion
       {
         :type => 'person',
