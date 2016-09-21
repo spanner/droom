@@ -22,6 +22,10 @@ module Droom::Concerns::AddressBookProperty
       where.not(id: thing.id)
     }
 
+    scope :of_type, -> name {
+      joins(:address_type).where(droom_address_types: {name: name})
+    }
+
   end
 
   def undefault_others
