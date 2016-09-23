@@ -324,8 +324,23 @@ module Droom
       joins(:emails).where(droom_emails: {email: email})
     }
 
-    def self.find_for_database_authentication(conditions)
-      from_email(conditions.first).first
+    def self.find_for_authentication(tainted_conditions)
+      from_email(tainted_conditions.first).first
+    end
+
+    # Confirmable and Recoverable both use the same resource-retrieval call so it is
+    # not easy to to override find-by-email without also affecting find-by-confirmation_token.
+    # Instead we just override the reset-sender.
+    # NB. for useful-failure purposes we have to return a new user object with errors set.
+    #
+    def self.send_reset_password_instructions(attributes)
+      if user = from_email(attributes[:email])
+        user.send_reset_password_instructions
+      else
+        user = new(email: attributes[:email])
+        user.errors.add(:email, :not_found)
+      end
+      user
     end
 
     def self.active_for_authentication?
