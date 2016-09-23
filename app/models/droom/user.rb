@@ -333,8 +333,8 @@ module Droom
     # Instead we just override the reset-sender.
     # NB. for useful-failure purposes we have to return a new user object with errors set.
     #
-    def self.send_reset_password_instructions(attributes)
-      if user = from_email(attributes[:email])
+    def self.send_reset_password_instructions(attributes={})
+      if user = from_email(attributes[:email]).first
         user.send_reset_password_instructions
       else
         user = new(email: attributes[:email])
