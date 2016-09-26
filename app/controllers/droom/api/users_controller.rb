@@ -81,6 +81,7 @@ module Droom::Api
       @users = @users.where(person_uid: params[:person_uid]) if params[:person_uid].present?
       @users = @users.matching_name(params[:name_q]) if params[:name_q].present?
       @users = @users.matching_email(params[:email_q]) if params[:email_q].present?
+      @users = @users.from_email(params[:email]) unless params[:email].blank?
       @users = @users.matching(params[:q]) if params[:q].present?
       @users = @users.limit(params[:limit]) if params[:limit].present?
       @users
