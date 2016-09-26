@@ -324,8 +324,8 @@ module Droom
       joins(:emails).where(droom_emails: {email: email})
     }
 
-    def self.find_for_authentication(tainted_conditions)
-      from_email(tainted_conditions.first).first
+    def self.find_for_authentication(tainted_conditions={})
+      from_email(tainted_conditions[:email]).first
     end
 
     # Confirmable and Recoverable both use the same resource-retrieval call so it is
@@ -343,7 +343,7 @@ module Droom
       user
     end
 
-    def self.active_for_authentication?
+    def active_for_authentication?
       emails.any?
     end
 
