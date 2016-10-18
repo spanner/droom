@@ -50,7 +50,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "vcard"
   s.add_dependency "rdiscount"
-  s.add_dependency "yomu"
   s.add_dependency "dropbox-sdk"
 
   s.add_dependency "mail_form"

@@ -1,6 +1,5 @@
 require 'open-uri'
 require 'dropbox_sdk'
-require 'yomu'
 
 module Droom
   class Document < ActiveRecord::Base
@@ -123,9 +122,9 @@ module Droom
 
     ## Filing
     #
-    # Some installations have different buckets for various purposes.
+    # Some installations like to use different buckets for various purposes.
     # Override `file_bucket` if you want to choose a bucket at runtime.
-    
+    #
     def file_bucket
       Settings.aws.asset_bucket
     end
