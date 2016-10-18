@@ -9,14 +9,15 @@ module Droom
     belongs_to :scrap, :dependent => :destroy
     has_many :dropbox_documents
 
-    has_attached_file :file, fog_directory: :file_bucket
+    has_attached_file :file,
+                      fog_directory: -> a { a.instance.file_bucket }
 
     after_save :update_dropbox_documents
     after_destroy :mark_dropbox_documents_deleted
 
     validates :file, :presence => true
     do_not_validate_attachment_file_type :file
-    
+
     scope :all_private, -> { where("private = 1") }
     scope :not_private, -> { where("private <> 1 OR private IS NULL") }
     scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
