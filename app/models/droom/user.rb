@@ -489,6 +489,7 @@ module Droom
     def informal_name
       [given_name, family_name].join(' ')
     end
+    alias :name :informal_name
 
     def formal_name
       if title_ordinary?
@@ -623,8 +624,7 @@ module Droom
     end
 
     def send_confirmation_if_directed
-      unless confirming
-        # a slightly rubbish way to avoid the double hit caused by devise updating the confirmation token.
+      unless confirming # avoid the double hit caused by devise updating the confirmation token.
         self.confirming = true
         self.send_confirmation_instructions if email? && send_confirmation?
       end

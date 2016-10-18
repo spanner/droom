@@ -81,18 +81,22 @@ module Droom
     ## Confirmation
     #
     # This is the destination of the password-setting form that intervenes when a new user arrives who has not yet
-    # set a password. Normally this would only happen when they hit the confirmation link, which checks the account 
+    # set a password. Normally this would only happen when they hit the confirmation link, which checks the account
     # then redirects to the dashboard.
     #
     def set_password
-      current_user.update_attributes(password_params.merge(confirmed: true))
-      sign_in current_user, :bypass => true
-      if current_user.data_room_user?
-        flash[:notice] = t(:password_set)
-        redirect_to params[:destination].presence || droom.dashboard_url
+      current_user.assign_attributes(password_params.merge(confirmed: true))
+      if current_user.save
+        sign_in current_user, :bypass => true
+        if current_user.data_room_user?
+          flash[:notice] = t(:password_set)
+          redirect_to params[:destination].presence || droom.dashboard_url
+        else
+          @omit_navigation = true
+          render
+        end
       else
-        @omit_navigation = true
-        render
+        render template: "/droom/users/request_password"
       end
     end
 
