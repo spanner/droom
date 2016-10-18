@@ -8,7 +8,8 @@ module Droom
     belongs_to :folder
     belongs_to :scrap, :dependent => :destroy
     has_many :dropbox_documents
-    has_attached_file :file
+
+    has_attached_file :file, fog_directory: :file_bucket
 
     after_save :update_dropbox_documents
     after_destroy :mark_dropbox_documents_deleted
@@ -117,6 +118,15 @@ module Droom
       dropbox_documents.each do |dd|
         dd.update
       end
+    end
+
+    ## Filing
+    #
+    # Some installations have different buckets for various purposes.
+    # Override `file_bucket` if you want to choose a bucket at runtime.
+    
+    def file_bucket
+      Settings.aws.asset_bucket
     end
 
   end

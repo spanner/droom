@@ -22,7 +22,7 @@ jQuery ($) ->
       @_control.attr('data-type', 'html')
       @_fily = false
       
-      # catch the standard jquery_ujs events and route them to our status handlers, 
+      # catch the standard jquery_ujs events and route them to our status handlers,
       @_control.on 'ajax:beforeSend', @pend
       @_control.on 'ajax:error', @fail
       @_control.on 'ajax:success', @receive
@@ -31,15 +31,13 @@ jQuery ($) ->
 
       # which trigger our own more fine-grained remote:* events
       @_control.on 'remote:prepare', @_options.on_prepare
-      # we are hitting this directly so that the return value has effect:
-      # @_control.on 'remote:begin', @_options.on_request
       @_control.on 'remote:progress', @_options.on_progress
       @_control.on 'remote:error', @_options.on_error
       @_control.on 'remote:success', @_options.on_success
       @_control.on 'remote:complete', @_options.on_complete
       @_control.on 'remote:cancel', @_options.on_cancel
       @activate()
-        
+
     activate: () => 
       @_control.find('a.cancel').click @cancel
       @_control.trigger 'remote:prepare'
@@ -49,7 +47,6 @@ jQuery ($) ->
       event.preventDefault()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_control.addClass('waiting')
-      # @_control.trigger 'remote:begin', xhr, settings
       @_options.on_request?(xhr, settings) ? true
 
     gotFiles: (event, elements) =>
@@ -58,16 +55,16 @@ jQuery ($) ->
 
     progress: (e, prog) =>
       @_control.trigger "remote:progress", prog
-    
+
     fail: (event, xhr, status) =>
       event.stopPropagation()
       @_control.removeClass('waiting').addClass('erratic')
-      @_control.trigger 'remote:error', xhr
+      @_control.trigger 'remote:error', xhr, status
       @_control.trigger 'remote:complete', status
 
     # Note that there is no special provision here for a server side failure that results in a success response:
     # eg if validation fails and we get the form back again, this Remote will be considered successful and disappear.
-    # In that case the function which triggered the remote operation is expected to do the right thing with the 
+    # In that case the function which triggered the remote operation is expected to do the right thing with the
     # returned html. Usually in that kind of situation you'd be using a popup, which checks for a returned form and
     # treats it as another iteration within the same window.
     #
