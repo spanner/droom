@@ -1,5 +1,34 @@
-.paginated
-  %ul.documents
-    = render :partial => 'droom/documents/listing', :collection => @documents
-  .pagination.sliding
-    = paginate @documents
+#documents.paginated
+  %form.faceter{:action => droom.documents_url, :id => "documents_search", data: {target: '#documents'}}
+    = hidden_field_tag :page, params[:page]
+    = hidden_field_tag :show, params[:show]
+    = hidden_field_tag :sort, params[:sort]
+
+    %fieldset.search<
+      = text_field_tag :q, params[:q], name: 'q', class: 'search', placeholder: t(:search), data: {slow: true}
+      = submit_tag t(:search)
+
+    = link_to "▾ more options", '#', class: "select", data: {action: "toggle", affected: ".document_selection", sticky: true}
+
+    .document_selection
+      = render "droom/documents/facets"
+      = render "droom/documents/options"
+
+  - if @documents.any?
+    - if @documents.current_page > 1
+      .pagination.upper
+        = paginate @documents, :params => {:format => nil}
+
+    - if @q.present?
+      - @documents.with_details.each do |document, details|
+        = render "droom/documents/document", document: document, details: details
+    - else
+      = render :partial => 'droom/documents/document', :collection => @documents
+
+    .pagination.lower
+      = paginate @documents, :params => {:format => nil}
+
+  - else
+    .nomatch
+      %h2
+        = t :sorry_no_matches

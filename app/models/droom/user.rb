@@ -616,6 +616,22 @@ module Droom
     has_many :scraps, :foreign_key => "created_by_id"
     has_many :documents, :foreign_key => "created_by_id"
 
+    ## Search
+    #
+    searchkick callbacks: :async
+    attr_accessor :updating_index
+    after_save :enqueue_for_indexing, unless: :updating_index?
+
+    def search_data
+      {
+        name: name,
+        chinese_name: chinese_name,
+        emails: emails.map(&:email),
+        addresses: addresses.map(&:address),
+        phones: phones.map(&:phone),
+        groups: groups.map(&:slug)
+      }
+    end
 
   protected
 

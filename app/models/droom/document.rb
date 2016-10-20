@@ -129,5 +129,88 @@ module Droom
       Settings.aws.asset_bucket
     end
 
+    ## Search
+    #
+    searchkick callbacks: false, highlight: [:title, :content]
+    attr_accessor :updating_index
+    after_save :enqueue_for_indexing, unless: :updating_index?
+
+    def search_data
+      {
+        name: name || "",
+        filename: file_file_name || "",
+        content_type: file_content_type || "",
+        content: @file_content || "",
+        event_type: get_event_type || "'",
+        year: get_year || ""
+      }
+    end
+
+    def get_event_type
+      if folder && folder.holder && folder.holder.is_a?(Droom::Event) && folder.holder.event_type
+        folder.holder.event_type.slug
+      end
+    end
+
+    def get_year
+      created_at.year if created_at?
+    end
+
+    def enqueue_for_indexing
+      if name_changed? || file_file_name_changed? || file_fingerprint_changed?
+        #todo: make sure this defaults to immediate performance if no queue set up
+        Droom::IndexDocumentJob.perform_later(id, Time.now.to_i)
+      end
+    end
+
+    def update_index!
+      unless self.updating_index
+        self.updating_index = true
+        with_local_file do |path|
+          @file_content = Yomu.new(path).text
+          self.reindex
+        end
+        self.update_column(:indexed_at, Time.now)
+        self.updating_index = false
+      end
+    end
+
+    def updating_index?
+      !!updating_index
+    end
+
+    # Pass block to perform operations with a local file, which will be
+    # pulled down from S3 if no other is available.
+    #
+    def with_local_file
+      if file?
+        if File.file?(file.path)
+          yield file.path
+        elsif file.queued_for_write[:original]
+          yield file.queued_for_write[:original].path
+        else
+          tempfile_path = copy_to_local_tempfile
+          yield tempfile_path
+          File.delete(tempfile_path) if File.file?(tempfile_path)
+        end
+      end
+    end
+
+    def copy_to_local_tempfile
+      if file?
+        begin
+          folder = self.class.to_s.downcase.pluralize
+          tempfile_path = Rails.root.join("tmp/#{folder}/#{id}/#{file_file_name}")
+          FileUtils.mkdir_p(Rails.root.join("tmp/#{folder}/#{id}"))
+          file.copy_to_local_file(:original, tempfile_path)
+        rescue => e
+          # raise Cdr::FileReadError, "Original file could not be read: #{e.message}"
+          Rails.logger.warn "File read failure: #{e.message}"
+        end
+        tempfile_path
+      end
+    end
+
+
   end
 end

@@ -1,0 +1,13 @@
+- if aggs = @documents.aggs.with_indifferent_access
+  %fieldset.faceting{data: {refreshing: true}}
+    - event_type_facets = aggs["event_type"]["buckets"]
+    - event_type_options = facet_options(event_type_facets, klass: "Droom::EventType", primary_key: :slug, selected: params[:event_type])
+    = select_tag "event_type", event_type_options, { include_blank: t(:filter_event_type), class: "facet" }
+
+    - year_facets = aggs["year"]["buckets"]
+    - year_options = facet_options(year_facets, selected: params[:year], desc: true)
+    = select_tag "year", year_options, { include_blank: t(:filter_year), class: "facet" }
+
+    - content_type_facets = aggs["content_type"]["buckets"]
+    - content_type_options = facet_options(content_type_facets, selected: params[:content_type])
+    = select_tag "content_type", content_type_options, { include_blank: t(:filter_content_type), class: "facet" }

@@ -1,3 +1,5 @@
+- document ||= @document
+- details ||= nil
 - cssclasses = ["dl"]
 - cssclasses << document.file_extension
 - cssclasses << 'changed' if document.changed_since_creation?
@@ -5,8 +7,8 @@
 %div.document.holder
   %h2.name<
     = link_to truncate(document.name, :length => 33), droom.folder_document_url(document.folder, document), :class => cssclasses, :title => t(:click_to_download, :name => document.file_file_name)
-
-  - if document.description
-    - cssclasses = document.changed_since_creation? ? "description changed" : "description"
-    %p{:class => cssclasses}
+  %p.description
+    - if details
+      = details[:highlight][:content].html_safe
+    - else
       = document.description

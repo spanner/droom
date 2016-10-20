@@ -3,6 +3,23 @@ require 'dropbox_sdk'
 module Droom
   module DroomHelper
 
+    def facet_options(facet, options={})
+      Rails.logger.warn ">>> facet_options: #{facet.inspect}"
+      if klass = options[:klass]
+        options[:primary_key] ||= :id
+        terms = facet.map{|f| f[:key]}
+        models = klass.constantize.where({options[:primary_key] => terms}).to_a
+        facet.each do |f|
+          if model = models.find {|m| m.send(options[:primary_key]) == f[:key]}
+            f[:name] = model.name
+          end
+        end
+      end
+      data = facet.select{|f| f[:key].present?}.map { |f| ["#{f[:name] || f[:key]} (#{f[:doc_count]})", f[:key]] }.sort_by {|o| o[0].to_s }
+      data.reverse! if options[:desc]
+      options_for_select(data, options[:selected])
+    end
+
     def allowed?(permission_code)
       current_user.admin? || current_user.permitted?(permission_code)
     end

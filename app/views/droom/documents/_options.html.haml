@@ -1,0 +1,16 @@
+%p.options
+  %span.option_set.document_selection
+    Show
+    %a{class: "param#{' here' if @show == '10' }", data: {param: "show", value: "10"}} 10
+    %a{class: "param#{' here' if @show == '20' }", data: {param: "show", value: "20"}} 20
+    %a{class: "param#{' here' if @show == '50' }", data: {param: "show", value: "50"}} 50
+    %a{class: "param#{' here' if @show == '100' }", data: {param: "show", value: "100"}} 100
+    %a{class: "param#{' here' if @show == 'all' }", confirm: "Really show all #{@documents.total_count} records?", data: {param: "show", value: "all"}}
+      all
+      = "(#{@documents.total_count})"
+  %span.option_set.document_selection
+    by
+    %a{class: "param#{' here' if @sort == 'date' }", data: {param: "sort", value: "date"}} date
+    %a{class: "param#{' here' if @sort == 'name' }", data: {param: "sort", value: "family_name"}} name
+    - if params[:q].present?
+      %a{class: "param#{' here' if @sort == 'score' }", data: {param: "sort", value: "score"}} relevance
