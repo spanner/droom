@@ -619,8 +619,6 @@ module Droom
     ## Search
     #
     searchkick callbacks: :async
-    attr_accessor :updating_index
-    after_save :enqueue_for_indexing, unless: :updating_index?
 
     def search_data
       {
@@ -629,8 +627,19 @@ module Droom
         emails: emails.map(&:email),
         addresses: addresses.map(&:address),
         phones: phones.map(&:phone),
-        groups: groups.map(&:slug)
+        groups: groups.map(&:slug),
+        status: status
       }
+    end
+    
+    def status
+      if admin?
+        'admin'
+      elsif data_room_user?
+        'internal'
+      else
+        'external'
+      end
     end
 
   protected
