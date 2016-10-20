@@ -10,19 +10,28 @@
   %td.email
     = mail_to user.email
 
-  %td.confirmed.toggle{:data => {:hoverable => true}}
-    - if user.confirmed?
-      %span.yes
-    - else
-      = link_to "&nbsp;", user_url(user, :user => { :confirm => true }, :format => :js), :class => "no", :method => :put, :remote => true, :data => {:action => "affect", :affected => "##{rowid}" }
+  %td.email
+    = user.address
 
-  %td.d.admin.toggle{:data => {:hoverable => true}}
+  - group_name = ''
+  - groups = Droom::Group.all
+  - groups.each_with_index do |group, i|
+    - group ||= @group
+    - user ||= @user
+    - membership ||= user.membership_of(group)
+
+    - if membership
+      - if group_name == ''
+        - group_name = group.name
+      - else
+        - group_name = group_name + ', ' + group.name
+
+  %td.email
+    = group_name
+
+  %td.toggle{:data => {:hoverable => true}}
     - if user.admin?
       = link_to "&nbsp;", user_url(user, :user => { :admin => false }, :format => :js), :class => "yes", :method => :put, :remote => true, :data => {:action => "affect", :affected => "##{rowid}" }
     - else
       = link_to "&nbsp;", user_url(user, :user => { :admin => true }, :format => :js), :class => "no", :method => :put, :remote => true, :data => {:action => "affect", :affected => "##{rowid}" }
 
-  - groups = Droom::Group.all
-  - groups.each_with_index do |group, i|
-    %td.toggle.group{:class => "g_#{group.id} #{'d' if i == groups.length-1}", :data => {:hoverable => true}}
-      = render :partial => "droom/memberships/toggle", :locals => {:group => group, :user => user}
