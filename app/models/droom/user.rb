@@ -325,7 +325,8 @@ module Droom
     }
 
     def self.find_for_database_authentication(conditions)
-      from_email(conditions.first).first
+      #from_email(conditions.first).first
+      from_email(conditions[:email]).first
     end
 
     def self.active_for_authentication?
