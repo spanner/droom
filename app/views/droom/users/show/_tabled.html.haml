@@ -11,7 +11,8 @@
     = mail_to user.email
 
   %td.email
-    = user.address
+    - unless user.last_sign_in_at.nil?
+      = user.last_sign_in_at.strftime("%Y-%m-%d %H:%M:%S")
 
   - group_name = ''
   - groups = Droom::Group.all
