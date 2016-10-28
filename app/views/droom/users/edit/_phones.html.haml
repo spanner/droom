@@ -5,5 +5,5 @@
   = render :partial => 'droom/phones/fields', :collection => user.phones
 
 - unless user.new_record?
-  %p.action
+  %p.action{style: 'margin-top: -10px;'}
     = link_to t(:add_phone), droom.new_user_phone_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#phone_fields'}

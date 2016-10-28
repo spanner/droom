@@ -1,12 +1,8 @@
 div.popup
-  position: fixed
-  overflow: auto
-  top: 100px
-  left: 100px
-  width: 580px
-  padding: 0
+  overflow-x: hidden !important
+  left: 170px !important
+  width: 1000px !important
   z-index: 6000
-  min-height: 200px
   background-color: $coolgrey00
   box_shadow: 1px 3px 8px #52555f
   .header
@@ -31,8 +27,7 @@ div.popup
     float: right
     width: 16px
     height: 18px
-    margin-left: 10px
-    margin-right: 5px
+    margin-right: 20px !important
     margin-top: 5px
     +text-hidden
     background: 
@@ -49,7 +44,7 @@ div.popup
     position: relative
     top: 0
     left: 0
-    width: 550px
+    width: 100% !important
     a.next, a.prev, span.next, span.prev
       position: relative
       display: inline-block
@@ -91,4 +86,4 @@ div.mask
   &.up
     opacity: 1
     visibility: visible
-  
+

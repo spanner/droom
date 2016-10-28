@@ -13,10 +13,7 @@
 
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
     = render partial: "droom/users/edit/user_fields", locals: {f: f, user: user}
-    = render partial: "droom/users/edit/details", locals: {f: f, user: user}
-    = render partial: "droom/users/edit/memberships", locals: {f: f, user: user}
-
-    .buttons
+    %div{style: 'width: 100%; text-align: center; margin-bottom: 15px;'}
       - if user == current_user
         = f.submit t(:save_your_profile)
       - else

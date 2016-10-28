@@ -34,7 +34,7 @@ module Droom
       @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
       respond_with @user
     end
-  
+
     def new
       if params[:group_id].present?
         @user.groups << Droom::Group.find(params[:group_id])
@@ -118,6 +118,7 @@ module Droom
         :description,
         :admin,
         :gender,
+        :dob,
         :preferences_attributes,
         :confirm,
         :old_id,

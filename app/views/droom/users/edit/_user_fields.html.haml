@@ -1,44 +1,126 @@
 - user ||= @user
-- if user.image?
-  - img = user.image.url(:thumb)
-- else
-  - img = image_url('droom/missing/user.png')
 
-.image-upload{:data => {:role => "imagepicker"}}
-  %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
-  = f.file_field :image
+%table
+  %tr
+    %td{valign: 'top'}
+      %table{style: 'width: 100%;'}
+        %tr
+          %td{style: 'width: 100%'}
+            %div
+              - if user.image?
+                - img = user.image.url(:thumb)
+              - else
+                - img = image_url('droom/missing/user.png')
 
-%p.names
-  - if Droom.use_titles?
-    %span.title>
-      = f.text_field :title, placeholder: t("placeholders.user.title")
-  %span.name>
-    = f.text_field :family_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.family_name")
-  %span.name>
-    = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
-  - if Droom.use_chinese_names?
-    %span.chinese_name>
-      = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
-  - if Droom.use_honours?
-    %span.honours>
-      = f.text_field :honours, placeholder: t("placeholders.user.honours")
+              .image-upload{:data => {:role => "imagepicker"}}
+                %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
+                = f.file_field :image
 
-.non-file-data
-  .contacts
-    = render "droom/users/edit/emails", f: f, user: user
-    = render "droom/users/edit/phones", f: f, user: user
-    = render "droom/users/edit/addresses", f: f, user: user
+      %table
+        %tr
+          %td{colspan: 2}
+            = 'Created at: ' + user.created_at.strftime('%Y-%m-%d')
+        %tr
+          %td{colspan: 2}
+            - if user.last_sign_in_at.nil?
+              = 'Last Signed in: ' + '-'
+            - else
+              = 'Last Signed in: ' + user.last_sign_in_at.strftime('%Y-%m-%d')
+        %tr
+          %td{colspan: 2}
+            - if user.confirmed?
+              = 'Account Confirmed?: ' + 'Yes'
+            - else
+              = 'Account Confirmed?: ' + 'No'
+        %tr
+          %td{colspan: 2}
+            - if user.confirmed_at.nil?
+              = 'Confirmed Date: ' + '-'
+            - else
+              = 'Confirmed Date: ' + user.confirmed_at.strftime('%Y-%m-%d')
+        %tr
+          %td{colspan: 2}
+            - if admin?
+              = f.check_box :admin
+              = f.label :admin
 
-  - if admin?
-    - if Droom.use_organisations?
-      %p.organisation
-        = f.label :organisation_id
-        %br
-        = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+    %td{valign: 'top'}
+      %div
+        %table
+          %tr
+            %td Title
+            %td Family Name
+            %td Given Name
+          %tr
+            %td
+              - if Droom.use_titles?
+                %span.title>
+                  = f.text_field :title, placeholder: t("placeholders.user.title")
+            %td
+              %span.name>
+                = f.text_field :family_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.family_name")
+            %td
+              %span.name>
+                = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
+          %tr
+            %td Chinese Name
+            %td DOB
+            %td Gender
+          %tr{valign: 'top'}
+            %td
+              - if Droom.use_chinese_names?
+                %span.chinese_name>
+                  = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
+            %td
+              = f.date_select :dob,:start_year => 1940
+            %td
+              = render partial: "droom/users/edit/details", locals: {f: f, user: user}
 
-  - if Droom.use_biogs?
-    - user.description = "<p></p>" unless user.description?
-    .description.wysihtml
-      .toolbar#t1
-        = render 'droom/shared/toolbar'
-      = f.text_area :description
+          %tr
+            %td Organization
+            %td Honours
+          %tr
+            %td
+              - if admin?
+                - if Droom.use_organisations?
+                  %p.organisation
+                    = f.label :organisation_id
+                    %br
+                    = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+                - else
+                  %span> None
+              - else
+                %span> None
+            %td
+              - if Droom.use_honours?
+                %span.honours>
+                  = f.text_field :honours, placeholder: t("placeholders.user.honours")
+              - else
+                %span.honours>
+                  None
+
+        %table{style: 'margin-top: 30px !important;'}
+          %tr
+            %td{colspan: 3}
+              = render "droom/users/edit/emails", f: f, user: user
+          %tr
+            %td{colspan: 3}
+              = render "droom/users/edit/phones", f: f, user: user
+          %tr
+            %td{colspan: 3}
+              = render "droom/users/edit/addresses", f: f, user: user
+        %table{style: 'width: 100%;'}
+          %tr
+            %td{colspan: 3}
+              - if Droom.use_biogs?
+                - user.description = "<p></p>" unless user.description?
+                .description.wysihtml
+                  .toolbar#t1
+                    = render 'droom/shared/toolbar'
+                  = f.text_area :description
+
+        %table
+          %tr
+            %td{colspan: 3}
+              = render partial: "droom/users/edit/memberships", locals: {f: f, user: user}
+

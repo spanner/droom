@@ -1,14 +1,9 @@
 - user ||= @user
 
 - if admin?
-  %p.admin
-    = f.check_box :admin
-    = f.label :admin
-
-- if admin?
   - groups = Droom::Group.all
   - if groups.any?
-    %p.memberships
+    %div{style: 'width: 600px;'}
       = f.label(:group_ids, class: "important") + ":"
       - groups.each do |group|
         %label.inline{for: "user_group_ids_#{group.id}"}
