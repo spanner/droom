@@ -1,0 +1,14 @@
+#documents.paginated
+
+  - if @documents.any?
+    %ul.documents
+      - @documents.with_details.each do |document, details|
+        = render "droom/documents/suggested", document: document, details: details
+
+    .pagination.lower
+      = paginate @documents, :params => {:format => nil}
+
+  - else
+    .nomatch
+      %p
+        = t :sorry_no_matches

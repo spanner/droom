@@ -4,7 +4,6 @@ module Droom
   module DroomHelper
 
     def facet_options(facet, options={})
-      Rails.logger.warn ">>> facet_options: #{facet.inspect}"
       if klass = options[:klass]
         options[:primary_key] ||= :id
         terms = facet.map{|f| f[:key]}
@@ -19,6 +18,7 @@ module Droom
       data.reverse! if options[:desc]
       options_for_select(data, options[:selected])
     end
+    alias :facet_option_tags :facet_options
 
     def allowed?(permission_code)
       current_user.admin? || current_user.permitted?(permission_code)

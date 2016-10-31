@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "paperclip"
   s.add_dependency "fog"
+  s.add_dependency "friendly_mime"
 
   s.add_dependency "geocoder"
   s.add_dependency "icalendar"

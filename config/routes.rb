@@ -26,7 +26,6 @@ Droom::Engine.routes.draw do
     resources :permissions
   end
 
-  resources :documents
   resources :preferences
   resources :invitations
   resources :memberships
@@ -50,7 +49,9 @@ Droom::Engine.routes.draw do
     resources :agenda_categories
   end
 
-  resources :documents#, only: [:index, :show]
+  resources :documents do
+    get "suggest", on: :collection
+  end
   resources :folders do
     get "dropbox", on: :member, as: :dropbox
     resources :documents

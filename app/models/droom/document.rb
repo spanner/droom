@@ -139,11 +139,16 @@ module Droom
       {
         name: name || "",
         filename: file_file_name || "",
-        content_type: file_content_type || "",
+        content_type: get_content_type,
         content: @file_content || "",
         event_type: get_event_type || "'",
         year: get_year || ""
       }
+    end
+
+    def get_content_type
+      content_type = Friendly::MIME.find(file_content_type) if file_content_type?
+      content_type || "Unknown"
     end
 
     def get_event_type
@@ -158,7 +163,6 @@ module Droom
 
     def enqueue_for_indexing
       if name_changed? || file_file_name_changed? || file_fingerprint_changed?
-        #todo: make sure this defaults to immediate performance if no queue set up
         Droom::IndexDocumentJob.perform_later(id, Time.now.to_i)
       end
     end

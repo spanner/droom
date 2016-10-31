@@ -400,6 +400,16 @@ jQuery ($) ->
         history: true
     @
 
+  $.fn.quick_search_form = (options) ->
+    @each ->
+      defaults = 
+        fast: true
+        into: "#found"
+        auto: false
+        history: false
+      new CaptiveForm @, _.extend(defaults, options)
+    @
+
   # The suggestions form is a fast filter form with history support
   #
   $.fn.suggestion_form = (options) ->
@@ -456,6 +466,7 @@ jQuery ($) ->
       if @_historical
         @saveState(@_original_content)
         $(window).bind 'popstate', @restoreState
+      $.qf = @
 
     bindLinks: () =>
       @_container.find('a.cancel').click(@revert)
@@ -482,10 +493,10 @@ jQuery ($) ->
     
     changed: (e) =>
       @submit_soon() unless @_inactive
-          
+
     clicked: (e) =>
       @submit_soon() unless @_inactive
-    
+
     serialize: () =>
       parameters = []
       @_form.find(":input").each (i, f) =>
@@ -509,10 +520,10 @@ jQuery ($) ->
         @display(@_cache[qs])
       else
         @_form.submit()
-      
+
     prepare: (xhr, settings) =>
       @_container.fadeTo "fast", 0.2
-    
+
     capture: (e, data, status, xhr) =>
       @_cache[@serialize()] = data
       @display(data)

@@ -3,16 +3,20 @@ module Droom
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
 
-    before_filter :get_folder, except: [:index]
-    before_filter :select_documents, only: [:index]
-    load_and_authorize_resource :document, :class => Droom::Document, :through => :folder, :shallow => true
-    
+    before_filter :get_folder, except: [:index, :suggest]
+    before_filter :select_documents, only: [:index, :suggest]
+    load_and_authorize_resource :document, :class => Droom::Document, :through => :folder, :shallow => true, except: [:index, :suggest]
+
     def index
       respond_with @documents do |format|
         format.js { render :partial => 'droom/documents/documents' }
       end
     end
-    
+
+    def suggest
+      respond_with @documents, layout: false
+    end
+
     def show
       if @document.file
         redirect_to @document.file.expiring_url(Time.now + 600)
@@ -31,7 +35,7 @@ module Droom
     end
     
     def edit
-      render 
+      render
     end
     
     def update
@@ -71,6 +75,9 @@ module Droom
 
       @show = (params[:show].presence || 20).to_i
       @page = (params[:page].presence || 1).to_i
+      @searching = @q.present? || criteria.any?
+      # even if not yet searching, we perform the query to make aggregation facets available.
+      # ui can check for @searching if the default list is not a useful browser.
       @documents = Document.search terms, fields: fields, where: criteria, order: order, per_page: @show, page: @page, highlight: highlight, aggs: aggregations
     end
   

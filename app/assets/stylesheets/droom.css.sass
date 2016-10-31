@@ -669,15 +669,21 @@ div.document
   h2.name
     font-size: 1.1em
     line-height: 1
-    a.dl
-      margin-left: -40px
-    + p.description
-      margin-top: -4px
+  p.description
+    margin: -8px 0 0 40px
   p.attachment
     margin: 0
     color: $mid
   p.description
     margin-top: 0
+    span.situation
+      display: block
+      line-height: 1.2
+      +small
+      color: $mid
+    span.details
+      display: block
+      margin-top: 0.4em
 
 ul.contacts
   list-style: none
@@ -1148,7 +1154,7 @@ ul.downloads
       
 a.document
   display: inline-block
-  padding: 8px 0 0 28px
+  padding: 6px 0 0 28px
   min-height: 20px
   line-height: 22px
   color: $mid
@@ -1291,8 +1297,11 @@ div.timepicker
       margin: 0.2em 0
     input[type="text"]
       font-size: 1.2em
-      padding: 4px
-      width: 95%
+      padding: 10px
+      width: 80%
+    input[type="submit"]
+      font-size: 18px
+      width: 20%
     input[type="search"]
       font-size: 18px
       width: 100%
@@ -1698,10 +1707,12 @@ span.preference
     overflow: hidden
     margin: 3px 0 3px 20px
 
-ul.documents
+ul.documents, #margin ul.documents
   margin: 20px 0 0 -2px
   padding: 0
   list-style: none
+  li
+    margin-bottom: 0.25em
 
 ul.people
   margin: 10px 0 0 -2px

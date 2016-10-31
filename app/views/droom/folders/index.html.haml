@@ -7,23 +7,23 @@
 
 
 - content_for :margin do
-  - if can?(:manage, Droom::Folder)
-    %p.action
-      = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
-      %br
-      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
-
   #finder
-    %form.filter{:action => droom.documents_url(:format => :js), :autocomplete => 'off', :data => {:action => "filter"}}
+    %form.filter{:action => droom.suggest_documents_url, autocomplete: 'off', spellcheck: "false", data: {action: "quick_search"}}
       %p
         = search_field_tag :q, params[:q], :results => 5, :autosave => 'document_filter'
+        %br
+        %span.formnote.right
+          = link_to 'Full search...', documents_url
 
     .scroller
       #found
-        %p.note
-          = t :find_document_notes
 
 
 #main.folders{:data => {:panel => false}}
   = render :partial => 'folders'
 
+  - if can?(:manage, Droom::Folder)
+    %p.action
+      = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
+      %br
+      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}

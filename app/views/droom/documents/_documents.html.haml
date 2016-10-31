@@ -14,21 +14,22 @@
       = render "droom/documents/facets"
       = render "droom/documents/options"
 
-  - if @documents.any?
-    - if @documents.current_page > 1
-      .pagination.upper
+  - if @q
+    - if @documents.any?
+      - if @documents.current_page > 1
+        .pagination.upper
+          = paginate @documents, :params => {:format => nil}
+
+      - if @q.present?
+        - @documents.with_details.each do |document, details|
+          = render "droom/documents/document", document: document, details: details
+      - else
+        = render :partial => 'droom/documents/document', :collection => @documents
+
+      .pagination.lower
         = paginate @documents, :params => {:format => nil}
 
-    - if @q.present?
-      - @documents.with_details.each do |document, details|
-        = render "droom/documents/document", document: document, details: details
     - else
-      = render :partial => 'droom/documents/document', :collection => @documents
-
-    .pagination.lower
-      = paginate @documents, :params => {:format => nil}
-
-  - else
-    .nomatch
-      %h2
-        = t :sorry_no_matches
+      .nomatch
+        %h2
+          = t :sorry_no_matches
