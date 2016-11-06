@@ -3,7 +3,7 @@
 - if admin?
   - groups = Droom::Group.all
   - if groups.any?
-    %div{style: 'width: 600px;'}
+    %div{style: 'width: 100%;'}
       = f.label(:group_ids, class: "important") + ":"
       - groups.each do |group|
         %label.inline{for: "user_group_ids_#{group.id}"}

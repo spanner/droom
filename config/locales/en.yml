@@ -221,6 +221,8 @@ en:
   edit_your_preferences_note: "These are administrative settings like your password and preferred email address. "
   edit_your_profile: "Edit your address book card"
   edit_your_profile_note: 'This is the contact information that <a href="%{url}" data-action="popup">other people see</a> when you are listed.'
+  preview_your_profile: "Preview your address book card"
+  preview_profile_of: "Preview profile for %{name}"
   email_note: "This should be the email address at which you received your invitation, and other correspondence from us."
   events: "Events"
   events_between: "Events between %{start} and %{finish}"

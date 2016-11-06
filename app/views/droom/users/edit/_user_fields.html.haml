@@ -1,8 +1,8 @@
 - user ||= @user
 
-%table
+%table{style: 'width: 100%; margin-top: 0px !important; padding: 0px !important;'}
   %tr
-    %td{valign: 'top'}
+    %td{valign: 'top', style: 'width: 17%;'}
       %table{style: 'width: 100%;'}
         %tr
           %td{style: 'width: 100%'}
@@ -43,14 +43,23 @@
             - if admin?
               = f.check_box :admin
               = f.label :admin
+        %tr
+          %td{colspan: 2}
+            -if can?(:edit, user)
+              = link_to t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
+        %tr
+          %td{colspan: 2}
+            - if can?(:edit, user)
+              = link_to t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
 
-    %td{valign: 'top'}
-      %div
+    %td{valign: 'top', style: 'width: 83%;'}
+      %div{style: 'width: 100%;'}
         %table
           %tr
             %td Title
             %td Family Name
             %td Given Name
+            %td Chinese Name
           %tr
             %td
               - if Droom.use_titles?
@@ -62,24 +71,20 @@
             %td
               %span.name>
                 = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
-          %tr
-            %td Chinese Name
-            %td DOB
-            %td Gender
-          %tr{valign: 'top'}
             %td
               - if Droom.use_chinese_names?
                 %span.chinese_name>
                   = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
+          %tr
+            %td DOB
+            %td Gender
+            %td Organization
+            %td Honours
+          %tr{valign: 'top'}
             %td
               = f.date_select :dob,:start_year => 1940
             %td
               = render partial: "droom/users/edit/details", locals: {f: f, user: user}
-
-          %tr
-            %td Organization
-            %td Honours
-          %tr
             %td
               - if admin?
                 - if Droom.use_organisations?
@@ -99,27 +104,29 @@
                 %span.honours>
                   None
 
-        %table{style: 'margin-top: 30px !important;'}
-          %tr
-            %td{colspan: 3}
-              = render "droom/users/edit/emails", f: f, user: user
-          %tr
-            %td{colspan: 3}
-              = render "droom/users/edit/phones", f: f, user: user
-          %tr
-            %td{colspan: 3}
-              = render "droom/users/edit/addresses", f: f, user: user
-        %table{style: 'width: 100%;'}
-          %tr
-            %td{colspan: 3}
-              - if Droom.use_biogs?
-                - user.description = "<p></p>" unless user.description?
-                .description.wysihtml
-                  .toolbar#t1
-                    = render 'droom/shared/toolbar'
-                  = f.text_area :description
-
-        %table
+        %table{style: 'margin-top: 15px !important; width: 100%;'}
+          %tbody
+            %tr{valign: 'top'}
+              %td
+                %table{style: 'width: 100%;'}
+                  %tbody
+                    %tr
+                      %td
+                        = render "droom/users/edit/emails", f: f, user: user
+                    %tr
+                      %td
+                        = render "droom/users/edit/phones", f: f, user: user
+                    %tr
+                      %td
+                        = render "droom/users/edit/addresses", f: f, user: user
+              %td
+                - if Droom.use_biogs?
+                  - user.description = "<p></p>" unless user.description?
+                  .description.wysihtml
+                    .toolbar#t1
+                      = render 'droom/shared/toolbar'
+                    = f.text_area :description
+        %table{style: 'width: 100%'}
           %tr
             %td{colspan: 3}
               = render partial: "droom/users/edit/memberships", locals: {f: f, user: user}

@@ -52,7 +52,7 @@ jQuery ($) ->
     prepare: () =>
       @_mask = $('<div class="mask" />').appendTo($('body'))
       @_container = @getContainer()
-      @_container.bind 'close', @hide
+      @_container.bind 'close', @reset #instead of @hide, @reset is used
       @_container.bind 'finished', @conclude
       @_container.bind 'resize', @place
       @_container.insertAfter(@_mask).hide()
@@ -71,7 +71,7 @@ jQuery ($) ->
       @_container.append(@_content)
       @_header = @_content.find('.header')
       @_content.find('form').remote
-        on_cancel: @hide
+        on_cancel: @reset # Instead of hiding, the popup is reset
         on_success: @receive
       @_content.activate()
       @show()
@@ -119,6 +119,7 @@ jQuery ($) ->
     reset: () =>
       @hide()
       @_container.remove()
+      @_mask.remove() #mask is also removed on reset
       @_iteration = 0
 
     place: (e) =>

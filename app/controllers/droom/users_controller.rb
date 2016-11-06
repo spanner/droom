@@ -78,6 +78,11 @@ module Droom
       end
     end
 
+    def preview
+      @user = Droom::User.find_by_id(params[:user_id])
+      respond_with @user
+    end
+
     ## Confirmation
     #
     # This is the destination of the password-setting form that intervenes when a new user arrives who has not yet

@@ -14,7 +14,7 @@ module Droom
           :class => "",
           :data => {:menu => "#{classname}_#{thing.id}"}
         })
-        html_options[:class] << " menu"
+        html_options[:class] << ' menu'
         link_to t(:edit), "#", html_options if can?(:edit, thing)
       end
     end
@@ -146,6 +146,5 @@ module Droom
     def day_names
       ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     end
-
   end
 end

@@ -3,9 +3,13 @@
 - rowid = "user_#{user.id}"
 - cssclass = "user"
 
-%tr{:id => rowid, :class => cssclass, data: {refreshable: true, url: user_url(user, view: 'tabled', format: :js)}}
+%tr{:id => rowid, :class => 'cssclass', data: {refreshable: true, url: user_url(user, view: 'tabled', format: :js)}}
   %td.name
-    = link_to user.informal_name, edit_user_url(user), :data => {:action => "popup", :affected => "##{rowid}"}
+    %span.contact
+      %span.name
+        = link_to user.informal_name, user_preview_profile_url(user.id), :data => {:action => "popup", :affected => "##{rowid}"}
+        = action_menulink(user)
+        = action_menu(user)
 
   %td.email
     = mail_to user.email
