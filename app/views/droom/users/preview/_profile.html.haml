@@ -1,0 +1,20 @@
+- user ||= @user
+
+#preview_user
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2.titlebar
+      - if @user == current_user
+        = t :preview_your_profile
+      - elsif @user.new_record?
+        = t :add_new_user
+      - else
+        = t :preview_profile_of, name: @user.name
+
+  = form_for user, :html => {:autocomplete => false} do |f|
+    = render partial: "droom/users/preview/user_fields", locals: {f: f, user: user}
+    %div{style: 'width: 100%; text-align: center; margin-top: 0px;'}
+      - rowid = "user_#{user.id}"
+      = link_to 'Edit Profile', edit_user_url(user), :data => {:action => "replace", :affected => "##{rowid}"}, style: 'color: green;'
+      = t :or
+      = link_to t(:cancel), '#', :class => 'cancel'
