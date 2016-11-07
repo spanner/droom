@@ -52,13 +52,17 @@ module Droom
     }
     
     scope :not_shown_in_directory, -> {
-      where(:directory => false)
+      where(directory: false)
     }
     
     scope :shown_in_directory, -> {
-      where(:directory => true)
+      where(directory: true)
     }
 
+    scope :privileged, -> {
+      where(privileged: true)
+    }
+    
     default_scope -> { order("droom_groups.created_at ASC") }
 
     def admit(users)
@@ -98,7 +102,7 @@ module Droom
         :id => id
       }
     end
-
+    
   protected
 
     def ensure_mailing_list_name

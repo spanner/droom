@@ -642,6 +642,10 @@ module Droom
       end
     end
 
+    def privileged?
+      admin? || groups.privileged.any?
+    end
+
   protected
 
     def ensure_uid!

@@ -21,5 +21,9 @@ module Droom
       default_type
     end
 
+    def confidential?
+      private?
+    end
+
   end
 end

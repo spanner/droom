@@ -65,6 +65,10 @@ module Droom
       criteria[:year] = params[:year] if params[:year].present?
       criteria[:content_type] = params[:content_type] if params[:content_type].present?
 
+      unless can?(:see_confidential_material)
+        criteria[:confidential] = false
+      end
+
       fields = ["name^10", "filename^5", "content"]
       highlight = {tag: "<strong>", fields: {content: {fragment_size: 320}}}
       aggregations = {

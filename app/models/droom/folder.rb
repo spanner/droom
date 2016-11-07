@@ -104,6 +104,20 @@ module Droom
       self.save if self.changed?
     end
 
+    def get_event_type
+      if holder && holder.is_a?(Droom::Event) && holder.event_type
+        holder.event_type
+      end
+    end
+
+    def confidential?
+      confidential = private?
+      if et = get_event_type
+        confidential ||= et.confidential?
+      end
+      confidential
+    end
+
   protected
 
     def set_properties

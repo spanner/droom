@@ -142,7 +142,8 @@ module Droom
         content_type: get_content_type,
         content: @file_content || "",
         event_type: get_event_type || "'",
-        year: get_year || ""
+        year: get_year || "",
+        confidential: confidential?
       }
     end
 
@@ -159,6 +160,12 @@ module Droom
 
     def get_year
       created_at.year if created_at?
+    end
+
+    def confidential?
+      confidential = private?
+      confidential ||= folder.confidential? if folder
+      confidential
     end
 
     def enqueue_for_indexing
@@ -184,7 +191,7 @@ module Droom
     end
 
     # Pass block to perform operations with a local file, which will be
-    # pulled down from S3 if no other is available.
+    # pulled down from S3 if no other version is available.
     #
     def with_local_file
       if file?

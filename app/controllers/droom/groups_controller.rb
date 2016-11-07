@@ -52,7 +52,7 @@ module Droom
   protected
   
     def group_params
-      params.require(:group).permit(:name, :leader_id, :description, :directory)
+      params.require(:group).permit(:name, :leader_id, :description, :directory, :privileged)
     end
     
     def get_groups

@@ -5,6 +5,8 @@
   %p.description
     = f.text_area :description, :class => 'name', :placeholder => t(:group_description)
     %br
+    = f.check_box :privileged
+    = f.label :privileged
     = f.check_box :directory
     = f.label :directory
 
