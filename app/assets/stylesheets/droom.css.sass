@@ -600,8 +600,7 @@ p.set_password
     display: inline-block
     float: left
     vertical-align: top
-    height: 32px
-    line-height: 36px
+    min-height: 32px
 
   span.meter
     width: 32px
@@ -609,6 +608,9 @@ p.set_password
     background-color: white
     border-radius: 50%
     position: relative
+
+  span.instructions
+    width: calc(99% - 40px)
 
   span.notes
     display: block

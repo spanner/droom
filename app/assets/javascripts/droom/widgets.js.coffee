@@ -274,7 +274,7 @@ jQuery ($) ->
           @meter?.tooShort()
         else
           result = zxcvbn(password)
-          ok = result.score >= 3
+          ok = result.score >= 2
           @meter?.display(result)
         if ok
           @password_field.removeClass('invalid').addClass('valid')
