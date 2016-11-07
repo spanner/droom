@@ -11,14 +11,20 @@ module Droom
           
           can :read, :dashboard
           can :read, Droom::Event
-          can :read, Droom::Folder
-          can :read, Droom::Document
           can :read, Droom::Scrap
           can :read, Droom::Venue
           can :read, Droom::User
           can :read, Droom::Group
           can :read, Droom::Organisation
-        
+
+          can :read, Droom::Document do |document|
+            !document.confidential?
+          end
+
+          can :read, Droom::Folder do |folder|
+            !folder.confidential?
+          end
+
           # And they can edit themselves
           #
           can :edit, Droom::User, :id => user.id
@@ -32,10 +38,15 @@ module Droom
           #
           can :manage, [Droom::Event, Droom::Document, Droom::Scrap], :created_by_id => user.id
 
+          # NB confidential events are visible internally but their documents are not.
+          if user.privileged?
+            can :read, Droom::Document
+            can :read, Droom::Folder
+          end
+
           # Then other abilities are determined by permissions. Our permissions are relatively abstract and 
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
           #
-
           if user.permitted?('droom.calendar')
             can :manage, Droom::Event
             can :manage, Droom::EventSet

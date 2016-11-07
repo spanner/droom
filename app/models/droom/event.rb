@@ -260,9 +260,16 @@ module Droom
       user && user.invited_to?(self)
     end
 
+    def confidential?
+      confidential = private?
+      confidential ||= event_type.confidential? if event_type
+      confidential
+    end
+
     def visible_to?(user)
       return true if self.public?
-      return false if self.private?# || Droom.events_private_by_default?
+      return true if user.privileged?
+      return false if self.confidential?# || Droom.events_private_by_default?
       return true
     end
     
