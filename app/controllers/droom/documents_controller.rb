@@ -65,7 +65,7 @@ module Droom
       criteria[:year] = params[:year] if params[:year].present?
       criteria[:content_type] = params[:content_type] if params[:content_type].present?
 
-      unless can?(:see_confidential_material)
+      unless current_user.privileged?
         criteria[:confidential] = false
       end
 
