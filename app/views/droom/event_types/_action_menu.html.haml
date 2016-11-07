@@ -1,0 +1,9 @@
+- if can? :edit, event_type
+  .menu{:data => {:for => "event_type_#{event_type.id}"}}
+    %ul.actions
+      %li
+        = link_to t(:add_event), droom.new_event_url(event: {event_type_id: event_type.id}), :class => 'add', :data => {:action => "popup", :affected => "#event_type_#{event_type.id}"}
+      %li
+        = link_to t(:edit_event_type), droom.edit_event_type_url(event_type), :class => 'edit', :data => {:action => "popup", :replaced => "#event_type_#{event_type.id}"}
+      %li
+        = link_to t(:delete_event_type), droom.event_type_url(event_type), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#event_type_#{event_type.id}", :confirm => t(:confirm_delete_event_type, :name => event_type.name)}

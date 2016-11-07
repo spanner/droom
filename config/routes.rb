@@ -77,6 +77,7 @@ Droom::Engine.routes.draw do
     resources :group_permissions
   end
 
+  resources :event_types
   resources :venues
 
   resources :dropbox_tokens do

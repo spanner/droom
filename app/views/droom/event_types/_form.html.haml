@@ -1,0 +1,16 @@
+= form_for @event_type, :html => {:class => 'edit event_type', :remote => true, :data => {:type => :html}} do |f|
+  %p.name
+    = f.text_field :name, :class => 'name', :placeholder => t(:event_type_name)
+    
+  %p.description
+    = f.text_area :description, :class => 'name', :placeholder => t(:event_type_description)
+    %br
+    = f.check_box :private
+    = f.label :private
+    = f.check_box :public
+    = f.label :public
+
+  .buttons
+    = f.submit t(:save)
+    = t :or
+    = link_to t(:cancel), "/", :class => 'cancel'

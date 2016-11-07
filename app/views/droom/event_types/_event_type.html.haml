@@ -1,0 +1,14 @@
+- event_type ||= @event_type
+- aclass = "name"
+- aclass << " confidential" if event_type.confidential?
+- aclass << " public" if event_type.public?
+
+%div.event_type{:id => "event_type_#{event_type.id}", :data => {:refreshable => true, :url => event_type_path(event_type, :format => :js)} }
+  = action_menu(event_type)
+
+  %h2.name
+    = link_to event_type.name, droom.event_type_url(event_type), class: aclass
+    = action_menulink(event_type)
+
+  %p
+    = event_type.description.presence || t(:no_description)

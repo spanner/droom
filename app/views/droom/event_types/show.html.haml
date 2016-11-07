@@ -1,0 +1,10 @@
+#event_type
+  %h1
+    = @event_type.name
+
+  %p
+    = @event_type.description
+
+  #events
+    - if @event_type.events.any?
+      = render :partial => 'droom/events/event', :collection => @event_type.events

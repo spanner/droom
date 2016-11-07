@@ -26,7 +26,7 @@ module Droom
 
     def action_menulink(thing, html_options={})
       if can?(:edit, thing)
-        classname = thing.class.to_s.downcase.underscore.split('/').last
+        classname = thing.class.to_s.underscore.split('/').last
         html_options.reverse_merge!({
           :class => "",
           :data => {:menu => "#{classname}_#{thing.id}"}
@@ -38,7 +38,7 @@ module Droom
     
     def action_menu(thing, locals={})
       if can?(:edit, thing)
-        type = thing.class.to_s.downcase.underscore
+        type = thing.class.to_s.underscore
         classname = type.split('/').last
         locals[classname.to_sym] = thing
         render :partial => "#{type.pluralize}/action_menu", :locals => locals
