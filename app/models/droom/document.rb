@@ -141,7 +141,7 @@ module Droom
         filename: file_file_name || "",
         content_type: get_content_type,
         content: @file_content || "",
-        event_type: get_event_type || "'",
+        event_type: get_event_type || "",
         year: get_year || "",
         confidential: confidential?
       }

@@ -488,10 +488,12 @@ en:
     other: "and %{count} more documents"
   time:
     formats:
+      full_date: "%-d %B %Y"
       natural: "%l:%M%P"
       natural_date: "%d %B"
       natural_with_date: "%l:%M%P, %d %B %Y"
       natural_on_date: "%l:%M%P on %d %B %Y"
+      natural_at_time: "%d %B %Y at %l:%M%P"
       natural_with_year: "%-d %B %Y"
       precise: "%H:%M"
       month_and_year: "%b %Y"

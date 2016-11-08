@@ -1,6 +1,6 @@
 - document ||= @document
 - details ||= nil
-- cssclasses = ["dl"]
+- cssclasses = ["dl", "small"]
 - cssclasses << document.file_extension.downcase
 - cssclasses << 'changed' if document.changed_since_creation?
 - brief ||= false
@@ -8,11 +8,15 @@
 
 %div.document.holder{id: "document_#{document.id}"}
   %h2.name<
-    = link_to name, droom.folder_document_url(document.folder, document), :class => cssclasses, :title => t(:click_to_download, :name => document.file_file_name)
+    = link_to droom.folder_document_url(document.folder, document), :class => cssclasses, :title => t(:click_to_download, :name => document.file_file_name) do
+      %span.name
+        = name
+      %span.situation
+        %date
+          = l document.created_at, format: :full_date
+        - if document.folder
+          = File.join document.folder.path, document.file_file_name
   %p.description
-    %span.situation
-      - if document.folder
-        = File.join document.folder.path, document.file_file_name
     %span.details
       - if details && details[:highlight]
         = details[:highlight][:content].html_safe

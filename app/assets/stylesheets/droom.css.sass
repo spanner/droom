@@ -631,7 +631,6 @@ a.dl, a.ul
   display: inline-block
   min-height: 40px
   text-indent: 40px
-  line-height: 40px
   background:
     position: 0 0
     repeat: no-repeat
@@ -668,24 +667,30 @@ li.person
     margin: 3px 10px 5px 5px
     
 div.document
+  margin-bottom: 32px
   h2.name
-    font-size: 1.1em
-    line-height: 1
+    font-size: 1.4em
+    line-height: 1.2
+  span.name
+    display: block
+    margin: 0.25em 0
+  span.situation
+    display: block
+    font-size: 1rem
+    color: $mid
+    date
+      margin-right: 10px
+      color: $red
   p.description
-    margin: -8px 0 0 40px
+    margin-left: 40px
+    font-size: 1rem
+    margin-top: 0
+    span.details
+      display: block
+      margin-top: 0.25em
   p.attachment
     margin: 0
     color: $mid
-  p.description
-    margin-top: 0
-    span.situation
-      display: block
-      line-height: 1.2
-      +small
-      color: $mid
-    span.details
-      display: block
-      margin-top: 0.4em
 
 ul.contacts
   list-style: none
