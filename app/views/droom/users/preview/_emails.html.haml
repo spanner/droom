@@ -1,5 +1,0 @@
-- user ||= @user
-- user.emails.build(address_type: Droom::AddressType.default) unless user.emails.any?
-
-#email_fields.nested_set
-  = render :partial => 'droom/users/preview/email_fields', :collection => user.emails

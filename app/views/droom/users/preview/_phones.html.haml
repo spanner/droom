@@ -1,5 +1,0 @@
-- user ||= @user
-- user.phones.build(address_type: Droom::AddressType.default) unless user.phones.any?
-
-#phone_fields.nested_set
-  = render :partial => 'droom/users/preview/phone_fields', :collection => user.phones

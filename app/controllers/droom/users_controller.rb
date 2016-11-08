@@ -55,7 +55,9 @@ module Droom
     end
 
     def edit
-      respond_with @user
+      respond_to do |format|
+        format.html {render :edit, locals: {mode: true}}
+      end
     end
     
     # This has to handle small preference updates over js and large account-management forms over html.
@@ -80,7 +82,9 @@ module Droom
 
     def preview
       @user = Droom::User.find_by_id(params[:user_id])
-      respond_with @user
+      respond_to do |format|
+        format.html {render :edit, locals: {mode: false}}
+      end
     end
 
     ## Confirmation

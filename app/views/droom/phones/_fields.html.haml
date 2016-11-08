@@ -2,6 +2,10 @@
 - fields_counter ||= nil
 - phone ||= fields || @phone
 - user = @user || current_user
+- if local_assigns.has_key? :is_edit_mode
+  - is_edit_mode = is_edit_mode
+- else
+  - is_edit_mode = true
 
 = fields_for user do |uf|
   = uf.fields_for :phones, phone, :child_index => fields_counter || 'field_counter' do |f|
@@ -9,12 +13,19 @@
     %fieldset.repeating
       %p.twocol.reversed
         %span.col>
-          = f.text_field :phone, :placeholder => t("placeholders.phone.phone")
+          - if is_edit_mode
+            = f.text_field :phone, :placeholder => t("placeholders.phone.phone")
+          - else
+            = f.text_field :phone, :placeholder => t("placeholders.phone.phone"), disabled: true
         %span.col.last>
-          = f.select :address_type_id, Droom::AddressType.for_selection(:phone)
+          - if is_edit_mode
+            = f.select :address_type_id, Droom::AddressType.for_selection(:phone)
+          - else
+            = f.select :address_type_id, Droom::AddressType.for_selection(:phone), {}, {disabled: true}
 
-      .controls
-        = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
-        - if phone.persisted?
-          = f.hidden_field :_destroy, data: {role: "destroy"}
+      - if is_edit_mode
+        .controls
+          = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
+          - if phone.persisted?
+            = f.hidden_field :_destroy, data: {role: "destroy"}
 

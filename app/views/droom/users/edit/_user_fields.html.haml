@@ -1,4 +1,8 @@
 - user ||= @user
+- if local_assigns.has_key? :is_edit_mode
+  - is_edit_mode = is_edit_mode
+- else
+  - is_edit_mode = true
 
 %table{style: 'width: 100%; margin-top: 0px !important; padding: 0px !important;'}
   %tr
@@ -14,7 +18,8 @@
 
               .image-upload{:data => {:role => "imagepicker"}}
                 %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
-                = f.file_field :image
+                - if is_edit_mode
+                  = f.file_field :image
 
       %table
         %tr
@@ -40,17 +45,29 @@
               = 'Confirmed Date: ' + user.confirmed_at.strftime('%Y-%m-%d')
         %tr
           %td{colspan: 2}
-            - if admin?
-              = f.check_box :admin
-              = f.label :admin
+            - if is_edit_mode
+              - if admin?
+                = f.check_box :admin
+                = f.label :admin
+            - else
+              - if user.admin?
+                = 'Administrator: Yes'
+              - else
+                = 'Administrator: No'
         %tr
           %td{colspan: 2}
             -if can?(:edit, user)
-              = link_to t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
+              - if is_edit_mode
+                = link_to t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
+              - else
+                = link_to_if false, t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
         %tr
           %td{colspan: 2}
             - if can?(:edit, user)
-              = link_to t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
+              - if is_edit_mode
+                = link_to t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
+              - else
+                = link_to_if false, t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
 
     %td{valign: 'top', style: 'width: 83%;'}
       %div{style: 'width: 100%;'}
@@ -64,17 +81,29 @@
             %td
               - if Droom.use_titles?
                 %span.title>
-                  = f.text_field :title, placeholder: t("placeholders.user.title")
+                  - if is_edit_mode
+                    = f.text_field :title, placeholder: t("placeholders.user.title")
+                  - else
+                    = f.text_field :title, placeholder: t("placeholders.user.title"), disabled: true
             %td
               %span.name>
-                = f.text_field :family_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.family_name")
+                - if is_edit_mode
+                  = f.text_field :family_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.family_name")
+                - else
+                  = f.text_field :family_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.family_name"), disabled: true
             %td
               %span.name>
-                = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
+                - if is_edit_mode
+                  = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
+                - else
+                  = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name"), disabled: true
             %td
               - if Droom.use_chinese_names?
                 %span.chinese_name>
-                  = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
+                  - if is_edit_mode
+                    = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
+                  - else
+                    = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name"), disabled: true
           %tr
             %td DOB
             %td Gender
@@ -82,16 +111,22 @@
             %td Honours
           %tr{valign: 'top'}
             %td
-              = f.date_select :dob,:start_year => 1940
+              - if is_edit_mode
+                = f.date_select :dob,:start_year => 1940
+              - else
+                = f.date_select :dob,:start_year => 1940, disabled: true
             %td
-              = render partial: "droom/users/edit/details", locals: {f: f, user: user}
+              = render partial: "droom/users/edit/details", locals: {f: f, user: user, is_edit_mode: is_edit_mode}
             %td
               - if admin?
                 - if Droom.use_organisations?
                   %p.organisation
                     = f.label :organisation_id
                     %br
-                    = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+                    - if is_edit_mode
+                      = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+                    - else
+                      = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences', disabled: true
                 - else
                   %span> None
               - else
@@ -99,7 +134,10 @@
             %td
               - if Droom.use_honours?
                 %span.honours>
-                  = f.text_field :honours, placeholder: t("placeholders.user.honours")
+                  - if is_edit_mode
+                    = f.text_field :honours, placeholder: t("placeholders.user.honours")
+                  - else
+                    = f.text_field :honours, placeholder: t("placeholders.user.honours"), disabled: true
               - else
                 %span.honours>
                   None
@@ -112,22 +150,24 @@
                   %tbody
                     %tr
                       %td
-                        = render "droom/users/edit/emails", f: f, user: user
+                        = render "droom/users/edit/emails", f: f, user: user, is_edit_mode: is_edit_mode
                     %tr
                       %td
-                        = render "droom/users/edit/phones", f: f, user: user
+                        = render "droom/users/edit/phones", f: f, user: user, is_edit_mode: is_edit_mode
                     %tr
                       %td
-                        = render "droom/users/edit/addresses", f: f, user: user
+                        = render "droom/users/edit/addresses", f: f, user: user, is_edit_mode: is_edit_mode
               %td
                 - if Droom.use_biogs?
                   - user.description = "<p></p>" unless user.description?
                   .description.wysihtml
                     .toolbar#t1
                       = render 'droom/shared/toolbar'
-                    = f.text_area :description
+                    - if is_edit_mode
+                      = f.text_area :description
+                    - else
+                      = f.text_area :description,{disabled: true}
         %table{style: 'width: 100%'}
           %tr
             %td{colspan: 3}
-              = render partial: "droom/users/edit/memberships", locals: {f: f, user: user}
-
+              = render partial: "droom/users/edit/memberships", locals: {f: f, user: user, is_edit_mode: is_edit_mode}
