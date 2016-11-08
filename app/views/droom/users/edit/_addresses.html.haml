@@ -1,9 +1,14 @@
 - user ||= @user
+- if local_assigns.has_key? :is_edit_mode
+  - is_edit_mode = is_edit_mode
+- else
+  - is_edit_mode = true
 - user.addresses.build(address_type: Droom::AddressType.default) unless user.addresses.any?
 
 #address_fields.nested_set
-  = render :partial => 'droom/addresses/fields', :collection => user.addresses
+  = render :partial => 'droom/addresses/fields', :collection => user.addresses, locals: {is_edit_mode: is_edit_mode}
 
-- unless user.new_record?
-  %p.action
-    = link_to t(:add_address), droom.new_user_address_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#address_fields'}
+- if is_edit_mode
+  - unless user.new_record?
+    %p.action{style: 'margin-top: -10px;'}
+      = link_to t(:add_address), droom.new_user_address_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#address_fields'}

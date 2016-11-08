@@ -3,8 +3,6 @@
 - membership ||= user.membership_of(group)
 
 - linkid = "#{user.id}_#{group.name.parameterize}"
-
+- group_name = ''
 - if membership
-  = link_to "&nbsp;", group_membership_url(group, membership), :id => linkid, :class => "yes", :method => :delete, :data => {:action => "replace", :replaced => "##{linkid}"}
-- else
-  = link_to "&nbsp;", group_memberships_url(group, :membership => {:user_id => user.id}), :id => linkid, :class => "no", :method => :post, :data => {:action => "replace", :replaced => "##{linkid}"}
+  = group.name

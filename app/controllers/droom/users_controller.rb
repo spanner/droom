@@ -34,7 +34,7 @@ module Droom
       @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
       respond_with @user
     end
-  
+
     def new
       if params[:group_id].present?
         @user.groups << Droom::Group.find(params[:group_id])
@@ -55,7 +55,9 @@ module Droom
     end
 
     def edit
-      respond_with @user
+      respond_to do |format|
+        format.html {render :edit, locals: {mode: true}}
+      end
     end
     
     # This has to handle small preference updates over js and large account-management forms over html.
@@ -75,6 +77,13 @@ module Droom
       else
         Rails.logger.warn "update failed: #{@user.errors.to_a.inspect}"
         respond_with @user
+      end
+    end
+
+    def preview
+      @user = Droom::User.find_by_id(params[:user_id])
+      respond_to do |format|
+        format.html {render :edit, locals: {mode: false}}
       end
     end
 
@@ -122,6 +131,7 @@ module Droom
         :description,
         :admin,
         :gender,
+        :dob,
         :preferences_attributes,
         :confirm,
         :old_id,

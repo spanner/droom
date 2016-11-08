@@ -1,30 +1,27 @@
 - groups = Droom::Group.all
 
 - if @users.any?
+  %p
+    - if can?(:create, Droom::User)
+      = link_to t(:add_user), new_user_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
+    %br
+    - if can?(:create, Droom::Group)
+      = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
+
+  %form.filter{:action => droom.admin_users_url(:format => :html), :autocomplete => 'off', :data => {:action => "table_filter", target: "#users"}}
+    %p
+      = label_tag 'search', 'Simple Search: '
+      = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
+
+
   %table.main.toggles#users{:data => {:refreshable => true, :url => "#{admin_users_path}.js"}}
     %thead
-      %tr.rotated
-        %th.action{:colspan => 2}
-          %p
-            - if can?(:create, Droom::User)
-              = link_to t(:add_user), new_user_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
-            %br
-            - if can?(:create, Droom::Group)
-              = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
-
-          %form.filter{:action => droom.admin_users_url(:format => :html), :autocomplete => 'off', :data => {:action => "table_filter", target: "#users"}}
-            %p
-              = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
-              
-        - %w{confirmed admin}.each do |col|
-          %th{:class => "#{col} #{'d' if col=='admin'}"}
-            - unless col == "name" || col == "email"
-              %span.rotated
-                = col
-        - groups.each_with_index do |group, i|
-          %th.group{:class => "#{'d' if i == groups.length-1}"}
-            %span.rotated
-              = link_to truncate(group.name, :length => 16), edit_group_url(group), :data => {:action => 'popup'}
+      %tr
+        %th Name
+        %th Email
+        %th Last Signed in at
+        %th Groups
+        %th Admin
 
     = render :partial => 'droom/users/show/tabled', :collection => @users
 

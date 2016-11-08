@@ -63,6 +63,7 @@ Droom::Engine.routes.draw do
   end
 
   resources :users do
+    get "preview" => "users#preview", as: :preview_profile
     get "preferences", on: :member, as: :preferences
     get "admin", on: :collection
     put :set_password, on: :collection

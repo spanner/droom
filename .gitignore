@@ -8,3 +8,5 @@ spec/dummy/tmp/
 .DS_Store
 /spec/dummy/public/system/*
 /spec/dummy/webdav/*
+
+/.idea/

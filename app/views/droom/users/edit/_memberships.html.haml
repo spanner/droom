@@ -1,16 +1,17 @@
 - user ||= @user
-
-- if admin?
-  %p.admin
-    = f.check_box :admin
-    = f.label :admin
-
+- if local_assigns.has_key? :is_edit_mode
+  - is_edit_mode = is_edit_mode
+- else
+  - is_edit_mode = true
 - if admin?
   - groups = Droom::Group.all
   - if groups.any?
-    %p.memberships
+    %div{style: 'width: 100%;'}
       = f.label(:group_ids, class: "important") + ":"
       - groups.each do |group|
         %label.inline{for: "user_group_ids_#{group.id}"}
-          = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
+          - if is_edit_mode
+            = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
+          - else
+            = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}", disabled: true
           = group.name
