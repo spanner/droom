@@ -7,23 +7,23 @@
   - is_edit_mode = is_edit_mode
 - else
   - is_edit_mode = true
+
 = fields_for user do |uf|
   = uf.fields_for :emails, email, :child_index => fields_counter || 'field_counter' do |f|
-
     %fieldset.repeating
       %p.twocol.reversed
         %span.col>
-          - if is_edit_mode
+          - if is_edit_mode || @user.new_record?
             = f.email_field :email, :placeholder => t("placeholders.email.email"), required: true
           - else
             = f.email_field :email, :placeholder => t("placeholders.email.email"), required: true, disabled: true
         %span.col.last>
-          - if is_edit_mode
+          - if is_edit_mode || @user.new_record?
             = f.select :address_type_id, Droom::AddressType.for_selection(:email)
           - else
             = f.select :address_type_id, Droom::AddressType.for_selection(:email), {}, {:disabled => true}
 
-      - if is_edit_mode
+      - if is_edit_mode || @user.new_record?
         .controls
           = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
           - if email.persisted?

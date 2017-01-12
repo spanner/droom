@@ -5,18 +5,18 @@
   - is_edit_mode = true
 - if admin?
   %div
-    - if is_edit_mode
+    - if is_edit_mode || @user.new_record?
       = f.radio_button :gender, "f"
     - else
       = f.radio_button :gender, "f", disabled: true
     = f.label :gender, t(:"helpers.label.user.gender_f"), value: "f"
-    - if is_edit_mode
+    - if is_edit_mode || @user.new_record?
       = f.radio_button :gender, "m"
     - else
       = f.radio_button :gender, "m", disabled: true
     = f.label :gender, t(:"helpers.label.user.gender_m"), value: "m"
 
-  - unless user.new_record? || user.confirmed?
+  - unless @user.new_record? || @user.confirmed?
     %p.confirmation
       = f.check_box :send_confirmation
       = f.label :send_confirmation

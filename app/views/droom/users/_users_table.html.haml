@@ -10,9 +10,8 @@
 
   %form.filter{:action => droom.admin_users_url(:format => :html), :autocomplete => 'off', :data => {:action => "table_filter", target: "#users"}}
     %p
-      = label_tag 'search', 'Simple Search: '
+      = label_tag 'search', 'Search: '
       = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
-
 
   %table.main.toggles#users{:data => {:refreshable => true, :url => "#{admin_users_path}.js"}}
     %thead

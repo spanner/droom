@@ -29,7 +29,10 @@
         - else
           = f.submit t(:save_profile)
       - else
-        - rowid = "user_#{user.id}"
-        = link_to 'Edit Profile', edit_user_url(user), :data => {:action => "replace", :affected => "##{rowid}"}, style: 'color: green;'
+        - if @user.new_record?
+          = f.submit t(:save_profile)
+        - else
+          - rowid = "user_#{user.id}"
+          = link_to 'Edit Profile', edit_user_url(user), :data => {:action => "replace", :affected => "##{rowid}"}, style: 'color: green;'
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'

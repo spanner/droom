@@ -18,56 +18,58 @@
 
               .image-upload{:data => {:role => "imagepicker"}}
                 %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
-                - if is_edit_mode
+                - if is_edit_mode || @user.new_record?
                   = f.file_field :image
 
-      %table
-        %tr
-          %td{colspan: 2}
-            = 'Created at: ' + user.created_at.strftime('%Y-%m-%d')
-        %tr
-          %td{colspan: 2}
-            - if user.last_sign_in_at.nil?
-              = 'Last Signed in: ' + '-'
-            - else
-              = 'Last Signed in: ' + user.last_sign_in_at.strftime('%Y-%m-%d')
-        %tr
-          %td{colspan: 2}
-            - if user.confirmed?
-              = 'Account Confirmed?: ' + 'Yes'
-            - else
-              = 'Account Confirmed?: ' + 'No'
-        %tr
-          %td{colspan: 2}
-            - if user.confirmed_at.nil?
-              = 'Confirmed Date: ' + '-'
-            - else
-              = 'Confirmed Date: ' + user.confirmed_at.strftime('%Y-%m-%d')
-        %tr
-          %td{colspan: 2}
-            - if is_edit_mode
-              - if admin?
-                = f.check_box :admin
-                = f.label :admin
-            - else
-              - if user.admin?
-                = 'Administrator: Yes'
-              - else
-                = 'Administrator: No'
-        %tr
-          %td{colspan: 2}
-            -if can?(:edit, user)
+      - if !@user.new_record?
+        %table
+          - if is_edit_mode
+            %tr
+              %td{colspan: 2}
+                = 'Created at: ' + user.created_at.strftime('%Y-%m-%d')
+            %tr
+              %td{colspan: 2}
+                - if user.last_sign_in_at.nil?
+                  = 'Last Signed in: ' + '-'
+                - else
+                  = 'Last Signed in: ' + user.last_sign_in_at.strftime('%Y-%m-%d')
+            %tr
+              %td{colspan: 2}
+                - if user.confirmed?
+                  = 'Account Confirmed?: ' + 'Yes'
+                - else
+                  = 'Account Confirmed?: ' + 'No'
+            %tr
+              %td{colspan: 2}
+                - if user.confirmed_at.nil?
+                  = 'Confirmed Date: ' + '-'
+                - else
+                  = 'Confirmed Date: ' + user.confirmed_at.strftime('%Y-%m-%d')
+          %tr
+            %td{colspan: 2}
               - if is_edit_mode
-                = link_to t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
+                - if admin?
+                  = f.check_box :admin
+                  = f.label :admin
               - else
-                = link_to_if false, t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
-        %tr
-          %td{colspan: 2}
-            - if can?(:edit, user)
-              - if is_edit_mode
-                = link_to t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
-              - else
-                = link_to_if false, t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
+                - if user.admin?
+                  = 'Administrator: Yes'
+                - else
+                  = 'Administrator: No'
+          %tr
+            %td{colspan: 2}
+              -if can?(:edit, user)
+                - if is_edit_mode
+                  = link_to t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
+                - else
+                  = link_to_if false, t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
+          %tr
+            %td{colspan: 2}
+              - if can?(:edit, user)
+                - if is_edit_mode
+                  = link_to t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
+                - else
+                  = link_to_if false, t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
 
     %td{valign: 'top', style: 'width: 83%;'}
       %div{style: 'width: 100%;'}
@@ -81,26 +83,26 @@
             %td
               - if Droom.use_titles?
                 %span.title>
-                  - if is_edit_mode
+                  - if is_edit_mode || @user.new_record?
                     = f.text_field :title, placeholder: t("placeholders.user.title")
                   - else
                     = f.text_field :title, placeholder: t("placeholders.user.title"), disabled: true
             %td
               %span.name>
-                - if is_edit_mode
+                - if is_edit_mode || @user.new_record?
                   = f.text_field :family_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.family_name")
                 - else
                   = f.text_field :family_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.family_name"), disabled: true
             %td
               %span.name>
-                - if is_edit_mode
+                - if is_edit_mode || @user.new_record?
                   = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
                 - else
                   = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name"), disabled: true
             %td
               - if Droom.use_chinese_names?
                 %span.chinese_name>
-                  - if is_edit_mode
+                  - if is_edit_mode || @user.new_record?
                     = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
                   - else
                     = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name"), disabled: true
@@ -111,7 +113,7 @@
             %td Honours
           %tr{valign: 'top'}
             %td
-              - if is_edit_mode
+              - if is_edit_mode || @user.new_record?
                 = f.date_select :dob,:start_year => 1940
               - else
                 = f.date_select :dob,:start_year => 1940, disabled: true
@@ -123,7 +125,7 @@
                   %p.organisation
                     = f.label :organisation_id
                     %br
-                    - if is_edit_mode
+                    - if is_edit_mode || @user.new_record?
                       = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
                     - else
                       = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences', disabled: true
@@ -134,7 +136,7 @@
             %td
               - if Droom.use_honours?
                 %span.honours>
-                  - if is_edit_mode
+                  - if is_edit_mode || @user.new_record?
                     = f.text_field :honours, placeholder: t("placeholders.user.honours")
                   - else
                     = f.text_field :honours, placeholder: t("placeholders.user.honours"), disabled: true
@@ -163,7 +165,7 @@
                   .description.wysihtml
                     .toolbar#t1
                       = render 'droom/shared/toolbar'
-                    - if is_edit_mode
+                    - if is_edit_mode || @user.new_record?
                       = f.text_area :description
                     - else
                       = f.text_area :description,{disabled: true}
