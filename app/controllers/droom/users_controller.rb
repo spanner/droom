@@ -20,13 +20,14 @@ module Droom
     end
 
     def admin
-      @users = @users.in_name_order
       if params[:q].blank?
+        @users = @users.in_name_order
         @users = @users.in_any_directory_group
+        @users = paginated(@users, 100)
       else
-        @users = @users.matching(params[:q])
+        @users = Droom::User.search params[:q], per_page: 100
       end
-      @users = paginated(@users, 100)
+
       respond_with @users
     end
 
