@@ -2,6 +2,9 @@ require 'digest'
 
 module Droom
   class User < ActiveRecord::Base
+    include HasPerson
+    include HasAward
+
     validates :family_name, :presence => true
     validates :given_name, :presence => true
     validates :uid, :uniqueness => true, :presence => true
@@ -60,7 +63,7 @@ module Droom
     def defer_confirmation?
       defer_confirmation && defer_confirmation != "false"
     end
-    
+
     # send_confirmation? is called after save by our own later confirmation mechanism.
     # If the send_confirmation flag has been set, we confirm.
     #
@@ -77,25 +80,25 @@ module Droom
     def password_required?
       confirmed? && (!password.blank?)
     end
-    
+
     def password_set?
       encrypted_password?
     end
-    
+
     def lacks_password?
       !password_set?
     end
-    
+
     ## Session ID
     #
     # Allows us to invalidate a session by remote control when the user signs out on a satellite site.
-    
+
     def reset_session_id!
       token = generate_authentication_token
       self.update_column(:session_id, token)
       token
     end
-    
+
     def clear_session_id!
       self.update_column(:session_id, "")
     end
@@ -109,7 +112,7 @@ module Droom
     ## Auth tokens
     #
     # Are no longer native to devise but we use them for domain-cookie auth.
-    
+
     def authenticate_token(token)
       Devise.secure_compare(self.authentication_token, token)
     end
@@ -119,14 +122,14 @@ module Droom
       self.update_column(:authentication_token, token)
       token
     end
-    
+
     def ensure_authentication_token
       if authentication_token.blank?
         self.authentication_token = generate_authentication_token
       end
       authentication_token
     end
-    
+
     def confirmed=(value)
       self.confirmed_at = Time.now if value.present? and value != "false"
     end
@@ -142,7 +145,7 @@ module Droom
     scope :administrative, -> { where(:admin => true) }
     scope :this_month, -> { where("created_at > ?", Time.now - 1.month) }
     scope :this_week, -> { where("created_at > ?", Time.now - 1.week) }
-    
+
     scope :in_name_order, -> {
       order("family_name ASC, given_name ASC")
     }
@@ -151,7 +154,6 @@ module Droom
     #
     belongs_to :organisation
     has_many :organisations, :foreign_key => :owner_id
-
 
     ## Group memberships
     #
@@ -163,13 +165,27 @@ module Droom
       joins(:groups).where(droom_groups: {directory: true}).group("droom_users.id")
     }
 
+    scope :confirmed_accounts, -> {
+      where('confirmed_at is not NULL')
+    }
+
+    scope :unconfirmed_accounts, -> {
+      where('confirmed_at is NULL')
+    }
+
+    scope :in_specific_group, -> group_name {
+      joins(:groups)
+      .where(droom_groups: {name: group_name})
+    }
+
+
     def admit_to(groups)
       groups = [groups].flatten
       groups.each do |group|
         memberships.where(group_id: group.id).first_or_create
       end
     end
-    
+
     def expel_from(group)
       memberships.of_group(group).destroy_all
     end
@@ -177,18 +193,17 @@ module Droom
     def member_of?(group)
       group && memberships.of_group(group).any?
     end
-    
+
     def membership_of(group)
       memberships.find_by(group_id: group.id)
     end
-    
+
     scope :in_group, -> group {
       group = group.id if group.is_a? Droom::Group
       select("droom_users.*")
         .joins("INNER JOIN droom_memberships as dm ON droom_users.id = dm.user_id")
         .where("dm.group_id" => group)
     }
-
 
     ## Event invitations
     #
@@ -198,7 +213,7 @@ module Droom
     def invite_to(event)
       invitations.where(event_id: event.id).first_or_create if event && invitable?
     end
-    
+
     def uninvite_from(event)
       invitations.to_event(event).destroy_all
     end
@@ -206,15 +221,15 @@ module Droom
     def invited_to?(event)
       event && !!invitation_to(event)
     end
-    
+
     def invitation_to(event)
       invitations.to_event(event).first
     end
-    
+
     def invitable?
       email?
     end
-    
+
     scope :personally_invited_to_event, -> event {
       joins('LEFT OUTER JOIN droom_invitations on droom_users.id = droom_invitations.user_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
     }
@@ -236,15 +251,15 @@ module Droom
     def add_personal_folders(folders=[])
       self.folders << folders if folders
     end
-    
+
     def remove_personal_folders(folders=[])
       self.folders.delete(folders) if folders
     end
-    
+
     def has_folder?(folder)
       folder && personal_folders.of_folder(folder).any?
     end
-    
+
     def documents
       Document.visible_to(self)
     end
@@ -254,7 +269,7 @@ module Droom
     #
     has_many :dropbox_tokens, :foreign_key => "created_by_id"
     has_many :dropbox_documents
-    
+
     def dropbox_token
       unless @dropbox_token
         @dropbox_token = dropbox_tokens.by_date.last || 'nope'
@@ -299,12 +314,12 @@ module Droom
     def thumbnail
       image_url(:thumb)
     end
-    
+
     def icon
       image_url(:icon)
     end
- 
- 
+
+
     ## Address book
     #
     # Can hold multiple emails, phones and addresses for each user.
@@ -316,7 +331,7 @@ module Droom
     accepts_nested_attributes_for :phones, :allow_destroy => true
     has_many :addresses
     accepts_nested_attributes_for :addresses, :allow_destroy => true
-    
+
     # The only difficulty is to support devise login using any known email address.
     #
     scope :from_email, -> email {
@@ -481,7 +496,7 @@ module Droom
     def title_ordinary?
       ['Mr', 'Ms', 'Mrs', '', nil].include?(title)
     end
-    
+
     def title_if_it_matters
       title unless title_ordinary?
     end
@@ -506,13 +521,13 @@ module Droom
     def full_name
       [given_name, family_name].compact.join(' ')
     end
-    
+
     def to_vcf
       @vcard ||= Vcard::Vcard::Maker.make2 do |maker|
         maker.add_name do |n|
           n.given = name || ""
         end
-        maker.add_addr {|a| 
+        maker.add_addr {|a|
           a.location = 'home' # until we do this properly with multiple contact sets
           a.country = post_country || ""
           a.region = post_region || ""
@@ -526,7 +541,7 @@ module Droom
       end
       @vcard.to_s
     end
-    
+
     def self.vcards_for(users=[])
       users.map(&:vcf).join("\n")
     end
@@ -571,7 +586,7 @@ module Droom
     end
 
     # Setting preferences is normally handled either by the PreferencesController or by nesting preferences
-    # in a user form. `User#set_pref` is a convenient console method but not otherwise used much. 
+    # in a user form. `User#set_pref` is a convenient console method but not otherwise used much.
     #
     # Preferences are set in a simple key:value way, where key usually includes some namespacing prefixes:
     #
@@ -621,17 +636,33 @@ module Droom
     searchkick callbacks: :async
 
     def search_data
-      {
+      data = {
         name: name,
         chinese_name: chinese_name,
         emails: emails.map(&:email),
         addresses: addresses.map(&:address),
         phones: phones.map(&:phone),
         groups: groups.map(&:slug),
-        status: status
+        status: status,
+        account_confirmation: confirm_account
       }
+      if person_by_user_uid_present?
+        #data[:person] = @person.uid
+        #data[:awards] = @person.awards.collect{|r| r.award_type_code}
+        #data[:person] = person_by_user_uid.uid
+        data[:awards] = person_by_user_uid.awards.collect{|r| r.award_type_code}
+      end
+      data
     end
-    
+
+    def confirm_account
+      if confirmed_at.nil?
+        'No'
+      else
+        'Yes'
+      end
+    end
+
     def status
       if admin?
         'admin'
