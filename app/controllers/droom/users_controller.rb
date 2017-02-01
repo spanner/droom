@@ -21,7 +21,8 @@ module Droom
 
     def admin
       if params[:q].blank? && params[:award_type_code].blank? && params[:account_group].blank? && params[:account_confirmed].blank?
-        group_slugs = %w(trustees audit-committee investment-committee croucher-office screeners interviewers judges developers editors)
+        group_slugs = Droom::Group.all.collect{ |r| r.slug }
+        #group_slugs = %w(trustees audit-committee investment-committee croucher-office screeners interviewers judges developers editors)
         @users = Droom::User.search '*', where: {groups: group_slugs}, limit: 100, order: {name: :asc}, aggs: [:awards, :groups, :account_confirmation]
       else
         query = params[:q].presence || '*'

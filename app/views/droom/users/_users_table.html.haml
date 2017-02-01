@@ -10,7 +10,6 @@
 
   %form.faceter{:action => droom.admin_users_url(:format => :html), :autocomplete => 'off', :id => "users_search", :data => { target: "#users" }}
     %fieldset.search<
-      -#= search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
       = text_field_tag :q, params[:q], name: 'q', class: 'search', placeholder: t(:search), data: {slow: true}
       = submit_tag 'search'
 
