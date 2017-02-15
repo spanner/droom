@@ -119,9 +119,9 @@
           %tr{valign: 'top'}
             %td
               - if is_edit_mode || @user.new_record?
-                = f.date_select :dob,:start_year => 1940
+                = f.date_select :dob, {order: [:day, :month, :year], prompt: { day: 'Select day', month: 'Select month', year: 'Select year' }, start_year: 1940, end_year: Date.today.year}
               - else
-                = f.date_select :dob,:start_year => 1940, disabled: true
+                = f.date_select :dob, {order: [:day, :month, :year], prompt: { day: 'Select day', month: 'Select month', year: 'Select year' }, start_year: 1940, end_year: Date.today.year}, disabled: true
             %td
               = render partial: "droom/users/edit/details", locals: {f: f, user: user, is_edit_mode: is_edit_mode}
             %td
