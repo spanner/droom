@@ -20,6 +20,7 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :images,
              :confirmed,
              :permission_codes,
+             :status,
              :unconfirmed_email,
              :password_set
 
@@ -71,4 +72,13 @@ class Droom::UserSerializer < ActiveModel::Serializer
     end
   end
 
+  def status
+    if object.privileged?
+      "senior"
+    elsif object.data_room_user?
+      "internal"
+    else
+      "external"
+    end
+  end
 end
