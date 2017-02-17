@@ -72,13 +72,4 @@ class Droom::UserSerializer < ActiveModel::Serializer
     end
   end
 
-  def status
-    if object.privileged?
-      "senior"
-    elsif object.data_room_user?
-      "internal"
-    else
-      "external"
-    end
-  end
 end

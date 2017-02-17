@@ -666,6 +666,8 @@ module Droom
     def status
       if admin?
         'admin'
+      elsif priveleged?
+        'senior'
       elsif data_room_user?
         'internal'
       else
