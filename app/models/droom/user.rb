@@ -726,31 +726,11 @@ module Droom
     def screened_years
       screened_records = screeners
       records_from_round(screened_records)
-=begin
-      if screened_records.any?
-        records = screened_records.map do |record|
-          [record.round.year, record.round.url]
-        end
-        records.sort!{ |r1,r2| r1.first <=> r2.first }
-      else
-        []
-      end
-=end
     end
 
     def interviewed_years
       interviewed_records = interviewers
       records_from_round(interviewed_records)
-=begin
-      if interviewed_records.any?
-        records = interviewed_records.map do |record|
-          [record.round.year, record.round.url]
-        end
-        records.sort!{ |r1,r2| r1.first <=> r2.first }
-      else
-        []
-      end
-=end
     end
 
     def applied_years
@@ -769,16 +749,6 @@ module Droom
       if person?
         received_awards = person.awards
         records_by_mapping_application(received_awards)
-=begin
-        if received_awards.any?
-          records = received_awards.map do |record|
-            application = Application.find(id: record.application_id)
-            [record.year, (application.url if application) ]
-          end
-        else
-          []
-        end
-=end
       else
         []
       end
@@ -788,16 +758,6 @@ module Droom
       if person?
         grant_records = person.grants
         records_by_mapping_application(grant_records)
-=begin
-        if grant_records.any?
-          records = grant_records.map do |record|
-            application = Application.find(id: record.application_id)
-            [record.year, (application.url if application) ]
-          end
-        else
-          []
-        end
-=end
       else
         []
       end
