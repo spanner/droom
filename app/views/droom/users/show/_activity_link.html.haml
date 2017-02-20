@@ -1,0 +1,17 @@
+- records = data
+- records_size = records.size - 1
+
+- if records.any?
+  - records.each_with_index do |record,index|
+    - if index == records_size
+      - link_name = record.first
+    - else
+      - link_name = "#{record.first},"
+
+    - if record.last == '' || record.last == nil
+      = label_tag link_name, link_name
+    - else
+      = link_to link_name, record.last, class: 'edit', target: :_blank
+
+- else
+  = label_tag 'None'

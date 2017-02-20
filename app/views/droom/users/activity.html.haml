@@ -1,0 +1,81 @@
+- user ||= @user
+- screened_years = user.screened_years
+
+- interviewed_years = user.interviewed_years
+
+- applied_years = user.applied_years
+
+- received_awards_years = user.received_awards
+
+- grants_years = user.received_grants
+
+
+#edit_user
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2.titlebar
+      - if @user == current_user
+        = t :activity_of_your
+      - else
+        = t :activity_of, name: @user.name
+
+  .user
+    %div
+      = label_tag 'Applications: '
+      = render 'droom/users/show/activity_link', data: applied_years
+      -#- if applied_years.any?
+        - applied_years.each_with_index do |record,index|
+          - if index == applied_years_size
+            = link_to record.first, record.last, class: 'edit', target: :_blank
+          - else
+            = link_to "#{record.first},", record.last, class: 'edit', target: :_blank
+      -#- else
+        = label_tag 'None'
+
+    %div
+      = label_tag 'Awards: '
+      = render 'droom/users/show/activity_link', data: received_awards_years
+      -#- if received_awards_years.any?
+        - received_awards_years.each_with_index do |record,index|
+          - if index == received_awards_years_size
+            = link_to record.first, record.last, class: 'edit', target: :_blank
+          - else
+            = link_to "#{record.first},", record.last, class: 'edit', target: :_blank
+      -#- else
+        = label_tag 'None'
+
+    %div
+      = label_tag 'Grants: '
+      = render 'droom/users/show/activity_link', data: grants_years
+      -#- if grants_years.any?
+        - grants_years.each_with_index do |record,index|
+          - if index == grants_years_size
+            = link_to record.first, record.last, class: 'edit', target: :_blank
+          - else
+            = link_to "#{record.first},", record.last, class: 'edit', target: :_blank
+      -#- else
+        = label_tag 'None'
+
+    %div
+      = label_tag 'Screener: '
+      = render 'droom/users/show/activity_link', data: screened_years
+      -#- if screened_years.any?
+        - screened_years.each_with_index do |record,index|
+          - if index == screened_years_size
+            = link_to record.first, record.last, class: 'edit', target: :_blank
+          - else
+            = link_to "#{record.first},", record.last, class: 'edit', target: :_blank
+      -#- else
+        = label_tag 'None'
+
+    %div
+      = label_tag 'Interviewer: '
+      = render 'droom/users/show/activity_link', data: interviewed_years
+      -#- if interviewed_years.any?
+        - interviewed_years.each_with_index do |record,index|
+          - if index == interviewed_years_size
+            = link_to record.first, record.last, class: 'edit', target: :_blank
+          - else
+            = link_to "#{record.first},", record.last, class: 'edit', target: :_blank
+      -#- else
+        = label_tag 'None'

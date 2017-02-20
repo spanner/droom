@@ -23,28 +23,33 @@
 
       - if !@user.new_record?
         %table
-          - if is_edit_mode
-            %tr
-              %td{colspan: 2}
-                = 'Created at: ' + user.created_at.strftime('%Y-%m-%d')
-            %tr
-              %td{colspan: 2}
-                - if user.last_sign_in_at.nil?
-                  = 'Last Signed in: ' + '-'
-                - else
-                  = 'Last Signed in: ' + user.last_sign_in_at.strftime('%Y-%m-%d')
-            %tr
-              %td{colspan: 2}
-                - if user.confirmed?
-                  = 'Account Confirmed?: ' + 'Yes'
-                - else
-                  = 'Account Confirmed?: ' + 'No'
-            %tr
-              %td{colspan: 2}
-                - if user.confirmed_at.nil?
-                  = 'Confirmed Date: ' + '-'
-                - else
-                  = 'Confirmed Date: ' + user.confirmed_at.strftime('%Y-%m-%d')
+          %tr
+            %td{colspan: 2}
+              = 'Created at: ' + user.created_at.strftime('%Y-%m-%d')
+          %tr
+            %td{colspan: 2}
+              - if user.last_sign_in_at.nil?
+                = 'Last Signed in: ' + 'none'
+              - else
+                = 'Last Signed in: ' + user.last_sign_in_at.strftime('%Y-%m-%d')
+          %tr
+            %td{colspan: 2}
+              - if user.confirmed?
+                = 'Account Confirmed?: ' + 'Yes'
+              - else
+                = 'Account Confirmed?: ' + 'No'
+          %tr
+            %td{colspan: 2}
+              - if user.confirmed_at.nil?
+                = 'Confirmed Date: ' + 'none'
+              - else
+                = 'Confirmed Date: ' + user.confirmed_at.strftime('%Y-%m-%d')
+          %tr
+            %td{colspan: 2}
+              - if user.data_room_user?
+                = 'Data Room Access: Yes'
+              - else
+                = 'Data Room Access: No'
           %tr
             %td{colspan: 2}
               - if is_edit_mode
@@ -58,18 +63,18 @@
                   = 'Administrator: No'
           %tr
             %td{colspan: 2}
+              = link_to 'Relationship with Croucher', droom.user_activity_url(user.id), :class => 'edit', :data => {:action => 'popup', :affected => "#user_activity_#{user.id}"}
+
+          %tr
+            %td{colspan: 2}
               -if can?(:edit, user)
                 - if is_edit_mode
                   = link_to t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
-                - else
-                  = link_to_if false, t(:edit_account), droom.edit_user_url(user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{user.id}"}
           %tr
             %td{colspan: 2}
               - if can?(:edit, user)
                 - if is_edit_mode
                   = link_to t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
-                - else
-                  = link_to_if false, t(:delete_user), droom.user_url(user), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}", :confirm => t(:confirm_delete_user, :name => user.full_name)}
 
     %td{valign: 'top', style: 'width: 83%;'}
       %div{style: 'width: 100%;'}

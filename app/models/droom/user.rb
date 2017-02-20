@@ -673,8 +673,134 @@ module Droom
       end
     end
 
+    def user_statuses
+      statuses = []
+      if applications.any?
+        statuses << 'Applicant'
+      end
+      if screeners.any?
+        statuses << 'Screener'
+      end
+      if interviewers.any?
+        statuses << 'Interviewer'
+      end
+      if person? && person.awards.any?
+        statuses << 'Scholar'
+      end
+      if data_room_user?
+        statuses << 'Data_room'
+      end
+      if groups.any?
+        groups.map{ |r| statuses << r.slug.singularize.capitalize}
+      end
+      statuses.uniq
+    end
+
+
     def privileged?
       admin? || groups.privileged.any?
+    end
+
+    def records_from_round(record_list)
+      if record_list.any?
+        records = record_list.map do |record|
+          [record.round.year, record.round.url]
+        end
+        records.sort!{ |r1,r2| r1.first <=> r2.first }
+      else
+        []
+      end
+    end
+
+    def records_by_mapping_application(record_list)
+      if record_list.any?
+        records = record_list.map do |record|
+          application = Application.find(id: record.application_id)
+          [record.year, (application.url if application) ]
+        end
+      else
+        []
+      end
+    end
+
+    def screened_years
+      screened_records = screeners
+      records_from_round(screened_records)
+=begin
+      if screened_records.any?
+        records = screened_records.map do |record|
+          [record.round.year, record.round.url]
+        end
+        records.sort!{ |r1,r2| r1.first <=> r2.first }
+      else
+        []
+      end
+=end
+    end
+
+    def interviewed_years
+      interviewed_records = interviewers
+      records_from_round(interviewed_records)
+=begin
+      if interviewed_records.any?
+        records = interviewed_records.map do |record|
+          [record.round.year, record.round.url]
+        end
+        records.sort!{ |r1,r2| r1.first <=> r2.first }
+      else
+        []
+      end
+=end
+    end
+
+    def applied_years
+      application_records = applications
+      if application_records.any?
+        records = application_records.map do |record|
+          [record.round.year, record.url]
+        end
+        records.sort!{ |r1,r2| r1.first <=> r2.first }
+      else
+        []
+      end
+    end
+
+    def received_awards
+      if person?
+        received_awards = person.awards
+        records_by_mapping_application(received_awards)
+=begin
+        if received_awards.any?
+          records = received_awards.map do |record|
+            application = Application.find(id: record.application_id)
+            [record.year, (application.url if application) ]
+          end
+        else
+          []
+        end
+=end
+      else
+        []
+      end
+    end
+
+    def received_grants
+      if person?
+        grant_records = person.grants
+        records_by_mapping_application(grant_records)
+=begin
+        if grant_records.any?
+          records = grant_records.map do |record|
+            application = Application.find(id: record.application_id)
+            [record.year, (application.url if application) ]
+          end
+        else
+          []
+        end
+=end
+      else
+        []
+      end
     end
 
   protected

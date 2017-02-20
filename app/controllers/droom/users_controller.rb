@@ -89,10 +89,14 @@ module Droom
     end
 
     def preview
-      @user = Droom::User.find_by_id(params[:user_id])
+      find_user_by_user_id
       respond_to do |format|
         format.html {render :edit, locals: {mode: false}}
       end
+    end
+
+    def activity
+      find_user_by_user_id
     end
 
     ## Confirmation
@@ -173,5 +177,8 @@ module Droom
       @user = current_user unless @user && current_user.admin?
     end
 
+    def find_user_by_user_id
+      @user = Droom::User.find_by_id(params[:user_id])
+    end
   end
 end
