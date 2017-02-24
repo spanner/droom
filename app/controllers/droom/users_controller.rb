@@ -20,13 +20,18 @@ module Droom
     end
 
     def admin
-      @users = @users.in_name_order
-      if params[:q].blank?
-        @users = @users.in_any_directory_group
+      if params[:q].blank? && params[:award_type_code].blank? && params[:account_group].blank? && params[:account_confirmed].blank?
+        group_slugs = Droom::Group.all.collect{ |r| r.slug }
+        #group_slugs = %w(trustees audit-committee investment-committee croucher-office screeners interviewers judges developers editors)
+        @users = Droom::User.search '*', where: {groups: group_slugs}, limit: 100, order: {name: :asc}, aggs: [:awards, :groups, :account_confirmation]
       else
-        @users = @users.matching(params[:q])
+        query = params[:q].presence || '*'
+        filters = {}
+        filters[:awards] = params[:award_type_code] if params[:award_type_code].present?
+        filters[:groups] = params[:account_group] if params[:account_group].present?
+        filters[:account_confirmation] = params[:account_confirmed] if params[:account_confirmed].present?
+        @users = Droom::User.search query, where: filters, limit: 100, aggs: [:awards, :groups, :account_confirmation]
       end
-      @users = paginated(@users, 100)
       respond_with @users
     end
 
@@ -62,7 +67,7 @@ module Droom
         format.html {render :edit, locals: {mode: true}}
       end
     end
-    
+
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
@@ -84,10 +89,14 @@ module Droom
     end
 
     def preview
-      @user = Droom::User.find_by_id(params[:user_id])
+      find_user_by_user_id
       respond_to do |format|
         format.html {render :edit, locals: {mode: false}}
       end
+    end
+
+    def activity
+      find_user_by_user_id
     end
 
     ## Confirmation
@@ -166,6 +175,10 @@ module Droom
 
     def self_unless_admin
       @user = current_user unless @user && current_user.admin?
+    end
+
+    def find_user_by_user_id
+      @user = Droom::User.find_by_id(params[:user_id])
     end
   end
 end

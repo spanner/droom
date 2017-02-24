@@ -24,6 +24,7 @@
 
 jQuery ($) ->
   $.activate_with () ->
+    @find_including_self('form.faceter').faceting_search()
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('.hidden').find('input, select, textarea').attr('disabled', true)

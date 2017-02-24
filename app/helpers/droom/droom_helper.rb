@@ -20,6 +20,23 @@ module Droom
     end
     alias :facet_option_tags :facet_options
 
+    def aggs_options(agg, options={})
+      if klass = options[:klass]
+        options[:primary_key] ||= :id
+        terms = agg.map{|f| f['key']}
+        models = klass.constantize.where({options[:primary_key] => terms}).to_a
+        agg.each do |f|
+          if model = models.find {|m| m.send(options[:primary_key]) == f['key']}
+            f[:name] = model.name
+          end
+        end
+      end
+      data = agg.select{|f| f['key'].present?}.map { |f| ["#{f[:name] || f['key']} (#{f['doc_count']})", f['key']] }.sort_by {|o| o[0].to_s }
+      data.reverse! if options[:desc]
+      options_for_select(data, options[:selected])
+    end
+    alias :aggs_option_tags :aggs_options
+
     def allowed?(permission_code)
       current_user.admin? || current_user.permitted?(permission_code)
     end
