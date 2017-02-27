@@ -1,15 +1,14 @@
-#suggestion_box
-  %h4
-    = @title || "Search Results"
-    
-  %ul.suggestion_search
-    - if @suggestions.any?
-      - @suggestions.each do |sugg|
-        = render :partial => "#{sugg.class.to_s.pluralize.underscore}/suggested", :object => sugg
+%h2.section
+  = @title || "Search Results"
   
-    - else
-      %li.error
-        = t :no_results
-  
-    %li.cancel
-      = link_to t(:clear_search), '#', :class => "cancel"
+%ul.suggestion_search
+  - if @suggestions.any?
+    - @suggestions.each do |sugg|
+      = render :partial => "#{sugg.class.to_s.pluralize.underscore}/suggested", :object => sugg
+
+  - else
+    %li.error
+      = t :no_results
+
+  %li.cancel
+    = link_to t(:clear_search), '#', :class => "cancel"

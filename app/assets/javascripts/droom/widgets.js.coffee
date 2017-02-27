@@ -735,12 +735,12 @@ jQuery ($) ->
       $.calendar?.show(year, month)
     @
 
-  # calendar_search links push their text into the suggestion box by way of the calendar.searchFor function.
+  # calendar_search links push their text into the suggestion box by way of the calendar.search function.
   # 
   $.fn.calendar_search = ->
     @click (e) ->
       e.preventDefault() if e
-      $.calendar?.searchFor($(@).text())
+      $.calendar?.search($(@).text())
 
 
 
@@ -929,7 +929,7 @@ jQuery ($) ->
       
     searchForm: =>
       @_form ?= $('#suggestions')
-    
+
     searchForDay: (e) =>
       e.preventDefault() if e
       day = $(e.target).text()
@@ -938,13 +938,12 @@ jQuery ($) ->
     searchForMonth: (e) =>
       e.preventDefault() if e
       @search("#{@monthName()} #{@_year}")
-      
+
     search: (term) =>
       @searchForm()?.find('input#term').val(term).change()
       @searchForm().trigger('show')
-      # should trigger a change event, then we hit the cache if possible
-      # @searchForm()?.submit()
-      
+
+
 
 
   # The Suggester hooks us up to the machinery that drives the main suggestions box, usually with some

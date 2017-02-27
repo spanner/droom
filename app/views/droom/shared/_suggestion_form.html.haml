@@ -1,5 +1,6 @@
-#search
-  %form#suggestionform{:action => droom.suggestions_url(:format => :js)}<
-    = text_field_tag :term, params[:term], :placeholder => t(:quick_search), :autocomplete => "off"
-    = submit_tag "go"
-  .search_results
+%form#suggestions{:action => droom.suggestions_url}
+  %p
+    %label{:for => 'term'}
+      = t :quick_search
+    = text_field_tag :term, params[:term], :placeholder => t(:quick_search_prompt), :autocomplete => "off", :autofocus => true
+
