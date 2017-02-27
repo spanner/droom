@@ -647,9 +647,6 @@ module Droom
         account_confirmation: confirm_account
       }
       if person_by_user_uid_present?
-        #data[:person] = @person.uid
-        #data[:awards] = @person.awards.collect{|r| r.award_type_code}
-        #data[:person] = person_by_user_uid.uid
         data[:awards] = person_by_user_uid.awards.collect{|r| r.award_type_code}
       end
       data
