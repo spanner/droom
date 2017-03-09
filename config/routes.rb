@@ -1,4 +1,4 @@
-Droom::Engine.routes.draw do 
+Droom::Engine.routes.draw do
   root to: "dashboard#index", as: :dashboard
 
   match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options]
@@ -7,14 +7,14 @@ Droom::Engine.routes.draw do
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
     get '/authenticate/:tok' => 'users#authenticate', as: 'authenticate'
     get '/deauthenticate/:tok' => 'users#deauthenticate', as: 'deauthenticate'
-    get '/reindex_user' => 'users#reindex_user', as: 'reindex'
+    post '/reindex_user' => 'users#reindex_user', as: 'reindex'
     resources :users
     resources :events
     resources :venues
   end
 
   devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords'}
-  
+
   # intermediate confirmation step to allow invitation without setting a password
   devise_scope :user do
     get "/users/:id/welcome/:confirmation_token" => "users/confirmations#show", as: :welcome
