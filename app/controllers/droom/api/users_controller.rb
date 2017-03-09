@@ -59,8 +59,10 @@ module Droom::Api
     end
 
     def reindex_user
-      Droom::CroucherIndexJob.perform_later
-      render json: {result: ''}
+      #Droom::CroucherIndexJob.perform_later
+      #render json: {result: ''}
+      Searchkick::ProcessQueueJob.perform_later(class_name: "Droom::User")
+      head :ok
     end
 
   protected
