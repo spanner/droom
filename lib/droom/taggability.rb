@@ -1,3 +1,5 @@
+#TODO make concern, include more selectively
+
 module Droom
   module Taggability
   
