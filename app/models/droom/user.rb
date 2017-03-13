@@ -2,9 +2,6 @@ require 'digest'
 
 module Droom
   class User < ActiveRecord::Base
-    include HasPerson
-    include HasAward
-
     validates :family_name, :presence => true
     validates :given_name, :presence => true
     validates :uid, :uniqueness => true, :presence => true
@@ -626,6 +623,7 @@ module Droom
       !Droom.require_login_permission || admin? || permitted?('droom.login')
     end
 
+
     ## Other ownership
     #
     has_many :scraps, :foreign_key => "created_by_id"
@@ -646,13 +644,11 @@ module Droom
         status: status,
         account_confirmation: confirm_account
       }
-      if person_by_user_uid_present?
-        #data[:person] = @person.uid
-        #data[:awards] = @person.awards.collect{|r| r.award_type_code}
-        #data[:person] = person_by_user_uid.uid
-        data[:awards] = person_by_user_uid.awards.collect{|r| r.award_type_code}
-      end
-      data
+      data.merge(additional_search_data)
+    end
+
+    def additional_search_data
+      {}
     end
 
     def confirm_account
@@ -675,95 +671,10 @@ module Droom
       end
     end
 
-    def user_statuses
-      statuses = []
-      if applications.any?
-        statuses << 'Applicant'
-      end
-      if screeners.any?
-        statuses << 'Screener'
-      end
-      if interviewers.any?
-        statuses << 'Interviewer'
-      end
-      if person? && person.awards.any?
-        statuses << 'Scholar'
-      end
-      if data_room_user?
-        statuses << 'Data_room'
-      end
-      if groups.any?
-        groups.map{ |r| statuses << r.slug.singularize.capitalize}
-      end
-      statuses.uniq
-    end
-
-
     def privileged?
       admin? || groups.privileged.any?
     end
 
-    def records_from_round(record_list)
-      if record_list.any?
-        records = record_list.map do |record|
-          [record.round.year, record.round.url]
-        end
-        records.sort!{ |r1,r2| r1.first <=> r2.first }
-      else
-        []
-      end
-    end
-
-    def records_by_mapping_application(record_list)
-      if record_list.any?
-        records = record_list.map do |record|
-          application = Application.find(id: record.application_id)
-          [record.year, (application.url if application) ]
-        end
-      else
-        []
-      end
-    end
-
-    def screened_years
-      screened_records = screeners
-      records_from_round(screened_records)
-    end
-
-    def interviewed_years
-      interviewed_records = interviewers
-      records_from_round(interviewed_records)
-    end
-
-    def applied_years
-      application_records = applications
-      if application_records.any?
-        records = application_records.map do |record|
-          [record.round.year, record.url]
-        end
-        records.sort!{ |r1,r2| r1.first <=> r2.first }
-      else
-        []
-      end
-    end
-
-    def received_awards
-      if person?
-        received_awards = person.awards
-        records_by_mapping_application(received_awards)
-      else
-        []
-      end
-    end
-
-    def received_grants
-      if person?
-        grant_records = person.grants
-        records_by_mapping_application(grant_records)
-      else
-        []
-      end
-    end
 
   protected
 
@@ -781,6 +692,7 @@ module Droom
     def confirmed_if_password_set
       self.update_column(:confirmed_at, Time.now) if password_set? && !confirmed?
     end
+
 
   private
 
