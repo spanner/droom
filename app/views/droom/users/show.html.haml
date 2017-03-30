@@ -1,2 +1,20 @@
-- @view ||= 'welcome'
-= render partial: "droom/users/show/#{@view}"
+#user_profile
+  %header#user_title
+    = render 'droom/users/show/title'
+
+  #user_profile_detail
+
+    %aside#right_pane
+      = render 'droom/users/show/contact'
+
+    #left_pane
+      #left_pane_contents
+        - if @view
+          = render "droom/users/show/#{@view}"
+        - else
+          = render 'droom/users/show/personal'
+          = render 'droom/users/show/account_info'
+          = render 'droom/users/show/statuses'
+          = render 'droom/users/show/groups'
+          = render 'droom/users/show/biography'
+

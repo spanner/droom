@@ -1,0 +1,51 @@
+- cssclass = 'personal_info'
+- cssclass << ' editable' if can?(:edit, @user)
+
+%section{class: cssclass, data: {refreshable: true, url: droom.user_url(@user, view: 'personal', format: :js)}}
+  - if @user && can?(:edit, @user)
+    %span.user_controls
+      = link_to t(:edit_user_profile_symbol), droom.edit_user_url(@user, view: 'personal'), class: "edit", data: {action: 'popup', affected: 'section.personal_info, span.user_title'}
+
+  %h2.section
+    = t :user_profile_personal
+
+  #personal_info_content
+    #left_pane
+      - if @user.image?
+        - img = @user.image.url(:thumb)
+      - else
+        - img = image_url('droom/missing/user.png')
+
+      .image-upload{:data => {:role => "imagepicker"}}
+        %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
+
+    #right_pane
+      .right_pane_container
+        .right_pane_contents
+          = 'Title: '
+          %b
+            = @user.title.present? ? @user.title : t(:not_known)
+        .right_pane_contents
+          = 'Family name: '
+          %b
+            = @user.family_name.present? ? @user.family_name : t(:not_known)
+
+      .right_pane_container
+        .right_pane_contents
+          = 'Given name: '
+          %b
+            = @user.given_name.present? ? @user.given_name : t(:not_known)
+        .right_pane_contents
+          = 'Chinese name: '
+          %b
+            = @user.chinese_name.present? ? @user.chinese_name : t(:not_known)
+
+      .right_pane_container
+        .right_pane_contents
+          = 'Date of birth: '
+          %b
+            = @user.dob.present? ? @user.dob.strftime('%e %b %Y') : t(:not_known)
+        .right_pane_contents
+          = 'Gender: '
+          %b
+            = @user.gender.present? ? ( @user.gender == 'm' ? 'Male' : 'Female') : t(:not_known)

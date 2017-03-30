@@ -1,0 +1,21 @@
+- user ||= @user
+
+#note
+  = render partial: 'droom/users/edit/header', locals: { user: user}
+
+  = form_for user, :html => {class: 'poppedup'}, data: {remote: true, type: :html} do |f|
+    = hidden_field_tag :view, @view
+
+    - groups = Droom::Group.all
+    - if groups.any?
+      %div{style: 'width: 100%;'}
+        = f.label(:group_ids, class: "important") + ":"
+        - groups.each do |group|
+          %label.inline{for: "user_group_ids_#{group.id}"}
+            - if is_edit_mode || @user.new_record?
+              = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
+            - else
+              = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}", disabled: true
+            = group.name
+
+    = render partial: 'droom/users/edit/buttons', locals: {f: f}

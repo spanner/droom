@@ -1,0 +1,55 @@
+- cssclass = 'account_info'
+- cssclass << ' editable' if can?(:edit, @user)
+
+%section{class: cssclass, data: {refreshable: true, url: droom.user_url(@user, view: 'account_info', format: :js)}}
+  - if @user && can?(:edit, @user)
+    %span.user_controls
+      = link_to t(:edit_user_profile_symbol), droom.edit_user_url(@user, view: 'account_info'), class: "edit", data: {action: 'popup', affected: "section.account_info"}
+
+  %h2.section
+    = t :user_profile_account
+
+  #account_info_container
+    .account_info_contents
+      .left_pane
+        = 'Created at: '
+        %b
+          = @user.created_at.present? ? @user.created_at.strftime('%e %b %Y') : t(:not_known)
+
+      .mid_pane
+        = 'Last signed in: '
+        %b
+          = @user.last_sign_in_at.present? ? @user.last_sign_in_at.strftime('%e %b %Y') : t(:not_known)
+
+      .right_pane
+        = 'Data Room Access: '
+        %b
+          = @user.data_room_user? ? 'Yes' : 'No'
+
+    .account_info_contents
+      .left_pane
+        = 'Account Confirmed?: '
+        %b
+          = @user.confirmed? ? 'Yes' : 'No'
+
+      .mid_pane
+        = 'Confirmed at: '
+        %b
+          = @user.confirmed_at.present? ? @user.confirmed_at.strftime('%e %b %Y') : t(:not_known)
+
+      .right_pane
+        = 'Administrator?: '
+        %b
+          = @user.admin? ? 'Yes' : 'No'
+
+    .account_info_contents
+      .left_pane
+        = link_to 'Relationship with Croucher', droom.user_activity_url(@user.id), :class => 'edit', :data => {:action => 'popup', :affected => "#user_activity_#{@user.id}"}
+
+      .mid_pane
+        = link_to t(:edit_account), droom.edit_user_url(@user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{@user.id}, section.contacts"}
+
+      .right_pane
+        -#= link_to t(:delete_user), droom.user_url(@user), :method => 'delete', :class => 'delete', :data => {:confirm => t(:confirm_delete_user, :name => @user.full_name)}
+
+

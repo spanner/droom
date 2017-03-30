@@ -7,7 +7,7 @@
   %td.name
     %span.contact
       %span.name
-        = link_to user.informal_name, user_preview_profile_url(user.id), :data => {:action => "popup", :affected => "##{rowid}"}
+        = link_to user.informal_name, user_url(user.id), target: '_blank'
         = action_menulink(user)
         = action_menu(user)
 

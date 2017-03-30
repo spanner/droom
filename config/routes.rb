@@ -7,8 +7,11 @@ Droom::Engine.routes.draw do
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
     get '/authenticate/:tok' => 'users#authenticate', as: 'authenticate'
     get '/deauthenticate/:tok' => 'users#deauthenticate', as: 'deauthenticate'
-    post '/reindex_user' => 'users#reindex_user', as: 'reindex'
-    resources :users
+    #post '/reindex_user' => 'users#reindex_user', as: 'reindex'
+    #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
+    resources :users do
+      post 'reindex', on: :member, as: :reindex
+    end
     resources :events
     resources :venues
   end
@@ -64,7 +67,6 @@ Droom::Engine.routes.draw do
   end
 
   resources :users do
-    get "preview" => "users#preview", as: :preview_profile
     get "activity" => "users#activity", as: :activity
     get "preferences", on: :member, as: :preferences
     get "admin", on: :collection

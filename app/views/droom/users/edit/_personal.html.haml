@@ -1,0 +1,64 @@
+- user ||= @user
+#note
+  = render partial: 'droom/users/edit/header', locals: { user: user}
+
+  = form_for user, :html => { class: 'poppedup'}, data: {remote: true, type: :html} do |f|
+    = hidden_field_tag :view, @view
+
+    %table
+      %tr
+        %td{valign: 'top'}
+          %table
+            %tr
+              %td
+                %div
+                  - if user.image?
+                    - img = user.image.url(:thumb)
+                  - else
+                    - img = image_url('droom/missing/user.png')
+
+                  .image-upload{:data => {:role => "imagepicker"}}
+                    %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
+                    = f.file_field :image
+
+        %td{valign: 'top'}
+          %div
+            %table
+              %tr
+                %td Title
+                %td Family Name
+              %tr
+                %td
+                  - if Droom.use_titles?
+                    %span.title>
+                      = f.text_field :title, placeholder: t("placeholders.user.title")
+                %td
+                  %span.name>
+                    = f.text_field :family_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.family_name")
+
+              %tr
+                %td Given Name
+                %td Chinese Name
+              %tr
+                %td
+                  %span.name>
+                    = f.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
+
+                %td
+                  - if Droom.use_chinese_names?
+                    %span.chinese_name>
+                      = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
+
+              %tr
+                %td Gender
+                %td Date of birth
+              %tr
+                %td{valign: 'top'}
+                  = f.radio_button :gender, "f"
+                  = f.label :gender, t(:"helpers.label.user.gender_f"), value: "f"
+                  = f.radio_button :gender, "m"
+                  = f.label :gender, t(:"helpers.label.user.gender_m"), value: "m"
+                %td{valign: 'top'}
+                  = f.date_select :dob, {order: [:day, :month, :year], prompt: { day: 'Select day', month: 'Select month', year: 'Select year' }, start_year: 1940, end_year: Date.today.year}
+
+    = render partial: 'droom/users/edit/buttons', locals: {f: f}
