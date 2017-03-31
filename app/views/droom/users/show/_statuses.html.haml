@@ -1,0 +1,19 @@
+- cssclass = 'statuses_info'
+- cssclass << ' editable' if can?(:edit, @user)
+
+- statuses = @user.user_statuses
+- statuses_size = statuses.size - 1
+
+%section{class: cssclass, data:{refreshable: true, url: droom.user_url(@user, view: 'statuses', format: :js)}}
+  %h2.section
+    = t :user_profile_statuses
+
+  %div#statuses_container
+    - if statuses.any?
+      - statuses.each_with_index do |r,index|
+        - if index == statuses_size
+          = r
+        - else
+          = "#{r}, "
+    - else
+      = 'None'

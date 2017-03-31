@@ -13,7 +13,7 @@ module Droom::Api
     def show
       render json: @user
     end
-  
+
     # This is a almost always a preliminary call at the initial auth stage,
     # so the client is not yet setting auth headers. We look for a token in params too.
     #
@@ -25,7 +25,7 @@ module Droom::Api
         render json: { errors: "Token not recognised" }, status: :unauthorized
       end
     end
-  
+
     # Deauth is used to achieve single-sign-out. It changes the auth token and session id
     # so that neither the data room session cookie nor the domain auth cookie can identify a user.
     #
@@ -39,7 +39,7 @@ module Droom::Api
         head :unauthorized
       end
     end
-  
+
     def update
       @user.update_attributes(user_params)
       render json: @user
@@ -55,6 +55,11 @@ module Droom::Api
 
     def destroy
       @user.destroy
+      head :ok
+    end
+
+    def reindex
+      @user.reindex_async
       head :ok
     end
 

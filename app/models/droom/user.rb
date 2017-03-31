@@ -648,7 +648,17 @@ module Droom
     end
 
     def additional_search_data
-      {}
+      {
+         'awards': person_awards
+      }
+    end
+
+    def person_awards
+      awards = []
+      if person_by_user_uid_present?
+        awards = person_by_user_uid.awards.collect{|r| r.award_type_code}
+      end
+      awards
     end
 
     def confirm_account

@@ -22,7 +22,6 @@ module Droom
     def admin
       if params[:q].blank? && params[:award_type_code].blank? && params[:account_group].blank? && params[:account_confirmed].blank?
         group_slugs = Droom::Group.all.collect{ |r| r.slug }
-        #group_slugs = %w(trustees audit-committee investment-committee croucher-office screeners interviewers judges developers editors)
         @users = Droom::User.search '*', where: {groups: group_slugs}, limit: 100, order: {name: :asc}, aggs: [:awards, :groups, :account_confirmation]
       else
         query = params[:q].presence || '*'
@@ -36,8 +35,13 @@ module Droom
     end
 
     def show
+      #find_user_by_user_id
       @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
-      respond_with @user
+      respond_with @user do |format|
+        format.js {
+          render partial: "droom/users/show/#{@view}"
+        }
+      end
     end
 
     def new
@@ -72,26 +76,7 @@ module Droom
     #
     def update
       if @user.update_attributes(user_params)
-        sign_in(@user, :bypass => true) if @user == current_user        # changing the password invalidates the session
-        respond_with @user do |f|
-          f.html {
-            flash[:notice] = "Thank you. Your account has been updated."
-            redirect_to droom.dashboard_url
-          }
-          f.js {
-            render partial: "droom/users/show/profile"
-          }
-        end
-      else
-        Rails.logger.warn "update failed: #{@user.errors.to_a.inspect}"
-        respond_with @user
-      end
-    end
-
-    def preview
-      find_user_by_user_id
-      respond_to do |format|
-        format.html {render :edit, locals: {mode: false}}
+        respond_with @user, location: user_url(view: @view)
       end
     end
 
@@ -169,8 +154,8 @@ module Droom
     end
 
     def set_view
-      @view = params[:view] if %w{listed tabled profile preferences my_profile}.include?(params[:view])
-      @view ||= 'profile'
+      @view = params[:view] if %w{listed tabled profile preferences my_profile title contact personal account_info statuses groups biography }.include?(params[:view])
+      #@view ||= 'profile'
     end
 
     def self_unless_admin
@@ -178,7 +163,7 @@ module Droom
     end
 
     def find_user_by_user_id
-      @user = Droom::User.find_by_id(params[:user_id])
+      @user ||= Droom::User.find_by_id(params[:user_id])
     end
   end
 end

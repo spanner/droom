@@ -1,0 +1,28 @@
+- cssclass = 'groups_info'
+- cssclass << ' editable' if can?(:edit, @user)
+
+- group_names = []
+
+-  groups = Droom::Group.all
+- if groups.any?
+  - group_names = groups.map{ |group| group.name if @user.group_ids.include?(group.id)}
+  - group_names = group_names.compact
+- group_names_size = group_names.any? ? group_names.size - 1 : 0
+
+%section{class: cssclass, data:{refreshable: true, url: droom.user_url(@user, view: 'groups', format: :js)}}
+  - if @user && can?(:edit, @user)
+    %span.user_controls
+      = link_to t(:edit_user_profile_symbol), droom.edit_user_url(@user, view: 'groups'), class: "edit", data: {action: 'popup', affected: "section.groups_info,section.statuses_info"}
+
+  %h2.section
+    = t :user_profile_groups
+
+  %div#groups_info_container
+    - if group_names.any?
+      - group_names.each_with_index do |r, index|
+        - if index == group_names_size
+          = r
+        - else
+          = "#{r}, "
+    - else
+      = 'None'

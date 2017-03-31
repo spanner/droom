@@ -1,0 +1,6 @@
+%span.user_title{data: {refreshable: true, url: droom.user_url(@user, view: 'title', format: :js)}}
+  = @user.title
+  = @user.informal_name
+  - if @user.chinese_name?
+    %span.chinese_name
+      = @user.chinese_name

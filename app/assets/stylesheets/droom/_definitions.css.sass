@@ -25,6 +25,7 @@ $palered: lighten($red, 30)
 $dark: #4d4e53
 $mid: #9a9b9d
 $pale: #bdbdbd
+$pale_for_edit: #cacac8
 $palest: #f2f0ed !default
 
 $page: #ffffff
@@ -136,7 +137,7 @@ $tool_button_width: 32px
 =small
   font-size: 80%
   line-height: 1.2
-  
+
 =icon_link($url)
   display: inline-block
   text-indent: 18px
@@ -166,7 +167,7 @@ $tool_button_width: 32px
   min-height: 24px
   &:hover
     background-position: 0 -48px
-  
+
 
 =icon($url)
   display: inline-block
@@ -185,7 +186,7 @@ $tool_button_width: 32px
 
 =blurred($color: $pale)
   text-shadow: $color 0 0 3px
-  
+
 =text-hidden($indent: 500px)
   overflow: hidden
   text-indent: $indent
@@ -195,7 +196,7 @@ $tool_button_width: 32px
     color: $pale
     background-image: image-url('droom/spinner.gif')
     background-position: 0 0
-  
+
 =outset($width: $datemark_width, $margin: $datemark_margin)
   position: relative
   float: left
@@ -239,3 +240,9 @@ $tool_button_width: 32px
       width: $subwidth - 18px
     &:last-child, &.last
       margin-right: 0
+
+=clearfix
+  &:after
+    content: ""
+    display: table
+    clear: both
