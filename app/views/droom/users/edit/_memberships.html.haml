@@ -1,8 +1,4 @@
 - user ||= @user
-- if local_assigns.has_key? :is_edit_mode
-  - is_edit_mode = is_edit_mode
-- else
-  - is_edit_mode = true
 
 - statuses = user.user_statuses
 - statuses_size = statuses.size - 1
@@ -25,8 +21,5 @@
       = f.label(:group_ids, class: "important") + ":"
       - groups.each do |group|
         %label.inline{for: "user_group_ids_#{group.id}"}
-          - if is_edit_mode || @user.new_record?
-            = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
-          - else
-            = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}", disabled: true
+          = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
           = group.name

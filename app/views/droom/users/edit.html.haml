@@ -1,6 +1,2 @@
 - @view ||= 'profile'
-- if local_assigns.has_key? :mode
-  - is_edit_mode = mode
-- else
-  - is_edit_mode = true
-= render partial: "droom/users/edit/#{@view}", locals: {is_edit_mode: is_edit_mode}
+= render partial: "droom/users/edit/#{@view}"

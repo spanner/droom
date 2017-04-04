@@ -6,8 +6,8 @@
     = hidden_field_tag :view, @view
 
     #edit_contacts
-      = render "droom/users/edit/emails", f: f, user: user, is_edit_mode: true
-      = render "droom/users/edit/phones", f: f, user: user, is_edit_mode: true
-      = render "droom/users/edit/addresses", f: f, user: user, is_edit_mode: true
+      = render "droom/users/edit/emails", f: f, user: user
+      = render "droom/users/edit/phones", f: f, user: user
+      = render "droom/users/edit/addresses", f: f, user: user
 
     = render partial: 'droom/users/edit/buttons', locals: {f: f}

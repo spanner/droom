@@ -2,10 +2,6 @@
 - fields_counter ||= nil
 - address ||= fields || @address
 - user = @user || current_user
-- if local_assigns.has_key? :is_edit_mode
-  - is_edit_mode = is_edit_mode
-- else
-  - is_edit_mode = true
 
 = fields_for user do |uf|
   = uf.fields_for :addresses, address, :child_index => fields_counter || 'field_counter' do |f|
@@ -13,17 +9,11 @@
     %fieldset.repeating
       %p.twocol.reversed
         %span.col>
-          - if is_edit_mode || @user.new_record?
-            = f.text_area :address, :placeholder => t("placeholders.address.address")
-          - else
-            = f.text_area :address, :placeholder => t("placeholders.address.address"), disabled: true
+          = f.text_area :address, :placeholder => t("placeholders.address.address")
         %span.col.last>
-          - if is_edit_mode || @user.new_record?
-            = f.select :address_type_id, Droom::AddressType.for_selection(:address)
-          - else
-            = f.select :address_type_id, Droom::AddressType.for_selection(:address),{},{disabled: true}
-      - if is_edit_mode || @user.new_record?
-        .controls
-          = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
-          - if address.persisted?
-            = f.hidden_field :_destroy, data: {role: "destroy"}
+          = f.select :address_type_id, Droom::AddressType.for_selection(:address)
+
+      .controls
+        = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
+        - if address.persisted?
+          = f.hidden_field :_destroy, data: {role: "destroy"}

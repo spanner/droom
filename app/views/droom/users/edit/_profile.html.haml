@@ -1,38 +1,22 @@
 - user ||= @user
-- if local_assigns.has_key? :is_edit_mode
-  - is_edit_mode = is_edit_mode
-- else
-  - is_edit_mode = true
+
 #edit_user
   .header
     = link_to "X", '#', :class => "closer", :data => {:action => "close"}
     %h2.titlebar
       - if @user == current_user
-        - if is_edit_mode
-          = t :edit_your_profile
-        - else
-          = t :preview_your_profile
+        = t :edit_your_profile
       - elsif @user.new_record?
         = t :add_new_user
       - else
-        - if is_edit_mode
-          = t :edit_profile_of, name: @user.name
-        - else
-          = t :preview_profile_of, name: @user.name
+        = t :edit_profile_of, name: @user.name
 
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
-    = render partial: 'droom/users/edit/user_fields', locals: {f: f, user: user, is_edit_mode: is_edit_mode}
+    = render partial: 'droom/users/edit/user_fields', locals: {f: f, user: user}
     %div{style: 'width: 100%; text-align: center;'}
-      - if is_edit_mode
-        - if user == current_user
-          = f.submit t(:save_your_profile)
-        - else
-          = f.submit t(:save_profile)
+      - if user == current_user
+        = f.submit t(:save_your_profile)
       - else
-        - if @user.new_record?
-          = f.submit t(:save_profile)
-        - else
-          - rowid = "user_#{user.id}"
-          = link_to 'Edit Profile', edit_user_url(user), :data => {:action => "replace", :affected => "##{rowid}"}, style: 'color: green;'
+        = f.submit t(:save_profile)
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'

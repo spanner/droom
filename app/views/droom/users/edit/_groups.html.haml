@@ -12,10 +12,7 @@
         = f.label(:group_ids, class: "important") + ":"
         - groups.each do |group|
           %label.inline{for: "user_group_ids_#{group.id}"}
-            - if is_edit_mode || @user.new_record?
-              = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
-            - else
-              = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}", disabled: true
+            = check_box_tag "user[group_ids][]", group.id, user.group_ids.include?(group.id), id: "user_group_ids_#{group.id}"
             = group.name
 
     = render partial: 'droom/users/edit/buttons', locals: {f: f}

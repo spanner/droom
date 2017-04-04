@@ -35,4 +35,5 @@
           = 'Administrator?: '
           = f.check_box :admin
 
-    = render partial: 'droom/users/edit/buttons', locals: {f: f}
+      .edit_account_info_content
+        = render partial: 'droom/users/edit/buttons', locals: {f: f}

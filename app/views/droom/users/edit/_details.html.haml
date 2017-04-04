@@ -1,19 +1,11 @@
 - user ||= @user
-- if local_assigns.has_key? :is_edit_mode
-  - is_edit_mode = is_edit_mode
-- else
-  - is_edit_mode = true
+
 - if admin?
-  %div
-    - if is_edit_mode || @user.new_record?
-      = f.radio_button :gender, "f"
-    - else
-      = f.radio_button :gender, "f", disabled: true
+  %p.gender
+    = f.radio_button :gender, "f"
     = f.label :gender, t(:"helpers.label.user.gender_f"), value: "f"
-    - if is_edit_mode || @user.new_record?
-      = f.radio_button :gender, "m"
-    - else
-      = f.radio_button :gender, "m", disabled: true
+
+    = f.radio_button :gender, "m"
     = f.label :gender, t(:"helpers.label.user.gender_m"), value: "m"
 
   - unless @user.new_record? || @user.confirmed?

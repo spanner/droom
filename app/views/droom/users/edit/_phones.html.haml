@@ -1,15 +1,9 @@
 - user ||= @user
-- if local_assigns.has_key? :is_edit_mode
-  - is_edit_mode = is_edit_mode
-- else
-  - is_edit_mode = true
-
 - user.phones.build(address_type: Droom::AddressType.default) unless user.phones.any?
 
 #phone_fields.nested_set
-  = render :partial => 'droom/phones/fields', :collection => user.phones, locals: {is_edit_mode: is_edit_mode}
+  = render :partial => 'droom/phones/fields', :collection => user.phones
 
 - unless user.new_record?
-  - if is_edit_mode
-    %p.action{style: 'margin-top: -10px;'}
-      = link_to t(:add_phone), droom.new_user_phone_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#phone_fields'}
+  %p.action{style: 'margin-top: -10px;'}
+    = link_to t(:add_phone), droom.new_user_phone_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#phone_fields'}
