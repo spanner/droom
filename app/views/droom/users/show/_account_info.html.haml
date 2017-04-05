@@ -44,12 +44,11 @@
 
     .account_info_contents
       .left_pane
-        = link_to 'Relationship with Croucher', droom.user_activity_url(@user.id), :class => 'edit', :data => {:action => 'popup', :affected => "#user_activity_#{@user.id}"}
-
-      .mid_pane
         = link_to t(:edit_account), droom.edit_user_url(@user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{@user.id}, section.contacts"}
+      .mid_pane
+        = ''
 
       .right_pane
-        -#= link_to t(:delete_user), droom.user_url(@user), :method => 'delete', :class => 'delete', :data => {:confirm => t(:confirm_delete_user, :name => @user.full_name)}
+        = ''
 
 

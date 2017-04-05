@@ -456,6 +456,7 @@ en:
   user_profile_contact: "Contact"
   user_profile_personal: "Personal Information"
   user_profile_account: "Account Information"
+  user_profile_rs_with_croucher: "Relationship with Croucher"
   user_profile_statuses: "Statuses"
   user_profile_groups: "Groups"
   user_profile_biography: "Biography"
