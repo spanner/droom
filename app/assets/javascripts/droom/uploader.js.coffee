@@ -12,7 +12,10 @@ jQuery ($) ->
       @_form = $('<form method="POST" />').addClass('uploader').prependTo @_catcher
       @resetFilefield()
       @_queue = @_catcher.find('[data-role="upload-queue"]')
-      @_triggers = @_catcher.find('[data-role="upload-file"]')
+      if picker_selector = @_catcher.data('picker')
+        @_triggers = $(picker_selector)
+      else
+        @_triggers = @_catcher.find('[data-role="upload-file"]')
       @_triggers.click @triggerFilefield
       @_catcher.on "dragenter", @lookAvailable
       @_catcher.on "drop", @catchFiles

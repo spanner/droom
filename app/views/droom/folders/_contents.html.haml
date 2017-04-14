@@ -13,7 +13,7 @@
           = link_to t(:more_documents_count, :count => document_count - limit), for_more
 
     - else
-      %li.files{data: {droppable: droom.folder_documents_path(folder)}}
+      %li.files{data: {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}"}}
         %ul
           = render :partial => 'droom/documents/listing', :collection => folder.documents, locals: {narrow: narrow}
         - if can?(:edit, folder)

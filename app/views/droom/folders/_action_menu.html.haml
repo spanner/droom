@@ -4,7 +4,7 @@
       %li
         = link_to t(:edit_folder), droom.edit_folder_url(folder), :class => "edit", :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}
       %li
-        = link_to t(:add_document), '#', class: "add", data: {role: "upload-file"}
+        = link_to t(:add_document), '#', class: "add", id: "upload_to_folder_#{folder.id}", data: {role: "upload-file"}
       %li
         = link_to t(:add_subfolder), droom.new_folder_folder_url(folder), :class => "add", :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}
       %li
