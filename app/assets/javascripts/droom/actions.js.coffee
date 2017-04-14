@@ -37,9 +37,9 @@ jQuery ($) ->
   class Refresher
     constructor: (element) ->
       @_container = $(element)
-      @_url = @_container.attr 'data-url'
+      @_url = @_container.attr('refreshable') or @_container.attr('data-url')
       @_container.bind "refresh", @refresh
-      
+
     refresh: (e) =>
       e.stopPropagation()
       e.preventDefault()

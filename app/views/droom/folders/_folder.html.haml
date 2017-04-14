@@ -13,6 +13,7 @@
 
 - if @folder
   - open = true if folder == @folder || folder.ancestor_of?(@folder)
+
 - defer_contents ||= !open
 - cssclass = "folder"
 - cssclass << " open" if open
@@ -21,7 +22,7 @@
 - cssclass << " standalone" if standalone
 - cssclass << " auto" if folder.automatic? && can?(:edit, folder)
 
-%li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: true, url: url, label: folder.slug} }<
+%li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: true, url: url, label: folder.slug } }<
   = link_to shorten(title, length), url, class: "folder"
   - unless omit_menu
     = action_menulink(folder)

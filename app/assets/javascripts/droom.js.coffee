@@ -20,6 +20,7 @@
 #= require droom/widgets
 #= require droom/stream
 #= require droom/map
+#= require droom/uploader
 #= require_self
 
 jQuery ($) ->
@@ -29,9 +30,9 @@ jQuery ($) ->
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('.hidden').find('input, select, textarea').attr('disabled', true)
     @find_including_self('.temporary').disappearAfter(1000)
-    
+
     # link actions
-    
+
     @find_including_self('[data-action="popup"]').popup()
     @find_including_self('[data-action="close"]').closes()
     @find_including_self('[data-action="affect"]').affects()
@@ -54,17 +55,17 @@ jQuery ($) ->
     @find_including_self('div[data-panel]').panel()
     @find_including_self('[data-menu]').action_menu()
     @find_including_self('table[data-hoverable]').hover_table()
-    
+
     # it's not very easy to add data attributes to kaminari pagination links
-    
+
     @find_including_self('.pagination.sliding a').page_turner()
 
     # and some shortcuts for compatibility
-    
+
     @find_including_self('a.inline, a.fetch').replace_with_remote_content()
-    
+
     # form widgets and input modification. These are moving to [data-role] markup.
-    
+
     @find_including_self('.wysihtml').html_editable()
     @find_including_self('[data-role="datepicker"]').date_picker()
     @find_including_self('.timepicker').time_picker()
@@ -79,6 +80,7 @@ jQuery ($) ->
     @find_including_self('[data-role="imagepicker"]').image_picker()
     @find_including_self('[data-role="venuepicker"]').venue_picker()
     @find_including_self('[data-role="slug"]').slug_field()
+    @find_including_self('[data-droppable]').uploader()
 
     # page widgets
     

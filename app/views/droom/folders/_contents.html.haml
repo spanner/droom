@@ -4,7 +4,7 @@
 - narrow ||= false
 - document_count = folder.documents.count
 
-%ul.filing
+%ul.filing<
   - if folder.children.any? or folder.documents.any?
     - if limit && limit < document_count
       = render :partial => 'droom/documents/listing', :collection => folder.documents.limit(limit)
@@ -13,25 +13,32 @@
           = link_to t(:more_documents_count, :count => document_count - limit), for_more
 
     - else
-      = render :partial => 'droom/documents/listing', :collection => folder.documents, locals: {narrow: narrow}
+      %li.files{data: {droppable: droom.folder_documents_path(folder)}}
+        %ul
+          = render :partial => 'droom/documents/listing', :collection => folder.documents, locals: {narrow: narrow}
+        - if can?(:edit, folder)
+          %ul.uploads{data: {role: "upload-queue"}}<
+
       - children = folder.children
       - if flat
         - if children.any? && for_more
           %li.more
             = link_to t(:more_subfolders_count, :count => children.count), for_more
-        
+
       - else
         / special case: if we're looking at a private folder that means we are allowed to see its children.
         - unless admin? || !folder.public?
           - children = folder.children.populated
 
-        - if limit && limit < document_count + folder.children.count
-          - children = children.limit(limit - document_count)
-          - children = children.populated unless can?(:edit, folder)
-          = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}
-          - if for_more
-            %li.more
-              = link_to t(:more), for_more
+        %li.folders
+          %ul
+            - if limit && limit < document_count + folder.children.count
+              - children = children.limit(limit - document_count)
+              - children = children.populated unless can?(:edit, folder)
+              = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}
+              - if for_more
+                %li.more
+                  = link_to t(:more), for_more
 
-        - else
-          = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}
+            - else
+              = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}

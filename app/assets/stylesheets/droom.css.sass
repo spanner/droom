@@ -1,7 +1,4 @@
 @import droom/definitions
-@import droom/popups
-@import droom/stream
-@import droom/datepicker
 
 p.quitelarge
   font-size: 1.4em
@@ -233,12 +230,9 @@ div.event, form.event, div.project
       p
         margin-top: 0
   .col
-    float: left
-    width: 450px
-    margin-right: 20px
-    &:last-child
-      margin-right: 0
-      width: 300px
+    display: block
+    width: 100%
+    margin-right: 0
 
 #margin
   ul.invitations
@@ -1519,17 +1513,15 @@ ul.filing
   position: relative
   padding: 0
   list-style: none
+  &:empty
+    display: none
   li.document
     position: relative
     white-space: nowrap
     overflow: hidden
-    span.action
-      position: absolute
-      top: 0
-      right: 0
 
 .no-touch
-  ul.filing
+  ul.filing, ul.uploads
     li.document
       span.action
         visibility: hidden
@@ -1551,9 +1543,10 @@ div.attachments
       +inverted
   ul
     padding-left: 20px
-    margin-bottom: 10px
-    margin-top: 0
+    margin: 0
     list-style: none
+    div.files
+      margin-bottom: 0.5em
     li.folder
       a.folder
         font-weight: bold
@@ -1566,13 +1559,12 @@ ul#folders, div.attachments
   padding-left: 0
   li
     list-style: none
+    margin: 0 0 0.25em 0
 
   li.folder
-    margin: 4px 0
     ul.filing
       padding-left: 30px
-      margin-top: 0
-      margin-bottom: 10px
+      margin: 0
     a.folder
       +big_icon_link("droom/folder.png")
       color: $text
@@ -2116,3 +2108,7 @@ ul.checklist
   width: 100%
   text-align: center
 
+@import droom/popups
+@import droom/stream
+@import droom/datepicker
+@import droom/uploader

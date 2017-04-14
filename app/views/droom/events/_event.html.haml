@@ -15,7 +15,11 @@
 - cssclasses << 'open' if open
 - cssclasses << 'invited' if event.attended_by?(current_user)
 
-%div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:action => "collapser", :refreshable => true, :url => event_path(event, :format => :js)} }
+- div_data = {:action => "collapser", refreshable: event_path(event, format: :js)}
+- unless full_attachments
+  - div_data[:droppable] = droom.folder_documents_path(event.folder)
+
+%div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => div_data}
   = link_to event_url(event) do
     .datemark
       %span.mon= event.start.strftime('%b')
@@ -29,7 +33,7 @@
         = link_to event.name, event_url(event), :class => "name"
         = action_menulink(event)
       = action_menu(event)
-        
+
       .detail
 
         %p.practicalities
@@ -53,12 +57,15 @@
               - else
                 = event.venue.definite_name + "."
 
-        - if !full_attachments && event.folder.populated?
-          .attachments
-            = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :limit => 3, :omit_menu => true, :for_more => event_url(event)}
+        - if !full_attachments
+          - if event.folder.populated? || can?(:edit, event.folder)
+            .attachments
+              = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :limit => 3, :omit_menu => true, :for_more => event_url(event)}
+              - if can?(:edit, event.folder)
+                %ul.uploads{data: {role: "upload-queue"}}<
 
         - if event.description?
-          = event.description.html_safe 
+          = event.description.html_safe
 
   - if full_attachments
     .addenda

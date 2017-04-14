@@ -31,7 +31,7 @@ module Droom
 
     def create
       @document.save!
-      render :partial => 'created'
+      render :partial => 'listing'
     end
     
     def edit
