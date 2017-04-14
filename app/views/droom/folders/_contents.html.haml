@@ -3,10 +3,15 @@
 - flat ||= false
 - narrow ||= false
 - document_count = folder.documents.count
+- divdata = {}
+- if flat
+  - divdata = {}
+- else
+  - divdata = {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}"}
 
 %ul.filing<
   - if limit && limit < document_count
-    %li.files{data: {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}"}}
+    %li.files{data: divdata}
       %ul
         = render :partial => 'droom/documents/listing', :collection => folder.documents.limit(limit)
         - if can?(:edit, folder)
@@ -17,7 +22,7 @@
             = link_to t(:more_documents_count, :count => document_count - limit), for_more
 
   - else
-    %li.files{data: {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}"}}
+    %li.files{data: divdata}
       %ul
         = render :partial => 'droom/documents/listing', :collection => folder.documents, locals: {narrow: narrow}
         - if can?(:edit, folder)
