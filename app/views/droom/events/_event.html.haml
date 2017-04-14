@@ -15,7 +15,11 @@
 - cssclasses << 'open' if open
 - cssclasses << 'invited' if event.attended_by?(current_user)
 
-%div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => {:action => "collapser", refreshable: event_path(event, format: :js), droppable: droom.folder_documents_path(event.folder)}}
+- div_data = {:action => "collapser", refreshable: event_path(event, format: :js)}
+- unless full_attachments
+  - div_data[:droppable] = droom.folder_documents_path(event.folder)
+
+%div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => div_data}
   = link_to event_url(event) do
     .datemark
       %span.mon= event.start.strftime('%b')
