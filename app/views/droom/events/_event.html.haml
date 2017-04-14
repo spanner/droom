@@ -60,8 +60,6 @@
           - if event.folder.populated? || can?(:edit, event.folder)
             .attachments
               = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :limit => 3, :omit_menu => true, :for_more => event_url(event)}
-              - if !event.folder.populated?
-                %ul.uploads{data: {role: "upload-queue"}}<
 
         - if event.description?
           = event.description.html_safe
