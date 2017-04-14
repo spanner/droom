@@ -1519,7 +1519,9 @@ ul.filing
     position: relative
     white-space: nowrap
     overflow: hidden
-
+  li.files
+    min-height: 48px
+    
 .no-touch
   ul.filing, ul.uploads
     li.document
@@ -1532,7 +1534,7 @@ ul.filing
 div.attachments
   position: relative
   float: right
-  width: 210px
+  width: 240px
   font-size: 90%
   h3
     margin: 0
@@ -1545,6 +1547,8 @@ div.attachments
     padding-left: 20px
     margin: 0
     list-style: none
+    ul
+      padding-left: 0
     li.folder
       margin-left: 5px
       a.folder

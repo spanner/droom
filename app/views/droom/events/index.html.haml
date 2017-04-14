@@ -12,8 +12,6 @@
     = link_to t(:subscribe_to_calendar), "webcal://#{Settings.host}/events.ics", class: "subscribe"
     - if can?(:create, Droom::Event)
       = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => "#events"}
-    - if can?(:manage, Droom::EventType)
-      = link_to t(:event_types), droom.event_types_url, :class => "edit"
 
   = render :partial => 'events'
 
