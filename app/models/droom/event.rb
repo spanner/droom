@@ -13,6 +13,8 @@ module Droom
 
     belongs_to :event_type
     has_folder :within => :event_type #... and subfolders via agenda_categories
+    before_destroy :destroy_related_folder
+
 
     has_many :invitations, :dependent => :destroy
     has_many :users, :through => :invitations
@@ -393,6 +395,15 @@ module Droom
         Time.zone.parse(value)
       else
         value
+      end
+    end
+
+  private
+
+    def destroy_related_folder
+      event_folder =  self.folder
+      if event_folder
+        event_folder.delete
       end
     end
 
