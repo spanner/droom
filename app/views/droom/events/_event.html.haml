@@ -2,7 +2,7 @@
 - event ||= @event
 - open ||= event == @event
 - open = true if pageclass == 'events'
-- full_attachments ||= false
+- full_attachments ||= open
 
 - event_master_id = event.master_id || event.id
 - if @seen_events[event_master_id]

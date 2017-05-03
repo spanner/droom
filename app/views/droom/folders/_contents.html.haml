@@ -3,11 +3,12 @@
 - flat ||= false
 - narrow ||= false
 - document_count = folder.documents.count
+- drop_refreshes ||= "#folder_#{folder.id}"
 - divdata = {}
 - if flat
   - divdata = {}
 - else
-  - divdata = {droppable: droom.folder_documents_path(folder), queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
+  - divdata = {droppable: droom.folder_documents_path(folder), queue: "#queue_to_#{folder.id}", refreshes: drop_refreshes}
 
 %ul.filing<
   - if limit && document_count > 0 && limit < document_count
