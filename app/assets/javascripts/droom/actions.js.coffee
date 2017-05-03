@@ -37,17 +37,21 @@ jQuery ($) ->
   class Refresher
     constructor: (element) ->
       @_container = $(element)
-      @_url = @_container.attr('refreshable') or @_container.attr('data-url')
+      @_url = @_container.attr('data-refreshable') or @_container.attr('data-url')
       @_container.bind "refresh", @refresh
 
     refresh: (e) =>
       e.stopPropagation()
       e.preventDefault()
-      $.ajax @_url,
-        dataType: "html"
-        beforeSend: @prep
-        success: @replace
-    
+      if @_url
+        @_container.addClass('working')
+        $.ajax @_url,
+          dataType: "html"
+          beforeSend: @prep
+          success: @replace
+      else
+        console.error "Cannot refresh: no URL to fetch"
+
     prep: (xhr, settings) =>
       xhr.setRequestHeader('X-PJAX', 'true')
       @_container.addClass('waiting')

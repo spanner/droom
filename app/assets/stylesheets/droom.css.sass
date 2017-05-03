@@ -1520,8 +1520,8 @@ ul.filing
     white-space: nowrap
     overflow: hidden
   li.files
-    min-height: 48px
-    
+    display: inline-block
+
 .no-touch
   ul.filing, ul.uploads
     li.document
@@ -1567,11 +1567,14 @@ ul#folders, div.attachments
       margin-bottom: 0
 
   li.folder
-    ul.filing
-      padding-left: 30px
+    ul
+      padding-left: 16px
       margin: 0
+      &.uploads
+        padding-left: 32px
     a.folder
       +big_icon_link("droom/folder.png")
+      text-indent: 32px
       color: $text
       font-weight: bold
       +hover
@@ -1580,7 +1583,7 @@ ul#folders, div.attachments
     &.root
       > a.folder
         font-size: 125%
-        text-indent: 28px
+        text-indent: 32px
     &.open
       > a.folder
         background-position: 0 -192px
@@ -1593,6 +1596,13 @@ ul#folders, div.attachments
       &.open
         > a.folder
           background-position: 0 -336px
+    &.working
+      opacity: 0.5
+      a.folder
+        background:
+          image: image-url('droom/spinner.gif')
+          position: 0 3px
+          repeat: no-repeat
 
 input.search_box
   font-size: 1.5em

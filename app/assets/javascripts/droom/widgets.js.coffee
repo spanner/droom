@@ -628,7 +628,7 @@ jQuery ($) ->
   $.fn.folder = ->
     @each ->
       new Folder(@)
-      
+
   class Folder
     constructor: (element) ->
       @_container = $(element)
@@ -640,7 +640,7 @@ jQuery ($) ->
       else
         @_container.children('a.folder').remote
           on_success: @replace
-      
+
     set: (e) =>
       e.preventDefault() if e
       @_state = localStorage?.getItem("show_folder_#{@_label}")

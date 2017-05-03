@@ -7,37 +7,30 @@
 - if flat
   - divdata = {}
 - else
-  - divdata = {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}"}
+  - divdata = {droppable: droom.folder_documents_path(folder), queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
 
 %ul.filing<
-  - if limit && limit < document_count
+  - if limit && document_count > 0 && limit < document_count
     %li.files{data: divdata}
       %ul
         = render :partial => 'droom/documents/listing', :collection => folder.documents.limit(limit)
-        - if can?(:edit, folder)
-          %li
-            %ul.uploads{data: {role: "upload-queue"}}<
         - if for_more
           %li.more
             = link_to t(:more_documents_count, :count => document_count - limit), for_more
 
   - else
-    %li.files{data: divdata}
-      %ul
-        = render :partial => 'droom/documents/listing', :collection => folder.documents, locals: {narrow: narrow}
-        - if can?(:edit, folder)
-          %li
-            %ul.uploads{data: {role: "upload-queue"}}<
-        - children = folder.children
-        - if flat # floated in event view
-          - if children.any? && for_more
-            %li.more
-              = link_to t(:more_subfolders_count, :count => children.count), for_more
+    - if document_count > 0
+      %li.files{data: divdata}
+        %ul
+          = render :partial => 'droom/documents/listing', :collection => folder.documents, locals: {narrow: narrow}
 
-    - unless flat # floated in event view
-      - unless admin? || !folder.public?
-        - children = folder.children.populated
+    - children = folder.children
+    - if flat # floated in event view
+      - if for_more && children.any?
+        %li.more
+          = link_to t(:more_subfolders_count, :count => children.count), for_more
 
+    - unless flat # <= floated in event view
       %li.folders
         %ul
           - if limit && limit < document_count + folder.children.count
@@ -47,10 +40,5 @@
             - if for_more
               %li.more
                 = link_to t(:more), for_more
-
           - else
             = render :partial => 'droom/folders/folder', :collection => children, :locals => {:defer_contents => true}
-
-          - if can?(:edit, folder)
-            %li
-              %ul.uploads{data: {role: "upload-queue"}}<

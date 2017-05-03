@@ -80,7 +80,7 @@ jQuery ($) ->
     @find_including_self('[data-role="imagepicker"]').image_picker()
     @find_including_self('[data-role="venuepicker"]').venue_picker()
     @find_including_self('[data-role="slug"]').slug_field()
-    @find_including_self('[data-droppable]').uploader()
+    @find_including_self('[data-droppable]').droploader()
 
     # page widgets
     

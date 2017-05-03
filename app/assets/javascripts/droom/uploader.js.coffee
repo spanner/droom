@@ -1,17 +1,20 @@
 jQuery ($) ->
 
-  $.fn.uploader = ->
+  $.fn.droploader = ->
     @each ->
-      new Uploader(@)
+      new Droploader(@)
 
 
-  class Uploader
+  class Droploader
     constructor: (element) ->
       @_catcher = $(element)
       @_url = @_catcher.data('droppable')
-      @_form = $('<form method="POST" />').addClass('uploader').prependTo @_catcher
+      @_form = $('<form method="POST" class="droploader" />').addClass('uploader').insertAfter @_catcher
       @resetFilefield()
-      @_queue = @_catcher.find('[data-role="upload-queue"]')
+      if queue_selector = @_catcher.data('queue')
+        @_queue = $(queue_selector)
+      else
+        @_queue = @_catcher.find('[data-role="upload-queue"]')
       if picker_selector = @_catcher.data('picker')
         @_triggers = $(picker_selector)
       else
@@ -50,6 +53,7 @@ jQuery ($) ->
         file: file
         queue: @_queue
         url: @_url
+        callback: @finishUpload
 
     blockEvent: (e) =>
       e.preventDefault()
@@ -66,11 +70,16 @@ jQuery ($) ->
     lookAvailable: =>
       unless @_mask
         @_mask = $('<div class="dropmask" />').appendTo @_catcher
-        @_mask.append $('<span class="notice">drop to add file</span>')
         @_mask.on "dragover", @blockDragover
         @_mask.on "drop", @catchFiles
         @_mask.on "dragleave", @lookNormal
       @_catcher.addClass('droppable')
+
+    finishUpload: (upload, el) =>
+      console.log "FINISHED", upload, el, @_catcher.data('refreshes')
+      if target_selector = @_catcher.data('refreshes')
+        $(target_selector).refresh()
+
 
 # The Upload class handles our formdata packaging, XHR-submission and progress reporting.
 # Unlike the other uploaders it supports multiple parallel uploads.
@@ -84,6 +93,7 @@ class Upload
     @_file = @_options.file
     @_queue = @_options.queue
     @_url = @_options.url
+    @_callback = @_options.callback
     if @_file && @_url
       @readFile()
       @prepXhr()
@@ -152,6 +162,7 @@ class Upload
     @_li.after confirmation
     @_li.remove()
     confirmation.signal_confirmation()
+    @_callback?(this, confirmation)
 
   error: () =>
     console.log "error", @_xhr

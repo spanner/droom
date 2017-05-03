@@ -22,10 +22,11 @@
 - cssclass << " standalone" if standalone
 - cssclass << " auto" if folder.automatic? && can?(:edit, folder)
 
-%li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: true, url: url, label: folder.slug } }<
-  = link_to shorten(title, length), url, class: "folder"
+%li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: url, label: folder.slug }}<
+  = link_to shorten(title, length), url, class: "folder", data: {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}", queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
   - unless omit_menu
     = action_menulink(folder)
+  %ul.uploads{id: "queue_to_#{folder.id}"}
   - unless defer_contents
     = render partial: "droom/folders/contents", locals: {folder: folder, limit: limit, for_more: for_more, flat: flat, narrow: narrow}
   - unless omit_menu
