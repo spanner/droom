@@ -12,8 +12,15 @@ module Droom::Concerns::Slugged
   def ensure_presence_of_unique(column, base, skope=self.class.all)
     unless self.send "#{column}?".to_sym
       value = base
-      addendum = 0
-      value = "#{base}_#{addendum+=1}" while skope.find_by(column => value)
+      addendum = 1
+      existing_record = skope.order(created_at: 'desc').where("#{column} like ?", "#{value}%").pluck(column.to_sym).first
+      if existing_record
+        record_number = existing_record.split('_').last
+        if record_number = Integer(record_number) rescue false
+          addendum+=record_number.to_i
+        end
+        value = "#{base}_#{addendum}"
+      end
       self.send :"#{column}=", value
     end
   end
