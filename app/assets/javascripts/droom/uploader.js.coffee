@@ -79,6 +79,8 @@ jQuery ($) ->
       console.log "FINISHED", upload, el, @_catcher.data('refreshes')
       if target_selector = @_catcher.data('refreshes')
         $(target_selector).refresh()
+      # else
+      #   @_catcher.refresh()
 
 
 # The Upload class handles our formdata packaging, XHR-submission and progress reporting.

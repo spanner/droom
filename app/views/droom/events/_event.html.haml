@@ -18,6 +18,8 @@
 - div_data = {:action => "collapser", refreshable: event_path(event, format: :js)}
 - unless full_attachments
   - div_data[:droppable] = droom.folder_documents_path(event.folder)
+  - div_data[:queue] = "#queue_to_#{event.folder.id}"
+  - div_data[:refreshes] = "#event_#{event.id}"
 
 %div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => div_data}
   = link_to event_url(event) do
@@ -59,6 +61,7 @@
         - if !full_attachments
           - if event.folder.populated? || can?(:edit, event.folder)
             .attachments
+              %ul.uploads{id: "queue_to_#{event.folder.id}"}
               = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :limit => 3, :omit_menu => true, :for_more => event_url(event)}
 
         - if event.description?
