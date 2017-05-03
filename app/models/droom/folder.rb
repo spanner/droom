@@ -8,7 +8,7 @@ module Droom
 
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
-    has_many :documents, :dependent => :destroy
+    has_many :documents, -> {order(file_file_name: :asc)}, :dependent => :destroy
     has_many :personal_folders, :dependent => :destroy
     acts_as_tree :order => "droom_folders.name ASC"
 
