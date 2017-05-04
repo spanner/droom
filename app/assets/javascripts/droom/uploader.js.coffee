@@ -51,12 +51,11 @@ jQuery ($) ->
 
     catchFiles: (e) =>
       @lookNormal()
-      if e?.originalEvent.dataTransfer
+      if e?.originalEvent.dataTransfer?.files.length
         @blockEvent(e)
         @readFiles e.originalEvent.dataTransfer.files
       else
-        console.log "drop", e
-        debugger
+        console.log "unreadable drop", e
 
 
     readFiles: (files) =>
@@ -205,6 +204,7 @@ class Upload
     constructor: (element) ->
       @_container = $(element)
       @_folder_id = @_container.data('folderId')
+      @_droppables = @_container.parents('[data-droppable]')
       @_sortable = new Sortable element,
         group: "files"
         sort: true
@@ -217,6 +217,7 @@ class Upload
 
     beginDrag: (e) =>
       console.log "beginDrag", @_droppables
+      # @_droppables.trigger "sorting"
       $('[data-droppable]').trigger "sorting"
 
     setPosition: (e) =>
