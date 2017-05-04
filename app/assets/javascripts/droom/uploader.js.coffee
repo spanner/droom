@@ -54,6 +54,10 @@ jQuery ($) ->
       if e?.originalEvent.dataTransfer
         @blockEvent(e)
         @readFiles e.originalEvent.dataTransfer.files
+      else
+        console.log "drop", e
+        debugger
+
 
     readFiles: (files) =>
       if files
@@ -200,19 +204,21 @@ class Upload
   class SortableFiling
     constructor: (element) ->
       @_container = $(element)
-      @_droppables = @_container.parents('[data-droppable]')
       @_sortable = new Sortable element,
         group: "files_#{element.id}"
         sort: true
+        pull: true
+        put: false
+        revertClone: true
         onStart: @beginDrag
         onUpdate: @setPosition
 
     beginDrag: (e) =>
       console.log "beginDrag", @_droppables
-      @_droppables.trigger "sorting"
+      $('[data-droppable]').trigger "sorting"
 
     setPosition: (e) =>
-      @_droppables.trigger "not_sorting"
+      $('[data-droppable]').trigger "not_sorting"
       $el = $(e.item || e.dragged)
       if doc_id = $el.data('docId')
         url = "/documents/#{doc_id}/reposition"
