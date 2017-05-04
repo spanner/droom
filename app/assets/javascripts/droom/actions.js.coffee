@@ -512,27 +512,6 @@ jQuery ($) ->
           @container.replaceWith data.responseText
           @container = $(".search_results")
 
-  #todo: Dragsort also needs to use Remote.
-
-  $.fn.drag_sort = (options) ->
-    @each ->
-      first = 0
-      offset = 1 + first
-      sorter = $(@).sortable
-        handle: ".handle"
-      $.each $(@).children(), (i, child) =>
-        $(child).bind "dragend", (e) =>
-          child = $(child)
-          index = child.index() + offset
-          id = parseInt(child.attr('id').split("person_")[1], 10)
-          $.ajax
-            url: "/users/#{id}"
-            type: "PUT"
-            dataType: "JSON"
-            data:
-              person:
-                position: index
-
 
   #todo: this has been replaced with the filterform.
 

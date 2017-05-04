@@ -3,7 +3,7 @@ module Droom
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
 
-    before_filter :get_folder, except: [:index, :suggest]
+    before_filter :get_folder, except: [:index, :suggest, :reposition]
     before_filter :select_documents, only: [:index, :suggest]
     load_and_authorize_resource :document, :class => Droom::Document, :through => :folder, :shallow => true, except: [:index, :suggest]
 
@@ -41,6 +41,12 @@ module Droom
     def update
       @document.save!
       render :partial => 'listing', :object => @document.with_event
+    end
+
+    def reposition
+      Rails.logger.warn "👉 reposition_params #{reposition_params.inspect}"
+      @document.update_attributes(reposition_params)
+      head :ok
     end
 
     def destroy
@@ -87,12 +93,20 @@ module Droom
   
     def document_params
       if params[:document]
-        params.require(:document).permit(:name, :file, :description, :folder_id)
+        params.require(:document).permit(:name, :file, :description, :folder_id, :position)
       else
         {}
       end
     end
-    
+
+    def reposition_params
+      if params[:document]
+        params.require(:document).permit(:position)
+      else
+        {}
+      end
+    end
+
     def get_folder
       @folder = Droom::Folder.find(params[:folder_id])
     end

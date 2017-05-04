@@ -8,6 +8,7 @@ jQuery ($) ->
   class Droploader
     constructor: (element) ->
       @_catcher = $(element)
+      @_active = true
       @_url = @_catcher.data('droppable')
       @_form = $('<form method="POST" class="droploader" />').addClass('uploader').insertAfter @_catcher
       @resetFilefield()
@@ -20,9 +21,20 @@ jQuery ($) ->
       else
         @_triggers = @_catcher.find('[data-role="upload-file"]')
       @_triggers.click @triggerFilefield
+      @_readers = []
+      @enable()
+      @_catcher.on "sorting", @disable
+      @_catcher.on "not_sorting", @enable
+ 
+    enable: =>
+      @_active = true
       @_catcher.on "dragenter", @lookAvailable
       @_catcher.on "drop", @catchFiles
-      @_readers = []
+
+    disable: =>
+      @_active = false
+      @_catcher.off "dragenter", @lookAvailable
+      @_catcher.off "drop", @catchFiles
  
     resetFilefield: () =>
       @_filefield?.remove()
@@ -178,3 +190,39 @@ class Upload
     @_options.on_cancel?()
     @_li.fadeOut () ->
       $(@).remove()
+
+
+
+  $.fn.sortable_files = ->
+    @each ->
+      new SortableFiling(@)
+
+  class SortableFiling
+    constructor: (element) ->
+      @_container = $(element)
+      @_droppables = @_container.parents('[data-droppable]')
+      @_sortable = new Sortable element,
+        group: "files_#{element.id}"
+        sort: true
+        onStart: @beginDrag
+        onUpdate: @setPosition
+
+    beginDrag: (e) =>
+      console.log "beginDrag", @_droppables
+      @_droppables.trigger "sorting"
+
+    setPosition: (e) =>
+      @_droppables.trigger "not_sorting"
+      $el = $(e.item || e.dragged)
+      if doc_id = $el.data('docId')
+        url = "/documents/#{doc_id}/reposition"
+        pos = e.newIndex + 1
+        update = $.ajax
+          method: "PUT"
+          url: url
+          data:
+            document:
+              position: pos
+          success: ->
+            $el.signal_confirmation()
+

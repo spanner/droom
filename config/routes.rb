@@ -55,6 +55,7 @@ Droom::Engine.routes.draw do
 
   resources :documents do
     get "suggest", on: :collection
+    put "reposition", on: :member
   end
   resources :folders do
     get "dropbox", on: :member, as: :dropbox

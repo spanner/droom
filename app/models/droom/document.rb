@@ -11,6 +11,8 @@ module Droom
     has_attached_file :file,
                       fog_directory: -> a { a.instance.file_bucket }
 
+    acts_as_list scope: :folder_id
+
     after_save :update_dropbox_documents
     after_destroy :mark_dropbox_documents_deleted
 

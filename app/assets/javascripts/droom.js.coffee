@@ -7,7 +7,7 @@
 #= require droom/lib/swipe
 #= require droom/lib/jquery.animate-colors
 #= require droom/lib/jquery.deserialize
-#= require droom/lib/jquery.sortable
+#= require droom/lib/Sortable
 #= require droom/lib/jquery.cookie
 #= require droom/lib/jquery.datepicker
 #= require droom/lib/wysihtml5
@@ -72,7 +72,6 @@ jQuery ($) ->
     @find_including_self('.person_selector').person_selector()
     @find_including_self('.person_picker').person_picker()
     @find_including_self('.group_picker').group_picker()
-    @find_including_self('.drag_sort').drag_sort()
     @find_including_self('fieldset[data-role="password"]').password_fieldset()
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('form.scrap').scrap_form()
@@ -90,6 +89,7 @@ jQuery ($) ->
     @find_including_self('form.fancy').captive()
     @find_including_self('li.folder').folder()
     @find_including_self('form#suggestions').suggestion_form()
+    @find_including_self('.sortable_files').sortable_files()
 
 
     @
