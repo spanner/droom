@@ -101,7 +101,7 @@ module Droom
 
     def reposition_params
       if params[:document]
-        params.require(:document).permit(:position)
+        params.require(:document).permit(:position, :folder_id)
       else
         {}
       end

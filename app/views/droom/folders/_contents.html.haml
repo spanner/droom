@@ -22,7 +22,7 @@
   - else
     - if document_count > 0
       %li.files{data: divdata}
-        %ul.sortable_files
+        %ul.sortable_files{data: {folder_id: folder.id}}
           = render :partial => 'droom/documents/listing', :collection => folder.documents, locals: {narrow: narrow}
 
     - children = folder.children

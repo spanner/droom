@@ -204,14 +204,16 @@ class Upload
   class SortableFiling
     constructor: (element) ->
       @_container = $(element)
+      @_folder_id = @_container.data('folderId')
       @_sortable = new Sortable element,
-        group: "files_#{element.id}"
+        group: "files"
         sort: true
         pull: true
-        put: false
+        put: true
         revertClone: true
         onStart: @beginDrag
         onUpdate: @setPosition
+        onAdd: @setPosition
 
     beginDrag: (e) =>
       console.log "beginDrag", @_droppables
@@ -222,13 +224,16 @@ class Upload
       $el = $(e.item || e.dragged)
       if doc_id = $el.data('docId')
         url = "/documents/#{doc_id}/reposition"
-        pos = e.newIndex + 1
+        params = document:
+          position: e.newIndex + 1
+          folder_id: @_folder_id
         update = $.ajax
           method: "PUT"
           url: url
-          data:
-            document:
-              position: pos
+          data: params
           success: ->
             $el.signal_confirmation()
 
+    setParent: (e) =>
+      console.log "setParent", e.item, e.from
+      
