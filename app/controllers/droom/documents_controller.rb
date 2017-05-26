@@ -24,7 +24,7 @@ module Droom
         raise ActiveRecord::RecordNotFound
       end
     end
-    
+
     def new
       render
     end
@@ -44,7 +44,6 @@ module Droom
     end
 
     def reposition
-      Rails.logger.warn "👉 reposition_params #{reposition_params.inspect}"
       @document.update_attributes(reposition_params)
       head :ok
     end
