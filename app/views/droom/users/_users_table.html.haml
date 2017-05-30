@@ -8,7 +8,7 @@
     - if can?(:create, Droom::Group)
       = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
 
-  %form.faceter{:action => droom.admin_users_url(:format => :html), :autocomplete => 'off', :id => "users_search", :data => { target: "#users" }}
+  %form.droom_faceter{:action => droom.admin_users_url(:format => :html), :autocomplete => 'off', :id => "users_search", :data => { target: "#users" }}
     %fieldset.search<
       = text_field_tag :q, params[:q], name: 'q', class: 'search', placeholder: t(:search), data: {slow: true}
       = submit_tag 'search'

@@ -25,7 +25,7 @@
 
 jQuery ($) ->
   $.activate_with () ->
-    @find_including_self('form.faceter').faceting_search()
+    @find_including_self('form.droom_faceter').faceting_search()
     @find_including_self('#flashes p:parent').flash()
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('.hidden').find('input, select, textarea').attr('disabled', true)
@@ -82,7 +82,7 @@ jQuery ($) ->
     @find_including_self('[data-droppable]').droploader()
 
     # page widgets
-    
+
     @find_including_self('#map').init_map()
     @find_including_self('#minicalendar').calendar()
     @find_including_self('form.search_form').search()

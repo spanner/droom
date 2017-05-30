@@ -1,5 +1,5 @@
 #documents.paginated
-  %form.faceter{:action => droom.documents_url, :id => "documents_search", data: {target: '#documents'}}
+  %form.droom_faceter{:action => droom.documents_url, :id => "documents_search", data: {target: '#documents'}}
     = hidden_field_tag :page, params[:page]
     = hidden_field_tag :show, params[:show]
     = hidden_field_tag :sort, params[:sort]
