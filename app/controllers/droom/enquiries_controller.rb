@@ -4,9 +4,6 @@ module Droom
     layout :no_layout_if_pjax
 
     skip_before_action :authenticate_user!, only: [:new, :create, :show]
-    skip_before_action :set_exception_context
-    skip_before_action :require_password, only: [:new, :create, :show]
-    skip_before_action :note_current_user, only: [:new, :create, :show]
 
     load_and_authorize_resource
 
