@@ -1,0 +1,31 @@
+- omit_body ||= false
+- body_limit ||= 300
+- omit_caption ||= false
+- caption_limit ||= 100
+
+- if notice.body? || notice.note?
+  - body = clean_html(notice.body || "")
+  - short_body = body.truncate(body_limit, :separator => " ").html_safe
+  - caption = clean_html(notice.note || "")
+  - short_caption = caption.truncate(caption_limit, :separator => " ").html_safe
+  - truncated = body != short_body || caption != short_caption
+
+  .notice_body
+    .compact
+      - unless omit_body
+        = short_body
+      - if !omit_caption && short_caption.present?
+        %figcaption
+          = short_caption
+      - if truncated
+        %a.reveal
+          =t (:notice_expand)
+    - if truncated
+      .expanded
+        - unless omit_body
+          = body
+        - if !omit_caption && caption.present?
+          %figcaption
+            = caption
+        %a.reveal
+          =t (:notice_contract)
