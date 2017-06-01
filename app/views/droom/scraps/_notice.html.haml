@@ -1,16 +1,15 @@
-.notice{id: "notice_#{notice.id}", class: notice.scraptype, data: {span: notice.size}}
-  = render "droom/scraps/notices/#{notice.scraptype}", notice: notice
+- notice_counter ||= nil
+- first = notice_counter == 0
+- size = first ? 2 : 1
 
-  - if notice.note?
-    %figcaption
-      = simple_format notice.note
+.notice{id: "notice_#{notice.id}", class: notice.scraptype, data: {span: size, refreshable: scrap_path(notice)}}
+  = render "droom/scraps/notices/#{notice.scraptype}", notice: notice, first: first
 
   .footnote
     %p
       - if notice.created_by
         = t :posted_by
         = notice.created_by.informal_name
-        %br
       - else
         = t :posted
       = time_ago_in_words notice.created_at

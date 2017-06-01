@@ -86,6 +86,29 @@ module Droom
       !password_set?
     end
 
+    # Our old user accounts store passwords as salted sha512 digests. Current standard uses BCrypt
+    # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
+  
+    def valid_password?(password)
+      begin
+        super(password)
+      rescue BCrypt::Errors::InvalidHash
+        Rails.logger.warn "...trying sha512 on password input"
+        stretches = 10
+        salt = self.password_salt
+        pepper = nil
+        old_digest = Devise::Encryptable::Encryptors::Sha512.digest(password, stretches, salt, pepper)
+        if old_digest == self.encrypted_password
+          self.password = password
+          self.save
+          return true
+        else
+          # Doesn't match the old format either: password is just wrong.
+          return false
+        end
+      end
+    end 
+
     ## Session ID
     #
     # Allows us to invalidate a session by remote control when the user signs out on a satellite site.

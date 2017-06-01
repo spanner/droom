@@ -1,3 +1,11 @@
 .content
-  %blockquote
-    = sanitize(notice.body)
+  .notice_body
+    %blockquote
+      = sanitize(notice.body)
+
+    .compact
+      %figcaption
+        = sanitize(notice.note).truncate(300, :separator => " ").html_safe
+    .expanded
+      %figcaption
+        = sanitize(notice.note)

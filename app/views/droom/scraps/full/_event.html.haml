@@ -17,5 +17,8 @@
           - else
             %span.eventname
               = scrap.event.name
+        - if notice.note?
+          %p.detail
+            = simple_format notice.note
 
   = render "droom/scraps/caption", :scrap => scrap

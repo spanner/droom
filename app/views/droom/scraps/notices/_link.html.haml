@@ -1,5 +1,7 @@
 .content
   %p
-    = link_to notice.url_without_protocol.gsub(/\//, "/&#8203;").html_safe, notice.url_with_protocol, :class => "biglink"
-  - if notice.body?
-    = sanitize(notice.body)
+    - if notice.url?
+      - title = notice.name.presence || notice.url_without_protocol.html_safe
+      = link_to title, notice.url_with_protocol, :class => "biglink"
+
+  = render "droom/scraps/notices/body", notice: notice, omit_body: true

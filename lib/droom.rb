@@ -7,6 +7,7 @@ require "droom/validators"
 require "droom/searchability"
 require "droom/taggability"
 require "droom/folders"
+require "droom/scrubbers"
 require "mail_form"
 
 module Droom  
@@ -28,6 +29,7 @@ module Droom
                  :main_dashboard_modules,
                  :margin_dashboard_modules,
                  :panels,
+                 :use_noticeboard,
                  :scrap_types,
                  :default_scrap_type,
                  :use_chinese_names,
@@ -41,6 +43,7 @@ module Droom
                  :mailing_lists_active_by_default,
                  :mailing_lists_digest_by_default,
                  :show_venue_map,
+                 :dropbox_enabled,
                  :dropbox_app_key,
                  :dropbox_app_secret,
                  :dropbox_app_name,
@@ -119,6 +122,10 @@ module Droom
       @@panels ||= %w{configuration search admin}
     end
     
+    def use_noticeboard?
+      !!@@use_noticeboard
+    end
+
     def scrap_types
       @@scrap_types ||= %w{image text quote link event document}
     end
@@ -169,6 +176,10 @@ module Droom
     
     def all_documents_public?
       !!@@all_documents_public
+    end
+
+    def dropbox_enabled?
+      !!@@dropbox_enabled
     end
 
     def dropbox_app_name

@@ -3,6 +3,26 @@ require 'dropbox_sdk'
 module Droom
   module DroomHelper
 
+    def clean_html(html)
+      fragment = Loofah.fragment(html)
+      fragment.xpath('text()').wrap('<p/>')
+      fragment.scrub!(scrubber)
+      fragment.scrub!(empty_node_scrubber)
+      fragment.to_s.gsub(/[\r\n]+/, ' ').html_safe
+    end
+
+    def scrubber
+      @_scrubber ||= Droom::Scrubber.new
+    end
+
+    def empty_node_scrubber
+      @emptiness_scrubber ||= Loofah::Scrubber.new do |node|
+        if !node.text? && node.children.empty? && (node.text == "" || node.text =~ /^\s+$/)
+          node.remove
+        end
+      end
+    end
+
     def facet_options(facet, options={})
       if klass = options[:klass]
         options[:primary_key] ||= :id
@@ -99,7 +119,7 @@ module Droom
     end
 
     def dropbox?
-      current_user and !!current_user.dropbox_token
+      Droom::dropbox_enabled? && current_user and !!current_user.dropbox_token
     end
     
     def dropbox_auth_url

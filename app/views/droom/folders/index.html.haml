@@ -6,7 +6,7 @@
     = t :library_introduction
 
 
-- content_for :margin do
+- content_for :filter do
   #finder
     %form.filter{:action => droom.suggest_documents_url, autocomplete: 'off', spellcheck: "false", data: {action: "quick_search"}}
       %p

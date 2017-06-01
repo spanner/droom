@@ -1,5 +1,5 @@
 # This is the mechanism by which droom's preferences system is bolted onto the host app's user class.
-# 
+#
 module Droom
   # LazyHash is a recursive hash descendant that accepts keys in the form `key:subkey:subsubkey` and populates 
   # nested hashes accordingly.

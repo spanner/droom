@@ -1,3 +1,6 @@
+- @scrap.body = clean_html(@scrap.body)
+- @scrap.note = clean_html(@scrap.note)
+
 = form_for @scrap, :html => {:class => 'edit scrap'} do |f|
 
   %ul.scraptypes

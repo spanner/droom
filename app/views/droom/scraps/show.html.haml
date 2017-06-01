@@ -1,5 +1,7 @@
 - scrap ||= @scrap
 
-.scrap{:id => "scrap_#{scrap.id}"}
-  = render :partial => "droom/scraps/full/#{scrap.scraptype}", :locals => {:scrap => scrap}
+- if Droom.use_noticeboard?
+  = render "droom/scraps/notice", notice: scrap
 
+- else
+  = render "droom/scraps/scrap", scrap: scrap

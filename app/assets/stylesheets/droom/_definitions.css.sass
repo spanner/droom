@@ -45,6 +45,9 @@ $match: $green
 $inst: $coolgrey10
 $person: $link
 
+$msword: #0582ad
+$excel: #319711
+
 $masthead: #64666f
 $menubg: $link
 $menuitem: $hover
@@ -117,19 +120,19 @@ $tool_button_width: 32px
   box-shadow: 0 1px 2px rgba(0,0,0,0.6)
   color: #fef4e9
   border: solid 1px darken($color, 10)
-  +background-image(linear-gradient(lighten($color, 3), $color, darken($color, 10)))
+  background: linear-gradient(lighten($color, 3), $color, darken($color, 10))
   &:hover
     text-decoration: none
-    +background-image(linear-gradient(lighten($color, 5), darken($color, 8)))
+    background: linear-gradient(lighten($color, 5), darken($color, 8))
   &:active
     position: relative
     top: 1px
     box-shadow: 0 1px 2px rgba(0,0,0,0.6) inset
-    +background-image(linear-gradient(darken($color, 10), lighten($color, 3), $color, darken($color, 15)))
+    background: linear-gradient(darken($color, 10), lighten($color, 3), $color, darken($color, 15))
   &.unavailable
     border: solid 1px darken($pale, 10)
     color: lighten($pale, 15)
-    +background-image(linear-gradient(darken($pale, 10), lighten($pale, 3), $pale, darken($pale, 15)))
+    background: linear-gradient(darken($pale, 10), lighten($pale, 3), $pale, darken($pale, 15))
     opacity: 0.75
   &.waiting
     opacity: 0.25
@@ -168,7 +171,6 @@ $tool_button_width: 32px
   background-size: 24px
   &:hover
     background-position: 0 -48px
-
 
 =icon($url)
   display: inline-block

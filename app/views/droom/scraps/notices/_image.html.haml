@@ -4,6 +4,5 @@
 - else
   %img{src: notice.image.url(:notice)}
 
-- if notice.body?
-  .content
-    = sanitize(notice.body)
+.content
+  = render "droom/scraps/notices/body", notice: notice, caption_limit: 300

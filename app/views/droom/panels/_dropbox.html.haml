@@ -1,17 +1,16 @@
-#dropbox.panel
-  - if dropbox?
-    %h4
-      = t :dropbox_preferences
+- if Droom.dropbox_enabled?
+  #dropbox.panel
+    - if dropbox?
+      %h4
+        = t :dropbox_preferences
       
-    = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
-      = preference_radio_set 'dropbox.strategy', 'everything', 'relevant', 'clicked'
-    %p
-      = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
+      = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
+        = preference_radio_set 'dropbox.strategy', 'everything', 'relevant', 'clicked'
+      %p
+        = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
 
-  - else
-    %p
-      = t :dropbox_introduction, :name => Droom.dropbox_app_name
-    %p
-      = link_to "Connect to your dropbox", droom.new_dropbox_token_url, :class => "dropbox"
-      
-      
+    - else
+      %p
+        = t :dropbox_introduction, :name => Droom.dropbox_app_name
+      %p
+        = link_to "Connect to your dropbox", droom.new_dropbox_token_url, :class => "dropbox"

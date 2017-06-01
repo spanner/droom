@@ -13,16 +13,17 @@
     %br
     %span.note
       = t(:edit_your_preferences_note)
-      
-  - if dropbox?
-    = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
-      = preference_radio_set 'dropbox.strategy', 'everything', 'relevant', 'clicked'
-    %p
-      = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
 
-  - else
-    %p
-      = link_to "Connect to your dropbox", droom.new_dropbox_token_url, :class => "dropbox"
-      %br
-      %span.note
-        = t :dropbox_introduction, :name => Droom.dropbox_app_name
+  - if Droom.dropbox_enabled?
+    - if dropbox?
+      = form_for [droom, current_user], :format => :js, :html => {:remote => true, :class => "preferences"} do |f|
+        = preference_radio_set 'dropbox.strategy', 'everything', 'relevant', 'clicked'
+      %p
+        = button_to "revoke dropbox access", droom.dropbox_token_url(current_user.dropbox_token), :method => 'delete', :class => "dropbox revoke"
+
+    - else
+      %p
+        = link_to "Connect to your dropbox", droom.new_dropbox_token_url, :class => "dropbox"
+        %br
+        %span.note
+          = t :dropbox_introduction, :name => Droom.dropbox_app_name

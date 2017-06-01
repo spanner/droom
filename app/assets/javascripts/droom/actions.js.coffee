@@ -59,13 +59,15 @@ jQuery ($) ->
 
     replace: (data, textStatus, jqXHR) =>
       replacement = $(data)
-      @_container.fadeOut 'fast', () =>
-        replacement.hide().insertAfter(@_container)
-        @_container.remove()
-        @_container = replacement
-        @_container.fadeIn 'fast', () =>
+      old_container = @_container
+      old_container .fadeOut 'fast', () =>
+        replacement.hide().insertAfter(old_container)
+        old_container .hide()
+        old_container .fadeIn 'fast', () =>
+          @_container = replacement
           @_container.activate()
-
+          old_container.trigger 'refreshed', @_container
+          old_container.remove()
 
   # ## Actions
   #
