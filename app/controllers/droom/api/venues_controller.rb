@@ -1,7 +1,7 @@
 module Droom::Api
   class VenuesController < Droom::Api::ApiController
-    before_filter :get_venues, only: [:index]
-    before_filter :find_or_create_venue, only: [:create]
+    before_action :get_venues, only: [:index]
+    before_action :find_or_create_venue, only: [:create]
     load_resource find_by: :slug, class: "Droom::Venue"
     # after_filter :set_pagination_headers, only: [:index]
     

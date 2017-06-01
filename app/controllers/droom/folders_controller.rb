@@ -3,8 +3,8 @@ module Droom
     respond_to :html, :json, :js
     layout :no_layout_if_pjax
   
-    before_filter :get_root_folders, :only => [:index]
-    before_filter :get_parent_folder, :only => [:new, :create]
+    before_action :get_root_folders, :only => [:index]
+    before_action :get_parent_folder, :only => [:new, :create]
     load_and_authorize_resource
     
     def index

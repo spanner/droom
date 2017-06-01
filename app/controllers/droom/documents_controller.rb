@@ -3,8 +3,8 @@ module Droom
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
 
-    before_filter :get_folder, except: [:index, :suggest, :reposition]
-    before_filter :select_documents, only: [:index, :suggest]
+    before_action :get_folder, except: [:index, :suggest, :reposition]
+    before_action :select_documents, only: [:index, :suggest]
     load_and_authorize_resource :document, :class => Droom::Document, :through => :folder, :shallow => true, except: [:index, :suggest]
 
     def index

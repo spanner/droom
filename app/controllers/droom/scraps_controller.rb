@@ -3,9 +3,9 @@ module Droom
     respond_to :html, :js, :json, :atom
     layout :no_layout_if_pjax
   
-    before_filter :get_scraps, :only => [:index]
-    before_filter :get_scraptype, :only => [:new, :create, :update]
-    before_filter :build_scrap, :only => [:new, :create]
+    before_action :get_scraps, :only => [:index]
+    before_action :get_scraptype, :only => [:new, :create, :update]
+    before_action :build_scrap, :only => [:new, :create]
     load_and_authorize_resource
 
     def index

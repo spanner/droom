@@ -1,8 +1,8 @@
 module Droom::Api
   class EventsController < Droom::Api::ApiController
 
-    before_filter :get_events, only: [:index]
-    before_filter :find_or_create_event, only: [:create]
+    before_action :get_events, only: [:index]
+    before_action :find_or_create_event, only: [:create]
     load_and_authorize_resource find_by: :uuid, class: "Droom::Event"
     
     def index

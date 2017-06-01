@@ -22,7 +22,7 @@ module Droom
       end
     end
     
-    config.to_prepare do
+    ActiveSupport::Reloader.to_prepare do
       Devise::SessionsController.layout Droom.devise_layout
       Devise::RegistrationsController.layout Droom.devise_layout
       Devise::ConfirmationsController.layout Droom.devise_layout

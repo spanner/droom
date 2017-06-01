@@ -3,7 +3,7 @@ module Droom
     respond_to :js, :html
     layout :no_layout_if_pjax
     
-    before_filter :build_preference, :only => [:new, :create]
+    before_action :build_preference, :only => [:new, :create]
     load_and_authorize_resource :through => :current_user
 
     def create

@@ -4,7 +4,7 @@ module Droom
     layout false
 
     skip_authorization_check
-    before_filter :get_classes
+    before_action :get_classes
     
     def index
       fragment = params[:term]

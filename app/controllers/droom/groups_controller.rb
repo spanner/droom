@@ -3,7 +3,7 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
 
-    before_filter :get_groups, :only => [:index]
+    before_action :get_groups, :only => [:index]
     load_and_authorize_resource
 
     def index

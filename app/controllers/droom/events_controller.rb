@@ -7,9 +7,9 @@ module Droom
     respond_to :html, :json, :ics, :js
     layout :no_layout_if_pjax
     
-    before_filter :get_events, :only => [:index]
-    before_filter :composite_dates, :only => [:update, :create]
-    before_filter :build_event, :only => [:new, :create]
+    before_action :get_events, :only => [:index]
+    before_action :composite_dates, :only => [:update, :create]
+    before_action :build_event, :only => [:new, :create]
     load_and_authorize_resource
 
     def index
