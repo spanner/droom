@@ -5,9 +5,8 @@ module Droom::Api
     before_action :set_access_control_headers
     before_action :assert_local_request
     skip_before_action :authenticate_user!
-    skip_before_action :require_data_room_permission
     skip_before_action :verify_authenticity_token
-    
+
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
     rescue_from "Droom::Error", with: :blew_up
 
