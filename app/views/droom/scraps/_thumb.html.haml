@@ -1,5 +1,5 @@
 - scrap ||= thumb
-- url = droom.noticeboard_url + "#scrap_#{scrap.id}"
+- url = droom.noticeboard_url + "#notice_#{scrap.id}"
 
 - if Droom.scrap_types.include? scrap.scraptype
   %div{:class => "scrap #{scrap.scraptype}", :id => "scrap_#{scrap.id}"}
@@ -27,10 +27,10 @@
       = link_to "text:", url, :class => "icon text", :data => {:scrap => scrap.id}
 
     %p.sample
-      = link_to scrap.name, url, :data => {:scrap => scrap.id}
-      = action_menulink(scrap, :class => "small")
+      = link_to scrap.name, url, :class => "title", :data => {:scrap => scrap.id}
       %span.caption
-        = shorten(scrap.note, 160)
+        - precis = scrap.note.presence || scrap.body
+        = shorten(precis, 120)
+
       = render :partial => "droom/scraps/credit", :locals => {:scrap => scrap}
-    = action_menu(scrap)
 

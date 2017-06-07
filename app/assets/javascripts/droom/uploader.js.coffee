@@ -91,7 +91,6 @@ jQuery ($) ->
       @_catcher.addClass('droppable')
 
     finishUpload: (upload, el) =>
-      console.log "FINISHED", upload, el, @_catcher.data('refreshes')
       if target_selector = @_catcher.data('refreshes')
         $(target_selector).refresh()
       # else
@@ -106,11 +105,13 @@ jQuery ($) ->
 # 3. on completion, remove progress li and replace with returned link partial
 
 class Upload
-  constructor: (@_options) ->
-    @_file = @_options.file
-    @_queue = @_options.queue
-    @_url = @_options.url
-    @_callback = @_options.callback
+  constructor: (opts) ->
+    @_options = opts
+    @_file = opts.file
+    @_queue = opts.queue
+    @_url = opts.url
+    @_callback = opts.callback
+    console.log "Upload", opts
     if @_file && @_url
       @readFile()
       @prepXhr()
