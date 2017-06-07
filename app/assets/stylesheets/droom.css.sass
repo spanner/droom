@@ -1053,6 +1053,10 @@ span.action
     +icon_link("droom/add.png")
     &:hover
       color: #89d690
+    &.waiting
+      color: $pale
+      background-image: image-url('droom/spinner.gif')
+      pointer-events: none
   a.edit
     color: $blue
     font-weight: normal

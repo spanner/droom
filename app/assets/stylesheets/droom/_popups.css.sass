@@ -15,7 +15,8 @@ div.popup
   box_shadow: 1px 3px 8px #52555f
   .header
     position: relative
-    height: 28px
+    box-sizing: border-box
+    height: 42px
     width: 100%
     overflow: hidden
     background-color: $text
@@ -35,10 +36,9 @@ div.popup
     float: right
     width: 16px
     height: 18px
-    margin-right: 20px !important
     margin-top: 5px
     +text-hidden
-    background: 
+    background:
       image: image-url('droom/crosses.png')
       color: transparent
       position: 0 0

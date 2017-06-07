@@ -1,7 +1,7 @@
 .content
   .notice_body
     %blockquote
-      = sanitize(notice.body)
+      = strip_tags(notice.body)
 
     .compact
       %figcaption
