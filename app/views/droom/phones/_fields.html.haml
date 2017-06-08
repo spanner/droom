@@ -7,7 +7,7 @@
   = uf.fields_for :phones, phone, :child_index => fields_counter || 'field_counter' do |f|
 
     %fieldset.repeating
-      %p.twocol.reversed
+      %p.twocol.addendum
         %span.col>
           = f.text_field :phone, :placeholder => t("placeholders.phone.phone")
 

@@ -160,6 +160,53 @@ jQuery ($) ->
         button.addClass('waiting').text('Please wait').bind "click", (e) =>
           e.preventDefault() if e
 
+  $.fn.appends_fields = (appended) ->
+    @each ->
+      $link = $(@)
+      affected = appended ? $link.attr('data-affected')
+      limit = parseInt($link.attr('data-limit') || 0)
+      set_visibility = () ->
+        counter = $(affected).find('fieldset.repeating').length
+        if limit and counter >= limit
+          $link.hide()
+        else
+          $link.show()
+      set_visibility()
+      $link.remote
+        on_request: (e, xhr, settings) =>
+          $link.addClass('working')
+        on_error: () =>
+          $link.removeClass('working').addClass('erratic')
+        on_success: (e, response) =>
+          unless response
+            response = e
+            e = undefined
+          e?.stopPropagation()
+          $link.removeClass('working')
+          counter = $(affected).find('fieldset').length
+          if offset = $(affected).data('offset')
+            counter += parseInt(offset)
+          addition = $(response.replace(/field_counter/g, counter))
+          addition.hide().appendTo(affected).slideDown('fast')
+          addition.activate()
+          addition.trigger('appended', addition)
+          set_visibility()
+
+
+  $.fn.removes_fields = () ->
+    @each ->
+      clipper = $(@)
+      selector = clipper.attr('data-holder') ? '.holder'
+      clipper.bind 'click', (e) ->
+        e.preventDefault()
+        holder = clipper.parents(selector).first()
+        holder.slideUp 'fast', () ->
+          delete_field = holder.find('input[data-role="destroy"]')
+          if delete_field.length
+            delete_field.val(1)
+            holder.find('input[type="file"]').disable()
+          else
+            holder.remove()
 
 
 

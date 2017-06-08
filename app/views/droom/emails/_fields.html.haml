@@ -6,7 +6,7 @@
 = fields_for user do |uf|
   = uf.fields_for :emails, email, :child_index => fields_counter || 'field_counter' do |f|
     %fieldset.repeating
-      %p.twocol.reversed
+      %p.twocol.addendum
         %span.col>
           = f.email_field :email, :placeholder => t("placeholders.email.email"), required: true
         %span.col.last>

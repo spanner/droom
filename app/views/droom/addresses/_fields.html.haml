@@ -7,7 +7,7 @@
   = uf.fields_for :addresses, address, :child_index => fields_counter || 'field_counter' do |f|
 
     %fieldset.repeating
-      %p.twocol.reversed
+      %p.twocol.addendum
         %span.col>
           = f.text_area :address, :placeholder => t("placeholders.address.address")
         %span.col.last>

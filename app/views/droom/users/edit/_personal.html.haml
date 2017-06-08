@@ -14,8 +14,6 @@
                 %div
                   - if user.image?
                     - img = user.image.url(:thumb)
-                  - else
-                    - img = image_url('droom/missing/user.png')
 
                   .image-upload{:data => {:role => "imagepicker"}}
                     %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}

@@ -1,0 +1,75 @@
+=column($width: 48%, $margin: 2%)
+  position: relative
+  display: inline-block
+  vertical-align: top
+  width: $width
+  margin-right: $margin
+  input[type="text"], input[type="email"], input[type="date"], input[type="password"], textarea, select
+    width: 100%
+    box-sizing: border-box
+  &:last-child, &.last
+    margin-right: 0
+  span.subcol
+    display: inline-block
+    vertical-align: top
+    width: 48%
+    margin-right: 3.5%
+    input[type="text"], input[type="email"], input[type="date"], input[type="password"], textarea, select
+      width: 100%
+      box-sizing: border-box
+    &:last-child, &.last
+      margin-right: 0
+
+
+p.onecol, p.twocol, p.threecol, p.fourcol
+  +clearfix
+  margin: 1em 0
+  &.flowed
+    span.col
+      float: left
+      margin-bottom: 0.75em
+      &.right
+        margin-right: 0
+      span.subcol
+        font-size: 90%
+  &.upset
+    margin-top: -1em
+  &.nospace
+    margin-bottom: 0
+  span.stacked
+    display: block
+    margin-bottom: 19px
+    &:last-child
+      margin-bottom: 0
+  h3+&
+    margin-top: 0.25em
+
+p.onecol
+  span.col
+    +column(100%, 0)
+p.twocol
+  span.col
+    +column(49%, 2%)
+  &.unequal
+    span.col:first-child, span.col.first
+      +column(24%, 2%)
+    span.col:last-child, span.col.last
+      +column(74%)
+  &.reversed
+    span.col:first-child, span.col.first
+      +column(62%, 2%)
+    span.col:last-child, span.col.last
+      +column(36%)
+  &.addendum
+    span.col:first-child, span.col.first
+      +column(calc(100% - 74px), 10px)
+    span.col:last-child, span.col.last
+      +column(64px)
+p.threecol
+  span.col
+    +column(36%, 2%)
+    &:first-child, &.first
+      +column(24%, 2%)
+p.fourcol
+  span.col
+    +column(23.5%, 2%)
