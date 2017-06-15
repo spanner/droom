@@ -337,7 +337,7 @@ form.event
       font-weight: bold
   input.venuepicker
     font-size: 1.2em
-    width: 250px
+    width: 241px
     padding: 4px
   .description
     margin-top: 0.5em
@@ -345,13 +345,14 @@ form.event
       width: 470px
       font-size: 1em
       height: 250px
+
+form.event, form.user
   p.admin
     clear: both
     float: right
-    margin: 5px 10px
+    margin: 16px 10px
     label
       display: inline-block
-      width: 75px
     select
       width: 75px
   .buttons
@@ -1626,23 +1627,25 @@ input.search_box
   width: 300px
   p
     display: none
-    padding: 10px
+    padding: 16px
     color: white
+    border: 1px solid white
+    border-radius: 3px
     +shadowed
-    +bordered
     &.notice
-      background-color: $green
-      border-color: darken($green, 10%)
+      background-color: $transgreen
+      border-color: $green
     &.alert
-      background-color: $link
-      border-color: darken($link, 10%)
+      background-color: $transred
+      border-color: $red
     a.closer
       display: block
       float: right
       width: 16px
       height: 16px
       margin-left: 10px
-      margin-right: -5px
+      margin-right: -10px
+      margin-top: -5px
       +text-hidden
       background:
         image: image-url('crosses.png')
@@ -2133,3 +2136,4 @@ ul.checklist
 @import droom/datepicker
 @import droom/uploader
 @import droom/columns
+@import droom/menus

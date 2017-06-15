@@ -1,4 +1,12 @@
-#panels
-  - Droom.panels.each do |panel|
-    - if admin? || panel != 'admin'
-      = render :partial => "droom/panels/#{panel}"
+- if user_signed_in?
+  #controls>
+    .headers
+      - if current_user.admin?
+        = link_to t("masthead.admin"), '#', :class => "admin_header", :title => t("masthead.admin"), :data => {:panel => 'admin'}
+      = link_to t("masthead.search"), '#', :class => "search_header", :title => t("masthead.search"), :data => {:panel => 'search'}
+      = link_to t("masthead.configuration"), '#', :class => "config_header", :title => t("masthead.configuration"), :data => {:panel => 'configuration'}
+
+  #panels
+    - Droom.panels.each do |panel|
+      - if admin? || panel != 'admin'
+        = render :partial => "droom/panels/#{panel}"

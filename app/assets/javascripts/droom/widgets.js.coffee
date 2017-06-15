@@ -167,11 +167,12 @@ jQuery ($) ->
 
 
 
-  $.fn.image_picker = () ->
+  $.fn.droom_image_picker = () ->
     @each ->
-      new ImagePicker @
+      console.log "droom_image_picker", @
+      new DroomImagePicker @
 
-  class ImagePicker extends FilePicker
+  class DroomImagePicker extends FilePicker
     display: () =>
       @_form.find('input.name').val(@_filename) if $('input.name').val() is @_previous_filename
       @_original_background ?= @_link.css("background-image")

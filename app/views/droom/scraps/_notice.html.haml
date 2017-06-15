@@ -10,6 +10,7 @@
       - if notice.created_by
         = t :posted_by
         = notice.created_by.informal_name
+        %br
       - else
         = t :posted
       = time_ago_in_words notice.created_at

@@ -6,7 +6,7 @@ module Droom
     
     def index
       authorize! :read, :dashboard
-      render
+      render layout: Droom.dashboard_layout.to_s
     end
     
   end

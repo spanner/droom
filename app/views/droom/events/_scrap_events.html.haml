@@ -1,4 +1,4 @@
-- scraps = Droom::Scrap.with_future_or_current_event
+- scraps = Droom::Scrap.with_event.limit(3)
 
 - if scraps.any?
   #stream

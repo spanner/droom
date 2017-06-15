@@ -48,10 +48,6 @@ $person: $link
 $msword: #0582ad
 $excel: #319711
 
-$masthead: #64666f
-$menubg: $link
-$menuitem: $hover
-
 $dark: #4d4e53 !default
 $mid: #9a9b9d !default
 $pale: #bdbdbd !default
@@ -70,6 +66,10 @@ $datemark_width: 50px
 $datemark_margin: 10px
 $tool_button_height: 32px
 $tool_button_width: 32px
+
+$transgreen: rgba(116,184,122, 0.8)
+$transred: rgba(237,28,36, 0.8)
+$shadow: rgba(0,0,0,0.6)
 
 =clearfix
   &:after
@@ -98,7 +98,7 @@ $tool_button_width: 32px
       color: $hover
 
 =shadowed
-  box-shadow: 1px 3px 3px 1px #333
+  box-shadow: 0px 1px 6px $shadow
 
 =bordered
   border: 5px solid white
@@ -250,3 +250,20 @@ $tool_button_width: 32px
     content: ""
     display: table
     clear: both
+
+=menu_link($src)
+  display: inline-block
+  text-indent: 18px
+  height: 16px
+  line-height: 16px
+  margin: 0 0 5px 0
+  white-space: nowrap
+  color: white
+  background:
+    color: transparent
+    position: 0 0
+    repeat: no-repeat
+    image: image-url($src)
+  &:hover
+    background-position: 0 -32px
+    text-shadow: 0 0 3px white

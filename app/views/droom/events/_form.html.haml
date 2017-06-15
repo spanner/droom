@@ -35,7 +35,7 @@
 
     .description.wysihtml
       .toolbar#t1
-        = render 'droom/shared/toolbar'
+        = render 'droom/shared/toolbar', omit_headings: true
       = f.text_area :description, :id => 'd1'
     
     %p.admin
@@ -43,7 +43,6 @@
         = f.label :event_type_id, t(:file_under)
         = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
       - if Droom::Calendar.count > 1
-        %br
         = f.label :calendar_id
         = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
       - else

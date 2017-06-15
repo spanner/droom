@@ -251,6 +251,7 @@ jQuery ($) ->
       Panel.remember(@)
     
     setup: () =>
+      console.log "setup", @id, @header
       position = @header.position()
       offset = @header.offset()
       top = position.top + @header.outerHeight()
@@ -259,7 +260,7 @@ jQuery ($) ->
         top: top - 3
         width: @header.outerWidth() - 2
       @container.css
-        right: -16
+        right: 0
         top: top - 1
 
     set: () =>

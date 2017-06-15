@@ -33,6 +33,12 @@ module Droom
     
     scope :visible_to, -> user { where("1=1") }
     
+    scope :with_event, -> {
+      joins(:event)
+        .where(["droom_scraps.scraptype = 'event'"])
+        .order('droom_events.start DESC')
+    }
+
     scope :with_future_or_current_event, -> {
       joins(:event)
         .where(["droom_scraps.scraptype = 'event' AND (droom_events.finish > :now) OR (droom_events.finish IS NULL AND droom_events.start > :now)", :now => Time.zone.now])
@@ -94,6 +100,10 @@ module Droom
     
     def next_older
       Droom::Scrap.earlier_than(self).first
+    end
+
+    def video?
+      scraptype == 'video'
     end
 
   protected

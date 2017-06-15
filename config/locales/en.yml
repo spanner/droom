@@ -19,7 +19,7 @@ en:
         start_time: "Time"
         finish_time: "Finish (optional)"
         start_date: "Date"
-        calendar_id: "Calendar"
+        calendar_id: "in calendar"
         private: "hidden unless attending"
       event_type:
         name: "Name"

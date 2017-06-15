@@ -20,9 +20,9 @@
     %p
       = t :account_password
     = render "droom/users/edit/admin_password_fields", f: f, user: user
-    
+
     - unless @user.confirmed?
-      %p.confirmation
+      %p.admin
         = f.check_box :send_confirmation
         = f.label :send_confirmation
 
@@ -34,7 +34,4 @@
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'
   
-
-
-
 
