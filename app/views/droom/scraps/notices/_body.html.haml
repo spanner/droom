@@ -11,7 +11,7 @@
   - truncated = body != short_body || caption != short_caption
 
   .notice_body
-    .compact
+    %div{class: truncated ? "compact" : "expanded"}
       - unless omit_body
         = short_body
       - if !omit_caption && short_caption.present?
@@ -20,6 +20,7 @@
       - if truncated
         %a.reveal
           =t (:notice_expand)
+
     - if truncated
       .expanded
         - unless omit_body
