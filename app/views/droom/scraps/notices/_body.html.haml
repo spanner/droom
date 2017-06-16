@@ -11,7 +11,7 @@
   - truncated = body != short_body || caption != short_caption
 
   .notice_body
-    %div{class: truncated ? "compact" : "expanded"}
+    %div{class: truncated ? "compact" : ""}
       - unless omit_body
         = short_body
       - if !omit_caption && short_caption.present?
