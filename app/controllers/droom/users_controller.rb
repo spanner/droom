@@ -20,16 +20,15 @@ module Droom
     end
 
     def admin
-      if params[:q].blank? && params[:award_type_code].blank? && params[:account_group].blank? && params[:account_confirmed].blank?
+      if params[:q].blank? && params[:account_group].blank? && params[:account_confirmed].blank?
         group_slugs = Droom::Group.all.collect{ |r| r.slug }
-        @users = Droom::User.search '*', where: {groups: group_slugs}, limit: 100, order: {name: :asc}, aggs: [:awards, :groups, :account_confirmation]
+        @users = Droom::User.search '*', where: {groups: group_slugs}, limit: 100, order: {name: :asc}, aggs: [:groups, :account_confirmation]
       else
         query = params[:q].presence || '*'
         filters = {}
-        filters[:awards] = params[:award_type_code] if params[:award_type_code].present?
         filters[:groups] = params[:account_group] if params[:account_group].present?
         filters[:account_confirmation] = params[:account_confirmed] if params[:account_confirmed].present?
-        @users = Droom::User.search query, where: filters, limit: 100, aggs: [:awards, :groups, :account_confirmation]
+        @users = Droom::User.search query, where: filters, limit: 100, aggs: [:groups, :account_confirmation]
       end
       respond_with @users
     end
