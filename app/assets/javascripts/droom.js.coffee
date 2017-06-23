@@ -78,7 +78,7 @@ jQuery ($) ->
     @find_including_self('input[type="submit"]').submitter()
     @find_including_self('form.scrap').scrap_form()
     @find_including_self('[data-role="filepicker"]').file_picker()
-    @find_including_self('[data-role="imagepicker"]').image_picker()
+    @find_including_self('[data-role="imagepicker"]').droom_image_picker()
     @find_including_self('[data-role="venuepicker"]').venue_picker()
     @find_including_self('[data-role="slug"]').slug_field()
     @find_including_self('[data-droppable]').droploader()
