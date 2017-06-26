@@ -13,6 +13,6 @@
           = f.select :address_type_id, Droom::AddressType.for_selection(:email)
 
       .controls
-        = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
+        = link_to t(:delete_symbol), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
         - if email.persisted?
           = f.hidden_field :_destroy, data: {role: "destroy"}
