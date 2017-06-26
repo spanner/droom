@@ -251,7 +251,6 @@ jQuery ($) ->
       Panel.remember(@)
     
     setup: () =>
-      console.log "setup", @id, @header
       position = @header.position()
       offset = @header.offset()
       top = position.top + @header.outerHeight()

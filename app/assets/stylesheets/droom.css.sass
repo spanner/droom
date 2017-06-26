@@ -1710,6 +1710,12 @@ form.preferences
       image: image-url("droom/checkboxes.png")
   input[type='checkbox'] + label
     background-position: 0 -26px
+  input[type='checkbox'][disabled] + label
+    background-position: 0 -90px
+    cursor: default
+  input[type='checkbox'][disabled]:checked + label
+    background-position: 0 -58px
+    color: $pale
   input[type='checkbox']:checked + label
     background-position: 0 6px
     color: $green
@@ -1724,7 +1730,6 @@ form.preferences
     background:
       image: image-url('droom/spinner.gif')
       position: 0 2px
-
 
 span.preference
   display: block

@@ -26,6 +26,8 @@ module Droom
 
     scope :earlier_than, -> scrap { where(["created_at < ?", scrap.created_at]).order("droom_scraps.created_at DESC")  }
 
+    scope :added_since, -> date { where("created_at > ?", date)}
+
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_scraps.name LIKE :f OR droom_scraps.body LIKE :f OR droom_scraps.note LIKE :f', :f => fragment)
