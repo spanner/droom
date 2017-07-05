@@ -2,11 +2,10 @@ module Droom
   class SuggestionsController < Droom::EngineController
     respond_to :html, :json, :js
     layout false
-
-    skip_authorization_check
     before_action :get_classes
-    
+
     def index
+      authorize! :index, :suggestions
       fragment = params[:term]
       max = params[:limit] || 10
       show_when_empty = params[:empty] == "all"
@@ -15,7 +14,7 @@ module Droom
       else
         if @types.include?('event') && fragment.length > 6 && span = Chronic.parse(fragment, :guess => false)
           @suggestions = Droom::Event.falling_within(span).accessible_by(current_ability)
-          @title = span.width > 86400 ? "Events in #{fragment}" : "Events on #{fragment}"
+          @title = span.width > 1.day ? "Events in #{fragment}" : "Events on #{fragment}"
         else
           @suggestions = @klasses.collect {|klass|
             klass.camelize.constantize.accessible_by(current_ability).matching(fragment).limit(max.to_i)

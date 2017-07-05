@@ -16,6 +16,7 @@ module Droom
           can :read, Droom::User
           can :read, Droom::Group
           can :read, Droom::Organisation
+          can :index, :suggestions
 
           can :read, Droom::Document do |document|
             !document.confidential?
