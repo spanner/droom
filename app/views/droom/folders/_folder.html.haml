@@ -23,8 +23,12 @@
   - cssclass << " standalone" if standalone
   - cssclass << " auto" if folder.automatic? && can?(:edit, folder)
 
+  - adata = {}
+  - if can?(:edit, folder)
+    - adata = {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}", queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
+
   %li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: url, label: folder.slug }}<
-    = link_to shorten(title, length), url, class: "folder", data: {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}", queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
+    = link_to shorten(title, length), url, class: "folder", data: adata
     - unless omit_menu
       = action_menulink(folder)
     - if can?(:edit, folder)
