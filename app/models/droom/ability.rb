@@ -18,13 +18,9 @@ module Droom
           can :read, Droom::Organisation
           can :index, :suggestions
 
-          can :read, Droom::Document do |document|
-            !document.confidential?
-          end
-
-          can :read, Droom::Folder do |folder|
-            !folder.confidential?
-          end
+          # This should move into CDR
+          can :read, Droom::Document, private: false
+          can :read, Droom::Folder, private: false
 
           # And they can edit themselves
           #
