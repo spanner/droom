@@ -16,7 +16,7 @@
 
     - if admin?
       %p.admin
-      - unless @user.confirmed?
+        - unless @user.confirmed?
           = f.check_box :send_confirmation
           = f.label :send_confirmation
         = f.check_box :admin
