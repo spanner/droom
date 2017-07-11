@@ -14,10 +14,13 @@
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
     = render partial: 'droom/users/edit/user_fields', locals: {f: f, user: user}
 
-    - unless @user.confirmed?
+    - if admin?
       %p.admin
-        = f.check_box :send_confirmation
-        = f.label :send_confirmation
+        - unless @user.confirmed?
+          = f.check_box :send_confirmation
+          = f.label :send_confirmation
+        = f.check_box :admin
+        = f.label :admin
 
     .buttons
       - if user == current_user
