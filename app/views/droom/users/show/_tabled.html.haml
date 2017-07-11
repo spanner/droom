@@ -2,8 +2,9 @@
 - user ||= tabled || @user
 - rowid = "user_#{user.id}"
 - cssclass = "user"
+- cssclass << " unconfirmed" unless user.confirmed?
 
-%tr{:id => rowid, :class => 'cssclass', data: {refreshable: true, url: user_url(user, view: 'tabled', format: :js)}}
+%tr{:id => rowid, :class => cssclass, data: {refreshable: true, url: user_url(user, view: 'tabled', format: :js)}}
   %td.name
     %span.contact
       %span.name
@@ -15,8 +16,13 @@
     = mail_to user.email
 
   %td.email
-    - unless user.last_sign_in_at.nil?
-      = user.last_sign_in_at.strftime("%Y-%m-%d %H:%M:%S")
+    - if user.confirmed? && user.last_sign_in_at?
+      = l user.last_sign_in_at, format: :natural_with_year
+    - else
+      = link_to reinvite_user_url(user), remote: true, method: "PUT", class: "reinvite", data: {action: "reinvite", confirmation: "✔︎ reinvited"} do
+        %span.label
+          reinvite
+    
 
   - group_name = ''
   - groups = Droom::Group.all

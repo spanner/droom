@@ -1,0 +1,105 @@
+form.faceter, form.droom_faceter
+  width: 750px
+  position: relative
+  fieldset
+    display: inline-block
+    vertical-align: top
+    margin-right: 10px
+    clear: left
+    select
+      width: 140px
+      &#year, &#award_year
+        width: 80px
+    input[type="text"], input[type="submit"], select
+      display: inline-block
+      float: left
+      vertical-align: top
+      margin: 0 10px 10px 0
+      border-radius: 3px
+      &:last-child
+        margin-right: 0
+    input[type="text"]
+      width: 512px
+    &:last-child
+      margin-right: 0
+  a.select
+    position: absolute
+    display: block
+    color: $pale
+    +hover
+    top: 48px
+    left: 540px
+  p.options
+    margin: 0 0 2em 0
+    font-size: 0.95rem
+    color: $mid
+    a
+      color: $pale
+      cursor: pointer
+      +hover
+      margin: 0 0.25em
+      &.here
+        color: $mid
+        pointer-events: none
+    span.option_set
+      margin-right: 1.2em
+  p.action
+    margin: 0
+  .padded
+    display: inline-block
+    padding: 10px
+  p.reports
+    float: right
+    margin-top: -1.5em
+    margin-right: 28px
+  p#message_report
+    color: $green
+    display: none
+    a
+      color: $green
+      +hover
+      font-weight: bold
+
+  fieldset.selecter
+    position: relative
+    display: inline-block
+    z-index: 500
+    width: 180px
+    transition: background-color 0.5s ease-out, box-shadow 0.5s ease-out
+    &.pinned
+      box-shadow: 0 2px 5px $shadow
+      background-color: rgba(255,255,255,0.9)
+      padding-top: 24px
+      margin-top: -24px
+      padding-left: 40px
+      margin-left: -40px
+      padding-bottom: 10px
+      border-bottom-right-radius: 5px
+      border-bottom-left-radius: 5px
+    .selection, .action, .caption
+      display: inline-block
+      vertical-align: top
+    .action
+      a
+        +button($green)
+        padding: 6px
+        font-size: 0.9rem
+        display: inline-block
+        vertical-align: top
+        float: left
+      a.message
+        width: 100px
+        border-bottom-left-radius: 5px
+        border-top-left-radius: 5px
+      a.show_other_actions
+        width: 20px
+        margin-left: 1px
+        border-bottom-right-radius: 5px
+        border-top-right-radius: 5px
+
+    .caption
+      span.note
+        display: block
+        padding: 10px 0 0 6px
+
+

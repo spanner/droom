@@ -57,6 +57,7 @@ jQuery ($) ->
     @find_including_self('table[data-hoverable]').hover_table()
     @find_including_self('[data-action="append_fields"]').appends_fields()
     @find_including_self('[data-action="remove_fields"]').removes_fields()
+    @find_including_self('[data-action="reinvite"]').reinviter()
 
     # it's not very easy to add data attributes to kaminari pagination links
 

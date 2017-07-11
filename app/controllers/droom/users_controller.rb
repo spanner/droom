@@ -4,10 +4,13 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     before_action :set_view, only: [:show, :edit, :update]
+    before_action :search_users, only: [:admin]
     # before_action :self_unless_admin, only: [:edit, :update]
-    # skip_before_action :request_password_if_not_set, only: [:set_password]
     load_and_authorize_resource except: [:set_password]
 
+    # :index is the old user-list view, preserved for historical compatibility but now v. clunky.
+    # :admin is the new elasticsearch index. The actual search work is done in `search_users`.
+    #
     def index
       @users = @users.in_name_order.includes(:permissions)
       @users = @users.matching(params[:q]) unless params[:q].blank?
@@ -17,20 +20,6 @@ module Droom
         format.js { render :partial => 'droom/users/users' }
         format.vcf { render :vcf => @users.map(&:to_vcf) }
       end
-    end
-
-    def admin
-      if params[:q].blank? && params[:account_group].blank? && params[:account_confirmed].blank?
-        group_slugs = Droom::Group.all.collect{ |r| r.slug }
-        @users = Droom::User.search '*', where: {groups: group_slugs}, limit: 100, order: {name: :asc}, aggs: [:groups, :account_confirmation]
-      else
-        query = params[:q].presence || '*'
-        filters = {}
-        filters[:groups] = params[:account_group] if params[:account_group].present?
-        filters[:account_confirmation] = params[:account_confirmed] if params[:account_confirmed].present?
-        @users = Droom::User.search query, where: filters, limit: 100, aggs: [:groups, :account_confirmation]
-      end
-      respond_with @users
     end
 
     def show
@@ -110,7 +99,38 @@ module Droom
       head :ok
     end
 
+    def reinvite
+      @user.send_confirmation_instructions unless @user.confirmed?
+      head :ok
+    end
+
   protected
+
+    def search_users
+      filters = {}
+      filters[:groups] = params[:account_group] if params[:account_group].present?
+      filters[:account_confirmation] = params[:account_confirmed] if params[:account_confirmed].present?
+      filters[:organisation] = params[:organisation] if params[:organisation].present?
+  
+      query = params[:q].presence || '*'
+      arguments = {
+        where: filters,
+        aggs: [:groups, :account_confirmation, :organisation],
+        order: {name: :asc}
+      }
+  
+      if params[:show] == "all"
+        arguments[:limit] = 1000
+      else
+        arguments[:per_page] = (params[:show].presence || 50).to_i
+        arguments[:page] = (params[:page].presence || 1).to_i
+      end
+
+      Rails.logger.warn "User search params: #{arguments.inspect}"
+
+      @users = Droom::User.search query, arguments
+    end
+
 
     def user_params
       params.require(:user).permit(

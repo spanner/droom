@@ -9,11 +9,13 @@ module Droom::Users
     def show
       @resource = self.resource = resource_class.confirm_by_token(params[:confirmation_token])
       @omit_navigation = true
-      if @resource && @resource.confirmed?
+      if @resource
         sign_in(resource_name, @resource)
-        render
-      elsif user_signed_in?
-        redirect_to droom.dashboard_url
+         if @resource.confirmed?
+           redirect_to droom.dashboard_url
+         else
+           redirect_to droom.dashboard_url
+         end
       else
         render :template => "droom/users/confirmations/failure"
       end

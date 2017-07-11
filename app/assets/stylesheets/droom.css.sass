@@ -1,5 +1,18 @@
 @import droom/definitions
 
+@keyframes confirmation
+  10%
+    background-color: $lightgreen
+  100%
+    background-color: $page
+
+@keyframes complaint
+  10%
+    background-color: $red
+  100%
+    background-color: $page
+
+
 p.quitelarge
   font-size: 1.4em
 
@@ -37,6 +50,36 @@ a.dropboxer
     color: #4ea1ea
   &:hover
     color: $hover
+
+a.confirmed
+  color: $green
+  animation-name: confirmation
+  animation-duration: 2s
+  animation-timing-function: ease-in-out
+
+a.erratic
+  color: $red
+  animation-name: complaint
+  animation-duration: 2s
+  animation-timing-function: ease-in-out
+
+
+
+a.reinvite
+  color: $blue
+  font-size: 1rem
+  float: right
+  padding-left: 20px
+  &.confirmed
+    color: $green
+
+a.waiting
+  color: $mid
+  padding-left: 20px
+  background:
+    image: image-url('droom/spinner.gif')
+    position: left 3px top 5px
+    repeat: no-repeat
 
 input.dropbox.revoke[type="submit"]
   +icon_link("droom/revoke_small.png")
@@ -307,6 +350,7 @@ span.admin.documents
 .users
   .person_picker
     font-size: 1.8em
+
 
 form.event
   span.interlabel
@@ -933,6 +977,13 @@ table.toggles
       background-position: 0 -648px
     a.yes:hover
       background-position: 0 -480px
+  tr.unconfirmed
+    td, th, td.name
+      color: $pale
+      a
+        color: $pale
+        +hover
+      
 
 
 
@@ -2140,3 +2191,4 @@ ul.checklist
 @import droom/uploader
 @import droom/columns
 @import droom/menus
+@import droom/forms

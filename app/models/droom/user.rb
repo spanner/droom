@@ -662,6 +662,8 @@ module Droom
         chinese_name: chinese_name,
         emails: emails.map(&:email),
         addresses: addresses.map(&:address),
+        organisation: organisation_id,
+        organisation_name: organisation_name,
         phones: phones.map(&:phone),
         groups: groups.map(&:slug),
         status: status,
@@ -672,6 +674,10 @@ module Droom
 
     def additional_search_data
       {}
+    end
+
+    def organisation_name
+      organisation.name if organisation
     end
 
     def confirm_account

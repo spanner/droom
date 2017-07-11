@@ -73,7 +73,7 @@ en:
         gender_f: "female"
         gender_m: "male"
         group_ids: "Groups"
-        send_confirmation: "Send an invitation message when saved"
+        send_confirmation: "Send invitation"
         defer_confirmation: "Send no email"
   preferences:
     dropbox:
@@ -247,6 +247,9 @@ en:
   event_type_description: "Visible only to administrators"
   expel: "remove from group"
   file_under: "File under"
+  filter_organisation: "Org..."
+  filter_account_confirmed: "Status..."
+  filter_group_type: "Group..."
   filter_content_type: "File type..."
   filter_year: "Year..."
   filter_event_type: "Event type..."
@@ -509,7 +512,7 @@ en:
       natural_with_date: "%l:%M%P, %d %B %Y"
       natural_on_date: "%l:%M%P on %d %B %Y"
       natural_at_time: "%d %B %Y at %l:%M%P"
-      natural_with_year: "%-d %B %Y"
+      natural_with_year: "%-d %b %Y"
       precise: "%H:%M"
       month_and_year: "%b %Y"
       minicalendar_title: "%B %Y"
