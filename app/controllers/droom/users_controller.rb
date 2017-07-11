@@ -64,7 +64,11 @@ module Droom
     #
     def update
       if @user.update_attributes(user_params)
-        respond_with @user, location: user_url(view: @view)
+        respond_with @user, location: user_url(view: @view) do |format|
+          format.js {
+            render partial: "droom/users/show/#{@view}"
+          }
+        end
       end
     end
 
