@@ -9,6 +9,10 @@
       = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#users'}
 
   %form.faceter{:action => droom.admin_users_url(:format => :html), :autocomplete => 'off', :id => "users_search", :data => { target: "#users" }}
+    = hidden_field_tag :page, params[:page]
+    = hidden_field_tag :show, params[:show]
+    = hidden_field_tag :sort, params[:sort]
+
     %fieldset.search<
       = text_field_tag :q, params[:q], name: 'q', class: 'search', placeholder: t(:search), data: {slow: true}
       = submit_tag 'search'
@@ -29,6 +33,8 @@
           %th Admin
 
       = render :partial => 'droom/users/show/tabled', :collection => @users
+    .pagination
+      = paginate @users
 
   - else
     .everyone
