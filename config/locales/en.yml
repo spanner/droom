@@ -348,7 +348,7 @@ en:
       given_name: "Given name"
       honours: "Honours"
       mobile: "Mobile/cell"
-      password: "At least 8 characters"
+      password: "6 characters or more"
       phone: "Telephone"
       title: "Title"
   profile: "Profile"

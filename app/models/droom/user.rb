@@ -18,7 +18,6 @@ module Droom
            :confirmable,
            :rememberable,
            :session_limitable,
-           :zxcvbnable,
            :lockable,
            reconfirmable: false,
            lock_strategy: :failed_attempts,
