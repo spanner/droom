@@ -2,7 +2,7 @@
 - event ||= @event
 - open ||= event == @event
 - open = true if pageclass == 'events'
-- full_attachments ||= open
+- full_attachments ||= false
 
 - event_master_id = event.master_id || event.id
 - if @seen_events[event_master_id]
@@ -21,7 +21,7 @@
   - div_data[:queue] = "#queue_to_#{event.folder.id}"
   - div_data[:refreshes] = "#event_#{event.id}"
 
-%div{:class => cssclasses.join(' '), :id => "event_#{event.id}", :data => div_data}
+%div{:class => cssclasses.join(' '), id: "event_#{event.id}", data: div_data}
   = link_to event_url(event) do
     .datemark
       %span.mon= event.start.strftime('%b')

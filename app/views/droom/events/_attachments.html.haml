@@ -1,7 +1,7 @@
 - event ||= @event
 - folder ||= event.folder
 
-.col.attachments
+.col.attachments{data: {droppable: droom.folder_documents_path(folder), queue: "#queue_to_#{folder.id}", refreshes: "#event_#{event.id}"}}
   %h3
     = t :attachments
   %ul.uploads{id: "queue_to_#{folder.id}"}
