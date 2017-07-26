@@ -227,12 +227,10 @@ jQuery ($) ->
 
 
 
-
-
   $.fn.password_fieldset = ->
-    @each ->
+    if @length
       new PasswordFieldset(@)
-    @
+
 
   class PasswordFieldset
     constructor: (element) ->
@@ -243,28 +241,22 @@ jQuery ($) ->
       @confirmation_field.bind 'input', @checkConfirmation
       @submitter = @fieldset.parents('form').find('input[type="submit"]')
       meter_holder = @fieldset.find('[data-role="meter"]')
-      
-      console.log "required password?", @required()
-      
       if meter_holder.length
         @meter = new PasswordMeter(meter_holder)
-      $.withZxcbvn =>
-        @checkPassword()
-        @password_field.bind 'input', @checkPassword
-      @set()
-
-    set: () =>
-      @unconfirmable()
-      @unsubmittable() if @required()
+      @password_field.bind 'input', @checkPassword
+      @checkPassword()
 
     checkPassword: () =>
-      # no password is ok if password is not required
+      # no password is ok, if password is not required
       if @empty()
         @unconfirmable()
         @password_field.removeClass('valid invalid')
         @meter?.clear()
-        unless @required()
-          @confirmation_field.attr('pattern', '').attr('required', false)
+        if @required()
+          @unsubmittable()
+        else
+          @submittable()
+        false
 
       # but if password is given, it must be long enough and strong enough
       else
@@ -273,24 +265,27 @@ jQuery ($) ->
         if password.length < 6
           @meter?.tooShort()
         else
-          result = zxcvbn(password)
-          ok = result.score >= 2
-          @meter?.display(result)
+          @meter?.check(password)
+          #TODO: agree and apply complexity requirements
+          ok = true
+
         if ok
           @password_field.removeClass('invalid').addClass('valid')
           @confirmable()
         else
           @password_field.removeClass('valid').addClass('invalid')
           @unconfirmable()
+        @checkConfirmation()
+        ok
 
     # ... and confirmed.
     checkConfirmation: () =>
-      if @checkPassword() and @confirmed()
+      if @confirmed()
         @confirmation_field.addClass('valid').removeClass('invalid')
         @submittable()
       else
         @confirmation_field.removeClass('valid').addClass('invalid')
-        @unsubmittable()
+        @unsubmittable() unless @empty() and not @required()
 
     required: () =>
       !!@password_field.attr('required')
@@ -305,11 +300,14 @@ jQuery ($) ->
       @confirmed() and (not @empty() or not @required())
 
     confirmable: () =>
-      @confirmation_field.attr('pattern', @password_field.val())
+      @confirmation_field.attr('required', true)
       @confirmation_block.enable()
+      @unsubmittable()
 
     unconfirmable: () =>
       @confirmation_block.disable()
+      @confirmation_field.attr('required', false)
+      @unsubmittable()# if @required()
 
     submittable: () =>
       @submitter.enable()
@@ -331,32 +329,36 @@ jQuery ($) ->
       @_gauge = @_container.find('[data-role="gauge"]')
       @_score = @_container.find('[data-role="score"]')
       @_notes = @_container.find('[data-role="notes"]')
+      @_original_warning = @_warnings.html()
+      @_original_notes = @_notes.html()
+      @_zxcvbn_ready = false
+      $.withZxcbvn =>
+        @_ready = true
 
     clear: () =>
       @_warnings.text("")
       @_container.removeClass('s0 s1 s2 s3 s4 acceptable')
-      @_notes.text("")
+      @_notes.html(@_original_notes)
+      @_warnings.html(@_original_warning)
 
     tooShort: () =>
       @clear()
       @_container.addClass('s0')
       @_warnings.text("Password too short.")
 
+    check: (value) =>
+      if @_ready
+        result = zxcvbn(value)
+        @display(result)
+        result.score
+
     display: (result) =>
-      if result.score < 3
-        warning = "Password not strong enough."
-        warning += " #{result.feedback.warning}." if result.feedback?.warning
-        @_warnings.text(warning)
+      if result.score < 2
+        @_warnings.text(result.feedback.warning) if result.feedback?.warning
         @_suggestions.text(result.feedback?.suggestions)
-      else if result.score == 3
-        @_warnings.text("Password strength is adequate.")
-      else 
-        @_warnings.text("Password strength is good.")
-      @_score.text(result.score)
-      @_notes.text("Time to crack " + result.crack_times_display.offline_slow_hashing_1e4_per_second)
-      cssclass = "s#{result.score}"
-      cssclass += " acceptable" if result.score >= 3
-      @_container.removeClass('s0 s1 s2 s3 s4 acceptable').addClass(cssclass)
+        @_container.slideDown()
+      else
+        @_container.removeClass('s0 s1 s2 s3 s4 acceptable').slideUp()
 
 
 
