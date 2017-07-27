@@ -1,0 +1,13 @@
+- content_for :title do
+  = t :organisation_type_admin
+
+- content_for :standfirst do
+  %p
+    = t :organisation_types_introduction
+
+#organisation_types
+  = render :partial => 'organisation_types'
+
+  %p.action
+    - if can?(:create, Droom::EventType)
+      = link_to t(:add_organisation_type), droom.new_organisation_type_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "div.organisation_types"}

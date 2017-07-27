@@ -12,10 +12,11 @@
     = shorten(organisation.description, :length => 64)
 
   .detail
-    = organisation.description.html_safe
-    - if organisation.url?
-      %p.note
-        = link_to organisation.url_without_protocol, organisation.url_with_protocol, :class => "external"
+    - if organisation.description != "null"
+      = organisation.description
+      - if organisation.url?
+        %p.note
+          = link_to organisation.url_without_protocol, organisation.url_with_protocol, :class => "external"
 
     - if organisation.users.any?
       %ul.people
