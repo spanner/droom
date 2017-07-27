@@ -1,5 +1,5 @@
 module Droom
-  class UserPermission < ActiveRecord::Base
+  class UserPermission < ApplicationRecord
     belongs_to :user
     belongs_to :permission
     belongs_to :group_permission

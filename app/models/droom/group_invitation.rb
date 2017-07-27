@@ -1,5 +1,5 @@
 module Droom
-  class GroupInvitation < ActiveRecord::Base
+  class GroupInvitation < ApplicationRecord
     belongs_to :created_by, :class_name => "User"
     belongs_to :group
     belongs_to :event

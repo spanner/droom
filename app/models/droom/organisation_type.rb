@@ -1,5 +1,5 @@
 module Droom
-  class OrganisationType < ActiveRecord::Base
+  class OrganisationType < ApplicationRecord
     has_many :organisations
     
     has_folder within: "Organisations" # here the within arguments sets the name of our parent folder

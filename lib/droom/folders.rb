@@ -3,9 +3,9 @@
 # name and some tree behaviours that allow us to present a filing system.
 #
 # This file defines the interface by which we declare that an object has a folder and would like to receive documents.
-# 
+#
 # It is also possible to have a loose folder: in that case it is considered public and available to everyone.
-# 
+#
 module Droom
   module Folders
 
@@ -20,7 +20,7 @@ module Droom
 
       # In most cases all you need is a `has_folder` line in the model class definition.
       #
-      #   class Thing < ActiveRecord::Base
+      #   class Thing < ApplicationRecord
       #     has_folder
       #   end
       #
@@ -33,7 +33,7 @@ module Droom
       # its event, so that the filing system reflects the organisation of the event. To achieve this,
       # pass in the name of an associate as the `:within` option:
       #
-      #   class Subthing < ActiveRecord::Base
+      #   class Subthing < ApplicationRecord
       #     belongs_to :thing
       #     has_folder :within => :thing
       #   end
@@ -48,7 +48,6 @@ module Droom
         class_eval {
           extend Droom::Folders::FolderedClassMethods
           include Droom::Folders::FolderedInstanceMethods
-          alias_method_chain :folder, :lazy_load
         }
       end
     end
@@ -62,12 +61,12 @@ module Droom
 
     module FolderedInstanceMethods
       #
-      # Folders are lazy-created. That is, when we need it, we make it. This is achieved by chaining the `:folder` 
-      # association method and creating a folder if none exists. This method definition must occur after the association 
+      # Folders are lazy-created. That is, when we need it, we make it. This is achieved by chaining the `:folder`
+      # association method and creating a folder if none exists. This method definition must occur after the association
       # has been defined.
       #
-      def folder_with_lazy_load
-        folder_without_lazy_load || self.create_folder(:parent => get_parent_folder)
+      def folder
+        super || self.create_folder(:parent => get_parent_folder)
       end
 
       def all_documents

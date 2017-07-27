@@ -2,7 +2,7 @@ require 'open-uri'
 require 'dropbox_sdk'
 
 module Droom
-  class Document < ActiveRecord::Base
+  class Document < ApplicationRecord
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
     belongs_to :scrap, :dependent => :destroy

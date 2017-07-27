@@ -1,5 +1,5 @@
 module Droom
-  class Enquiry < ActiveRecord::Base
+  class Enquiry < ApplicationRecord
     include MailForm::Delivery
 
     attributes :robot, :captcha => true

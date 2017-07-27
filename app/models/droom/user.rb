@@ -1,7 +1,7 @@
 require 'digest'
 
 module Droom
-  class User < ActiveRecord::Base
+  class User < ApplicationRecord
     validates :family_name, :presence => true
     validates :given_name, :presence => true
     validates :uid, :uniqueness => true, :presence => true

@@ -1,5 +1,5 @@
 module Droom
-  class DropboxDocument < ActiveRecord::Base
+  class DropboxDocument < ApplicationRecord
     belongs_to :user
     belongs_to :document
 

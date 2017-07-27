@@ -1,5 +1,5 @@
 module Droom
-  class Membership < ActiveRecord::Base
+  class Membership < ApplicationRecord
     belongs_to :user
     belongs_to :group
     belongs_to :created_by, :class_name => "User"

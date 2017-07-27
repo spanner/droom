@@ -1,5 +1,5 @@
 module Droom
-  class AgendaCategory < ActiveRecord::Base
+  class AgendaCategory < ApplicationRecord
     belongs_to :category
     belongs_to :event
     belongs_to :created_by, :class_name => "Droom::User"

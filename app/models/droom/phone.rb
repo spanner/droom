@@ -1,5 +1,5 @@
 module Droom
-  class Phone < ActiveRecord::Base
+  class Phone < ApplicationRecord
     include Droom::Concerns::AddressBookProperty
   end
 end

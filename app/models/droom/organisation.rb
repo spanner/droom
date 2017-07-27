@@ -1,5 +1,5 @@
 module Droom
-  class Organisation < ActiveRecord::Base
+  class Organisation < ApplicationRecord
     has_many :users
     belongs_to :organisation_type
     belongs_to :owner, :class_name => 'Droom::User'

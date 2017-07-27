@@ -1,5 +1,5 @@
 module Droom
-  class Calendar < ActiveRecord::Base
+  class Calendar < ApplicationRecord
     include Droom::Concerns::Slugged
     
     belongs_to :created_by, :class_name => "Droom::User"

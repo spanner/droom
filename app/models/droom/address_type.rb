@@ -1,5 +1,5 @@
 module Droom
-  class AddressType < ActiveRecord::Base
+  class AddressType < ApplicationRecord
     has_many :emails
     has_many :phones
     has_many :addresses

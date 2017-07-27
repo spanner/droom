@@ -1,5 +1,5 @@
 module Droom
-  class DropboxToken < ActiveRecord::Base
+  class DropboxToken < ApplicationRecord
     belongs_to :created_by, :class_name => "Droom::User"
     after_create :delete_previous
     

@@ -1,5 +1,5 @@
 module Droom
-  class EventType < ActiveRecord::Base
+  class EventType < ApplicationRecord
     include Droom::Concerns::Slugged
 
     has_many :events, :dependent => :nullify

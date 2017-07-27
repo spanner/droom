@@ -1,7 +1,7 @@
 # Preferences...
 
 module Droom
-  class Preference < ActiveRecord::Base
+  class Preference < ApplicationRecord
     belongs_to :created_by, :class_name => "Droom::User"
     validates :key, :presence => true, :uniqueness => {:scope => :created_by_id}
     

@@ -1,5 +1,5 @@
 module Droom
-  class Category < ActiveRecord::Base
+  class Category < ApplicationRecord
     include Droom::Concerns::Slugged
 
     belongs_to :created_by, :class_name => "Droom::User"

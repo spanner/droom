@@ -1,5 +1,5 @@
 module Droom
-  class PersonalFolder < ActiveRecord::Base
+  class PersonalFolder < ApplicationRecord
     belongs_to :user
     belongs_to :folder
     

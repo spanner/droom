@@ -1,5 +1,5 @@
 module Droom
-  class Email < ActiveRecord::Base
+  class Email < ApplicationRecord
     include Droom::Concerns::AddressBookProperty
   end
 end

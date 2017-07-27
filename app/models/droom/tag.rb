@@ -2,7 +2,7 @@
 # They are strictly catalogue data, used to locate people but not treated as part of the user record.
 
 module Droom
-  class Tag < ActiveRecord::Base
+  class Tag < ApplicationRecord
     # They are attached to people and other things through many-to-many taggings.
     #
     has_many :taggings
