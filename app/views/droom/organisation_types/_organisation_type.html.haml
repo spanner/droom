@@ -1,0 +1,14 @@
+- organisation_type ||= @organisation_type
+- aclass = "name"
+- aclass << " confidential" if organisation_type.confidential?
+- aclass << " public" if organisation_type.public?
+
+%div.organisation_type{:id => "organisation_type_#{organisation_type.id}", :data => {:refreshable => true, :url => organisation_type_path(organisation_type, :format => :js)} }
+  = action_menu(organisation_type)
+
+  %h2.name
+    = link_to organisation_type.name, droom.organisation_type_url(organisation_type), class: aclass
+    = action_menulink(organisation_type)
+
+  %p
+    = organisation_type.description.presence || t(:no_description)

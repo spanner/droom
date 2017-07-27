@@ -7,7 +7,7 @@ module Droom
     def index
       respond_with @organisation_types do |format|
         format.js {
-          # render :partial => 'droom/event_types/event_types'
+          render :partial => 'droom/organisation_types/organisation_types'
         }
       end
     end
@@ -26,7 +26,7 @@ module Droom
 
     def update
       @organisation_type.update_attributes(organisation_type_params)
-      # render :partial => 'event_type'
+      render :partial => 'organisation_type'
     end
 
     def create
