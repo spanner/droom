@@ -4,7 +4,7 @@ module Droom
     
     has_folder within: "Organisations" # here the within arguments sets the name of our parent folder
 
-    before_validation :slug_from_name
+    # before_validation :slug_from_name
     default_scope -> {order(:name)}
   
     def self.for_selection
@@ -24,6 +24,5 @@ module Droom
       private?
     end
     
-  end
   end
 end
