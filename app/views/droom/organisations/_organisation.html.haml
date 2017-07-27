@@ -5,13 +5,13 @@
   .heading
     %h2.name<
       = link_to organisation.name, organisation_url(organisation), :class => "name"
-      - if organisation.chinese_name?
-        %span.chinese_name
-          = organisation.chinese_name
       - if organisation.organisation_type
         %span.addendum
           = organisation.organisation_type.name
       = action_menulink(organisation)
+      - if organisation.chinese_name?
+        %span.chinese_name
+          = organisation.chinese_name
     = action_menu(organisation)
 
   - if organisation.description?
