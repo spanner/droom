@@ -30,6 +30,14 @@ class ConsolidatedMigrations < ActiveRecord::Migration
     add_index "droom_addresses", ["default"], name: "index_droom_addresses_on_default", using: :btree
     add_index "droom_addresses", ["user_id"], name: "index_droom_addresses_on_user_id", using: :btree
 
+    create_table "droom_agenda_categories", options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+      t.integer  "event_id",      limit: 4
+      t.integer  "category_id",   limit: 4
+      t.integer  "created_by_id", limit: 4
+      t.datetime "created_at",              null: false
+      t.datetime "updated_at",              null: false
+    end
+
     create_table "droom_calendars", options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
       t.string   "name",              limit: 255
       t.string   "slug",              limit: 255

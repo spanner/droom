@@ -19,7 +19,6 @@
 #= require droom/actions
 #= require droom/widgets
 #= require droom/stream
-#= require droom/map
 #= require droom/uploader
 #= require_self
 
@@ -86,7 +85,6 @@ jQuery ($) ->
 
     # page widgets
 
-    @find_including_self('#map').init_map()
     @find_including_self('#minicalendar').calendar()
     @find_including_self('form.search_form').search()
     @find_including_self('form.fancy').captive()
