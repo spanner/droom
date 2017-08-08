@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 5.0"
   s.add_dependency "responders"
-  s.add_dependency "jquery-rails"
 
   s.add_dependency "active_model_serializers"
   s.add_dependency "api-pagination"
