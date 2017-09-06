@@ -634,38 +634,25 @@ module Droom
 
     def search_data
       data = {
+        uid: uid,
+        title: title,
         name: name,
         chinese_name: chinese_name,
         emails: emails.map(&:email),
         addresses: addresses.map(&:address),
         phones: phones.map(&:phone),
-        groups: groups.map(&:slug),
-        status: status,
-        account_confirmation: confirm_account
+        groups: group_slugs,
+        status: status
       }
       data.merge(additional_search_data)
     end
 
     def additional_search_data
-      {
-         'awards': person_awards
-      }
+      {}
     end
 
-    def person_awards
-      awards = []
-      if person_by_user_uid_present?
-        awards = person_by_user_uid.awards.collect{|r| r.award_type_code}
-      end
-      awards
-    end
-
-    def confirm_account
-      if confirmed_at.nil?
-        'No'
-      else
-        'Yes'
-      end
+    def group_slugs
+      groups.pluck(:slug).map(&:presence).compact.uniq
     end
 
     def status
@@ -673,10 +660,16 @@ module Droom
         'admin'
       elsif privileged?
         'senior'
-      elsif data_room_user?
-        'internal'
       else
-        'external'
+        if emails.empty?
+          'unreachable'
+        elsif confirmed_at.nil?
+          'unresponsive'
+        elsif data_room_user?
+          'internal'
+        else
+          'external'
+        end
       end
     end
 
