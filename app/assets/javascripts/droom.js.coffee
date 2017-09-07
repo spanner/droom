@@ -21,6 +21,7 @@
 #= require droom/stream
 #= require droom/map
 #= require droom/uploader
+#= require droom/draggables
 #= require_self
 
 jQuery ($) ->
@@ -91,5 +92,6 @@ jQuery ($) ->
     @find_including_self('form#suggestions').suggestion_form()
     @find_including_self('.sortable_files').sortable_files()
 
+    @find_including_self('.user_merger').user_merger()
 
     @

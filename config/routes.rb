@@ -11,6 +11,7 @@ Droom::Engine.routes.draw do
     #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
     resources :users do
       post 'reindex', on: :member, as: :reindex
+      put "/subsume/:other_id" => "users#subsume", as: 'subsume'
     end
     resources :events
     resources :venues

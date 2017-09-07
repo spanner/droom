@@ -634,6 +634,7 @@ module Droom
 
     def search_data
       data = {
+        id: id,
         uid: uid,
         title: title,
         name: name,
@@ -642,13 +643,10 @@ module Droom
         addresses: addresses.map(&:address),
         phones: phones.map(&:phone),
         groups: group_slugs,
-        status: status
+        liveliness: liveliness,
+        privileged: privileged?
       }
       data.merge(additional_search_data)
-    end
-
-    def additional_search_data
-      {}
     end
 
     def group_slugs
@@ -660,16 +658,22 @@ module Droom
         'admin'
       elsif privileged?
         'senior'
+      elsif data_room_user?
+        'internal'
       else
-        if emails.empty?
-          'unreachable'
-        elsif confirmed_at.nil?
-          'unresponsive'
-        elsif data_room_user?
-          'internal'
-        else
-          'external'
-        end
+        'external'
+      end
+    end
+
+    def liveliness
+      if emails.empty?
+        'unreachable'
+      elsif !last_sign_in_at? and !confirmed_at?
+        'unresponsive'
+      elsif data_room_user?
+        'internal'
+      else
+        'external'
       end
     end
 
@@ -677,6 +681,30 @@ module Droom
       admin? || groups.privileged.any?
     end
 
+    def additional_search_data
+      {}
+    end
+
+    def subsume(other_user)
+      Droom::MergeUsersJob.perform_later(id, other_user.id, Time.now.to_i)
+    end
+
+    def subsume!(other_user)
+      Droom::User.transaction do
+        %w{emails phones addresses memberships organisations scraps documents invitations memberships user_permissions dropbox_tokens dropbox_documents personal_folders}.each do |association|
+          self.send(association.to_sym) << other_user.send(association.to_sym)
+        end
+        %w{encrypted_password password_salt family_name given_name chinese_name title gender organisation_id description image}.each do |property|
+          self.send "#{property}=".to_sym, other_user.send(property.to_sym) unless self.send(property.to_sym).present?
+        end
+        if self.merged_with?
+          self.merged_with += "\n#{other_user.uid}"
+        else
+          self.merged_with = other_user.uid
+        end
+        save!
+      end
+    end
 
   protected
 
