@@ -53,13 +53,6 @@ module Droom::Api
       end
     end
 
-    def subsume
-      user = Droom::User.find(params[:user_id])
-      other_user = Droom::User.find(params[:other_id])
-      user.subsume(other_user)
-      render json: {subsume: "queued"}
-    end
-
     def destroy
       @user.destroy
       head :ok

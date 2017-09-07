@@ -11,7 +11,6 @@ Droom::Engine.routes.draw do
     #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
     resources :users do
       post 'reindex', on: :member, as: :reindex
-      put "/subsume/:other_id" => "users#subsume", as: 'subsume'
     end
     resources :events
     resources :venues
@@ -73,6 +72,7 @@ Droom::Engine.routes.draw do
     get "preferences", on: :member, as: :preferences
     get "admin", on: :collection
     put :set_password, on: :collection
+    put "/subsume/:other_id" => "users#subsume", as: 'subsume'
     resources :events
     resources :emails
     resources :phones

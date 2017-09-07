@@ -191,7 +191,7 @@ class UserMerger extends DragManager
   enactDrop: (droppee, dropped) =>
     outer_id = droppee.data('user')
     inner_id = dropped.data('user')
-    url = "/api/users/#{outer_id}/subsume/#{inner_id}"
+    url = "/users/#{outer_id}/subsume/#{inner_id}.json"
     $.ajax
       url: url
       method: "PUT"
