@@ -1,0 +1,4 @@
+%video
+.embed
+%figcaption{contenteditable: "plaintext-only", data: {placeholder: "Optional video caption"}}<
+.ed-buttons

@@ -1,0 +1,5 @@
+.select
+.thumbnail
+  %a.thumbnail.none
+    %svg.icon.filled
+      %use{"xlink:href" => "#delete_symbol"}

@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
   s.add_dependency "acts_as_list"
   s.add_dependency "kaminari"
   s.add_dependency "haml"
+  s.add_dependency "haml_coffee_assets"
 
   s.add_dependency "paperclip"
   s.add_dependency "fog"

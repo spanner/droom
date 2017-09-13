@@ -1,0 +1,11 @@
+%p.ed-search
+  %a.prev ◀
+  %input.q{type: "text", placeholder: "Search..."}>
+  %a.next ▶
+  
+%ul.ed-assets
+
+%p.ed-importer
+  %input.remote_url{type: "text", placeholder: "From URL..."}>
+  %a.button.import>
+    fetch

@@ -1,0 +1,5 @@
+Collection empty. Please click the 
+%a.control.small
+  %svg.icon.filled
+    %use{"xlink:href" => "#up_symbol"}
+button to upload.
