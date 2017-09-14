@@ -6,7 +6,7 @@
 .ed-menu
   %a.control.choose.menu-head
     %svg.icon.filled
-      %use{"xlink:href" => "#video_symbol"}
+      %use{"xlink:href" => "#reuse_symbol"}
   .assets.menu-body.wide
 
 %a.control.delete

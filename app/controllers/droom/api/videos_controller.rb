@@ -1,3 +1,5 @@
+require 'active_model_serializers'
+
 module Droom::Api
   class VideosController < Droom::Api::ApiAssetsController
 

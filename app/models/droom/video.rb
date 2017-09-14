@@ -1,3 +1,5 @@
+require 'video_info'
+
 module Droom
   class Video < ApplicationRecord
     belongs_to :user
@@ -45,7 +47,6 @@ module Droom
     def get_metadata
       if remote_url?
         if video = VideoInfo.new(remote_url)
-          self.title = video.title
           self.provider = video.provider
           self.thumbnail_large = video.thumbnail_large
           self.thumbnail_medium = video.thumbnail_medium
@@ -56,7 +57,6 @@ module Droom
           self.embed_code = video.embed_code
         end
       else
-        self.title = file_file_name
         self.provider = 'local'
         self.thumbnail_large = nil
         self.thumbnail_medium = nil

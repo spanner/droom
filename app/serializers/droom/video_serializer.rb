@@ -1,8 +1,5 @@
-require 'active_model_serializers'
-
 class Droom::VideoSerializer < ActiveModel::Serializer
   attributes :id,
-             :title,
              :file_name,
              :remote_url,
              :provider,
@@ -14,13 +11,9 @@ class Droom::VideoSerializer < ActiveModel::Serializer
              :file_updated_at,
              :embed_code,
              :url,
-             :thumb_url,
+             :icon_url,
              :half_url,
              :full_url
-
-  def title
-    [object.provider, object.title.presence || object.file_file_name].compact.join(': ')
-  end
 
   def file_name
     object.file_file_name
@@ -37,14 +30,12 @@ class Droom::VideoSerializer < ActiveModel::Serializer
   def url
     if object.file?
       object.file_url(:original)
-    else
-      object.remote_url
     end
   end
 
-  def thumb_url
+  def icon_url
     if object.file?
-      object.file_url(:thumb)
+      object.file_url(:icon)
     else
       object.thumbnail_small
     end

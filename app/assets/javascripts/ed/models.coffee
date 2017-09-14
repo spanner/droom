@@ -195,7 +195,10 @@ class Ed.Models.Video extends Ed.Model
     unless @has('thumb_url')
       vid = document.createElement('video')
       vid.onloadeddata = =>
-        @extractImage(vid, 280)
+        @set 'icon_url', @extractImage(vid, 64, 10)
+        @set 'half_url', @extractImage(vid, 540, 10)
+        @set 'full_url', @extractImage(vid, 1120, 10)
+        @set 'url', @get 'full_url'
       vid.src = @get('file')
 
   extractImage: (vid, w=48, t=0) =>
@@ -211,8 +214,7 @@ class Ed.Models.Video extends Ed.Model
       canvas.height = h
       ctx = canvas.getContext('2d')
       ctx.drawImage(vid, 0, 0, w, h)
-      preview = canvas.toDataURL('image/jpeg')
-      @set "poster_url", preview
+      canvas.toDataURL('image/jpeg')
 
 
 class Ed.Collections.Videos extends Backbone.Collection

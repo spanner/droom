@@ -1,4 +1,4 @@
-Collection empty. Please click the 
+Click the
 %a.control.small
   %svg.icon.filled
     %use{"xlink:href" => "#up_symbol"}

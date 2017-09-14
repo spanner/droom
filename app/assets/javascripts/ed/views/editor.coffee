@@ -170,6 +170,7 @@ class Ed.Views.Asset extends Ed.View
     @_progress.render()
 
   setModel: (model) =>
+    @log "setModel", model
     @model = model
     @stickit() if @model
     @_styler?.setModel(model)
@@ -191,9 +192,8 @@ class Ed.Views.Asset extends Ed.View
     @update()
 
   remove: () =>
-    @$el.slideUp 'fast', ->
-      parent = $(@).parent()
-      @remove()
+    @$el.slideUp 'fast', =>
+      @$el.remove()
       @update()
 
   # bindings for use within an asset model.
@@ -280,26 +280,15 @@ class Ed.Views.Video extends Ed.Views.Asset
         name: "data-video",
         observe: "id"
       ]
-    "video":
-      observe: "embed_code"
-      visible: "untrue"
-      attributes: [
-        name: "poster"
-        observe: "poster_url"
-        onGet: "urlAtSize"
-      ,
-        name: "controls"
-        observe: "url"
-        onGet: "present"
-      ,
-        name: "src"
-        observe: "url"
-      ]
     ".embed":
       observe: "embed_code"
       visible: true
       updateView: true
       updateMethod: "html"
+    "video":
+      observe: "embed_code"
+      visible: "unlessEmbedded"
+      visibleFn: "hideVideo"
     "figcaption":
       observe: "caption"
 
@@ -308,14 +297,13 @@ class Ed.Views.Video extends Ed.Views.Asset
       @model = new Ed.Models.Video
         id: video_id
         caption: @$el.find('figcaption').text()
-    else 
-      @model = new Ed.Models.Video
-        caption: @$el.find('figcaption').text()
-    @model.loadAnd => @render()
 
-  saveVideo: (e) =>
-    e?.preventDefault()
-    @model.save()
+  unlessEmbedded: (embed_code) =>
+    console.log "unlessEmbedded", !embed_code
+    !embed_code
+
+  hideVideo: (el, visible, model) =>
+    el.hide() unless visible
 
 
 class Ed.Views.Quote extends Ed.Views.Asset
