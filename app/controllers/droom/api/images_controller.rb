@@ -49,7 +49,7 @@ module Droom::Api
     end
 
     def image_params
-      params.require(:image).permit(:file, :caption)
+      params.require(:image).permit(:file, :remote_url, :caption)
     end
 
   end

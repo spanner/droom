@@ -49,7 +49,7 @@ module Droom::Api
     end
 
     def video_params
-      params.require(:video).permit(:file, :caption, :youtube_id)
+      params.require(:video).permit(:file, :remote_url, :caption)
     end
 
   end
