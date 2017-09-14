@@ -2,7 +2,7 @@ module Droom::Api
   class VideosController < Droom::Api::ApiAssetsController
 
     before_action :get_videos, only: [:index]
-    load_and_authorize_resource via: :current_user
+    load_and_authorize_resource class: "Droom::Video", via: :current_user
 
     def index
       render json: @videos
@@ -42,7 +42,7 @@ module Droom::Api
 
     def get_videos
       if current_user.admin?
-        @videos = video.order(created_at: :desc)
+        @videos = Droom::Video.order(created_at: :desc)
       else
         @videos = paginated(current_user.videos.order(created_at: :desc))
       end

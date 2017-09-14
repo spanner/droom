@@ -2,7 +2,7 @@ module Droom::Api
   class ImagesController < Droom::Api::ApiAssetsController
 
     before_action :get_images, only: [:index]
-    load_and_authorize_resource via: :current_user
+    load_and_authorize_resource class: "Droom::Image", via: :current_user
 
     def index
       render json: @images
@@ -42,7 +42,7 @@ module Droom::Api
 
     def get_images
       if current_user.admin?
-        @images = Image.order(created_at: :desc)
+        @images = Droom::Image.order(created_at: :desc)
       else
         @images = paginated(current_user.images.order(created_at: :desc))
       end

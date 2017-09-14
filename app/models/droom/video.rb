@@ -13,7 +13,7 @@ module Droom
                         full: { geometry: "1120x630<", format: 'jpg', time: 3 }
                       }
 
-    validates_attachment_content_type :video, :content_type => /\Avideo/
+    validates_attachment_content_type :file, :content_type => /\Avideo/
     before_validation :get_organisation
     before_validation :get_metadata
 

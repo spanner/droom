@@ -9,7 +9,7 @@ module Droom
                       default_url: nil,
                       preserve_files: true,
                       styles: {
-                        hero: ["1600x900#", :jpg]
+                        hero: ["1600x900#", :jpg],
                         full: "640x640#",
                         half: "320x320#",
                         thumb: ["48x48#", :png]
@@ -21,7 +21,7 @@ module Droom
                         icon: "-strip"
                       }
 
-    validates_attachment_content_type :image, :content_type => /\Aimage/
+    validates_attachment_content_type :file, :content_type => /\Aimage/
     before_validation :get_organisation
     before_validation :read_remote_url
     after_post_process :read_dimensions

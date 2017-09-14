@@ -14,6 +14,8 @@ Droom::Engine.routes.draw do
     end
     resources :events
     resources :venues
+    resources :images
+    resources :videos
   end
 
   devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords'}
