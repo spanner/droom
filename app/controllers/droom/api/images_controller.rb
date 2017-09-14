@@ -5,31 +5,27 @@ module Droom::Api
     load_and_authorize_resource class: "Droom::Image", via: :current_user
 
     def index
-      render json: @images
+      render json: ActiveModel::Serializer::CollectionSerializer.new(@images, serializer: Droom::ImageSerializer)
     end
 
     def show
-      render json: @image
+      return_image
     end
 
     def update
       if @image.update_attributes(image_params)
-        render json: @image
+        return_image
       else
-        render json: {
-          errors: @image.errors.to_a
-        }
+        return_errors
       end
     end
 
     def create
       @image.user = current_user
       if @image.save
-        render json: @image
+        return_image
       else
-        render json: {
-          errors: @image.errors.to_a
-        }
+        return_errors
       end
     end
 
@@ -38,7 +34,17 @@ module Droom::Api
       head :ok
     end
 
-  protected
+    def return_image
+      render json: @image, serializer: Droom::ImageSerializer
+    end
+
+    def return_errors
+      render json: {
+        errors: @image.errors.to_a
+      }
+    end
+
+    protected
 
     def get_images
       if current_user.admin?
@@ -49,7 +55,7 @@ module Droom::Api
     end
 
     def image_params
-      params.require(:image).permit(:file, :remote_url, :caption)
+      params.require(:image).permit(:file, :file_name, :remote_url, :caption)
     end
 
   end

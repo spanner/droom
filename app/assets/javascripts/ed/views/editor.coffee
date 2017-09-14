@@ -12,7 +12,6 @@ class Ed.Views.Editor extends Ed.View
 
   wrap: =>
     window.model = @model = new Ed.Models.Editable
-    @log "wrap!", @el, @model
     @ui.title.each (i, el) =>
       @subviews.push new Ed.Views.Title
         el: el
@@ -50,7 +49,6 @@ class Ed.Views.Content extends Ed.View
       observe: 'content'
 
   wrap: =>
-    @log "wrap!", @el
     content = @ui.content.html().trim()
     @model.set 'content', content
     @showPlaceholderIfEmpty()
@@ -83,52 +81,51 @@ class Ed.Views.Content extends Ed.View
         @ui.content.show().focus()
 
   onRender: =>
-    @log "render!"
     @stickit()
 
     @_inserter = new Ed.Views.AssetInserter
     @_inserter.render()
     @_inserter.attendTo(@ui.content)
-
-    @_toolbar = new MediumEditor @ui.content,
-      placeholder: false
-      toolbar:
-        updateOnEmptySelection: true
-        allowMultiParagraphSelection: false
-        imageDragging: false
-        commands: [
-          {
-            command: 'link',
-            key: 'K',
-            meta: true,
-            shift: false,
-            alt: false
-          }
-        ]
-        buttons: [
-          {
-            name: 'bold'
-            contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
-          },
-          {
-            name: 'italic'
-            contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
-          },
-          {
-            name: 'anchor'
-            contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
-          },
-          {
-            name: 'h2'
-            contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
-            aria: "Major heading"
-          },
-          {
-            name: 'h3'
-            contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
-            aria: "Minor heading"
-          }
-        ]
+    #
+    # @_toolbar = new MediumEditor @ui.content,
+    #   placeholder: false
+    #   toolbar:
+    #     updateOnEmptySelection: true
+    #     allowMultiParagraphSelection: false
+    #     imageDragging: false
+    #     commands: [
+    #       {
+    #         command: 'link',
+    #         key: 'K',
+    #         meta: true,
+    #         shift: false,
+    #         alt: false
+    #       }
+    #     ]
+    #     buttons: [
+    #       {
+    #         name: 'bold'
+    #         contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
+    #       },
+    #       {
+    #         name: 'italic'
+    #         contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
+    #       },
+    #       {
+    #         name: 'anchor'
+    #         contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
+    #       },
+    #       {
+    #         name: 'h2'
+    #         contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
+    #         aria: "Major heading"
+    #       },
+    #       {
+    #         name: 'h3'
+    #         contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
+    #         aria: "Minor heading"
+    #       }
+    #     ]
 
 
 
@@ -152,8 +149,6 @@ class Ed.Views.Asset extends Ed.View
   onRender: () =>
     @$el.attr "contenteditable", false
     @stickit() if @model
-    @log "picker_view_class", @getOption('pickerView')
-    debugger
     if picker_view_class = @getOption('pickerView')
       @_picker = new picker_view_class
       @_picker.$el.appendTo @ui.buttons
@@ -161,7 +156,6 @@ class Ed.Views.Asset extends Ed.View
       @_picker.on "select", @setModel
       @_picker.on "create", @savedModel
       @_picker.on "remove", @remove
-      @log "picker", @_picker
     if styler_view_class = @getOption('stylerView')
       @_styler = new styler_view_class
         model: @model

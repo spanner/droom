@@ -3,7 +3,8 @@
   &[data-placeholder]
     &:empty:before
       content: attr(data-placeholder)
-      color: $blue
+      color: $mid
+      font-style: italic
 
 span[contenteditable]
   display: inline-block
@@ -51,13 +52,13 @@ span.note
   line-height: 1.2
 
 .ed-progress
-  display: block
+  display: none
   width: 100px
   height: 100px
   position: absolute
-  top: 50%
-  left: 50%
-  margin: -20px -50px 0
+  top: calc(50% - 50px)
+  left: calc(50% - 50px)
+  margin: 0
   .label
     position: absolute
     display: block
@@ -84,16 +85,19 @@ span.note
   figure, .bl
     position: relative
     min-height: 48px
-    background-color: $blue
-    margin: 0
+    margin: 0 -20px
     blockquote
       min-height: 1em
       min-width: 1em
     figcaption
       display: block
       min-height: 1em
+      margin: 8px 20px
+      text-align: center
     img[src=""]
+      display: block
       padding-bottom: 56%
+      width: 100%
       background-color: $verypale
     &:hover, &.hold
       .ed-buttons
@@ -110,10 +114,15 @@ span.note
     .ed-buttons
       position: absolute
       top: 10px
-      right: 10px
+      left: 10px
+      width: calc(100% - 20px)
       .picker, .styler, .config
-        display: inline-block
-        vertical-align: top
+        display: block
+        margin: 0
+      .picker
+        float: left
+      .styler
+        float: right
       .thumbnails, .select
         display: inline-block
         vertical-align: top
@@ -179,7 +188,7 @@ span.note
     display: none
     position: absolute
     z-index: 500
-    right: 4px
+    left: 10px
     top: 40px
     width: 340px
     overflow: hidden
@@ -187,6 +196,8 @@ span.note
     background-color: white
     box-sizing: border-box
     pointer-events: auto
+    box-shadow: 0 3px 4px $shadow
+    border-radius: 4px
 
 .open
   .ed-menu
@@ -194,6 +205,7 @@ span.note
       border-bottom-right-radius: 0
       border-bottom-left-radius: 0
       background-color: white
+      box-shadow: 0 3px 4px $shadow
       padding-bottom: 4px
       z-index: 501
     .menu-body
@@ -361,37 +373,27 @@ ul.ed-assets
 .ed-search
   margin: 20px 0 0 20px !important
   clear: both
-  input
+  span.heading
     display: inline-block
     vertical-align: top
-    box-sizing: border-box
-    padding: 8px
-    height: 36px
-    width: 176px
-    font-size: 0.9rem
-    line-height: 20px
-    margin: 0
+    width: 226px
+    text-align: center
+    font-weight: bold
+    font-size: 1rem
   a
     display: inline-block
     vertical-align: top
     box-sizing: border-box
-    height: 36px
-    width: 48px
-    padding: 8px
-    text-align: center
-    background-color: white
-    background-color: $green
-    color: white
+    height: 32px
+    width: 32px
+    padding: 0
+    color: $dark
     cursor: pointer
-    font-size: 1rem
-    +glow-on-hover
-    &.prev
-      margin-right: 16px
-    &.next
-      margin-left: 12px
+    svg
+      height: 32px
+      width: 32px
     &.inactive
       color: $pale
-      background-color: $coolgrey00
       pointer-events: none
 
 .ed-importer

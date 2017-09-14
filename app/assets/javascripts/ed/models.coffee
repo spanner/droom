@@ -15,10 +15,9 @@ class Ed.Model extends Backbone.Model
     !!@get(attribute)
 
   parse: (data) =>
-    data = data.data if data.data
-    attributes = _.extend data.attributes, id: data.id
-    @readDates(attributes)
-    attributes
+    debugger unless data
+    @readDates(data)
+    data
 
   readDates: (data) =>
     for col in ["created_at", "updated_at", "published_at", "deleted_at"]
@@ -135,32 +134,42 @@ class Ed.Models.Editable extends Ed.Model
 # are uploaded on the side during editing.
 #
 class Ed.Models.Image extends Ed.Model
-  savedAttributes: ["image", "image_name", "remote_url", "caption", "weighting"]
+  savedAttributes: ["file", "file_name", "remote_url", "caption", "weighting"]
+  defaults:
+    url: ""
+    hero_url: ""
+    full_url: ""
+    half_url: ""
+    icon_url: ""
+    caption: ""
 
   build: =>
-    @getThumb() if @isNew() and @has('image')
+    @on 'change:file', @getThumbs
+    @getThumbs()
 
-  getThumb: () =>
-    unless @get('thumb_url')
+  getThumbs: () =>
+    window.nim = @
+    if @get('file') and not @get('url')
       img = document.createElement('img')
       img.onload = =>
-        @extractImage(img, 560)
-      img.src = @get('image')
+        @set 'icon_url', @extractImage(img, 64)
+        @set 'half_url', @extractImage(img, 320)
+        @set 'full_url', @extractImage(img, 640)
+        @set 'url', @get 'full_url'
+      img.src = @get('file')
 
-  extractImage: (img, w=48) =>
-    unless @get('url')
-      if img.height > img.width
-        h = w * (img.height / img.width)
-      else
-        h = w
-        w = h * (img.width / img.height)
-      canvas = document.createElement('canvas')
-      canvas.width = w
-      canvas.height = h
-      ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0, w, h)
-      preview = canvas.toDataURL('image/png')
-      @set "url", preview
+  extractImage: (img, w=64) =>
+    if img.height > img.width
+      h = w * (img.height / img.width)
+    else
+      h = w
+      w = h * (img.width / img.height)
+    canvas = document.createElement('canvas')
+    canvas.width = w
+    canvas.height = h
+    ctx = canvas.getContext('2d')
+    ctx.drawImage(img, 0, 0, w, h)
+    canvas.toDataURL('image/png')
 
 
 class Ed.Collections.Images extends Backbone.Collection
@@ -172,17 +181,22 @@ class Ed.Collections.Images extends Backbone.Collection
 # are uploaded for inclusion but really ought to be picked from youtube.
 #
 class Ed.Models.Video extends Ed.Model
-  savedAttributes: ["video", "video_name", "remote_url", "caption"]
+  savedAttributes: ["file", "file_name", "remote_url", "caption"]
+  defaults:
+    url: ""
+    full_url: ""
+    half_url: ""
+    icon_url: ""
 
   build: =>
-    @getVideo() if @isNew() and @has('video')
+    @getVideo() if @isNew() and @has('file')
 
   getVideo: () =>
     unless @has('thumb_url')
       vid = document.createElement('video')
       vid.onloadeddata = =>
         @extractImage(vid, 280)
-      vid.src = @get('video')
+      vid.src = @get('file')
 
   extractImage: (vid, w=48, t=0) =>
     unless @get('poster_url')

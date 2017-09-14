@@ -1,7 +1,8 @@
-class ImageSerializer < ActiveModel::Serializer
+require 'active_model_serializers'
+
+class Droom::ImageSerializer < ActiveModel::Serializer
   attributes :id,
              :file,
-             :caption,
              :file_name,
              :remote_url,
              :file_size,
@@ -9,7 +10,11 @@ class ImageSerializer < ActiveModel::Serializer
              :height,
              :file_type,
              :file_updated_at,
-             :urls
+             :url,
+             :icon_url,
+             :half_url,
+             :full_url,
+             :hero_url
  
   def file_name
     object.file_file_name
@@ -23,22 +28,24 @@ class ImageSerializer < ActiveModel::Serializer
     object.file_file_size
   end
  
-  def urls
-    if object.file?
-      {
-        icon: object.file_url(:icon),
-        half: object.file_url(:half),
-        full: object.file_url(:full),
-        hero: object.file_url(:hero)
-      }
-    else
-      {
-        icon: "",
-        half: "",
-        full: "",
-        hero: ""
-      }
-    end
+  def url
+    object.url(:original).presence || ""
   end
-  
+
+  def icon_url
+    object.url(:icon).presence || ""
+  end
+
+  def half_url
+    object.url(:half).presence || ""
+  end
+
+  def full_url
+    object.url(:full).presence || ""
+  end
+
+  def hero_url
+    object.url(:hero).presence || ""
+  end
+
 end

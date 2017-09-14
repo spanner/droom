@@ -5,37 +5,43 @@ module Droom::Api
     load_and_authorize_resource class: "Droom::Video", via: :current_user
 
     def index
-      render json: @videos
+      render json: ActiveModel::Serializer::CollectionSerializer.new(@videos, serializer: Droom::VideoSerializer)
     end
 
     def show
-      render json: @video
+      return_video
     end
 
     def update
       if @video.update_attributes(video_params)
-        render json: @video
+        return_video
       else
-        render json: {
-          errors: @video.errors.to_a
-        }
+        return_errors
       end
     end
 
     def create
       @video.user = current_user
       if @video.save
-        render json: @video
+        return_video
       else
-        render json: {
-          errors: @video.errors.to_a
-        }
+        return_errors
       end
     end
 
     def destroy
       @video.destroy
       head :ok
+    end
+
+    def return_video
+      render json: @video
+    end
+
+    def return_errors
+      render json: {
+        errors: @video.errors.to_a
+      }
     end
 
   protected
@@ -49,7 +55,7 @@ module Droom::Api
     end
 
     def video_params
-      params.require(:video).permit(:file, :remote_url, :caption)
+      params.require(:video).permit(:file, :file_name, :remote_url, :caption)
     end
 
   end

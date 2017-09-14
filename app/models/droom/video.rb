@@ -56,7 +56,7 @@ module Droom
           self.embed_code = video.embed_code
         end
       else
-        self.title = video_file_name
+        self.title = file_file_name
         self.provider = 'local'
         self.thumbnail_large = nil
         self.thumbnail_medium = nil
