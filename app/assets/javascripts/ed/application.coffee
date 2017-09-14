@@ -16,10 +16,14 @@ class Ed.Application extends Backbone.Marionette.Application
   initialize: (options={}) ->
     root._ed = @
     root.onerror = @reportError
+    @original_backbone_sync = Backbone.sync
     Backbone.sync = @sync
     Backbone.Marionette.Renderer.render = @render
+
     @el = options.el
-    @_config = new Ed.Config(options.config)
+    @images = new Ed.Collections.Images
+    @videos = new Ed.Collections.Videos
+    @_config = new Ed.Config options.config
     @notices = new Ed.Collections.Notices
     @initUI()
 
@@ -29,6 +33,8 @@ class Ed.Application extends Backbone.Marionette.Application
   ## Prepare UI
   #
   initUI: (fn) =>
+    @images.fetch()
+    @videos.fetch()
     @_editor = new Ed.Views.Editor
       el: @el
 

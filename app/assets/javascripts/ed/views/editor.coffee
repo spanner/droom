@@ -55,6 +55,7 @@ class Ed.Views.Content extends Ed.View
     @model.set 'content', content
     @showPlaceholderIfEmpty()
     @ui.content.on 'blur', @showPlaceholderIfEmpty
+    @ui.content.addClass 'editing'
 
     @ui.content.find('figure.image').each (i, el) =>
       @subviews.push new Ed.Views.Image
@@ -75,6 +76,7 @@ class Ed.Views.Content extends Ed.View
       @ui.content.show()
     else
       @ui.content.hide()
+      @_inserter?.hide()
       @ui.placeholder.show()
       @ui.placeholder.click =>
         @ui.placeholder.hide()
@@ -129,6 +131,7 @@ class Ed.Views.Content extends Ed.View
         ]
 
 
+
 ## Individual Asset Managers
 #
 # The html we get and set can include a number of embedded assets...
@@ -149,6 +152,8 @@ class Ed.Views.Asset extends Ed.View
   onRender: () =>
     @$el.attr "contenteditable", false
     @stickit() if @model
+    @log "picker_view_class", @getOption('pickerView')
+    debugger
     if picker_view_class = @getOption('pickerView')
       @_picker = new picker_view_class
       @_picker.$el.appendTo @ui.buttons
@@ -156,6 +161,7 @@ class Ed.Views.Asset extends Ed.View
       @_picker.on "select", @setModel
       @_picker.on "create", @savedModel
       @_picker.on "remove", @remove
+      @log "picker", @_picker
     if styler_view_class = @getOption('stylerView')
       @_styler = new styler_view_class
         model: @model

@@ -169,6 +169,14 @@ module Droom
       order("family_name ASC, given_name ASC")
     }
 
+
+    ## Editor assets
+    #
+    has_many :pages
+    has_many :images
+    has_many :videos
+
+
     ## Organisation affiliation
     #
     belongs_to :organisation
@@ -463,7 +471,6 @@ module Droom
         end
       end
     end
-
 
 
     ## Suggestion box

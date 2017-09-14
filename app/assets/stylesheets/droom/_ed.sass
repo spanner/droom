@@ -1,0 +1,419 @@
+[contenteditable]
+  outline: none
+  &[data-placeholder]
+    &:empty:before
+      content: attr(data-placeholder)
+      color: $blue
+
+span[contenteditable]
+  display: inline-block
+  cursor: text
+
+a.control, label.control
+  display: inline-block
+  vertical-align: top
+  width: 36px
+  height: 36px
+  background-color: $translucent
+  border-radius: 36px
+  margin-left: 2px
+  margin-bottom: 8px
+  cursor: pointer
+  overflow: hidden
+  color: $pale
+  border: 1px solid currentColor
+  &:hover
+    color: $mid
+  input[type="file"]
+    display: none
+  svg
+    width: 36px
+    height: 36px
+    transition: transform 0.5s ease-out
+  &.delete:hover
+    border-color: $red
+  &.choose:hover
+    color: $orange
+  &.add:hover
+    color: $green
+  &.properties:hover
+    color: $mid
+  &.small
+    width: 24px
+    height: 24px
+    svg
+      width: 24px
+      height: 24px
+
+span.note
+  color: $pale
+  font-size: 0.9rem
+  line-height: 1.2
+
+.ed-progress
+  display: block
+  width: 100px
+  height: 100px
+  position: absolute
+  top: 50%
+  left: 50%
+  margin: -20px -50px 0
+  .label
+    position: absolute
+    display: block
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    text-align: center
+    color: white
+    text-shadow: 0 0 10px $shadow
+    font-weight: lighter
+    font-size: 1rem
+    line-height: 100px
+    &.processing
+      font-size: 1rem
+
+.ed-buttons
+  display: none
+  .editor, .picker, .ed-menu
+    display: inline-block
+    margin-right: 2px
+
+.editing
+  figure, .bl
+    position: relative
+    min-height: 48px
+    background-color: $blue
+    margin: 0
+    blockquote
+      min-height: 1em
+      min-width: 1em
+    figcaption
+      display: block
+      min-height: 1em
+    img[src=""]
+      padding-bottom: 56%
+      background-color: $verypale
+    &:hover, &.hold
+      .ed-buttons
+        display: block
+    .ed-controls
+      position: absolute
+      bottom: 0
+      right: 0
+      a.save
+        +button($green)
+        font-size: 0.9rem
+        padding: 4px 10px
+        display: none
+    .ed-buttons
+      position: absolute
+      top: 10px
+      right: 10px
+      .picker, .styler, .config
+        display: inline-block
+        vertical-align: top
+      .thumbnails, .select
+        display: inline-block
+        vertical-align: top
+  .bl
+    transition:
+      properties: width height
+      duration: 0.5s
+      easing: ease-out
+    figure
+      transition:
+        properties: width height
+        duration: 0.5s
+        easing: ease-out
+    .ed-buttons
+      top: -12px
+      right: -12px
+
+  .layout_controls
+    .buttons
+      a.save
+        +button($green)
+        display: none
+
+.ed-inserter
+  position: absolute
+  box-sizing: border-box
+  display: none
+  z-index: 1000
+  height: 56px
+  width: 56px
+  padding: 9px 8px
+  border-bottom-left-radius: 28px
+  border-top-left-radius: 28px
+  overflow: hidden
+  top: 0
+  left: -28px
+  transition: width 0.25s ease-out
+  background-color: white
+  a.control.show
+    &:hover
+      color: $green
+  &.showing
+    width: 200px
+    a.control.show
+      svg
+        transform: rotate(45deg)
+      &:hover
+        color: $red
+  .ed-buttons
+    position: relative
+    display: block
+    width: 200px
+    a.control
+      width: 36px
+      height: 36px
+      margin-right: 8px
+      svg
+        width: 36px
+        height: 36px
+
+.ed-menu
+  .menu-body
+    display: none
+    position: absolute
+    z-index: 500
+    right: 4px
+    top: 40px
+    width: 340px
+    overflow: hidden
+    padding: 0
+    background-color: white
+    box-sizing: border-box
+    pointer-events: auto
+
+.open
+  .ed-menu
+    &>a.control, &>label.control
+      border-bottom-right-radius: 0
+      border-bottom-left-radius: 0
+      background-color: white
+      padding-bottom: 4px
+      z-index: 501
+    .menu-body
+      display: block
+
+ul.image-buttons
+  padding: 0
+  margin: 16px 0 0 20px
+  list-style: none
+  li.asset
+    position: relative
+    display: inline-block
+    float: left
+    margin: 10px
+    width: 36px
+    height: 36px
+    border-radius: 36px
+
+ul.ed-assets
+  padding: 0
+  margin: 16px 0 0 20px
+  list-style: none
+  li.empty
+    color: $mid
+    margin: 20px
+
+  li.asset
+    position: relative
+    display: inline-block
+    float: left
+    margin: 0 16px 16px 0
+    width: 48px
+    height: 48px
+    .ed-progress
+      width: 40px
+      height: 40px
+      position: absolute
+      display: none
+      margin: 4px
+      .label
+        display: none
+    a
+      display: block
+      width: 48px
+      height: 48px
+      box-sizing: border-box
+      padding: 6px
+      text-align: right
+      font-size: 1rem
+      cursor: pointer
+      color: white
+      background:
+        color: $pale
+        position: center center
+        size: cover
+        repeat: no-repeat
+      &.add
+        background-color: $green
+        color: white
+      &.detach
+        background-color: $dark
+        color: white
+      &.yt
+        &:after
+          content: ""
+          position: absolute
+          top: 15px
+          right: 14px
+          width: 20px
+          height: 20px
+          background:
+            image: image-url('playable.png')
+            position: 0 0
+            repeat: no-repeat
+            size: contain
+    input
+      position: absolute
+      left: 1000px
+    span.ed-progress
+      display: block
+      position: absolute
+      bottom: 4px
+      right: 4px
+      width: 40px !important
+      height: 40px !important
+      margin-top: -20px !important
+      margin-left: -20px !important
+
+.ed-properties
+  p.caption
+    height: 140px
+    overflow: auto
+    margin-top: 0
+    padding: 10px
+  .buttons
+    position: absolute
+    bottom: 10px
+    left: 10px
+    color: $mid
+    a.button
+      float: left
+      display: inline-block
+      vertical-align: top
+  .pinner
+    position: absolute
+    bottom: 10px
+    right: 10px
+
+.pinner
+  span.label
+    float: left
+    display: inline-block
+    vertical-align: top
+    line-height: 1
+    margin-right: 10px
+  .sectors
+    position: relative
+    float: right
+    width: 40px
+    height: 40px
+    input
+      display: none
+    input + span
+      background-color: $pale
+    input:checked + span
+      background-color: $green
+    label.sector
+      background-color: $pale
+      span
+        position: absolute
+        display: block
+        width: 12px
+        height: 12px
+        border-radius: 10px
+        &:hover
+          backround-color: $mid
+        &.tl
+          top: 0
+          left: 0
+        &.tc
+          top: 0
+          left: 14px
+        &.tr
+          top: 0
+          right: 0
+        &.ml
+          top: 14px
+          left: 0
+        &.mc
+          top: 14px
+          left: 14px
+        &.mr
+          top: 14px
+          right: 0
+        &.bl
+          bottom: 0
+          left: 0
+        &.bc
+          bottom: 0
+          left: 14px
+        &.br
+          bottom: 0
+          right: 0
+
+.ed-search
+  margin: 20px 0 0 20px !important
+  clear: both
+  input
+    display: inline-block
+    vertical-align: top
+    box-sizing: border-box
+    padding: 8px
+    height: 36px
+    width: 176px
+    font-size: 0.9rem
+    line-height: 20px
+    margin: 0
+  a
+    display: inline-block
+    vertical-align: top
+    box-sizing: border-box
+    height: 36px
+    width: 48px
+    padding: 8px
+    text-align: center
+    background-color: white
+    background-color: $green
+    color: white
+    cursor: pointer
+    font-size: 1rem
+    +glow-on-hover
+    &.prev
+      margin-right: 16px
+    &.next
+      margin-left: 12px
+    &.inactive
+      color: $pale
+      background-color: $coolgrey00
+      pointer-events: none
+
+.ed-importer
+  margin: 6px 0 20px 20px !important
+  clear: both
+  input, a.button
+    display: inline-block
+    vertical-align: top
+    box-sizing: border-box
+    padding: 8px
+    height: 36px
+    font-size: 0.9rem
+    line-height: 20px
+    margin: 0
+  input
+    width: 240px
+    margin-right: 16px
+    color: $dark
+    border: 1px solid $pale
+    outline: none
+  a.button
+    background-color: $blue
+    color: white
+    width: 48px
+    cursor: pointer

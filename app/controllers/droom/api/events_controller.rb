@@ -38,32 +38,19 @@ module Droom::Api
     def find_or_create_event
       if params[:event]
         if params[:event][:uid].present?
-          @event = Droom::User.where(uid: params[:event][:uid]).first
-        end
-        if params[:event][:email].present?
-          @event ||= Droom::User.where(email: params[:event][:email]).first
+          @event = Droom::Event.where(uid: params[:event][:uid]).first
         end
       end
-      @event ||= Droom::User.create(event_params)
+      @event ||= Droom::Event.create(event_params)
     end
 
     def get_events
-      events = Droom::User.in_name_order
-      
+      events = Droom::Event.in_name_order
       if params[:q].present?
         @fragments = params[:q].split(/\s+/)
         @fragments.each { |frag| events = events.matching(frag) }
       end
-
       @events = events
-
-      # @show = params[:show] || 20
-      # @page = params[:page] || 1
-      # if @show == 'all'
-      #   @events = events
-      # else
-      #   @events = events.page(@page).per(@show)
-      # end
     end
 
     def event_params

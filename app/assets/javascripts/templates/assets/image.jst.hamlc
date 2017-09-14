@@ -1,4 +1,3 @@
 %img{src: ""}
-%a.save.ed-action Save caption
 %figcaption{contenteditable: "plaintext-only", data: {placeholder: "Optional image caption"}}<
 .ed-buttons

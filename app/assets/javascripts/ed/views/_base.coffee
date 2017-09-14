@@ -97,4 +97,5 @@ class Ed.View extends Backbone.Marionette.View
   log: ->
     if _ed.logging() and console?.log?
       console.log "[#{@constructor.name}]", arguments...
-    
+
+

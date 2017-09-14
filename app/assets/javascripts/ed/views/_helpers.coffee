@@ -1,4 +1,3 @@
-
 ## Asset inserter
 #
 # This view inserts a new asset element into the html stream with a management view wrapped around it.
@@ -111,6 +110,121 @@ class Ed.Views.AssetStyler extends Ed.View
   setFull: () => @trigger "styled", "full"
   setWide: () => @trigger "styled", "wide"
   setHero: () => @trigger "styled", "heroic"
+
+
+
+## Asset-pickers
+#
+# These menus are embedded in the asset view. They select from an asset collection to
+# set the model in the asset view, with the option to upload or import new items.
+#
+class Ed.Views.AssetPicker extends Backbone.Marionette.View
+  tagName: "div"
+  className: "picker"
+  menuView: Ed.Views.AssetsList
+
+  events:
+    "click a.menu-head": "toggleMenu"
+    "click a.delete": "removeAsset"
+
+  ui:
+    head: ".menu-head"
+    body: ".menu-body"
+    label: "label"
+    filefield: 'input[type="file"]'
+
+  onRender: =>
+    @ui.label.on "click", @close
+    @ui.filefield.on 'change', @getPickedFile
+
+  toggleMenu: =>
+    if @showing()
+      @close()
+    else
+      @open()
+
+  showing: =>
+    @$el.hasClass('open')
+
+  open: =>
+    unless @_menu_view
+      @_menu_view = new Ed.Views.AssetsList
+        collection: @collection
+      @ui.body.append @_menu_view.el
+      @_menu_view.render()
+      @_menu_view.on "select", @select
+    @_menu_view.open()
+    @$el.addClass('open')
+    @$el.parents('.slide, figure').addClass('hold')
+
+  close: =>
+    @_menu_view?.close()
+    @$el.removeClass('open')
+    @$el.parents('.slide, figure').removeClass('hold')
+
+  # passed through again to reach the Asset view.
+  select: (model) =>
+    @close()
+    @trigger "select", model
+
+  getPickedFile: (e) =>
+    if files = @ui.filefield[0].files
+      @readLocalFile files[0]
+
+  readLocalFile: (file) =>
+    if file?
+      reader = new FileReader()
+      reader.onloadend = => 
+        @createModel reader.result, file
+      reader.readAsDataURL(file)
+
+  removeAsset: () => 
+    @trigger "remove"
+
+  setWeighting: (e) =>
+    e?.preventDefault()
+    
+
+
+class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
+  template: "assets/image_picker"
+
+  initialize: (data, options={}) ->
+    @collection ?= _ed.images
+    super
+
+  createModel: (data, file) =>
+    model = @collection.unshift
+      image: data
+      image_name: file.name
+      image_size: file.size
+      image_type: file.type
+    @select(model)
+    model.save().done =>
+      @trigger "create", model
+
+
+class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
+  template: "assets/video_picker"
+
+  initialize: ->
+    @collection ?= _ed.videos
+    super
+
+  createModel: (data, file) =>
+    model = @collection.unshift
+      video: data
+      video_name: file.name
+      video_size: file.size
+      video_type: file.type
+    @select(model)
+    model.save().done =>
+      $.v = model
+      @trigger "create", model
+
+
+class Ed.Views.QuotePicker extends Ed.Views.AssetPicker
+  template: "assets/quote_picker"
 
 
 

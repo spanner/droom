@@ -3,9 +3,13 @@ class Ed.Model extends Backbone.Model
 
   initialize: ->
     @_loaded = $.Deferred()
+    @build()
     @resetOriginalAttributes()
     @on 'sync', @resetOriginalAttributes
     @on "change", @changedIfSignificant
+
+  build: =>
+    #noop
 
   has: (attribute) =>
     !!@get(attribute)
@@ -101,12 +105,7 @@ class Ed.Models.Editable extends Ed.Model
     image_id: null
     content: "<p></p>"
 
-  initialize: ->
-    super
-    @_images = new Ed.Collections.Images
-      holder: @
-    @_videos = new Ed.Collections.Videos
-      holder: @
+  build: =>
     @_jobs = new Ed.Collections.Jobs
       holder: @
     @_jobs.on "add remove reset", @setBusyness
@@ -133,13 +132,12 @@ class Ed.Models.Editable extends Ed.Model
 
 
 ## Images
-# are uploaded on the side during page editing.
+# are uploaded on the side during editing.
 #
 class Ed.Models.Image extends Ed.Model
   savedAttributes: ["image", "image_name", "remote_url", "caption", "weighting"]
 
-  initialize: () ->
-    super
+  build: =>
     @getThumb() if @isNew() and @has('image')
 
   getThumb: () =>
@@ -164,11 +162,10 @@ class Ed.Models.Image extends Ed.Model
       preview = canvas.toDataURL('image/png')
       @set "url", preview
 
+
 class Ed.Collections.Images extends Backbone.Collection
   model: Ed.Models.Image
-
-  initialize: (options) =>
-    @_serial = options.serial
+  url: "/api/images"
 
 
 ## Images
@@ -177,8 +174,7 @@ class Ed.Collections.Images extends Backbone.Collection
 class Ed.Models.Video extends Ed.Model
   savedAttributes: ["video", "video_name", "remote_url", "caption"]
 
-  initialize: () ->
-    super
+  build: =>
     @getVideo() if @isNew() and @has('video')
 
   getVideo: () =>
@@ -204,11 +200,10 @@ class Ed.Models.Video extends Ed.Model
       preview = canvas.toDataURL('image/jpeg')
       @set "poster_url", preview
 
+
 class Ed.Collections.Videos extends Backbone.Collection
   model: Ed.Models.Video
-
-  initialize: (options) =>
-    @_serial = options.serial
+  url: "/api/videos"
 
 
 ## Minor inline assets
