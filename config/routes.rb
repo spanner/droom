@@ -28,6 +28,8 @@ Droom::Engine.routes.draw do
     get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
   end
 
+  resources :pages
+
   resources :services do
     resources :permissions
   end
@@ -97,5 +99,6 @@ Droom::Engine.routes.draw do
   get "/enquire" => "enquiries#new", as: :enquire
   get "/noticeboard" => "scraps#index", as: :noticeboard
   get "/profile" => "users#edit", as: :profile, defaults: {view: "profile"}
+  get "/page/:slug" => "pages#published", as: :published_page
 
 end

@@ -5,12 +5,14 @@
       content: attr(data-placeholder)
       color: $mid
       font-style: italic
+      text-transform: none
 
 span[contenteditable]
   display: inline-block
   cursor: text
 
 a.control, label.control
+  pointer-events: auto
   display: inline-block
   vertical-align: top
   width: 36px
@@ -77,11 +79,15 @@ span.note
 
 .ed-buttons
   display: none
+  pointer-events: none
   .editor, .picker, .ed-menu
     display: inline-block
     margin-right: 2px
 
 .editing
+  & > p:empty:before
+    content: "❡"
+    color: $verypale
   figure, .bl
     position: relative
     min-height: 48px
@@ -156,6 +162,7 @@ span.note
   padding: 9px 8px
   border-bottom-left-radius: 28px
   border-top-left-radius: 28px
+  border-left: 1px solid $mid
   overflow: hidden
   top: 0
   left: -28px

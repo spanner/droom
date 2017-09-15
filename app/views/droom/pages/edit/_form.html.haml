@@ -1,0 +1,33 @@
+= form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
+  #form_controls
+    = f.submit "save"
+    = f.submit "publish", class: "publish", disabled: true
+
+  #page_editor
+    #page_masthead
+      .bg.ed-image{data: {placeholder: "Click or drop here to add your main image"}}
+      .fg
+        #title
+          %h1.title
+            %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}
+              = @page.title
+
+    #page_content.ed-content
+      = f.hidden_field :content
+      .content{contenteditable: true}
+        = sanitize @page.content
+
+      .placeholder
+        %p
+          Click here to edit the main body of your page. The first paragraph will automatically be made a little bigger.
+          That might be the only paragraph you need, but there is no limit to the length of the page and you are welcome to add images, links and video clips.
+        %p
+          Click the
+          %svg.prefix
+            %use{"xlink:href" => "#plus_symbol"}
+          button on next to a blank line to insert an image, video clip, quote or button.
+        %p
+          %span.selected
+            Select some text
+          to bring up the editing toolbar, create a link or change formatting.
+

@@ -10,9 +10,9 @@ module Droom
                       preserve_files: true,
                       styles: {
                         hero: ["1600x900#", :jpg],
-                        full: "640x640#",
-                        half: "320x320#",
-                        icon: ["48x48#", :png]
+                        full: "960x640#",
+                        half: "480x320#",
+                        icon: ["48x32#", :png]
                       },
                       convert_options: {
                         hero: "-quality 25 -strip",

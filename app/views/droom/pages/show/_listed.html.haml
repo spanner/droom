@@ -1,0 +1,13 @@
+- page ||= @page
+- cssclass = "page holder"
+- cssclass << page.public? " public" : " private"
+- cssclass << " published" if page.published?
+
+%div{class: cssclass, id: "page_#{page.id}", data: {refreshable: true, url: droom.page_path(page, view: "listed")} }
+  .heading
+    %h2.name<
+      = link_to page.title, edit_page_url(page), :class => "name"
+
+  - if page.content?
+    %p.preview
+      = shorten(strip_tags(page.content), :length => 64)
