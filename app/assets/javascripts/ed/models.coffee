@@ -101,6 +101,7 @@ class Ed.Collection extends Backbone.Collection
 class Ed.Models.Editable extends Ed.Model
   defaults: 
     title: ""
+    slug: ""
     image_id: null
     content: "<p></p>"
 
@@ -108,6 +109,7 @@ class Ed.Models.Editable extends Ed.Model
     @_jobs = new Ed.Collections.Jobs
       holder: @
     @_jobs.on "add remove reset", @setBusyness
+    @on "change:title", @setSlug
 
   # return a tidied version of our content with all editing machinery removed.
   getBody: =>
@@ -128,6 +130,26 @@ class Ed.Models.Editable extends Ed.Model
 
   setBusyness: () =>
     @set 'busy', !!@_jobs.length
+
+  setSlug: () =>
+    title = @get('title')
+    previous_title = @previous('title')
+    slug = @get('slug')
+    if !slug or slug is @slugify(previous_title)
+      @set 'slug', @slugify(title)
+
+  slugify: (html) =>
+    if html
+      spaced_html = html.replace(/(&nbsp;|<br>)/g, ' ')
+      $('<div />').html(spaced_html).text().trim()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/&/g, '-and-')
+        .replace(/[\s\W-]+/g, '-')
+        .replace(/-$/, '')
+        .toLowerCase()
+    else
+      ""
 
 
 ## Images

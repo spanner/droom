@@ -1,14 +1,21 @@
 = form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
   #form_controls
+    %span.left
+      %span.label
+        Slug:
+      %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}
+    = f.hidden_field :slug, data: {ed: "slug"}
     = f.submit "save"
     = f.submit "publish", class: "publish", disabled: true
 
   #page_editor
     #page_masthead
+      = f.hidden_field :image_id, data: {ed: "image_id"}
       .bg.ed-image{data: {placeholder: "Click or drop here to add your main image"}}
       .fg
         #title
           %h1.title
+            = f.hidden_field :title
             %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}
               = @page.title
 

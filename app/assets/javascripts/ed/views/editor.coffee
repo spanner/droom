@@ -7,6 +7,7 @@
 class Ed.Views.Editor extends Ed.View
   ui:
     title: ".ed-title"
+    slug: ".ed-slug"
     content: ".ed-content"
     image: ".ed-image"
 
@@ -14,6 +15,10 @@ class Ed.Views.Editor extends Ed.View
     window.model = @model = new Ed.Models.Editable
     @ui.title.each (i, el) =>
       @subviews.push new Ed.Views.Title
+        el: el
+        model: @model
+    @ui.slug.each (i, el) =>
+      @subviews.push new Ed.Views.Slug
         el: el
         model: @model
     @ui.content.each (i, el) =>
@@ -35,6 +40,15 @@ class Ed.Views.Title extends Ed.View
   wrap: =>
     @model.set 'title', @$el.text().trim()
 
+
+class Ed.Views.Slug extends Ed.View
+  template: false
+  bindings: 
+    ':el':
+      observe: 'slug'
+
+  wrap: =>
+    @model.set 'slug', @$el.text().trim()
 
 
 class Ed.Views.Content extends Ed.View
@@ -215,6 +229,31 @@ class Ed.Views.Asset extends Ed.View
 
 
 class Ed.Views.MainImage extends Ed.Views.Asset
+  pickerView: Ed.Views.ImagePicker
+  template: false
+  tagName: "div"
+  className: "bg"
+  bindings:
+    ":el":
+      attributes: [
+        name: "data-image",
+        observe: "url"
+      ,
+        name: "style"
+        observe: ["url", "weighting"]
+        onGet: "weightedBackground"
+      ]
+
+  wrap: =>
+    if image_id = @$el.data('image')
+      @model = new Ed.Models.Image
+        id: image_id
+        caption: @$el.find('figcaption').text()
+    else 
+      @model = new Ed.Models.Image
+        caption: @$el.find('figcaption').text()
+    @model.loadAnd => @render()
+
 
 
 
