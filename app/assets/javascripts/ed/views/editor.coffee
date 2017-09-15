@@ -10,6 +10,18 @@ class Ed.Views.Editor extends Ed.View
     slug: ".ed-slug"
     content: ".ed-content"
     image: ".ed-image"
+    titlefield: '[data-ed="title"]'
+    slugfield: '[data-ed="slug"]'
+    contentfield: '[data-ed="content"]'
+    imagefield: '[data-ed="image_id"]'
+
+  bindings:
+    '[data-ed="title"]': "title"
+    '[data-ed="slug"]': "slug"
+    '[data-ed="image_id"]': "image_id"
+    '[data-ed="content"]':
+      observe: "content"
+      onGet: "cleanContent"
 
   wrap: =>
     window.model = @model = new Ed.Models.Editable
@@ -29,6 +41,16 @@ class Ed.Views.Editor extends Ed.View
       @subviews.push new Ed.Views.MainImage
         el: el
         model: @model
+
+  cleanContent: (content, model) =>
+    console.log "cleanContent", content
+    wrapper = $('<div />').html(content)
+    wrapper.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
+    wrapper.find('[data-placeholder]').removeAttr('data-placeholder')
+    wrapper.find('.ed-buttons').remove()
+    wrapper.find('.ed-progress').remove()
+    wrapper.find('.ed-action').remove()
+    wrapper.html()
 
 
 class Ed.Views.Title extends Ed.View

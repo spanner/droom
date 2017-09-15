@@ -15,14 +15,14 @@
       .fg
         #title
           %h1.title
-            = f.hidden_field :title
+            = f.hidden_field :title, data: {ed: 'title'}
             %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}
               = @page.title
 
     #page_content.ed-content
-      = f.hidden_field :content
+      = f.hidden_field :content, data: {ed: 'content'}
       .content{contenteditable: true}
-        = sanitize @page.content
+        = sanitize(@page.content.presence || "<p></p>")
 
       .placeholder
         %p

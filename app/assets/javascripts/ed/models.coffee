@@ -111,16 +111,6 @@ class Ed.Models.Editable extends Ed.Model
     @_jobs.on "add remove reset", @setBusyness
     @on "change:title", @setSlug
 
-  # return a tidied version of our content with all editing machinery removed.
-  getBody: =>
-    content = $(@get('content'))
-    content.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
-    content.find('[data-placeholder]').removeAttr('data-placeholder')
-    content.find('.ed-buttons').remove()
-    content.find('.ed-progress').remove()
-    content.find('.ed-action').remove()
-    $('<div />').append(content).html()
-
   startJob: (label) =>
     job = @_jobs.add
       label: label
@@ -133,9 +123,8 @@ class Ed.Models.Editable extends Ed.Model
 
   setSlug: () =>
     title = @get('title')
-    previous_title = @previous('title')
     slug = @get('slug')
-    if !slug or slug is @slugify(previous_title)
+    if !slug or slug is @slugify(@previous('title'))
       @set 'slug', @slugify(title)
 
   slugify: (html) =>
