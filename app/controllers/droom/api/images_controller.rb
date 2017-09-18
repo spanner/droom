@@ -50,7 +50,7 @@ module Droom::Api
 
     def get_images
       if current_user.admin?
-        @images = Droom::Image.order(created_at: :desc)
+        @images = paginated(Droom::Image.order(created_at: :desc))
       else
         @images = paginated(current_user.images.order(created_at: :desc))
       end

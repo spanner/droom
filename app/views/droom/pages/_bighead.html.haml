@@ -1,0 +1,16 @@
+- bighead ||= nil
+- page ||= bighead || @page
+
+- if page.illustrated?
+  - image_url = page.image.url(:hero)
+  #page_masthead
+    .bg{style: "background-image: url('#{image_url}')"}
+    .darken
+    .fg
+      #title
+        %h1.title
+          = page.title
+- else
+  #page_title
+    %h1.title
+      = page.title

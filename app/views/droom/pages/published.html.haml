@@ -1,0 +1,13 @@
+#page
+  #page_masthead
+    - image_url = @page.image.url(:hero) if @page.image
+    .bg{style: "background-image: url('#{image_url}')"}
+    .darken
+    .fg
+      #title
+        %h1.title
+          = @page.title
+
+  #page_content.ed-content
+    .content
+      = clean_html(@page.content.presence || "<p></p>")

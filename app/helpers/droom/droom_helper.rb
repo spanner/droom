@@ -17,7 +17,8 @@ module Droom
 
     def empty_node_scrubber
       @emptiness_scrubber ||= Loofah::Scrubber.new do |node|
-        if !node.text? && node.children.empty? && (node.text == "" || node.text =~ /^\s+$/)
+        if !node.text? && node.children.empty? && node.name != 'img' && (node.text == "" || node.text =~ /^\s+$/)
+          Rails.logger.warn "REMOVING #{node.name}"
           node.remove
         end
       end

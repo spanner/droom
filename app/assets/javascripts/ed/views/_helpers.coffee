@@ -351,7 +351,7 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
 
   setWeighting: (e) =>
     e?.preventDefault()
-    
+
 
 
 class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
@@ -371,6 +371,11 @@ class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
     @select(model)
     model.save().done =>
       @trigger "create", model
+
+
+class Ed.Views.MainImagePicker extends Ed.Views.ImagePicker
+  template: "assets/main_image_picker"
+  title: "Images"
 
 
 class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
@@ -395,7 +400,6 @@ class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
 class Ed.Views.QuotePicker extends Ed.Views.AssetPicker
   template: "assets/quote_picker"
   title: "Quotes"
-
 
 
 class Ed.Views.ProgressBar extends Ed.View

@@ -1,18 +1,29 @@
 module Droom
   class PagesController < Droom::EngineController
     respond_to :html
-    load_and_authorize_resource find_by: :slug
+    load_and_authorize_resource except: [:published]
 
     def create
-      @page.update_attributes(page_params)
-      render
+      if @page.update_attributes(page_params)
+        redirect_to droom.page_url(@page)
+      else
+        render action: :new
+      end
     end
         
     def update
-      @page.update_attributes(page_params)
-      render
+      if @page.update_attributes(page_params)
+        redirect_to droom.page_url(@page)
+      else
+        render action: :edit
+      end
     end
-    
+
+    def publish
+      @page.publish!
+      redirect_to droom.published_page_url(@page.slug)
+    end
+
     def destroy
       @page.destroy
       redirect_to droom.pages_url

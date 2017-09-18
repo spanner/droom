@@ -1,36 +1,33 @@
+- welcome_page = Droom::Page.find_by(slug: "_welcome")
+- sidebar_page = Droom::Page.find_by(slug: "_sidebar")
+
 - content_for(:pagetitle) do
   =t :please_sign_in
-  
-#account
-  %h1.pagetitle
+
+- if welcome_page && welcome_page.content?
+  - content_for(:pagetitle) do
+    = welcome_page.title
+
+
+  .welcome
+    = render "droom/pages/bighead", page: welcome_page
+    #content
+      %aside#margin
+        = render partial: 'devise/sessions/login_form'
+        - if sidebar_page && sidebar_page.content?
+          = clean_html sidebar_page.content
+
+      %article#body.narrow
+        .welcome
+          = clean_html welcome_page.content
+
+
+- else
+  - content_for(:pagetitle) do
     =t :please_sign_in
-    
-  - if flash[:notice]
-    %p.standfirst.green
-      = flash[:notice]
 
-  = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
-    - if params[:backto].present?
-      = hidden_field_tag :backto, CGI.escape(params[:backto])
+  #account
+    %h1.pagetitle
+      =t :please_sign_in
 
-    %p
-      = f.label :email
-      %br
-      = f.email_field :email, :class => 'login'
-
-    %p
-      = f.label :password
-      %span.reminder
-        = link_to t(:forgot_password), new_password_path(resource_name)
-      %br
-      = f.password_field :password, :class => 'login'
-
-    %p
-      - if devise_mapping.rememberable?
-        = f.check_box :remember_me
-        = f.label :remember_me, :class => "minor"
-
-    .controls
-      .save.button
-        %p
-          = f.submit t(:sign_in), :class => "submit"
+    = render partial: 'devise/sessions/login_form'

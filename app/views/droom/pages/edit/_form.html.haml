@@ -1,17 +1,21 @@
+- image_url = @page.image.url(:hero) if @page.image
+
 = form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
   #form_controls
     %span.left
       %span.label
         Slug:
-      %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}
+      %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}<
+        = @page.slug
     = f.hidden_field :slug, data: {ed: "slug"}
-    = f.submit "save"
-    = f.submit "publish", class: "publish", disabled: true
+    = f.submit "save and preview"
 
   #page_editor
     #page_masthead
-      = f.hidden_field :image_id, data: {ed: "image_id"}
-      .bg.ed-image{data: {placeholder: "Click or drop here to add your main image"}}
+      = f.hidden_field :image_id, data: {ed: "image"}
+      .bg.ed-image{style: "background-image: url('#{image_url}')", data: {image: @page.image_id, placeholder: "Click or drop here to add your main image"}}
+        .ed-buttons
+      .darken.darker
       .fg
         #title
           %h1.title
@@ -22,7 +26,8 @@
     #page_content.ed-content
       = f.hidden_field :content, data: {ed: 'content'}
       .content{contenteditable: true}
-        = sanitize(@page.content.presence || "<p></p>")
+        - @page.content = "<p></p>" unless @page.content?
+        = @page.content.html_safe
 
       .placeholder
         %p

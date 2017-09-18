@@ -84,6 +84,11 @@ span.note
     display: inline-block
     margin-right: 2px
 
+.ed-content
+  .placeholder
+    color: $mid
+    font-style: italic
+
 .editing
   & > p:empty:before
     content: "\2060"  // forces display of empty node
@@ -116,21 +121,24 @@ span.note
         font-size: 0.9rem
         padding: 4px 10px
         display: none
+  .ed-buttons
+    position: absolute
+    top: 10px
+    left: 10px
+    width: calc(100% - 20px)
+    .picker, .styler, .config
+      display: block
+      margin: 0
+    .picker
+      float: left
+    .styler
+      float: right
+    .thumbnails, .select
+      display: inline-block
+      vertical-align: top
+  &:hover, &.hold
     .ed-buttons
-      position: absolute
-      top: 10px
-      left: 10px
-      width: calc(100% - 20px)
-      .picker, .styler, .config
-        display: block
-        margin: 0
-      .picker
-        float: left
-      .styler
-        float: right
-      .thumbnails, .select
-        display: inline-block
-        vertical-align: top
+      display: block
   .bl
     transition:
       properties: width height

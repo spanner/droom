@@ -3,9 +3,15 @@ module Droom
     attr_accessor :publish_now, :publishing
     after_save :publish_if_publishing
 
+    belongs_to :image
+
     scope :published, -> {
       where.not(published_at: nil)
     }
+
+    def illustrated?
+      !!image
+    end
 
     def publish!
       unless publishing?

@@ -58,30 +58,6 @@ class Ed.View extends Backbone.Marionette.View
   providerClass: (provider) =>
     "yt" if provider is "YouTube"
 
-
-  # for use with attached assets.
-  #
-  backgroundFromAsset: (asset) =>
-    style = ""
-    if asset?
-      url = asset.get("#{@_size}_url") if @_size
-      url ?= asset.get('url')
-      if url
-        style = "background-image: url('#{url}')"
-    style
-
-  weightedBackgroundFromAsset: (asset) =>
-    style = ""
-    if asset?
-      url = asset.get("#{@_size}_url") if @_size
-      url ?= asset.get('url')
-      if url
-        style = "background-image: url('#{url}')"
-      if weighting = asset.get('weighting')
-        style += "; background-position: #{weighting}"
-    style
-
-
   ## Utilities
 
   isBlank: (string) =>

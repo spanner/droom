@@ -13,15 +13,22 @@ class Ed.Views.Editor extends Ed.View
     titlefield: '[data-ed="title"]'
     slugfield: '[data-ed="slug"]'
     contentfield: '[data-ed="content"]'
-    imagefield: '[data-ed="image_id"]'
+    imagefield: '[data-ed="image"]'
 
   bindings:
-    '[data-ed="title"]': "title"
-    '[data-ed="slug"]': "slug"
-    '[data-ed="image_id"]': "image_id"
+    '[data-ed="title"]':
+      observe: "title"
+      updateModel: false
+    '[data-ed="slug"]':
+      observe: "slug"
+      updateModel: false
+    '[data-ed="image"]':
+      observe: "image_id"
+      updateModel: false
     '[data-ed="content"]':
       observe: "content"
       onGet: "cleanContent"
+      updateModel: false
 
   wrap: =>
     window.model = @model = new Ed.Models.Editable
@@ -37,13 +44,12 @@ class Ed.Views.Editor extends Ed.View
       @subviews.push new Ed.Views.Content
         el: el
         model: @model
-    @ui.content.each (i, el) =>
+    @ui.image.each (i, el) =>
       @subviews.push new Ed.Views.MainImage
         el: el
         model: @model
 
   cleanContent: (content, model) =>
-    console.log "cleanContent", content
     wrapper = $('<div />').html(content)
     wrapper.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
     wrapper.find('[data-placeholder]').removeAttr('data-placeholder')
@@ -76,20 +82,21 @@ class Ed.Views.Slug extends Ed.View
 class Ed.Views.Content extends Ed.View
   template: false
   ui:
-    field: 'input[type="hidden"]'
     content: ".content"
     placeholder: ".placeholder"
 
   bindings: 
     '.content':
       observe: 'content'
+      updateView: false
 
   wrap: =>
     content = @ui.content.html().trim()
-    @model.set 'content', content
+    @model.set 'content', content, silent: true
     @showPlaceholderIfEmpty()
     @ui.content.on 'blur', @showPlaceholderIfEmpty
     @ui.content.addClass 'editing'
+    window.cont = @
 
     @ui.content.find('figure.image').each (i, el) =>
       @subviews.push new Ed.Views.Image
@@ -122,46 +129,46 @@ class Ed.Views.Content extends Ed.View
     @_inserter = new Ed.Views.AssetInserter
     @_inserter.render()
     @_inserter.attendTo(@ui.content)
-    #
-    # @_toolbar = new MediumEditor @ui.content,
-    #   placeholder: false
-    #   toolbar:
-    #     updateOnEmptySelection: true
-    #     allowMultiParagraphSelection: false
-    #     imageDragging: false
-    #     commands: [
-    #       {
-    #         command: 'link',
-    #         key: 'K',
-    #         meta: true,
-    #         shift: false,
-    #         alt: false
-    #       }
-    #     ]
-    #     buttons: [
-    #       {
-    #         name: 'bold'
-    #         contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
-    #       },
-    #       {
-    #         name: 'italic'
-    #         contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
-    #       },
-    #       {
-    #         name: 'anchor'
-    #         contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
-    #       },
-    #       {
-    #         name: 'h2'
-    #         contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
-    #         aria: "Major heading"
-    #       },
-    #       {
-    #         name: 'h3'
-    #         contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
-    #         aria: "Minor heading"
-    #       }
-    #     ]
+
+    @_toolbar = new MediumEditor @ui.content,
+      placeholder: false
+      toolbar:
+        updateOnEmptySelection: true
+        allowMultiParagraphSelection: false
+        imageDragging: false
+        commands: [
+          {
+            command: 'link',
+            key: 'K',
+            meta: true,
+            shift: false,
+            alt: false
+          }
+        ]
+        buttons: [
+          {
+            name: 'bold'
+            contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
+          },
+          {
+            name: 'italic'
+            contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
+          },
+          {
+            name: 'anchor'
+            contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
+          },
+          {
+            name: 'h2'
+            contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
+            aria: "Major heading"
+          },
+          {
+            name: 'h3'
+            contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
+            aria: "Minor heading"
+          }
+        ]
 
 
 
@@ -176,13 +183,14 @@ class Ed.Views.Asset extends Ed.View
     buttons: ".ed-buttons"
 
   initialize: =>
-    @wrap() if @el and not @model
     @_size ?= _.result @, 'defaultSize'
+    super
 
   wrap: =>
     #required in subclass to extract model properties from html.
 
   onRender: () =>
+    @log "render"
     @$el.attr "contenteditable", false
     @stickit() if @model
     if picker_view_class = @getOption('pickerView')
@@ -251,33 +259,38 @@ class Ed.Views.Asset extends Ed.View
 
 
 class Ed.Views.MainImage extends Ed.Views.Asset
-  pickerView: Ed.Views.ImagePicker
+  pickerView: Ed.Views.MainImagePicker
   template: false
-  tagName: "div"
-  className: "bg"
-  bindings:
-    ":el":
-      attributes: [
-        name: "data-image",
-        observe: "url"
-      ,
-        name: "style"
-        observe: ["url", "weighting"]
-        onGet: "weightedBackground"
-      ]
+  defaultSize: "hero"
+
+  ui:
+    buttons: ".ed-buttons"
 
   wrap: =>
+    @$el.addClass 'editing'
     if image_id = @$el.data('image')
-      @model = new Ed.Models.Image
-        id: image_id
-        caption: @$el.find('figcaption').text()
-    else 
-      @model = new Ed.Models.Image
-        caption: @$el.find('figcaption').text()
-    @model.loadAnd => @render()
+      _ed.withAssets =>
+        @setModel _ed.images.get(image_id)
 
+  setModel: (image) =>
+    @log "setModel", image
+    @bindImage(image)
+    @model.set "image", image, stickitChange: true
+    @_progress?.setModel(image)
+    @stickit()
 
-
+  bindImage: (image) =>
+    if @image
+      @unstickit @image
+    if image
+      @log "BINDING", image
+      @image = image
+      @addBinding @image, ":el",
+        attributes: [
+          name: "style"
+          observe: "url"
+          onGet: "backgroundAtSize"
+        ]
 
 
 class Ed.Views.Image extends Ed.Views.Asset
@@ -311,13 +324,10 @@ class Ed.Views.Image extends Ed.Views.Asset
 
   wrap: =>
     if image_id = @$el.data('image')
-      @model = new Ed.Models.Image
-        id: image_id
-        caption: @$el.find('figcaption').text()
+      _ed.withAssets =>
+        @setModel _ed.images.get(image_id) ? new Ed.Models.Image
     else 
       @model = new Ed.Models.Image
-        caption: @$el.find('figcaption').text()
-    @model.loadAnd => @render()
 
   saveImage: (e) =>
     e?.preventDefault()
@@ -354,10 +364,10 @@ class Ed.Views.Video extends Ed.Views.Asset
       observe: "caption"
 
   wrap: =>
+    @$el.addClass 'editing'
     if video_id = @$el.data('video')
-      @model = new Ed.Models.Video
-        id: video_id
-        caption: @$el.find('figcaption').text()
+      _ed.withAssets =>
+        @setModel _ed.videos.get(video_id ) ? new Ed.Models.Video
 
   unlessEmbedded: (embed_code) =>
     console.log "unlessEmbedded", !embed_code

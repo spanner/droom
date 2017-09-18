@@ -21,9 +21,10 @@ class Ed.Application extends Backbone.Marionette.Application
     Backbone.Marionette.Renderer.render = @render
 
     @el = options.el
+    @_loaded = $.Deferred()
+    @_config = new Ed.Config options.config
     @images = new Ed.Collections.Images
     @videos = new Ed.Collections.Videos
-    @_config = new Ed.Config options.config
     @notices = new Ed.Collections.Notices
     @initUI()
 
@@ -33,8 +34,7 @@ class Ed.Application extends Backbone.Marionette.Application
   ## Prepare UI
   #
   initUI: (fn) =>
-    @images.fetch()
-    @videos.fetch()
+    @loadAssets()
     @_editor = new Ed.Views.Editor
       el: @el
 
@@ -44,6 +44,13 @@ class Ed.Application extends Backbone.Marionette.Application
   config: (key) =>
     @_config.get(key)
 
+  loadAssets: () =>
+    $.when(@images.fetch(), @videos.fetch()).done =>
+      @_loaded.resolve(@images, @videos)
+    @_loaded.promise()
+
+  withAssets: (fn) =>
+    @_loaded.done fn
 
   ## Backbone overrides
   # Override sync to add a progress listener to every save

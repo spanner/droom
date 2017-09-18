@@ -1,7 +1,12 @@
-- page ||= @page
+- listed ||= nil
+- page ||= listed  || @page
 - cssclass = "page holder"
-- cssclass << page.public? " public" : " private"
-- cssclass << " published" if page.published?
+- if page.public? ? " public" : " private"
+  - cssclass << " public"
+- else
+  - cssclass << " private"
+- if page.published?
+  - cssclass << " published"
 
 %div{class: cssclass, id: "page_#{page.id}", data: {refreshable: true, url: droom.page_path(page, view: "listed")} }
   .heading

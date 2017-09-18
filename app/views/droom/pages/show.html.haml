@@ -1,6 +1,24 @@
+- content_for :title do 
+  = t :preview_page
+
+%p
+  = t :preview_page_intro
+
 %main
-  %h1
-    = @page.title
-  %article
-    = sanitize @page.content
-  
+
+= form_for @page, url: droom.publish_page_url(@page), method: "put", html: {id: "page_form"} do |f|
+  #form_controls
+    %span.left
+      %a{href: droom.pages_url}
+        ↞ pages
+    
+    %a.button.edit{href: droom.edit_page_url(@page)}
+      edit
+    = f.submit "publish", class: "publish"
+
+  #page_preview
+    = render "droom/pages/bighead", page: @page
+
+    #page_content.ed-content
+      .content
+        = clean_html(@page.content.presence || "<p></p>")

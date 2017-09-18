@@ -110,6 +110,7 @@ class Ed.Models.Editable extends Ed.Model
       holder: @
     @_jobs.on "add remove reset", @setBusyness
     @on "change:title", @setSlug
+    @on 'change:image', @setImageId
 
   startJob: (label) =>
     job = @_jobs.add
@@ -120,6 +121,12 @@ class Ed.Models.Editable extends Ed.Model
 
   setBusyness: () =>
     @set 'busy', !!@_jobs.length
+
+  setImageId: (model, image, options) =>
+    if image
+      @set 'image_id', image.id
+    else
+      @set 'image_id', null
 
   setSlug: () =>
     title = @get('title')
@@ -166,6 +173,7 @@ class Ed.Models.Image extends Ed.Model
         @set 'icon_url', @extractImage(img, 64)
         @set 'half_url', @extractImage(img, 320)
         @set 'full_url', @extractImage(img, 640)
+        @set 'hero_url', @get 'full_url'
         @set 'url', @get 'full_url'
       img.src = @get('file')
 

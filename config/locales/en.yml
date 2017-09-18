@@ -344,6 +344,9 @@ en:
       url: "Link destination"
       body: "Body text or quote"
       caption: "Optional caption"
+    session:
+      email: "Email"
+      password: "Password"
     user:
       address: "Postal address"
       chinese_name: "中国姓名"

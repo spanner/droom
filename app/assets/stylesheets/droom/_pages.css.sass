@@ -1,3 +1,15 @@
+.darken
+  position: absolute
+  width: 100%
+  height: 100%
+  left: 0
+  bottom: 0
+  max-height: 100%
+  pointer-events: none
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0) 35%)
+  &.darker
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 40%)
+
 #page_form
   position: relative
   width: 920px
@@ -9,6 +21,9 @@
     margin: 10px 0
     .left
       float: left
+      a
+        margin-top: 10px
+        margin-right: 10px
       span
         margin-top: 10px
         &.ed-slug
@@ -19,10 +34,13 @@
     border: 1px solid $mid
     clear: left
 
+  #page_preview
+    border: 1px solid $mid
+
 #page_masthead
   position: relative
   width: 100%
-  padding-bottom: 56.25%
+  padding-bottom: 50%
   .bg
     position: absolute
     top: 0
@@ -39,14 +57,26 @@
     bottom: 18px
     left: 36px
     width: calc(100% - 64px)
+    #title
+      max-width: 900px
+      margin: 0 auto
     h1
       font-size: 2em
       color: white
+
+#page_title
+  h1
+    font-size: 2em
+    margin: 36px 36px 0 36px
 
 #page_content
   padding: 18px 36px
   min-height: 500px
   background-color: white
+  p:first-child
+    font-size: 1.25em
+    line-height: 1.5
+    
   figure
     margin: 24px -36px
     video
@@ -67,6 +97,8 @@
     figcaption
       color: $dark
       font-style: italic
+      text-align: center
+      margin: 5px 20%
     a.save
       float: right
       +button($green)
