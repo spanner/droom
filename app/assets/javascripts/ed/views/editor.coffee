@@ -132,43 +132,40 @@ class Ed.Views.Content extends Ed.View
 
     @_toolbar = new MediumEditor @ui.content,
       placeholder: false
+      autoLink: true
+      imageDragging: false
+      allowMultiParagraphSelection: false
+      anchor:
+        customClassOption: null
+        customClassOptionText: 'Button'
+        linkValidation: false
+        placeholderText: 'URL...'
+        targetCheckbox: false
+      paste:
+        forcePlainText: false
+        cleanPastedHTML: true
+        cleanReplacements: []
+        cleanAttrs: ['class', 'style', 'dir']
+        cleanTags: ['meta']
       toolbar:
         updateOnEmptySelection: true
-        allowMultiParagraphSelection: false
-        imageDragging: false
-        commands: [
-          {
-            command: 'link',
-            key: 'K',
-            meta: true,
-            shift: false,
-            alt: false
-          }
-        ]
         buttons: [
-          {
-            name: 'bold'
-            contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
-          },
-          {
-            name: 'italic'
-            contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
-          },
-          {
-            name: 'anchor'
-            contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
-          },
-          {
-            name: 'h2'
-            contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
-            aria: "Major heading"
-          },
-          {
-            name: 'h3'
-            contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
-            aria: "Minor heading"
-          }
+          name: 'bold'
+          contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
+        ,
+          name: 'italic'
+          contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
+        ,
+          name: 'anchor'
+          contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
+        ,
+          name: 'h2'
+          contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
+        ,
+          name: 'h3'
+          contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
         ]
+
 
 
 
