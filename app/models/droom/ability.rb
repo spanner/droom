@@ -3,12 +3,14 @@ module Droom
     include CanCan::Ability
 
     def initialize(user)
-      if user
+      user ||= Droom::User.new
+      can :create, Droom::Enquiry
+
+      if user.persisted?
         if user.admin?
           can :manage, :all
 
         elsif !Droom.require_login_permission? || user.permitted?('droom.login')
-          
           can :read, :dashboard
           can :read, Droom::Event
           can :read, Droom::Scrap
@@ -81,9 +83,6 @@ module Droom
 
         can :read, Droom::Scrap
 
-      else
-        can :new, Droom::Enquiry
-        can :create, Droom::Enquiry
       end
     end
   end

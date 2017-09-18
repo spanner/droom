@@ -1,5 +1,6 @@
 module Droom
   class Enquiry < ApplicationRecord
+    include MailForm::Shim
     include MailForm::Delivery
 
     attributes :robot, :captcha => true
