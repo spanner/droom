@@ -177,7 +177,7 @@ en:
   delete_folder: "Delete Folder"
   delete_group: "Delete Group"
   delete_scrap: "Remove"
-  delete_user: "Delete Person"
+  delete_user: "Remove person"
   delete_service: "Delete Service"
   delete_permission: "Delete Permission"
   confirm_delete_scrap: "Are you sure you want to remove this %{type} scrap?"

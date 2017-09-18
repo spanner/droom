@@ -9,7 +9,7 @@
     box-sizing: border-box
   &:last-child, &.last
     margin-right: 0
-  span.subcol
+  .subcol
     display: inline-block
     vertical-align: top
     width: 48%
@@ -21,22 +21,22 @@
       margin-right: 0
 
 
-p.onecol, p.twocol, p.threecol, p.fourcol
+.onecol, .twocol, .threecol, .fourcol
   +clearfix
   margin: 1em 0
   &.flowed
-    span.col
+    .col
       float: left
       margin-bottom: 0.75em
       &.right
         margin-right: 0
-      span.subcol
+      .subcol
         font-size: 90%
   &.upset
     margin-top: -1em
   &.nospace
     margin-bottom: 0
-  span.stacked
+  .stacked
     display: block
     margin-bottom: 19px
     &:last-child
@@ -44,32 +44,38 @@ p.onecol, p.twocol, p.threecol, p.fourcol
   h3+&
     margin-top: 0.25em
 
-p.onecol
-  span.col
+.onecol
+  .col
     +column(100%, 0)
-p.twocol
-  span.col
+
+.twocol
+  .col
     +column(49%, 2%)
   &.unequal
-    span.col:first-child, span.col.first
+    .col:first-child, .col.first
       +column(24%, 2%)
-    span.col:last-child, span.col.last
+    .col:last-child, .col.last
       +column(74%)
   &.reversed
-    span.col:first-child, span.col.first
+    .col:first-child, .col.first
       +column(62%, 2%)
-    span.col:last-child, span.col.last
+    .col:last-child, .col.last
       +column(36%)
   &.addendum
-    span.col:first-child, span.col.first
+    .col:first-child, .col.first
       +column(calc(100% - 74px), 10px)
-    span.col:last-child, span.col.last
+    .col:last-child, .col.last
       +column(64px)
-p.threecol
-  span.col
+
+.threecol
+  .col
     +column(36%, 2%)
     &:first-child, &.first
       +column(24%, 2%)
-p.fourcol
-  span.col
+  &.equal
+    .col
+      +column(31%, 2%)
+
+.fourcol
+  .col
     +column(23.5%, 2%)

@@ -11,13 +11,13 @@
 
   %p.secondary
     = f.label :description
-    %span.formnote
-      = t :organisation_description_note
 
   .description.wysihtml
     .toolbar#t1
       = render 'droom/shared/toolbar'
     = f.text_area :description
+    %span.formnote
+      = t :organisation_description_note
     
   .buttons
     = f.submit t(:save_organisation)

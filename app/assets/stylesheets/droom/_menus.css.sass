@@ -26,6 +26,7 @@ div.menu
 
 a.menu
   display: inline-block
+  visibility: hidden
   text-indent: 26px
   height: 20px
   width: 26px
@@ -53,3 +54,5 @@ a.menu
     background-image: image-url('droom/menu/smallasterisk.png')
     width: 20px
     height: 18px
+  *:hover > &
+    visibility: visible

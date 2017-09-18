@@ -167,8 +167,6 @@ class Ed.Views.Content extends Ed.View
         ]
 
 
-
-
 ## Individual Asset Managers
 #
 # The html we get and set can include a number of embedded assets...

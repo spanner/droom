@@ -1,1 +1,22 @@
-= render :partial => 'organisation', :object => @organisation
+.org{id: "organisation_#{@organisation.id}"}
+
+  %h1
+    = @organisation.name
+
+  %p
+    = clean_html @organisation.description
+
+  %h2
+    Network members
+    
+  - if @organisation.users.any?
+    %ul.people
+      = render :partial => "droom/users/user", :collection => @organisation.users.in_name_order
+      %li.person
+        = link_to droom.new_organisation_user_url(@organisation.id), class: "add", data: {action: "popup", affected: "#organisation_#{@organisation.id}"} do
+          %span.mugshot
+            %svg
+              %use{"xlink:href" => "#plus_symbol"}
+          %span.contact
+            %span.name
+              Add a new user
