@@ -141,6 +141,7 @@ class Ed.Views.Content extends Ed.View
         linkValidation: false
         placeholderText: 'URL...'
         targetCheckbox: false
+      anchorPreview: false
       paste:
         forcePlainText: false
         cleanPastedHTML: true
@@ -177,6 +178,14 @@ class Ed.Views.Asset extends Ed.View
   ui:
     buttons: ".ed-buttons"
     catcher: ".dropmask"
+    prompt: ".prompt"
+
+  events:
+    "dragenter": "lookAvailable"
+    "dragover @ui.catcher": "dragOver"
+    "dragleave @ui.catcher": "lookNormal"
+    "drop @ui.catcher": "catchFiles"
+    "click @ui.catcher": "pickFile"
 
   initialize: =>
     @_size ?= _.result @, 'defaultSize'
@@ -214,6 +223,7 @@ class Ed.Views.Asset extends Ed.View
     @_styler?.setModel(model)
     @_progress?.setModel(model)
     @trigger "select"
+    @ui.prompt.hide()
     @update()
 
   update: =>
@@ -286,13 +296,6 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   template: false
   defaultSize: "hero"
 
-  events:
-    "dragenter": "lookAvailable"
-    "dragover @ui.catcher": "dragOver"
-    "dragleave @ui.catcher": "lookNormal"
-    "drop @ui.catcher": "catchFiles"
-    "click": "pickFile"
-
   wrap: =>
     @$el.addClass 'editing'
     if image_id = @$el.data('image')
@@ -301,6 +304,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 
   setModel: (image) =>
     @log "setModel", image
+    @ui.prompt.hide() if @image # ie not first call
     @bindImage(image)
     @model.set "image", image, stickitChange: true
     @_progress?.setModel(image)
@@ -310,7 +314,6 @@ class Ed.Views.MainImage extends Ed.Views.Asset
     if @image
       @unstickit @image
     if image
-      @log "BINDING", image
       @image = image
       @addBinding @image, ":el",
         attributes: [
@@ -327,9 +330,6 @@ class Ed.Views.Image extends Ed.Views.Asset
   tagName: "figure"
   className: "image full"
   defaultSize: "full"
-
-  events:
-    "click a.save": "saveImage"
 
   bindings:
     ":el":

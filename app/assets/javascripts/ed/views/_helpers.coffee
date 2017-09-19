@@ -293,12 +293,13 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
   ui:
     head: ".menu-head"
     body: ".menu-body"
+    deleter: "a.delete"
     label: "label"
     filefield: 'input[type="file"]'
 
   events:
-    "click a.menu-head": "toggleMenu"
-    "click a.delete": "removeAsset"
+    "click @ui.head": "toggleMenu"
+    "click @ui.deleter": "removeAsset"
     "click @ui.filefield": "containEvent" # always artificial
 
   onRender: =>

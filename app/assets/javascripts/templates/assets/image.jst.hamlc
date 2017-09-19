@@ -1,3 +1,7 @@
-%img{src: ""}
+.holder
+  %img{src: ""}
+  .ed-buttons
+  .dropmask
+    %p.prompt
+      Click or drop image file here
 %figcaption{contenteditable: "plaintext-only", data: {placeholder: "Optional image caption"}}<
-.ed-buttons

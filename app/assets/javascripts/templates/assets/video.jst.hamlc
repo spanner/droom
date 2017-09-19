@@ -1,4 +1,8 @@
-%video
-.embed
+.holder
+  %video
+  .embed
+  .ed-buttons
+  .dropmask
+    %p.prompt
+      Click or drop video file here
 %figcaption{contenteditable: "plaintext-only", data: {placeholder: "Optional video caption"}}<
-.ed-buttons
