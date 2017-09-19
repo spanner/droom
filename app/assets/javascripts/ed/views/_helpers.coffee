@@ -290,15 +290,16 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
   className: "picker"
   menuView: Ed.Views.AssetsList
 
-  events:
-    "click a.menu-head": "toggleMenu"
-    "click a.delete": "removeAsset"
-
   ui:
     head: ".menu-head"
     body: ".menu-body"
     label: "label"
     filefield: 'input[type="file"]'
+
+  events:
+    "click a.menu-head": "toggleMenu"
+    "click a.delete": "removeAsset"
+    "click @ui.filefield": "containEvent" # always artificial
 
   onRender: =>
     @ui.label.on "click", @close
@@ -335,6 +336,10 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
     @close()
     @trigger "select", model
 
+  pickFile: (e) =>
+    console.log "pickFile", e.target or e.originalEvent.target
+    @ui.filefield.click()
+
   getPickedFile: (e) =>
     if files = @ui.filefield[0].files
       @readLocalFile files[0]
@@ -351,6 +356,9 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
 
   setWeighting: (e) =>
     e?.preventDefault()
+
+  containEvent: (e) =>
+    e?.stopPropagation()
 
 
 

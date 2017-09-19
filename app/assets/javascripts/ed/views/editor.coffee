@@ -176,6 +176,7 @@ class Ed.Views.Asset extends Ed.View
 
   ui:
     buttons: ".ed-buttons"
+    catcher: ".dropmask"
 
   initialize: =>
     @_size ?= _.result @, 'defaultSize'
@@ -185,7 +186,6 @@ class Ed.Views.Asset extends Ed.View
     #required in subclass to extract model properties from html.
 
   onRender: () =>
-    @log "render"
     @$el.attr "contenteditable", false
     @stickit() if @model
     if picker_view_class = @getOption('pickerView')
@@ -209,7 +209,6 @@ class Ed.Views.Asset extends Ed.View
     @_progress.render()
 
   setModel: (model) =>
-    @log "setModel", model
     @model = model
     @stickit() if @model
     @_styler?.setModel(model)
@@ -235,6 +234,35 @@ class Ed.Views.Asset extends Ed.View
       @$el.remove()
       @update()
 
+  lookAvailable: (e) =>
+    e?.stopPropagation()
+    @$el.addClass('droppable')
+
+  lookNormal: (e) =>
+    e?.stopPropagation()
+    @$el.removeClass('droppable')
+
+  dragOver: (e) =>
+    e?.preventDefault()
+    if e.originalEvent.dataTransfer
+      e.originalEvent.dataTransfer.dropEffect = 'copy'
+
+  catchFiles: (e) =>
+    @lookNormal()
+    if e?.originalEvent.dataTransfer?.files.length
+      @containEvent(e)
+      @readFile e.originalEvent.dataTransfer.files
+    else
+      console.log "unreadable drop", e
+
+  readFile: (files) =>
+    @_picker?.readLocalFile(files[0]) if files.length
+
+  pickFile: (e) =>
+    @containEvent(e)
+    @_picker?.pickFile(e)
+
+
   # bindings for use within an asset model.
   #
   urlAtSize: (url) =>
@@ -258,8 +286,12 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   template: false
   defaultSize: "hero"
 
-  ui:
-    buttons: ".ed-buttons"
+  events:
+    "dragenter": "lookAvailable"
+    "dragover @ui.catcher": "dragOver"
+    "dragleave @ui.catcher": "lookNormal"
+    "drop @ui.catcher": "catchFiles"
+    "click": "pickFile"
 
   wrap: =>
     @$el.addClass 'editing'

@@ -227,6 +227,7 @@ jQuery ($) ->
       panel.hide() for panel in @panels
 
     constructor: (element) ->
+      console.log "panel", element
       @container = $(element)
       @id = @container.attr('data-panel')
       @links = $("a[data-panel='#{@id}']")

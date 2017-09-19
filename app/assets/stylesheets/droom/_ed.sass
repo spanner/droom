@@ -89,6 +89,29 @@ span.note
     color: $mid
     font-style: italic
 
+.ed-image
+  cursor: pointer
+  .dropmask
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 200
+    display: none
+    align-items: center
+    justify-content: center
+    background-color: $green
+    mix-blend-mode: multiply
+    p
+      color: white
+      pointer-events: none
+      mix-blend-mode: normal
+      font-size: 2.5em
+  &.droppable
+    .dropmask
+      display: flex
+
 .editing
   & > p:empty:before
     content: "\2060"  // forces display of empty node
@@ -259,6 +282,7 @@ ul.ed-assets
       position: absolute
       display: none
       margin: 4px
+      pointer-events: none
       .label
         display: none
     a

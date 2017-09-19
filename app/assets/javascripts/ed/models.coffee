@@ -123,10 +123,10 @@ class Ed.Models.Editable extends Ed.Model
     @set 'busy', !!@_jobs.length
 
   setImageId: (model, image, options) =>
-    if image
+    if image.id
       @set 'image_id', image.id
     else
-      @set 'image_id', null
+      image.once 'sync', => @setImageId(self, image)
 
   setSlug: () =>
     title = @get('title')
