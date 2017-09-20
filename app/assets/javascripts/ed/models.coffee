@@ -150,6 +150,24 @@ class Ed.Models.Editable extends Ed.Model
     else
       ""
 
+  contentWrapper: () =>
+    wrapper = $('<div />')
+    if content = @get('content')
+      wrapper.html(content.trim())
+      wrapper.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
+      wrapper.find('[data-placeholder]').removeAttr('data-placeholder')
+      wrapper.find('.ed-buttons').remove()
+      wrapper.find('.ed-progress').remove()
+      wrapper.find('.ed-action').remove()
+      wrapper.find('.ed-dropmask').remove()
+    wrapper
+
+  cleanContent: =>
+    @contentWrapper().html()
+
+  textContent: =>
+    @contentWrapper().text()
+
 
 ## Images
 # are uploaded on the side during editing.

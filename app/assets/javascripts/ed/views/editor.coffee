@@ -14,6 +14,7 @@ class Ed.Views.Editor extends Ed.View
     slugfield: '[data-ed="slug"]'
     contentfield: '[data-ed="content"]'
     imagefield: '[data-ed="image"]'
+    checkers: '[data-ed-check]'
 
   bindings:
     '[data-ed="title"]':
@@ -48,16 +49,13 @@ class Ed.Views.Editor extends Ed.View
       @subviews.push new Ed.Views.MainImage
         el: el
         model: @model
+    @ui.checkers.each (i, el) =>
+      @subviews.push new Ed.Views.Checker
+        el: el
+        model: @model
 
   cleanContent: (content, model) =>
-    wrapper = $('<div />').html(content.trim())
-    wrapper.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
-    wrapper.find('[data-placeholder]').removeAttr('data-placeholder')
-    wrapper.find('.ed-buttons').remove()
-    wrapper.find('.ed-progress').remove()
-    wrapper.find('.ed-action').remove()
-    wrapper.find('.ed-dropmask').remove()
-    wrapper.html()
+    @model.cleanContent()
 
 
 class Ed.Views.Title extends Ed.View
@@ -167,6 +165,44 @@ class Ed.Views.Content extends Ed.View
           name: 'h3'
           contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
         ]
+
+
+class Ed.Views.Checker extends Ed.View
+  template: false
+
+  ui:
+    counter: 'span.count'
+
+  wrap: =>
+    @attribute = @$el.data('ed-check')
+    @addBinding null, ':el',
+      observe: @attribute
+      update: "attributePresent"
+    @addBinding null, 'use.check',
+      attributes: [
+        name: "xlink:href"
+        observe: @attribute
+        onGet: "checkSymbol"
+      ]
+
+  attributePresent: ($el, value, model, options) =>
+    present = false
+    if @attribute is 'content'
+      value = @model.textContent()
+      @log "words:", @attribute, value.split(/\W+/)
+      word_count = value.split(/\W+/).length
+      present = word_count > 20
+      @ui.counter.text word_count
+    else
+      present = value
+    if present
+      $el.removeClass('missing').addClass('present')
+    else
+      $el.removeClass('present').addClass('missing')
+
+  checkSymbol: (value) =>
+    @log "checkSymbol", !!value
+    if value then "#tick_symbol" else "#cross_symbol"
 
 
 ## Individual Asset Managers
