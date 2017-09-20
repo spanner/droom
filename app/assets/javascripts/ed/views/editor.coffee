@@ -198,28 +198,45 @@ class Ed.Views.Asset extends Ed.View
   onRender: () =>
     @$el.attr "contenteditable", false
     @stickit() if @model
+    @addPicker()
+    @listenToPicker()
+    @addRemover()
+    @listenToRemover()
+    @addStyler()
+    @listenToStyler()
+    @addProgress()
 
+  addPicker: =>
     if picker_view_class = @getOption('pickerView')
       @_picker = new picker_view_class
       @_picker.$el.appendTo @ui.buttons
       @_picker.render()
-      @_picker.on "select", @setModel
-      @_picker.on "create", @savedModel
 
+  listenToPicker: =>
+    @_picker?.on "select", @setModel
+    @_picker?.on "create", @savedModel
+
+  addRemover: =>
     @_remover = new Ed.Views.AssetRemover
       model: @model
-    @_remover.on "remove", @remove
     @_remover.$el.appendTo @ui.buttons
     @_remover.render()
+  
+  listenToRemover: =>
+    @_remover.on "remove", @remove
 
+  addStyler: =>
     if _ed.getOption('asset_styles')
       if styler_view_class = @getOption('stylerView')
         @_styler = new styler_view_class
           model: @model
         @_styler.$el.appendTo @ui.buttons
         @_styler.render()
-        @_styler.on "styled", @setStyle
 
+  listenToStyler: =>
+    @_styler?.on "styled", @setStyle
+
+  addProgress: =>
     @_progress = new Ed.Views.ProgressBar
       model: @model
       size: 100
@@ -314,7 +331,6 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 
   setModel: (image) =>
     @log "setModel", image
-    @ui.prompt.hide()
     @bindImage(image)
     @model.set "image", image, stickitChange: true
     @_progress?.setModel(image)
@@ -322,6 +338,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 
   bindImage: (image) =>
     if @image
+      @log "removing image"
       @unstickit @image
     if image
       @image = image
@@ -331,6 +348,19 @@ class Ed.Views.MainImage extends Ed.Views.Asset
           observe: "url"
           onGet: "backgroundAtSize"
         ]
+      @ui.overlay.show()
+      @ui.prompt.hide()
+      @_remover.show()
+    else
+      @log "clearing background"
+      @$el.css
+        'background-image': ''
+      @ui.prompt.show()
+      @ui.overlay.hide()
+      @_remover.hide()
+
+  remove: () =>
+    @setModel null
 
 
 class Ed.Views.Image extends Ed.Views.Asset

@@ -364,12 +364,14 @@ class Ed.Views.AssetRemover extends Backbone.Marionette.View
   ui:
     deleter: "a.delete"
 
-  events:
-    "click @ui.deleter": "removeAsset"
+  triggers:
+    "click @ui.deleter": "remove"
 
-  removeAsset: () => 
-    @trigger "remove"
+  show: =>
+    @$el.show()
 
+  hide: =>
+    @$el.hide()
 
 class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
   template: "assets/image_picker"
