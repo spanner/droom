@@ -125,11 +125,11 @@ class Ed.Models.Editable extends Ed.Model
   setImageId: (model, image, options) =>
     if image
       if image.id
-        @set 'image_id', image.id
+        @set 'main_image_id', image.id
       else
         image.once 'sync', => @setImageId(self, image)
     else
-      @set 'image_id', null
+      @set 'main_image_id', null
 
   setSlug: () =>
     title = @get('title')

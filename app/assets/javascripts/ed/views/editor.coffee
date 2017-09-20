@@ -23,7 +23,7 @@ class Ed.Views.Editor extends Ed.View
       observe: "slug"
       updateModel: false
     '[data-ed="image"]':
-      observe: "image_id"
+      observe: "main_image_id"
       updateModel: false
     '[data-ed="content"]':
       observe: "content"
@@ -50,12 +50,13 @@ class Ed.Views.Editor extends Ed.View
         model: @model
 
   cleanContent: (content, model) =>
-    wrapper = $('<div />').html(content)
+    wrapper = $('<div />').html(content.trim())
     wrapper.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
     wrapper.find('[data-placeholder]').removeAttr('data-placeholder')
     wrapper.find('.ed-buttons').remove()
     wrapper.find('.ed-progress').remove()
     wrapper.find('.ed-action').remove()
+    wrapper.find('.ed-dropmask').remove()
     wrapper.html()
 
 
@@ -177,7 +178,7 @@ class Ed.Views.Asset extends Ed.View
 
   ui:
     buttons: ".ed-buttons"
-    catcher: ".dropmask"
+    catcher: ".ed-dropmask"
     prompt: ".prompt"
     overlay: ".darken"
 
@@ -332,7 +333,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   setModel: (image) =>
     @log "setModel", image
     @bindImage(image)
-    @model.set "image", image, stickitChange: true
+    @model.set "main_image", image, stickitChange: true
     @_progress?.setModel(image)
     @stickit()
 

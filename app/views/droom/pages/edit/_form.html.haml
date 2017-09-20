@@ -1,4 +1,4 @@
-- image_url = @page.image.url(:hero) if @page.image
+- image_url = @page.main_image.url(:hero) if @page.main_image
 
 = form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
   #form_controls
@@ -12,8 +12,8 @@
 
   #page_editor
     #page_masthead
-      = f.hidden_field :image_id, data: {ed: "image"}
-      .bg.ed-image{style: "background-image: url('#{image_url}')", data: {image: @page.image_id, placeholder: "Click or drop here to add your main image"}}
+      = f.hidden_field :main_image_id, data: {ed: "image"}
+      .bg.ed-image{style: "background-image: url('#{image_url}')", data: {image: @page.main_image_id, placeholder: "Click or drop here to add your main image"}}
         .ed-buttons
       .darken.darker
       .fg
