@@ -293,13 +293,11 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
   ui:
     head: ".menu-head"
     body: ".menu-body"
-    deleter: "a.delete"
     label: "label"
     filefield: 'input[type="file"]'
 
   events:
     "click @ui.head": "toggleMenu"
-    "click @ui.deleter": "removeAsset"
     "click @ui.filefield": "containEvent" # always artificial
 
   onRender: =>
@@ -352,15 +350,25 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
         @createModel reader.result, file
       reader.readAsDataURL(file)
 
-  removeAsset: () => 
-    @trigger "remove"
-
   setWeighting: (e) =>
     e?.preventDefault()
 
   containEvent: (e) =>
     e?.stopPropagation()
 
+
+class Ed.Views.AssetRemover extends Backbone.Marionette.View
+  template: "assets/remover"
+  className: "remover"
+
+  ui:
+    deleter: "a.delete"
+
+  events:
+    "click @ui.deleter": "removeAsset"
+
+  removeAsset: () => 
+    @trigger "remove"
 
 
 class Ed.Views.ImagePicker extends Ed.Views.AssetPicker

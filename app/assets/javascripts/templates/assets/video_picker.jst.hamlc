@@ -8,7 +8,3 @@
     %svg.icon.filled
       %use{"xlink:href" => "#reuse_symbol"}
   .assets.menu-body.wide
-
-%a.control.delete
-  %svg.icon.filled
-    %use{"xlink:href" => "#delete_symbol"}

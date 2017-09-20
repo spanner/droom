@@ -12,17 +12,20 @@ root.Ed = Ed
 # manage its html content.
 
 class Ed.Application extends Backbone.Marionette.Application
+  defaults:
+    asset_styles: ['left', 'full', 'right']
 
-  initialize: (options={}) ->
+  initialize: (opts={}) ->
     root._ed = @
     root.onerror = @reportError
     @original_backbone_sync = Backbone.sync
     Backbone.sync = @sync
     Backbone.Marionette.Renderer.render = @render
 
-    @el = options.el
+    @options = _.extend @defaults, opts
+    @el = @options.el
     @_loaded = $.Deferred()
-    @_config = new Ed.Config options.config
+    @_config = new Ed.Config @options.config
     @images = new Ed.Collections.Images
     @videos = new Ed.Collections.Videos
     @notices = new Ed.Collections.Notices
@@ -51,6 +54,9 @@ class Ed.Application extends Backbone.Marionette.Application
 
   withAssets: (fn) =>
     @_loaded.done fn
+
+  getOption: (key) =>
+    @options[key]
 
   ## Backbone overrides
   # Override sync to add a progress listener to every save

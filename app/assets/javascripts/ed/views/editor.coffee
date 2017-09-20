@@ -179,6 +179,7 @@ class Ed.Views.Asset extends Ed.View
     buttons: ".ed-buttons"
     catcher: ".dropmask"
     prompt: ".prompt"
+    overlay: ".darken"
 
   events:
     "dragenter": "lookAvailable"
@@ -197,23 +198,32 @@ class Ed.Views.Asset extends Ed.View
   onRender: () =>
     @$el.attr "contenteditable", false
     @stickit() if @model
+
     if picker_view_class = @getOption('pickerView')
       @_picker = new picker_view_class
       @_picker.$el.appendTo @ui.buttons
       @_picker.render()
       @_picker.on "select", @setModel
       @_picker.on "create", @savedModel
-      @_picker.on "remove", @remove
-    if styler_view_class = @getOption('stylerView')
-      @_styler = new styler_view_class
-        model: @model
-      @_styler.$el.appendTo @ui.buttons
-      @_styler.render()
-      @_styler.on "styled", @setStyle
+
+    @_remover = new Ed.Views.AssetRemover
+      model: @model
+    @_remover.on "remove", @remove
+    @_remover.$el.appendTo @ui.buttons
+    @_remover.render()
+
+    if _ed.getOption('asset_styles')
+      if styler_view_class = @getOption('stylerView')
+        @_styler = new styler_view_class
+          model: @model
+        @_styler.$el.appendTo @ui.buttons
+        @_styler.render()
+        @_styler.on "styled", @setStyle
+
     @_progress = new Ed.Views.ProgressBar
       model: @model
       size: 100
-      thickness: 10
+      thickness: 4
     @_progress.$el.appendTo @$el
     @_progress.render()
 
@@ -304,7 +314,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 
   setModel: (image) =>
     @log "setModel", image
-    @ui.prompt.hide() if @image # ie not first call
+    @ui.prompt.hide()
     @bindImage(image)
     @model.set "image", image, stickitChange: true
     @_progress?.setModel(image)
@@ -405,7 +415,6 @@ class Ed.Views.Video extends Ed.Views.Asset
 
 
 class Ed.Views.Quote extends Ed.Views.Asset
-  pickerView: Ed.Views.QuotePicker
   stylerView: Ed.Views.AssetStyler
   template: "assets/quote"
   tagName: "figure"

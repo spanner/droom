@@ -27,6 +27,7 @@ a.control, label.control
   border: 1px solid currentColor
   &:hover
     color: $mid
+    background-color: white
   input[type="file"]
     display: none
   svg
@@ -34,7 +35,7 @@ a.control, label.control
     height: 36px
     transition: transform 0.5s ease-out
   &.delete:hover
-    border-color: $red
+    color: $red
   &.choose:hover
     color: $orange
   &.add:hover
@@ -84,6 +85,8 @@ span.note
   .editor, .picker, .ed-menu
     display: inline-block
     margin-right: 2px
+    a.control, label.control
+      border: none
 
 .ed-content
   .placeholder
@@ -156,11 +159,14 @@ span.note
     top: 10px
     left: 10px
     width: calc(100% - 20px)
-    .picker, .styler, .config
+    .picker, .styler, .config, .remover
       display: block
       margin: 0
     .picker
       float: left
+    .remover
+      float: right
+      margin: 0 4px
     .styler
       float: right
     .thumbnails, .select

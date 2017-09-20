@@ -19,7 +19,9 @@
 jQuery ($) ->
   document.execCommand('defaultParagraphSeparator', false, 'p')
 
-  $.fn.edify = ->
-    console.log "edify", @
+  $.fn.edify = (options={}) ->
+    console.log "edify", @, options
     @each ->
-      new Ed.Application(el: @).start()
+      args = _.extend options,
+        el: @
+      new Ed.Application(args).start()
