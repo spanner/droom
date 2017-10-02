@@ -19,16 +19,17 @@ jQuery ($) ->
   $.fn.popup = () ->
     @each ->
       new Popup(@)
-          
+
   class Popup
     constructor: (element) ->
       @_link = $(element)
       @_iteration = 0
-      @_affected = @_link.attr('data-affected')
-      @_replaced = @_link.attr('data-replaced')
-      @_aftered = @_link.attr('data-appended')
-      @_befored = @_link.attr('data-prepended')
-      @_reporter = @_link.attr('data-reporter')
+      @_affected = @_link.data('affected')
+      @_replaced = @_link.data('replaced')
+      @_aftered = @_link.data('appended')
+      @_befored = @_link.data('prepended')
+      @_reporter = @_link.data('reporter')
+      @_style = @_link.data('style')
       @_link.remote
         on_request: @begin
         on_success: @receive
@@ -47,11 +48,12 @@ jQuery ($) ->
           @prepare()
 
     getContainer: () =>
-      $('<div class="popup" />')
+      container = $('<div class="popup" />')
+      container.addClass(@_style) if @_style
 
     prepare: () =>
       @_mask = $('<div class="mask" />').appendTo($('body'))
-      @_container = @getContainer()
+      @_container ?= @getContainer()
       @_container.bind 'close', @reset #instead of @hide, @reset is used
       @_container.bind 'finished', @conclude
       @_container.bind 'resize', @place
@@ -227,7 +229,6 @@ jQuery ($) ->
       panel.hide() for panel in @panels
 
     constructor: (element) ->
-      console.log "panel", element
       @container = $(element)
       @id = @container.attr('data-panel')
       @links = $("a[data-panel='#{@id}']")

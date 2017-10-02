@@ -10,7 +10,7 @@ module Droom
         render action: :new
       end
     end
-        
+
     def update
       if @page.update_attributes(page_params)
         redirect_to droom.page_url(@page)
@@ -31,7 +31,7 @@ module Droom
 
     def published
       @page = Page.published.find_by(slug: params[:slug])
-      @render
+      render
     end
 
     def builtin
@@ -43,7 +43,7 @@ module Droom
   protected
 
     def page_params
-      params.require(:page).permit(:title, :slug, :image_id, :content, :publish_now)
+      params.require(:page).permit(:title, :slug, :main_image_id, :content, :publish_now)
     end
 
   end

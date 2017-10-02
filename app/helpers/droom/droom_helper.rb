@@ -89,6 +89,10 @@ module Droom
       end
     end
 
+    def help_link(slug, category=nil, title="")
+      render 'droom/helps/show/link', slug: slug, category: category, title: title
+    end
+
     def dropbox_session
       # note that we usually don't want to pick up an existing dropbox session. That happens in the dropbox_tokens_controller, when
       # following up an access token round trip, but in the view any existing session has probably expired and we're better off with a new one.

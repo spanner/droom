@@ -1,0 +1,5 @@
+- content_for :title do 
+  = @help.title
+
+- @view ||= 'popup'
+= render "droom/helps/show/#{@view}"

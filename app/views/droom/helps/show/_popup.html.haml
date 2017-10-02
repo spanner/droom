@@ -1,0 +1,21 @@
+- popup ||= nil
+- help ||= popup || @help
+
+#help
+  - if help.illustrated?
+    .header.illustrated
+      .bg{style: "background-image: url('#{help.main_image.url(:half)}')"}
+      .darken
+      .fg
+        = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+        %h3.title
+          = help.title
+  - else
+  .header
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2.titlebar
+      = help.title
+
+  .body
+    .content
+      = clean_html(help.content.presence || "<p></p>")

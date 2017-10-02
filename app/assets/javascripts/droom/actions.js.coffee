@@ -283,8 +283,6 @@ jQuery ($) ->
       else
         @_link.addClass('yes').removeClass('no')
       $(@_affected).refresh()
-      
-
 
 
 
@@ -295,7 +293,7 @@ jQuery ($) ->
   #
   # will toggle on and off the display of anything with the 'admin' class.
   #
-  $.fn.toggle = () ->
+  $.fn.toggle_visibility = () ->
     @each ->
       new Toggle(@, $(@).attr('data-affected'))
 

@@ -6,12 +6,13 @@ div.popup
   min-height: 100px
   max-height: 620px
   max-width: 1200px
-  min-width: 40%
   height: auto
   width: auto
   z-index: 6000
   background-color: $coolgrey00
   box-shadow: 1px 3px 8px #52555f
+  &.help
+    width: 360px
   .header
     position: relative
     box-sizing: border-box
@@ -77,6 +78,10 @@ div.popup
     span.prev
       background-position: 0 -160px
       margin-left: 0
+  .body
+    padding: 20px
+    p:first-child
+      margin-top: 0
 
 
 div.mask

@@ -28,6 +28,8 @@ Droom::Engine.routes.draw do
     get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
   end
 
+  resources :helps
+
   resources :pages do
     put :publish, on: :member
   end

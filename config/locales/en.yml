@@ -26,13 +26,18 @@ en:
         description: "Notes"
         private: "Confidential"
         public: "Public"
+      folder:
+        name: "Folder name"
+        slug: "Folder path"
       group:
         name: "Group name"
         description: "Notes"
         directory: "Show in directory"
-      folder:
-        name: "Folder name"
-        slug: "Folder path"
+      help:
+        title: "Title of help note"
+        category: "category (optional)"
+        slug: "Slug (usually automatic)"
+        content: "Enter help text and links here."
       organisation:
         name: "Name"
         url: "Web link"
@@ -263,6 +268,9 @@ en:
   group: "group"
   group_admin: "Directory"
   group_created: "Group '%{name}' created"
+  helps:
+    edit: "Edit help note"
+    new: "Add help note"
   invite_person: "invite a new person"
   invite_to_group: "Invite and add to group"
   calendar: "Calendar"

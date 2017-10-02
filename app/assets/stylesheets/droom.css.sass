@@ -75,11 +75,13 @@ a.reinvite
 
 a.waiting
   color: $mid
-  padding-left: 20px
+  padding-left: 23px
   background:
     image: image-url('droom/spinner.gif')
-    position: left 3px top 5px
+    position: 1px 4px
     repeat: no-repeat
+  svg
+    display: none
 
 input.dropbox.revoke[type="submit"]
   +icon_link("droom/revoke_small.png")
@@ -431,6 +433,9 @@ form.document
     width: 480px
     font-size: 1em
     height: 60px
+
+
+
 
 .image-upload
   position: relative
@@ -2195,6 +2200,7 @@ ul.checklist
 @import droom/menus
 @import droom/forms
 @import droom/organisations
+@import droom/help
 @import droom/pages
 @import droom/ed
 @import medium/base

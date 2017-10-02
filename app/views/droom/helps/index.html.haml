@@ -1,0 +1,13 @@
+#main.helps
+
+  %p.standfirst
+    = t(:helps_introduction)
+
+  = render :partial => "droom/helps/helps"
+
+  %p.admin
+    = link_to t(:new_help), droom.new_help_url
+
+
+- content_for :title do 
+  = t :helps

@@ -23,7 +23,7 @@ class Ed.Config
     trap_errors: false
 
   development:
-    logging: true
+    logging: false
     display_errors: true
     badger_errors: false
     trap_errors: false

@@ -1,0 +1,62 @@
+a.help
+  color: $mid
+  &.new
+    color: $red
+
+span.help
+  color: $pale
+  text-decoration: line-through
+
+#help_form
+  position: relative
+  width: 920px
+  margin: 40px 0 100px
+
+  #help_editor
+    position: relative
+    border: 1px solid $mid
+    clear: left
+
+#help_masthead
+  position: relative
+  width: 100%
+  padding-bottom: 50%
+  .bg
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background:
+      color: $pale
+      position: center center
+      repeat: no-repeat
+      size: cover
+  .fg
+    position: absolute
+    bottom: 18px
+    left: 36px
+    width: calc(100% - 64px)
+    #title
+      max-width: 900px
+      margin: 0 auto
+    h1
+      font-size: 2em
+      color: white
+
+form.help
+  p.slug
+    margin-top: 0
+    input
+      font-size: 1rem
+      padding: 6px
+  input.name
+    width: 100%
+    font-size: 2em
+  textarea
+    width: 100%
+    font-size: 1em
+    height: 200px
+  .buttons
+    margin-top: 1em
+

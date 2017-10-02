@@ -18,7 +18,7 @@ class Ed.Application extends Backbone.Marionette.Application
   initialize: (opts={}) ->
     root._ed = @
     root.onerror = @reportError
-    @original_backbone_sync = Backbone.sync
+    Backbone.original_sync = Backbone.sync
     Backbone.sync = @sync
     Backbone.Marionette.Renderer.render = @render
 
@@ -66,7 +66,7 @@ class Ed.Application extends Backbone.Marionette.Application
     [base_url, path].join('/')
 
   sync: (method, model, opts) =>
-    unless method is "read"
+    unless method is "read" or !model.startProgress
       original_success = opts.success
       model.startProgress("Saving")
       opts.beforeSend = (xhr, settings) ->
@@ -79,7 +79,7 @@ class Ed.Application extends Backbone.Marionette.Application
       opts.success = (data, status, request) ->
         model.finishProgress(true)
         original_success(data, status, request)
-    @original_backbone_sync method, model, opts
+    Backbone.original_sync method, model, opts
 
   # Override render (in marionette) to use our hamlcoffee templates through JST
   #
