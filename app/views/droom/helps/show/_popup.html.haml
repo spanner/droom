@@ -3,7 +3,7 @@
 
 #help
   - if help.illustrated?
-    .header.illustrated
+    .header.illustrated{data: {draggable: ".popup", remembered: "help"}}
       .bg{style: "background-image: url('#{help.main_image.url(:half)}')"}
       .darken
       .fg
@@ -11,7 +11,7 @@
         %h3.title
           = help.title
   - else
-  .header
+  .header{data: {draggable: ".popup", remembered: "help"}}
     = link_to "X", '#', :class => "closer", :data => {:action => "close"}
     %h2.titlebar
       = help.title

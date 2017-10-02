@@ -1,5 +1,5 @@
 #edit_user
-  .header
+  .header{data: {draggable: ".popup", remembered: "user"}}
     = link_to "X", '#', :class => "closer", :data => {:action => "close"}
     %h2.titlebar
       - if @user == current_user

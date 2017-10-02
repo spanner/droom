@@ -1,10 +1,19 @@
+- content_for :title do
+  = @organisation.name
+
+
 .org{id: "organisation_#{@organisation.id}"}
 
-  %h1
-    = @organisation.name
-
-  %p
-    = clean_html @organisation.description
+  - if @organisation.description?
+    %p
+      = clean_html @organisation.description
+  - else
+    %p
+      No description available.
+      - if can? :edit, @organisation
+        You can
+        = link_to "edit your organisation", droom.edit_organisation_url(@organisation), data: {action: "popup"}
+        to add one.
 
   %h2
     Network members

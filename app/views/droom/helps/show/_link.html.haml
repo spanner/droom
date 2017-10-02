@@ -3,7 +3,7 @@
 - title ||= nil
 
 - if help = Droom::Help.find_by(slug: slug, category: category)
-  = link_to droom.help_url(help), class: "help", data: {action: "popup", style: "help"} do
+  = link_to droom.help_url(help.slug), class: "help", data: {action: "popup", style: "help"} do
     %svg.prefix
       %use{"xlink:href" => "#help_symbol"}
     %span.label

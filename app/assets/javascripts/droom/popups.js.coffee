@@ -30,6 +30,7 @@ jQuery ($) ->
       @_befored = @_link.data('prepended')
       @_reporter = @_link.data('reporter')
       @_style = @_link.data('style')
+      @_masked = not @_link.data('unmasked')
       @_link.remote
         on_request: @begin
         on_success: @receive
@@ -40,6 +41,7 @@ jQuery ($) ->
           @prepare()
         when 1
           # a popup that it is still displaying the first response will just be shown again.
+          # edit: after revo changes I don't think this is true any more: popup is reset on close.
           @show()
           return false
         else
@@ -50,14 +52,17 @@ jQuery ($) ->
     getContainer: () =>
       container = $('<div class="popup" />')
       container.addClass(@_style) if @_style
+      container
 
     prepare: () =>
-      @_mask = $('<div class="mask" />').appendTo($('body'))
+      body = $('body')
+      if @_masked
+        @_mask = $('<div class="mask" />').appendTo(body)
       @_container ?= @getContainer()
       @_container.bind 'close', @reset #instead of @hide, @reset is used
       @_container.bind 'finished', @conclude
       @_container.bind 'resize', @place
-      @_container.insertAfter(@_mask).hide()
+      @_container.appendTo(body).hide()
 
     receive: (e, data) =>
       e?.stopPropagation()
@@ -73,7 +78,7 @@ jQuery ($) ->
       @_container.append(@_content)
       @_header = @_content.find('.header')
       @_content.find('form').remote
-        on_cancel: @reset # Instead of hiding, the popup is reset
+        on_cancel: @reset
         on_success: @receive
       @_content.activate()
       @show()
@@ -104,42 +109,45 @@ jQuery ($) ->
       unless @_container.is(":visible")
         @_container.fadeTo 'fast', 1, () =>
           @_container.find('[autofocus]').focus()
-        @_mask.addClass('up')
-        @_mask.bind "click", @hide
-        $('#droom').addClass('masked')
+        if @_masked
+          @_mask.addClass('up')
+          @_mask.bind "click", @hide
+          $('#droom').addClass('masked')
         $(window).bind "resize", @place
         @focus()
 
     hide: (e) =>
       e.preventDefault() if e
       @_container.fadeOut('fast')
-      @_mask.removeClass('up')
-      @_mask.unbind "click", @hide
-      $('#droom').removeClass('masked')
+      if @_masked
+        @_mask.removeClass('up')
+        @_mask.unbind "click", @hide
+        $('#droom').removeClass('masked')
       $(window).unbind "resize", @place
 
     reset: () =>
       @hide()
       @_container.remove()
-      @_mask.remove() #mask is also removed on reset
+      @_mask?.remove()
       @_iteration = 0
 
     place: (e) =>
-      width = @_container.children().first().width() || 580
-      w = $(window)
-      height_limit = w.height() - 100
-      height = [@_container.height(), height_limit].min()
-      left = parseInt((w.width() - width) / 2)
-      top = parseInt((w.height() - height - 40) / 2)  # allowing for padding
-      placement = 
-        left: left
-        top: top
-        width: width
-        "max-height": height_limit
-      if @_container.is(":visible")
-        @_container.animate placement
-      else
-        @_container.css placement
+      unless @_container.data('droom-positioned')
+        width = @_container.children().first().width() || 580
+        w = $(window)
+        height_limit = w.height() - 100
+        height = [@_container.height(), height_limit].min()
+        left = parseInt((w.width() - width) / 2)
+        top = parseInt((w.height() - height - 40) / 2)  # allowing for padding
+        placement = 
+          left: left
+          top: top
+          width: width
+          "max-height": height_limit
+        if @_container.is(":visible")
+          @_container.animate placement
+        else
+          @_container.css placement
 
     focus: () =>
       @_container.find('[autofocus]').focus()

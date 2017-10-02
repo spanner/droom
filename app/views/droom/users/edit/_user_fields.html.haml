@@ -23,6 +23,13 @@
     %span.honours>
       = f.text_field :honours, placeholder: t("placeholders.user.honours")
 
+  - if Droom.use_biogs?
+    - user.description = "<p></p>" unless user.description?
+    .description.wysihtml
+      .toolbar#t1
+        = render 'droom/shared/toolbar'
+      = f.text_area :description, placeholder: t("placeholders.user.description")
+
 .non-file-data
   .contacts
     = render "droom/users/edit/emails", f: f, user: user
@@ -36,9 +43,3 @@
         %br
         = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
 
-  - if Droom.use_biogs?
-    - user.description = "<p></p>" unless user.description?
-    .description.wysihtml
-      .toolbar#t1
-        = render 'droom/shared/toolbar'
-      = f.text_area :description

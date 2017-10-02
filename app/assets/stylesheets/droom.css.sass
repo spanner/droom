@@ -63,8 +63,6 @@ a.erratic
   animation-duration: 2s
   animation-timing-function: ease-in-out
 
-
-
 a.reinvite
   color: $blue
   font-size: 1rem
@@ -92,6 +90,13 @@ input.dropbox.revoke[type="submit"]
   line-height: 20px
   &:hover
     color: $hover
+
+input:required
+  background:
+    image: image-url("droom/required.png")
+    position: top right
+    size: 20px
+    repeat: no-repeat
 
 label
   &.required
@@ -439,9 +444,9 @@ form.document
 
 .image-upload
   position: relative
-  width: 132px
-  height: 132px
-  margin-right: 20px
+  width: 86px
+  height: 86px
+  margin-right: 10px
   float: left
   overflow: hidden
   a.remover
@@ -456,18 +461,18 @@ form.document
       image: image-url('droom/minisymbols.png')
   a.box
     display: block
-    width: 130px
-    height: 130px
+    width: 84px
+    height: 84px
     border: 1px solid $pale
     background:
       color: white
       position: center center
       repeat: no-repeat
       size: cover
-    input[type="file"]
-      position: absolute
-      top: 200px
-      left: 0
+  input[type="file"]
+    position: absolute
+    top: 200px
+    left: 0
 
 .youtube-search
   position: relative
@@ -508,29 +513,38 @@ form.user
     margin: 0
     margin-bottom: 10px
   p.names
+    position: relative
+    float: left
+    width: calc(100% - 100px)
+    +clearfix
     input[type="text"]
       width: 100%
       box-sizing: border-box
     span.title
       display: inline-block
       vertical-align: top
-      width: 64px
+      width: calc(16% - 10px)
       margin-right: 10px
     span.name
       display: inline-block
       vertical-align: top
-      width: 114px
+      width: calc(32% - 10px)
       margin-right: 10px
     span.chinese_name, span.honours
       display: inline-block
       vertical-align: top
-      width: 64px
+      width: 20%
       margin-right: 0
   .contacts
     overflow: hidden
+    margin-top: 10px
     input[type="text"], input[type="email"]
       width: 100%
       box-sizing: border-box
+    textarea
+      width: 100%
+      box-sizing: border-box
+      height: 96px
     p.email
       width: 442px
     p.phone, p.mobile
@@ -548,7 +562,7 @@ form.user
       margin-right: 10px
   div.description
     textarea
-      width: calc(100% - 20px)
+      width: 100%
   div.address_book
     clear: both
     margin-top: 24px

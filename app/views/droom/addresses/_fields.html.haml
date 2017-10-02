@@ -13,7 +13,8 @@
         %span.col.last>
           = f.select :address_type_id, Droom::AddressType.for_selection(:address)
 
-      .controls
-        = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
-        - if address.persisted?
-          = f.hidden_field :_destroy, data: {role: "destroy"}
+      - unless user.new_record?
+        .controls
+          = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
+          - if address.persisted?
+            = f.hidden_field :_destroy, data: {role: "destroy"}

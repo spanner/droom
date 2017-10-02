@@ -8,11 +8,12 @@
     %fieldset.repeating
       %p.twocol.addendum
         %span.col>
-          = f.email_field :email, :placeholder => t("placeholders.email.email"), required: true
+          = f.email_field :email, :placeholder => t("placeholders.email.email"), required: true, class: "required"
         %span.col.last>
           = f.select :address_type_id, Droom::AddressType.for_selection(:email)
 
-      .controls
-        = link_to t(:delete_symbol), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
-        - if email.persisted?
-          = f.hidden_field :_destroy, data: {role: "destroy"}
+      - unless user.new_record?
+        .controls
+          = link_to t(:delete_symbol), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
+          - if email.persisted?
+            = f.hidden_field :_destroy, data: {role: "destroy"}

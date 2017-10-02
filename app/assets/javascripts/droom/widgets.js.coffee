@@ -843,8 +843,74 @@ jQuery ($) ->
         @_direction = if parseInt(@_link.text()) > @_page_number then "right" else "left"
 
 
+  # To begin with this only works with an item that is already positioned absolutely in relation to the page.
+  #
+  $.fn.draggable = () ->
+    @each ->
+      new Draggable(@)
 
+  class Draggable
+    constructor: (element) ->
+      @_handle = $(element)
+      selector = @_handle.data('draggable')
+      if selector and selector isnt 'true' and selector isnt 'draggable'
+        @_container = @_handle.parents(selector).first()
+      @_container = @_handle unless @_container.length
+      @_remembered = @_handle.data('remembered')
+      @_handle.on "mouseenter", @lookDraggable
+      @_handle.on "dragleave", @lookNormal
+      @_handle.on "mousedown", @startDrag
+      console.log "new draggable", @_remembered
+      @recallPosition() if @_remembered
 
+    lookDraggable: (e) =>
+      @_handle.addClass('dragme')
+
+    lookNormal: (e) =>
+      @_handle.removeClass('dragme')
+
+    startDrag: (e) =>
+      @_container_start = @_container.offset()
+      @_drag_start =
+        x: e.pageX
+        y: e.pageY
+      @_handle.addClass('dragging')
+      @_container.addClass('dragging')
+      $(document)
+        .on "mousemove", @moveContainer
+        .on "mouseup", @finishDrag
+
+    moveContainer: (e) =>
+      delta =
+        x: e.pageX - @_drag_start.x
+        y: e.pageY - @_drag_start.y
+      newpos =
+        left: @_container_start.left + delta.x
+        top: @_container_start.top + delta.y
+      @_container.css newpos
+      newpos
+
+    finishDrag: (e) =>
+      final_position = @moveContainer(e)
+      $(document)
+        .off "mousemove", @moveContainer
+        .off "mouseup", @finishDrag
+      @storePosition(final_position) if @_remembered
+      @_container_start = null
+      @_drag_start = null
+      @_handle.removeClass('dragging')
+      @_container.removeClass('dragging')
+      @_container.data('droom-positioned', true)
+
+    storePosition: (position) =>
+      cookie_name = "draggable_#{@_remembered}"
+      $.cookie cookie_name, JSON.stringify(position)
+
+    recallPosition: =>
+      cookie_name = "draggable_#{@_remembered}"
+      if position = $.cookie cookie_name
+        @_container.css JSON.parse(position)
+        @_container.data('droom-positioned', true)
 
 
   #todo: make this a case of the page turner?

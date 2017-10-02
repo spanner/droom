@@ -92,6 +92,7 @@ jQuery ($) ->
     @find_including_self('li.folder').folder()
     @find_including_self('form#suggestions').suggestion_form()
     @find_including_self('.sortable_files').sortable_files()
+    @find_including_self('[data-draggable]').draggable()
 
 
     @

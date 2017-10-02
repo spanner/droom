@@ -362,6 +362,7 @@ en:
     user:
       address: "Postal address"
       chinese_name: "中国姓名"
+      description: "Brief biography or notes on role"
       dob: "Date of birth"
       email: "Email"
       family_name: "Family name"
