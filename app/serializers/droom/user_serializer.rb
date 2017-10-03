@@ -24,10 +24,6 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :unconfirmed_email,
              :password_set
 
-  def status
-    object.confirmed?
-  end
-
   def confirmed
     object.confirmed?
   end
