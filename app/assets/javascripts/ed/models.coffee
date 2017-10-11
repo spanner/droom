@@ -15,7 +15,6 @@ class Ed.Model extends Backbone.Model
     !!@get(attribute)
 
   parse: (data) =>
-    debugger unless data
     @readDates(data)
     data
 
@@ -110,7 +109,7 @@ class Ed.Models.Editable extends Ed.Model
       holder: @
     @_jobs.on "add remove reset", @setBusyness
     @on "change:title", @setSlug
-    @on 'change:image', @setImageId
+    @on 'change:main_image', @setImageId
 
   startJob: (label) =>
     job = @_jobs.add

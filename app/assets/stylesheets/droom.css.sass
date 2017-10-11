@@ -239,8 +239,6 @@ p.stretcher
   ul
     padding-left: 0
     list-style: none
-    li
-      margin-bottom: 1em
 
 .preview
   color: $mid
@@ -1827,6 +1825,22 @@ ul.people
     width: 250px
     height: 48px
     margin-bottom: 10px
+    line-height: 1.25
+    a
+      color: $dark
+      &.email
+        color: $mid
+      &.add
+        color: $green
+        span.mugshot
+          background: none
+      +hover
+    &.unconfirmed
+      a
+        color: $pale
+      span.mugshot
+        color: $pale
+        background: none
     &.refused
       opacity: 0.4
     span.mugshot
@@ -1835,6 +1849,7 @@ ul.people
       float: left
       width: 32px
       height: 32px
+      border-radius: 16px
       margin-right: 9px
       margin-top: 11px
       svg
@@ -1869,7 +1884,9 @@ ul.people
       display: block
       overflow: hidden
       span.name
+        display: inline-block
         font-size: 1em
+        margin-top: 4px
 
 .search_results
   position: relative

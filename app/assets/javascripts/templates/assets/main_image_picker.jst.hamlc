@@ -6,4 +6,4 @@
   %a.control.choose.menu-head
     %svg.icon.filled
       %use{"xlink:href" => "#reuse_symbol"}
-  .assets.menu-body.wide
+  .assets.menu-body

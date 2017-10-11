@@ -3,7 +3,7 @@ module Droom
     helper Droom::DroomHelper
     respond_to :html, :js
     layout :no_layout_if_pjax
-    before_action :set_view, only: [:show, :edit, :update]
+    before_action :set_view, only: [:show, :new, :edit, :update]
     before_action :search_users, only: [:admin]
     # before_action :self_unless_admin, only: [:edit, :update]
     load_and_authorize_resource except: [:set_password]
@@ -177,7 +177,7 @@ module Droom
     end
 
     def set_view
-      @view = params[:view] if %w{listed tabled profile preferences my_profile title contact personal account_info statuses groups biography }.include?(params[:view])
+      @view = params[:view] if %w{simple listed tabled profile preferences my_profile title contact personal account_info statuses groups biography }.include?(params[:view])
       #@view ||= 'profile'
     end
 

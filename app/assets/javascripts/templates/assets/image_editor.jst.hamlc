@@ -3,7 +3,7 @@
     %svg.icon.filled
       %use{"xlink:href" => "#cog_symbol"}
 
-  .ed-properties.menu-body.wide
+  .ed-properties.menu-body
 
     %p.caption{contenteditable: "plaintext-only", data: {placeholder: "Caption..."}}<
 

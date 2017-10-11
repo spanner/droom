@@ -1,4 +1,6 @@
 - user ||= @user
+- minimal ||= false
+
 - if user.image?
   - img = user.image.url(:thumb)
 - else
@@ -33,10 +35,14 @@
 .non-file-data
   .contacts
     = render "droom/users/edit/emails", f: f, user: user
-    = render "droom/users/edit/phones", f: f, user: user
-    = render "droom/users/edit/addresses", f: f, user: user
+    - unless minimal
+      = render "droom/users/edit/phones", f: f, user: user
+      = render "droom/users/edit/addresses", f: f, user: user
 
-  - if admin?
+  - if minimal
+    = f.hidden_field :organisation_id
+
+  - elsif admin?
     - if Droom.use_organisations?
       %p.organisation
         = f.label :organisation_id

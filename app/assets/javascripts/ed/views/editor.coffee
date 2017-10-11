@@ -189,10 +189,17 @@ class Ed.Views.Checker extends Ed.View
     present = false
     if @attribute is 'content'
       value = @model.textContent()
-      @log "words:", @attribute, value.split(/\W+/)
-      word_count = value.split(/\W+/).length
+      if value.trim() is ""
+        word_count = 0
+        @ui.counter.text ''
+      else
+        words = _.filter value.split(/\W+/), (w) -> !!w.trim()
+        @log "words", words, words.length
+        word_count = words.length
+        word_word = if word_count is 1 then " word" else " words"
+        @ui.counter.text "(You have #{word_count} #{word_word})"
+
       present = word_count > 20
-      @ui.counter.text word_count
     else
       present = value
     if present
@@ -309,6 +316,7 @@ class Ed.Views.Asset extends Ed.View
       @update()
 
   lookAvailable: (e) =>
+    @log "lookAvailable"
     e?.stopPropagation()
     @$el.addClass('droppable')
 
@@ -317,6 +325,7 @@ class Ed.Views.Asset extends Ed.View
     @$el.removeClass('droppable')
 
   dragOver: (e) =>
+    @log "dragOver"
     e?.preventDefault()
     if e.originalEvent.dataTransfer
       e.originalEvent.dataTransfer.dropEffect = 'copy'
