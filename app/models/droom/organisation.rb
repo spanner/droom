@@ -2,6 +2,7 @@ module Droom
   class Organisation < ApplicationRecord
     has_many :users
     has_many :images, through: :users
+    has_many :videos, through: :users
 
     belongs_to :organisation_type
     belongs_to :owner, :class_name => 'Droom::User'

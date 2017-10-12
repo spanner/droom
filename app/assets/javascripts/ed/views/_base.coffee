@@ -75,3 +75,26 @@ class Ed.View extends Backbone.Marionette.View
       console.log "[#{@constructor.name}]", arguments...
 
 
+class Ed.Views.MenuView extends Backbone.Marionette.View
+
+  onRender: =>
+    console.log "sticking it", @model.get('main_image_weighting')
+    @stickit() if @model
+
+  toggleMenu: =>
+    if @showing()
+      @close()
+    else
+      @open()
+
+  showing: =>
+    @$el.hasClass('open')
+
+  open: =>
+    @$el.addClass('open')
+    @ui.body.show()
+
+  close: =>
+    @_menu_view?.close()
+    @ui.body.hide()
+    @$el.removeClass('open')

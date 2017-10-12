@@ -23,16 +23,21 @@ class Ed.Views.Editor extends Ed.View
     '[data-ed="slug"]':
       observe: "slug"
       updateModel: false
-    '[data-ed="image"]':
+    '[data-ed="main_image_id"]':
       observe: "main_image_id"
+      updateModel: false
+    '[data-ed="main_image_weighting"]':
+      observe: "main_image_weighting"
       updateModel: false
     '[data-ed="content"]':
       observe: "content"
       onGet: "cleanContent"
       updateModel: false
+    '[data-ed="submit"]':
+      observe: "busy"
+      update: "disableWhenBusy"
 
   wrap: =>
-    window.model = @model = new Ed.Models.Editable
     @ui.title.each (i, el) =>
       @subviews.push new Ed.Views.Title
         el: el
@@ -56,6 +61,12 @@ class Ed.Views.Editor extends Ed.View
 
   cleanContent: (content, model) =>
     @model.cleanContent()
+
+  disableWhenBusy: ($el, busy, model, options) =>
+    if busy
+      $el.disable()
+    else
+      $el.enable()
 
 
 class Ed.Views.Title extends Ed.View
@@ -254,15 +265,19 @@ class Ed.Views.Asset extends Ed.View
   wrap: =>
     #required in subclass to extract model properties from html.
 
-  onRender: () =>
+  onRender: =>
     @$el.attr "contenteditable", false
     @stickit() if @model
+    @addHelpers()
+
+  addHelpers: =>
     @addPicker()
     @listenToPicker()
     @addRemover()
     @listenToRemover()
     @addStyler()
     @listenToStyler()
+    @addConfig()
     @addProgress()
 
   addPicker: =>
@@ -294,6 +309,13 @@ class Ed.Views.Asset extends Ed.View
 
   listenToStyler: =>
     @_styler?.on "styled", @setStyle
+
+  addConfig: =>
+    if config_view_class = @getOption('configView')
+      @_config = new config_view_class
+        model: @model
+      @_config.$el.appendTo @ui.buttons
+      @_config.render()
 
   addProgress: =>
     @_progress = new Ed.Views.ProgressBar
@@ -381,14 +403,19 @@ class Ed.Views.Asset extends Ed.View
 
 class Ed.Views.MainImage extends Ed.Views.Asset
   pickerView: Ed.Views.MainImagePicker
+  configView: Ed.Views.ImageWeighter
   template: false
   defaultSize: "hero"
 
   wrap: =>
     @$el.addClass 'editing'
+    if weighting = @$el.css('background-position')
+      @model.set 'main_image_weighting', weighting.replace(/50%/g, 'center').replace(/100%/g, 'bottom').replace(/0%/g, 'top')
     if image_id = @$el.data('image')
       _ed.withAssets =>
         @setModel _ed.images.get(image_id)
+    @model.on "change:main_image_weighting", @setWeighting
+    window.mim = @model
 
   setModel: (image) =>
     @log "setModel", image
@@ -419,6 +446,13 @@ class Ed.Views.MainImage extends Ed.Views.Asset
       @ui.prompt.show()
       @ui.overlay.hide()
       @_remover.hide()
+
+  # not a simple binding because weighting here is a property of the Editable, not of the image
+  setWeighting: (model, weighting) =>
+    if weighting
+      @$el.css('background-position', weighting)
+    else
+      @$el.css('background-position', '')
 
   remove: () =>
     @setModel null
@@ -454,7 +488,7 @@ class Ed.Views.Image extends Ed.Views.Asset
     if image_id = @$el.data('image')
       _ed.withAssets =>
         @setModel _ed.images.get(image_id) ? new Ed.Models.Image
-    else 
+    else
       @model = new Ed.Models.Image
 
   saveImage: (e) =>
@@ -560,6 +594,7 @@ class Ed.Views.Button extends Ed.Views.Asset
   ui:
     buttons: ".ed-buttons"
     label: "span.label"
+    url: "span.url"
 
   bindings:
     ":el":
@@ -567,6 +602,9 @@ class Ed.Views.Button extends Ed.Views.Asset
         name: "class"
         observe: "label"
         onGet: "classFromLength"
+      ,
+        name: "href"
+        observe: "url"
       ]
     "span.label":
       observe: "label"

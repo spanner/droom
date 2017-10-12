@@ -181,10 +181,6 @@ module Droom
     belongs_to :organisation
     has_many :organisations, :foreign_key => :owner_id
 
-    # def images
-    #   organisation.images if organisation
-    # end
-
     ## Group memberships
     #
     has_many :memberships, :dependent => :destroy

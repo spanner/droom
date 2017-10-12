@@ -180,6 +180,7 @@ class Ed.Views.AssetInserter extends Ed.View
     "click a.image": "addImage"
     "click a.video": "addVideo"
     "click a.quote": "addQuote"
+    "click a.button": "addButton"
 
   onRender: () =>
     @_p = null
@@ -223,6 +224,10 @@ class Ed.Views.AssetInserter extends Ed.View
   addQuote: () =>
     @insert new Ed.Views.Quote
       model: new Ed.Models.Quote
+
+  addButton: () =>
+    @insert new Ed.Views.Button
+      model: new Ed.Models.Button
 
   insert: (view) =>
     if @_p
@@ -285,12 +290,31 @@ class Ed.Views.AssetStyler extends Ed.View
   setWide: => @trigger "styled", "wide"
 
 
+class Ed.Views.ImageWeighter extends Ed.Views.MenuView
+  tagName: "div"
+  className: "weighter"
+  template: "assets/weighter"
+
+  ui:
+    head: ".menu-head"
+    body: ".menu-body"
+
+  events:
+    "click @ui.head": "toggleMenu"
+
+  bindings: 
+    "input.weight": "main_image_weighting"
+
+
+
+
 ## Asset-pickers
 #
 # These menus are embedded in the asset view. They select from an asset collection to
 # set the model in the asset view, with the option to upload or import new items.
 #
-class Ed.Views.AssetPicker extends Backbone.Marionette.View
+
+class Ed.Views.AssetPicker extends Ed.Views.MenuView
   tagName: "div"
   className: "picker"
   menuView: Ed.Views.AssetsList
@@ -309,16 +333,8 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
     @ui.label.on "click", @close
     @ui.filefield.on 'change', @getPickedFile
 
-  toggleMenu: =>
-    if @showing()
-      @close()
-    else
-      @open()
-
-  showing: =>
-    @$el.hasClass('open')
-
   open: =>
+    @ui.body.show()
     unless @_menu_view
       @_menu_view = new Ed.Views.AssetsList
         collection: @collection
@@ -328,12 +344,6 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
       @_menu_view.on "select", @select
     @_menu_view.open()
     @$el.addClass('open')
-    @$el.parents('.slide, figure').addClass('hold')
-
-  close: =>
-    @_menu_view?.close()
-    @$el.removeClass('open')
-    @$el.parents('.slide, figure').removeClass('hold')
 
   # passed through again to reach the Asset view.
   select: (model) =>
@@ -354,9 +364,6 @@ class Ed.Views.AssetPicker extends Backbone.Marionette.View
       reader.onloadend = => 
         @createModel reader.result, file
       reader.readAsDataURL(file)
-
-  setWeighting: (e) =>
-    e?.preventDefault()
 
   containEvent: (e) =>
     e?.stopPropagation()

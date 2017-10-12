@@ -23,10 +23,10 @@ a.control, label.control
   margin-bottom: 8px
   cursor: pointer
   overflow: hidden
-  color: $pale
+  color: $blue
   border: 1px solid currentColor
   &:hover
-    color: $mid
+    color: $dark
     background-color: white
   input[type="file"]
     display: none
@@ -34,8 +34,10 @@ a.control, label.control
     width: 36px
     height: 36px
     transition: transform 0.5s ease-out
-  &.delete:hover
+  &.delete
     color: $red
+    &:hover
+      color: $reddish
   &.choose:hover
     color: $orange
   &.add:hover
@@ -95,6 +97,19 @@ span.note
 
 .ed-image, .editing figure
   cursor: pointer
+  position: relative
+  width: 100%
+  height: 100%
+  display: flex
+  align-items: flex-start
+  justify-content: center
+  transition: background-position 0.5s ease-in-out
+  background:
+    repeat: no-repeat
+    position: center bottom
+    size: cover
+  p
+    color: $pale
   .ed-dropmask
     position: absolute
     top: 0
@@ -102,7 +117,7 @@ span.note
     width: 100%
     height: 100%
     display: flex
-    align-items: flex-start
+    align-items: center
     justify-content: center
     p
       color: white
@@ -115,10 +130,16 @@ span.note
       background-color: $green
       mix-blend-mode: difference
 
+.ed-image
+  background:
+    color: $dark
+  a.control, label.control
+    box-shadow: 0 0 6px $shadow
+  
 .editing
   & > p:empty:before
     content: "\2060"  // forces display of empty node
-  figure, .bl
+  figure, div.bl
     position: relative
     min-height: 48px
     margin: 0 -20px
@@ -158,7 +179,7 @@ span.note
     top: 10px
     left: 10px
     width: calc(100% - 20px)
-    .picker, .styler, .config, .remover
+    .picker, .styler, .config, .weighter, .remover
       display: block
       margin: 0
     .picker
@@ -166,7 +187,7 @@ span.note
     .remover
       float: right
       margin: 0 4px
-    .styler
+    .styler, .weighter
       float: right
     .thumbnails, .select
       display: inline-block
@@ -174,6 +195,15 @@ span.note
   &:hover, &.hold
     .ed-buttons
       display: block
+  > p:before
+    content: "❡ "
+    color: $verypale
+    font-size: 0.7rem
+    display: inline-block
+    float: left
+    width: 12px
+    margin-left: -12px
+    margin-top: 5px
   .bl
     transition:
       properties: width height
@@ -214,7 +244,7 @@ span.note
     &:hover
       color: $green
   &.showing
-    width: 200px
+    width: 250px
     a.control.show
       svg
         transform: rotate(45deg)
@@ -223,7 +253,7 @@ span.note
   .ed-buttons
     position: relative
     display: block
-    width: 200px
+    width: 250px
     a.control
       width: 36px
       height: 36px
@@ -247,6 +277,11 @@ span.note
     pointer-events: auto
     box-shadow: 0 3px 4px $shadow
     border-radius: 4px
+    .weighter &
+      right: 32px
+      left: auto
+      width: 72px
+      height: 72px
 
 .open
   .ed-menu
@@ -359,18 +394,12 @@ ul.ed-assets
       float: left
       display: inline-block
       vertical-align: top
-  .pinner
-    position: absolute
-    bottom: 10px
-    right: 10px
 
 .pinner
+  margin: 16px
+  width: 40px
   span.label
-    float: left
-    display: inline-block
-    vertical-align: top
-    line-height: 1
-    margin-right: 10px
+    display: block
   .sectors
     position: relative
     float: right
@@ -389,7 +418,6 @@ ul.ed-assets
         display: block
         width: 12px
         height: 12px
-        border-radius: 10px
         &:hover
           backround-color: $mid
         &.tl

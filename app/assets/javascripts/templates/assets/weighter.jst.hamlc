@@ -1,0 +1,35 @@
+.ed-menu
+  %a.control.properties.menu-head
+    %svg.icon.filled
+      %use{"xlink:href" => "#cog_symbol"}
+
+  .ed-properties.menu-body
+    .pinner
+      .sectors<
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "top left"}
+          %span.tl
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "top center"}
+          %span.tc
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "top right"}
+          %span.tr
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "center left"}
+          %span.ml
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "center center"}
+          %span.mc
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "center right"}
+          %span.mr
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "bottom left"}
+          %span.bl
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "bottom center"}
+          %span.bc
+        %label.sector>
+          %input.weight{type: "radio", name: "weighting", value: "bottom right"}
+          %span.br

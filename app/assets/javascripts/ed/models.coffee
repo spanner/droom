@@ -73,8 +73,8 @@ class Ed.Model extends Backbone.Model
     @set("progress", 0.00)
     @set("progressing", true)
     @set("progress_label", label)
-    if _ed.page
-      @_job = _ed.page.startJob "#{label} #{@constructor.name}"
+    if _ed.model
+      @_job = _ed.model.startJob "#{label} #{@constructor.name}"
     else
       @_job = new Ed.Models.Job "#{label} #{@constructor.name}"
 
@@ -172,7 +172,7 @@ class Ed.Models.Editable extends Ed.Model
 # are uploaded on the side during editing.
 #
 class Ed.Models.Image extends Ed.Model
-  savedAttributes: ["file", "file_name", "remote_url", "caption", "weighting"]
+  savedAttributes: ["file", "file_name", "remote_url", "caption"]
   defaults:
     url: ""
     hero_url: ""
