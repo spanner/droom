@@ -106,19 +106,22 @@ class Ed.Models.Editable extends Ed.Model
 
   build: =>
     @_jobs = new Ed.Collections.Jobs
-      holder: @
     @_jobs.on "add remove reset", @setBusyness
     @on "change:title", @setSlug
     @on 'change:main_image', @setImageId
 
   startJob: (label) =>
+    console.log "JOB STARTING"
     job = @_jobs.add
       label: label
+    window.job = job
     job.on "finished", =>
+      console.log "JOB DONE"
       @_jobs.remove(job)
     job
 
   setBusyness: () =>
+    console.log "setBusyness", @_jobs.length
     @set 'busy', !!@_jobs.length
 
   setImageId: (model, image, options) =>
