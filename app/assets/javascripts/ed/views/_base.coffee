@@ -78,7 +78,6 @@ class Ed.View extends Backbone.Marionette.View
 class Ed.Views.MenuView extends Backbone.Marionette.View
 
   onRender: =>
-    console.log "sticking it", @model.get('main_image_weighting')
     @stickit() if @model
 
   toggleMenu: =>

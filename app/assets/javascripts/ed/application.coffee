@@ -37,8 +37,8 @@ class Ed.Application extends Backbone.Marionette.Application
   ## Prepare UI
   #
   initUI: (fn) =>
-    @loadAssets()
     @model = new Ed.Models.Editable
+    @loadAssets()
     @_editor = new Ed.Views.Editor
       model: @model
       el: @el

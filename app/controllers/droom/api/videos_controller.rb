@@ -4,7 +4,8 @@ module Droom::Api
   class VideosController < Droom::Api::ApiAssetsController
 
     before_action :get_videos, only: [:index]
-    load_and_authorize_resource class: "Droom::Video", via: :current_user
+    before_action :build_user_video, only: [:new, :create]
+    load_and_authorize_resource class: "Droom::Video", except: [:index, :new, :create]
 
     def index
       render json: ActiveModel::Serializer::CollectionSerializer.new(@videos, serializer: Droom::VideoSerializer)
@@ -23,7 +24,6 @@ module Droom::Api
     end
 
     def create
-      @video.user = current_user
       if @video.save
         return_video
       else
@@ -51,10 +51,17 @@ module Droom::Api
     def get_videos
       if current_user.admin?
         @videos = Droom::Video.order(created_at: :desc)
+      elsif current_user.organisation
+        @videos = paginated(current_user.organisation.videos.order(created_at: :desc))
       else
         @videos = paginated(current_user.videos.order(created_at: :desc))
       end
     end
+
+    def build_user_video
+      @video = Droom::Video.new video_params.merge(user: current_user, organisation: current_user.organisation)
+    end
+
 
     def video_params
       params.require(:video).permit(:file, :file_name, :remote_url, :caption)

@@ -220,7 +220,6 @@ class Ed.Views.Checker extends Ed.View
         @ui.counter.text ''
       else
         words = _.filter value.split(/\W+/), (w) -> !!w.trim()
-        @log "words", words, words.length
         word_count = words.length
         word_word = if word_count is 1 then " word" else " words"
         @ui.counter.text "(You have #{word_count} #{word_word})"
@@ -234,7 +233,6 @@ class Ed.Views.Checker extends Ed.View
       $el.removeClass('present').addClass('missing')
 
   checkSymbol: (value) =>
-    @log "checkSymbol", !!value
     if value then "#tick_symbol" else "#cross_symbol"
 
 
@@ -397,7 +395,7 @@ class Ed.Views.Asset extends Ed.View
     if url
       style += "background-image: url('#{@urlAtSize(url)}')"
       if weighting
-        style += "; background-position: #{weighting}')"
+        style += "; background-position: #{weighting}"
     style
 
 
@@ -410,15 +408,16 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   wrap: =>
     @$el.addClass 'editing'
     if weighting = @$el.css('background-position')
-      @model.set 'main_image_weighting', weighting.replace(/50%/g, 'center').replace(/100%/g, 'bottom').replace(/0%/g, 'top')
+      named_weighting = weighting.replace(/^100%/g, 'right').replace(/^50%/g, 'center').replace(/^0%*/g, 'left').replace(/100%$/g, 'bottom').replace(/50%$/g, 'center').replace(/0%*$/g, 'top')
+      @log "MainImage got weighting", weighting, named_weighting
+      @model.set 'main_image_weighting', named_weighting
     if image_id = @$el.data('image')
       _ed.withAssets =>
         @setModel _ed.images.get(image_id)
     @model.on "change:main_image_weighting", @setWeighting
-    window.mim = @model
+    @setWeighting(@model, @model.get('main_image_weighting'))
 
   setModel: (image) =>
-    @log "setModel", image
     @bindImage(image)
     @model.set "main_image", image, stickitChange: true
     @_progress?.setModel(image)
@@ -426,7 +425,6 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 
   bindImage: (image) =>
     if @image
-      @log "removing image"
       @unstickit @image
     if image
       @image = image
@@ -434,13 +432,12 @@ class Ed.Views.MainImage extends Ed.Views.Asset
         attributes: [
           name: "style"
           observe: "url"
-          onGet: "backgroundAtSize"
+          onGet: "backgroundAtSizeAndPosition"
         ]
       @ui.overlay.show()
       @ui.prompt.hide()
       @_remover.show()
     else
-      @log "clearing background"
       @$el.css
         'background-image': ''
       @ui.prompt.show()
@@ -448,11 +445,23 @@ class Ed.Views.MainImage extends Ed.Views.Asset
       @_remover.hide()
 
   # not a simple binding because weighting here is a property of the Editable, not of the image
+  # but we can only bind the whole style property 
   setWeighting: (model, weighting) =>
+    @log "setWeighting", weighting, @el
     if weighting
-      @$el.css('background-position', weighting)
+      @$el.css
+        'background-position': weighting
     else
       @$el.css('background-position', '')
+
+  backgroundAtSizeAndPosition: (url) =>
+    style = ""
+    if url
+      style += "background-image: url('#{@urlAtSize(url)}')"
+      if weighting = @model.get('main_image_weighting')
+        style += "; background-position: #{weighting}"
+    style
+
 
   remove: () =>
     @setModel null
