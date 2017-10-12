@@ -155,18 +155,19 @@ jQuery ($) ->
   $.fn.reinviter = ->
     @each ->
       $el = $(@)
-      $el.on 'ajax:beforeSend', (xhr) ->
-        $el.addClass('waiting')
-      $el.on 'ajax:success', (data, status, xhr) ->
-        $el.removeClass('waiting')
-        $el.addClass('confirmed')
-        $el.find('svg use').attr('xlink:href', '#tick_symbol')
-        if confirmation = $el.data('confirmation')
-          $el.find('span.label').text(confirmation )
-      $el.on 'ajax:error', (xhr, status, error) ->
-        $el.removeClass('waiting')
-        $el.addClass('erratic')
-        $el.find('span.label').text(error)
+      $el.data 'method', 'put'
+      $el.remote
+        on_request: () =>
+          $el.addClass('waiting')
+        on_success: (e, r) =>
+          $el.removeClass('waiting').addClass('reinvited')
+          $el.find('svg use').attr('xlink:href', '#tick_symbol')
+          if confirmation = $el.data('confirmation')
+            $el.find('span.label').text(confirmation )
+        on_error: (xhr, status, error) ->
+          $el.removeClass('waiting')
+          $el.addClass('erratic')
+          $el.find('span.label').text(error)
 
 
   # The submitter is a self-disabling submit button that can only be clicked once.

@@ -109,18 +109,32 @@ class Ed.Views.Content extends Ed.View
     @ui.content.find('a.button').each (i, el) =>
       @subviews.push new Ed.Views.Button
         el: el
+    @ui.placeholder.click =>
+      @ui.placeholder.hide()
+      @ui.content.show().focus()
 
   showPlaceholderIfEmpty: =>
     if @ui.content.text().trim()
-      @ui.placeholder.hide()
-      @ui.content.show()
+      @hidePlaceholder()
     else
-      @ui.content.hide()
-      @_inserter?.hide()
-      @ui.placeholder.show()
-      @ui.placeholder.click =>
-        @ui.placeholder.hide()
-        @ui.content.show().focus()
+      @showPlaceholderSoon()
+
+  hidePlaceholder: =>
+    @ui.placeholder.hide()
+    @ui.content.show()
+
+  showPlaceholder: =>
+    @ui.content.hide()
+    @_inserter?.hide()
+    @ui.placeholder.show()
+
+  showPlaceholderSoon: =>
+    @dontShowPlaceholder()
+    @_placeholdershower = window.setTimeout @showPlaceholder, 500
+
+  dontShowPlaceholder: =>
+    if @_placeholdershower
+      window.clearTimeout @_placeholdershower 
 
   onRender: =>
     @stickit()
@@ -128,6 +142,7 @@ class Ed.Views.Content extends Ed.View
     @_inserter = new Ed.Views.AssetInserter
     @_inserter.render()
     @_inserter.attendTo(@ui.content)
+    @_inserter.on 'expand', @dontShowPlaceholder
 
     @_toolbar = new MediumEditor @ui.content,
       placeholder: false

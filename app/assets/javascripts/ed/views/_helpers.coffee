@@ -198,14 +198,19 @@ class Ed.Views.AssetInserter extends Ed.View
       range = selection.getRangeAt(0)
       current = $(range.commonAncestorContainer)
     @_p = current.closest('p')
-    if @_p.length and @isBlank(@_p.text())
+    if @_p.length and @isBlank(@_p.text()) and not @_p.is(':first-child')
       @show(@_p)
     else
       @hide()
 
   toggleButtons: (e) =>
     e?.preventDefault()
-    if @$el.hasClass('showing') then @$el.removeClass('showing') else @$el.addClass('showing')
+    if @$el.hasClass('showing')
+      @trigger 'contract'
+      @$el.removeClass('showing')
+    else
+      @trigger 'expand'
+      @$el.addClass('showing')
 
   addImage: () =>
     @insert new Ed.Views.Image

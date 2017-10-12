@@ -34,6 +34,7 @@ module Droom
       render
     end
 
+    #todo: check for renderable page if no authored page is found.
     def builtin
       if page_key = params[:page]
         render template: "pages/#{page_key}", layout: "page"

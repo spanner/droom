@@ -65,9 +65,6 @@ a.erratic
 
 a.reinvite
   color: $blue
-  font-size: 1rem
-  float: right
-  padding-left: 20px
   &.confirmed
     color: $green
 
@@ -1838,6 +1835,12 @@ ul.people
     &.unconfirmed
       a
         color: $pale
+        &.reinvite
+          color: $blue
+          &.reinvited
+            color: $green
+          &.erratic
+            color: $red
       span.mugshot
         color: $pale
         background: none
