@@ -176,11 +176,14 @@ module Droom
     has_many :images
     has_many :videos
 
-
     ## Organisation affiliation
     #
     belongs_to :organisation
     has_many :organisations, :foreign_key => :owner_id
+
+    # def images
+    #   organisation.images if organisation
+    # end
 
     ## Group memberships
     #

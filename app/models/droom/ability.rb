@@ -43,7 +43,7 @@ module Droom
             can :read, Droom::Folder
           end
 
-          # Then other abilities are determined by permissions. Our permissions are relatively abstract and 
+          # Then other abilities are determined by permissions. Our permissions are relatively abstract and
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
           #
           if user.permitted?('droom.calendar')

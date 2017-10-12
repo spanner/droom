@@ -4,13 +4,15 @@ module Droom::Api
   class ImagesController < Droom::Api::ApiAssetsController
 
     before_action :get_images, only: [:index]
-    load_and_authorize_resource class: "Droom::Image", via: :current_user
+    before_action :build_user_image, only: [:new, :create]
+    load_and_authorize_resource class: "Droom::Image", except: [:index, :new, :create]
 
     def index
       render json: ActiveModel::Serializer::CollectionSerializer.new(@images, serializer: Droom::ImageSerializer)
     end
 
     def show
+      @image = current_user.images.find(params[:id])
       return_image
     end
 
@@ -23,7 +25,6 @@ module Droom::Api
     end
 
     def create
-      @image.user = current_user
       if @image.save
         return_image
       else
@@ -51,9 +52,15 @@ module Droom::Api
     def get_images
       if current_user.admin?
         @images = paginated(Droom::Image.order(created_at: :desc))
+      elsif current_user.organisation
+        @images = paginated(current_user.organisation.images.order(created_at: :desc))
       else
         @images = paginated(current_user.images.order(created_at: :desc))
       end
+    end
+
+    def build_user_image
+      @image = Droom::Image.new image_params.merge(user: current_user, organisation: current_user.organisation)
     end
 
     def image_params
