@@ -12,7 +12,7 @@ module Droom
 
     def create
       if @help.update_attributes(help_params)
-        redirect_to droom.help_url(@help)
+        redirect_to droom.help_url(@help.slug)
       else
         render action: :new
       end
@@ -20,7 +20,7 @@ module Droom
 
     def update
       if @help.update_attributes(help_params)
-        redirect_to droom.help_url(@help)
+        redirect_to droom.help_url(@help.slug)
       else
         render action: :edit
       end

@@ -12,7 +12,7 @@ module Droom
                         hero: ["1600x900#", :jpg],
                         full: "960x640#",
                         half: "480x320#",
-                        icon: ["48x32#", :png]
+                        icon: ["96x64#", :png]
                       },
                       convert_options: {
                         hero: "-quality 25 -strip",
