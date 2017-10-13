@@ -3,6 +3,10 @@ module Droom
     respond_to :html
     load_and_authorize_resource except: [:published]
 
+    def new
+      @page = Droom::Page.new(slug: params[:slug])
+    end
+
     def create
       if @page.update_attributes(page_params)
         redirect_to droom.page_url(@page)
@@ -29,15 +33,17 @@ module Droom
       redirect_to droom.pages_url
     end
 
+    # NB authored page can override built-in page template if it takes that slug.
+    #
     def published
-      @page = Page.published.find_by(slug: params[:slug])
-      render
-    end
-
-    #todo: check for renderable page if no authored page is found.
-    def builtin
-      if page_key = params[:page]
-        render template: "pages/#{page_key}", layout: "page"
+      if @page = Page.published.find_by(slug: params[:slug])
+        render
+      elsif lookup_context.exists?(params[:slug], 'pages', false)
+        render template: "pages/#{params[:slug]}", layout: "page"
+      elsif can?(:create, Droom::Page)
+        redirect_to droom.new_page_url(slug: params[:slug])
+      else
+        raise ActiveRecord::RecordNotFound, "No such page."
       end
     end
 

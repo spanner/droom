@@ -15,9 +15,12 @@
       = f.hidden_field :main_image_id, data: {ed: "image"}
       .bg.ed-image{style: "background-image: url('#{image_url}')", data: {image: @page.main_image_id, placeholder: "Click or drop here to add your main image"}}
         .ed-buttons
-      .darken.darker
+        .ed-dropmask
+          %p.prompt
+            Click or drop an image here
+      .darken
       .fg
-        #title
+        #pagetitle
           %h1.title
             = f.hidden_field :title, data: {ed: 'title'}
             %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}

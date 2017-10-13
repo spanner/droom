@@ -137,8 +137,6 @@ span.note
     box-shadow: 0 0 6px $shadow
   
 .editing
-  & > p:empty:before
-    content: "\2060"  // forces display of empty node
   figure, div.bl
     position: relative
     min-height: 48px
@@ -195,7 +193,7 @@ span.note
   &:hover, &.hold
     .ed-buttons
       display: block
-  > p:before
+  & > p:before
     content: "❡ "
     color: $verypale
     font-size: 0.7rem
