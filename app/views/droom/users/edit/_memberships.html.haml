@@ -1,19 +1,5 @@
 - user ||= @user
 
-- statuses = user.user_statuses
-- statuses_size = statuses.size - 1
-
-%div{style: 'width: 100%; margin-bottom: 15px;'}
-  = label_tag 'statuses', 'Statuses: ', class: 'important'
-  - if statuses.any?
-    - statuses.each_with_index do |r,index|
-      - if index == statuses_size
-        = label_tag "status_#{r}", r
-      - else
-        = label_tag "status_#{r}", r + ','
-  - else
-    = 'None'
-
 - if admin?
   - groups = Droom::Group.all
   - if groups.any?

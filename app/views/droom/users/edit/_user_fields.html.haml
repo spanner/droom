@@ -145,4 +145,7 @@
         %table{style: 'width: 100%'}
           %tr
             %td{colspan: 3}
+
+              = render partial: "droom/users/edit/statuses", locals: {f: f, user: user} if user.persisted?
               = render partial: "droom/users/edit/memberships", locals: {f: f, user: user}
+
