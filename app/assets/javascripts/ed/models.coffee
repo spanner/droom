@@ -139,20 +139,6 @@ class Ed.Models.Editable extends Ed.Model
     if !slug or slug is @slugify(@previous('title'))
       @set 'slug', @slugify(title)
 
-  # NO GOOD IN IE < edge :(
-  # slugify: (html) =>
-  #   if html
-  #     spaced_html = html.replace(/(&nbsp;|<br>)/g, ' ')
-  #     $('<div />').html(spaced_html).text().trim()
-  #       .normalize('NFD')
-  #       .replace(/[\u0300-\u036f]/g, '')
-  #       .replace(/&/g, '-and-')
-  #       .replace(/[\s\W-]+/g, '-')
-  #       .replace(/-$/, '')
-  #       .toLowerCase()
-  #   else
-  #     ""
-
   slugify: (html) =>
     spaced_html = html.replace(/(&nbsp;|<br>)/g, ' ')
     str = $('<div />').html(spaced_html).text().trim()
@@ -160,7 +146,7 @@ class Ed.Models.Editable extends Ed.Model
     to_chars = "aaaaaaaaceeeeeeiiiilnoooooosuuuunczz"
     regex = new RegExp('[' + from_chars.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1') + ']', 'g')
     return '' unless str
-    str = String(str).toLowerCase().replace(regex, (c) ->
+    str = String(str).toLowerCase().replace regex, (c) ->
       to_chars.charAt(from_chars.indexOf(c)) || '-'
     str.replace(/[^\w\s-]/g, '').replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase()
 
