@@ -407,17 +407,20 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 
   wrap: =>
     @$el.addClass 'editing'
+    @model = new Ed.Models.Image
+    @model.on "change:main_image_weighting", @setWeighting
+    if image_id = @$el.data('image')
+      @model.set(id, image_id)
+      # TODO: paginate in browser so that all images are available
+      # _ed.withAssets =>
+      #   @setModel _ed.images.get(image_id)
     if weighting = @$el.css('background-position')
       named_weighting = weighting.replace(/^100%/g, 'right').replace(/^50%/g, 'center').replace(/^0%*/g, 'left').replace(/100%$/g, 'bottom').replace(/50%$/g, 'center').replace(/0%*$/g, 'top')
       @log "MainImage got weighting", weighting, named_weighting
       @model.set 'main_image_weighting', named_weighting
-    if image_id = @$el.data('image')
-      _ed.withAssets =>
-        @setModel _ed.images.get(image_id)
-    @model.on "change:main_image_weighting", @setWeighting
-    @setWeighting(@model, @model.get('main_image_weighting'))
 
   setModel: (image) =>
+    @log "setModel", image
     @bindImage(image)
     @model.set "main_image", image, stickitChange: true
     @_progress?.setModel(image)

@@ -121,7 +121,6 @@ class Ed.Models.Editable extends Ed.Model
     job
 
   setBusyness: () =>
-    console.log "setBusyness", @_jobs.length
     @set 'busy', !!@_jobs.length
 
   setImageId: (model, image, options) =>
