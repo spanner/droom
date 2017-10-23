@@ -410,8 +410,8 @@ class Ed.Views.MainImage extends Ed.Views.Asset
     @model = new Ed.Models.Image
     @model.on "change:main_image_weighting", @setWeighting
     if image_id = @$el.data('image')
-      @model.set(id, image_id)
-      # TODO: paginate in browser so that all images are available
+      @model.set('id', image_id)
+      # TODO: paginate in browser so that all images are available?
       # _ed.withAssets =>
       #   @setModel _ed.images.get(image_id)
     if weighting = @$el.css('background-position')
