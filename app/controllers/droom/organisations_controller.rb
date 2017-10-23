@@ -5,6 +5,10 @@ module Droom
     helper Droom::DroomHelper
     load_and_authorize_resource
 
+    def index
+      @organisations = paginated @organisations
+    end
+
     def create
       @organisation.update_attributes(organisation_params)
       respond_with @organisation

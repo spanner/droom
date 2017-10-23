@@ -20,7 +20,6 @@
 #= require droom/widgets
 #= require droom/stream
 #= require droom/uploader
-#= require ed
 #= require_self
 
 jQuery ($) ->

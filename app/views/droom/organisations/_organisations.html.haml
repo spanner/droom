@@ -1,2 +1,5 @@
 .organisations_list{:data => {:refreshable => true, :url => "#{droom.organisations_path}.js"}}
   = render :partial => 'droom/organisations/show/listed', :collection => @organisations
+
+.pagination.lower
+  = paginate @organisations, :params => {:format => nil}
