@@ -411,13 +411,10 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   wrap: =>
     window.mi = @
     @$el.addClass 'editing'
-    @model = new Ed.Models.Image
+    @image = new Ed.Models.Image
     @model.on "change:main_image_weighting", @setWeighting
     if image_id = @$el.data('image')
-      @model.set('id', image_id)
-      # TODO: paginate in browser so that all images are available?
-      # _ed.withAssets =>
-      #   @setModel _ed.images.get(image_id)
+      @image.set('id', image_id)
     if weighting = @$el.css('background-position')
       named_weighting = weighting.replace(/^100%/g, 'right').replace(/^50%/g, 'center').replace(/^0%*/g, 'left').replace(/100%$/g, 'bottom').replace(/50%$/g, 'center').replace(/0%*$/g, 'top')
       @log "MainImage got weighting", weighting, named_weighting
@@ -426,7 +423,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   setModel: (image) =>
     @log "setModel", image
     @bindImage(image)
-    @model.set "main_image", image, stickitChange: true
+    @model.setImage(image)
     @_progress?.setModel(image)
 
   bindImage: (image) =>
@@ -474,7 +471,6 @@ class Ed.Views.MainImage extends Ed.Views.Asset
       style += "background-image: url('#{@imageUrlAtSize(url)}')"
       if weighting = @model.get('main_image_weighting')
         style += "; background-position: #{weighting}"
-    @log "backgroundAtSizeAndPosition ->", style
     style
 
   remove: () =>

@@ -101,36 +101,39 @@ class Ed.Models.Editable extends Ed.Model
   defaults: 
     title: ""
     slug: ""
-    image_id: null
+    main_image_id: null
     content: "<p></p>"
 
   build: =>
     @_jobs = new Ed.Collections.Jobs
     @_jobs.on "add remove reset", @setBusyness
     @on "change:title", @setSlug
-    @on 'change:main_image', @setImageId
 
   startJob: (label) =>
-    console.log "JOB STARTING"
     job = @_jobs.add
       label: label
     window.job = job
     job.on "finished", =>
-      console.log "JOB DONE"
       @_jobs.remove(job)
     job
 
   setBusyness: () =>
     @set 'busy', !!@_jobs.length
 
-  setImageId: (model, image, options) =>
+  setImage: (image) =>
+    console.log "setImage", image
     if image
+      @set "main_image", image
       if image.id
-        @set 'main_image_id', image.id
+        @setImageId(image)
       else
-        image.once 'sync', => @setImageId(self, image)
+        image.once 'sync', => @setImageId(image)
     else
-      @set 'main_image_id', null
+      @setImageId(null)
+
+  setImageId: (image) =>
+    console.log "setImage", image?.id
+    @set 'main_image_id', image?.id
 
   setSlug: () =>
     title = @get('title')

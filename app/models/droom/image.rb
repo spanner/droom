@@ -9,7 +9,7 @@ module Droom
                       default_url: nil,
                       preserve_files: true,
                       styles: {
-                        hero: ["1600x900#", :jpg],
+                        hero: ["1600x1600>", :jpg],
                         full: "960x640#",
                         half: "480x320#",
                         icon: ["96x64#", :png]
