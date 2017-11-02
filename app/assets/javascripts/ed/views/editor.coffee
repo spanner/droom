@@ -409,12 +409,12 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   defaultSize: "hero"
 
   wrap: =>
-    window.mi = @
     @$el.addClass 'editing'
     @image = new Ed.Models.Image
     @model.on "change:main_image_weighting", @setWeighting
     if image_id = @$el.data('image')
       @image.set('id', image_id)
+      @model.set('main_image_id', image_id)
     if weighting = @$el.css('background-position')
       named_weighting = weighting.replace(/^100%/g, 'right').replace(/^50%/g, 'center').replace(/^0%*/g, 'left').replace(/100%$/g, 'bottom').replace(/50%$/g, 'center').replace(/0%*$/g, 'top')
       @log "MainImage got weighting", weighting, named_weighting
