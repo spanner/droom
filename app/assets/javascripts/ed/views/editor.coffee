@@ -332,6 +332,9 @@ class Ed.Views.Asset extends Ed.View
     @ui.prompt.hide()
     @update()
 
+  savedModel: =>
+    @stickit()
+
   update: =>
     @$el.parent().trigger 'input'
 
@@ -406,6 +409,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   defaultSize: "hero"
 
   wrap: =>
+    window.mi = @
     @$el.addClass 'editing'
     @model = new Ed.Models.Image
     @model.on "change:main_image_weighting", @setWeighting
@@ -424,12 +428,12 @@ class Ed.Views.MainImage extends Ed.Views.Asset
     @bindImage(image)
     @model.set "main_image", image, stickitChange: true
     @_progress?.setModel(image)
-    @stickit()
 
   bindImage: (image) =>
     if @image
       @unstickit @image
     if image
+      @log "bindImage"
       @image = image
       @addBinding @image, ":el",
         attributes: [
@@ -441,14 +445,16 @@ class Ed.Views.MainImage extends Ed.Views.Asset
       @ui.prompt.hide()
       @_remover.show()
     else
+      @log "unbindImage"
       @$el.css
         'background-image': ''
       @ui.prompt.show()
       @ui.overlay.hide()
       @_remover.hide()
+    @stickit()
 
-  # not a simple binding because weighting here is a property of the Editable, not of the image
-  # but we can only bind the whole style property 
+  # not a simple binding because weighting is a property of the Editable, not of the image
+  # and we can only bind the `style` attribute as a whole.
   setWeighting: (model, weighting) =>
     @log "setWeighting", weighting, @el
     if weighting
@@ -457,14 +463,19 @@ class Ed.Views.MainImage extends Ed.Views.Asset
     else
       @$el.css('background-position', '')
 
+  # bindings for use within an asset model.
+  #
+  imageUrlAtSize: (url) =>
+    @image?.get("#{@_size}_url") ? url
+
   backgroundAtSizeAndPosition: (url) =>
     style = ""
     if url
-      style += "background-image: url('#{@urlAtSize(url)}')"
+      style += "background-image: url('#{@imageUrlAtSize(url)}')"
       if weighting = @model.get('main_image_weighting')
         style += "; background-position: #{weighting}"
+    @log "backgroundAtSizeAndPosition ->", style
     style
-
 
   remove: () =>
     @setModel null
