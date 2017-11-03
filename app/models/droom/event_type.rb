@@ -1,3 +1,5 @@
+# Event type is currenty our only source of confidentiality, which it distributes through its event-folders to their documents.
+#
 module Droom
   class EventType < ActiveRecord::Base
     include Droom::Concerns::Slugged
@@ -8,7 +10,7 @@ module Droom
     has_folder within: "Events" # here the within arguments sets the name of our parent folder
 
     before_validation :slug_from_name
-    after_save :set_folder_confidentiality
+    after_save :distribute_confidentiality
 
     default_scope -> {order(:name)}
 
@@ -31,11 +33,13 @@ module Droom
 
     protected
 
-    # This is done in a very inefficient cascading sort of way in order to trigger all the right reindexings.
+    # This is done in a cascading way so that we trigger all the right reindexings.
     # It should be a rare and special event and we prefer thorough to quick.
     #
-    def set_folder_confidentiality
-      folders.each {|folder| folder.set_confidentiality(private?) }
+    def distribute_confidentiality
+      folder.set_confidentiality!(private?)
+      # catch any event folders in the wrong place
+      folders.other_than(folder.family).each {|folder| folder.set_confidentiality!(private?) }
     end
 
   end

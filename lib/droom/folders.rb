@@ -3,9 +3,11 @@
 # name and some tree behaviours that allow us to present a filing system.
 #
 # This file defines the interface by which we declare that an object has a folder and would like to receive documents.
-# 
+#
 # It is also possible to have a loose folder: in that case it is considered public and available to everyone.
-# 
+#
+#TODO very old code! Rewrite as a Concern, or simplify away altogether?
+#
 module Droom
   module Folders
 
@@ -98,6 +100,12 @@ module Droom
       #
       def receive_document(doc)
         folder.documents << doc
+      end
+
+      # Default confidentiality can be overridden in special cases.
+      #
+      def confidential?
+        false
       end
 
     end

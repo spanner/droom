@@ -102,7 +102,7 @@ module Droom
         :id => id
       }
     end
-    
+
   protected
 
     def ensure_mailing_list_name

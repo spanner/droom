@@ -16,6 +16,8 @@ module Droom
 
     before_validation :set_properties
     before_validation :slug_from_name
+    before_create :inherit_confidentiality
+    after_save :distribute_confidentiality
 
     default_scope -> { includes(:documents) }
 
@@ -24,6 +26,7 @@ module Droom
     scope :all_public, -> { where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
     scope :not_public, -> { where("#{table_name}.public <> 1 OR #{table_name}.private = 1)") }
     scope :by_name, -> { order("#{table_name}.name ASC") }
+    scope :other_than, -> folders {where.not(id: folders.map(&:id))}
     scope :visible_to, -> user {
       if user
         select('droom_folders.*')
@@ -91,7 +94,6 @@ module Droom
     end
 
     def copy_to_dropbox(user)
-      Rails.logger.warn ">>> creating dropbox subfolder #{slug} for user #{user.name}"
       documents.each { |doc| doc.copy_to_dropbox(user) }
     end
     
@@ -114,9 +116,25 @@ module Droom
       private?
     end
 
-    def set_confidentiality(confidentiality)
-      update_column(:private, confidentiality)
-      documents.each {|document| document.set_confidentiality(confidentiality) }
+    # called from event type or parent folder when confidentiality changes
+    def set_confidentiality!(confidentiality)
+      assign_attributes private: confidentiality
+      save!
+    end
+
+    # called before_create
+    def inherit_confidentiality
+      if holder
+        write_attribute :private, holder.confidential?
+      elsif parent
+        write_attribute :private, parent.confidential?
+      end
+    end
+
+    # called after_save, including after set_confidentiality!
+    def distribute_confidentiality
+      documents.each {|document| document.set_confidentiality!(confidential?) }
+      children.each {|folder| folder.set_confidentiality!(confidential?) }
     end
 
   protected
