@@ -16,7 +16,7 @@ module Droom
 
     before_validation :set_properties
     before_validation :slug_from_name
-    
+
     default_scope -> { includes(:documents) }
 
     scope :all_private, -> { where("#{table_name}.private = 1") }
@@ -48,13 +48,13 @@ module Droom
       return true
     end
 
-    # A root folder is created automatically for each class that has_folders,
+    # A root folder is created automatically for each class that has_folder,
     # the first time something in that class asks for its folder.
     # scope :roots, where('droom_folders.holder_type IS NULL AND droom_folders.parent_id IS NULL')
-
+    #
     scope :loose, -> { where('parent_id IS NULL') }
     scope :latest, -> limit { order("updated_at DESC, created_at DESC").limit(limit) }
-    scope :populated, -> { 
+    scope :populated, -> {
       select('droom_folders.*')
         .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id LEFT OUTER JOIN droom_folders AS df ON droom_folders.id = df.parent_id')
         .having('count(dd.id) > 0 OR count(df.id) > 0')
@@ -111,11 +111,12 @@ module Droom
     end
 
     def confidential?
-      confidential = private?
-      if et = get_event_type
-        confidential ||= et.confidential?
-      end
-      confidential
+      private?
+    end
+
+    def set_confidentiality(confidentiality)
+      update_column(:private, confidentiality)
+      documents.each {|document| document.set_confidentiality(confidentiality) }
     end
 
   protected

@@ -16,7 +16,7 @@
                 %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
                 = f.file_field :image
 
-      - if !@user.new_record?
+      - if !user.new_record?
         %table
           %tr
             %td{colspan: 2}

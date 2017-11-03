@@ -1,33 +1,35 @@
 - folder ||= @folder
-- standalone ||= false
-- title ||= folder.name || folder.slug
-- open ||= false
-- limit ||= false
-- for_more ||= false
-- omit_menu ||= false
-- flat ||= false
-- stem ||= ""
-- narrow ||= false
-- length = narrow ? 28 : 64
-- url = droom.folder_path(folder)
 
-- if @folder
-  - open = true if folder == @folder || folder.ancestor_of?(@folder)
+- if can? :read, folder
+  - standalone ||= false
+  - title ||= folder.name || folder.slug
+  - open ||= false
+  - limit ||= false
+  - for_more ||= false
+  - omit_menu ||= false
+  - flat ||= false
+  - stem ||= ""
+  - narrow ||= false
+  - length = narrow ? 28 : 64
+  - url = droom.folder_path(folder)
 
-- defer_contents ||= !open
-- cssclass = "folder"
-- cssclass << " open" if open
-- cssclass << " root" if folder.loose?
-- cssclass << " empty" unless folder.populated?
-- cssclass << " standalone" if standalone
-- cssclass << " auto" if folder.automatic? && can?(:edit, folder)
+  - if @folder
+    - open = true if folder == @folder || folder.ancestor_of?(@folder)
 
-%li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: url, label: folder.slug }}<
-  = link_to shorten(title, length), url, class: "folder", data: {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}", queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
-  - unless omit_menu
-    = action_menulink(folder)
-  %ul.uploads{id: "queue_to_#{folder.id}"}
-  - unless defer_contents
-    = render partial: "droom/folders/contents", locals: {folder: folder, limit: limit, for_more: for_more, flat: flat, narrow: narrow}
-  - unless omit_menu
-    = action_menu(folder)
+  - defer_contents ||= !open
+  - cssclass = "folder"
+  - cssclass << " open" if open
+  - cssclass << " root" if folder.loose?
+  - cssclass << " empty" unless folder.populated?
+  - cssclass << " standalone" if standalone
+  - cssclass << " auto" if folder.automatic? && can?(:edit, folder)
+
+  %li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: url, label: folder.slug }}<
+    = link_to shorten(title, length), url, class: "folder", data: {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}", queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
+    - unless omit_menu
+      = action_menulink(folder)
+    %ul.uploads{id: "queue_to_#{folder.id}"}
+    - unless defer_contents
+      = render partial: "droom/folders/contents", locals: {folder: folder, limit: limit, for_more: for_more, flat: flat, narrow: narrow}
+    - unless omit_menu
+      = action_menu(folder)

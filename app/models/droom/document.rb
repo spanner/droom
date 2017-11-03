@@ -165,9 +165,11 @@ module Droom
     end
 
     def confidential?
-      confidential = private?
-      confidential ||= folder.confidential? if folder
-      confidential
+      private?
+    end
+
+    def set_confidentiality(confidentiality)
+      update_attributes(private: confidentiality)
     end
 
     def enqueue_for_indexing

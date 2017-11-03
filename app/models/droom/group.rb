@@ -50,11 +50,11 @@ module Droom
       fragment = "%#{fragment}%"
       where('droom_groups.name like ?', fragment)
     }
-    
+
     scope :not_shown_in_directory, -> {
       where(directory: false)
     }
-    
+
     scope :shown_in_directory, -> {
       where(directory: true)
     }
@@ -89,7 +89,7 @@ module Droom
       end
       group_invitation.destroy!
     end
-    
+
     def invited_to?(event)
       group_invitations.to_event(event).any?
     end

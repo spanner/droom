@@ -5,6 +5,6 @@
 #email_fields.nested_set
   = render :partial => 'droom/emails/fields', :collection => user.emails
 
-- unless @user.new_record?
+- unless user.new_record?
   %p.action{style: 'margin-top: -10px;'}
     = link_to t(:add_email), droom.new_user_email_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#email_fields'}

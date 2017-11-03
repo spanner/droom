@@ -17,14 +17,6 @@ module Droom
           can :read, Droom::Group
           can :read, Droom::Organisation
 
-          can :read, Droom::Document do |document|
-            !document.confidential?
-          end
-
-          can :read, Droom::Folder do |folder|
-            !folder.confidential?
-          end
-
           # And they can edit themselves
           #
           can :edit, Droom::User, :id => user.id
@@ -38,13 +30,7 @@ module Droom
           #
           can :manage, [Droom::Event, Droom::Document, Droom::Scrap], :created_by_id => user.id
 
-          # NB confidential events are visible internally but their documents are not.
-          if user.privileged?
-            can :read, Droom::Document
-            can :read, Droom::Folder
-          end
-
-          # Then other abilities are determined by permissions. Our permissions are relatively abstract and 
+          # Then other abilities are determined by permissions. Our permissions are relatively abstract and
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
           #
           if user.permitted?('droom.calendar')
@@ -61,12 +47,12 @@ module Droom
             can :manage, Droom::Organisation
             can :manage, Droom::User
           end
-        
+
           if user.permitted?('droom.library')
             can :manage, Droom::Folder
             can :manage, Droom::Document
           end
-        
+
           if user.permitted?('droom.stream')
             can :create, Droom::Scrap
           end
@@ -80,6 +66,13 @@ module Droom
           can :create, Droom::DropboxToken
           can :create, Droom::DropboxDocument
           can :create, Droom::MailingListMembership
+
+          # Confidential events are visible internally but their documents are only visible to 'privileged' users.
+          #
+          unless user.privileged?
+            cannot :read, Droom::Folder, private: true
+            cannot :read, Droom::Document, private: true
+          end
         end
 
         can :read, Droom::Scrap

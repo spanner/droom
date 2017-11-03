@@ -3,6 +3,7 @@
 - open ||= event == @event
 - open = true if pageclass == 'events'
 - full_attachments ||= false
+- show_folder = event.folder && can?(:read, event.folder)
 
 - event_master_id = event.master_id || event.id
 - if @seen_events[event_master_id]
@@ -16,7 +17,7 @@
 - cssclasses << 'invited' if event.attended_by?(current_user)
 
 - div_data = {:action => "collapser", refreshable: event_path(event, format: :js)}
-- unless full_attachments
+- if show_folder && !full_attachments
   - div_data[:droppable] = droom.folder_documents_path(event.folder)
   - div_data[:queue] = "#queue_to_#{event.folder.id}"
   - div_data[:refreshes] = "#event_#{event.id}"
@@ -58,7 +59,7 @@
               - else
                 = event.venue.definite_name + "."
 
-        - if !full_attachments
+        - if show_folder && !full_attachments
           - if event.folder.populated? || can?(:edit, event.folder)
             .attachments
               %ul.uploads{id: "queue_to_#{event.folder.id}"}
@@ -67,7 +68,7 @@
         - if event.description?
           = event.description.html_safe
 
-  - if full_attachments
+  - if show_folder && full_attachments
     .addenda
       = render :partial => 'droom/events/attachments', :locals => {:event => event}
       = render :partial => 'droom/events/invitations', :locals => {:event => event}

@@ -1,5 +1,5 @@
 - user ||= @user
-- user.addresses.build(address_type: Droom::AddressType.default) unless @user.addresses.any?
+- user.addresses.build(address_type: Droom::AddressType.default) unless user.addresses.any?
 
 #address_fields.nested_set
   = render :partial => 'droom/addresses/fields', :collection => user.addresses
