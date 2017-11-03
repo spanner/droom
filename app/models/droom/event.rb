@@ -14,6 +14,7 @@ module Droom
     belongs_to :event_type
     has_folder :within => :event_type #... and subfolders via agenda_categories
     after_destroy :destroy_related_folder
+    after_save :distribute_confidentiality
 
     has_many :invitations, :dependent => :destroy
     has_many :users, :through => :invitations
@@ -262,9 +263,7 @@ module Droom
     end
 
     def confidential?
-      confidential = private?
-      confidential ||= event_type.confidential? if event_type
-      confidential
+      private? || event_type && event_type.confidential?
     end
 
     def visible_to?(user)
@@ -375,7 +374,7 @@ module Droom
     end
 
   protected
-    
+
     # This is mostly for ical/webcal distributions but we also use it in the API.
     #
     def set_uuid
@@ -395,6 +394,10 @@ module Droom
       else
         value
       end
+    end
+
+    def distribute_confidentiality
+      folder.set_confidentiality!(confidential?)
     end
 
   private

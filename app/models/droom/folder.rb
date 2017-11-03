@@ -118,6 +118,11 @@ module Droom
 
     # called from event type or parent folder when confidentiality changes
     def set_confidentiality!(confidentiality)
+      if holder and holder.confidential?
+        # folder attached to a confidential object will always be confidential,
+        #  even if its parent has just been made available.
+        confidentiality = true
+      end
       assign_attributes private: confidentiality
       save!
     end
