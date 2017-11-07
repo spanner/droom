@@ -179,6 +179,7 @@ module Droom
     # called before_create
     def inherit_confidentiality
       write_attribute :private, folder && folder.confidential?
+      true
     end
 
     def enqueue_for_indexing!
