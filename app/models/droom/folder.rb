@@ -134,6 +134,7 @@ module Droom
       elsif parent
         write_attribute :private, parent.confidential?
       end
+      true
     end
 
     # called after_save, including after set_confidentiality!
