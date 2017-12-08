@@ -1,4 +1,4 @@
-# require 'geocoder'
+require 'geocoder'
 
 module Droom
   class Venue < ApplicationRecord
@@ -8,6 +8,9 @@ module Droom
     has_many :events, :dependent => :nullify
 
     before_validation :slug_from_name
+    reverse_geocoded_by :lat, :lng, :address => :address
+    after_validation :reverse_geocode
+    
 
     # geocoded_by :name_and_address, :latitude  => :lat, :longitude => :lng
     # before_validation :geocode
