@@ -145,13 +145,11 @@
   
   
 #page_form
-  display: flex
-  flex-flow: row nowrap
-  align-items: flex-start
-  justify-content: space-around
+  display: block
 
   aside#instructions
     width: 28%
+    float: right
     margin: 0 2% 3em 2%
     p:first-child
       margin-top: 0
@@ -174,27 +172,6 @@
     background-color: white
     margin-bottom: 3em
 
-    #form_controls
-      position: relative
-      margin: 10px 0
-      +clearfix
-      span.buttons
-        display: block
-        float: right
-      span.right
-        float: right
-        padding: 8px
-        margin-right: 1em
-      span.left
-        margin-right: 10px
-        a
-          margin-top: 10px
-          margin-right: 10px
-        span
-          margin-top: 10px
-          &.ed-slug
-            color: $mid
-
     #page_editor
       box-sizing: border-box
       position: relative
@@ -203,6 +180,7 @@
       box-shadow: 0 1px 6px $shadow
 
     .content
+      width: 100%
       min-height: 400px
       padding-bottom: 96px
       display: none
