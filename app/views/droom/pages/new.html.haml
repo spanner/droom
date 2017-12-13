@@ -1,8 +1,5 @@
 - content_for :title do 
   = t "pages.new"
 
-#intro.standfirst
-  %p
-    = t "intro.new_page"
-
-= render :partial => 'droom/pages/edit/form'
+#page_form
+  = render :partial => 'droom/pages/edit/form'

@@ -1,48 +1,116 @@
 - image_url = @page.main_image.url(:hero) if @page.main_image
+- image_weighting = @page.main_image_weighting.presence || 'center center'
 
 = form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
-  #form_controls
-    %span.left
-      %span.label
-        Slug:
-      %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}<
-        = @page.slug
-    = f.hidden_field :slug, data: {ed: "slug"}
-    = f.submit "save and preview"
+  %section#editor
 
-  #page_editor
-    #page_masthead
-      = f.hidden_field :main_image_id, data: {ed: "image"}
-      .bg.ed-image{style: "background-image: url('#{image_url}')", data: {image: @page.main_image_id, placeholder: "Click or drop here to add your main image"}}
-        .ed-buttons
-        .ed-dropmask
-          %p.prompt
-            Click or drop an image here
-      .darken
-      .fg
-        #pagetitle
-          %h1.title
-            = f.hidden_field :title, data: {ed: 'title'}
-            %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}
-              = @page.title
+    #page_editor
+      #page_masthead
+        = f.hidden_field :main_image_id, data: {ed: "main_image_id"}
+        = f.hidden_field :main_image_weighting, data: {ed: "main_image_weighting"}
 
-    #page_content.ed-content
-      = f.hidden_field :content, data: {ed: 'content'}
-      .content{contenteditable: true}
-        - @page.content = "<p></p>" unless @page.content?
-        = @page.content.html_safe
+        .bg.ed-image{style: "background-image: url('#{image_url}'); background-position: #{image_weighting}", data: {image: @page.main_image_id, placeholder: "Click or drop here to add your main image"}}
+          .ed-buttons
+          .ed-dropmask
+            %p.prompt
+              Click or drop an image here
+        .darken
+        .fg
+          #pagetitle
+            %h1.title
+              = f.hidden_field :title, data: {ed: 'title'}
+              %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}<
+                = @page.title
 
-      .placeholder
-        %p
-          Click here to edit the main body of your page. The first paragraph will automatically be made a little bigger.
-          That might be the only paragraph you need, but there is no limit to the length of the page and you are welcome to add images, links and video clips.
-        %p
-          Click the
+      #page_content.ed-content
+        = f.hidden_field :content, data: {ed: 'content'}
+        .content{contenteditable: true}
+          - @page.content = "<p></p>" unless @page.content?
+          = @page.content.html_safe
+
+        .placeholder
+          %p
+            Click here to edit the main body of your page. The first paragraph will automatically be made a little bigger.
+            That might be the only paragraph you need, but there is no limit to the length of the page and you are welcome to add images, links and video clips.
+          %p
+            Click the
+            %svg.prefix
+              %use{"xlink:href" => "#plus_symbol"}
+            button on next to a blank line to insert an image, video clip, quote or button.
+          %p
+            %span.selected
+              Select some text
+            to bring up the editing toolbar, create a link or change formatting.
+
+
+  %aside#instructions
+    #form_controls
+      = f.submit "save and preview"
+      %p
+        = f.check_box :public
+        = f.label :public
+      %p
+        = f.hidden_field :slug, data: {ed: "slug"}
+        %span.label
+          Slug:
+        %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}<
+          = @page.slug
+
+    %p
+      Here you can compose a page for public or private presentation.
+      The structure is simple and general-purpose. Each page consists of:
+
+    %ul
+      %li
+        %a.title{data: {"ed-check" => "title"}}
           %svg.prefix
-            %use{"xlink:href" => "#plus_symbol"}
-          button on next to a blank line to insert an image, video clip, quote or button.
-        %p
-          %span.selected
-            Select some text
-          to bring up the editing toolbar, create a link or change formatting.
+            %use.check{"xlink:href" => "#cross_symbol"}
+          %span
+            Main page heading
+      %li
+        %a.subtitle{data: {"ed-check" => "subtitle"}}
+          %svg.prefix
+            %use.check{"xlink:href" => "#cross_symbol"}
+          %span
+            Optional strapline
+      %li
+        %a.image{data: {"ed-check" => "main_image"}}
+          %svg.prefix
+            %use.check{"xlink:href" => "#cross_symbol"}
+          %span
+            A big masthead image
+      %li
+        %a.text{data: {"ed-check" => "content"}}
+          %svg.prefix
+            %use.check{"xlink:href" => "#cross_symbol"}
+          %span
+            One or more paragraphs of text
+            %span.count
+
+    %p
+      The only requirements for publication are that the page has a title and some text.
+
+    %h3
+      Tips and guides
+
+    %ul
+      %li
+        =help_link("suggestions", "pages", "Suggestions for your page")
+      %li
+        =help_link("variables", "pages", "Variables you can include")
+      %li
+        =help_link("images", "pages", "Image tips and suggestions")
+      %li 
+        =help_link("media", "pages", "How to add images and video")
+      %li 
+        =help_link("youtube", "pages", "How to add youtube video")
+      %li
+        =help_link("formatting", "pages", "How to add links and formatting")
+      %li
+        =help_link("formatting", "pages", "Linking to other pages")
+      %li
+        =help_link("slug", "pages", "Check the page slug")
+
+    %p
+      
 
