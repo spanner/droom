@@ -7,10 +7,12 @@
 class Ed.Views.Editor extends Ed.View
   ui:
     title: ".ed-title"
+    subtitle: ".ed-subtitle"
     slug: ".ed-slug"
     content: ".ed-content"
     image: ".ed-image"
     titlefield: '[data-ed="title"]'
+    subtitlefield: '[data-ed="subtitle"]'
     slugfield: '[data-ed="slug"]'
     contentfield: '[data-ed="content"]'
     imagefield: '[data-ed="image"]'
@@ -19,6 +21,9 @@ class Ed.Views.Editor extends Ed.View
   bindings:
     '[data-ed="title"]':
       observe: "title"
+      updateModel: false
+    '[data-ed="subtitle"]':
+      observe: "subtitle"
       updateModel: false
     '[data-ed="slug"]':
       observe: "slug"
@@ -37,9 +42,17 @@ class Ed.Views.Editor extends Ed.View
       observe: "busy"
       update: "disableWhenBusy"
 
+  # events:
+  #   ""
+    # on content focus, place caret
+
   wrap: =>
     @ui.title.each (i, el) =>
       @subviews.push new Ed.Views.Title
+        el: el
+        model: @model
+    @ui.subtitle.each (i, el) =>
+      @subviews.push new Ed.Views.Subtitle
         el: el
         model: @model
     @ui.slug.each (i, el) =>
@@ -59,6 +72,20 @@ class Ed.Views.Editor extends Ed.View
         el: el
         model: @model
 
+  onRender: =>
+    @stickit()
+    @placeCaret()
+    # _.defer -> balanceText('.balanced')
+
+  placeCaret: =>
+    if title_el = @ui.title.get(0)
+      range = document.createRange()
+      range.setStart title_el, 0
+      range.collapse true
+      selection = window.getSelection()
+      selection.removeAllRanges()
+      selection.addRange range
+
   cleanContent: (content, model) =>
     @model.cleanContent()
 
@@ -77,6 +104,17 @@ class Ed.Views.Title extends Ed.View
 
   wrap: =>
     @model.set 'title', @$el.text().trim()
+
+
+class Ed.Views.Subtitle extends Ed.View
+  template: false
+  bindings: 
+    ':el':
+      observe: 'subtitle'
+
+  wrap: =>
+    @log "SUBTITLE"
+    @model.set 'subtitle', @$el.text().trim()
 
 
 class Ed.Views.Slug extends Ed.View

@@ -50,7 +50,7 @@ module Droom
   protected
 
     def page_params
-      params.require(:page).permit(:title, :slug, :main_image_id, :content, :publish_now)
+      params.require(:page).permit(:title, :subtitle, :slug, :main_image_id, :content, :publish_now)
     end
 
   end

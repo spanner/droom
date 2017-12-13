@@ -1,5 +1,6 @@
 - image_url = @page.main_image.url(:hero) if @page.main_image
 - image_weighting = @page.main_image_weighting.presence || 'center center'
+- @page.content = "<p></p>" unless @page.content?
 
 = form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
   %aside#instructions
@@ -31,15 +32,18 @@
         .darken
         .fg
           #pagetitle
+            = f.hidden_field :title, data: {ed: 'title'}
+            = f.hidden_field :subtitle, data: {ed: 'subtitle'}
             %h1.title
-              = f.hidden_field :title, data: {ed: 'title'}
               %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}<
                 = @page.title
+            %p.subtitle
+              %span.ed-subtitle{contenteditable: true, data: {placeholder: "Click to add optional strapline"}}<
+                = @page.subtitle
 
       #page_content.ed-content
         = f.hidden_field :content, data: {ed: 'content'}
         .content{contenteditable: true}
-          - @page.content = "<p></p>" unless @page.content?
           = @page.content.html_safe
 
         .placeholder
