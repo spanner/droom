@@ -1,0 +1,18 @@
+- page ||= @page
+
+#page
+  #page_masthead
+    - image_url = page.published_image.url(:hero) if page.published_image
+    .bg{style: "background-image: url('#{image_url}')"}
+    .darken
+    .fg
+      #title
+        %h1.title
+          = sanitize(page.published_title)
+        - if page.published_subtitle?
+          %p.subtitle
+            = sanitize(page.published_subtitle)
+
+  #page_content.ed-content
+    .content
+      = clean_html(page.published_content.presence || "<p></p>")

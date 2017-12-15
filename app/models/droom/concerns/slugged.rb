@@ -1,6 +1,10 @@
 module Droom::Concerns::Slugged
   extend ActiveSupport::Concern
-  
+
+  def slug_from_title
+    ensure_presence_of_unique(:slug, title.parameterize)
+  end
+
   def slug_from_name
     ensure_presence_of_unique(:slug, name.parameterize)
   end
@@ -11,17 +15,13 @@ module Droom::Concerns::Slugged
 
   def ensure_presence_of_unique(column, base, skope=self.class.all)
     unless self.send "#{column}?".to_sym
-      value = base
-      addendum = 1
-      existing_record = skope.order(created_at: 'desc').where("#{column} like ?", "#{value}%").pluck(column.to_sym).first
-      if existing_record
-        record_number = existing_record.split('_').last
-        if record_number = Integer(record_number) rescue false
-          addendum+=record_number.to_i
-        end
-        value = "#{base}_#{addendum}"
+      slug = base.presence || self.class.to_s.underscore
+      addendum = 0
+      while skope.find_by(slug: slug)
+        addendum += 1
+        slug = "#{base}_#{addendum}"
       end
-      self.send :"#{column}=", value
+      self.send :"#{column}=", slug
     end
   end
 
