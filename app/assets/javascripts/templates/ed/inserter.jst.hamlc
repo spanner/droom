@@ -11,6 +11,9 @@
   %a.control.add.quote>
     %svg.icon
       %use{"xlink:href" => "#quote_symbol"}
-  / %a.control.add.button>
-  /   %svg.icon
-  /     %use{"xlink:href" => "#button_symbol"}
+  %a.control.add.blocks>
+    %svg.icon
+      %use{"xlink:href" => "#blocks_symbol"}
+  %a.control.add.button>
+    %svg.icon
+      %use{"xlink:href" => "#button_symbol"}

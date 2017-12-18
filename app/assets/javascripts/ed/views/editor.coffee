@@ -155,6 +155,9 @@ class Ed.Views.Content extends Ed.View
     @ui.content.find('figure.quote').each (i, el) =>
       @subviews.push new Ed.Views.Quote
         el: el
+    @ui.content.find('section.blockset').each (i, el) =>
+      @subviews.push new Ed.Views.Blocks
+        el: el
     @ui.content.find('a.button').each (i, el) =>
       @subviews.push new Ed.Views.Button
         el: el
@@ -197,7 +200,6 @@ class Ed.Views.Content extends Ed.View
       placeholder: false
       autoLink: true
       imageDragging: false
-      allowMultiParagraphSelection: false
       anchor:
         customClassOption: null
         customClassOptionText: 'Button'
@@ -213,6 +215,7 @@ class Ed.Views.Content extends Ed.View
         cleanTags: ['meta']
       toolbar:
         updateOnEmptySelection: true
+        allowMultiParagraphSelection: false
         buttons: [
           name: 'bold'
           contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
@@ -518,7 +521,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 class Ed.Views.Image extends Ed.Views.Asset
   pickerView: Ed.Views.ImagePicker
   stylerView: Ed.Views.AssetStyler
-  template: "assets/image"
+  template: "ed/image"
   tagName: "figure"
   className: "image full"
   defaultSize: "full"
@@ -556,7 +559,7 @@ class Ed.Views.Image extends Ed.Views.Asset
 class Ed.Views.Video extends Ed.Views.Asset
   pickerView: Ed.Views.VideoPicker
   stylerView: Ed.Views.AssetStyler
-  template: "assets/video"
+  template: "ed/video"
   tagName: "figure"
   className: "video full"
   defaultSize: "full"
@@ -596,9 +599,74 @@ class Ed.Views.Video extends Ed.Views.Asset
     el.hide() unless visible
 
 
+class Ed.Views.Block extends Ed.View
+  template: "ed/block"
+  className: "block"
+
+  ui:
+    buttons: ".ed-buttons"
+    content: ".ed-block"
+    remover: "a.remover"
+
+  events:
+    "click a.remove": "removeBlock"
+
+  bindings:
+    ".ed-block":
+      observe: "content"
+      updateMethod: "html"
+      onGet: "readHtml"
+
+  removeBlock: (e) =>
+    e?.preventDefault()
+    @$el.fadeOut => @model.remove()
+
+  readHtml: (html) =>
+    #sanitize?
+    console.log "block html", html
+    html
+
+
+class Ed.Views.Blocks extends Ed.Views.CompositeView
+  template: "ed/blockset"
+  tagName: "section"
+  className: "blockset"
+  childViewContainer: ".blocks"
+  childView: Ed.Views.Block
+
+  ui:
+    buttons: ".ed-buttons"
+    block_holder: ".blocks"
+    blocks: ".block"
+
+  wrap: =>
+    @collection = new Ed.Collections.Blocks
+    @$el.addClass 'editing'
+    if @ui.blocks.length
+      @ui.blocks.each (i, block) =>
+        $block = $(block)
+        console.log "BLOCK", $block.html()
+        @addBlock $block.html()
+        $block.remove()
+    else
+      @addBlock "<p>First</p>"
+      @addBlock "<p>Second</p>"
+      @addBlock "<p>Third</p>"
+
+  onRender: =>
+    @setLengthClass()
+    @collection.on 'add remove reset', @setLengthClass
+
+  addBlock: (content="") =>
+    @collection.add content: content
+
+  setLengthClass: =>
+    @ui.block_holder.removeClass('none one two three four').addClass(['none', 'one', 'two', 'three', 'four'][@collection.length])
+
+
 class Ed.Views.Quote extends Ed.Views.Asset
   stylerView: Ed.Views.AssetStyler
-  template: "assets/quote"
+  template: "ed/quote"
   tagName: "figure"
   className: "quote full"
   defaultSize: "full"
@@ -624,7 +692,6 @@ class Ed.Views.Quote extends Ed.Views.Asset
     @model = new Ed.Models.Quote
       utterance: @$el.find('blockquote').text()
       caption: @$el.find('figcaption').text()
-    @render()
 
   focus: =>
     @ui.quote.focus()
@@ -643,7 +710,7 @@ class Ed.Views.Quote extends Ed.Views.Asset
 
 class Ed.Views.Button extends Ed.Views.Asset
   stylerView: Ed.Views.AssetStyler
-  template: "assets/button"
+  template: "ed/button"
   tagName: "a"
   className: "button full"
   defaultSize: "full"
@@ -669,7 +736,6 @@ class Ed.Views.Button extends Ed.Views.Asset
   wrap: =>
     @model = new Ed.Models.Button
       label: @ui.label.text()
-    @render()
 
   focus: =>
     @ui.label.focus()

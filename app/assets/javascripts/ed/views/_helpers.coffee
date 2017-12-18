@@ -4,7 +4,7 @@
 # These are small thumbnail galleries with add and import controls alongside.
 #
 class Ed.Views.ListedAsset extends Ed.View
-  template: "assets/listed"
+  template: "ed/listed"
   tagName: "li"
   className: "asset"
 
@@ -67,13 +67,13 @@ class Ed.Views.ListedAsset extends Ed.View
 
 
 class Ed.Views.NoAsset extends Ed.View
-  template: "assets/none"
+  template: "ed/none"
   tagName: "li"
   className: "empty"
 
 
 class Ed.Views.AssetsList extends Backbone.Marionette.CompositeView
-  template: "assets/list"
+  template: "ed/list"
   childViewContainer: "ul.ed-assets"
   childView: Ed.Views.ListedAsset
   emptyView: Ed.Views.NoAsset
@@ -171,7 +171,7 @@ class Ed.Views.AssetsList extends Backbone.Marionette.CompositeView
 # This view inserts a new asset element into the html stream with a management view wrapped around it.
 #
 class Ed.Views.AssetInserter extends Ed.View
-  template: "assets/inserter"
+  template: "ed/inserter"
   tagName: "div"
   className: "ed-inserter"
 
@@ -181,6 +181,7 @@ class Ed.Views.AssetInserter extends Ed.View
     "click a.video": "addVideo"
     "click a.quote": "addQuote"
     "click a.button": "addButton"
+    "click a.blocks": "addBlocks"
 
   onRender: () =>
     @_p = null
@@ -199,7 +200,7 @@ class Ed.Views.AssetInserter extends Ed.View
       range = selection.getRangeAt(0)
       current = $(range.commonAncestorContainer)
     @_p = current.closest('p')
-    if @_p.length and @isBlank(@_p.text()) and not @_p.is(':first-child')
+    if @_p.length and @isBlank(@_p.text())# and not @_p.is(':first-child')
       @show(@_p)
     else
       @hide()
@@ -213,21 +214,20 @@ class Ed.Views.AssetInserter extends Ed.View
       @trigger 'expand'
       @$el.addClass('showing')
 
-  addImage: () =>
+  addImage: =>
     @insert new Ed.Views.Image
-      model: new Ed.Models.Image
 
-  addVideo: () =>
+  addVideo: =>
     @insert new Ed.Views.Video
-      model: new Ed.Models.Video
 
-  addQuote: () =>
+  addQuote: =>
     @insert new Ed.Views.Quote
-      model: new Ed.Models.Quote
 
-  addButton: () =>
+  addButton: =>
     @insert new Ed.Views.Button
-      model: new Ed.Models.Button
+
+  addBlocks: =>
+    @insert new Ed.Views.Blocks
 
   insert: (view) =>
     if @_p
@@ -266,7 +266,7 @@ class Ed.Views.AssetInserter extends Ed.View
 class Ed.Views.AssetStyler extends Ed.View
   tagName: "div"
   className: "styler"
-  template: "assets/styler"
+  template: "ed/styler"
   events:
     "click a.right": "setRight"
     "click a.left": "setLeft"
@@ -293,7 +293,7 @@ class Ed.Views.AssetStyler extends Ed.View
 class Ed.Views.ImageWeighter extends Ed.Views.MenuView
   tagName: "div"
   className: "weighter"
-  template: "assets/weighter"
+  template: "ed/weighter"
 
   ui:
     head: ".menu-head"
@@ -370,7 +370,7 @@ class Ed.Views.AssetPicker extends Ed.Views.MenuView
 
 
 class Ed.Views.AssetRemover extends Backbone.Marionette.View
-  template: "assets/remover"
+  template: "ed/remover"
   className: "remover"
 
   ui:
@@ -386,7 +386,7 @@ class Ed.Views.AssetRemover extends Backbone.Marionette.View
     @$el.hide()
 
 class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
-  template: "assets/image_picker"
+  template: "ed/image_picker"
   title: "Images"
 
   initialize: (data, options={}) ->
@@ -405,12 +405,12 @@ class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
 
 
 class Ed.Views.MainImagePicker extends Ed.Views.ImagePicker
-  template: "assets/main_image_picker"
+  template: "ed/main_image_picker"
   title: "Images"
 
 
 class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
-  template: "assets/video_picker"
+  template: "ed/video_picker"
   title: "Videos"
 
   initialize: ->
@@ -429,7 +429,7 @@ class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
 
 
 class Ed.Views.QuotePicker extends Ed.Views.AssetPicker
-  template: "assets/quote_picker"
+  template: "ed/quote_picker"
   title: "Quotes"
 
 

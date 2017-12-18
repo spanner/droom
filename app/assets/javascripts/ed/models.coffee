@@ -158,6 +158,7 @@ class Ed.Models.Editable extends Ed.Model
       wrapper.html(content.trim())
       wrapper.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
       wrapper.find('[data-placeholder]').removeAttr('data-placeholder')
+      wrapper.find('.ed-block').removeClass('.ed-block')
       wrapper.find('.ed-buttons').remove()
       wrapper.find('.ed-progress').remove()
       wrapper.find('.ed-action').remove()
@@ -169,6 +170,14 @@ class Ed.Models.Editable extends Ed.Model
 
   textContent: =>
     @contentWrapper().text()
+
+
+class Ed.Models.Block extends Ed.Model
+  defaults:
+    content: ""
+
+class Ed.Collections.Blocks extends Backbone.Collection
+  model: Ed.Models.Block
 
 
 ## Images
