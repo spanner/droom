@@ -158,7 +158,6 @@ class Ed.Models.Editable extends Ed.Model
       wrapper.html(content.trim())
       wrapper.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
       wrapper.find('[data-placeholder]').removeAttr('data-placeholder')
-      wrapper.find('.ed-block').removeClass('.ed-block')
       wrapper.find('.ed-buttons').remove()
       wrapper.find('.ed-progress').remove()
       wrapper.find('.ed-action').remove()

@@ -42,10 +42,6 @@ class Ed.Views.Editor extends Ed.View
       observe: "busy"
       update: "disableWhenBusy"
 
-  # events:
-  #   ""
-    # on content focus, place caret
-
   wrap: =>
     @ui.title.each (i, el) =>
       @subviews.push new Ed.Views.Title
@@ -146,6 +142,9 @@ class Ed.Views.Content extends Ed.View
     @ui.content.addClass 'editing'
     window.cont = @
 
+    @ui.content.find('section.blockset').each (i, el) =>
+      @subviews.push new Ed.Views.Blocks
+        el: el
     @ui.content.find('figure.image').each (i, el) =>
       @subviews.push new Ed.Views.Image
         el: el
@@ -154,9 +153,6 @@ class Ed.Views.Content extends Ed.View
         el: el
     @ui.content.find('figure.quote').each (i, el) =>
       @subviews.push new Ed.Views.Quote
-        el: el
-    @ui.content.find('section.blockset').each (i, el) =>
-      @subviews.push new Ed.Views.Blocks
         el: el
     @ui.content.find('a.button').each (i, el) =>
       @subviews.push new Ed.Views.Button
@@ -193,46 +189,12 @@ class Ed.Views.Content extends Ed.View
 
     @_inserter = new Ed.Views.AssetInserter
     @_inserter.render()
-    @_inserter.attendTo(@ui.content)
+    @_inserter.attendTo @ui.content
     @_inserter.on 'expand', @dontShowPlaceholder
 
-    @_toolbar = new MediumEditor @ui.content,
-      placeholder: false
-      autoLink: true
-      imageDragging: false
-      anchor:
-        customClassOption: null
-        customClassOptionText: 'Button'
-        linkValidation: false
-        placeholderText: 'URL...'
-        targetCheckbox: false
-      anchorPreview: false
-      paste:
-        forcePlainText: false
-        cleanPastedHTML: true
-        cleanReplacements: []
-        cleanAttrs: ['class', 'style', 'dir']
-        cleanTags: ['meta']
-      toolbar:
-        updateOnEmptySelection: true
-        allowMultiParagraphSelection: false
-        buttons: [
-          name: 'bold'
-          contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
-        ,
-          name: 'italic'
-          contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
-        ,
-          name: 'anchor'
-          contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
-        ,
-          name: 'h2'
-          contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
-        ,
-          name: 'h3'
-          contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
-        ]
-
+    @_toolbar = new Ed.Views.Toolbar
+      target: @ui.content
+    @_toolbar.render()
 
 class Ed.Views.Checker extends Ed.View
   template: false
@@ -338,8 +300,12 @@ class Ed.Views.Asset extends Ed.View
   listenToRemover: =>
     @_remover.on "remove", @remove
 
+  withinBlock: =>
+    console.log "withinBlock?", !!@$el.parents('.block').length
+    !!@$el.parents('.block').length
+
   addStyler: =>
-    if _ed.getOption('asset_styles')
+    if _ed.getOption('asset_styles') and not @withinBlock()
       if styler_view_class = @getOption('stylerView')
         @_styler = new styler_view_class
           model: @model
@@ -592,7 +558,6 @@ class Ed.Views.Video extends Ed.Views.Asset
         @setModel _ed.videos.get(video_id ) ? new Ed.Models.Video
 
   unlessEmbedded: (embed_code) =>
-    console.log "unlessEmbedded", !embed_code
     !embed_code
 
   hideVideo: (el, visible, model) =>
@@ -609,22 +574,32 @@ class Ed.Views.Block extends Ed.View
     remover: "a.remover"
 
   events:
+    "focus .ed-block": "focusBlock"
     "click a.remove": "removeBlock"
 
   bindings:
-    ".ed-block":
+    ":el":
       observe: "content"
       updateMethod: "html"
       onGet: "readHtml"
+
+  onRender: =>
+    @$el.attr 'contenteditable', true
+    @stickit()
+    @_toolbar = new Ed.Views.Toolbar
+      target: @ui.content
+    @_toolbar.render()
 
   removeBlock: (e) =>
     e?.preventDefault()
     @$el.fadeOut => @model.remove()
 
   readHtml: (html) =>
-    #sanitize?
-    console.log "block html", html
-    html
+    html or "<p></p>"
+
+  focusBlock: (e) =>
+    # might need to place caret...
+    true
 
 
 class Ed.Views.Blocks extends Ed.Views.CompositeView
@@ -645,15 +620,15 @@ class Ed.Views.Blocks extends Ed.Views.CompositeView
     if @ui.blocks.length
       @ui.blocks.each (i, block) =>
         $block = $(block)
-        console.log "BLOCK", $block.html()
         @addBlock $block.html()
         $block.remove()
     else
-      @addBlock "<p>First</p>"
-      @addBlock "<p>Second</p>"
-      @addBlock "<p>Third</p>"
+      @addBlock()
+      @addBlock()
+      @addBlock()
 
   onRender: =>
+    @$el.attr "contenteditable", false
     @setLengthClass()
     @collection.on 'add remove reset', @setLengthClass
 

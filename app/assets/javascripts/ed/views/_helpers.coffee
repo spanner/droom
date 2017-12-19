@@ -166,6 +166,56 @@ class Ed.Views.AssetsList extends Backbone.Marionette.CompositeView
     @selectAssets()
 
 
+## Toolbar
+#
+# Attaches an editing toolbar to a DOM element.
+#
+class Ed.Views.Toolbar extends Ed.View
+  template: false
+  className: "ed-toolbar"
+
+  initialize: (opts={}) =>
+    @target_el = opts.target
+
+  onRender: () =>
+    @_toolbar ?= new MediumEditor @target_el,
+      placeholder: false
+      autoLink: true
+      imageDragging: false
+      anchor:
+        customClassOption: null
+        customClassOptionText: 'Button'
+        linkValidation: false
+        placeholderText: 'URL...'
+        targetCheckbox: false
+      anchorPreview: false
+      paste:
+        forcePlainText: false
+        cleanPastedHTML: true
+        cleanReplacements: []
+        cleanAttrs: ['class', 'style', 'dir']
+        cleanTags: ['meta']
+      toolbar:
+        updateOnEmptySelection: true
+        allowMultiParagraphSelection: false
+        buttons: [
+          name: 'bold'
+          contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
+        ,
+          name: 'italic'
+          contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
+        ,
+          name: 'anchor'
+          contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
+        ,
+          name: 'h2'
+          contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
+        ,
+          name: 'h3'
+          contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
+        ]
+
+
 ## Asset inserter
 #
 # This view inserts a new asset element into the html stream with a management view wrapped around it.
@@ -187,6 +237,7 @@ class Ed.Views.AssetInserter extends Ed.View
     @_p = null
 
   #TODO shouldn't we know about the holding editable so as to tell it about new assets?
+  # and also todo: please can we just render this with no special calls?
   attendTo: ($el) =>
     @_target_el = $el
     @$el.appendTo $('body')
