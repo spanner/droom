@@ -170,6 +170,7 @@ class Ed.Views.AssetsList extends Backbone.Marionette.CompositeView
 #
 # Attaches an editing toolbar to a DOM element.
 #
+
 class Ed.Views.Toolbar extends Ed.View
   template: false
   className: "ed-toolbar"
@@ -197,7 +198,7 @@ class Ed.Views.Toolbar extends Ed.View
         cleanTags: ['meta']
       toolbar:
         updateOnEmptySelection: true
-        allowMultiParagraphSelection: false
+        allowMultiParagraphSelection: true
         buttons: [
           name: 'bold'
           contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
@@ -208,11 +209,20 @@ class Ed.Views.Toolbar extends Ed.View
           name: 'anchor'
           contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
         ,
+          name: 'orderedlist'
+          contentDefault: '<svg><use xlink:href="#ol_button"></use></svg>'
+        ,
+          name: 'unorderedlist'
+          contentDefault: '<svg><use xlink:href="#ul_button"></use></svg>'
+        ,
           name: 'h2'
           contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
         ,
           name: 'h3'
           contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
+        ,
+          name: 'removeFormat'
+          contentDefault: '<svg><use xlink:href="#clear_button"></use></svg>'
         ]
 
 

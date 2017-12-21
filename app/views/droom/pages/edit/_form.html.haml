@@ -4,23 +4,23 @@
 
 = form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
   %aside#instructions
-    #form_controls
+    #form_controls.pin
       = f.submit "save and preview"
-      %p
-        = f.check_box :public
-        = f.label :public
-      %p
-        = f.hidden_field :slug, data: {ed: "slug"}
-        %span.label
-          Slug:
-        %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}<
-          = @page.slug
+    %p
+      = f.check_box :public
+      = f.label :public
+    %p
+      = f.hidden_field :slug, data: {ed: "slug"}
+      %span.label
+        Slug:
+      %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}<
+        = @page.slug
 
-      = render "droom/pages/edit/instructions"
+    = render "droom/pages/edit/instructions"
 
   %section#editor
     #page_editor
-      #page_masthead
+      #page_masthead.editing
         = f.hidden_field :main_image_id, data: {ed: "main_image_id"}
         = f.hidden_field :main_image_weighting, data: {ed: "main_image_weighting"}
 
@@ -41,7 +41,7 @@
               %span.ed-subtitle{contenteditable: true, data: {placeholder: "Click to add optional strapline"}}<
                 = @page.subtitle
 
-      #page_content.ed-content
+      #page_content.ed-content.editing
         = f.hidden_field :content, data: {ed: 'content'}
         .content{contenteditable: true}
           = @page.content.html_safe
