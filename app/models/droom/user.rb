@@ -291,23 +291,6 @@ module Droom
     end
 
 
-    ## Dropbox links
-    #
-    has_many :dropbox_tokens, :foreign_key => "created_by_id"
-    has_many :dropbox_documents
-
-    def dropbox_token
-      unless @dropbox_token
-        @dropbox_token = dropbox_tokens.by_date.last || 'nope'
-      end
-      @dropbox_token unless @dropbox_token == 'nope'
-    end
-
-    def dropbox_client
-      dropbox_token.dropbox_client if dropbox_token
-    end
-
-
     ## Mugshot
     #
     has_attached_file :image,
@@ -578,7 +561,6 @@ module Droom
     # The keys are usually colon:separated for namespacing purposes, eg:
     #
     #   current_user.pref("email:enabled?")
-    #   current_user.pref("dropbox:enabled?")
     #
     # Default settings are defined in Droom.user_defaults and can be defined in an initializer if the default droom
     # defaults are not right for your application.

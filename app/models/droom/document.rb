@@ -1,20 +1,15 @@
 require 'open-uri'
-require 'dropbox_sdk'
 
 module Droom
   class Document < ApplicationRecord
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
     belongs_to :scrap, :dependent => :destroy
-    has_many :dropbox_documents
 
     has_attached_file :file,
                       fog_directory: -> a { a.instance.file_bucket }
 
     acts_as_list scope: :folder_id
-
-    after_save :update_dropbox_documents
-    after_destroy :mark_dropbox_documents_deleted
 
     validates :file, :presence => true
     do_not_validate_attachment_file_type :file
@@ -98,28 +93,6 @@ module Droom
         :value => name,
         :id => id
       }
-    end
-
-    def copy_to_dropbox(user)
-      dropbox_documents.create(:user => user)
-    end
-
-    def mark_dropbox_documents_deleted
-      dropbox_documents.each do |dd|
-        dd.mark_deleted(true)
-      end
-    end
-
-    def create_dropbox_documents
-      # after create, in a delayed job
-      # for each user who is syncing our folder, create a dropbox document
-      # that is: everyone who has the sync everything preference or who is associated with the holder of this folder
-    end
-
-    def update_dropbox_documents
-      dropbox_documents.each do |dd|
-        dd.update
-      end
     end
 
     ## Filing

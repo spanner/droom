@@ -1,5 +1,3 @@
-require 'dropbox_sdk'
-
 module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper

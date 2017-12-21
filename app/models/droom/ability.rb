@@ -76,8 +76,6 @@ module Droom
 
           # Some models are purely administrative.
           #
-          can :create, Droom::DropboxToken
-          can :create, Droom::DropboxDocument
           can :create, Droom::MailingListMembership
         end
 

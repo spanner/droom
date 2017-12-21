@@ -81,15 +81,6 @@ en:
         send_confirmation: "Send invitation"
         defer_confirmation: "Send no email"
   preferences:
-    dropbox:
-      strategy:
-        everything: "Sync everything"
-        selected: "Sync these folders..."
-        relevant: "Sync relevant documents"
-        clicked: "Copy on command only"
-      events?: "Your events"
-      topics?: "Your topics"
-      groups?: "Your groups"
     email:
       enabled?: "Receive administrative messages"
       mailing_lists?: "Join group mailing lists"
@@ -177,7 +168,6 @@ en:
   confirm_uninvite_group: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   confirm_uninvite_person: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   contact_information_unavailable: "No contact"
-  copy_to_dropbox: "Copy folder to dropbox"
   delete_event: "Delete Event"
   delete_folder: "Delete Folder"
   delete_group: "Delete Group"
@@ -190,7 +180,6 @@ en:
   close_symbol: "✕"
   delete_symbol: "✕"
   detach_upload: "Detach Upload"
-  dropbox_access_revoked: "We have detached from your dropbox. You can delete the hkfx folder."
   attachment_count: 
     zero: "No documents attached."
     one: "One document attached."
@@ -208,11 +197,6 @@ en:
   downloads: "downloads"
   download_attachments_as_zipfile: "Download all attachments as a zipfile"
   download_vcards: "Download this list to your address book"
-  dropbox_copy_all: "Copy everything"
-  dropbox_copy_personal: "Copy only the most useful folders"
-  dropbox_copy_topics: "Copy only selected topics"
-  dropbox_copy_selected: "Copy only when you click"
-  dropbox_introduction: "This will create a '%{name}' folder in your dropbox into which you can copy folders and documents."
   edit: "Edit"
   edit_account: "Edit account settings"
   edit_account_of: "Edit account settings for %{name}"
@@ -303,7 +287,6 @@ en:
   invitations_highlighted: "Events to which you are invited will be highlighted."
   help: "Help"
   help_pages: "Help pages"
-  copy_to_dropbox: "copy to dropbox"
   loading_people: "Loading people"
   loading_documents: "Loading documents"
   masthead:

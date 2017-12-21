@@ -43,6 +43,10 @@ module Droom
       !!publishing
     end
 
+    def interpolations
+      {}
+    end
+
     protected
 
     def publish_if_publishing

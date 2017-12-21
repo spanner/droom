@@ -90,15 +90,6 @@ module Droom
       folder && folder.ancestors.include?(self)
     end
 
-    def copy_to_dropbox(user)
-      Rails.logger.warn ">>> creating dropbox subfolder #{slug} for user #{user.name}"
-      documents.each { |doc| doc.copy_to_dropbox(user) }
-    end
-    
-    def dropboxed_for?(user)
-      # dropbox_documents.for_user(user).any?
-    end
-
     def get_name_from_holder
       send :set_properties
       self.save if self.changed?

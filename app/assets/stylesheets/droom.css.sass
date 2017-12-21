@@ -31,26 +31,6 @@ a.select
   top: 48px
   left: 540px
 
-a.dropbox
-  +big_icon_link("droom/dropbox.png")
-  color: #4ea1ea
-  &:visited
-    color: #4ea1ea
-  &:hover
-    color: $hover
-  &.revoke
-    background-position: 0 -48px
-    color: $hover
-
-a.dropboxer
-  +icon_link("droom/dropbox_small.png")
-  margin-left: 0
-  color: #4ea1ea
-  &:visited
-    color: #4ea1ea
-  &:hover
-    color: $hover
-
 a.confirmed
   color: $green
   animation-name: confirmation
@@ -77,16 +57,6 @@ a.waiting
     repeat: no-repeat
   svg
     display: none
-
-input.dropbox.revoke[type="submit"]
-  +icon_link("droom/revoke_small.png")
-  background-color: transparent
-  color: $blue
-  padding: 0
-  height: auto
-  line-height: 20px
-  &:hover
-    color: $hover
 
 input:required
   background:
