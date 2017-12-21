@@ -578,7 +578,7 @@ class Ed.Views.Block extends Ed.View
     "click a.remove": "removeBlock"
 
   bindings:
-    ":el":
+    ".ed-block":
       observe: "content"
       updateMethod: "html"
       onGet: "readHtml"
@@ -592,7 +592,8 @@ class Ed.Views.Block extends Ed.View
 
   removeBlock: (e) =>
     e?.preventDefault()
-    @$el.fadeOut => @model.remove()
+    @$el.fadeOut =>
+      @model.remove()
 
   readHtml: (html) =>
     html or "<p></p>"
@@ -614,9 +615,11 @@ class Ed.Views.Blocks extends Ed.Views.CompositeView
     block_holder: ".blocks"
     blocks: ".block"
 
+  events:
+    "click a.addblock": "addEmptyBlock"
+
   wrap: =>
     @collection = new Ed.Collections.Blocks
-    @$el.addClass 'editing'
     if @ui.blocks.length
       @ui.blocks.each (i, block) =>
         $block = $(block)
@@ -632,11 +635,20 @@ class Ed.Views.Blocks extends Ed.Views.CompositeView
     @setLengthClass()
     @collection.on 'add remove reset', @setLengthClass
 
+  addEmptyBlock: =>
+    console.log "addEmptyBlock"
+    @collection.add content: ""
+
   addBlock: (content="") =>
     @collection.add content: content
 
   setLengthClass: =>
+    console.log "setLengthClass", @collection.length
     @ui.block_holder.removeClass('none one two three four').addClass(['none', 'one', 'two', 'three', 'four'][@collection.length])
+    if @collection.length >= 4
+      @ui.buttons.addClass('inactive')
+    else
+      @ui.buttons.removeClass('inactive')
 
 
 class Ed.Views.Quote extends Ed.Views.Asset
