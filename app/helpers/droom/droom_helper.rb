@@ -101,6 +101,14 @@ module Droom
       render :partial => "droom/preferences/radio_set", :locals => {:key => key, :values => values}
     end
 
+    def render_page(page)
+      page.render
+    end
+
+    def render_published_page(page)
+      page.render_published
+    end
+
     def shorten(text, length=64, separator=" ")
       text = strip_tags(text)
       length = length[:length] if length.is_a?(Hash)

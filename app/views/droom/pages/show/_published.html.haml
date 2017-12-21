@@ -8,11 +8,11 @@
     .fg
       #title
         %h1.title
-          = sanitize(page.published_title)
+          = sanitize(page.render(:published_title))
         - if page.published_subtitle?
           %p.subtitle
-            = sanitize(page.published_subtitle)
+            = sanitize(page.render(:published_subtitle))
 
   #page_content.ed-content
     .content
-      = clean_html(page.published_content.presence || "<p></p>")
+      = clean_html(page.render(:published_content).presence || "<p></p>")

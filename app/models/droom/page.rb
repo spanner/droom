@@ -1,3 +1,5 @@
+require 'mustache'
+
 module Droom
   class Page < ApplicationRecord
     include Droom::Concerns::Slugged
@@ -43,11 +45,29 @@ module Droom
       !!publishing
     end
 
+    def render(attribute=:published_content)
+      if renderable_attributes.include? attribute
+        Mustache.render(read_attribute(attribute), interpolations)
+      else
+        ""
+      end
+    end
+
     def interpolations
+      {
+        site_title: I18n.t('site_title')
+      }.merge custom_interpolations
+    end
+
+    def custom_interpolations
       {}
     end
 
     protected
+
+    def renderable_attributes
+      [:title, :published_title, :subtitle, :published_subtitle, :content, :published_content]
+    end
 
     def publish_if_publishing
       publish! if publish_now?

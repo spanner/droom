@@ -21,4 +21,4 @@
 
     #page_content.ed-content
       .content
-        = clean_html(@page.content.presence || "<p></p>")
+        = clean_html(@page.render(:content) || "<p></p>")

@@ -8,7 +8,6 @@ require "droom/searchability"
 require "droom/taggability"
 require "droom/folders"
 require "droom/scrubbers"
-require "mail_form"
 
 module Droom  
   # Droom configuration is handled by accessors on the Droom base module.

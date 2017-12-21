@@ -8,6 +8,7 @@ require 'cancan'
 require 'kaminari'
 require 'icalendar'
 require 'haml'
+require 'mail_form'
 
 module Droom
   class Engine < ::Rails::Engine

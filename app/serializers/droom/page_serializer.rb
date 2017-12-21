@@ -17,7 +17,7 @@ class Droom::PageSerializer < ActiveModel::Serializer
   end
 
   def content
-    object.published_content
+    object.render_published
   end
 
   def image_url
