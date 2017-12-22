@@ -9,15 +9,15 @@ class Droom::PageSerializer < ActiveModel::Serializer
 
 
   def title
-    object.published_title
+    object.render(:published_title)
   end
 
   def subtitle
-    object.published_subtitle
+    object.render(:published_subtitle)
   end
 
   def content
-    object.render_published
+    object.render(:published_content)
   end
 
   def image_url

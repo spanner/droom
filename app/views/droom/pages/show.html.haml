@@ -4,21 +4,22 @@
 %p
   = t :preview_page_intro
 
-%main
+#page_form
+  %aside#instructions
+    = form_for @page, url: droom.publish_page_url(@page), method: "put", html: {id: "page_form"} do |f|
+      %span.left
+        %a{href: droom.pages_url}
+          ↞ pages
+  
+      %a.button.edit{href: droom.edit_page_url(@page)}
+        edit
 
-= form_for @page, url: droom.publish_page_url(@page), method: "put", html: {id: "page_form"} do |f|
-  #form_controls
-    %span.left
-      %a{href: droom.pages_url}
-        ↞ pages
-    
-    %a.button.edit{href: droom.edit_page_url(@page)}
-      edit
-    = f.submit "publish", class: "publish"
+      = f.submit "publish", class: "publish"
 
-  #page_preview
-    = render "droom/pages/bighead", page: @page
+  %section#preview
+    #page_preview
+      = render "droom/pages/bighead", page: @page
 
-    #page_content.ed-content
-      .content
-        = clean_html(@page.render(:content) || "<p></p>")
+      #page_content
+        .content
+          = @page.render(:content).html_safe

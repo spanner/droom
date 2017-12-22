@@ -574,11 +574,10 @@ class Ed.Views.Block extends Ed.View
     remover: "a.remover"
 
   events:
-    "focus .ed-block": "focusBlock"
     "click a.remove": "removeBlock"
 
   bindings:
-    ".ed-block":
+    ":el":
       observe: "content"
       updateMethod: "html"
       onGet: "readHtml"
@@ -597,10 +596,6 @@ class Ed.Views.Block extends Ed.View
 
   readHtml: (html) =>
     html or "<p></p>"
-
-  focusBlock: (e) =>
-    # might need to place caret...
-    true
 
 
 class Ed.Views.Blocks extends Ed.Views.CompositeView

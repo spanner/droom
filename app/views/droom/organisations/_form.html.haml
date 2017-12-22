@@ -1,4 +1,6 @@
-= form_for @organisation, :html => {:class => 'edit organisation'} do |f|
+- organisation ||= @organisation
+
+= form_for [droom, organisation], :html => {:class => 'edit organisation'} do |f|
   %p.name
     = f.label :name
     %br

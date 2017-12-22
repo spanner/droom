@@ -14,6 +14,7 @@
   position: relative
   width: 100%
   padding-bottom: 50%
+  margin-bottom: 0.5em
   .bg
     position: absolute
     top: 0
@@ -27,29 +28,33 @@
       size: cover
   .fg
     position: absolute
-    bottom: 18px
-    left: 36px
-    width: calc(100% - 64px)
-    #pagetitle
-      margin: 0 auto
-    h1.title
-      font-size: 2em
-      color: white
-      margin: 0
-    p.subtitle
-      font-size: 1rem
-      color: white
-      margin: 0.5em 0
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background-color: rgba(0,0,0,0.3)
+    #title
+      position: absolute
+      bottom: 10px
+      left: 30px
+      h1.title
+        font-size: 2em
+        color: white
+        margin: 0
+      p.subtitle
+        font-size: 1rem
+        color: white
+        margin: 0.5em 0
 
 #page_title
   h1
     font-size: 2em
     margin: 36px 36px 0 36px
+    text-align: center
 
 #page_content
   padding: 18px 36px
   min-height: 500px
-  background-color: white
   & > p:first-child
     font-size: 1.25em
     line-height: 1.5
@@ -62,7 +67,7 @@
     display: flex
     flex-flow: row nowrap
     align-items: flex-start
-    justify-content: space-between
+    justify-content: space-around
     .block
       position: relative
       box-sizing: border-box
@@ -75,22 +80,18 @@
           margin-top: 0.25em
         &+ul
           margin-top: 0.25em
-      
     &.two
-      align-items: center
       .block
-        width: 45%
-        font-size: 1.5em
-        line-height: 1.8
+        width: 46%
     &.three .block
-      width: 30%
+      width: 29%
       font-size: 1rem
     &.four .block
       width: 24%
       font-size: 0.9rem
 
   figure
-    margin: 24px -36px
+    margin: 24px 0
     video
       width: 100%
       height: auto
@@ -203,6 +204,19 @@
         +hover
         span
           width: calc(100% - 50px)
+
+  section#preview
+    position: relative
+    width: 66%
+    margin: 0
+    background-color: white
+    margin-bottom: 3em
+    #page_preview
+      box-sizing: border-box
+      position: relative
+      width: 100%
+      border: 1px solid $pale
+      box-shadow: 0 1px 6px $shadow
 
   section#editor
     width: 66%

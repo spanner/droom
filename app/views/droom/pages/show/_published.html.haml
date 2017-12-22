@@ -15,4 +15,4 @@
 
   #page_content.ed-content
     .content
-      = clean_html(page.render(:published_content).presence || "<p></p>")
+      = page.render(:published_content).html_safe

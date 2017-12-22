@@ -39,9 +39,9 @@ en:
         slug: "Slug (usually automatic)"
         content: "Enter help text and links here."
       organisation:
-        name: "Name"
+        name: "Organisation Name"
         url: "Web link"
-        description: "Mission and description"
+        description: "Brief description"
       permission:
         service_id: "Service"
         name: "Title or link text"
@@ -62,8 +62,8 @@ en:
         description: "Notes"
         slug: "Key"
       user:
-        given_name: "Given name"
-        family_name: "Family name"
+        given_name: "Forename"
+        family_name: "Surname"
         chinese_name: "中国姓名"
         email: "Email"
         phone: "Telephone"
@@ -329,12 +329,16 @@ en:
   person_post_country: "Country"
   person_post_code: "Post code"
   placeholders:
-    email:
-      email: "Email address"
-    phone:
-      phone: "Phone number"
     address:
       address: "Postal address"
+    email:
+      email: "Email address"
+    organisation:
+      name: "Organisation name"
+      url: "Website link"
+      description: "Brief description"
+    phone:
+      phone: "Phone number"
     scrap:
       name: "Heading"
       url: "Link destination"
@@ -366,6 +370,7 @@ en:
   type_name: "Start typing a name"
   profile: "Profile"
   search: "Search"
+  sign_up: "Sign up"
   "on": "on"
   at: "at"
   or: "or"
