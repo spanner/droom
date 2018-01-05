@@ -2,10 +2,10 @@ module Droom::Api
   class ApiController < Droom::EngineController
 
     respond_to :json
-    before_action :set_access_control_headers
-    before_action :assert_local_request
-    skip_before_action :authenticate_user!
     skip_before_action :verify_authenticity_token
+    before_action :set_access_control_headers
+    skip_before_action :authenticate_user!, if: :api_local?
+    before_action :assert_local_request, if: :api_local?
 
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
     rescue_from "Droom::Error", with: :blew_up
@@ -14,7 +14,7 @@ module Droom::Api
       @current_ability ||= Droom::Ability.new(current_user)
     end
 
-  protected
+    protected
     
     def assert_local_request
       raise CanCan::AccessDenied if (Rails.env.production? || Rails.env.staging?) && (request.host != 'localhost' || request.port != Settings.api_port)
@@ -51,6 +51,10 @@ module Droom::Api
     
     def api_controller?
       true
+    end
+
+    def api_local?
+      Droom::api_local?
     end
   end
 end

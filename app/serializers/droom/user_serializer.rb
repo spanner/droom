@@ -2,13 +2,12 @@ require 'active_model_serializers'
 
 class Droom::UserSerializer < ActiveModel::Serializer
   attributes :uid,
-             :authentication_token,
              :status,
              :title,
              :given_name,
              :family_name,
              :chinese_name,
-             :colloquial_name,
+             :name,
              :honours,
              :affiliation,
              :email,
@@ -21,8 +20,11 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :images,
              :confirmed,
              :permission_codes,
-             :unconfirmed_email,
              :password_set
+
+  def name
+    object.colloquial_name
+  end
 
   def confirmed
     object.confirmed?

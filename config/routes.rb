@@ -11,6 +11,7 @@ Droom::Engine.routes.draw do
     #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
     resources :users do
       post 'reindex', on: :member, as: :reindex
+      get "whoami" , on: :collection, as: :whoami
     end
     resources :events
     resources :venues

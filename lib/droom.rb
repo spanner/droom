@@ -59,7 +59,8 @@ module Droom
                  :separate_calendars,
                  :second_time_zone,
                  :require_login_permission,
-                 :default_permissions
+                 :default_permissions,
+                 :api_local
   
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
@@ -261,8 +262,11 @@ module Droom
     def default_permissions
       @@default_permissions ||= %w{droom.login droom.calendar droom.directory droom.attach droom.library}
     end
-    
-    
+
+    def api_local?
+      !!@@api_local
+    end
+
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
     # doesn't exist you just get back the default value, or nil if there isn't one. This is where you
     # set the defaults.

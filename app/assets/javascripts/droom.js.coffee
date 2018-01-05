@@ -10,6 +10,7 @@
 #= require droom/lib/Sortable
 #= require droom/lib/jquery.cookie
 #= require droom/lib/jquery.datepicker
+#= require droom/lib/jquery.waterfall
 #= require droom/lib/wysihtml5
 #= require droom/lib/parser_rules/advanced
 
@@ -22,6 +23,7 @@
 #= require droom/stream
 #= require droom/uploader
 #= require droom/widgets
+#= require droom/noticeboard
 #= require_self
 
 jQuery ($) ->

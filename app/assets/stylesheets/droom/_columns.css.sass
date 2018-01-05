@@ -23,6 +23,9 @@
     &:last-child, &.last
       margin-right: 0
 
+span.notcol
+  display: block
+  clear: both
 
 .onecol, .twocol, .threecol, .fourcol
   +clearfix
@@ -77,7 +80,7 @@
       +column(24%, 2%)
   &.equal
     .col
-      +column(31%, 2%)
+      +column(32%, 2%)
 
 .fourcol
   .col

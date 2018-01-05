@@ -14,6 +14,10 @@ module Droom::Api
       render json: @user
     end
 
+    def whoami
+      render json: current_user
+    end
+
     # This is a almost always a preliminary call at the initial auth stage,
     # so the client is not yet setting auth headers. We look for a token in params too.
     #
