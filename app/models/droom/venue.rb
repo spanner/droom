@@ -71,6 +71,7 @@ module Droom
         :type => 'venue',
         :prompt => name,
         :value => name,
+        :detail => address.to_s,
         :id => id
       }
     end
