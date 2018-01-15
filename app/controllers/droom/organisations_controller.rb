@@ -32,7 +32,7 @@ module Droom
   
     def organisation_params
       if params[:organisation]
-        params.require(:organisation).permit(:name, :description, :owner, :owner_id, :url, :chinese_name, :phone, :address, :organisation_type_id)
+        params.require(:organisation).permit(:name, :description, :owner, :owner_id, :chinese_name, :phone, :address, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image_date, :image_name, :logo_data, :logo_name)
       else
         {}
       end

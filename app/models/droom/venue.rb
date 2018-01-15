@@ -46,11 +46,11 @@ module Droom
     def to_s
       name
     end
-    
+
     def identifier
       'venue'
     end
-    
+
     def name_and_address
       [name, address, post_code].compact.join("\n")
     end

@@ -12,8 +12,11 @@ module Droom::Api
     end
 
     def update
-      @organisation.update_attributes(organisation_params)
-      render json: @organisation
+      if @organisation.update_attributes(organisation_params)
+        render json: @organisation
+      else
+        render json: {errors: @organisation.errors}, status: :unprocessable_entity
+      end
     end
 
     def create
@@ -34,8 +37,7 @@ module Droom::Api
     protected
 
     def organisation_params
-      params.require(:organisation).permit(:name, :chinese_name, :description, :phone, :address, :owner_id, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :logo_data, :logo_name
-)
+      params.require(:organisation).permit(:name, :chinese_name, :description, :phone, :address, :owner_id, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image_data, :image_name, :logo_data, :logo_name)
     end
 
   end
