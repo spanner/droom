@@ -17,6 +17,15 @@
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
     = render partial: 'droom/users/edit/user_fields', locals: {f: f, user: user, minimal: true}
 
+    - if Droom.use_organisations?
+      - if admin?
+        %p.organisation.admin
+          = f.label :organisation_id
+          = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+      - else
+        = f.hidden_field :organisation_id
+
+
     - unless @user.confirmed?
       = f.hidden_field :send_confirmation, value: true
 

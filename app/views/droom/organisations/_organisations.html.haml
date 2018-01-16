@@ -1,4 +1,4 @@
-.organisations_list{:data => {:refreshable => true, :url => "#{droom.organisations_path}.js"}}
+.organisations_list.autogrid{:data => {:refreshable => true, :url => "#{droom.organisations_path}.js"}}
   = render :partial => 'droom/organisations/show/listed', :collection => @organisations
 
 .pagination.lower

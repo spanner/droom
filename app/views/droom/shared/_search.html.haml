@@ -1,0 +1,13 @@
+- url ||= ""
+
+%form.search{action: url}>
+  %input#search_box{type: "text", name: "q", value: params['q']}
+  %label{for: "search_box", title: t('tooltips.filter')}
+    %svg
+      %use{"xlink:href" => "#search_symbol"}
+  %a.submit{title: t('tooltips.click_to_search')}
+    %svg
+      %use{"xlink:href" => "#search_button_symbol"}
+  %a.cancel{title: t('tooltips.click_to_reset_search'), href: url}
+    %svg
+      %use{"xlink:href" => "#cross_button_symbol"}

@@ -1,0 +1,48 @@
+- organisation ||= @organisation
+
+%section.links
+  %ul.social
+    - if organisation.url?
+      %li
+        %a.web{href: organisation.url}
+          %svg.icon
+            %use{"xlink:href" => "#web_symbol"}
+          %span.label
+            = organisation.url
+
+    - if organisation.weibo_id?
+      %li
+        %a.weibo{href: organisation.weibo_url}
+          %svg.icon
+            %use{"xlink:href" => "#weibo_symbol"}
+          %span.label
+            Weibo:
+            = organisation.weibo_id
+
+    - if organisation.facebook_page?
+      %li
+        %a.facebook{href: organisation.facebook_url}
+          %svg.icon
+            %use{"xlink:href" => "#facebook_symbol"}
+          %span.label
+            Facebook:
+            = organisation.facebook_page
+
+    - if organisation.twitter_id?
+      %li
+        %a.twitter{href: organisation.twitter_id}
+          %svg.icon
+            %use{"xlink:href" => "#twitter_symbol"}
+          %span.label
+            Twitter:
+            = organisation.twitter_id
+
+    - if organisation.instagram_id?
+      %li
+        %a.instagram{href: organisation.instagram_url}
+          %svg.icon
+            %use{"xlink:href" => "#instagram_symbol"}
+          %span.label
+            Instagram:
+            = organisation.instagram_id
+

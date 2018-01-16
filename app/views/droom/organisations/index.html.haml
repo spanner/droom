@@ -1,8 +1,24 @@
 - content_for :title do
   = t :directory
 
+- content_for :search do
+  = render 'droom/shared/search', url: organisations_url
+
 - content_for :standfirst do
-  = t :organisations_introduction, org_count: @organisations.count, person_count: Droom::User.count
+  - if admin?
+    .admin.right
+      = link_to droom.new_organisation_url, :class => 'add', :data => {:action => "popup", :refreshed => ".organisations_list"} do
+        %svg.icon.small
+          %use{"xlink:href" => "#plus_symbol"}
+        %span.label
+          = t(:add_organisation)
+      = link_to droom.new_user_url, :class => 'add', :data => {:action => "popup", :refreshed => ".organisations_list"} do
+        %svg.icon.small
+          %use{"xlink:href" => "#plus_symbol"}
+        %span.label
+          = t(:add_user)
+  %p
+    = t :organisations_introduction, org_count: Droom::Organisation.count, person_count: Droom::User.count
 
 - content_for :filter do
   #finder
@@ -14,7 +30,6 @@
       #found
         %p.note
           = t :find_people_notes
-
 
 #main.organisations
   = render :partial => 'droom/organisations/organisations'

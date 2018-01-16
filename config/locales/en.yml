@@ -124,7 +124,7 @@ en:
   add_page: "Add page"
   add_permission: "Add a permission"
   add_group: "Add group"
-  add_new_user: "Invite a new data room user"
+  add_new_user: "Invite a new network user"
   add_permission: "Add permission"
   add_service: "Add service"
   add_subfolder: Add sub-folder
@@ -361,6 +361,7 @@ en:
       phone: "Telephone"
       title: "Title"
   profile: "Profile"
+  quick_edit: "Quick edit"
   send_message: "Send Message"
   has_been_created: "has been added to the system"
   and_invited: "and invited to log in."

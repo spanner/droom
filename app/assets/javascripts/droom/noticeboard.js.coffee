@@ -1,17 +1,25 @@
-$.fn.waterfallify = ->
+$.fn.autoGrid = (selector='.gridbox') ->
+  @each ->
+    console.log "autogrid", @
+    $el = $(@)
+    $el.find(selector).autoRow()
+
+$.fn.autoRow = ->
   @each ->
     $el = $(@)
-    waterfall = $el.waterfall
-      defaultContainerWidth: 900
-      colMinWidth: 300
-      autoresize: true
-    $(window).on 'resize', -> waterfall.reflow()
-    $(window).on 'load', -> waterfall.reflow()
-    $el.find('.notice').notice(waterfall)
+    console.log "autoRow", @
+    contents = $el.find('.content')
+    row = 20
+    space = 30
+    rows_touched = Math.ceil((contents.outerHeight() + row) / (row + space))
+    $el.css "grid-row-end", "span #{rows_touched}"
+
+$.fn.noticeboard = ->
+  @each ->
+    $el = $(@)
+    $el.autoGrid()
+    $el.find('.notice').notice()
     $(document.location.hash).highlight()
-    $el.on 'refreshed', ->
-      _.defer ->
-        $('#noticeboard').waterfallify()
 
 
 $.fn.highlight = ->
@@ -20,15 +28,15 @@ $.fn.highlight = ->
     @addClass('flash')
     @trigger 'expand'
 
-$.fn.notice = (waterfall) ->
+
+$.fn.notice = ->
   @each ->
-    new Notice(@, waterfall)
+    new Notice(@)
 
 
 class Notice
-  constructor: (element, waterfall) ->
+  constructor: (element) ->
     @_container = $(element)
-    @_waterfall = waterfall
     @_container.on 'refreshed', @refresh
     @_expander = @_container.find('a.reveal')
     if @_expander.length
@@ -49,10 +57,3 @@ class Notice
     @_container = $(new_container)
     @_container.on 'refreshed', @refresh
     @_expander = @_container.find('a.reveal')
-    @reflow()
-
-  reflow: (e) =>
-    if @_container.index() == 0
-      @_container.data 'span', 2
-    @_waterfall?.reflow()
-

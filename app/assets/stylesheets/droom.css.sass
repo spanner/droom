@@ -362,16 +362,21 @@ form.event, form.user
   p.admin
     clear: both
     float: right
-    margin: 16px 10px
+    margin: 16px 4px
     label
       display: inline-block
     select
-      width: 75px
+      width: 120px
   .buttons
     margin: 10px 0
     float: left
   p.guidance
     clear: both
+
+form.user
+  select, textarea, iframe
+    max-width: 757px
+    box-sizing: border-box
 
 form.folder
   input.name
@@ -404,8 +409,12 @@ form.document
     font-size: 1em
     height: 60px
 
-
-
+form.organisation
+  input.name
+    width: 500px
+    font-size: 2em
+  input.url, textarea
+    width: 500px
 
 .image-upload
   position: relative
@@ -477,29 +486,31 @@ form.user
   p
     margin: 0
     margin-bottom: 10px
-  p.names
+  .hanging
     position: relative
+    display: block
     float: left
     width: calc(100% - 100px)
     +clearfix
-    input[type="text"]
-      width: 100%
-      box-sizing: border-box
-    span.title
-      display: inline-block
-      vertical-align: top
-      width: calc(16% - 10px)
-      margin-right: 10px
-    span.name
-      display: inline-block
-      vertical-align: top
-      width: calc(32% - 10px)
-      margin-right: 10px
-    span.chinese_name, span.honours
-      display: inline-block
-      vertical-align: top
-      width: 20%
-      margin-right: 0
+    p.names
+      input[type="text"]
+        width: 100%
+        box-sizing: border-box
+      span.title
+        display: inline-block
+        vertical-align: top
+        width: calc(16% - 10px)
+        margin-right: 10px
+      span.name
+        display: inline-block
+        vertical-align: top
+        width: calc(32% - 10px)
+        margin-right: 10px
+      span.chinese_name, span.honours
+        display: inline-block
+        vertical-align: top
+        width: 20%
+        margin-right: 0
   .contacts
     overflow: hidden
     margin-top: 10px
@@ -526,6 +537,7 @@ form.user
     label.inline
       margin-right: 10px
   div.description
+    clear: left
     textarea
       width: 100%
   div.address_book
@@ -1813,7 +1825,7 @@ ul.people
             color: $red
       span.mugshot
         color: $pale
-        background: none
+        background-image: none
     &.refused
       opacity: 0.4
     span.mugshot
@@ -1823,13 +1835,13 @@ ul.people
       width: 32px
       height: 32px
       border-radius: 16px
+      border: 1px solid $pale
       margin-right: 9px
       margin-top: 11px
       svg
         width: 32px
         height: 32px
       background:
-        color: $pale
         repeat: no-repeat
         position: center center
         size: cover
@@ -2201,11 +2213,11 @@ ul.checklist
 @import droom/datepicker
 @import droom/uploader
 @import droom/columns
-@import droom/menus
-@import droom/forms
-@import droom/organisations
-@import droom/help
-@import droom/pages
 @import droom/ed
+@import droom/forms
+@import droom/help
+@import droom/menus
+@import droom/noticeboard
+@import droom/pages
 @import medium/base
 @import medium/droom

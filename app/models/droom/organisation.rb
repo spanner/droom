@@ -12,10 +12,12 @@ module Droom
                       styles: {
                         thumb: ["128x96#", :png],
                         standard: ["640x480>", :jpg],
+                        hero: ["1920x1080>", :jpg]
                       },
                       convert_options: {
                         thumb: "-strip",
-                        standard: "-quality 50 -strip"
+                        standard: "-quality 50 -strip",
+                        hero: "-quality 25 -strip"
                       }
     has_attached_file :logo,
                       default_url: :nil,
@@ -110,6 +112,8 @@ module Droom
 
     ## Social links
     #
+    # Should probably be implemented as a more future-proof social_links association, but this will get us started.
+    #
     def instagram_url
       url_with_base(instagram_id, "instagram.com") if instagram_id?
     end
@@ -125,8 +129,6 @@ module Droom
     def weibo_url
       url_with_base(weibo_id, "www.weibo.com") if weibo_id?
     end
-
-    protected
 
     def url_with_base(fragment, base)
       if fragment =~ /#{Regexp.quote(base)}/i
@@ -151,6 +153,17 @@ module Droom
       url.strip
     end
 
+    ## Search
+    #
+    searchkick callbacks: :async
+
+    def search_data
+      {
+        name: name || "",
+        chinese_name: chinese_name || "",
+        description: description
+      }
+    end
 
   end
 end

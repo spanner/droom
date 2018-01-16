@@ -2,7 +2,7 @@
   .menu{:data => {:for => "organisation_#{organisation.id}"}}
     %ul.actions
       %li
-        = link_to t(:edit_organisation), droom.edit_organisation_url(organisation), :class => 'edit', :data => {:action => "popup", :replaced => "#organisation_#{organisation.id}"}
+        = link_to t(:quick_edit), droom.edit_organisation_url(organisation), :class => 'edit', :data => {:action => "popup", :replaced => "#organisation_#{organisation.id}"}
       %li
         = link_to t(:add_user), droom.new_organisation_user_url(organisation), :class => 'add', :data => {:action => "popup", :affected => "#organisation_#{organisation.id}"}
       %li
