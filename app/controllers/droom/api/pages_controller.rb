@@ -2,6 +2,8 @@ require 'active_model_serializers'
 
 module Droom::Api
   class PagesController < Droom::Api::ApiAssetsController
+    before_action :set_access_control_headers
+    skip_before_action :authenticate_user!
 
     def index
       @pages = Droom::Page.published

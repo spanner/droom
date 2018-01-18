@@ -4,6 +4,7 @@ module Droom::Api
     respond_to :json
     skip_before_action :verify_authenticity_token
     before_action :set_access_control_headers
+
     skip_before_action :authenticate_user!, if: :api_local?
     before_action :assert_local_request, if: :api_local?
 

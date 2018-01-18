@@ -5,6 +5,7 @@ module Droom
     def initialize(user)
       user ||= Droom::User.new
       can :create, Droom::Enquiry
+      can :read, Droom::Page
 
       if user.persisted?
         if user.admin?
