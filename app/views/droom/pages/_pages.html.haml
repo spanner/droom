@@ -1,2 +1,10 @@
-.pages_list{:data => {:refreshable => true, :url => "#{droom.pages_path}.js"}}
+#pages{:data => {:refreshable => true, :url => "#{droom.pages_path}.js"}}
   = render :partial => 'droom/pages/show/listed', :collection => @pages
+
+  - if can? :create, Droom::Page
+    .page.new
+      = link_to droom.new_page_url, class: "central" do
+        %svg.icon
+          %use{"xlink:href" => "#plus_button_symbol"}
+        %span.label
+          = t(:add_page)

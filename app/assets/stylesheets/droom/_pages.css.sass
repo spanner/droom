@@ -16,6 +16,59 @@ a.breadhead
   &.darker
     background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 40%)
 
+#pages
+  .page
+    position: relative
+    width: 240px
+    height: 360px
+    float: left
+    display: inline-block
+    vertical-align: top
+    overflow: hidden
+    margin-right: 20px
+    margin-bottom: 20px
+    border: 1px solid $pale
+    border-radius: 4px
+    &.new
+      display: flex
+      justify-content: center
+      align-items: center
+      a
+        display: block
+        color: $green
+        font-size: 1.6em
+        font-weight: lighter
+        text-align: center
+        svg
+          display: block
+          margin: 10px auto
+          width: 40px
+          height: 40px
+    .head
+      position: relative
+      width: 240px
+      height: 240px
+      border-radius: 4px 4px 0 0
+      background:
+        color: $mid
+        position: center center
+        repeat: no-repeat
+        size: cover
+      h3
+        position: absolute
+        bottom: 10px
+        left: 10px
+        color: white
+        font-size: 0.9rem
+        font-weight: bold
+    .body
+      width: 220px
+      margin: 10px
+      font-size: 0.75rem
+      line-height: 1.6
+      color: $dark
+
+
 #page_masthead
   position: relative
   width: 100%
