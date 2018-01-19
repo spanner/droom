@@ -31,6 +31,9 @@ module Droom
     validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
 
     scope :added_since, -> date { where("created_at > ?", date)}
+    
+    scope :approved, -> {where(approved: true)}
+
     default_scope -> {order("name ASC")}
 
     def self.for_selection
@@ -39,6 +42,9 @@ module Droom
       organisations
     end
 
+    def send_registration_confirmation
+      # just send it.
+    end
 
     ## Images
     #
@@ -76,7 +82,6 @@ module Droom
     def image_name=(name)
       self.image_file_name = name
     end
-
 
     def logo_url(style=:standard, decache=true)
       if logo?
@@ -161,7 +166,8 @@ module Droom
       {
         name: name || "",
         chinese_name: chinese_name || "",
-        description: description
+        description: description,
+        approved: approved?
       }
     end
 

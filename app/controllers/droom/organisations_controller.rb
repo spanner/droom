@@ -3,12 +3,26 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     helper Droom::DroomHelper
+
+    skip_before_action :verify_authenticity_token, only: [:register]
+    skip_before_action :authenticate_user!, only: [:register]
     before_action :search_organisations, only: [:index]
-    load_and_authorize_resource
+    load_and_authorize_resource, except: [:register]
 
     def create
       @organisation.update_attributes(organisation_params)
       respond_with @organisation
+    end
+
+    def register
+      if Droom.accept_registrations?
+        @user = Droom::User.create user_params.merge(defer_confirmation: true)
+        @organisation = Droom::Organisation.create user_params.merge(approved: false, owner: @user)
+        @organisation.send_registration_confirmation
+        render
+      else
+        head :not_allowed
+      end
     end
 
     def update

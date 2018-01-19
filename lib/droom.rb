@@ -60,7 +60,8 @@ module Droom
                  :second_time_zone,
                  :require_login_permission,
                  :default_permissions,
-                 :api_local
+                 :api_local,
+                 :accept_registrations
   
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
@@ -265,6 +266,10 @@ module Droom
 
     def api_local?
       !!@@api_local
+    end
+
+    def accept_registrations?
+      !!@accept_registrations
     end
 
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
