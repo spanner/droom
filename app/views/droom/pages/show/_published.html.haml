@@ -1,18 +1,17 @@
 - page ||= @page
 
-#page
-  #page_masthead
-    - image_url = page.published_image.url(:hero) if page.published_image
-    .bg{style: "background-image: url('#{image_url}')"}
-    .darken
-    .fg
-      #title
-        %h1.title
-          = sanitize(page.render(:published_title))
-        - if page.published_subtitle?
-          %p.subtitle
-            = sanitize(page.render(:published_subtitle))
+- content_for :masthead do
+  - image_url = page.published_image.url(:hero) if page.published_image
+  .bg{style: "background-image: url('#{image_url}')"}
+  .darken
+  .fg
+    #title
+      %h1.title
+        = sanitize(page.render(:published_title))
+      - if page.published_subtitle?
+        %p.subtitle
+          = sanitize(page.render(:published_subtitle))
 
-  #page_content.ed-content
-    .content
-      = page.render(:published_content).html_safe
+#page_content.ed-content
+  .content
+    = page.render(:published_content).html_safe

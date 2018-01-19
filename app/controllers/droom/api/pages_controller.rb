@@ -12,6 +12,7 @@ module Droom::Api
 
     def show
       if @page = Droom::Page.published.find_by(slug: params[:id])
+        authenticate_user! unless @page.public?
         return_page
       else
         raise ActiveRecord::RecordNotFound, "No such page."

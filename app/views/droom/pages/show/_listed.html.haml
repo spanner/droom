@@ -11,7 +11,7 @@
 - bg = page.main_image ? page.main_image.url : ""
 
 %div{class: cssclass, id: "page_#{page.id}", data: {refreshable: true, url: droom.page_path(page, view: "listed")} }
-  = link_to droom.edit_page_url(page) do
+  = link_to droom.page_url(page) do
     .head{style: "background-image: url(#{bg})"}
       .darken
       %h3.name

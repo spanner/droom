@@ -45,6 +45,10 @@ module Droom
       !!publishing
     end
 
+    def publication_required?
+      !published_at || published_at < updated_at
+    end
+
     def render(attribute=:published_content)
       if renderable_attributes.include? attribute
         Mustache.render(read_attribute(attribute), interpolations)

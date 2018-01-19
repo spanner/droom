@@ -1,4 +1,9 @@
+- content_for :pagetitle do 
+  = t "pages.edit"
+
 - content_for :title do 
+  %a.breadhead{href: droom.pages_url}
+    = t("pages.index")
   = t "pages.edit"
 
 #page_form
