@@ -6,6 +6,8 @@ module Droom
 
     belongs_to :organisation_type
     belongs_to :owner, :class_name => 'Droom::User'
+    belongs_to :approved_by, :class_name => 'Droom::User'
+
     accepts_nested_attributes_for :owner
 
     has_attached_file :image,
@@ -31,7 +33,6 @@ module Droom
     validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
 
     scope :added_since, -> date { where("created_at > ?", date)}
-    
     scope :approved, -> {where(approved: true)}
 
     default_scope -> {order("name ASC")}
@@ -43,8 +44,27 @@ module Droom
     end
 
     def send_registration_confirmation
-      # just send it.
+      # Droom.mailer is a configuration variable that usually contains Droom::Mailer
+      Droom.mailer.send(:org_confirmation, self).deliver_later
+      Droom.mailer.send(:org_notification, self).deliver_later
     end
+
+    def approve!(user)
+      unless approved?
+        self.approved_at = Time.now
+        self.approved_by = user
+        send_organisation_welcome
+      end
+    end
+
+    def approved?
+      approved_at?
+    end
+
+    def send_welcome
+      Droom.mailer.send(:org_welcome, self).deliver_later
+    end
+
 
     ## Images
     #
@@ -117,7 +137,7 @@ module Droom
 
     ## Social links
     #
-    # Should probably be implemented as a more future-proof social_links association, but this will get us started.
+    # Should really be implemented as a more future-proof social_links association, but this will get us started.
     #
     def instagram_url
       url_with_base(instagram_id, "instagram.com") if instagram_id?

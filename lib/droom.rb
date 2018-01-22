@@ -17,7 +17,7 @@ module Droom
                  :home_url,
                  :suggestible_classes,
                  :searchable_classes,
-                 :yt_client,
+                 :mailer,
                  :layout,
                  :dashboard_layout,
                  :page_layout,
@@ -39,10 +39,12 @@ module Droom
                  :use_titles,
                  :use_honours,
                  :use_organisations,
+                 :organisations_registerable,
                  :enable_mailing_lists,
                  :mailman_table_name,
                  :mailing_lists_active_by_default,
                  :mailing_lists_digest_by_default,
+                 :yt_client,
                  :show_venue_map,
                  :dropbox_enabled,
                  :dropbox_app_key,
@@ -60,8 +62,7 @@ module Droom
                  :second_time_zone,
                  :require_login_permission,
                  :default_permissions,
-                 :api_local,
-                 :accept_registrations
+                 :api_local
   
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
@@ -71,6 +72,10 @@ module Droom
   class << self
     def home_url
       @@home_url ||= "http://example.com"
+    end
+
+    def mailer
+      @mailer || Droom::Mailer
     end
     
     def layout
@@ -163,6 +168,10 @@ module Droom
     
     def use_organisations?
       !!@@use_organisations
+    end
+
+    def organisations_registerable?
+      !!@organisations_registerable
     end
 
     def stream_shared?
@@ -266,10 +275,6 @@ module Droom
 
     def api_local?
       !!@@api_local
-    end
-
-    def accept_registrations?
-      !!@accept_registrations
     end
 
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 

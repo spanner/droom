@@ -9,15 +9,15 @@ module Droom
     before_action :search_organisations, only: [:index]
     load_and_authorize_resource, except: [:register]
 
+    #TODO approve directly if admin user is creating
     def create
       @organisation.update_attributes(organisation_params)
       respond_with @organisation
     end
 
     def register
-      if Droom.accept_registrations?
-        @user = Droom::User.create user_params.merge(defer_confirmation: true)
-        @organisation = Droom::Organisation.create user_params.merge(approved: false, owner: @user)
+      if Droom.organisations_registerable?
+        @organisation = Droom::Organisation.create organisation_params
         @organisation.send_registration_confirmation
         render
       else
