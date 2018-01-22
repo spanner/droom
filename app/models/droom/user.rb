@@ -169,6 +169,8 @@ module Droom
       order("family_name ASC, given_name ASC")
     }
 
+    scope :admins, -> { where(admin: true) }
+
 
     ## Editor assets
     #

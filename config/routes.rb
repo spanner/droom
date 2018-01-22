@@ -1,5 +1,4 @@
 Droom::Engine.routes.draw do
-  root to: "dashboard#index", as: :dashboard
 
   match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options]
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]
@@ -18,7 +17,9 @@ Droom::Engine.routes.draw do
     resources :images
     resources :videos
     resources :pages
-    resources :organisations
+    resources :organisations do
+      post :register, on: :collection
+    end
   end
 
   devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords'}
@@ -75,6 +76,7 @@ Droom::Engine.routes.draw do
   end
 
   resources :organisations do
+    post :register, on: :collection
     resources :users
   end
 

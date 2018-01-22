@@ -3,12 +3,26 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     helper Droom::DroomHelper
-    before_action :search_organisations, only: [:index]
-    load_and_authorize_resource
 
+    skip_before_action :verify_authenticity_token, only: [:register]
+    skip_before_action :authenticate_user!, only: [:register]
+    before_action :search_organisations, only: [:index]
+    load_and_authorize_resource except: [:register]
+
+    #TODO approve directly if admin user is creating
     def create
       @organisation.update_attributes(organisation_params)
       respond_with @organisation
+    end
+
+    def register
+      if Droom.organisations_registerable?
+        @organisation = Droom::Organisation.create organisation_params
+        @organisation.send_registration_confirmation
+        render
+      else
+        head :not_allowed
+      end
     end
 
     def update

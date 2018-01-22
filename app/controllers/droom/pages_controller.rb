@@ -4,6 +4,14 @@ module Droom
     load_and_authorize_resource except: [:published]
     skip_before_action :authenticate_user!, only: [:published]
 
+    def welcome
+      if @page = Page.published.find_by(slug: 'welcome')
+        render template: "droom/pages/published"
+      else
+        redirect_to dashboard_url
+      end
+    end
+
     def new
       @page = Droom::Page.new(slug: params[:slug])
     end

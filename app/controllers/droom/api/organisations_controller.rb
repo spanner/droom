@@ -2,6 +2,7 @@ module Droom::Api
   class OrganisationsController < Droom::Api::ApiController
 
     load_and_authorize_resource class: "Droom::Organisation"
+    skip_before_action :assert_local_request, only: [:register]
 
     def index
       render json: @organisations
@@ -26,6 +27,16 @@ module Droom::Api
         render json: {
           errors: @organisation.errors.to_a
         }
+      end
+    end
+
+    def register
+      if Droom.organisations_registerable?
+        @organisation = Droom::Organisation.create organisation_params
+        @organisation.send_registration_confirmation
+        render json: @organisation
+      else
+        head :not_allowed
       end
     end
 

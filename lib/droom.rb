@@ -17,7 +17,7 @@ module Droom
                  :home_url,
                  :suggestible_classes,
                  :searchable_classes,
-                 :yt_client,
+                 :mailer,
                  :layout,
                  :dashboard_layout,
                  :page_layout,
@@ -39,10 +39,12 @@ module Droom
                  :use_titles,
                  :use_honours,
                  :use_organisations,
+                 :organisations_registerable,
                  :enable_mailing_lists,
                  :mailman_table_name,
                  :mailing_lists_active_by_default,
                  :mailing_lists_digest_by_default,
+                 :yt_client,
                  :show_venue_map,
                  :dropbox_enabled,
                  :dropbox_app_key,
@@ -70,6 +72,10 @@ module Droom
   class << self
     def home_url
       @@home_url ||= "http://example.com"
+    end
+
+    def mailer
+      @mailer || Droom::Mailer
     end
     
     def layout
@@ -162,6 +168,10 @@ module Droom
     
     def use_organisations?
       !!@@use_organisations
+    end
+
+    def organisations_registerable?
+      !!@organisations_registerable
     end
 
     def stream_shared?
