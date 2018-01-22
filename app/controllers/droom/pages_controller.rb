@@ -1,11 +1,11 @@
 module Droom
   class PagesController < Droom::EngineController
     respond_to :html
-    load_and_authorize_resource except: [:published]
-    skip_before_action :authenticate_user!, only: [:published]
+    load_and_authorize_resource except: [:published, :welcome]
+    skip_before_action :authenticate_user!, only: [:published, :welcome]
 
     def welcome
-      if @page = Page.published.find_by(slug: 'welcome')
+      if @page = Droom::Page.published.find_by(slug: 'welcome')
         render template: "droom/pages/published"
       else
         redirect_to dashboard_url
@@ -45,7 +45,7 @@ module Droom
     # NB authored page can override built-in page template if it takes that slug.
     #
     def published
-      if @page = Page.published.find_by(slug: params[:slug])
+      if @page = Droom::Page.published.find_by(slug: params[:slug])
         authenticate_user! unless @page.public?
         render
 
