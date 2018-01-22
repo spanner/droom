@@ -1,5 +1,4 @@
 Droom::Engine.routes.draw do
-  root to: "dashboard#index", as: :dashboard
 
   match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options]
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]

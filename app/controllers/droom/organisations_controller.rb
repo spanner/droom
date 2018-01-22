@@ -7,7 +7,7 @@ module Droom
     skip_before_action :verify_authenticity_token, only: [:register]
     skip_before_action :authenticate_user!, only: [:register]
     before_action :search_organisations, only: [:index]
-    load_and_authorize_resource, except: [:register]
+    load_and_authorize_resource except: [:register]
 
     #TODO approve directly if admin user is creating
     def create
