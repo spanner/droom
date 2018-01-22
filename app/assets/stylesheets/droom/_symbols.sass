@@ -27,21 +27,22 @@ svg.icon
       min-height: 20px
       width: calc(100% - 32px)
 
-svg.prefix
+svg.prefix, svg.suffix
   width: 1.2em
   height: 1.2em
   margin: 0
   display: inline-block
   vertical-align: top
-  & + span.label
-    width: calc(100% - 1.5em)
+  &.smaller
+    width: 1em
+    height: 1em
+    margin: 0.1em 0.05em
+
+svg.prefix + span.label
+  width: calc(100% - 1.5em)
 
 svg.suffix
-  width: 1.2em
-  height: 1.2em
   margin: 0 0 0 0.25em
-  display: inline
-  vertical-align: top
 
 h2
   position: relative

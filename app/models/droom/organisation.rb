@@ -45,8 +45,10 @@ module Droom
 
     def send_registration_confirmation
       # Droom.mailer is a configuration variable that usually contains Droom::Mailer
-      Droom.mailer.send(:org_confirmation, self).deliver_later
-      Droom.mailer.send(:org_notification, self).deliver_later
+      Droom.mailer.send(:org_confirmation, self).deliver_now
+      Droom::User.admins.each do |admin|
+        Droom.mailer.send(:org_notification, self, admin).deliver_now
+      end
     end
 
     def approve!(user)

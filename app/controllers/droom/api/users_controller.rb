@@ -13,6 +13,8 @@ module Droom::Api
       render json: @user
     end
 
+    # This would usually be a session-continuation check from a front end.
+    #
     def whoami
       render json: current_user
     end
