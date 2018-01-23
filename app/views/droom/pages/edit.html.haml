@@ -6,5 +6,5 @@
     = t("pages.index")
   = t "pages.edit"
 
-#page_form
-  = render :partial => 'droom/pages/edit/form'
+- @view ||= 'simple'
+= render partial: "droom/organisations/edit/#{@view}"

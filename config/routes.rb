@@ -1,5 +1,8 @@
 Droom::Engine.routes.draw do
 
+  root to: "dashboard#index"
+  get "/dashboard" => "dashboard#index", :as => :dashboard
+
   match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options]
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]
 
@@ -18,6 +21,7 @@ Droom::Engine.routes.draw do
     resources :videos
     resources :pages
     resources :organisations do
+      get :signup, on: :collection
       post :register, on: :collection
     end
   end
@@ -77,6 +81,8 @@ Droom::Engine.routes.draw do
 
   resources :organisations do
     post :register, on: :collection
+    get :approve, on: :member
+    get :disapprove, on: :member
     resources :users
   end
 

@@ -7,8 +7,10 @@ module Droom
     belongs_to :organisation_type
     belongs_to :owner, :class_name => 'Droom::User'
     belongs_to :approved_by, :class_name => 'Droom::User'
+    belongs_to :disapproved_by, :class_name => 'Droom::User'
 
     accepts_nested_attributes_for :owner
+    after_save :capture_owner
 
     has_attached_file :image,
                       styles: {
@@ -43,19 +45,24 @@ module Droom
       organisations
     end
 
-    def send_registration_confirmation
-      # Droom.mailer is a configuration variable that usually contains `Droom::Mailer`
-      Droom.mailer.send(:org_confirmation, self).deliver_now
+    def send_registration_confirmation_messages
+      # Droom.mailer is a configuration variable that usually contains `Droom::Mailer` :)
+      Droom.mailer.send(:org_confirmation, self).deliver_later
       Droom::User.admins.each do |admin|
-        Droom.mailer.send(:org_notification, self, admin).deliver_now
+        Droom.mailer.send(:org_notification, self, admin).deliver_later
       end
     end
 
     def approve!(user)
       unless approved?
-        self.approved_at = Time.now
-        self.approved_by = user
-        send_organisation_welcome
+        self.update_attributes({
+          approved_at: Time.now,
+          approved_by: user,
+          disapproved_at: nil,
+          disapproved_by: nil
+        })
+        activities.each(&:reindex!)
+        send_welcome_message
       end
     end
 
@@ -63,8 +70,27 @@ module Droom
       approved_at?
     end
 
-    def send_welcome
-      Droom.mailer.send(:org_welcome, self).deliver_later
+    def disapprove!(user)
+      unless disapproved?
+        self.update_attributes({
+          disapproved_at: Time.now,
+          disapproved_by: user,
+          approved_at: nil,
+          approved_by: nil
+        })
+        activities.each(&:reindex!)
+      end
+    end
+
+    def disapproved?
+      disapproved_at?
+    end
+
+    def send_welcome_message
+      if owner
+        owner.generate_confirmation_token unless owner.confirmation_token?
+        Droom.mailer.send(:org_welcome, self, owner.confirmation_token).deliver_later
+      end
     end
 
 
@@ -191,6 +217,12 @@ module Droom
         description: description,
         approved: approved?
       }
+    end
+
+    def capture_owner
+      if owner and owner.organisation != self
+        owner.update_column :organisation_id, self.id
+      end
     end
 
   end

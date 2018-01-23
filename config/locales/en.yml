@@ -335,6 +335,7 @@ en:
       email: "Email address"
     organisation:
       name: "Organisation name"
+      chinese_name: "中国姓名"
       url: "Website link"
       description: "Brief description"
     phone:

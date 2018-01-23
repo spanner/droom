@@ -1,5 +1,7 @@
 module Droom
   class Mailer < ActionMailer::Base
+    layout Settings.email.layout
+    default from: Settings.email.from
 
     def org_confirmation(organisation)
       @organisation = organisation
@@ -16,9 +18,10 @@ module Droom
       mail(to: @admin.email, subject: @subject)
     end
 
-    def org_welcome(organisation)
+    def org_welcome(organisation, token)
       @organisation = organisation
       @user = organisation.owner
+      @token = token
       @subject = I18n.t("registration.welcome_subject", name: organisation.name)
       mail(to: @user.email, subject: @subject)
     end

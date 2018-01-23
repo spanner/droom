@@ -1,13 +1,6 @@
-$.fn.autoGrid = (selector='.gridbox') ->
-  @each ->
-    console.log "autogrid", @
-    $el = $(@)
-    $el.find(selector).autoRow()
-
-$.fn.autoRow = ->
+$.fn.autoGrid = ->
   @each ->
     $el = $(@)
-    console.log "autoRow", @
     contents = $el.find('.content')
     row = 20
     space = 30
@@ -20,7 +13,6 @@ $.fn.noticeboard = ->
     $el.autoGrid()
     $el.find('.notice').notice()
     $(document.location.hash).highlight()
-
 
 $.fn.highlight = ->
   if @offset()

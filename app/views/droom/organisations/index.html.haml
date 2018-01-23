@@ -7,12 +7,13 @@
 - content_for :standfirst do
   - if admin?
     .admin.right
-      = link_to droom.new_organisation_url, :class => 'add', :data => {:action => "popup", :refreshed => ".organisations_list"} do
+      = link_to droom.new_organisation_url, class: 'add', data: {action: "popup", prepended: "#organisations"} do
         %svg.icon.small
           %use{"xlink:href" => "#plus_symbol"}
         %span.label
           = t(:add_organisation)
-      = link_to droom.new_user_url, :class => 'add', :data => {:action => "popup", :refreshed => ".organisations_list"} do
+
+      = link_to droom.new_user_url, class: 'add', data: {action: "popup", prepended: "#organisations"} do
         %svg.icon.small
           %use{"xlink:href" => "#plus_symbol"}
         %span.label
@@ -25,11 +26,6 @@
     %form.filter{:action => droom.users_url(:format => :js), :data => {:action => "filter"}}
       %p
         = search_field_tag :q, params[:q], :results => 5, :autosave => 'person_filter'
-
-    .scroller
-      #found
-        %p.note
-          = t :find_people_notes
 
 #main.organisations
   = render :partial => 'droom/organisations/organisations'

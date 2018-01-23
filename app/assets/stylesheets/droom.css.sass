@@ -23,9 +23,12 @@ p.nothing
   color: $mid
   margin-bottom: 2em
 
-p.warning
+.warning
   color: $reddish
 
+.success
+  color: $green
+  
 a.select
   position: absolute
   display: block
@@ -414,10 +417,10 @@ form.document
 
 form.organisation
   input.name
-    width: 500px
+    width: 520px
     font-size: 2em
-  input.url, textarea
-    width: 500px
+  input.url, textarea, select
+    width: 520px
 
 .image-upload
   position: relative
@@ -557,6 +560,7 @@ form.user
   p.gender, p.status, p.confirmation
     float: left
     margin-right: 25px
+
   p.admin
     float: right
 
@@ -579,6 +583,8 @@ form.group, form.event_type, form.service, form.permission
     input[type="text"]
       font-size: 1.5em
       font-weight: bold
+  p.admin
+    float: right
 
 p.manage_password
   span.col
@@ -670,6 +676,14 @@ h2.name
 
 h2.quiet
   color: $pale
+
+h2.stamp
+  margin-top: 0
+  span.message
+    font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace
+  span.notes
+    font-size: 1rem
+    color: $pale
 
 a.dl, a.ul
   display: inline-block
@@ -1742,8 +1756,11 @@ form
     clear: left
     input[type="text"], input[type="email"], input[type="password"], select, textarea
       width: 97%
+  p.admin
+    float: right
   .buttons
     clear: left
+    margin-top: 1em
 
 form.preferences
   input[type='radio'], input[type='checkbox']

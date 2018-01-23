@@ -86,7 +86,7 @@ module Droom
     end
 
     def admin?
-      current_user && current_user.admin?
+      user_signed_in? && current_user.admin?
     end
 
     def pageclass

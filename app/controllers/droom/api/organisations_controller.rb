@@ -33,7 +33,7 @@ module Droom::Api
     def register
       if Droom.organisations_registerable?
         @organisation = Droom::Organisation.create organisation_params
-        @organisation.send_registration_confirmation
+        @organisation.send_registration_confirmation_messages
         render json: @organisation
       else
         head :not_allowed

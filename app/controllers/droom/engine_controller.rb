@@ -29,7 +29,11 @@ module Droom
     def pjax?
       request.headers['X-PJAX']
     end
-    
+
+    def admin?
+      user_signed_in? && current_user.admin?
+    end
+
     def set_pagination_headers
       if results = instance_variable_get("@#{name_from_controller}")
         if results.respond_to? :total_count
