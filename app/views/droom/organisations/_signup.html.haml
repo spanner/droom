@@ -25,10 +25,7 @@
     = f.fields_for :owner, user do |uf|
       %fieldset
         %h2
-          - if user_signed_in?
-            User in charge
-          - else
-            Yourself
+          Person in charge
         %p.names.threecol<
           %span.col.first>
             = uf.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
