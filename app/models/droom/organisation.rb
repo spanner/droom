@@ -53,6 +53,13 @@ module Droom
       end
     end
 
+    def self.approve_all
+      Searchkick.callbacks(:bulk) do
+        u = Droom::User.first
+        all.each {|o| o.approve!(u)}
+      end
+    end
+
     def approve!(user)
       unless approved?
         self.update_attributes({
@@ -61,7 +68,7 @@ module Droom
           disapproved_at: nil,
           disapproved_by: nil
         })
-        activities.each(&:reindex!)
+        activities.each(&:reindex)
         send_welcome_message
       end
     end
@@ -78,7 +85,7 @@ module Droom
           approved_at: nil,
           approved_by: nil
         })
-        activities.each(&:reindex!)
+        activities.each(&:reindex)
       end
     end
 
