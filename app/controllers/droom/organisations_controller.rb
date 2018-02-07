@@ -24,6 +24,11 @@ module Droom
       render
     end
 
+    def pending
+      @organisations = Droom::Organisation.unapproved
+      render
+    end
+
     def create
       @organisation.update_attributes(organisation_params)
       @organisation.approve!(current_user)

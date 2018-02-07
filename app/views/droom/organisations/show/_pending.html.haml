@@ -1,0 +1,31 @@
+- pending ||= nil
+- organisation ||= pending || @organisation
+
+.organisation.holder{:id => "organisation_#{organisation.id}", :data => {:refreshable => true, :url => droom.organisation_path(organisation, view: "pending")} }
+  %p.actions.right
+    = link_to droom.approve_organisation_url(organisation), class: "approve", remote: true, data: {action: 'remove', affected: "#pending_organisations"} do
+      %svg.prefix
+        %use{"xlink:href" => "#tick_button_symbol"}
+      %span.label
+        Approve
+
+    %span.conjunction
+      or
+
+    = link_to droom.disapprove_organisation_url(organisation), class: "disapprove", remote: true, data: {action: 'remove', affected: "#pending_organisations"} do
+      %svg.prefix
+        %use{"xlink:href" => "#cross_button_symbol"}
+      %span.label
+        Reject
+
+  %h2.name<
+    = link_to organisation.name, organisation_url(organisation), :class => "name"
+    - if organisation.organisation_type
+      %span.addendum
+        = organisation.organisation_type.name
+    - if organisation.chinese_name?
+      %span.chinese_name
+        = organisation.chinese_name
+
+  %p.description
+    = shorten organisation.description, length: 240

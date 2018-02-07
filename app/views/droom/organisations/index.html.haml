@@ -21,6 +21,16 @@
   %p
     = t :organisations_introduction, org_count: Droom::Organisation.count, person_count: Droom::User.count
 
+  - if admin?
+    - pending_count = Droom::Organisation.unapproved.count
+    - if pending_count > 0
+      %p
+        = link_to droom.pending_organisations_url, class: "actions" do
+          %svg.icon
+            %use{"xlink:href" => "#list_symbol"}
+          %span.label
+            = t(:pending_organisations_introduction, count: pending_count)
+
 - content_for :filter do
   #finder
     %form.filter{:action => droom.users_url(:format => :js), :data => {:action => "filter"}}

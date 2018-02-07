@@ -139,6 +139,7 @@ en:
   calendar: "Calendar"
   calendar_introduction: 'This is a chronological list of all our future events, with the next first.<br />You can also see a similar <a href="%{url}">list of all past events</a>.'
   calendar_past_introduction: 'This is a chronological list of all our past events, with the most recent first.<br />You can also see a similar <a href="%{url}">list of events coming up</a>.'
+  click_below_to_approve: "Please click below to approve or disapprove each registration."
   continue: "Continue"
   copy: "copy"
   dashboard: "Dashboard"
@@ -298,6 +299,7 @@ en:
   notice_expand: "⇣ more"
   no_attachments: "Nothing has been attached"
   no_invitations: "Nobody has been invited"
+  organisation_applications: "Organisations applying to join"
   page_title: "Page title"
   page_slug: "Slug"
   page_video_id: "Youtube video id"
@@ -316,6 +318,10 @@ en:
   password_reset_instructions: "Please enter your email address below. A message will be sent containing a link that will let you reset your password."
   password_reset_message_sent: "A message has been sent to your email address containing a link that will let you reset your password. Please allow a few minutes for it to arrive, and keep an eye on your spam folder. The address it will come from is %{sender}."
   password_reset_welcome: "Please use the form below to set a new password for your account. A confirmation box will appear when your password meets the requirements, and the submit button will go green and become clickable when the passwords match."
+  pending_organisations_introduction:
+    zero: "There are no organisations waiting for approval."
+    one: "There is one organisation waiting for approval."
+    other: "There are %{count} organisation waiting for approval."
   person_title: "Title"
   person_forename: "Forename"
   person_name: "Name"

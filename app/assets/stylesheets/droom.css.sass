@@ -64,6 +64,14 @@ a.waiting
   svg
     display: none
 
+a.approve
+  color: $green
+  +hover
+
+a.disapprove
+  color: $reddish
+  +hover
+
 input:required
   background:
     image: image-url("droom/required.png")
@@ -250,6 +258,19 @@ div.event, form.event, div.project
     display: block
     width: 100%
     margin-right: 0
+
+div.organisation
+  position: relative
+  p.actions
+    float: right
+    margin: 0
+    & + h2
+      width: 70%
+  h2.name
+    margin-bottom: 0
+  p.description
+    margin-top: 0.25em
+
 
 #margin
   ul.invitations

@@ -34,8 +34,9 @@ module Droom
     validates_attachment :image, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
     validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
 
-    scope :added_since, -> date { where("created_at > ?", date)}
-    scope :approved, -> {where(approved: true)}
+    scope :added_since, -> date { where("created_at > ?", date) }
+    scope :approved, -> { where.not(approved_at: nil) }
+    scope :unapproved, -> { where(approved_at: nil, disapproved_at: nil) }
 
     default_scope -> {order("name ASC")}
 

@@ -80,6 +80,7 @@ Droom::Engine.routes.draw do
   end
 
   resources :organisations do
+    get :pending, on: :collection
     post :register, on: :collection
     get :approve, on: :member
     get :disapprove, on: :member
