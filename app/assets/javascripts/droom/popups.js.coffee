@@ -30,6 +30,7 @@ jQuery ($) ->
       @_befored = @_link.data('prepended')
       @_reporter = @_link.data('reporter')
       @_style = @_link.data('style')
+      @_delay = @_link.data('delay')
       @_masked = not @_link.data('unmasked')
       @_link.remote
         on_request: @begin
@@ -85,7 +86,13 @@ jQuery ($) ->
 
     conclude: (data) =>
       if @_affected
-        $(@_affected).trigger "refresh"
+        aff = $(@_affected)
+        if @_delay
+          _.delay ->
+            aff.trigger "refresh"
+          , @_delay
+        else
+          aff.trigger "refresh"
       if @_aftered?
         addition = $(data)
         $(@_aftered).after(addition)

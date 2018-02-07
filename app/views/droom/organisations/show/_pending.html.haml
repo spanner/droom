@@ -27,5 +27,6 @@
       %span.chinese_name
         = organisation.chinese_name
 
-  %p.description
-    = shorten organisation.description, length: 240
+  - if organisation.description?
+    %p.description
+      = shorten organisation.description, length: 240

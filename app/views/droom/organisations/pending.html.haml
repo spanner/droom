@@ -10,8 +10,9 @@
     = t :click_below_to_approve
 
 #pending_organisations{:data => {:refreshable => true, :url => droom.pending_organisations_url}}
-  - if @organisations.any?
-    = render :partial => 'droom/organisations/show/pending', collection: @organisations
-  - else
-    %p
-      No organisations are waiting for approval.
+  #main.body
+    - if @organisations.any?
+      = render :partial => 'droom/organisations/show/pending', collection: @organisations
+    - else
+      %p
+        No organisations are waiting for approval.

@@ -290,6 +290,7 @@ en:
   help_pages: "Help pages"
   loading_people: "Loading people"
   loading_documents: "Loading documents"
+  manage_pages: "Pages"
   masthead:
     admin: "Admin"
     configuration: "Configuration"
