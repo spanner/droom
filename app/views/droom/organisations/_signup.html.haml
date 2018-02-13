@@ -2,8 +2,7 @@
 - user = Droom::User.new
 
 #signup
-  = form_for [droom, organisation], :html => {:class => 'edit organisation'} do |f|
-
+  = form_for [droom, organisation], url: droom.register_organisations_path, method: "post", html: {class: 'edit organisation'} do |f|
     %fieldset
       %p.name.twocol<
         %span.col>

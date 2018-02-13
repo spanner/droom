@@ -171,7 +171,7 @@ module Droom
     end
 
     def organisations_registerable?
-      !!@organisations_registerable
+      !!@@organisations_registerable
     end
 
     def stream_shared?

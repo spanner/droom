@@ -37,9 +37,11 @@ module Droom
 
     def register
       if Droom.organisations_registerable?
+        #todo: check that organisation has user, required fields.
         @organisation = Droom::Organisation.create organisation_params
+        @user = @organisation.owner
         @organisation.send_registration_confirmation_messages
-        render
+        respond_with @organisation
       else
         head :not_allowed
       end
