@@ -1,5 +1,7 @@
 module Droom
   class Organisation < ApplicationRecord
+    include Droom::Concerns::Tagged
+
     has_many :users
     has_many :images, through: :users
     has_many :videos, through: :users

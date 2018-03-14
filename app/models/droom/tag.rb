@@ -1,14 +1,108 @@
-# Tags are simple one-word descriptors. There is no hierarchy or other structure among them.
-# They are strictly catalogue data, used to locate people but not treated as part of the user record.
+# Droom tags are simple one word flags that can have a type and some synonyms.
+# They are usually presented in a choose-or-create typeahead interface
+# and can be attached to any model class by including the `Droom::Concerns::Tagged` concern.
 
 module Droom
   class Tag < ApplicationRecord
-    # They are attached to people and other things through many-to-many taggings.
-    #
+
     has_many :taggings
     has_many :taggees, :through => :taggings
+    has_many :tag_synonyms
+    belongs_to :tag_type
+
     before_save :downcase
 
+    scope :other_than, -> term {
+      where.not(name: term)
+    }
+
+    scope :of_type, -> names {
+      joins(:tag_type).where(droom_tag_type: {name: names})
+    }
+
+    def self.find_or_create(term)
+      if term.present?
+        where(name: term.strip.downcase).first_or_create
+      end
+    end
+
+    def self.from_list(list=[], or_create=true)
+      list = list.split(/[,;]\s*/) if String === list
+      list.uniq.map { |t| find_or_create(t) }
+    end
+
+    def self.to_list(tags=[])
+      tags.map(&:name).compact.uniq.join(', ')
+    end
+
+
+    ## Elasticsearch indexing
+    #
+    searchkick word_start: [:term, :synonyms]
+
+    def search_data
+      {
+        name: term,
+        synonyms: synonyms
+      }
+    end
+
+    def synonyms
+      tag_synonyms.pluck(:synonym).uniq
+    end
+
+    def with_synonyms
+      [name] + synonyms
+    end
+
+    def subsume(other_term=nil)
+      Droom::Tag.transaction do
+        if other_tag && other_tag != self
+          self.taggees << other_term.taggees
+          self.tag_synonyms << other_term.tag_synonyms
+          self.tag_synonyms.create(synonym: other_term.name)
+          other_term.destroy
+          self.save
+        end
+      end
+    end
+
+    # This is here just to make tag interpolation a bit more readable.
+    #
+    def to_s
+      name
+    end
+
+    ## Clouds
+    #
+    # The administrative interface offers a big tag cloud and drag and drop tag-merging. Tag size in the
+    # cloud is based on a usage count that is retrieved here in a join with the taggings table. The cloud
+    # display logic can be found in the [application_helper](../controllers/application_helper.html).
+    #
+    attr_accessor :cloud_size
+    scope :with_usage_count, -> limit {
+      select("tags.*, count(tt.id) AS weight").joins("INNER JOIN taggings as tt ON tt.tag_id = tags.id").group("tt.tag_id").order("weight DESC").limit(limit)
+    }
+
+    # *self.for_cloud* uses that scope to return a list of the most popular tags, weighted for display as a tag cloud
+    # and re-sorted into alphabetical order (since to select the most popular we originally had to sort by weighting).
+    #
+    def self.for_cloud(limit=100)
+      with_usage_count(limit).sort_by(&:name)
+    end
+
+
+
+
+
+
+
+
+
+
+
+    ## RETRO
+    #
     ## Suggestions
     #
     # There is a tag-suggesting mechanism in the front end to encourage tag reuse and consistency.
@@ -41,7 +135,10 @@ module Droom
         .where(["droom_taggings.taggee_type = ? and droom_taggings.taggee_id IN (#{placeholders})", *these.map(&:id).unshift(type)])
         .group('droom_tags.id')
     }
+    
 
+    ## VERY RETRO
+    #
     # Suggestions are returned in a minimal format and need only contain name and (for the public search
     # where there are more possibilities) the type of suggestion.
     #
@@ -53,63 +150,7 @@ module Droom
       }
     end
 
-    ## Keyword lists
-    #
-    # Sometimes we want the interface to present a simple comma-separated list.
-    # These methods help to move to and from that form.
-    #
-    def self.from_list(list=[], or_create=true)
-      list = list.split(/[,;]\s*/) if String === list
-      list.uniq.map{|t| self.for(t, or_create) }.compact if list && list.any?
-    end
 
-    # Renders a set of tags as a comma-separated list.
-    #
-    def self.to_list(tags=[])
-      tags.uniq.map(&:name).join(', ')
-    end
-
-    # Finds or creates a tag with the supplied title
-    #
-    def self.for(name, or_create=true)
-      if or_create
-        where(name: name).first_or_create
-      else
-        find_by(name: name)
-      end
-    end
-
-
-    ## Clouds
-    #
-    # The administrative interface offers a big tag cloud and drag and drop tag-merging. Tag size in the
-    # cloud is based on a usage count that is retrieved here in a join with the taggings table. The cloud
-    # display logic can be found in the [application_helper](../controllers/application_helper.html).
-    #
-    attr_accessor :cloud_size
-    scope :with_usage_count, -> limit {
-      select("tags.*, count(tt.id) AS weight").joins("INNER JOIN taggings as tt ON tt.tag_id = tags.id").group("tt.tag_id").order("weight DESC").limit(limit)
-    }
-
-    # *self.for_cloud* uses that scope to return a list of the most popular tags, weighted for display as a tag cloud
-    # and re-sorted into alphabetical order (since to select the most popular we originally had to sort by weighting).
-    #
-    def self.for_cloud(limit=100)
-      with_usage_count(limit).sort_by(&:name)
-    end
-
-    # This is here just to make tag interpolation a bit more readable.
-    #
-    def to_s
-      name
-    end
-  
-    ## Admin
-    # 
-    def assimilate(tag)
-      self.taggees << tag.taggees
-      tag.destroy
-    end
 
   protected
   
