@@ -61,16 +61,31 @@ module Droom
       end
     end
 
-    def approve!(user)
+    # loud version for normal vetting process
+    #
+    def approve!(approving_user=nil)
       unless approved?
         self.update_attributes({
           approved_at: Time.now,
-          approved_by: user,
+          approved_by: approving_user,
+          disapproved_at: nil,
+          disapproved_by: nil
+        })
+        send_welcome_message if approving_user
+        activities.each(&:reindex)
+      end
+    end
+
+    # quiet version for seeding and admin tasks
+    #
+    def approve
+      unless approved?
+        self.update_attributes({
+          approved_at: Time.now,
           disapproved_at: nil,
           disapproved_by: nil
         })
         activities.each(&:reindex)
-        send_welcome_message
       end
     end
 
