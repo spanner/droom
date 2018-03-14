@@ -25,9 +25,83 @@ backbone@>=1.0.0, backbone@^1.3.3:
   dependencies:
     underscore ">=1.8.3"
 
+clipboard@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.0.tgz#4661dc972fb72a4c4770b8db78aa9b1caef52b50"
+  dependencies:
+    good-listener "^1.2.2"
+    select "^1.1.2"
+    tiny-emitter "^2.0.0"
+
+component-closest@*:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/component-closest/-/component-closest-1.0.1.tgz#1ed0464132fc88a3510a2dabec079695789fb1b5"
+  dependencies:
+    component-matches-selector "~0.1.6"
+
+component-delegate@0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/component-delegate/-/component-delegate-0.2.3.tgz#523ec3a0538fdc85e25e9b4ae4c5e0606875f7fc"
+  dependencies:
+    component-closest "*"
+    component-event "*"
+
+component-emitter@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.2.0.tgz#ccd113a86388d06482d03de3fc7df98526ba8efe"
+
+component-event@*:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/component-event/-/component-event-0.2.0.tgz#8689a7c25a7dd0afe7e2e8408091d5b9e12ce196"
+
+component-event@0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/component-event/-/component-event-0.1.4.tgz#3de78fc28782381787e24bf2a7c536bf0142c9b4"
+
+component-events@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/component-events/-/component-events-1.0.9.tgz#cf784541272db71b5b231552df89d805eef62900"
+  dependencies:
+    component-delegate "0.2.3"
+    component-event "0.1.4"
+
+component-matches-selector@~0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/component-matches-selector/-/component-matches-selector-0.1.6.tgz#7b630e04e7e0c3b0019f31749fd70af5ed8b972e"
+  dependencies:
+    component-query "*"
+
+component-query@*:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/component-query/-/component-query-0.0.3.tgz#07f49dab7071fa9606725df53e607f468acdaacf"
+
+computed-style-component@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/computed-style-component/-/computed-style-component-0.1.0.tgz#38c2138ec3f108a78eed3163cb6c98a84ddc0a28"
+
+delegate@^3.1.2:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/delegate/-/delegate-3.2.0.tgz#b66b71c3158522e8ab5744f720d8ca0c2af59166"
+
+ep-jquery-tokeninput@^1.8.10:
+  version "1.8.10"
+  resolved "https://registry.yarnpkg.com/ep-jquery-tokeninput/-/ep-jquery-tokeninput-1.8.10.tgz#9596125a49877bf99d54eb13cf95371e44c931ca"
+
 ev-emitter@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ev-emitter/-/ev-emitter-1.1.1.tgz#8f18b0ce5c76a5d18017f71c0a795c65b9138f2a"
+
+good-listener@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/good-listener/-/good-listener-1.2.2.tgz#d53b30cdf9313dffb7dc9a0d477096aa6d145c50"
+  dependencies:
+    delegate "^3.1.2"
+
+has-translate3d@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/has-translate3d/-/has-translate3d-0.0.3.tgz#ee0157ad5b4ca8a1a33514a9e7ef45415a132103"
+  dependencies:
+    transform-property "0.0.1"
 
 imagesloaded@^4.1.3:
   version "4.1.3"
@@ -41,9 +115,23 @@ jquery-circle-progress@^1.2.2:
   dependencies:
     jquery "*"
 
+jquery-deserialize@^2.0.0-rc1:
+  version "2.0.0-rc1"
+  resolved "https://registry.yarnpkg.com/jquery-deserialize/-/jquery-deserialize-2.0.0-rc1.tgz#86420415f0a9cd439a65a8e1ecdc96742674cd2d"
+  dependencies:
+    jquery ">=1.4.3"
+
+jquery.cookie@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/jquery.cookie/-/jquery.cookie-1.4.1.tgz#d63dce209eab691fe63316db08ca9e47e0f9385b"
+
 jquery@*, jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+
+jquery@>=1.4.3:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
 medium-editor@^5.23.2:
   version "5.23.2"
@@ -53,13 +141,38 @@ moment@^2.18.1:
   version "2.19.4"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.4.tgz#17e5e2c6ead8819c8ecfad83a0acccb312e94682"
 
+select@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
+
 smartquotes@^2.1.2:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/smartquotes/-/smartquotes-2.3.1.tgz#01ebb595d6c7a9e24d90e8cb95c17d0e1af49407"
 
+sortablejs@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.7.0.tgz#80a2b2370abd568e1cec8c271131ef30a904fa28"
+
 sprintf-js@^1.0.3:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.1.tgz#36be78320afe5801f6cea3ee78b6e5aab940ea0c"
+
+swipe@^1.7.7:
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/swipe/-/swipe-1.7.7.tgz#63e287e7f67197f62d920f72956ebe10a8cb63f1"
+  dependencies:
+    component-emitter "1.2.0"
+    component-event "0.1.4"
+    component-events "1.0.9"
+    computed-style-component "0.1.0"
+    has-translate3d "0.0.3"
+    touchaction-property "0.0.1"
+    transform-property "0.0.1"
+    transitionend-property "0.0.2"
+
+tiny-emitter@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.0.2.tgz#82d27468aca5ade8e5fd1e6d22b57dd43ebdfb7c"
 
 tinycolor2@^1.4.1:
   version "1.4.1"
@@ -68,6 +181,18 @@ tinycolor2@^1.4.1:
 tooltipster@^4.2.5:
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/tooltipster/-/tooltipster-4.2.5.tgz#e492fc3984576418f8c18b1aaee1456c1bd8b0a9"
+
+touchaction-property@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/touchaction-property/-/touchaction-property-0.0.1.tgz#f046a46224776091cacdc63c20ffc737b751f6c6"
+
+transform-property@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/transform-property/-/transform-property-0.0.1.tgz#4863662f9d5e5bb8f0c00648eff08beb14fd65f2"
+
+transitionend-property@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/transitionend-property/-/transitionend-property-0.0.2.tgz#7f969648f8394d52ba097f126b2b1e79f37b0c6c"
 
 underscore.inflection@^1.3.2:
   version "1.3.2"
@@ -87,3 +212,7 @@ underscore@>=1.4.2, underscore@>=1.8.3, underscore@^1.8.3:
 util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
+
+wysihtml@^0.6.0-beta1:
+  version "0.6.0-beta1"
+  resolved "https://registry.yarnpkg.com/wysihtml/-/wysihtml-0.6.0-beta1.tgz#8ffa073bb5a2f22d8d307f7496205ba32dd15b44"

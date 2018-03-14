@@ -1,18 +1,19 @@
-#= require droom/lib/modernizr
 #= require jquery
-#= require droom/lib/underscore
 #= require droom/lib/jquery_ujs
-#= require droom/lib/ZeroClipboard
 #= require droom/lib/assets
-#= require droom/lib/swipe
-#= require droom/lib/jquery.animate-colors
-#= require droom/lib/jquery.deserialize
-#= require droom/lib/Sortable
-#= require droom/lib/jquery.cookie
+
+#= require underscore/underscore
+#= require clipboard/dist/clipboard
+#= require swipe/swipe
+#= require jquery.deserialize/jquery.deserialize
+#= require sortablejs/Sortable
+#= require jquery.cookie/jquery.cookie
+#= require wysihtml/dist/wysihtml
+#= require wysihtml/dist/wysihtml.toolbar
+#= require ep-jquery-tokeninput/src/jquery.tokeninput
+
 #= require droom/lib/jquery.datepicker
-#= require droom/lib/jquery.waterfall
-#= require droom/lib/wysihtml5
-#= require droom/lib/parser_rules/advanced
+#= require droom/lib/jquery.animate-colors
 
 #= require droom/extensions
 #= require droom/utilities
@@ -43,7 +44,7 @@ jQuery ($) ->
     @find_including_self('[data-action="reveal"]').reveals()
     @find_including_self('[data-action="remove"]').removes()
     @find_including_self('[data-action="remove_all"]').removes_all()
-    @find_including_self('[data-action="copy"]').copier()
+    @find_including_self('[data-action="copy"]').copier()   # UPDATE
     @find_including_self('[data-action="column_toggle"]').column_expander()
     @find_including_self('[data-action="setter"]').setter()
     @find_including_self('[data-action="toggle"]').toggle()

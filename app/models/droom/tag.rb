@@ -1,3 +1,5 @@
+#TODO review droom_client treatment of tags, especially the get-me-everything caching.
+
 # Droom tags are simple one word flags that can have a type and some synonyms.
 # They are usually presented in a choose-or-create typeahead interface
 # and can be attached to any model class by including the `Droom::Concerns::Tagged` concern.
