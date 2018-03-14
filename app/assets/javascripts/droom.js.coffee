@@ -22,6 +22,7 @@
 #= require droom/actions
 #= require droom/popups
 #= require droom/stream
+#= require droom/tagger
 #= require droom/uploader
 #= require droom/draggables
 #= require droom/widgets
@@ -99,5 +100,6 @@ jQuery ($) ->
     @find_including_self('.sortable_files').sortable_files()
     @find_including_self('[data-draggable]').draggable()
     @find_including_self('.gridbox').gridBox()
+    @find_including_self('.tagger').tagger()
 
     @
