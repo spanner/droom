@@ -4,10 +4,5 @@ module Droom
   class Tagging < ApplicationRecord
     belongs_to :tag
     belongs_to :taggee, :polymorphic => true
-  
-    # The tagging interface allows the creation of new tags on save but in normal use this would never be hit:
-    # the ajax-based tag-adder creates tags in the background so the form needs only the nested tagging fields.
-    #
-    accepts_nested_attributes_for :tag, :reject_if => :all_blank
   end
 end

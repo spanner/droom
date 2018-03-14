@@ -1,5 +1,9 @@
 $.fn.autoGrid = ->
   @each ->
+    $(@).find('.gridbox').gridBox()
+
+$.fn.gridBox = ->
+  @each ->
     $el = $(@)
     contents = $el.find('.content')
     row = 20

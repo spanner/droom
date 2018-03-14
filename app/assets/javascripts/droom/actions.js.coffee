@@ -60,16 +60,14 @@ jQuery ($) ->
     replace: (data, textStatus, jqXHR) =>
       replacement = $(data)
       old_container = @_container
-      console.log "replacing", old_container
-      console.log "with", replacement 
       old_container.fadeOut 'fast', () =>
         replacement.hide().insertAfter(old_container)
         old_container.hide()
-        replacement.fadeIn 'fast', () =>
-          @_container = replacement
-          old_container.trigger 'refreshed', @_container
-          old_container.remove()
-          @_container.activate()
+        replacement.show()
+        old_container.trigger 'refreshed', @_container
+        old_container.remove()
+        replacement.activate().signal_confirmation()
+        @_container = replacement
 
   # ## Actions
   #

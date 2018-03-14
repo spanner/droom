@@ -129,7 +129,7 @@ en:
   add_service: "Add service"
   add_subfolder: Add sub-folder
   add_to_stream: "add to stream"
-  add_user: "Add user"
+  add_user: "Add User"
   added_to: "has been added to '%{group}'."
   backto: "what you were doing before"
   by: "by"
@@ -444,6 +444,7 @@ en:
   quick_search: "Quick search"
   future_events: "Events coming up"
   event_name: "Event name"
+  pic: "Person in charge"
   search_youtube: "Search Youtube"
   save_user: "Save user"
   slug_note: "Spaces and odd characters will be replaced with dashes"
@@ -551,7 +552,7 @@ en:
       
   errors:
     attributes:
-      name: 
+      name:
         blank: "Please enter your full name"
       email:
         blank: "Please give an email address on which we can contact you"
@@ -563,4 +564,3 @@ en:
 
   apps:
     data_room: "Data<br />Room"
-    

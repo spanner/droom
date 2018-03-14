@@ -4,8 +4,6 @@ require "droom/renderers"
 require "droom/engine"
 require "droom/auth_cookie"
 require "droom/validators"
-require "droom/searchability"
-require "droom/taggability"
 require "droom/folders"
 require "droom/scrubbers"
 

@@ -66,6 +66,7 @@ jQuery ($) ->
       @_container.appendTo(body).hide()
 
     receive: (e, data) =>
+      console.log "receive", data
       e?.stopPropagation()
       if @_iteration == 0 || $(data).find('form').not('.button_to').length
         @display(data)
@@ -77,12 +78,16 @@ jQuery ($) ->
       @_content = $(data)
       @_container.empty()
       @_container.append(@_content)
-      @_header = @_content.find('.header')
-      @_content.find('form').remote
-        on_cancel: @reset
-        on_success: @receive
       @_content.activate()
       @show()
+      _.defer =>
+        @_header = @_content.find('.header')
+        @_content.find('form').remote
+          on_cancel: @reset
+          on_success: @receive
+        @_content.find('a.popup ').remote
+          on_cancel: @reset
+          on_success: @receive
 
     conclude: (data) =>
       if @_affected

@@ -17,7 +17,11 @@
         %li
           = link_to t(:uninvite), droom.event_invitation_url(event, invitation), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}"}
 
+      - if !user.confirmed? && can?(:reinvite, user)
+        %li
+          = link_to t(:reinvite), droom.reinvite_user_url(user), class: 'edit reinvite', method: 'put', data: {action: "reinvite", confirmation: "reinvited"}
+
       - if group && membership = user.membership_of(group)
         %li
           = link_to t(:expel), droom.membership_url(membership), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#user_#{user.id}"}
-        
+

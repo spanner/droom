@@ -34,6 +34,11 @@ module Droom
           #
           can :manage, [Droom::Event, Droom::Document, Droom::Scrap], :created_by_id => user.id
 
+          if user.organisation && user.organisation_admin?
+            can :manage, Droom::Organisation, id: user.organisation_id
+            can :manage, Droom::User, organisation_id: user.organisation_id
+          end
+
           # Then other abilities are determined by permissions. Our permissions are relatively abstract and
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
           #

@@ -24,3 +24,5 @@ jQuery ($) ->
       args = _.extend options,
         el: @
       new Ed.Application(args).start()
+
+  $('[data-editor="ed"]').edify()

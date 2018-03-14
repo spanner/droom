@@ -97,7 +97,6 @@ jQuery ($) ->
     @find_including_self('form#suggestions').suggestion_form()
     @find_including_self('.sortable_files').sortable_files()
     @find_including_self('[data-draggable]').draggable()
-
-    @find_including_self('.user_merger').user_merger()
+    @find_including_self('.gridbox').gridBox()
 
     @

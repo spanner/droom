@@ -27,6 +27,7 @@ module Droom
 
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
+    before_save :org_admin_if_alone
     after_save :send_confirmation_if_directed
 
     # People are often invited into the system in batches or after offline contact.
@@ -181,7 +182,11 @@ module Droom
     ## Organisation affiliation
     #
     belongs_to :organisation
-    has_many :organisations, :foreign_key => :owner_id
+
+    def org_admin?
+      organisation && organisation_admin?
+    end
+
 
     ## Group memberships
     #
@@ -750,6 +755,12 @@ module Droom
       self.uid = SecureRandom.uuid unless self.uid?
     end
 
+    def org_admin_if_alone
+      if organisation && organisation.users.length == 1
+        self.organisation_admin = true
+      end
+    end
+
     def send_confirmation_if_directed
       unless confirming # avoid the double hit caused by devise updating the confirmation token.
         self.confirming = true
@@ -760,9 +771,6 @@ module Droom
     def confirmed_if_password_set
       self.update_column(:confirmed_at, Time.now) if password_set? && !confirmed?
     end
-
-
-  private
 
     def generate_authentication_token
       loop do

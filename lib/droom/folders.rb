@@ -1,5 +1,5 @@
 # Documents in droom are never attached directly to an object. Instead they are always attached to a folder,
-# and the folder is usually attached to an object. The folder itself is a normal ActiveRecord object with a 
+# and the folder is usually attached to an object. The folder itself is a normal ActiveRecord object with a
 # name and some tree behaviours that allow us to present a filing system.
 #
 # This file defines the interface by which we declare that an object has a folder and would like to receive documents.

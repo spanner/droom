@@ -24,7 +24,7 @@
     = f.fields_for :owner, user do |uf|
       %fieldset
         %h2
-          Person in charge
+          =t :pic
         %p.names.threecol<
           %span.col.first>
             = uf.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
@@ -42,6 +42,11 @@
           %p.preferences
             = preference_checkbox 'news.enabled'
 
-    %p.buttons.onecol<
-      %span.col
-        = f.submit t(:sign_up)
+    %p.admin
+      = f.label :organisation_type_id
+      = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
+
+    .buttons
+      = f.submit t(:sign_up)
+      = t :or
+      = link_to t(:cancel), "/", :class => 'cancel'

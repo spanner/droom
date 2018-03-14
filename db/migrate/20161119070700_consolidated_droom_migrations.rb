@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-class ConsolidatedMigrations < ActiveRecord::Migration
+class ConsolidatedMigrations < ActiveRecord::Migration[4.2]
   def change
 
     create_table "droom_address_types", options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|

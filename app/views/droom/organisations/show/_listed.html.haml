@@ -1,18 +1,35 @@
 - listed ||= nil
 - organisation ||= listed || @organisation
-- open ||= organisation == @organisation
 
-.organisation.holder{:id => "organisation_#{organisation.id}", :class => open ? "name open" : "name", :data => {:refreshable => true, :url => droom.organisation_path(organisation, :format => :js)} }
-  .heading
+.organisation.gridbox{:id => "organisation_#{organisation.id}", :data => {:refreshable => true, :url => droom.organisation_path(organisation, view: 'listed')} }
+  = action_menulink(organisation)
+  = action_menu(organisation)
+
+  .content
     %h2.name<
-      = link_to organisation.name, organisation_url(organisation), :class => "name"
-      - if organisation.organisation_type
-        %span.addendum
-          = organisation.organisation_type.name
-      = action_menulink(organisation)
+      = link_to organisation.name, droom.organisation_url(organisation), :class => "name"
       - if organisation.chinese_name?
         %span.chinese_name
           = organisation.chinese_name
-    = action_menu(organisation)
 
-    = organisation.description.html_safe if organisation.description?
+    %p.details.notes
+      - if organisation.organisation_type
+        = t "organisation_types.#{organisation.organisation_type.name.downcase}"
+        - if organisation.activities.any?
+          = t :with_activities_count, count: organisation.activities.count
+
+    - if organisation.description?
+      = sanitize organisation.description
+    - else
+      %p.nodescription
+        = t :no_description
+
+    %ul.people
+      - organisation.users.each do |user|
+        %li
+          = link_to user_url(user), data: {action: "popup"} do
+            %svg.icon
+              %use{"xlink:ref" => "#user_symbol"}
+            %span.label
+              = user.colloquial_name
+

@@ -94,6 +94,8 @@ module Droom
         arguments[:page] = (params[:page].presence || 1).to_i
       end
 
+      arguments[:fields] = ['name^10', 'chinese_name', 'description', 'url', 'address']
+
       unless admin?
         arguments[:where] = {
           approved: true

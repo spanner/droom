@@ -15,7 +15,7 @@ module Droom
       @users = @users.in_name_order.includes(:permissions)
       @users = @users.matching(params[:q]) unless params[:q].blank?
       @users = @users.from_email(params[:email]) unless params[:email].blank?
-      @users = paginated(@users, 10)
+      @users = paginated(@users, params[:pp].presence || 24)
       respond_with @users do |format|
         format.js { render :partial => 'droom/users/users' }
         format.vcf { render :vcf => @users.map(&:to_vcf) }

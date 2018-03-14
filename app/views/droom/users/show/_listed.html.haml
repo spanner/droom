@@ -38,14 +38,6 @@
       = action_menulink(user)
     %br
     = mail_to user.email, user.email, class: "email"
-    - if !user.confirmed? && can?(:reinvite, user)
-      %br
-      = link_to droom.reinvite_user_url(user), class: 'reinvite', method: 'put', data: {action: "reinvite", confirmation: "reinvited"} do
-        %svg.prefix
-          %use{"xlink:href" => "#email_symbol"}
-        %span
-          reinvite
-
     = action_menu(user, event: event, group: group)
 
 

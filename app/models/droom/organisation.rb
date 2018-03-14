@@ -72,7 +72,6 @@ module Droom
           disapproved_by: nil
         })
         send_welcome_message if approving_user
-        activities.each(&:reindex)
       end
     end
 
