@@ -98,6 +98,13 @@ module Droom
       end
     end
 
+    def subsume
+      user = Droom::User.find(params[:user_id])
+      other_user = Droom::User.find(params[:other_id])
+      user.subsume(other_user)
+      render json: {subsume: "queued"}
+    end
+
     def destroy
       @user.destroy
       head :ok
@@ -177,7 +184,7 @@ module Droom
     end
 
     def set_view
-      @view = params[:view] if %w{simple listed tabled profile preferences my_profile title contact personal account_info statuses groups biography }.include?(params[:view])
+      @view = params[:view] if %w{simple listed tabled profile preferences my_profile title contact personal account_info statuses groups biography result}.include?(params[:view])
       #@view ||= 'profile'
     end
 

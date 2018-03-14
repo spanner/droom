@@ -1592,6 +1592,7 @@ ul.filing
     overflow: hidden
   li.files
     display: inline-block
+    width: 100%
 
 .no-touch
   ul.filing, ul.uploads
@@ -2110,6 +2111,22 @@ ul.checklist
           margin-bottom: 3em
 
           #account_info_container
+            .liveliness
+              margin: 1em 0
+              &.unreachable
+                color: $red
+              &.unresponsive
+                color: $red
+              &.external
+                color: $green
+              &.internal
+                color: $green
+              svg.icon.small
+                margin-left: -24px
+                &+span.label
+                  margin-left: 0
+                  line-height: 28px
+          
             width: 100%
             .account_info_contents
               width: 100%
@@ -2239,3 +2256,4 @@ ul.checklist
 @import droom/ed
 @import medium/base
 @import medium/droom
+@import droom/draggables

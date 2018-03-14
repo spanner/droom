@@ -13,6 +13,7 @@ module Droom
 
     acts_as_list scope: :folder_id
 
+    before_create :inherit_confidentiality
     after_save :update_dropbox_documents
     after_destroy :mark_dropbox_documents_deleted
 
@@ -165,13 +166,28 @@ module Droom
     end
 
     def confidential?
-      confidential = private?
-      confidential ||= folder.confidential? if folder
-      confidential
+      private?
+    end
+
+    # called from containing folder when confidentiality changes
+    # calls save properly to allow for various indexing regimes.
+    def set_confidentiality!(confidentiality)
+      assign_attributes private: confidentiality
+      save!
+    end
+
+    # called before_create
+    def inherit_confidentiality
+      write_attribute :private, folder && folder.confidential?
+      true
+    end
+
+    def enqueue_for_indexing!
+      Droom::IndexDocumentJob.perform_later(id, Time.now.to_i)
     end
 
     def enqueue_for_indexing
-      if name_changed? || file_file_name_changed? || file_fingerprint_changed?
+      if name_changed? || file_file_name_changed? || file_fingerprint_changed? || private_changed?
         Droom::IndexDocumentJob.perform_later(id, Time.now.to_i)
       end
     end

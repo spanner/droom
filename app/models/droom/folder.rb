@@ -16,7 +16,9 @@ module Droom
 
     before_validation :set_properties
     before_validation :slug_from_name
-    
+    before_create :inherit_confidentiality
+    after_save :distribute_confidentiality
+
     default_scope -> { includes(:documents) }
 
     scope :all_private, -> { where("#{table_name}.private = 1") }
@@ -24,6 +26,7 @@ module Droom
     scope :all_public, -> { where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
     scope :not_public, -> { where("#{table_name}.public <> 1 OR #{table_name}.private = 1)") }
     scope :by_name, -> { order("#{table_name}.name ASC") }
+    scope :other_than, -> folders {where.not(id: folders.map(&:id))}
     scope :visible_to, -> user {
       if user
         select('droom_folders.*')
@@ -48,13 +51,13 @@ module Droom
       return true
     end
 
-    # A root folder is created automatically for each class that has_folders,
+    # A root folder is created automatically for each class that has_folder,
     # the first time something in that class asks for its folder.
     # scope :roots, where('droom_folders.holder_type IS NULL AND droom_folders.parent_id IS NULL')
-
+    #
     scope :loose, -> { where('parent_id IS NULL') }
     scope :latest, -> limit { order("updated_at DESC, created_at DESC").limit(limit) }
-    scope :populated, -> { 
+    scope :populated, -> {
       select('droom_folders.*')
         .joins('LEFT OUTER JOIN droom_documents AS dd ON droom_folders.id = dd.folder_id LEFT OUTER JOIN droom_folders AS df ON droom_folders.id = df.parent_id')
         .having('count(dd.id) > 0 OR count(df.id) > 0')
@@ -91,7 +94,6 @@ module Droom
     end
 
     def copy_to_dropbox(user)
-      Rails.logger.warn ">>> creating dropbox subfolder #{slug} for user #{user.name}"
       documents.each { |doc| doc.copy_to_dropbox(user) }
     end
     
@@ -111,11 +113,34 @@ module Droom
     end
 
     def confidential?
-      confidential = private?
-      if et = get_event_type
-        confidential ||= et.confidential?
+      private?
+    end
+
+    # called from event type or parent folder when confidentiality changes
+    def set_confidentiality!(confidentiality)
+      if holder and holder.confidential?
+        # folder attached to a confidential object will always be confidential,
+        #  even if its parent has just been made available.
+        confidentiality = true
       end
-      confidential
+      assign_attributes private: confidentiality
+      save!
+    end
+
+    # called before_create
+    def inherit_confidentiality
+      if holder
+        write_attribute :private, holder.confidential?
+      elsif parent
+        write_attribute :private, parent.confidential?
+      end
+      true
+    end
+
+    # called after_save, including after set_confidentiality!
+    def distribute_confidentiality
+      documents.each {|document| document.set_confidentiality!(confidential?) }
+      children.each {|folder| folder.set_confidentiality!(confidential?) }
     end
 
   protected

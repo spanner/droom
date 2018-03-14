@@ -45,7 +45,7 @@ module Droom
   protected
 
     def link_folder
-      user.add_personal_folders(group.folder)
+      user.find_or_add_personal_folders(group.folder)
     end
 
     def unlink_folder

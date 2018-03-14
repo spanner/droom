@@ -20,6 +20,7 @@
 #= require droom/widgets
 #= require droom/stream
 #= require droom/uploader
+#= require droom/draggables
 #= require_self
 
 jQuery ($) ->
@@ -93,5 +94,6 @@ jQuery ($) ->
     @find_including_self('.sortable_files').sortable_files()
     @find_including_self('[data-draggable]').draggable()
 
+    @find_including_self('.user_merger').user_merger()
 
     @

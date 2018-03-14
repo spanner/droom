@@ -1,7 +1,7 @@
 - ineditable ||= false
 
-.paginated
-  %ul.people
-    = render :partial => 'droom/users/show/listed', :collection => @users
-  .pagination.sliding
-    = paginate @users
+%ul.people
+  = render :partial => 'droom/users/show/listed', :collection => @users
+
+.pagination.lower
+  = paginate @users

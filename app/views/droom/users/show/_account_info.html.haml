@@ -10,6 +10,13 @@
     = t :user_profile_account
 
   #account_info_container
+    %div{class: "liveliness #{@user.liveliness}"}
+      %svg.icon.small
+        %use{href: "#user_#{@user.liveliness}_symbol"}
+      %span.label
+        = t ("status_labels.#{@user.liveliness}")
+      
+
     .account_info_contents
       .left_pane
         = 'Created at: '
@@ -41,14 +48,4 @@
         = 'Administrator?: '
         %b
           = @user.admin? ? 'Yes' : 'No'
-
-    .account_info_contents
-      .left_pane
-        = link_to t(:edit_account), droom.edit_user_url(@user, view: 'preferences'), :class => 'edit', :data => {:action => "popup", :affected => "#user_#{@user.id}, section.contacts"}
-      .mid_pane
-        = ''
-
-      .right_pane
-        = ''
-
-
+    

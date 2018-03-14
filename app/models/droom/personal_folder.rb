@@ -10,10 +10,6 @@ module Droom
     scope :for_user, -> user {
       where(["user_id = ?", user.id])
     }
-    
-    def copy_to_dropbox
-      
-    end
-    
+
   end
 end

@@ -81,6 +81,7 @@ Droom::Engine.routes.draw do
     get "admin", on: :collection
     put :set_password, on: :collection
     put :reinvite, on: :member
+    put "/subsume/:other_id" => "users#subsume", as: 'subsume'
     resources :events
     resources :emails
     resources :phones

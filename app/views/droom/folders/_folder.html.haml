@@ -1,5 +1,6 @@
 - folder ||= @folder
-- if folder.populated? || can?(:edit, folder)
+
+- if can? :read, folder
   - standalone ||= false
   - title ||= folder.name || folder.slug
   - open ||= false
@@ -9,7 +10,7 @@
   - flat ||= false
   - stem ||= ""
   - narrow ||= false
-  - length = narrow ? 32 : 96
+  - length = narrow ? 28 : 64
   - url = droom.folder_path(folder)
 
   - if @folder
@@ -23,16 +24,11 @@
   - cssclass << " standalone" if standalone
   - cssclass << " auto" if folder.automatic? && can?(:edit, folder)
 
-  - adata = {}
-  - if can?(:edit, folder)
-    - adata = {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}", queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
-
   %li{class: cssclass, id: "folder_#{folder.id}", data: {refreshable: url, label: folder.slug }}<
-    = link_to shorten(title, length), url, class: "folder", data: adata
+    = link_to shorten(title, length), url, class: "folder", data: {droppable: droom.folder_documents_path(folder), picker: "#upload_to_folder_#{folder.id}", queue: "#queue_to_#{folder.id}", refreshes: "#folder_#{folder.id}"}
     - unless omit_menu
       = action_menulink(folder)
-    - if can?(:edit, folder)
-      %ul.uploads{id: "queue_to_#{folder.id}"}
+    %ul.uploads{id: "queue_to_#{folder.id}"}
     - unless defer_contents
       = render partial: "droom/folders/contents", locals: {folder: folder, limit: limit, for_more: for_more, flat: flat, narrow: narrow}
     - unless omit_menu

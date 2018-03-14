@@ -271,6 +271,10 @@ module Droom
     #
     # Personal folders are created and destroyed along with invitations and memberships.
     #
+    # BEWARE: This whole mechanism is largely superseded now by a much simpler confidentiality flag.
+    # It proved too onerous in the administration and makes permission checks quite expensive.
+    # The whole personal folder / dropbox folder machinery is likely to be deprecated soon.
+    #
     has_many :personal_folders
     has_many :folders, :through => :personal_folders
 
@@ -280,6 +284,13 @@ module Droom
 
     def remove_personal_folders(folders=[])
       self.folders.delete(folders) if folders
+    end
+
+    def find_or_add_personal_folders(folders=[])
+      folders = [folders].flatten
+      folders.each do |folder|
+        self.folders << folder unless self.folders.include?(folder)
+      end
     end
 
     def has_folder?(folder)
@@ -663,6 +674,9 @@ module Droom
 
     def search_data
       data = {
+        id: id,
+        uid: uid,
+        title: title,
         name: name,
         chinese_name: chinese_name,
         emails: emails.map(&:email),
@@ -670,15 +684,15 @@ module Droom
         organisation: organisation_id,
         organisation_name: organisation_name,
         phones: phones.map(&:phone),
-        groups: groups.map(&:slug),
-        status: status,
-        account_confirmation: confirm_account
+        groups: group_slugs,
+        liveliness: liveliness,
+        privileged: privileged?
       }
       data.merge(additional_search_data)
     end
 
-    def additional_search_data
-      {}
+    def group_slugs
+      groups.pluck(:slug).map(&:presence).compact.uniq
     end
 
     def organisation_name
@@ -705,10 +719,46 @@ module Droom
       end
     end
 
+    def liveliness
+      if emails.empty?
+        'unreachable'
+      elsif !last_sign_in_at? and !confirmed_at?
+        'unresponsive'
+      elsif data_room_user?
+        'internal'
+      else
+        'external'
+      end
+    end
+
     def privileged?
       admin? || groups.privileged.any?
     end
 
+    def additional_search_data
+      {}
+    end
+
+    def subsume(other_user)
+      Droom::MergeUsersJob.perform_later(id, other_user.id, Time.now.to_i)
+    end
+
+    def subsume!(other_user)
+      Droom::User.transaction do
+        %w{emails phones addresses memberships organisations scraps documents invitations memberships user_permissions dropbox_tokens dropbox_documents personal_folders}.each do |association|
+          self.send(association.to_sym) << other_user.send(association.to_sym)
+        end
+        %w{encrypted_password password_salt family_name given_name chinese_name title gender organisation_id description image}.each do |property|
+          self.send "#{property}=".to_sym, other_user.send(property.to_sym) unless self.send(property.to_sym).present?
+        end
+        if self.merged_with?
+          self.merged_with += "\n#{other_user.uid}"
+        else
+          self.merged_with = other_user.uid
+        end
+        save!
+      end
+    end
 
   protected
 

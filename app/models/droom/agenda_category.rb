@@ -5,7 +5,7 @@ module Droom
     belongs_to :created_by, :class_name => "Droom::User"
     has_folder :within => :event
     accepts_nested_attributes_for :category
-    
+
     validates :event, :presence => true
     validates :category, :presence => true
     

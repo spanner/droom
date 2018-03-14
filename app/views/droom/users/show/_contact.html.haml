@@ -11,6 +11,14 @@
 
   - if @user
     %ul.address_book
-      = render partial: "droom/emails/email", collection: @user.emails.by_preference
+      - if @user.emails.any?
+        = render partial: "droom/emails/email", collection: @user.emails.by_preference
+      - else
+        %p.problem
+          = link_to droom.edit_user_url(@user, view: 'contact'), data: {action: 'popup', affected: "section.contacts, section.user"} do
+            %strong
+              = t('problems.user.unreachable')
+
+        
       = render partial: "droom/phones/phone", collection: @user.phones.by_preference
       = render partial: "droom/addresses/address", collection: @user.addresses.by_preference

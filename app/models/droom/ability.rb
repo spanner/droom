@@ -20,10 +20,6 @@ module Droom
           can :read, Droom::Organisation
           can :index, :suggestions
 
-          # This should move into CDR
-          can :read, Droom::Document, private: false
-          can :read, Droom::Folder, private: false
-
           # And they can edit themselves
           #
           can :edit, Droom::User, :id => user.id
@@ -36,12 +32,6 @@ module Droom
           # This rule must sit after the user rules because users have no created_by_id column.
           #
           can :manage, [Droom::Event, Droom::Document, Droom::Scrap], :created_by_id => user.id
-
-          # NB confidential events are visible internally but their documents are not.
-          if user.privileged?
-            can :read, Droom::Document
-            can :read, Droom::Folder
-          end
 
           # Then other abilities are determined by permissions. Our permissions are relatively abstract and
           # not closely coupled to Cancan abilities. Here we map them onto more concrete operations.
@@ -60,12 +50,12 @@ module Droom
             can :manage, Droom::Organisation
             can :manage, Droom::User
           end
-        
+
           if user.permitted?('droom.library')
             can :manage, Droom::Folder
             can :manage, Droom::Document
           end
-        
+
           if user.permitted?('droom.stream')
             can :create, Droom::Scrap
           end
@@ -79,6 +69,13 @@ module Droom
           can :create, Droom::DropboxToken
           can :create, Droom::DropboxDocument
           can :create, Droom::MailingListMembership
+
+          # Confidential events are visible internally but their documents are only visible to 'privileged' users.
+          #
+          unless user.privileged?
+            cannot :read, Droom::Folder, private: true
+            cannot :read, Droom::Document, private: true
+          end
         end
 
         can :read, Droom::Scrap
