@@ -446,7 +446,7 @@ jQuery ($) ->
     constructor: (element, opts) ->
       @_form = $(element)
       @_options = $.extend @constructor.default_options, opts
-      @_historical = !!(Modernizr.history and @_options.history or @_form.attr('data-historical'))
+      @_historical = @_options.history or @_form.attr('data-historical')
       @_selector = @_form.attr('data-target') || @_options.into
       @_container = $(@_selector)
       @_original_qs = @serialize()

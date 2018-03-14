@@ -513,45 +513,17 @@ jQuery ($) ->
         $(".#{classes}").removeClass('hover')
 
 
-
-  # The *copier* action uses ZeroClipboard to put on the clipboard whatever is in our data-value attribute.
+  # The *copier* action uses Clipboard.js to put on the clipboard whatever is in our data-clipboad-text attribute
+  # (or if that's missing), our textContent. More options in their docs, if you can stand them.
   #
   $.fn.copier = ->
-    ZeroClipboard.setMoviePath( '/assets/droom/lib/ZeroClipboard.swf' );
     @each ->
-      new Copier @
+      clipboard = new ClipboardJS(@)
+      clipboard.on 'success', (e) ->
+        $(e.trigger).signal_confirmation()
+        console.log "copied", e.text
 
-  class Copier
-    constructor: (element) ->
-      @_link = $(element)
-      @_link.click @failed
-      @_link.wrap $('<div class="copyholder" />')
-      @_container = @_link.parents('.copyholder')
-      @_clip = new ZeroClipboard.Client()
-      @_clip.setHandCursor true
-      @_clip.setText(@_link.attr('data-value').replace(/^\s+/gm, ''))
-      
-      [w, h] = [@_link.width() || 60, @_link.height() || 15]
-      @_clip_element = @_clip.getHTML(w, h+5)
-      $(@_clip_element).appendTo @_container
 
-      @_clip.addEventListener 'complete', @complete
-      @_clip.addEventListener 'onMouseOver', @hover
-      @_clip.addEventListener 'onMouseOut', @unHover
-
-    hover: (e) =>
-      @_link.addClass('hover')
-
-    unHover: (e) =>
-      @_link.removeClass('hover')
-      
-    complete: (client, text) =>
-      @_link.signal_confirmation()
-
-    failed: (e) =>
-      e.preventDefault()
-      
-      
   # The main search page hasn't had much love yet.
   #
   # If we keep the inline functionality it should probably use the standard captive form.

@@ -20,7 +20,7 @@
       = t :organisation_description_note
  
   .tagger
-    = f.text_field :tags, placeholder: t("placeholders.tagger.prompt"), class: "tags"
+    = f.text_field :tags, placeholder: t("placeholders.tagger.prompt"), class: "tags", data: {suggest: "main"}
     %a.add_tag{title: "Click to adopt this text as a new term"} +
 
   %p.admin

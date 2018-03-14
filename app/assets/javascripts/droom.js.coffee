@@ -4,8 +4,7 @@
 
 #= require underscore/underscore
 #= require clipboard/dist/clipboard
-#= require swipe/swipe
-#= require jquery.deserialize/jquery.deserialize
+#= require jquery-deserialize/src/jquery.deserialize
 #= require sortablejs/Sortable
 #= require jquery.cookie/jquery.cookie
 #= require wysihtml/dist/wysihtml
