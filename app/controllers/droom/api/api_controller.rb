@@ -11,10 +11,6 @@ module Droom::Api
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
     rescue_from "Droom::Error", with: :blew_up
 
-    def current_ability
-      @current_ability ||= Droom::Ability.new(current_user)
-    end
-
     protected
     
     def assert_local_request

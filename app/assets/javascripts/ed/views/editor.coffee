@@ -196,6 +196,7 @@ class Ed.Views.Content extends Ed.View
       target: @ui.content
     @_toolbar.render()
 
+
 class Ed.Views.Checker extends Ed.View
   template: false
 

@@ -507,12 +507,6 @@ class Ed.Views.ProgressBar extends Ed.View
       observe: "progress"
       update: "progressLabel"
 
-  initialize: () ->
-    @_size = @options.size
-    @_thickness = @options.thickness
-    $.pg = @
-    $.m = @model
-
   onRender: () =>
     @initProgress()
     @stickit() if @model

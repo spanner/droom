@@ -18,9 +18,6 @@ module Droom
     end
 
     def index
-      unless admin?
-        @organisations = @organisations.approved
-      end
       render
     end
 
@@ -95,6 +92,12 @@ module Droom
       else
         arguments[:per_page] = (params[:show].presence || 50).to_i
         arguments[:page] = (params[:page].presence || 1).to_i
+      end
+
+      unless admin?
+        arguments[:where] = {
+          approved: true
+        }
       end
 
       @organisations = Droom::Organisation.search query, arguments
