@@ -5,11 +5,16 @@ class Ed.View extends Backbone.Marionette.View
 
   initialize: =>
     @subviews = []
+    @beforeWrap()
     @wrap()
     @render()
 
   wrap: =>
     # each subclass should have its own way of lifting data from the DOM to populate a model.
+
+  beforeWrap: =>
+    @bindUIElements()
+    # possibly with some dom manipulation
 
   onRender: =>
     @stickit()
@@ -73,6 +78,22 @@ class Ed.View extends Backbone.Marionette.View
   log: ->
     if _ed.logging() and console?.log?
       console.log "[#{@constructor.name}]", arguments...
+
+
+class Ed.Views.CompositeView extends Backbone.Marionette.CompositeView
+
+  initialize: =>
+    @beforeWrap()
+    @wrap()
+    @render()
+
+  wrap: =>
+    # each subclass should have its own way of lifting data from the DOM to populate a collection.
+
+  beforeWrap: =>
+    @bindUIElements()
+    # possibly with some dom manipulation
+
 
 
 class Ed.Views.MenuView extends Backbone.Marionette.View

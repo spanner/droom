@@ -90,6 +90,9 @@ class Ed.Model extends Backbone.Model
     @_job?.finish()
     @_job = null
 
+  remove: =>
+    @collection?.remove(@)
+
 
 class Ed.Collection extends Backbone.Collection
 
@@ -158,6 +161,8 @@ class Ed.Models.Editable extends Ed.Model
       wrapper.html(content.trim())
       wrapper.find('[contenteditable], [contenteditable="false"]').removeAttr('contenteditable')
       wrapper.find('[data-placeholder]').removeAttr('data-placeholder')
+      wrapper.find('.medium-editor-element').removeClass('medium-editor-element')
+      wrapper.find('.ed-button').remove()
       wrapper.find('.ed-buttons').remove()
       wrapper.find('.ed-progress').remove()
       wrapper.find('.ed-action').remove()
@@ -169,6 +174,14 @@ class Ed.Models.Editable extends Ed.Model
 
   textContent: =>
     @contentWrapper().text()
+
+
+class Ed.Models.Block extends Ed.Model
+  defaults:
+    content: ""
+
+class Ed.Collections.Blocks extends Backbone.Collection
+  model: Ed.Models.Block
 
 
 ## Images

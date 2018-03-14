@@ -1,0 +1,6 @@
+.ed-buttons
+  %a.control.addblock
+    %svg.icon.filled
+      %use{"xlink:href" => "#plus_button_symbol"}
+.blocks
+ 

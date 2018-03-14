@@ -1,13 +1,9 @@
 #main.pages
-
   %p.standfirst
-    = t(:pages_introduction)
+    = t(:pages_introduction).html_safe
 
   = render :partial => "droom/pages/pages"
 
-  %p.admin
-    = link_to t(:new_page), droom.new_page_url
-
 
 - content_for :title do 
-  = t :pages
+  = t 'pages.index'

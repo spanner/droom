@@ -39,9 +39,9 @@ en:
         slug: "Slug (usually automatic)"
         content: "Enter help text and links here."
       organisation:
-        name: "Name"
+        name: "Organisation Name"
         url: "Web link"
-        description: "Mission and description"
+        description: "Brief description"
       permission:
         service_id: "Service"
         name: "Title or link text"
@@ -62,8 +62,8 @@ en:
         description: "Notes"
         slug: "Key"
       user:
-        given_name: "Given name"
-        family_name: "Family name"
+        given_name: "Forename"
+        family_name: "Surname"
         chinese_name: "中国姓名"
         email: "Email"
         phone: "Telephone"
@@ -81,15 +81,6 @@ en:
         send_confirmation: "Send invitation"
         defer_confirmation: "Send no email"
   preferences:
-    dropbox:
-      strategy:
-        everything: "Sync everything"
-        selected: "Sync these folders..."
-        relevant: "Sync relevant documents"
-        clicked: "Copy on command only"
-      events?: "Your events"
-      topics?: "Your topics"
-      groups?: "Your groups"
     email:
       enabled?: "Receive administrative messages"
       mailing_lists?: "Join group mailing lists"
@@ -133,7 +124,7 @@ en:
   add_page: "Add page"
   add_permission: "Add a permission"
   add_group: "Add group"
-  add_new_user: "Invite a new data room user"
+  add_new_user: "Invite a new network user"
   add_permission: "Add permission"
   add_service: "Add service"
   add_subfolder: Add sub-folder
@@ -148,6 +139,7 @@ en:
   calendar: "Calendar"
   calendar_introduction: 'This is a chronological list of all our future events, with the next first.<br />You can also see a similar <a href="%{url}">list of all past events</a>.'
   calendar_past_introduction: 'This is a chronological list of all our past events, with the most recent first.<br />You can also see a similar <a href="%{url}">list of events coming up</a>.'
+  click_below_to_approve: "Please click below to approve or disapprove each registration."
   continue: "Continue"
   copy: "copy"
   dashboard: "Dashboard"
@@ -177,7 +169,6 @@ en:
   confirm_uninvite_group: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   confirm_uninvite_person: "Are you sure you want to remove '%{name}' from '%{event_name}'?"
   contact_information_unavailable: "No contact"
-  copy_to_dropbox: "Copy folder to dropbox"
   delete_event: "Delete Event"
   delete_folder: "Delete Folder"
   delete_group: "Delete Group"
@@ -190,7 +181,6 @@ en:
   close_symbol: "✕"
   delete_symbol: "✕"
   detach_upload: "Detach Upload"
-  dropbox_access_revoked: "We have detached from your dropbox. You can delete the hkfx folder."
   attachment_count: 
     zero: "No documents attached."
     one: "One document attached."
@@ -208,11 +198,6 @@ en:
   downloads: "downloads"
   download_attachments_as_zipfile: "Download all attachments as a zipfile"
   download_vcards: "Download this list to your address book"
-  dropbox_copy_all: "Copy everything"
-  dropbox_copy_personal: "Copy only the most useful folders"
-  dropbox_copy_topics: "Copy only selected topics"
-  dropbox_copy_selected: "Copy only when you click"
-  dropbox_introduction: "This will create a '%{name}' folder in your dropbox into which you can copy folders and documents."
   edit: "Edit"
   edit_account: "Edit account settings"
   edit_account_of: "Edit account settings for %{name}"
@@ -306,9 +291,9 @@ en:
   invitations_highlighted: "Events to which you are invited will be highlighted."
   help: "Help"
   help_pages: "Help pages"
-  copy_to_dropbox: "copy to dropbox"
   loading_people: "Loading people"
   loading_documents: "Loading documents"
+  manage_pages: "Pages"
   masthead:
     admin: "Admin"
     configuration: "Configuration"
@@ -318,6 +303,7 @@ en:
   notice_expand: "⇣ more"
   no_attachments: "Nothing has been attached"
   no_invitations: "Nobody has been invited"
+  organisation_applications: "Organisations applying to join"
   page_title: "Page title"
   page_slug: "Slug"
   page_video_id: "Youtube video id"
@@ -330,11 +316,16 @@ en:
     new: "Create page"
     edit: "Edit page"
     show: "Preview page"
+    index: "Custom pages"
   password_notice: "You must choose a password before you can proceed (unless you remember your old one: in that case you can just log in)."
   password_reset_complete: "Thank you for persevering with all the account administration. Your password has been reset and you have been signed in automatically."
   password_reset_instructions: "Please enter your email address below. A message will be sent containing a link that will let you reset your password."
   password_reset_message_sent: "A message has been sent to your email address containing a link that will let you reset your password. Please allow a few minutes for it to arrive, and keep an eye on your spam folder. The address it will come from is %{sender}."
   password_reset_welcome: "Please use the form below to set a new password for your account. A confirmation box will appear when your password meets the requirements, and the submit button will go green and become clickable when the passwords match."
+  pending_organisations_introduction:
+    zero: "There are no organisations waiting for approval."
+    one: "There is one organisation waiting for approval."
+    other: "There are %{count} organisation waiting for approval."
   person_title: "Title"
   person_forename: "Forename"
   person_name: "Name"
@@ -348,12 +339,17 @@ en:
   person_post_country: "Country"
   person_post_code: "Post code"
   placeholders:
-    email:
-      email: "Email address"
-    phone:
-      phone: "Phone number"
     address:
       address: "Postal address"
+    email:
+      email: "Email address"
+    organisation:
+      name: "Organisation name"
+      chinese_name: "中国姓名"
+      url: "Website link"
+      description: "Brief description"
+    phone:
+      phone: "Phone number"
     scrap:
       name: "Heading"
       url: "Link destination"
@@ -376,6 +372,7 @@ en:
       phone: "Telephone"
       title: "Title"
   profile: "Profile"
+  quick_edit: "Quick edit"
   send_message: "Send Message"
   has_been_created: "has been added to the system"
   and_invited: "and invited to log in."
@@ -385,6 +382,7 @@ en:
   type_name: "Start typing a name"
   profile: "Profile"
   search: "Search"
+  sign_up: "Sign up"
   "on": "on"
   at: "at"
   or: "or"

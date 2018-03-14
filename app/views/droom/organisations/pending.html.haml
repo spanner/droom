@@ -1,0 +1,18 @@
+- content_for :title do
+  = t :organisation_applications
+
+- content_for :search do
+  = render 'droom/shared/search', url: organisations_url
+
+- content_for :standfirst do
+  %p
+    = t :pending_organisations_introduction, count: Droom::Organisation.unapproved.count
+    = t :click_below_to_approve
+
+#pending_organisations{:data => {:refreshable => true, :url => droom.pending_organisations_url}}
+  #main.body
+    - if @organisations.any?
+      = render :partial => 'droom/organisations/show/pending', collection: @organisations
+    - else
+      %p
+        No organisations are waiting for approval.

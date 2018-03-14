@@ -1,3 +1,14 @@
+a.breadhead
+  display: block
+  color: $pale
+  font-size: 1rem
+  letter-spacing: 0
+
+h1.pagetitle
+  a.breadhead:before
+    content: "< "
+    
+
 .darken
   position: absolute
   width: 100%
@@ -6,41 +17,70 @@
   bottom: 0
   max-height: 100%
   pointer-events: none
-  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0) 35%)
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3) 35%, rgba(0,0,0,0) 95%)
   &.darker
     background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 40%)
 
-#page_form
-  position: relative
-  width: 920px
-  margin: 40px 0 100px
-
-  #form_controls
+#pages
+  .page
     position: relative
-    text-align: right
-    margin: 10px 0
-    .left
-      float: left
+    width: 240px
+    height: 360px
+    float: left
+    display: inline-block
+    vertical-align: top
+    overflow: hidden
+    margin-right: 20px
+    margin-bottom: 20px
+    border: 1px solid $pale
+    border-radius: 4px
+    &.new
+      display: flex
+      justify-content: center
+      align-items: center
       a
-        margin-top: 10px
-        margin-right: 10px
-      span
-        margin-top: 10px
-        &.ed-slug
-          color: $mid
+        display: block
+        color: $green
+        font-size: 1.6em
+        font-weight: lighter
+        text-align: center
+        svg
+          display: block
+          margin: 10px auto
+          width: 40px
+          height: 40px
+    .head
+      position: relative
+      width: 240px
+      height: 240px
+      border-radius: 4px 4px 0 0
+      background:
+        color: $mid
+        position: center center
+        repeat: no-repeat
+        size: cover
+      h3
+        position: absolute
+        bottom: 10px
+        left: 10px
+        color: white
+        font-size: 0.9rem
+        font-weight: bold
 
-  #page_editor
-    position: relative
-    border: 1px solid $mid
-    clear: left
+    .body
+      width: 220px
+      margin: 10px
+      font-size: 0.75rem
+      line-height: 1.6
+      color: $dark
 
-  #page_preview
-    border: 1px solid $mid
 
 #page_masthead
   position: relative
   width: 100%
+  height: 0
   padding-bottom: 50%
+  overflow: hidden
   .bg
     position: absolute
     top: 0
@@ -54,29 +94,71 @@
       size: cover
   .fg
     position: absolute
-    bottom: 18px
-    left: 36px
-    width: calc(100% - 64px)
-    #pagetitle
-      margin: 0 auto
-    h1
-      font-size: 2em
+    bottom: 20px
+    left: 4%
+    width: 92%
+    h1.title
+      font-size: 3em
       color: white
-
-#page_title
-  h1
-    font-size: 2em
-    margin: 36px 36px 0 36px
+      margin: 0
+      a.breadhead
+        color: $pale
+        font-size: 1.2rem
+        letter-spacing: 0
+        &:hover
+          color: white
+    p.subtitle
+      font-size: 1rem
+      color: white
+      margin: 0.5em 0
 
 #page_content
   padding: 18px 36px
   min-height: 500px
-  background-color: white
-  p:first-child
+  & > p:first-child
     font-size: 1.25em
     line-height: 1.5
+  ul
+    list-style: square
+    padding-left: 0
+  ol
+    padding-left: 0
+  .blocks
+    display: flex
+    flex-flow: row nowrap
+    align-items: flex-start
+    justify-content: space-between
+    margin: 0 auto
+    .block
+      position: relative
+      box-sizing: border-box
+      display: inline-block
+      figure.full
+        margin: 12px 0
+      p:empty
+        display: none
+      p:first-child, h2:first-child
+        margin-top: 0
+      h3
+        margin-bottom: 0
+        font-weight: bold
+        font-size: 1rem
+        &+p
+          margin-top: 0.25em
+        &+ul
+          margin-top: 0.25em
+    &.two
+      .block
+        width: 46%
+    &.three .block
+      width: 29%
+      font-size: 1rem
+    &.four .block
+      width: 24%
+      font-size: 0.9rem
+
   figure
-    margin: 24px -36px
+    margin: 24px 0
     video
       width: 100%
       height: auto
@@ -167,4 +249,148 @@
         position: absolute
         margin-left: 0
         margin-top: -0.1em
-  
+
+#page_form
+  display: block
+
+  aside#instructions
+    width: 28%
+    float: right
+    margin: 0 2% 3em 2%
+    p:first-child
+      margin-top: 0
+    ul
+      list-style: none
+      padding: 0
+      a
+        cursor: pointer
+        color: $green
+        +hover
+      a.missing, a.new
+        color: $red
+        +hover
+        span
+          width: calc(100% - 50px)
+
+  section#preview
+    position: relative
+    width: 66%
+    margin: 0
+    background-color: white
+    margin-bottom: 3em
+    #page_preview
+      box-sizing: border-box
+      position: relative
+      width: 100%
+      border: 1px solid $pale
+      box-shadow: 0 1px 6px $shadow
+
+  section#editor
+    width: 66%
+    margin: 0
+    background-color: white
+    margin-bottom: 3em
+
+    #page_editor
+      box-sizing: border-box
+      position: relative
+      width: 100%
+      border: 1px solid $pale
+      box-shadow: 0 1px 6px $shadow
+
+    .content
+      width: 100%
+      min-height: 400px
+      padding-bottom: 96px
+      display: none
+      figure
+        margin: 24px -20px
+        video
+          width: 100%
+          height: auto
+          background-color: $pale
+        .embed
+          position: relative
+          width: 100%
+          padding-bottom: 56.25%
+          overflow: hidden
+          &:empty
+            display: none
+          iframe
+            position: absolute
+            width: 100%
+            height: 100%
+        figcaption
+          color: $dark
+          font-style: italic
+        a.save
+          float: right
+          +button($green)
+          font-size: 0.9rem
+          display: none
+        &.quote
+          blockquote
+            transition: font-size 0.5s ease-out
+          &.shortish
+            blockquote
+              font-size: 1.2em
+              line-height: 1.4
+          &.short
+            blockquote
+              font-size: 1.6em
+              line-height: 1.3
+          &.veryshort
+            blockquote
+              font-size: 2em
+              line-height: 1.2
+        &.right
+          display: inline-block
+          float: right
+          width: 50%
+          margin: 6px -20px 24px 24px
+          &.quote
+            margin: 6px 24px 24px 0
+          .styler
+            float: left
+            clear: left
+        &.left
+          display: inline-block
+          float: left
+          width: 50%
+          margin: 6px 24px 24px -20px
+          &.quote
+            margin: 6px 24px 24px 0
+          .styler
+            float: left
+            clear: left
+        &.full
+          display: block
+          clear: both
+          margin: 1.5em -20px
+          width: calc(100% + 40px)
+          &.quote
+            margin: 1.5em 0
+            blockquote, figcaption
+              margin-left: 10%
+              text-align: left
+        img
+          width: 100%
+          height: auto
+        blockquote
+          color: $mid
+          margin: 0
+          &:before
+            content: '“'
+            font-size: 120%
+            position: absolute
+            width: 0.5em
+            text-align: right
+            margin-left: -0.55em
+            margin-top: -0.1em
+          &:after
+            content: '”'
+            font-size: 120%
+            position: absolute
+            margin-left: 0
+            margin-top: -0.1em
+

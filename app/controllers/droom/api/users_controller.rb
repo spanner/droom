@@ -1,7 +1,6 @@
 module Droom::Api
   class UsersController < Droom::Api::ApiController
 
-    before_action :assert_local_request
     before_action :get_users, only: [:index]
     before_action :find_or_create_user, only: [:create]
     load_resource find_by: :uid, class: "Droom::User", except: [:authenticate]
@@ -12,6 +11,12 @@ module Droom::Api
 
     def show
       render json: @user
+    end
+
+    # This would usually be a session-continuation check from a front end.
+    #
+    def whoami
+      render json: current_user
     end
 
     # This is a almost always a preliminary call at the initial auth stage,
@@ -93,7 +98,7 @@ module Droom::Api
     end
 
     def user_params
-      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :affiliation, :email, :phone, :description, :address, :post_code, :correspondence_address, :country_code, :mobile, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image_url)
+      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :affiliation, :email, :phone, :description, :address, :post_code, :correspondence_address, :country_code, :mobile, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image_data, :image_name)
     end
 
   end

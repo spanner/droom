@@ -1,3 +1,12 @@
+module ActiveRecord
+  class Base
+    # Not truly random but never mind. It picks an unpredictable record.
+    def self.sample
+      offset(rand(count)).first
+    end
+  end
+end
+
 class Array
   def to_ics
     to_icalendar.to_ical

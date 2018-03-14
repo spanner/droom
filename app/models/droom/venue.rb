@@ -9,9 +9,9 @@ module Droom
 
     before_validation :slug_from_name
 
-    # geocoded_by :name_and_address, :latitude  => :lat, :longitude => :lng
-    # before_validation :geocode
-    # reverse_geocoded_by :lat, :lng
+    # for migration purposes only:
+    # before_validation :reverse_geocode
+    # reverse_geocoded_by :lat, :lng, :address => :address
 
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
@@ -44,11 +44,11 @@ module Droom
     def to_s
       name
     end
-    
+
     def identifier
       'venue'
     end
-    
+
     def name_and_address
       [name, address, post_code].compact.join("\n")
     end
@@ -69,6 +69,7 @@ module Droom
         :type => 'venue',
         :prompt => name,
         :value => name,
+        :detail => address.to_s,
         :id => id
       }
     end

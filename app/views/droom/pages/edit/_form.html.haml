@@ -1,48 +1,63 @@
 - image_url = @page.main_image.url(:hero) if @page.main_image
+- image_weighting = @page.main_image_weighting.presence || 'center center'
+- @page.content = "<p></p>" unless @page.content?
 
 = form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
-  #form_controls
-    %span.left
+  %aside#instructions
+    #form_controls.pin
+      = f.submit "save and preview"
+    %p
+      = f.check_box :public
+      = f.label :public
+    %p
+      = f.hidden_field :slug, data: {ed: "slug"}
       %span.label
         Slug:
       %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}<
         = @page.slug
-    = f.hidden_field :slug, data: {ed: "slug"}
-    = f.submit "save and preview"
 
-  #page_editor
-    #page_masthead
-      = f.hidden_field :main_image_id, data: {ed: "image"}
-      .bg.ed-image{style: "background-image: url('#{image_url}')", data: {image: @page.main_image_id, placeholder: "Click or drop here to add your main image"}}
-        .ed-buttons
-        .ed-dropmask
-          %p.prompt
-            Click or drop an image here
-      .darken
-      .fg
-        #pagetitle
-          %h1.title
+    = render "droom/pages/edit/instructions"
+
+  %section#editor
+    #page_editor
+      #page_masthead.editing
+        = f.hidden_field :main_image_id, data: {ed: "main_image_id"}
+        = f.hidden_field :main_image_weighting, data: {ed: "main_image_weighting"}
+
+        .bg.ed-image{style: "background-image: url('#{image_url}'); background-position: #{image_weighting}", data: {image: @page.main_image_id, placeholder: "Click or drop here to add your main image"}}
+          .ed-buttons
+          .ed-dropmask
+            %p.prompt
+              Click or drop an image here
+        .darken
+        .fg
+          #page_title
             = f.hidden_field :title, data: {ed: 'title'}
-            %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}
-              = @page.title
+            = f.hidden_field :subtitle, data: {ed: 'subtitle'}
+            %h1.title
+              %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}<
+                = @page.title
+            %p.subtitle
+              %span.ed-subtitle{contenteditable: true, data: {placeholder: "Click to add optional strapline"}}<
+                = @page.subtitle
 
-    #page_content.ed-content
-      = f.hidden_field :content, data: {ed: 'content'}
-      .content{contenteditable: true}
-        - @page.content = "<p></p>" unless @page.content?
-        = @page.content.html_safe
+      #page_content.ed-content.editing
+        = f.hidden_field :content, data: {ed: 'content'}
+        .content{contenteditable: true}
+          = @page.content.html_safe
 
-      .placeholder
-        %p
-          Click here to edit the main body of your page. The first paragraph will automatically be made a little bigger.
-          That might be the only paragraph you need, but there is no limit to the length of the page and you are welcome to add images, links and video clips.
-        %p
-          Click the
-          %svg.prefix
-            %use{"xlink:href" => "#plus_symbol"}
-          button on next to a blank line to insert an image, video clip, quote or button.
-        %p
-          %span.selected
-            Select some text
-          to bring up the editing toolbar, create a link or change formatting.
+        .placeholder
+          %p
+            Click here to edit the main body of your page. The first paragraph will automatically be made a little bigger.
+            That might be the only paragraph you need, but there is no limit to the length of the page and you are welcome to add images, links and video clips.
+          %p
+            Click the
+            %svg.prefix
+              %use{"xlink:href" => "#plus_symbol"}
+            button on next to a blank line to insert an image, video clip, quote or button.
+          %p
+            %span.selected
+              Select some text
+            to bring up the editing toolbar, create a link or change formatting.
+
 

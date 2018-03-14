@@ -5,8 +5,6 @@
 #Droom.main_dashboard_modules = %w{welcome future_events past_events documents}
 #Droom.margin_dashboard_modules = %w{calendar invitations stream}
 #Droom.home_url = Settings.host
-#Droom.email_from = Settings.email.address
-#Droom.email_from_name = Settings.email.name
 #Droom.dropbox_app_key = Settings.dropbox.key
 #Droom.dropbox_app_secret = Settings.dropbox.secret
 #Droom.dropbox_app_name = Settings.dropbox.name

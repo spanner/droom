@@ -7,10 +7,12 @@
 class Ed.Views.Editor extends Ed.View
   ui:
     title: ".ed-title"
+    subtitle: ".ed-subtitle"
     slug: ".ed-slug"
     content: ".ed-content"
     image: ".ed-image"
     titlefield: '[data-ed="title"]'
+    subtitlefield: '[data-ed="subtitle"]'
     slugfield: '[data-ed="slug"]'
     contentfield: '[data-ed="content"]'
     imagefield: '[data-ed="image"]'
@@ -19,6 +21,9 @@ class Ed.Views.Editor extends Ed.View
   bindings:
     '[data-ed="title"]':
       observe: "title"
+      updateModel: false
+    '[data-ed="subtitle"]':
+      observe: "subtitle"
       updateModel: false
     '[data-ed="slug"]':
       observe: "slug"
@@ -42,6 +47,10 @@ class Ed.Views.Editor extends Ed.View
       @subviews.push new Ed.Views.Title
         el: el
         model: @model
+    @ui.subtitle.each (i, el) =>
+      @subviews.push new Ed.Views.Subtitle
+        el: el
+        model: @model
     @ui.slug.each (i, el) =>
       @subviews.push new Ed.Views.Slug
         el: el
@@ -58,6 +67,20 @@ class Ed.Views.Editor extends Ed.View
       @subviews.push new Ed.Views.Checker
         el: el
         model: @model
+
+  onRender: =>
+    @stickit()
+    @placeCaret()
+    # _.defer -> balanceText('.balanced')
+
+  placeCaret: =>
+    if title_el = @ui.title.get(0)
+      range = document.createRange()
+      range.setStart title_el, 0
+      range.collapse true
+      selection = window.getSelection()
+      selection.removeAllRanges()
+      selection.addRange range
 
   cleanContent: (content, model) =>
     @model.cleanContent()
@@ -77,6 +100,17 @@ class Ed.Views.Title extends Ed.View
 
   wrap: =>
     @model.set 'title', @$el.text().trim()
+
+
+class Ed.Views.Subtitle extends Ed.View
+  template: false
+  bindings: 
+    ':el':
+      observe: 'subtitle'
+
+  wrap: =>
+    @log "SUBTITLE"
+    @model.set 'subtitle', @$el.text().trim()
 
 
 class Ed.Views.Slug extends Ed.View
@@ -108,6 +142,9 @@ class Ed.Views.Content extends Ed.View
     @ui.content.addClass 'editing'
     window.cont = @
 
+    @ui.content.find('section.blockset').each (i, el) =>
+      @subviews.push new Ed.Views.Blocks
+        el: el
     @ui.content.find('figure.image').each (i, el) =>
       @subviews.push new Ed.Views.Image
         el: el
@@ -152,45 +189,12 @@ class Ed.Views.Content extends Ed.View
 
     @_inserter = new Ed.Views.AssetInserter
     @_inserter.render()
-    @_inserter.attendTo(@ui.content)
+    @_inserter.attendTo @ui.content
     @_inserter.on 'expand', @dontShowPlaceholder
 
-    @_toolbar = new MediumEditor @ui.content,
-      placeholder: false
-      autoLink: true
-      imageDragging: false
-      allowMultiParagraphSelection: false
-      anchor:
-        customClassOption: null
-        customClassOptionText: 'Button'
-        linkValidation: false
-        placeholderText: 'URL...'
-        targetCheckbox: false
-      anchorPreview: false
-      paste:
-        forcePlainText: false
-        cleanPastedHTML: true
-        cleanReplacements: []
-        cleanAttrs: ['class', 'style', 'dir']
-        cleanTags: ['meta']
-      toolbar:
-        updateOnEmptySelection: true
-        buttons: [
-          name: 'bold'
-          contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
-        ,
-          name: 'italic'
-          contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
-        ,
-          name: 'anchor'
-          contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
-        ,
-          name: 'h2'
-          contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
-        ,
-          name: 'h3'
-          contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
-        ]
+    @_toolbar = new Ed.Views.Toolbar
+      target: @ui.content
+    @_toolbar.render()
 
 
 class Ed.Views.Checker extends Ed.View
@@ -297,8 +301,12 @@ class Ed.Views.Asset extends Ed.View
   listenToRemover: =>
     @_remover.on "remove", @remove
 
+  withinBlock: =>
+    console.log "withinBlock?", !!@$el.parents('.block').length
+    !!@$el.parents('.block').length
+
   addStyler: =>
-    if _ed.getOption('asset_styles')
+    if _ed.getOption('asset_styles') and not @withinBlock()
       if styler_view_class = @getOption('stylerView')
         @_styler = new styler_view_class
           model: @model
@@ -480,7 +488,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 class Ed.Views.Image extends Ed.Views.Asset
   pickerView: Ed.Views.ImagePicker
   stylerView: Ed.Views.AssetStyler
-  template: "assets/image"
+  template: "ed/image"
   tagName: "figure"
   className: "image full"
   defaultSize: "full"
@@ -518,7 +526,7 @@ class Ed.Views.Image extends Ed.Views.Asset
 class Ed.Views.Video extends Ed.Views.Asset
   pickerView: Ed.Views.VideoPicker
   stylerView: Ed.Views.AssetStyler
-  template: "assets/video"
+  template: "ed/video"
   tagName: "figure"
   className: "video full"
   defaultSize: "full"
@@ -551,16 +559,97 @@ class Ed.Views.Video extends Ed.Views.Asset
         @setModel _ed.videos.get(video_id ) ? new Ed.Models.Video
 
   unlessEmbedded: (embed_code) =>
-    console.log "unlessEmbedded", !embed_code
     !embed_code
 
   hideVideo: (el, visible, model) =>
     el.hide() unless visible
 
 
+class Ed.Views.Block extends Ed.View
+  template: "ed/block"
+  className: "block"
+
+  ui:
+    buttons: ".ed-buttons"
+    content: ".ed-block"
+    remover: "a.remover"
+
+  events:
+    "click a.remove": "removeBlock"
+
+  bindings:
+    ":el":
+      observe: "content"
+      updateMethod: "html"
+      onGet: "readHtml"
+
+  onRender: =>
+    @$el.attr 'contenteditable', true
+    @stickit()
+    @_toolbar = new Ed.Views.Toolbar
+      target: @ui.content
+    @_toolbar.render()
+
+  removeBlock: (e) =>
+    e?.preventDefault()
+    @$el.fadeOut =>
+      @model.remove()
+
+  readHtml: (html) =>
+    html or "<p></p>"
+
+
+class Ed.Views.Blocks extends Ed.Views.CompositeView
+  template: "ed/blockset"
+  tagName: "section"
+  className: "blockset"
+  childViewContainer: ".blocks"
+  childView: Ed.Views.Block
+
+  ui:
+    buttons: ".ed-buttons"
+    block_holder: ".blocks"
+    blocks: ".block"
+
+  events:
+    "click a.addblock": "addEmptyBlock"
+
+  wrap: =>
+    @collection = new Ed.Collections.Blocks
+    if @ui.blocks.length
+      @ui.blocks.each (i, block) =>
+        $block = $(block)
+        @addBlock $block.html()
+        $block.remove()
+    else
+      @addBlock()
+      @addBlock()
+      @addBlock()
+
+  onRender: =>
+    @$el.attr "contenteditable", false
+    @setLengthClass()
+    @collection.on 'add remove reset', @setLengthClass
+
+  addEmptyBlock: =>
+    console.log "addEmptyBlock"
+    @collection.add content: ""
+
+  addBlock: (content="") =>
+    @collection.add content: content
+
+  setLengthClass: =>
+    console.log "setLengthClass", @collection.length
+    @ui.block_holder.removeClass('none one two three four').addClass(['none', 'one', 'two', 'three', 'four'][@collection.length])
+    if @collection.length >= 4
+      @ui.buttons.addClass('inactive')
+    else
+      @ui.buttons.removeClass('inactive')
+
+
 class Ed.Views.Quote extends Ed.Views.Asset
   stylerView: Ed.Views.AssetStyler
-  template: "assets/quote"
+  template: "ed/quote"
   tagName: "figure"
   className: "quote full"
   defaultSize: "full"
@@ -586,7 +675,6 @@ class Ed.Views.Quote extends Ed.Views.Asset
     @model = new Ed.Models.Quote
       utterance: @$el.find('blockquote').text()
       caption: @$el.find('figcaption').text()
-    @render()
 
   focus: =>
     @ui.quote.focus()
@@ -605,7 +693,7 @@ class Ed.Views.Quote extends Ed.Views.Asset
 
 class Ed.Views.Button extends Ed.Views.Asset
   stylerView: Ed.Views.AssetStyler
-  template: "assets/button"
+  template: "ed/button"
   tagName: "a"
   className: "button full"
   defaultSize: "full"
@@ -631,7 +719,6 @@ class Ed.Views.Button extends Ed.Views.Asset
   wrap: =>
     @model = new Ed.Models.Button
       label: @ui.label.text()
-    @render()
 
   focus: =>
     @ui.label.focus()

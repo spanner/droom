@@ -1,5 +1,3 @@
-require 'dropbox_sdk'
-
 module Droom
   module DroomHelper
 
@@ -83,24 +81,12 @@ module Droom
       end
     end
     
-    def dropbox_link(folder)
-      if dropbox? && current_user.pref('dropbox.strategy') == 'clicked' && folder.populated? && !folder.dropboxed_for?(current_user)
-        link_to t(:copy_to_dropbox), droom.dropbox_folder_url(folder), :id => "dropbox_folder_#{folder.id}", :class => 'dropboxer minimal', :data => {:action => "remove", :removed => "#dropbox_folder_#{folder.id}"}
-      end
-    end
-
     def help_link(slug, category=nil, title="")
       render 'droom/helps/show/link', slug: slug, category: category, title: title
     end
 
-    def dropbox_session
-      # note that we usually don't want to pick up an existing dropbox session. That happens in the dropbox_tokens_controller, when
-      # following up an access token round trip, but in the view any existing session has probably expired and we're better off with a new one.
-      DropboxSession.new(Droom.dropbox_app_key, Droom.dropbox_app_secret)
-    end
-
     def admin?
-      current_user && current_user.admin?
+      user_signed_in? && current_user.admin?
     end
 
     def pageclass
@@ -115,6 +101,14 @@ module Droom
       render :partial => "droom/preferences/radio_set", :locals => {:key => key, :values => values}
     end
 
+    def render_page(page)
+      page.render
+    end
+
+    def render_published_page(page)
+      page.render_published
+    end
+
     def shorten(text, length=64, separator=" ")
       text = strip_tags(text)
       length = length[:length] if length.is_a?(Hash)
@@ -123,20 +117,6 @@ module Droom
       end
     end
 
-    def dropbox?
-      Droom::dropbox_enabled? && current_user and !!current_user.dropbox_token
-    end
-    
-    def dropbox_auth_url
-      dbs = dropbox_session
-      # get an auth link address, with our register action as the callback
-      authorization_url = dbs.get_authorize_url(droom.register_dropbox_tokens_url)
-      # store the requesting dropbox session, serialized, in our user's session cookie
-      # if the oauth confirmation is successful, we will need it.
-      session[:dropbox_session] = dbs.serialize
-      authorization_url
-    end
-    
     def nav_link_to(name, url, options={})
       options[:class] ||= ""
       options[:class] << "here" if (request.path == url) || (url != "/" && request.path =~ /^#{url}/)

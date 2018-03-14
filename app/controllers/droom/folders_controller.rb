@@ -19,7 +19,7 @@ module Droom
     def show
       respond_with @folder do |format|
         format.js { 
-          render :partial => 'droom/folders/folder' 
+          render :partial => 'droom/folders/folder'
         }
       end
     end
@@ -49,11 +49,6 @@ module Droom
     def destroy
       @folder.destroy
       head :ok
-    end
-    
-    def dropbox
-      @folder.copy_to_dropbox(current_user)
-      render :partial => "folder"
     end
 
     def with_parent

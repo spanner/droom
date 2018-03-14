@@ -16,9 +16,7 @@ module Droom
 
     before_validation :set_properties
     before_validation :slug_from_name
-    before_create :inherit_confidentiality
-    after_save :distribute_confidentiality
-
+    
     default_scope -> { includes(:documents) }
 
     scope :all_private, -> { where("#{table_name}.private = 1") }
@@ -51,7 +49,7 @@ module Droom
       return true
     end
 
-    # A root folder is created automatically for each class that has_folder,
+    # A root folder is created automatically for each class that has_folders,
     # the first time something in that class asks for its folder.
     # scope :roots, where('droom_folders.holder_type IS NULL AND droom_folders.parent_id IS NULL')
     #
@@ -93,14 +91,6 @@ module Droom
       folder && folder.ancestors.include?(self)
     end
 
-    def copy_to_dropbox(user)
-      documents.each { |doc| doc.copy_to_dropbox(user) }
-    end
-    
-    def dropboxed_for?(user)
-      # dropbox_documents.for_user(user).any?
-    end
-
     def get_name_from_holder
       send :set_properties
       self.save if self.changed?
@@ -113,34 +103,11 @@ module Droom
     end
 
     def confidential?
-      private?
-    end
-
-    # called from event type or parent folder when confidentiality changes
-    def set_confidentiality!(confidentiality)
-      if holder and holder.confidential?
-        # folder attached to a confidential object will always be confidential,
-        #  even if its parent has just been made available.
-        confidentiality = true
+      confidential = private?
+      if et = get_event_type
+        confidential ||= et.confidential?
       end
-      assign_attributes private: confidentiality
-      save!
-    end
-
-    # called before_create
-    def inherit_confidentiality
-      if holder
-        write_attribute :private, holder.confidential?
-      elsif parent
-        write_attribute :private, parent.confidential?
-      end
-      true
-    end
-
-    # called after_save, including after set_confidentiality!
-    def distribute_confidentiality
-      documents.each {|document| document.set_confidentiality!(confidential?) }
-      children.each {|folder| folder.set_confidentiality!(confidential?) }
+      confidential
     end
 
   protected

@@ -1,0 +1,63 @@
+#svg_holder
+  position: absolute
+  display: none
+
+svg
+  fill: currentColor
+  svg
+    path, polygon, circle
+      fill: currentColor
+  pointer-events: none
+
+svg.icon
+  width: 28px
+  height: 28px
+  display: inline-block
+  vertical-align: middle
+  margin: 0
+  &+span
+    display: inline-block
+    vertical-align: top
+  &.small
+    width: 16px
+    height: 16px
+    vertical-align: middle
+    margin: 2px
+    &+span
+      min-height: 20px
+      width: calc(100% - 32px)
+
+svg.prefix, svg.suffix
+  width: 1.2em
+  height: 1.2em
+  margin: 0
+  display: inline-block
+  vertical-align: top
+  &.smaller
+    width: 1em
+    height: 1em
+    margin: 0.1em 0.05em
+
+svg.prefix + span.label
+  width: calc(100% - 1.5em)
+
+svg.suffix
+  margin: 0 0 0 0.25em
+
+h2
+  position: relative
+  margin-bottom: 0
+  svg.icon
+    width: 32px
+    height: 32px
+    vertical-align: middle
+    & + span
+      vertical-align: middle
+  svg.prefix
+    width: 1.5em
+    height: 1.5em
+    vertical-align: middle
+    & + span
+      vertical-align: middle
+
+

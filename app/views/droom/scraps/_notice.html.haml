@@ -2,7 +2,7 @@
 - first = notice_counter == 0
 - size = first ? 2 : 1
 
-.notice{id: "notice_#{notice.id}", class: notice.scraptype, data: {span: size, refreshable: scrap_path(notice)}}
+.notice.gridbox{id: "notice_#{notice.id}", class: notice.scraptype, data: {refreshable: scrap_path(notice)}}
   = render "droom/scraps/notices/#{notice.scraptype}", notice: notice, first: first
 
   .footnote

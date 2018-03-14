@@ -1,0 +1,35 @@
+- organisation ||= @organisation
+
+#edit_organisation
+  .header{data: {draggable: ".popup", remembered: "organisation"}}
+    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+    %h2.titlebar
+      Quick edit organisation
+
+  = form_for [droom, organisation], :html => {:class => 'edit organisation'} do |f|
+    %p.name.twocol<
+      %span.col>
+        = f.text_field :name, :required => true, :autofocus => true, placeholder: t("placeholders.organisation.name")
+      %span.col>
+        = f.text_field :chinese_name, placeholder: t("placeholders.organisation.chinese_name")
+
+    %p.secondary
+      = f.label :url
+      %br
+      = f.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
+
+    .description.wysihtml
+      .toolbar#t1
+        = render 'droom/shared/toolbar'
+      = f.text_area :description, placeholder: t("placeholders.organisation.description")
+      %span.formnote
+        = t :organisation_description_note
+ 
+    %p.admin
+      = f.label :organisation_type_id
+      = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
+
+    .buttons
+      = f.submit t(:save_organisation)
+      = t :or
+      = link_to t(:cancel), '#', :class => 'cancel'

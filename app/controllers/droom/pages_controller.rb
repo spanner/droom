@@ -1,7 +1,16 @@
 module Droom
   class PagesController < Droom::EngineController
     respond_to :html
-    load_and_authorize_resource except: [:published]
+    load_and_authorize_resource except: [:published, :welcome]
+    skip_before_action :authenticate_user!, only: [:published, :welcome]
+
+    def welcome
+      if @page = Droom::Page.published.find_by(slug: 'welcome')
+        render template: "droom/pages/published"
+      else
+        redirect_to dashboard_url
+      end
+    end
 
     def new
       @page = Droom::Page.new(slug: params[:slug])
@@ -36,12 +45,16 @@ module Droom
     # NB authored page can override built-in page template if it takes that slug.
     #
     def published
-      if @page = Page.published.find_by(slug: params[:slug])
+      if @page = Droom::Page.published.find_by(slug: params[:slug])
+        authenticate_user! unless @page.public?
         render
+
       elsif lookup_context.exists?(params[:slug], 'pages', false)
-        render template: "pages/#{params[:slug]}", layout: "page"
+        render template: "pages/#{params[:slug]}"
+
       elsif can?(:create, Droom::Page)
         redirect_to droom.new_page_url(slug: params[:slug])
+
       else
         raise ActiveRecord::RecordNotFound, "No such page."
       end
@@ -50,7 +63,7 @@ module Droom
   protected
 
     def page_params
-      params.require(:page).permit(:title, :slug, :main_image_id, :content, :publish_now)
+      params.require(:page).permit(:title, :subtitle, :slug, :main_image_id, :content, :public, :publish_now)
     end
 
   end

@@ -1,0 +1,46 @@
+- organisation ||= @organisation
+- image_url = organisation.image_url(:hero)
+
+- content_for :pagetitle do
+  = organisation.name
+
+- content_for :body_class do 
+  organisation
+
+- if image_url.present?
+  - content_for :masthead do
+    #page_masthead
+      .bg{style: "background-image: url('#{image_url}')"}
+      .darken
+      .fg
+        = action_menu(organisation)
+        %h1.title
+          = link_to t(:directory), main_app.directory_url, class: "breadhead"
+          = organisation.name
+          = action_menulink(organisation)
+          - if organisation.chinese_name
+            %span.chinese_name
+              = organisation.chinese_name
+
+- else
+  - content_for :title do 
+    = link_to t(:directory), main_app.directory_url, class: "breadhead"
+    = organisation.name
+    = action_menulink(organisation)
+    - if organisation.chinese_name
+      %span.chinese_name
+        = organisation.chinese_name
+
+    = action_menu(organisation)
+
+- content_for :margin do
+  = render "droom/organisations/show/status", organisation: organisation
+  = render "droom/organisations/show/links", organisation: organisation
+  = render "droom/organisations/show/personnel", organisation: organisation
+  = render "droom/organisations/show/marginal_extras"
+
+
+%section.description
+  = sanitize organisation.description
+
+= render "droom/organisations/show/extras"

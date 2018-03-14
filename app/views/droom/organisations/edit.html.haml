@@ -1,6 +1,2 @@
-#edit_organisation
-  .header
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = t :edit_organisation
-  = render :partial => 'form'
+- @view ||= 'full'
+= render partial: "droom/organisations/edit/#{@view}"

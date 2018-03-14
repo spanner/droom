@@ -1,3 +1,13 @@
+=paramarker
+  content: "❡ "
+  color: $verypale
+  font-size: 1rem
+  display: inline-block
+  float: left
+  width: 20px
+  margin-left: -24px
+  margin-top: -3px
+
 [contenteditable]
   outline: none
   &[data-placeholder]
@@ -117,7 +127,7 @@ span.note
     width: 100%
     height: 100%
     display: flex
-    align-items: center
+    align-items: flex-end
     justify-content: center
     p
       color: white
@@ -135,8 +145,41 @@ span.note
     color: $dark
   a.control, label.control
     box-shadow: 0 0 6px $shadow
-  
+
 .editing
+  .blockset
+    position: relative
+    .ed-buttons
+      right: 0
+      left: auto
+      &.inactive
+        visibility: hidden
+        a
+          pointer-events: none
+          color: $pale
+  .blocks
+    .block
+      a.remove
+        position: absolute
+        display: none
+        left: -28px
+        top: 14px
+        color: $red
+        cursor: pointer
+        z-index: 100
+        svg
+          width: 24px
+          height: 24px
+      h3, p
+        &:empty
+          min-height: 2em
+          border: 1px dotted $verypale
+        &:before
+          +paramarker
+      &:hover
+        a.remove
+          display: block
+
   figure, div.bl
     position: relative
     min-height: 48px
@@ -176,7 +219,6 @@ span.note
     position: absolute
     top: 10px
     left: 10px
-    width: calc(100% - 20px)
     .picker, .styler, .config, .weighter, .remover
       display: block
       margin: 0
@@ -194,14 +236,7 @@ span.note
     .ed-buttons
       display: block
   & > p:before
-    content: "❡ "
-    color: $verypale
-    font-size: 0.7rem
-    display: inline-block
-    float: left
-    width: 12px
-    margin-left: -12px
-    margin-top: 5px
+    +paramarker
   .bl
     transition:
       properties: width height

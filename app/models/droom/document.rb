@@ -1,21 +1,15 @@
 require 'open-uri'
-require 'dropbox_sdk'
 
 module Droom
   class Document < ApplicationRecord
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
     belongs_to :scrap, :dependent => :destroy
-    has_many :dropbox_documents
 
     has_attached_file :file,
                       fog_directory: -> a { a.instance.file_bucket }
 
     acts_as_list scope: :folder_id
-
-    before_create :inherit_confidentiality
-    after_save :update_dropbox_documents
-    after_destroy :mark_dropbox_documents_deleted
 
     validates :file, :presence => true
     do_not_validate_attachment_file_type :file
@@ -101,28 +95,6 @@ module Droom
       }
     end
 
-    def copy_to_dropbox(user)
-      dropbox_documents.create(:user => user)
-    end
-
-    def mark_dropbox_documents_deleted
-      dropbox_documents.each do |dd|
-        dd.mark_deleted(true)
-      end
-    end
-
-    def create_dropbox_documents
-      # after create, in a delayed job
-      # for each user who is syncing our folder, create a dropbox document
-      # that is: everyone who has the sync everything preference or who is associated with the holder of this folder
-    end
-
-    def update_dropbox_documents
-      dropbox_documents.each do |dd|
-        dd.update
-      end
-    end
-
     ## Filing
     #
     # Some installations like to use different buckets for various purposes.
@@ -166,20 +138,9 @@ module Droom
     end
 
     def confidential?
-      private?
-    end
-
-    # called from containing folder when confidentiality changes
-    # calls save properly to allow for various indexing regimes.
-    def set_confidentiality!(confidentiality)
-      assign_attributes private: confidentiality
-      save!
-    end
-
-    # called before_create
-    def inherit_confidentiality
-      write_attribute :private, folder && folder.confidential?
-      true
+      confidential = private?
+      confidential ||= folder.confidential? if folder
+      confidential
     end
 
     def enqueue_for_indexing!
@@ -187,7 +148,7 @@ module Droom
     end
 
     def enqueue_for_indexing
-      if name_changed? || file_file_name_changed? || file_fingerprint_changed? || private_changed?
+      if name_changed? || file_file_name_changed? || file_fingerprint_changed?
         Droom::IndexDocumentJob.perform_later(id, Time.now.to_i)
       end
     end

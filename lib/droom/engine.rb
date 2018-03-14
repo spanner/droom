@@ -8,6 +8,7 @@ require 'cancan'
 require 'kaminari'
 require 'icalendar'
 require 'haml'
+require 'mail_form'
 
 module Droom
   class Engine < ::Rails::Engine
@@ -15,11 +16,10 @@ module Droom
 
     initializer "droom.integration" do
       Devise.parent_controller = "Droom::EngineController"
-      ActiveSupport.on_load :action_controller do
-        helper Droom::DroomHelper
-      end
     end
-    
+
+    config.assets.paths << Droom::Engine.root.join('node_modules')
+
     ActiveSupport::Reloader.to_prepare do
       Devise::SessionsController.layout Droom.devise_layout
       Devise::RegistrationsController.layout Droom.devise_layout

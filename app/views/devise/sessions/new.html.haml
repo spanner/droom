@@ -1,25 +1,15 @@
-- welcome_page = Droom::Page.find_by(slug: "_welcome")
-- sidebar_page = Droom::Page.find_by(slug: "_sidebar")
+- signin_page = Droom::Page.find_by(slug: "signin")
 
 - content_for(:pagetitle) do
   =t :please_sign_in
 
-- if welcome_page && welcome_page.content?
-  - content_for(:pagetitle) do
-    = welcome_page.title
 
+- if signin_page && signin_page.content?
+  - content_for(:pagetitle) do
+    = signin_page.title
 
   .welcome
-    = render "droom/pages/bighead", page: welcome_page
-    #content
-      %aside#margin
-        = render partial: 'devise/sessions/login_form'
-        - if sidebar_page && sidebar_page.content?
-          = clean_html sidebar_page.content
-
-      %article#body.narrow
-        .welcome
-          = clean_html welcome_page.content
+    = render "droom/pages/page", page: signin_page
 
 
 - else

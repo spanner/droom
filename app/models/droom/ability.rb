@@ -5,6 +5,7 @@ module Droom
     def initialize(user)
       user ||= Droom::User.new
       can :create, Droom::Enquiry
+      can :read, Droom::Page
 
       if user.persisted?
         if user.admin?
@@ -66,8 +67,6 @@ module Droom
 
           # Some models are purely administrative.
           #
-          can :create, Droom::DropboxToken
-          can :create, Droom::DropboxDocument
           can :create, Droom::MailingListMembership
 
           # Confidential events are visible internally but their documents are only visible to 'privileged' users.

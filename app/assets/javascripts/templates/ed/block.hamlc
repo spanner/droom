@@ -1,0 +1,4 @@
+%a.remove.ed-button
+  %svg.icon.filled
+    %use{"xlink:href" => "#cross_button_symbol"}
+.ed-block{contenteditable: true}

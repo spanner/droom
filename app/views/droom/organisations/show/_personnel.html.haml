@@ -1,0 +1,14 @@
+- organisation ||= @organisation
+
+- if admin? || organisation.users.any?
+
+  %section.personnel
+    %h2
+      = t :organisation_people, name: organisation.name
+
+      = link_to droom.new_organisation_user_url(organisation), :class => 'add', :data => {:action => "popup", :refreshed => ".organisations_list"} do
+        %svg.icon.small
+          %use{"xlink:href" => "#plus_symbol"}
+
+    %ul.people
+      = render partial: "droom/users/show/listed", collection: organisation.users

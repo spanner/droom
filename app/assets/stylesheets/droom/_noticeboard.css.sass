@@ -1,0 +1,177 @@
+@keyframes flash
+  0%, 100%
+    background-color: white
+  10%
+    background-color: #ffffaa
+
+
+#noticeboard
+  +clearfix
+  margin-top: 40px
+  margin-bottom: 100px
+  .column
+    float: left
+  .notice
+    position: relative
+    box-sizing: border-box
+    display: inline-block
+    float: left
+    min-width: 280px
+    background-color: white
+    color: $dark
+    margin: 0 16px 16px 0
+    border-radius: 3px
+    border: 1px solid $pale
+    padding-bottom: 30px
+    &.working
+      opacity: 0.25
+    &.flash
+      animation: flash 4s 1
+      animation-timing-function: ease-out
+    .controls
+      position: absolute
+      top: -27px
+      right: -1px
+      height: 20px
+      padding: 3px 8px
+      background-color: white
+      font-size: 1rem
+      border: 1px solid $pale
+      border-top-left-radius: 3px
+      border-top-right-radius: 3px
+      border-bottom: none
+      a.edit
+        color: $pale
+        margin-right: 3px
+        &:hover
+          color: $green
+      a.delete
+        color: $pale
+        &:hover
+          color: $red
+    .content
+      font-weight: lighter
+      .notice_body
+        clear: left
+        overflow: hidden
+    .footnote
+      font-size: 0.75rem
+      color: $pale
+      margin: 0 12px 12px 16px
+      position: absolute
+      bottom: 0
+      right: 0
+      width: 65%
+      p
+        margin: 0
+    img
+      display: block
+    figcaption
+      font-size: 80%
+      color: $mid
+      p
+        margin: 0
+    h2
+      margin-bottom: 0.25em
+      margin-top: 12px
+      font-size: 1em
+      line-height: 1.6
+      font-weight: bold
+      overflow: hidden
+      &+p
+        margin-top: 0.25em
+    .datemark
+      margin: 0 16px 4px 0
+      width: auto
+      span
+        text-align: left
+      span.mon
+        color: $dark
+        padding: 0 0 3px 0
+        font-size: 105%
+      span.dom
+        color: $dark
+        margin-left: -1px
+        padding: 0 5px 1px 0
+      span.year
+        font-weight: normal
+        padding: 1px 0 3px 0
+    iframe
+      width: 100%
+      padding-bottom: 56.25%
+    img
+      width: 100%
+      height: auto
+    a.biglink
+      display: block
+      font-size: 1em
+      font-weight: bold
+      line-height: 1.2
+      color: $blue
+      overflow: hidden
+      +hover
+    &.quote
+      blockquote
+        color: $mid
+        margin: 0 20px
+        font-size: 1.5em
+        line-height: 1.3
+        &:before
+          content: '“'
+          font-size: 180%
+          position: absolute
+          width: 12px
+          text-align: right
+          margin-left: -0.5em
+          margin-top: -0.1em
+        &:after
+          content: '”'
+          font-size: 180%
+          position: absolute
+          margin-left: 0.1em
+          margin-top: -0.1em
+      figcaption
+        margin: 10px 0 0 20px
+
+    .compact
+      display: block
+    .expanded
+      display: none
+    .footnote
+      display: none
+    &.expanded
+      padding-bottom: 54px
+      .expanded
+        display: block
+      .compact
+        display: none
+      .footnote
+        display: block
+    &.unexpandable
+      padding-bottom: 12px
+      .footnote
+        display: block
+        position: relative
+        margin: 0 16px
+        float: right
+    a.reveal
+      font-size: 1rem
+      display: block
+      position: absolute
+      bottom: 12px
+      left: 16px
+      cursor: pointer
+      color: $pale
+      +hover
+    &:hover
+      a.reveal
+        color: $link
+
+.no-touch
+  #noticeboard
+    .notice
+      .controls
+        display: none
+      &:hover
+        .controls
+          display: block

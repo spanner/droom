@@ -6,9 +6,37 @@ module Droom
 
     belongs_to :organisation_type
     belongs_to :owner, :class_name => 'Droom::User'
-    belongs_to :created_by, :class_name => 'Droom::User'
+    belongs_to :approved_by, :class_name => 'Droom::User'
+    belongs_to :disapproved_by, :class_name => 'Droom::User'
 
-    scope :added_since, -> date { where("created_at > ?", date)}
+    accepts_nested_attributes_for :owner
+    after_save :capture_owner
+
+    has_attached_file :image,
+                      styles: {
+                        thumb: ["128x96#", :png],
+                        standard: ["640x480>", :jpg],
+                        hero: ["1920x1080>", :jpg]
+                      },
+                      convert_options: {
+                        thumb: "-strip",
+                        standard: "-quality 50 -strip",
+                        hero: "-quality 25 -strip"
+                      }
+    has_attached_file :logo,
+                      default_url: :nil,
+                      styles: {
+                        standard: "520x520#",
+                        icon: "32x32#",
+                        thumb: "130x130#"
+                      }
+
+    validates_attachment :image, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+    validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+
+    scope :added_since, -> date { where("created_at > ?", date) }
+    scope :approved, -> { where.not(approved_at: nil) }
+    scope :unapproved, -> { where(approved_at: nil, disapproved_at: nil) }
 
     default_scope -> {order("name ASC")}
 
@@ -18,6 +46,137 @@ module Droom
       organisations
     end
 
+    def send_registration_confirmation_messages
+      # Droom.mailer is a configuration variable that usually contains `Droom::Mailer` :)
+      Droom.mailer.send(:org_confirmation, self).deliver_later
+      Droom::User.admins.each do |admin|
+        Droom.mailer.send(:org_notification, self, admin).deliver_later
+      end
+    end
+
+    def self.approve_all
+      Searchkick.callbacks(:bulk) do
+        u = Droom::User.first
+        all.each {|o| o.approve!(u)}
+      end
+    end
+
+    # loud version for normal vetting process
+    #
+    def approve!(approving_user=nil)
+      unless approved?
+        self.update_attributes({
+          approved_at: Time.now,
+          approved_by: approving_user,
+          disapproved_at: nil,
+          disapproved_by: nil
+        })
+        send_welcome_message if approving_user
+        activities.each(&:reindex)
+      end
+    end
+
+    # quiet version for seeding and admin tasks
+    #
+    def approve
+      unless approved?
+        self.update_attributes({
+          approved_at: Time.now,
+          disapproved_at: nil,
+          disapproved_by: nil
+        })
+        activities.each(&:reindex)
+      end
+    end
+
+    def approved?
+      approved_at?
+    end
+
+    def disapprove!(user)
+      unless disapproved?
+        self.update_attributes({
+          disapproved_at: Time.now,
+          disapproved_by: user,
+          approved_at: nil,
+          approved_by: nil
+        })
+        activities.each(&:reindex)
+      end
+    end
+
+    def disapproved?
+      disapproved_at?
+    end
+
+    def send_welcome_message
+      if owner
+        owner.generate_confirmation_token unless owner.confirmation_token?
+        Droom.mailer.send(:org_welcome, self, owner.confirmation_token).deliver_later
+      end
+    end
+
+
+    ## Images
+    #
+    def image_url(style=:standard, decache=true)
+      if image?
+        url = image.url(style, decache)
+        url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
+      else
+        ""
+      end
+    end
+
+    # Images usually come to us as data: urls but can also be given as actual url or assigned directly to image.
+    #
+    def image_url=(address)
+      if address.present?
+        self.image = URI(address)
+      end
+    rescue OpenURI::HTTPError => e
+      Rails.logger.warn "Cannot read image url #{address} because: #{e}. Skipping."
+    end
+
+    # image_data should be a fully specified data: url in base64 with prefix. Paperclip knows what to do with it.
+    #
+    def image_data=(data_uri)
+      if data_uri.present?
+        self.image = data_uri
+      end
+    end
+
+    # If image_data is given then the file name should be also supplied as `image_name`.
+    # You normally want to call this method after image_url= or image_data=, eg by ordering
+    # parameters in the controller.
+    #
+    def image_name=(name)
+      self.image_file_name = name
+    end
+
+    def logo_url(style=:standard, decache=true)
+      if logo?
+        url = logo.url(style, decache)
+        url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
+      end
+    end
+
+    # logo_data should be a fully specified data: url in base64 with prefix. Paperclip knows what to do with it.
+    #
+    def logo_data=(data_uri)
+      if data_uri.present?
+        self.logo = data_uri
+      end
+    end
+
+    # If logo_data is given then the file name should be also supplied as `logo_name`.
+    # You normally want to call this method after logo_url= or logo_data=, eg by ordering
+    # parameters in the controller.
+    #
+    def logo_name=(name)
+      self.logo_file_name = name
+    end
+
     def url_with_protocol
       url =~ /^https?:\/\// ? url : "http://#{url}"
     end
@@ -25,5 +184,69 @@ module Droom
     def url_without_protocol
       url.sub(/^https?:\/\//, '')
     end
+
+
+    ## Social links
+    #
+    # Should really be implemented as a more future-proof social_links association, but this will get us started.
+    #
+    def instagram_url
+      url_with_base(instagram_id, "instagram.com") if instagram_id?
+    end
+
+    def facebook_url
+      url_with_base(facebook_page, "facebook.com") if facebook_page?
+    end
+
+    def twitter_url
+      url_with_base(twitter_id, "twitter.com") if twitter_id?
+    end
+
+    def weibo_url
+      url_with_base(weibo_id, "www.weibo.com") if weibo_id?
+    end
+
+    def url_with_base(fragment, base)
+      if fragment =~ /#{Regexp.quote(base)}/i
+        self.class.normalize_url(fragment)
+      else
+        path = fragment.sub(/^@/, '').strip
+        URI.join("https://#{base}", path.strip).to_s
+      end
+    rescue URI::InvalidURIError
+      ""
+    end
+
+    def url_without_base(base)
+      social_id = url
+      social_id.sub!(/http(s)?:\/\/(www\.)?/, '')
+      social_id.sub!(/#{Regexp.quote(base)}(\/)?/, '')
+      social_id
+    end
+
+    def self.normalize_url(url="")
+      url = "http://#{url}" unless url.blank? or url =~ /^https?:\/\//
+      url.strip
+    end
+
+    ## Search
+    #
+    searchkick callbacks: :async
+
+    def search_data
+      {
+        name: name || "",
+        chinese_name: chinese_name || "",
+        description: description,
+        approved: approved?
+      }
+    end
+
+    def capture_owner
+      if owner and owner.organisation != self
+        owner.update_column :organisation_id, self.id
+      end
+    end
+
   end
 end

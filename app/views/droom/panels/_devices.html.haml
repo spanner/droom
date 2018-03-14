@@ -11,7 +11,5 @@
       = link_to t(:download_contacts), droom.users_url(:format => :vcf)
     %li
       = link_to t(:follow_stream), droom.feed_scraps_url(:format => :rss, :auth_token => current_user.authentication_token)
-    %li
-      = link_to t(:setup_dropbox), '#'
   %p.note
     These links are all personal to you and include an automatic login. Keep them secret.

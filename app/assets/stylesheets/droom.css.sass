@@ -23,6 +23,12 @@ p.nothing
   color: $mid
   margin-bottom: 2em
 
+.warning
+  color: $reddish
+
+.success
+  color: $green
+  
 a.select
   position: absolute
   display: block
@@ -30,26 +36,6 @@ a.select
   +hover
   top: 48px
   left: 540px
-
-a.dropbox
-  +big_icon_link("droom/dropbox.png")
-  color: #4ea1ea
-  &:visited
-    color: #4ea1ea
-  &:hover
-    color: $hover
-  &.revoke
-    background-position: 0 -48px
-    color: $hover
-
-a.dropboxer
-  +icon_link("droom/dropbox_small.png")
-  margin-left: 0
-  color: #4ea1ea
-  &:visited
-    color: #4ea1ea
-  &:hover
-    color: $hover
 
 a.confirmed
   color: $green
@@ -78,15 +64,13 @@ a.waiting
   svg
     display: none
 
-input.dropbox.revoke[type="submit"]
-  +icon_link("droom/revoke_small.png")
-  background-color: transparent
-  color: $blue
-  padding: 0
-  height: auto
-  line-height: 20px
-  &:hover
-    color: $hover
+a.approve
+  color: $green
+  +hover
+
+a.disapprove
+  color: $reddish
+  +hover
 
 input:required
   background:
@@ -275,6 +259,19 @@ div.event, form.event, div.project
     width: 100%
     margin-right: 0
 
+div.organisation
+  position: relative
+  p.actions
+    float: right
+    margin: 0
+    & + h2
+      width: 70%
+  h2.name
+    margin-bottom: 0
+  p.description
+    margin-top: 0.25em
+
+
 #margin
   ul.invitations
     padding: 0
@@ -392,16 +389,21 @@ form.event, form.user
   p.admin
     clear: both
     float: right
-    margin: 16px 10px
+    margin: 16px 4px
     label
       display: inline-block
     select
-      width: 75px
+      width: 120px
   .buttons
     margin: 10px 0
     float: left
   p.guidance
     clear: both
+
+form.user
+  select, textarea, iframe
+    max-width: 757px
+    box-sizing: border-box
 
 form.folder
   input.name
@@ -434,8 +436,12 @@ form.document
     font-size: 1em
     height: 60px
 
-
-
+form.organisation
+  input.name
+    width: 520px
+    font-size: 2em
+  input.url, textarea, select
+    width: 520px
 
 .image-upload
   position: relative
@@ -507,29 +513,31 @@ form.user
   p
     margin: 0
     margin-bottom: 10px
-  p.names
+  .hanging
     position: relative
+    display: block
     float: left
     width: calc(100% - 100px)
     +clearfix
-    input[type="text"]
-      width: 100%
-      box-sizing: border-box
-    span.title
-      display: inline-block
-      vertical-align: top
-      width: calc(16% - 10px)
-      margin-right: 10px
-    span.name
-      display: inline-block
-      vertical-align: top
-      width: calc(32% - 10px)
-      margin-right: 10px
-    span.chinese_name, span.honours
-      display: inline-block
-      vertical-align: top
-      width: 20%
-      margin-right: 0
+    p.names
+      input[type="text"]
+        width: 100%
+        box-sizing: border-box
+      span.title
+        display: inline-block
+        vertical-align: top
+        width: calc(16% - 10px)
+        margin-right: 10px
+      span.name
+        display: inline-block
+        vertical-align: top
+        width: calc(32% - 10px)
+        margin-right: 10px
+      span.chinese_name, span.honours
+        display: inline-block
+        vertical-align: top
+        width: 20%
+        margin-right: 0
   .contacts
     overflow: hidden
     margin-top: 10px
@@ -556,6 +564,7 @@ form.user
     label.inline
       margin-right: 10px
   div.description
+    clear: left
     textarea
       width: 100%
   div.address_book
@@ -572,6 +581,7 @@ form.user
   p.gender, p.status, p.confirmation
     float: left
     margin-right: 25px
+
   p.admin
     float: right
 
@@ -594,6 +604,8 @@ form.group, form.event_type, form.service, form.permission
     input[type="text"]
       font-size: 1.5em
       font-weight: bold
+  p.admin
+    float: right
 
 p.manage_password
   span.col
@@ -685,6 +697,14 @@ h2.name
 
 h2.quiet
   color: $pale
+
+h2.stamp
+  margin-top: 0
+  span.message
+    font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace
+  span.notes
+    font-size: 1rem
+    color: $pale
 
 a.dl, a.ul
   display: inline-block
@@ -1346,6 +1366,7 @@ $calendar_width: 250px
 $box: 35px
 
 #minicalendar
+  margin-top: 36px
   position: relative
   overflow: hidden
   width: 250px
@@ -1758,8 +1779,14 @@ form
     clear: left
     input[type="text"], input[type="email"], input[type="password"], select, textarea
       width: 97%
+  p.admin
+    float: right
+    input[type="text"], input[type="email"], input[type="password"], select, textarea
+      width: 90px
+      margin-left: 6px
   .buttons
     clear: left
+    margin-top: 1em
 
 form.preferences
   input[type='radio'], input[type='checkbox']
@@ -1844,7 +1871,7 @@ ul.people
             color: $red
       span.mugshot
         color: $pale
-        background: none
+        background-image: none
     &.refused
       opacity: 0.4
     span.mugshot
@@ -1854,13 +1881,13 @@ ul.people
       width: 32px
       height: 32px
       border-radius: 16px
+      border: 1px solid $pale
       margin-right: 9px
       margin-top: 11px
       svg
         width: 32px
         height: 32px
       background:
-        color: $pale
         repeat: no-repeat
         position: center center
         size: cover
@@ -1966,7 +1993,7 @@ div.popup
       width: 130px
       height: 130px
       margin-right: 20px
-      margin-bottom: 10px
+      margin-bottom: 20px
       border-radius: 8px
       background:
         color: $mid
@@ -2248,12 +2275,13 @@ ul.checklist
 @import droom/datepicker
 @import droom/uploader
 @import droom/columns
-@import droom/menus
-@import droom/forms
-@import droom/organisations
-@import droom/help
-@import droom/pages
 @import droom/ed
+@import droom/forms
+@import droom/help
+@import droom/menus
+@import droom/noticeboard
+@import droom/pages
+@import droom/symbols
 @import medium/base
 @import medium/droom
 @import droom/draggables

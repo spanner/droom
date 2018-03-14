@@ -4,22 +4,28 @@
   vertical-align: top
   width: $width
   margin-right: $margin
-  input[type="text"], input[type="email"], input[type="date"], input[type="password"], textarea, select
+  input[type="text"], input[type="email"], input[type="date"], input[type="password"], input[type="url"], textarea, select
     width: 100%
     box-sizing: border-box
   &:last-child, &.last
     margin-right: 0
+  span.note
+    display: inline-block
+    line-height: 1.3
   .subcol
     display: inline-block
     vertical-align: top
     width: 48%
     margin-right: 3.5%
-    input[type="text"], input[type="email"], input[type="date"], input[type="password"], textarea, select
+    input[type="text"], input[type="email"], input[type="date"], input[type="password"], input[type="url"], textarea, select
       width: 100%
       box-sizing: border-box
     &:last-child, &.last
       margin-right: 0
 
+span.notcol
+  display: block
+  clear: both
 
 .onecol, .twocol, .threecol, .fourcol
   +clearfix
@@ -74,8 +80,30 @@
       +column(24%, 2%)
   &.equal
     .col
-      +column(31%, 2%)
+      +column(32%, 2%)
 
 .fourcol
   .col
     +column(23.5%, 2%)
+
+.autogrid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))
+  grid-column-gap: 2em
+  grid-row-gap: 30px
+  grid-auto-rows: 20px
+  .gridbox
+    position: relative
+    grid-column-end: span 1
+    border: 1px solid $pale
+    border-radius: 5px
+    box-sizing: border-box
+    margin-bottom: 0
+    a.menu
+      position: absolute
+      top: 10px
+      right: 10px
+      z-index: 10
+    .content
+      padding: 20px
+      box-sizing: border-box

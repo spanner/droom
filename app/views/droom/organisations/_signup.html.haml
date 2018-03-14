@@ -1,0 +1,47 @@
+- organisation = Droom::Organisation.new
+- user = Droom::User.new
+
+#signup
+  = form_for [droom, organisation], url: droom.register_organisations_path, method: "post", html: {class: 'edit organisation'} do |f|
+    %fieldset
+      %p.name.twocol<
+        %span.col>
+          = f.text_field :name, :required => true, :autofocus => true, placeholder: t("placeholders.organisation.name")
+        %span.col>
+          = f.text_field :chinese_name, placeholder: t("placeholders.organisation.chinese_name")
+
+      %p.url.twocol<
+        %span.col.first>
+          = f.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
+        %span.col.last>
+          %span.note
+            You can add social media links later.
+
+      %p.description.onecol<
+        %span.col>
+          = f.text_area :description, placeholder: t("placeholders.organisation.description")
+
+    = f.fields_for :owner, user do |uf|
+      %fieldset
+        %h2
+          Person in charge
+        %p.names.threecol<
+          %span.col.first>
+            = uf.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
+          %span.col>
+            = uf.text_field :family_name, :required => true, placeholder: t("placeholders.user.family_name")
+          %span.col.last>
+            = uf.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
+
+        %p.email.onecol
+          %span.col
+            = uf.text_field :email, :required => true, placeholder: t("placeholders.user.email")
+
+      = uf.fields_for :preferences do |pf|
+        %fieldset{data: {role: "preferences"}}
+          %p.preferences
+            = preference_checkbox 'news.enabled'
+
+    %p.buttons.onecol<
+      %span.col
+        = f.submit t(:sign_up)

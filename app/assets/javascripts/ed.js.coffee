@@ -5,7 +5,7 @@
 #= require 'backbone.marionette/lib/backbone.marionette'
 #= require 'backbone.stickit/backbone.stickit'
 #= require 'moment/moment'
-#= require 'smartquotes/smartquotes'
+#= require 'smartquotes/dist/smartquotes'
 #= require 'medium-editor/dist/js/medium-editor'
 #= require 'jquery-circle-progress/dist/circle-progress'
 

@@ -1,6 +1,6 @@
 - listed ||= nil
 - page ||= listed  || @page
-- cssclass = "page holder"
+- cssclass = "page"
 - if page.public? ? " public" : " private"
   - cssclass << " public"
 - else
@@ -8,11 +8,13 @@
 - if page.published?
   - cssclass << " published"
 
-%div{class: cssclass, id: "page_#{page.id}", data: {refreshable: true, url: droom.page_path(page, view: "listed")} }
-  .heading
-    %h2.name<
-      = link_to page.title, edit_page_url(page), :class => "name"
+- bg = page.main_image ? page.main_image.url : ""
 
-  - if page.content?
-    %p.preview
-      = shorten(strip_tags(page.content), :length => 64)
+%div{class: cssclass, id: "page_#{page.id}", data: {refreshable: true, url: droom.page_path(page, view: "listed")} }
+  = link_to droom.page_url(page) do
+    .head{style: "background-image: url(#{bg})"}
+      .darken
+      %h3.name
+        = page.title.html_safe
+    .body
+      = shorten(strip_tags(page.content), :length => 200)

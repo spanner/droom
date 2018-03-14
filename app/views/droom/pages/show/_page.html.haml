@@ -1,0 +1,22 @@
+- page ||= @page
+
+- if page.illustrated?
+  - image_url = page.main_image.url(:hero)
+  #page_masthead
+    .bg{style: "background-image: url('#{image_url}')"}
+    .darken
+    .fg
+      #page_title
+        %h1.title
+          = sanitize(page.title)
+        - if @page.subtitle?
+          %p.subtitle
+            = @page.render(:subtitle).html_safe
+- else
+  #page_title
+    %h1.title
+      = page.title
+
+#page_content
+  .content
+    = @page.render(:content).html_safe
