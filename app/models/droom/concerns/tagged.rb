@@ -32,7 +32,7 @@ module Droom::Concerns::Tagged
     if somewords.blank?
       self.tags.clear
     else
-      self.tags = Tag.from_list(somewords)
+      self.tags = Droom::Tag.from_list(somewords)
     end
   end
 

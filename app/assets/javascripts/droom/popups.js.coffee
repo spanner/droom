@@ -79,14 +79,15 @@ jQuery ($) ->
       @_container.append(@_content)
       @_content.activate()
       @show()
-      _.defer =>
-        @_header = @_content.find('.header')
-        @_content.find('form').remote
-          on_cancel: @reset
-          on_success: @receive
-        @_content.find('a.popup ').remote
-          on_cancel: @reset
-          on_success: @receive
+      @_header = @_content.find('.header')
+      console.log "onward forms:", @_content.find('form').length
+      @_content.find('form').remote
+        on_cancel: @reset
+        on_success: @receive
+      console.log "onward links:", @_content.find('a.popup').length
+      @_content.find('a.popup ').remote
+        on_cancel: @reset
+        on_success: @receive
 
     conclude: (data) =>
       if @_affected

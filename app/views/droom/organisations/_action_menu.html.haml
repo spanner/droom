@@ -3,8 +3,8 @@
     %ul.actions
       %li
         = link_to t(:quick_edit), droom.edit_organisation_url(organisation, view: "quick"), :class => 'edit', :data => {:action => "popup", :affected => "#organisation_#{organisation.id}"}
-      %li
-        = link_to t(:edit), droom.edit_organisation_url(organisation, view: "full"), :class => 'edit', :data => {:action => "popup", :affected => "#organisation_#{organisation.id}"}
+      / %li
+      /   = link_to t(:edit), droom.edit_organisation_url(organisation, view: "full"), :class => 'edit', :data => {:action => "popup", :affected => "#organisation_#{organisation.id}"}
       %li
         = link_to t(:add_user), droom.new_organisation_user_url(organisation), :class => 'add', :data => {:action => "popup", :affected => "#organisation_#{organisation.id}"}
       %li
