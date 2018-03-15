@@ -1,0 +1,51 @@
+form.search.quick
+  position: absolute
+  top: 40px
+  right: 0
+  svg
+    width: 48px
+    height: 48px
+    margin: 0
+    display: inline-block
+    vertical-align: middle
+  label
+    display: inline-block
+    vertical-align: middle
+    cursor: pointer
+    color: $pale
+  input, a
+    color: $pale
+    transition: color 1s ease-out
+    &:focus
+      box-shadow: none
+  input
+    display: inline-block
+    vertical-align: middle
+    background-color: transparent
+    text-align: right
+    border: none
+    outline: none
+    margin: 0
+    padding: 0
+    max-width: 200px
+    font-size: 1.5rem
+    font-weight: lighter
+    &:focus+label
+      color: $green
+  a.cancel, a.submit
+    display: none
+    color: white
+  &.submittable
+    input, a
+      color: $green
+    label
+      display: none
+    a.submit
+      display: inline-block
+  &.cancellable
+    input, a
+      color: $red
+    label
+      display: none
+    a.cancel
+      display: inline-block

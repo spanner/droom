@@ -566,8 +566,31 @@ jQuery ($) ->
 
 
 
+  $.urlParam = (name, url) ->
+    url ?= window.location.href
+    results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(url)
+    return false unless results
+    decodeURIComponent(results[1]).replace(/\+/g, " ")
 
-
+  $.fn.quick_search_form = ->
+    @each ->
+      $form = $(@)
+      $input = $form.find('input[type="text"]')
+      $stumbit = $form.find('a.submit')
+      $stumbit.click (e) ->
+        e?.preventDefault()
+        $form.trigger('submit')
+      button_setter = ->
+        q = $.urlParam('q')
+        v = $input.val()
+        if v and (v is q)
+          $form.addClass('cancellable').removeClass('submittable')
+        else if v and v.length > 1
+          $form.removeClass('cancellable').addClass('submittable')
+        else
+          $form.removeClass('cancellable submittable')
+      $input.on "input", _.debounce(button_setter, 100)
+      button_setter()
 
 
 

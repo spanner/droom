@@ -66,7 +66,7 @@
               = render :partial => "droom/folders/contents", :locals => {:folder => event.folder, :open => true, :flat => true, :narrow => true, :limit => 3, :omit_menu => true, :for_more => event_url(event)}
 
         - if event.description?
-          = event.description.html_safe
+          = sanitize(event.description)
 
   - if show_folder && full_attachments
     .addenda

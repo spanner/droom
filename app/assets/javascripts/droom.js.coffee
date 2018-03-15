@@ -8,7 +8,7 @@
 #= require sortablejs/Sortable
 #= require jquery.cookie/jquery.cookie
 #= require ep-jquery-tokeninput/src/jquery.tokeninput
-#= require 'medium-editor/dist/js/medium-editor'
+#= require medium-editor/dist/js/medium-editor
 
 #= require droom/lib/jquery.datepicker
 #= require droom/lib/jquery.animate-colors
@@ -99,5 +99,6 @@ jQuery ($) ->
     @find_including_self('[data-draggable]').draggable()
     @find_including_self('.gridbox').gridBox()
     @find_including_self('.tagger').tagger()
+    @find_including_self('form.search.quick').quick_search_form()
 
     @
