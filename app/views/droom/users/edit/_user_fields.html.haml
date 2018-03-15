@@ -26,7 +26,6 @@
       %span.honours>
         = f.text_field :honours, placeholder: t("placeholders.user.honours")
 
-
   .contacts.non-file-data
     = render "droom/users/edit/emails", f: f, user: user
     - unless minimal
@@ -34,8 +33,5 @@
       = render "droom/users/edit/addresses", f: f, user: user
 
 - if Droom.use_biogs?
-  - user.description = "<p></p>" unless user.description?
   .description
-    = f.label :description
-    %br
-    = f.text_area :description, class: "rte", placeholder: t("placeholders.user.description")
+    = f.text_area :description, class: "rte", data: {placeholder: t("placeholders.user.description")}

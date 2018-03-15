@@ -1,9 +1,4 @@
 - organisation ||= @organisation
 
 #new_organisation
-  .header
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = t :add_organisation
-
-  = render :partial => 'droom/organisations/signup', organisation: organisation
+  = render :partial => 'droom/organisations/edit/quick', organisation: organisation

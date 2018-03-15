@@ -1,9 +1,9 @@
-[contenteditable], input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], select, textarea
+[contenteditable], input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea
   padding: 8px
   border: 1px solid $pale
   background-color: white
   font-size: 1.2em
-  +book
+  outline: none
   &.strong
     font-weight: bold
   &.destination
@@ -30,28 +30,30 @@
     color: $pale
   &.placeholder
     color: $pale
+  &[data-placeholder]
+    &:empty:before
+      content: attr(data-placeholder)
+      color: $pale
+      text-transform: none
 
 select
   -webkit-appearance: none
   -webkit-border-radius: 0
   -webkit-padding-end: 24px
   font-size: 1.2em
-  border: 1px dotted $pale
-  background:
-    color: white
-    position: right top
-    repeat: no-repeat
-    image: image-url('dropdown.png')
+  border: 1px solid $pale
+  padding: 7px 8px 9px 8px
+  outline: none
+  border-bottom-right-radius: 12px
+  background-color: white
   &:hover
     color: $hover
-    background-position: right -96px
   &.small
     font-size: 0.9em
     padding: 2px
     -webkit-padding-end: 16px
 
 input[type="submit"]
-  +book
   +button($green)
   display: inline-block
   transition: width 0.5s ease-out, height 0.5s ease-out, font-size 0.5s ease-out, padding 0.5s ease-out
@@ -89,13 +91,6 @@ input[type="submit"]
     padding: 14px 8px 5px 20px
 
 [contenteditable]
-  outline: none
-  &[data-placeholder]
-    &:empty:before
-      content: attr(data-placeholder)
-      color: $mid
-      font-style: italic
-      text-transform: none
   p:first-child, h2:first-child, h3:first-child, ul:first-child
     margin-top: 0
   p:last-child, h2:last-child, h3:last-child, ul:last-child
