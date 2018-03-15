@@ -7,9 +7,9 @@
 #= require jquery-deserialize/src/jquery.deserialize
 #= require sortablejs/Sortable
 #= require jquery.cookie/jquery.cookie
+#= require ep-jquery-tokeninput/src/jquery.tokeninput
 #= require wysihtml/dist/wysihtml
 #= require wysihtml/dist/wysihtml.toolbar
-#= require ep-jquery-tokeninput/src/jquery.tokeninput
 
 #= require droom/lib/jquery.datepicker
 #= require droom/lib/jquery.animate-colors
@@ -18,6 +18,7 @@
 #= require droom/utilities
 #= require droom/ajax
 
+#= require droom/wysihtml_rules
 #= require droom/actions
 #= require droom/popups
 #= require droom/stream

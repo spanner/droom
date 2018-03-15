@@ -589,10 +589,10 @@ jQuery ($) ->
       @_textarea.attr('id', $.makeGuid()) unless @_textarea.attr('id')?
       stylesheets = $("link").map ->
         $(@).attr('href')
-      @_editor = new wysihtml5.Editor @_textarea.get(0),
+      @_editor = new wysihtml.Editor @_textarea.get(0),
         stylesheets: stylesheets,
         toolbar: @_toolbar.get(0),
-        parserRules: wysihtml5ParserRules
+        parserRules: wysihtmlParserRules
         useLineBreaks: false
       @_toolbar.show()
       # @_editor.on "load", () =>

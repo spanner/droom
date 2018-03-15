@@ -11,14 +11,14 @@ class Tagger
   constructor: (el) ->
     @_el = $(el)
     @_tags = @_el.find("#tags")
-    @_field = @_el.find('input.tagger')
+    @_field = @_el.find('input.tags')
     @_form = @_field.parents('form')
     @_adder = @_el.find('a.add_tag')
     if value = @_field.val()
       existing_terms = _.map _.uniq(value.split(',')), (term) -> name: term
     else
       existing_terms = []
-    @_field.tokenInput "/droom/api/tags",
+    @_field.tokenInput "/api/tags",
       minChars: 2
       tokenValue: "name"
       prePopulate: existing_terms
@@ -26,9 +26,9 @@ class Tagger
         seen = {}
         terms = []
         _.map data, (suggestion) ->
-          unless seen[suggestion.term]
-            terms.push(name: suggestion.term)
-            seen[suggestion.term] = true
+          unless seen[suggestion.name]
+            terms.push(name: suggestion.name)
+            seen[suggestion.name] = true
         terms
     @_search_field = @_tags.find('input#token-input-item_terms')
     @_search_field.after @_adder

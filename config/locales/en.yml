@@ -347,7 +347,8 @@ en:
       name: "Organisation name"
       chinese_name: "中国姓名"
       url: "Website link"
-      description: "Brief description"
+      description: "Brief description. Please keep within about 100 words."
+      keywords: "Please type and select"
     phone:
       phone: "Phone number"
     scrap:

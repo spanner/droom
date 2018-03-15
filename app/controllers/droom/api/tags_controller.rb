@@ -1,3 +1,5 @@
+require 'active_model_serializers'
+
 module Droom::Api
   class TagsController < Droom::Api::ApiController
     before_action :search_tags, only: [:index]
@@ -25,7 +27,7 @@ module Droom::Api
       end
 
       arguments = {
-        fields: ["name^5", "synonyms"]
+        fields: ["name^5", "synonyms"],
         where: criteria,
         order: order,
         match: :word_start,
@@ -37,7 +39,7 @@ module Droom::Api
         arguments[:page] = (params[:page].presence || 1).to_i
       end
 
-      @tags = Tag.search terms, arguments
+      @tags = Droom::Tag.search terms, arguments
     end
 
   end

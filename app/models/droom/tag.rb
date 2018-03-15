@@ -40,11 +40,11 @@ module Droom
 
     ## Elasticsearch indexing
     #
-    searchkick word_start: [:term, :synonyms]
+    searchkick word_start: [:name, :synonyms]
 
     def search_data
       {
-        name: term,
+        name: name,
         synonyms: synonyms
       }
     end
@@ -57,13 +57,13 @@ module Droom
       [name] + synonyms
     end
 
-    def subsume(other_term=nil)
+    def subsume(other_tag=nil)
       Droom::Tag.transaction do
         if other_tag && other_tag != self
-          self.taggees << other_term.taggees
-          self.tag_synonyms << other_term.tag_synonyms
-          self.tag_synonyms.create(synonym: other_term.name)
-          other_term.destroy
+          self.taggees << other_tag.taggees
+          self.tag_synonyms << other_tag.tag_synonyms
+          self.tag_synonyms.create(synonym: other_tag.name)
+          other_tag.destroy
           self.save
         end
       end

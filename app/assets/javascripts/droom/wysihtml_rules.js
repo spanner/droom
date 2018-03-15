@@ -32,10 +32,10 @@
  *    ... becomes ...
  *    <div class="wysiwyg-text-align-center">hello</div>
  */
-var wysihtml5ParserRules = {
+var wysihtmlParserRules = {
     /**
      * CSS Class white-list
-     * Following CSS classes won't be removed when parsed by the wysihtml5 HTML parser
+     * Following CSS classes won't be removed when parsed by the wysihtml HTML parser
      */
     "classes": {
         "wysiwyg-clear-both": 1,
@@ -79,14 +79,21 @@ var wysihtml5ParserRules = {
      * The following options are available:
      *
      *    - add_class:        converts and deletes the given HTML4 attribute (align, clear, ...) via the given method to a css class
-     *                        The following methods are implemented in wysihtml5.dom.parse:
+     *                        The following methods are implemented in wysihtml.dom.parse:
      *                          - align_text:  converts align attribute values (right/left/center/justify) to their corresponding css class "wysiwyg-text-align-*")
-     *                            <p align="center">foo</p> ... becomes ... <p> class="wysiwyg-text-align-center">foo</p>
+     *                            <p align="center">foo</p> ... becomes ... <p class="wysiwyg-text-align-center">foo</p>
      *                          - clear_br:    converts clear attribute values left/right/all/both to their corresponding css class "wysiwyg-clear-*"
      *                            <br clear="all"> ... becomes ... <br class="wysiwyg-clear-both">
      *                          - align_img:    converts align attribute values (right/left) on <img> to their corresponding css class "wysiwyg-float-*"
-     *                          
+     *
+     *    - add_style:        converts and deletes the given HTML4 attribute (align) via the given method to a css style
+     *                        The following methods are implemented in wysihtml.dom.parse:
+     *                          - align_text:  converts align attribute values (right/left/center) to their corresponding css style)
+     *                            <p align="center">foo</p> ... becomes ... <p style="text-align:center">foo</p>
+     *
      *    - remove:             removes the element and its content
+     *
+     *    - unwrap              removes element but leaves content
      *
      *    - rename_tag:         renames the element to the given tag
      *
@@ -99,7 +106,9 @@ var wysihtml5ParserRules = {
      *                            - src:            allows something like "/foobar.jpg", "http://google.com", ...
      *                            - href:           allows something like "mailto:bert@foo.com", "http://google.com", "/foobar.jpg"
      *                            - alt:            strips unwanted characters. if the attribute is not set, then it gets set (to ensure valid and compatible HTML)
-     *                            - numbers:  ensures that the attribute only contains numeric characters
+     *                            - numbers:        ensures that the attribute only contains numeric (integer) characters (no float values or units)
+     *                            - dimension:      for with/height attributes where floating point numbrs and percentages are allowed
+     *                            - any:            allows anything to pass 
      */
     "tags": {
         "tr": {
@@ -111,7 +120,7 @@ var wysihtml5ParserRules = {
             "remove": 1
         },
         "form": {
-            "rename_tag": "div"
+            "remove": 1
         },
         "rt": {
             "rename_tag": "span"
@@ -126,7 +135,7 @@ var wysihtml5ParserRules = {
             }
         },
         "details": {
-            "rename_tag": "div"
+            "rename_tag": "p"
         },
         "h4": {
             "add_class": {
@@ -138,17 +147,16 @@ var wysihtml5ParserRules = {
             "remove": 1
         },
         "multicol": {
-            "rename_tag": "div"
+            "remove": 1
         },
         "figure": {
-            "rename_tag": "div"
+            "remove": 1
         },
         "xmp": {
             "rename_tag": "span"
         },
         "small": {
-            "rename_tag": "span",
-            "set_class": "wysiwyg-font-size-smaller"
+            "rename_tag": "span"
         },
         "area": {
             "remove": 1
@@ -181,22 +189,10 @@ var wysihtml5ParserRules = {
         "a": {
             "check_attributes": {
                 "href": "href"
-            },
-            "set_attributes": {
-                "rel": "nofollow",
-                "target": "_blank"
             }
         },
         "img": {
-            "check_attributes": {
-                "width": "numbers",
-                "alt": "alt",
-                "src": "src",
-                "height": "numbers"
-            },
-            "add_class": {
-                "align": "align_img"
-            }
+            "remove": 1
         },
         "rb": {
             "rename_tag": "span"
@@ -214,9 +210,6 @@ var wysihtml5ParserRules = {
         "bgsound": {
             "remove": 1
         },
-        "sup": {
-            "rename_tag": "span"
-        },
         "address": {
             "rename_tag": "div"
         },
@@ -227,17 +220,13 @@ var wysihtml5ParserRules = {
             "rename_tag": "div"
         },
         "h1": {
-            "add_class": {
-                "align": "align_text"
-            }
+            "rename_tag": "h2"
         },
         "head": {
             "remove": 1
         },
         "tbody": {
-            "add_class": {
-                "align": "align_text"
-            }
+            "remove": 1
         },
         "dd": {
             "rename_tag": "div"
@@ -247,27 +236,16 @@ var wysihtml5ParserRules = {
         },
         "li": {},
         "td": {
-            "check_attributes": {
-                "rowspan": "numbers",
-                "colspan": "numbers"
-            },
-            "add_class": {
-                "align": "align_text"
-            }
+            "remove": 1
         },
         "object": {
             "remove": 1
         },
-        "div": {
-            "add_class": {
-                "align": "align_text"
-            }
-        },
         "option": {
-            "rename_tag": "span"
+            "remove": 1
         },
         "select": {
-            "rename_tag": "span"
+            "remove": 1
         },
         "i": {},
         "track": {
@@ -277,14 +255,14 @@ var wysihtml5ParserRules = {
             "remove": 1
         },
         "fieldset": {
-            "rename_tag": "div"
+            "remove": 1
         },
         "big": {
             "rename_tag": "span",
             "set_class": "wysiwyg-font-size-larger"
         },
         "button": {
-            "rename_tag": "span"
+            "remove": 1
         },
         "noscript": {
             "remove": 1
@@ -300,9 +278,7 @@ var wysihtml5ParserRules = {
             "remove": 1
         },
         "h5": {
-            "add_class": {
-                "align": "align_text"
-            }
+            "rename_tag": "h3"
         },
         "meta": {
             "remove": 1
@@ -317,14 +293,10 @@ var wysihtml5ParserRules = {
             "rename_tag": "span"
         },
         "caption": {
-            "add_class": {
-                "align": "align_text"
-            }
+            "remove": 1
         },
         "tfoot": {
-            "add_class": {
-                "align": "align_text"
-            }
+            "remove": 1
         },
         "base": {
             "remove": 1
@@ -344,9 +316,7 @@ var wysihtml5ParserRules = {
         },
         "b": {},
         "q": {
-            "check_attributes": {
-                "cite": "url"
-            }
+            "rename_tag": "span"
         },
         "applet": {
             "remove": 1
@@ -403,11 +373,7 @@ var wysihtml5ParserRules = {
         "meter": {
             "rename_tag": "span"
         },
-        "h3": {
-            "add_class": {
-                "align": "align_text"
-            }
-        },
+        "h3": {},
         "textarea": {
             "rename_tag": "span"
         },
@@ -418,10 +384,7 @@ var wysihtml5ParserRules = {
             "rename_tag": "div"
         },
         "font": {
-            "rename_tag": "span",
-            "add_class": {
-                "size": "size_font"
-            }
+            "remove": 1
         },
         "tt": {
             "rename_tag": "span"
@@ -430,9 +393,7 @@ var wysihtml5ParserRules = {
             "remove": 1
         },
         "thead": {
-            "add_class": {
-                "align": "align_text"
-            }
+            "remove": 1
         },
         "blink": {
             "rename_tag": "span"
@@ -444,21 +405,13 @@ var wysihtml5ParserRules = {
             "remove": 1
         },
         "h6": {
-            "add_class": {
-                "align": "align_text"
-            }
+            "rename_tag": "h3"
         },
         "param": {
             "remove": 1
         },
         "th": {
-            "check_attributes": {
-                "rowspan": "numbers",
-                "colspan": "numbers"
-            },
-            "add_class": {
-                "align": "align_text"
-            }
+            "remove": 1
         },
         "legend": {
             "rename_tag": "span"
@@ -521,19 +474,11 @@ var wysihtml5ParserRules = {
         "ruby": {
             "rename_tag": "span"
         },
-        "h2": {
-            "add_class": {
-                "align": "align_text"
-            }
-        },
+        "h2": {},
         "ins": {
             "rename_tag": "span"
         },
-        "p": {
-            "add_class": {
-                "align": "align_text"
-            }
-        },
+        "p": {},
         "sub": {
             "rename_tag": "span"
         },
@@ -544,10 +489,14 @@ var wysihtml5ParserRules = {
             "remove": 1
         },
         "optgroup": {
-            "rename_tag": "span"
+            "remove": 1
         },
         "header": {
             "rename_tag": "div"
+        },
+        "sup": {
+            "rename_tag": "span"
         }
-    }
+    },
+    "attributes": {}
 };

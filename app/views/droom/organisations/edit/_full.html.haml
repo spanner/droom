@@ -12,17 +12,17 @@
     %br
     = f.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
 
+  %p.secondary.tagger
+    = f.label :keywords
+    %br
+    = f.text_field :keywords, placeholder: t("placeholders.organisation.keywords"), class: "tags", data: {suggest: "main"}
+    %a.add_tag{title: t("tooltips.click_to_make_tag")} +
+
   .description.wysihtml
     .toolbar#t1
       = render 'droom/shared/toolbar'
     = f.text_area :description, placeholder: t("placeholders.organisation.description")
-    %span.formnote
-      = t :organisation_description_note
  
-  .tagger
-    = f.text_field :tags, placeholder: t("placeholders.tagger.prompt"), class: "tags", data: {suggest: "main"}
-    %a.add_tag{title: "Click to adopt this text as a new term"} +
-
   %p.admin
     = f.label :organisation_type_id
     = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'

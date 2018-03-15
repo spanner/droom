@@ -1,29 +1,14 @@
-$duration: 0.6s
-
-div.tagger
-  margin: 16px 0 5px
-  height: 0
-  min-height: 0
-  transition: min-height $duration ease-out, height $duration ease-out
+.tagger
+  margin: 16px 0
   overflow: hidden
   input.tags
-    min-height: 0
     margin: 0
+    outline: none
     overflow: hidden
-    transition: min-height $duration ease-out
+    width: 100%
     +clearfix
-  &.editing
-    a.add_tag
-      +small_button($blue)
-  &.active
-    min-height: 64px
-    height: auto
-    #terms
-      min-height: 64px
-    a.add
-      color: $pale
-      svg
-        transform: rotate(225deg)
+  a.add_tag
+    +button($blue)
   &.waiting
     opacity: 0.25
     a.add

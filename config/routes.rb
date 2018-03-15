@@ -20,6 +20,7 @@ Droom::Engine.routes.draw do
     resources :images
     resources :videos
     resources :pages
+    resources :tags
     resources :organisations do
       get :signup, on: :collection
       post :register, on: :collection
