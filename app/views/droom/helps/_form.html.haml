@@ -13,10 +13,8 @@
     %span.slug.col>
       = f.text_field :slug, :class => "slug", :placeholder => t("helpers.label.help.slug"), data: {role: 'slug'}
 
-  .content.wysihtml
-    .toolbar#t1
-      = render 'droom/shared/toolbar', omit_headings: true
-    = f.text_area :content, :id => 'd1', :placeholder => t("helpers.label.help.content"), data: {role: 'content'}
+  .content
+    = f.text_area :content, :id => 'd1', :class => "rte", :placeholder => t("helpers.label.help.content"), data: {role: 'content'}
 
   .buttons
     = f.submit t(:save)

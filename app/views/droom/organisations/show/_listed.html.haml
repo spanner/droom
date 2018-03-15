@@ -12,6 +12,15 @@
         %span.chinese_name
           = organisation.chinese_name
 
+    - if organisation.tags.any?
+      %ul.tags
+        - organisation.tags.each do |tag|
+          %li.tag
+            %svg.prefix
+              %use{"xlink:href" => "#tag_symbol"}
+            %span.label
+              = tag.name
+
     %p.details.notes
       - if organisation.organisation_type
         = t "organisation_types.#{organisation.organisation_type.name.downcase}"
@@ -24,12 +33,6 @@
       %p.nodescription
         = t :no_description
 
-    %ul.people
-      - organisation.users.each do |user|
-        %li
-          = link_to user_url(user), data: {action: "popup"} do
-            %svg.icon
-              %use{"xlink:ref" => "#user_symbol"}
-            %span.label
-              = user.colloquial_name
-
+    - if organisation.users.any?
+      %ul.people
+        = render partial: "droom/users/show/listed_minimal", collection: organisation.users

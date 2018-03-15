@@ -111,6 +111,10 @@ $weibo: #e6162d
     &:hover
       color: $hover
 
+=small
+  font-size: 80%
+  line-height: 1.2
+
 =shadowed
   box-shadow: 0px 1px 6px $shadow
 
@@ -121,7 +125,7 @@ $weibo: #e6162d
   overflow: hidden
   text-indent: $indent
 
-=button($color: $mid)
+=button($color: $mid, $text_color: white)
   display: inline-block
   position: relative
   outline: none
@@ -152,9 +156,12 @@ $weibo: #e6162d
   &.waiting
     opacity: 0.25
 
-=small
-  font-size: 80%
-  line-height: 1.2
+=minibutton($color: $green, $text_color: white)
+  +button($color, $text_color)
+  +small
+  padding: 4px 8px
+  border-radius: 32px
+  height: auto
 
 =icon_link($url)
   display: inline-block

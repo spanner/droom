@@ -577,45 +577,51 @@ jQuery ($) ->
   #todo: make this true
   #
   $.fn.html_editable = ()->
-    @each ->
-      new Editor(@)
-
-  class Editor
-    constructor: (element) ->
-      @_container = $(element)
-      @_textarea = @_container.find('textarea')
-      @_toolbar = @_container.find('.toolbar')
-      @_toolbar.attr('id', $.makeGuid()) unless @_toolbar.attr('id')?
-      @_textarea.attr('id', $.makeGuid()) unless @_textarea.attr('id')?
-      stylesheets = $("link").map ->
-        $(@).attr('href')
-      @_editor = new wysihtml.Editor @_textarea.get(0),
-        stylesheets: stylesheets,
-        toolbar: @_toolbar.get(0),
-        parserRules: wysihtmlParserRules
-        useLineBreaks: false
-      @_toolbar.show()
-      # @_editor.on "load", () =>
-      #   @_iframe = @_editor.composer.iframe
-      #   $(@_editor.composer.doc).find('html').css
-      #     "height": 0
-      #   @resizeIframe()
-      #   @_textarea = @_editor.composer.element
-      #   @_textarea.addEventListener("keyup", @resizeIframe, false)
-      #   @_textarea.addEventListener("blur", @resizeIframe, false)
-      #   @_textarea.addEventListener("focus", @resizeIframe, false)
-        
-    resizeIframe: () =>
-      if $(@_iframe).height() != $(@_editor.composer.doc).height()
-        $(@_iframe).height(@_editor.composer.element.offsetHeight)
-    
-    showToolbar: () =>
-      @_hovered = true
-      @_toolbar.fadeTo(200, 1)
-
-    hideToolbar: () =>
-      @_hovered = false
-      @_toolbar.fadeTo(1000, 0.2)
+    editor = new MediumEditor @,
+      placeholder: false
+      autoLink: true
+      imageDragging: false
+      anchor:
+        customClassOption: null
+        customClassOptionText: 'Button'
+        linkValidation: false
+        placeholderText: 'URL...'
+        targetCheckbox: false
+      anchorPreview: false
+      paste:
+        forcePlainText: false
+        cleanPastedHTML: true
+        cleanReplacements: []
+        cleanAttrs: ['class', 'style', 'dir']
+        cleanTags: ['meta']
+      toolbar:
+        updateOnEmptySelection: true
+        allowMultiParagraphSelection: true
+        buttons: [
+          name: 'bold'
+          contentDefault: '<svg><use xlink:href="#bold_button"></use></svg>'
+        ,
+          name: 'italic'
+          contentDefault: '<svg><use xlink:href="#italic_button"></use></svg>'
+        ,
+          name: 'anchor'
+          contentDefault: '<svg><use xlink:href="#anchor_button"></use></svg>'
+        ,
+          name: 'orderedlist'
+          contentDefault: '<svg><use xlink:href="#ol_button"></use></svg>'
+        ,
+          name: 'unorderedlist'
+          contentDefault: '<svg><use xlink:href="#ul_button"></use></svg>'
+        ,
+          name: 'h2'
+          contentDefault: '<svg><use xlink:href="#h1_button"></use></svg>'
+        ,
+          name: 'h3'
+          contentDefault: '<svg><use xlink:href="#h2_button"></use></svg>'
+        ,
+          name: 'removeFormat'
+          contentDefault: '<svg><use xlink:href="#clear_button"></use></svg>'
+        ]
 
 
 

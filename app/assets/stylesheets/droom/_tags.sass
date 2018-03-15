@@ -1,0 +1,27 @@
+.tagger
+  margin: 16px 0
+  overflow: hidden
+  width: 538px
+  input.tags
+    margin: 0
+    outline: none
+    overflow: hidden
+    width: 100%
+    +clearfix
+  a.add_tag
+    +minibutton($green)
+    vertical-align: middle
+  &.waiting
+    opacity: 0.25
+    a.add
+      color: $pale
+
+ul.tags
+  padding: 0
+  list-style: none
+  li
+    display: inline-block
+    margin-right: 10px
+    color: $pale
+    svg.prefix
+      margin-right: 0

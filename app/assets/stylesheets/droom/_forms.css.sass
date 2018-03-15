@@ -1,3 +1,160 @@
+[contenteditable], input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], select, textarea
+  padding: 8px
+  border: 1px solid $pale
+  background-color: white
+  font-size: 1.2em
+  +book
+  &.strong
+    font-weight: bold
+  &.destination
+    color: $blue
+  &.empty
+    color: $pale
+  &[disabled]
+    color: $pale
+    background-color: #fff
+    border-color: $verypale
+  &.valid, &.invalid
+    background:
+      repeat: no-repeat
+      image: image-url('droom/oknotok.png')
+  &.valid
+    background-position: right 3px
+  &.invalid
+    background-position: right -97px
+  &::-webkit-input-placeholder
+    color: $pale
+  &::-moz-placeholder
+    color: $pale
+  &:-ms-input-placeholder
+    color: $pale
+  &.placeholder
+    color: $pale
+
+select
+  -webkit-appearance: none
+  -webkit-border-radius: 0
+  -webkit-padding-end: 24px
+  font-size: 1.2em
+  border: 1px dotted $pale
+  background:
+    color: white
+    position: right top
+    repeat: no-repeat
+    image: image-url('dropdown.png')
+  &:hover
+    color: $hover
+    background-position: right -96px
+  &.small
+    font-size: 0.9em
+    padding: 2px
+    -webkit-padding-end: 16px
+
+input[type="submit"]
+  +book
+  +button($green)
+  display: inline-block
+  transition: width 0.5s ease-out, height 0.5s ease-out, font-size 0.5s ease-out, padding 0.5s ease-out
+  &.unavailable
+    background-color: $mid
+    opacity: 0.5
+    &:hover
+      background-color: $mid
+  &.submitted
+    padding-left: 32px
+    background:
+      color: $verypale
+      position: 3px 3px
+      repeat: no-repeat
+      image: image-url('droom/spinner.gif')
+  &.positive
+    +button($green, white)
+  &.negative
+    +button($red, white)
+  &.large
+    font-size: 1.5em
+  &.next
+    float: right
+  &.disabled
+    +button(white, $palest)
+
+#margin
+  input[type="text"], input[type="email"], input[type="password"]
+    box-sizing: border-box
+    font-size: 1rem
+    padding: 8px
+    width: 100%
+  input[type="submit"]
+    font-size: 1rem
+    padding: 14px 8px 5px 20px
+
+[contenteditable]
+  outline: none
+  &[data-placeholder]
+    &:empty:before
+      content: attr(data-placeholder)
+      color: $mid
+      font-style: italic
+      text-transform: none
+  p:first-child, h2:first-child, h3:first-child, ul:first-child
+    margin-top: 0
+  p:last-child, h2:last-child, h3:last-child, ul:last-child
+    margin-bottom: 0
+
+fieldset.disabled
+  input[type="submit"]
+    +button(white, $pale)
+
+label.required
+  font-weight: bold
+
+label.inline
+  display: inline-block
+
+.error
+  color: $error
+  font-weight: bold
+
+span.erratic
+  display: block
+  overflow: hidden
+  input[type="text"], input[type="password"], input[type="email"], select
+    border-color: lighten($error, 40)
+    color: $error
+  .error_message
+    color: $error
+    display: block
+    font-weight: bold
+    a.closer
+      display: block
+      float: left
+      width: 16px
+      height: 16px
+      margin-right: 2px
+      +text-hidden
+      background:
+        image: image-url('crosses.png')
+        color: transparent
+        position: 3px -58px
+        repeat: no-repeat
+
+a.button
+  +button
+
+form.waiting
+  input.submit
+    background:
+      color: $verypale
+
+.field_with_errors
+  input
+    border-color: $error
+    color: $error
+
+textarea
+  line-height: 1.5
+
+
 form#login
   a.reminder
     padding: 2px

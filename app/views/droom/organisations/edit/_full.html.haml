@@ -18,10 +18,10 @@
     = f.text_field :keywords, placeholder: t("placeholders.organisation.keywords"), class: "tags", data: {suggest: "main"}
     %a.add_tag{title: t("tooltips.click_to_make_tag")} +
 
-  .description.wysihtml
-    .toolbar#t1
-      = render 'droom/shared/toolbar'
-    = f.text_area :description, placeholder: t("placeholders.organisation.description")
+  .description
+    = f.label :description
+    %br
+    = f.text_area :description, class: "rte", placeholder: t("placeholders.organisation.description")
  
   %p.admin
     = f.label :organisation_type_id

@@ -8,8 +8,7 @@
 #= require sortablejs/Sortable
 #= require jquery.cookie/jquery.cookie
 #= require ep-jquery-tokeninput/src/jquery.tokeninput
-#= require wysihtml/dist/wysihtml
-#= require wysihtml/dist/wysihtml.toolbar
+#= require 'medium-editor/dist/js/medium-editor'
 
 #= require droom/lib/jquery.datepicker
 #= require droom/lib/jquery.animate-colors
@@ -18,7 +17,6 @@
 #= require droom/utilities
 #= require droom/ajax
 
-#= require droom/wysihtml_rules
 #= require droom/actions
 #= require droom/popups
 #= require droom/stream
@@ -75,7 +73,7 @@ jQuery ($) ->
 
     # form widgets and input modification. These are moving to [data-role] markup.
 
-    @find_including_self('.wysihtml').html_editable()
+    @find_including_self('textarea.rte').html_editable()
     @find_including_self('[data-role="datepicker"]').date_picker()
     @find_including_self('.timepicker').time_picker()
     @find_including_self('.person_selector').person_selector()

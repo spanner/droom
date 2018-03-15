@@ -1,0 +1,21 @@
+- user ||= listed_minimal ||= @user
+- liclass = "person small"
+- liclass << " unconfirmed" unless user.confirmed?
+
+- if user.image?
+  - mugstyle = "background-image: url(#{user.image.url(:thumb)})"
+- else
+  - mugstyle = ""
+
+%li{id: "user_#{user.id}", class: liclass, data: {refreshable: true, url: droom.user_path(user, view: 'listed_minimal')} }
+  - if user.confirmed?
+    %span.mugshot{style: mugstyle}
+  - else
+    %span.mugshot
+      %svg
+        %use{"xlink:href" => "#unknown_symbol"}
+  %span.contact
+    %span.name
+      = link_to truncate(user.colloquial_name, length: 32), user_url(user), data: {action: "popup"}
+      %br
+      = mail_to user.email, user.email, class: "email"

@@ -35,7 +35,7 @@
 
 - if Droom.use_biogs?
   - user.description = "<p></p>" unless user.description?
-  .description.wysihtml
-    .toolbar#t1
-      = render 'droom/shared/toolbar'
-    = f.text_area :description, placeholder: t("placeholders.user.description")
+  .description
+    = f.label :description
+    %br
+    = f.text_area :description, class: "rte", placeholder: t("placeholders.user.description")

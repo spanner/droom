@@ -6,10 +6,7 @@
     = hidden_field_tag :view, @view
 
     - if Droom.use_biogs?
-      - user.description = "<p></p>" unless user.description?
-      .description.wysihtml
-        .toolbar#t1
-          = render 'droom/shared/toolbar'
-          = f.text_area :description
+      .description
+        = f.text_area :description, class: "rte", placeholder: t("placeholders.user.description")
 
     = render partial: 'droom/users/edit/buttons', locals: {f: f}

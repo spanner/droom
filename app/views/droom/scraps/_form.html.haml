@@ -48,10 +48,10 @@
       %p.url
         = f.url_field :url, :class => 'url', placeholder: t("placeholders.scrap.url")
     
-    .text.wysihtml
-      .toolbar#t1
-        = render 'droom/shared/toolbar'
-      = f.text_area :body, :class => 'text', placeholder: t("placeholders.scrap.body"), :id => 'd1'
+    .text
+      = f.label :body
+      %br
+      = f.text_area :body, :class => 'rte text', placeholder: t("placeholders.scrap.body"), :id => 'd1'
 
     %p.caption
       = f.text_field :note, :class => 'note', placeholder: t("placeholders.scrap.caption")
