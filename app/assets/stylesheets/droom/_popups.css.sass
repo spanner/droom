@@ -5,6 +5,42 @@
   width: 800px
 
 div.popup
+  form.event
+    margin-left: $datemark_width + $datemark_margin
+  form.document
+    margin-left: 60px
+  div.user
+    margin: 20px 20px
+    div.mugshot
+      position: relative
+      display: block
+      float: left
+      width: 130px
+      height: 130px
+      margin-right: 20px
+      margin-bottom: 20px
+      border-radius: 8px
+      background:
+        color: $mid
+        repeat: no-repeat
+        position: center center
+        size: cover
+    div.detail
+      overflow: hidden
+      h3
+        margin: 0
+        font-size: 2em
+      p.contact
+        +pale
+        margin-top: 0
+
+div.popup
+  #event, #document, #user, #group, #event_type, #membership, #folder
+    width: 580px
+    > p
+      margin: 10px 20px 0 20px
+
+div.popup
   position: absolute
   overflow-x: hidden
   top: 10px
@@ -59,8 +95,12 @@ div.popup
       background-position: 0 -32px
   form
     margin: 20px
+    [contenteditable], input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea
+      box-sizing: border-box
+      width: 100%
     textarea.rte, div.rte
-      width: 518px
+      box-sizing: border-box
+      width: 100%
       min-height: 100px
       max-height: 400px
       overflow: auto

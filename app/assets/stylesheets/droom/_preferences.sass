@@ -1,0 +1,44 @@
+form.preferences
+  input[type='radio'], input[type='checkbox']
+    display: none
+    float: left
+    width: 20px
+  input[type='radio'] + label, input[type='checkbox'] + label
+    clear: none
+    padding: 5px 0 4px 22px
+    margin-right: 6px
+    cursor: pointer
+    color: $mid
+    background:
+      repeat: no-repeat
+      image: image-url("droom/checkboxes.png")
+  input[type='checkbox'] + label
+    background-position: 0 -26px
+  input[type='checkbox'][disabled] + label
+    background-position: 0 -90px
+    cursor: default
+  input[type='checkbox'][disabled]:checked + label
+    background-position: 0 -58px
+    color: $pale
+  input[type='checkbox']:checked + label
+    background-position: 0 6px
+    color: $green
+  input[type='radio'] + label
+    background-position: 0 -153px
+    padding-left: 20px
+  input[type='radio']:checked + label
+    background-position: 0 -121px
+    color: $green
+  input.waiting[type='radio'] + label, input.waiting[type='checkbox'] + label
+    color: $pale
+    background:
+      image: image-url('droom/spinner.gif')
+      position: 0 2px
+
+span.preference
+  display: block
+  margin: 3px
+  span.subpreference
+    display: block
+    overflow: hidden
+    margin: 3px 0 3px 20px

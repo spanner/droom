@@ -24,8 +24,7 @@
     %p.secondary.tagger
       = f.label :keywords
       %br
-      = f.text_field :keywords, placeholder: t("placeholders.organisation.keywords"), class: "tags", data: {suggest: "main"}
-      %a.add_tag{title: t("tooltips.click_to_make_tag")} +
+      = f.text_field :keywords, placeholder: t("placeholders.organisation.keywords"), class: "tags"
 
     .description
       = f.label :description

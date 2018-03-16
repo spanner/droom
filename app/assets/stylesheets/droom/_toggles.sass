@@ -1,0 +1,100 @@
+table.toggles
+  margin: 40px 0
+  border-collapse: collapse
+  tr.rotated
+    td, th
+      position: relative
+      height: 90px
+      width: 32px
+      text-align: center
+      a.menu
+        visibility: hidden
+      &:hover
+        a.menu
+          visibility: visible
+      &.spacer, &.action
+        width: auto
+        text-align: left
+    span.rotated
+      display: inline-block
+      position: absolute
+      top: 90px
+      left: 10px
+      line-height: 1
+      white-space: nowrap
+      transform: rotate(-90deg)
+      transform-origin: top left
+  th
+    font-weight: normal
+    a, a:visited
+      color: $dark
+      +hover
+    a.menu
+      visibility: hidden
+    &:hover
+      a.menu
+        visibility: visible
+    h4
+      margin: 0
+      line-height: 1.1
+  td, th
+    border: 1px solid $verypale
+    padding: 4px
+  th.action, th.spacer
+    border: 0
+  th.action
+    form.filter
+      position: absolute
+      bottom: 10px
+      input[type="search"]
+        width: 200px
+  th.d, td.d
+    border-right-color: $text
+  td.hover
+    background-color: $coolgrey0
+  tr:hover
+    td
+      background-color: $coolgrey0
+    td.hover
+      background-color: $coolgrey1
+  td.name
+    min-width: 140px
+    min-height: 36px
+    line-height: 1
+    text-align: left
+    a
+      color: $dark
+      +hover
+  td.spacer
+    padding: 10px
+  td.toggle
+    min-height: 32px
+    text-align: center
+    span.no, span.yes, a.yes, a.no
+      +icon("droom/minisymbols.png")
+      margin: 5px 0 0 3px
+      &.yes
+        background-position: 0 -384px
+      &.no
+        background-position: 0 -528px
+        opacity: 0.3
+        &:hover
+          opacity: 1
+      &.not_applicable
+        background-position: 0 -600px
+      &.waiting
+        background-image: image-url('droom/spinner.gif')
+        background-position: 2px 2px
+    span.no, span.yes
+      opacity: 0.3
+    a.no:hover
+      background-position: 0 -648px
+    a.yes:hover
+      background-position: 0 -480px
+  tr.unconfirmed
+    td, th, td.name
+      color: $pale
+      a
+        color: $pale
+        +hover
+      

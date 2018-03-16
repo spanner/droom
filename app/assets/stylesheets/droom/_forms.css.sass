@@ -1,6 +1,7 @@
 [contenteditable], input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea
   padding: 8px
   border: 1px solid $pale
+  box-sizing: border-box
   background-color: white
   font-size: 1.2em
   outline: none
@@ -14,6 +15,7 @@
     color: $pale
     background-color: #fff
     border-color: $verypale
+    opacity: 0.75
   &.valid, &.invalid
     background:
       repeat: no-repeat
@@ -24,10 +26,13 @@
     background-position: right -97px
   &::-webkit-input-placeholder
     color: $pale
+    font-weight: lighter
   &::-moz-placeholder
     color: $pale
+    font-weight: lighter
   &:-ms-input-placeholder
     color: $pale
+    font-weight: lighter
   &.placeholder
     color: $pale
   &[data-placeholder]
@@ -35,6 +40,7 @@
       content: attr(data-placeholder)
       color: $pale
       text-transform: none
+      font-weight: lighter
 
 select
   -webkit-appearance: none
@@ -148,6 +154,45 @@ form.waiting
 
 textarea
   line-height: 1.5
+
+
+// This is some very old layout from the early droom days
+// and much in need of updating.
+
+form
+  .columns
+    position: relative
+    width: 540px
+    margin: 0.5em 0
+    +clearfix
+    .column
+      position: relative
+      overflow: hidden
+      width: 48%
+      float: left
+      &:first-child
+        margin-right: 4%
+      input[type="text"], input[type="email"], input[type="password"], select, textarea
+        width: 100%
+      p:first-child
+        margin-top: 0
+      &.hidden
+        display: none
+  .fullwidth
+    clear: left
+    input[type="text"], input[type="email"], input[type="password"], select, textarea
+      width: 97%
+  p.admin
+    float: right
+    input[type="text"], input[type="email"], input[type="password"], select, textarea
+      width: 90px
+      margin-left: 6px
+    &+.buttons
+      width: 50%
+      margin-top: 2em
+  .buttons
+    clear: left
+    margin-top: 1em
 
 
 form#login

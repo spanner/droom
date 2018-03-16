@@ -1,13 +1,19 @@
 - url ||= ""
+- exit_url ||= nil
+- q = @terms == '*' ? "" : @terms
 
-%form.search{action: url}>
-  %input#search_box{type: "text", name: "q", value: params['q']}
+%form.search.quick{action: url, id: "quick_search"}<
+  = hidden_field_tag :page, params[:page]
+  = hidden_field_tag :show, params[:show]
+  = hidden_field_tag :sort, params[:sort]
+
+  %input#search_box{type: "text", name: "q", value: q}
   %label{for: "search_box", title: t('tooltips.filter')}
     %svg
-      %use{"xlink:href" => "#search_symbol"}
+      %use{"xlink:href" => "#search_plain_symbol"}
   %a.submit{title: t('tooltips.click_to_search')}
     %svg
       %use{"xlink:href" => "#search_button_symbol"}
-  %a.cancel{title: t('tooltips.click_to_reset_search'), href: url}
+  %a.cancel{title: t('tooltips.click_to_cancel_search'), href: exit_url.presence || url}
     %svg
       %use{"xlink:href" => "#cross_button_symbol"}

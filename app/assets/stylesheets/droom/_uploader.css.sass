@@ -119,3 +119,67 @@ ul.uploads
       span.progress, a.cancel
         display: none
 
+//Older but still in use
+
+.image-upload
+  position: relative
+  width: 86px
+  height: 86px
+  margin-right: 10px
+  float: left
+  overflow: hidden
+  a.remover
+    display: block
+    position: absolute
+    top: 5px
+    right: 3px
+    width: 24px
+    height: 24px
+    background:
+      position: 0 -646px
+      image: image-url('droom/minisymbols.png')
+  a.box
+    display: block
+    width: 84px
+    height: 84px
+    border: 1px solid $pale
+    background:
+      color: white
+      position: center center
+      repeat: no-repeat
+      size: cover
+  input[type="file"]
+    position: absolute
+    top: 200px
+    left: 0
+
+.youtube-search
+  position: relative
+  width: 132px
+  height: 132px
+  margin-right: 20px
+  float: left
+  a.remover
+    display: block
+    position: absolute
+    top: 5px
+    right: 3px
+    width: 24px
+    height: 24px
+    background:
+      position: 0 -646px
+      image: image-url('droom/minisymbols.png')
+  .thumbnail
+    display: block
+    width: 130px
+    height: 73px
+    border: 1px solid $pale
+    background:
+      color: white
+      position: center center
+      repeat: no-repeat
+      size: cover
+  input[type="text"]
+    width: 120px
+    padding: 5px
+    margin: 20px 0 0 0

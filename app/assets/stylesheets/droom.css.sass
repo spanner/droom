@@ -19,6 +19,10 @@ p.quitelarge
 p.large
   font-size: 1.6em
 
+.centered
+  width: 100%
+  text-align: center
+
 p.nothing
   color: $mid
   margin-bottom: 2em
@@ -28,7 +32,7 @@ p.nothing
 
 .success
   color: $green
-  
+
 a.select
   position: absolute
   display: block
@@ -272,53 +276,6 @@ div.organisation
     margin-top: 0.25em
 
 
-#margin
-  ul.invitations
-    padding: 0
-    margin-bottom: 2em
-    margin-top: 0.25em
-    li.invitation
-      list-style: none
-      text-indent: 20px
-      margin-left: -20px
-      background:
-        repeat: no-repeat
-        position: 0 0
-        image: image-url('droom/acceptance.png')
-      &.refused
-        color: $mid
-        text-decoration: line-through
-        background-position: 0 -32px
-        a
-          color: $mid
-      &.accepted
-        background-position: 0 -64px
-        a
-          color: $green
-      span.action
-        display: inline-block
-        margin: 0 0 0 10px
-        text-indent: 0
-        a.accept, a.refuse
-          display: inline-block
-          text-indent: 20px
-          height: 16px
-          width: 16px
-          line-height: 16px
-          overflow: hidden
-          background:
-            position: 0 0
-            repeat: no-repeat
-            image: image-url("droom/acceptance.png")
-        a.accept
-          background-position: 0 -162px
-        a.refuse
-          background-position: 0 -130px
-        a.waiting
-          background-image: image-url('droom/spinner.gif')
-          background-position: 0 0
-          a
-            color: $pale
 ul.enquiries
   padding-left: 0
   li.enquiry
@@ -419,6 +376,7 @@ form.document
   .filepicker
     +outset(40px)
     margin-top: 5px
+    overflow: hidden
     input[type="file"]
       display: none
     p.tip
@@ -443,153 +401,6 @@ form.organisation
   input.url, textarea, select
     width: 520px
 
-.image-upload
-  position: relative
-  width: 86px
-  height: 86px
-  margin-right: 10px
-  float: left
-  overflow: hidden
-  a.remover
-    display: block
-    position: absolute
-    top: 5px
-    right: 3px
-    width: 24px
-    height: 24px
-    background:
-      position: 0 -646px
-      image: image-url('droom/minisymbols.png')
-  a.box
-    display: block
-    width: 84px
-    height: 84px
-    border: 1px solid $pale
-    background:
-      color: white
-      position: center center
-      repeat: no-repeat
-      size: cover
-  input[type="file"]
-    position: absolute
-    top: 200px
-    left: 0
-
-.youtube-search
-  position: relative
-  width: 132px
-  height: 132px
-  margin-right: 20px
-  float: left
-  a.remover
-    display: block
-    position: absolute
-    top: 5px
-    right: 3px
-    width: 24px
-    height: 24px
-    background:
-      position: 0 -646px
-      image: image-url('droom/minisymbols.png')
-  .thumbnail
-    display: block
-    width: 130px
-    height: 73px
-    border: 1px solid $pale
-    background:
-      color: white
-      position: center center
-      repeat: no-repeat
-      size: cover
-  input[type="text"]
-    width: 120px
-    padding: 5px
-    margin: 20px 0 0 0
-
-
-form.user
-  p
-    margin: 0
-    margin-bottom: 10px
-  .hanging
-    position: relative
-    display: block
-    float: left
-    width: calc(100% - 100px)
-    +clearfix
-    p.names
-      input[type="text"]
-        width: 100%
-        box-sizing: border-box
-      span.title
-        display: inline-block
-        vertical-align: top
-        width: calc(16% - 10px)
-        margin-right: 10px
-      span.name
-        display: inline-block
-        vertical-align: top
-        width: calc(32% - 10px)
-        margin-right: 10px
-      span.chinese_name, span.honours
-        display: inline-block
-        vertical-align: top
-        width: 20%
-        margin-right: 0
-  .contacts
-    overflow: hidden
-    margin-top: 10px
-    input[type="text"], input[type="email"]
-      width: 100%
-      box-sizing: border-box
-    textarea
-      width: 100%
-      box-sizing: border-box
-      height: 96px
-    p.email
-      width: 442px
-    p.phone, p.mobile
-      float: left
-      width: 188px
-      margin-right: 10px
-      &:last-child
-        margin-right: 0
-  p.organisation
-    clear: left
-    select
-      font-size: 1em
-  p.memberships
-    label.inline
-      margin-right: 10px
-  div.description
-    clear: left
-    textarea
-      width: 100%
-  div.address_book
-    clear: both
-    margin-top: 24px
-  .user, .buttons
-    clear: left
-
-  .description
-    textarea
-      height: 150px
-      font-size: 1em
-
-  p.gender, p.status, p.confirmation
-    float: left
-    margin-right: 25px
-
-  p.admin
-    float: right
-
-  p.memberships
-    clear: left
-
-  .buttons
-    position: relative
-    clear: left
-    margin-top: 0.5em
 
 form.group, form.event_type, form.service, form.permission
   input[type="text"], textarea, select
@@ -604,90 +415,6 @@ form.group, form.event_type, form.service, form.permission
       font-weight: bold
   p.admin
     float: right
-
-p.manage_password
-  span.col
-    +column(230px)
-    label:
-      display: block
-    &.password_quality
-      +column(38px)
-      span.meter
-        width: 36px
-        height: 36px
-        border: 1px solid $verypale
-      &.acceptable
-        span.meter
-          &:after
-            left: 12px
-
-p.set_password
-  +clearfix
-  span.col
-    +column(320px, 20px)
-  span.col.button
-    +column(200px)
-    input[type="submit"]
-      padding: 10px 14px
-
-.password_quality
-  clear: left
-  color: $red
-  span.meter
-    background-color: transparent
-  &.s0
-    color: $red
-    span.meter
-      background-color: $red
-  &.s1
-    color: orange
-    span.meter
-      background-color: orange
-  &.s2
-    color: #c7d434
-    span.meter
-      background-color: #c7d434
-  &.s3
-    color: #8dc63d
-    span.meter
-      background-color: #8dc63d
-  &.s4
-    color: $green
-    span.meter
-      background-color: $green
-  &.acceptable
-    span.meter
-      &:after
-        display: block
-        content: "✓"
-        color: white
-        position: absolute
-        top: 0
-        left: 9px
-
-  span.meter, span.instructions
-    display: inline-block
-    float: left
-    vertical-align: top
-
-  span.meter
-    width: 24px
-    height: 24px
-    margin-right: 8px
-    background-color: white
-    border-radius: 50%
-    position: relative
-
-  span.instructions
-    width: calc(99% - 40px)
-
-  span.notes
-    display: block
-    clear: left
-    color: $mid
-    +small
-    padding-left: 40px
-
 
 h2.name
   font-size: 2em
@@ -914,108 +641,6 @@ table.people
             background-position: 0 -360px
   td.buttons
     width: 80px
-
-
-table.toggles
-  margin: 40px 0
-  border-collapse: collapse
-  tr.rotated
-    td, th
-      position: relative
-      height: 90px
-      width: 32px
-      text-align: center
-      a.menu
-        visibility: hidden
-      &:hover
-        a.menu
-          visibility: visible
-      &.spacer, &.action
-        width: auto
-        text-align: left
-    span.rotated
-      display: inline-block
-      position: absolute
-      top: 90px
-      left: 10px
-      line-height: 1
-      white-space: nowrap
-      transform: rotate(-90deg)
-      transform-origin: top left
-  th
-    font-weight: normal
-    a, a:visited
-      color: $dark
-      +hover
-    a.menu
-      visibility: hidden
-    &:hover
-      a.menu
-        visibility: visible
-    h4
-      margin: 0
-      line-height: 1.1
-  td, th
-    border: 1px solid $verypale
-    padding: 4px
-  th.action, th.spacer
-    border: 0
-  th.action
-    form.filter
-      position: absolute
-      bottom: 10px
-      input[type="search"]
-        width: 200px
-  th.d, td.d
-    border-right-color: $text
-  td.hover
-    background-color: $coolgrey0
-  tr:hover
-    td
-      background-color: $coolgrey0
-    td.hover
-      background-color: $coolgrey1
-  td.name
-    min-width: 140px
-    min-height: 36px
-    line-height: 1
-    text-align: left
-    a
-      color: $dark
-      +hover
-  td.spacer
-    padding: 10px
-  td.toggle
-    min-height: 32px
-    text-align: center
-    span.no, span.yes, a.yes, a.no
-      +icon("droom/minisymbols.png")
-      margin: 5px 0 0 3px
-      &.yes
-        background-position: 0 -384px
-      &.no
-        background-position: 0 -528px
-        opacity: 0.3
-        &:hover
-          opacity: 1
-      &.not_applicable
-        background-position: 0 -600px
-      &.waiting
-        background-image: image-url('droom/spinner.gif')
-        background-position: 2px 2px
-    span.no, span.yes
-      opacity: 0.3
-    a.no:hover
-      background-position: 0 -648px
-    a.yes:hover
-      background-position: 0 -480px
-  tr.unconfirmed
-    td, th, td.name
-      color: $pale
-      a
-        color: $pale
-        +hover
-      
 
 
 
@@ -1360,22 +985,6 @@ div.timepicker
         position: relative
         float: left
 
-$calendar_width: 250px
-$box: 35px
-
-#minicalendar
-  margin-top: 36px
-  position: relative
-  overflow: hidden
-  width: 250px
-  margin: 0
-  .scroller
-    width: 600px
-    height: 260px
-    table
-      position: relative
-      float: left
-
 #finder
   position: relative
   .scrolled
@@ -1390,101 +999,6 @@ $box: 35px
 
 #search, .search_results
   position: relative
-
-#margin
-  form.filter
-    margin-top: 3px
-    p
-      margin: 0.2em 0
-    input[type="text"]
-      font-size: 1.2em
-      padding: 10px
-      width: 80%
-    input[type="submit"]
-      font-size: 18px
-      width: 20%
-    input[type="search"]
-      font-size: 18px
-      width: 100%
-  .filtered_list
-
-table.minimonth
-  font-style: normal
-  border-collapse: collapse
-  border:
-    style: solid
-    width: 1px
-    color: white
-  color: $text
-  margin: 0
-  h3
-    font-size: 1.2em
-    line-height: 22px
-    margin: 10px 0 5px 0
-  a
-    display: block
-    font-weight: lighter
-    text-decoration: none
-  th
-  th, td
-    font-weight: normal
-    border:
-      style: solid
-      width: 1px
-      color: white
-    vertical-align: top
-    text-align: center
-    height: $box
-    width: $box
-    line-height: $box
-    padding: 0
-    overflow: hidden
-  td.m
-    a
-      display: block
-      overflow: hidden
-      font-size: 1.4em
-      line-height: 1
-      width: $box
-      height: $box
-      text-indent: 50px
-      background:
-        position: 5px 5px
-        repeat: no-repeat
-        image: image-url('droom/minimonth.png')
-      &:hover
-        background-position: 5px -43px
-      &.previous
-        background-position: 5px -91px
-        &:hover
-          background-position: 5px -139px
-      &.waiting
-        background-image: image-url('droom/spinner.gif')
-        background-position: 8px 12px
-        &:hover
-          background-position: 8px 12px
-  th.day_name
-    color: $dark
-  td.t
-    background-color: $palest
-  td.w
-  td.u
-    color: $pale
-    +blurred
-  td.e
-    a:hover
-      background-color: $hover
-      color: white
-  td.o
-    color: $verypale
-    a
-      color: $pale
-      &:hover
-        color: white
-  td.t
-    font-weight: bold
-  td.p
-
 
 
 h3.setup
@@ -1592,102 +1106,6 @@ a.expander
     &:hover
       background-position: 0 -96px
 
-ul.filing
-  position: relative
-  padding: 0
-  list-style: none
-  &:empty
-    display: none
-  li.document
-    position: relative
-    white-space: nowrap
-    overflow: hidden
-  li.files
-    display: inline-block
-    width: 100%
-
-.no-touch
-  ul.filing, ul.uploads
-    li.document
-      span.action
-        visibility: hidden
-      &:hover
-        span.action
-          visibility: visible
-
-div.attachments
-  position: relative
-  float: right
-  width: 240px
-  overflow: hidden
-  font-size: 90%
-  h3
-    margin: 0
-    padding-left: 20px
-    font-weight: normal
-    line-height: 1.5
-    a
-      +inverted
-  ul
-    padding-left: 20px
-    margin: 0
-    list-style: none
-    ul
-      padding-left: 0
-    li.folder
-      margin-left: 5px
-      a.folder
-        font-weight: bold
-        color: $text
-  &.col
-    h3, ul
-      padding-left: 0
-
-ul#folders, div.attachments
-  padding-left: 0
-  li
-    list-style: none
-    margin: 0 0 0.25em 0
-    &.files
-      margin-bottom: 0
-
-  li.folder
-    ul
-      padding-left: 16px
-      margin: 0
-      &.uploads
-        padding-left: 32px
-    a.folder
-      +big_icon_link("droom/folder.png")
-      text-indent: 32px
-      color: $text
-      font-weight: bold
-      +hover
-      +waitable
-      padding: 4px 0
-    &.root
-      > a.folder
-        font-size: 125%
-        text-indent: 32px
-    &.open
-      > a.folder
-        background-position: 0 -192px
-        &:hover
-          background-position: 0 -240px
-    &.empty
-      > a.folder
-        color: $pale
-        background-position: 0 -144px
-      &.open
-        > a.folder
-          background-position: 0 -336px
-    &.working
-      opacity: 0.5
-      a.folder
-        background:
-          image: image-url('droom/spinner.gif')
-          position: 0 3px
-          repeat: no-repeat
 
 input.search_box
   font-size: 1.5em
@@ -1729,15 +1147,6 @@ input.search_box
         repeat: no-repeat
 
 
-/* -------- map infowindows -------- */
-
-.window
-  h2
-    margin-bottom: 0.1em
-  address
-    font-style: normal
-    color: $mid
-    +small
 
 /* -------- drag_sort -------- */
 
@@ -1748,83 +1157,6 @@ input.search_box
   height: 40px
   background: #def
 
-
-
-
-
-form
-  .columns
-    position: relative
-    width: 540px
-    .column
-      position: relative
-      overflow: hidden
-      width: 260px
-      float: left
-      margin-right: 10px
-      p:first-child
-        margin-top: 0
-      &.hidden
-        display: none
-  .fullwidth
-    clear: left
-    input[type="text"], input[type="email"], input[type="password"], select, textarea
-      width: 97%
-  p.admin
-    float: right
-    input[type="text"], input[type="email"], input[type="password"], select, textarea
-      width: 90px
-      margin-left: 6px
-    &+.buttons
-      width: 50%
-  .buttons
-    clear: left
-    margin-top: 1em
-
-form.preferences
-  input[type='radio'], input[type='checkbox']
-    display: none
-    float: left
-    width: 20px
-  input[type='radio'] + label, input[type='checkbox'] + label
-    clear: none
-    padding: 5px 0 4px 22px
-    margin-right: 6px
-    cursor: pointer
-    color: $mid
-    background:
-      repeat: no-repeat
-      image: image-url("droom/checkboxes.png")
-  input[type='checkbox'] + label
-    background-position: 0 -26px
-  input[type='checkbox'][disabled] + label
-    background-position: 0 -90px
-    cursor: default
-  input[type='checkbox'][disabled]:checked + label
-    background-position: 0 -58px
-    color: $pale
-  input[type='checkbox']:checked + label
-    background-position: 0 6px
-    color: $green
-  input[type='radio'] + label
-    background-position: 0 -153px
-    padding-left: 20px
-  input[type='radio']:checked + label
-    background-position: 0 -121px
-    color: $green
-  input.waiting[type='radio'] + label, input.waiting[type='checkbox'] + label
-    color: $pale
-    background:
-      image: image-url('droom/spinner.gif')
-      position: 0 2px
-
-span.preference
-  display: block
-  margin: 3px
-  span.subpreference
-    display: block
-    overflow: hidden
-    margin: 3px 0 3px 20px
 
 ul.documents, #margin ul.documents
   margin: 20px 0 0 -2px
@@ -1879,51 +1211,6 @@ ul.documents, #margin ul.documents
       background-position: 0 -196px
 
 
-div.popup
-  #event, #document, #user, #group, #event_type, #membership, #folder
-    width: 580px
-    > p
-      margin: 10px 20px 0 20px
-
-div.popup
-  form.event
-    margin-left: $datemark_width + $datemark_margin
-  form.document
-    margin-left: 60px
-
-  div.notifier
-    position: absolute
-    top: 0
-    left: 0px
-    height: 100%
-    background-color: white
-    padding: 20px 140px
-
-  div.user
-    margin: 20px 20px
-    div.mugshot
-      position: relative
-      display: block
-      float: left
-      width: 130px
-      height: 130px
-      margin-right: 20px
-      margin-bottom: 20px
-      border-radius: 8px
-      background:
-        color: $mid
-        repeat: no-repeat
-        position: center center
-        size: cover
-    div.detail
-      overflow: hidden
-      h3
-        margin: 0
-        font-size: 2em
-      p.contact
-        +pale
-        margin-top: 0
-
 ul.checklist
   font-size: 80%
   list-style: none
@@ -1953,253 +1240,26 @@ ul.checklist
     &.robot
       display: none
 
-//User profile preview
-
-#user_profile
-  position: relative
-  width: 100%
-
-  header#user_title
-    width: 100%
-    clear: both
-    margin-bottom: 15px
-    .user_title
-      font-size: 3.2em
-      margin: 30px 0 30px -2px
-      &.smaller
-        font-size: 2.6em
-      &.bigger
-        font-size: 4em
-        margin-left: -8px
-      &.biggest
-        font-size: 6em
-        margin-left: -10px
-      .addendum
-        +pale
-        font-size: 50%
-
-  #user_profile_detail
-    position: relative
-    width: 100%
-    min-height: 600px
-    margin-bottom: 200px
-
-    aside#right_pane
-      display: block
-      position: absolute
-      float: right
-      width: 30%
-      right: 0
-      top: 0
-
-      section
-        margin-bottom: 1em
-
-        ul.address_book
-          list-style: none
-          margin: 0
-          padding: 0
-          li
-            clear: left
-            padding: 5px 0
-            +clearfix
-            svg.icon
-              float: left
-            span.contact
-              float: left
-              width: calc(100% - 24px)
-              overflow: hidden
-
-      section.contacts
-        h2.section
-          margin-top: 0
-
-    #left_pane
-      float: left
-      width: 65%
-
-      #left_pane_contents
-        width: 100%
-        clear: both
-
-        section.personal_info
-          width: 100%
-          clear: both
-          margin-bottom: 11em
-
-          #personal_info_content
-            width: 100%
-            clear: both
-
-            #left_pane
-              width: 25%
-              float: left
-
-            #right_pane
-              width: 75%
-              float: left
-
-              .right_pane_container
-                width: 100%
-                clear: both
-
-                .right_pane_contents
-                  width: 50%
-                  float: left
-
-        section.account_info
-          width: 100%
-          clear: both
-          margin-bottom: 3em
-
-          #account_info_container
-            .liveliness
-              margin: 1em 0
-              &.unreachable
-                color: $red
-              &.unresponsive
-                color: $red
-              &.external
-                color: $green
-              &.internal
-                color: $green
-              svg.icon.small
-                margin-left: -24px
-                &+span.label
-                  margin-left: 0
-                  line-height: 28px
-          
-            width: 100%
-            .account_info_contents
-              width: 100%
-              clear: both
-
-              .left_pane
-                width: 33%
-                float: left
-
-              .mid_pane
-                width: 33%
-                float: left
-
-              .right_pane
-                width: 34%
-                float: left
-
-        section.rs_with_croucher
-          width: 100%
-          clear: both
-          margin-bottom: 1em
-        section.statuses_info
-          width: 100%
-          margin-bottom: 1em
-
-          #statuses_container
-            width: 100%
-
-        section.groups_info
-          width: 100%
-          margin-bottom: 1em
-
-        section.notes_info
-          width: 100%
 
 
-    .editable
-      position: relative
-      border-left: 1px dotted transparent
-      padding-left: 9px
-      margin-left: -10px
-      transition: border-color 0.5s ease-in
-      & > span.user_controls
-        position: absolute
-        overflow: hidden
-        opacity: 0
-        transition: opacity 0.5s ease-in
-        top: -3px
-        left: -79px
-        width: 80px
-        font-size: 14px
-        font-weight: normal
-        background-color: white
-        a.new, a.edit, a.pick
-          display: inline-block
-          vertical-align: top
-          float: right
-          padding: 2px 5px 2px 10px
-          border: 1px dotted $pale
-          border-right: 0
-          border-top-left-radius: 20px
-          border-bottom-left-radius: 20px
-        a.detach, a.delete
-          display: inline-block
-          vertical-align: top
-          float: right
-          padding: 2px 5px
-          border: 1px dotted $pale
-          border-right: 0
-          border-left: 0
-        a.edit
-          color: $blue
-          +hover
-        a.new
-          color: $green
-          +hover
-        a.pick
-          color: $blue
-          +hover
-        a.detach
-          color: $blue
-          +hover
-          padding: 2px 5px
-        a.delete
-          color: $red
-          +hover
-          padding: 2px 5px
-        a.copy
-          display: none
-        &:hover
-          visibility: visible
-      &:hover
-        border-color: $pale_for_edit
-        & > span.user_controls
-          opacity: 1
-
-#edit_account_info
-  with: 100%
-  clear: both
-
-  .edit_account_info_content
-    width: 100%
-    clear: both
-
-    .content_box
-      width: 33%
-      float: left
-    .last_content_box
-      width: 34%
-      float: left
-
-
-.centered
-  width: 100%
-  text-align: center
-
-@import droom/popups
-@import droom/stream
-@import droom/datepicker
-@import droom/uploader
 @import droom/columns
+@import droom/datepicker
 @import droom/ed
 @import droom/forms
+@import droom/folders
 @import droom/help
+@import droom/margin
 @import droom/menus
 @import droom/noticeboard
 @import droom/pages
+@import droom/popups
+@import droom/preferences
 @import droom/search
 @import droom/symbols
 @import droom/tags
+@import droom/toggles
 @import droom/token_input
+@import droom/uploader
 @import droom/users
 
 @import medium/base

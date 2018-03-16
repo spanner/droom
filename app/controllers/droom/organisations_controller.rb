@@ -80,18 +80,18 @@ module Droom
 
     def search_organisations
       if params[:q].present?
-        query = params[:q].presence
+        @terms = params[:q]
         arguments = { order: {_score: :desc}}
       else
-        query = '*'
+        @terms = '*'
         arguments = { order: {name: :asc}}
       end
 
       if params[:show] == "all"
         arguments[:limit] = 1000
       else
-        arguments[:per_page] = (params[:show].presence || 50).to_i
-        arguments[:page] = (params[:page].presence || 1).to_i
+        @per_page = arguments[:per_page] = (params[:show].presence || 50).to_i
+        @page = arguments[:page] = (params[:page].presence || 1).to_i
       end
 
       arguments[:fields] = ['name^10', 'chinese_name', 'description', 'url', 'address']
@@ -102,7 +102,7 @@ module Droom
         }
       end
 
-      @organisations = Droom::Organisation.search query, arguments
+      @organisations = Droom::Organisation.search @terms, arguments
     end
 
   end

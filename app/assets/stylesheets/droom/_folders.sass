@@ -1,0 +1,96 @@
+ul.filing
+  position: relative
+  padding: 0
+  list-style: none
+  &:empty
+    display: none
+  li.document
+    position: relative
+    white-space: nowrap
+    overflow: hidden
+  li.files
+    display: inline-block
+    width: 100%
+
+.no-touch
+  ul.filing, ul.uploads
+    li.document
+      span.action
+        visibility: hidden
+      &:hover
+        span.action
+          visibility: visible
+
+div.attachments
+  position: relative
+  float: right
+  width: 240px
+  overflow: hidden
+  font-size: 90%
+  h3
+    margin: 0
+    padding-left: 20px
+    font-weight: normal
+    line-height: 1.5
+    a
+      +inverted
+  ul
+    padding-left: 20px
+    margin: 0
+    list-style: none
+    ul
+      padding-left: 0
+    li.folder
+      margin-left: 5px
+      a.folder
+        font-weight: bold
+        color: $text
+  &.col
+    h3, ul
+      padding-left: 0
+
+ul#folders, div.attachments
+  padding-left: 0
+  li
+    list-style: none
+    margin: 0 0 0.25em 0
+    &.files
+      margin-bottom: 0
+
+  li.folder
+    ul
+      padding-left: 16px
+      margin: 0
+      &.uploads
+        padding-left: 32px
+    a.folder
+      +big_icon_link("droom/folder.png")
+      text-indent: 32px
+      color: $text
+      font-weight: bold
+      +hover
+      +waitable
+      padding: 4px 0
+    &.root
+      > a.folder
+        font-size: 125%
+        text-indent: 32px
+    &.open
+      > a.folder
+        background-position: 0 -192px
+        &:hover
+          background-position: 0 -240px
+    &.empty
+      > a.folder
+        color: $pale
+        background-position: 0 -144px
+      &.open
+        > a.folder
+          background-position: 0 -336px
+    &.working
+      opacity: 0.5
+      a.folder
+        background:
+          image: image-url('droom/spinner.gif')
+          position: 0 3px
+          repeat: no-repeat

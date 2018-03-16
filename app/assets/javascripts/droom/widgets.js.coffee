@@ -594,6 +594,41 @@ jQuery ($) ->
 
 
 
+  $.fn.subordinate = ->
+    @each ->
+      new Subordinate @,
+        reversed: false
+
+  $.fn.insubordinate = ->
+    @each ->
+      new Subordinate @,
+        reversed: true
+
+  class Subordinate
+    constructor: (element, options={}) ->
+      @_container = $(element)
+      @_reversed = options.reversed ? false
+      if selector = @_container.attr('data-dependent').replace('.', '_')
+        @_controller = $(selector)
+        @_controller.bind 'click', @update
+        @update()
+
+    update: =>
+      if @_reversed
+        if @_controller.is(":checked") then @disable() else @enable()
+      else
+        if @_controller.is(":checked") then @enable() else @disable()
+
+    enable: () =>
+      console.log "subordinate enable", @_container
+      @_container.enable()
+      @_container.find('input[type="text"]').first().focus()
+
+    disable: () =>
+      console.log "subordinate disable", @_container
+      @_container.disable()
+
+
   # HTML-editing support is provided by WysiHTML, which is an ugly but effective iframe-based solution.
   # Any textarea with the 'data-editable' attribute will be handed over to WysiHTML for processing.
   #

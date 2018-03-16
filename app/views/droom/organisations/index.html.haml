@@ -1,9 +1,6 @@
 - content_for :title do
   = t :directory
 
-- content_for :search do
-  = render 'droom/shared/search', url: organisations_url
-
 - content_for :standfirst do
   - if admin?
     .admin.right
@@ -30,12 +27,6 @@
             %use{"xlink:href" => "#list_symbol"}
           %span.label
             = t(:pending_organisations_introduction, count: pending_count)
-
-- content_for :filter do
-  #finder
-    %form.filter{:action => droom.users_url(:format => :js), :data => {:action => "filter"}}
-      %p
-        = search_field_tag :q, params[:q], :results => 5, :autosave => 'person_filter'
 
 #main.organisations
   = render :partial => 'droom/organisations/organisations'

@@ -12,7 +12,6 @@ class Tagger
     @_el = $(el)
     @_field = @_el.find('input.tags')
     @_form = @_field.parents('form')
-    @_adder = @_el.find('a.add_tag')
 
     if value = @_field.val()
       existing_terms = _.map _.uniq(value.split(',')), (term) -> name: term
@@ -22,8 +21,10 @@ class Tagger
       minChars: 2
       excludeCurrent: true
       allowFreeTagging: true
+      zindex: 9000
       tokenValue: "name"
       prePopulate: existing_terms
+      hintText: "Type in a search term to see suggestions. Enter creates a new tag."
       onResult: (data) =>
         seen = {}
         terms = []
@@ -34,27 +35,12 @@ class Tagger
         terms
 
     @_search_field = @_el.find('li.token-input-input-token input[type="text"]')
-    @_search_field.after @_adder
-    @_adder.on "click", @accept
+    @_search_field.attr "placeholder", @_field.attr('placeholder')
     @_field.on "change", @changed
-    @_search_field.on "input change", @observeSearch
-    @observeSearch()
-    if @_el.hasClass('active')
-      @focus()  #todo only if terms just applied
-
-  tagsAlready: =>
-    _.map @_field.val().split(','), (t) -> t.trim()
+    @focus() if @_el.hasClass('active')
 
   focus: =>
     @_search_field.focus()
-
-  observeSearch: =>
-    @_current_tag = @_search_field.val()
-    if @_current_tag?.length > 3
-      if not @_current_tag in @tagsAlready()
-        @_adder.show()
-    else
-      @_adder.hide()
 
   accept: =>
     #noop: editor will add new term

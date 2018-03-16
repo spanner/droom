@@ -1,9 +1,6 @@
 - content_for :title do
   = t :organisation_applications
 
-- content_for :search do
-  = render 'droom/shared/search', url: organisations_url
-
 - content_for :standfirst do
   %p
     = t :pending_organisations_introduction, count: Droom::Organisation.unapproved.count
