@@ -1,15 +1,14 @@
-- signin_page = Droom::Page.find_by(slug: "signin")
+- welcome_page = Droom::Page.published.find_by(slug: "_welcome")
 
 - content_for(:pagetitle) do
   =t :please_sign_in
 
-
-- if signin_page && signin_page.content?
+- if welcome_page && welcome_page.content?
   - content_for(:pagetitle) do
-    = signin_page.title
+    = welcome_page.title
 
   .welcome
-    = render "droom/pages/page", page: signin_page
+    = render "droom/pages/show/page", page: welcome_page
 
 
 - else

@@ -1,3 +1,6 @@
+- content_for :js do
+  = javascript_include_tag "ed"
+
 - image_url = @page.main_image.url(:hero) if @page.main_image
 - image_weighting = @page.main_image_weighting.presence || 'center center'
 - @page.content = "<p></p>" unless @page.content?

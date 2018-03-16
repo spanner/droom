@@ -9,9 +9,9 @@
       #page_title
         %h1.title
           = sanitize(page.title)
-        - if @page.subtitle?
+        - if page.subtitle?
           %p.subtitle
-            = @page.render(:subtitle).html_safe
+            = page.render(:subtitle).html_safe
 - else
   #page_title
     %h1.title
@@ -19,4 +19,4 @@
 
 #page_content
   .content
-    = @page.render(:content).html_safe
+    = page.render(:content).html_safe

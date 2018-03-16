@@ -192,7 +192,7 @@ en:
   finish_time: "Finish?"
   folder: "folder"
   follow_stream: "Follow the stream in an RSS reader"
-  forgot_password: "Forgotten your password?"
+  forgot_password: "Reset password"
   future_event_count:
     zero: "No events coming up"
     one: "One event coming up"
@@ -333,12 +333,8 @@ en:
   more: "more..."
   more_documents_count:
     zero: "No more documents"
-    one: "and one more document"
-    other: "and %{count} more documents"
-  more_documents_count:
-    zero: "No more documents"
-    one: "one more document..."
-    other: "%{count} more documents..."
+    one: "+ one more"
+    other: "+ %{count} more"
   more_in_calendar: "More future events..."
   more_past_events: "More past events..."
   more_subfolders_count:
