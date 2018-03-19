@@ -5,7 +5,7 @@ module Droom
     skip_before_action :authenticate_user!, only: [:published, :welcome]
 
     def welcome
-      if @page = Droom::Page.published.find_by(slug: 'welcome')
+      if @page = Droom::Page.published.find_by(slug: '_welcome')
         render template: "droom/pages/published"
       else
         redirect_to dashboard_url
@@ -47,10 +47,10 @@ module Droom
     def published
       if @page = Droom::Page.published.find_by(slug: params[:slug])
         authenticate_user! unless @page.public?
-        render
+        render layout: "page"
 
       elsif lookup_context.exists?(params[:slug], 'pages', false)
-        render template: "pages/#{params[:slug]}"
+        render template: "pages/#{params[:slug]}", layout: Droom.pages_layout
 
       elsif can?(:create, Droom::Page)
         redirect_to droom.new_page_url(slug: params[:slug])
