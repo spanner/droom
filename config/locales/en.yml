@@ -532,6 +532,7 @@ en:
       year: "%Y"
       month: "%B %Y"
       time_on_date: "%l:%M%P on %-d %B %Y"
+      filename: "%Y-%B-%d"
   to: "to"
   tooltips:
     click_to_make_tag: "Click to make this a new keyword"
