@@ -540,3 +540,29 @@ class Ed.Views.ProgressBar extends Ed.View
       $el.text("#{progress * 100}%").removeClass('processing')
     else
       $el.html("please wait").addClass('processing')
+
+
+class Ed.Views.Helper extends Ed.View
+  template: false
+
+  ui:
+    shower: "a.show"
+    help: ".help"
+
+  events:
+    "click a.show": "toggle"
+
+  onRender: =>
+    @stickit()
+
+  toggle: (e) =>
+    if @$el.hasClass('showing')
+      @$el.removeClass 'showing'
+    else
+      @$el.addClass 'showing'
+
+
+
+
+
+

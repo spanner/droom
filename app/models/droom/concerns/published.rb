@@ -73,7 +73,7 @@ module Droom::Concerns::Published
   protected
 
   def renderable_attributes
-    [:title, :published_title, :subtitle, :published_subtitle, :content, :published_content]
+    [:title, :published_title, :intro, :published_intro, :subtitle, :published_subtitle, :content, :published_content]
   end
 
   def publish_if_publishing

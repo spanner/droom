@@ -8,15 +8,13 @@ class Ed.Views.Editor extends Ed.View
   ui:
     title: ".ed-title"
     subtitle: ".ed-subtitle"
+    intro: ".ed-intro"
     slug: ".ed-slug"
     content: ".ed-content"
     image: ".ed-image"
-    titlefield: '[data-ed="title"]'
-    subtitlefield: '[data-ed="subtitle"]'
-    slugfield: '[data-ed="slug"]'
-    contentfield: '[data-ed="content"]'
-    imagefield: '[data-ed="image"]'
+    image_caption: ".ed-imagecaption"
     checkers: '[data-ed-check]'
+    helpers: '.ed-help'
 
   bindings:
     '[data-ed="title"]':
@@ -24,6 +22,9 @@ class Ed.Views.Editor extends Ed.View
       updateModel: false
     '[data-ed="subtitle"]':
       observe: "subtitle"
+      updateModel: false
+    '[data-ed="intro"]':
+      observe: "intro"
       updateModel: false
     '[data-ed="slug"]':
       observe: "slug"
@@ -33,6 +34,9 @@ class Ed.Views.Editor extends Ed.View
       updateModel: false
     '[data-ed="main_image_weighting"]':
       observe: "main_image_weighting"
+      updateModel: false
+    '[data-ed="main_image_caption"]':
+      observe: "main_image_caption"
       updateModel: false
     '[data-ed="content"]':
       observe: "content"
@@ -51,6 +55,10 @@ class Ed.Views.Editor extends Ed.View
       @subviews.push new Ed.Views.Subtitle
         el: el
         model: @model
+    @ui.intro.each (i, el) =>
+      @subviews.push new Ed.Views.Intro
+        el: el
+        model: @model
     @ui.slug.each (i, el) =>
       @subviews.push new Ed.Views.Slug
         el: el
@@ -63,14 +71,23 @@ class Ed.Views.Editor extends Ed.View
       @subviews.push new Ed.Views.MainImage
         el: el
         model: @model
+    @ui.image_caption.each (i, el) =>
+      @subviews.push new Ed.Views.ImageCaption
+        el: el
+        model: @model
     @ui.checkers.each (i, el) =>
       @subviews.push new Ed.Views.Checker
+        el: el
+        model: @model
+    @ui.helpers.each (i, el) =>
+      @subviews.push new Ed.Views.Helper
         el: el
         model: @model
 
   onRender: =>
     @stickit()
     @placeCaret()
+    window.m = @model
     # _.defer -> balanceText('.balanced')
 
   placeCaret: =>
@@ -109,7 +126,6 @@ class Ed.Views.Subtitle extends Ed.View
       observe: 'subtitle'
 
   wrap: =>
-    @log "SUBTITLE"
     @model.set 'subtitle', @$el.text().trim()
 
 
@@ -121,6 +137,26 @@ class Ed.Views.Slug extends Ed.View
 
   wrap: =>
     @model.set 'slug', @$el.text().trim()
+
+
+  class Ed.Views.Intro extends Ed.View
+    template: false
+    bindings: 
+      ':el':
+        observe: 'intro'
+
+    wrap: =>
+      @model.set 'intro', @$el.text().trim()
+
+
+  class Ed.Views.ImageCaption extends Ed.View
+    template: false
+    bindings: 
+      ':el':
+        observe: 'main_image_caption'
+
+    wrap: =>
+      @model.set 'main_image_caption', @$el.text().trim()
 
 
 class Ed.Views.Content extends Ed.View
@@ -140,7 +176,6 @@ class Ed.Views.Content extends Ed.View
     @showPlaceholderIfEmpty()
     @ui.content.on 'blur', @showPlaceholderIfEmpty
     @ui.content.addClass 'editing'
-    window.cont = @
 
     @ui.content.find('section.blockset').each (i, el) =>
       @subviews.push new Ed.Views.Blocks
@@ -157,6 +192,9 @@ class Ed.Views.Content extends Ed.View
     @ui.content.find('a.button').each (i, el) =>
       @subviews.push new Ed.Views.Button
         el: el
+
+    @ui.content.on('focus', @ensureP).on('blur', @clearP)
+
     @ui.placeholder.click =>
       @ui.placeholder.hide()
       @ui.content.show().focus()
@@ -423,9 +461,9 @@ class Ed.Views.MainImage extends Ed.Views.Asset
     if image_id = @$el.data('image')
       @image.set('id', image_id)
       @model.set('main_image_id', image_id)
+      #TODO default to image caption
     if weighting = @$el.css('background-position')
       named_weighting = weighting.replace(/^100%/g, 'right').replace(/^50%/g, 'center').replace(/^0%*/g, 'left').replace(/100%$/g, 'bottom').replace(/50%$/g, 'center').replace(/0%*$/g, 'top')
-      @log "MainImage got weighting", weighting, named_weighting
       @model.set 'main_image_weighting', named_weighting
 
   setModel: (image) =>

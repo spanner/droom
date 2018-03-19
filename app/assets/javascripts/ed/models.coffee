@@ -62,6 +62,10 @@ class Ed.Model extends Backbone.Model
       json[root] = super
     json
 
+  revert: =>
+    @set @_original_attributes
+
+
   ## Progress job
   #
   # Each asset has its own save job that will be added to the jobs collection of its holding editable
@@ -103,6 +107,7 @@ class Ed.Collection extends Backbone.Collection
 class Ed.Models.Editable extends Ed.Model
   defaults: 
     title: ""
+    intro: ""
     slug: ""
     main_image_id: null
     content: "<p></p>"

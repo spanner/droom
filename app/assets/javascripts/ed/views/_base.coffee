@@ -63,6 +63,23 @@ class Ed.View extends Backbone.Marionette.View
   providerClass: (provider) =>
     "yt" if provider is "YouTube"
 
+
+  ## Contenteditable helpers
+
+  ensureP: (e) =>
+    el = e.target
+    if el.innerHTML is ""
+      el.style.minHeight = el.offsetHeight + 'px'
+      p = document.createElement('p')
+      p.innerHTML = "&#8203;"
+      el.appendChild p
+
+  clearP: (e) =>
+    el = e.target
+    content = el.innerHTML
+    el.innerHTML = "" if content is "<p>&#8203;</p>" or content is "<p><br></p>" or content is "<p></p>" or content is "<p>​</p>"  # there's a zwsp in that last string
+
+
   ## Utilities
 
   isBlank: (string) =>

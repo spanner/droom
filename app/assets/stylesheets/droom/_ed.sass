@@ -1,6 +1,6 @@
 =paramarker
   content: "❡ "
-  color: $verypale
+  color: $pale
   font-size: 1rem
   display: inline-block
   float: left
@@ -10,12 +10,14 @@
 
 [contenteditable]
   outline: none
+  color: $darkblue
   &[data-placeholder]
-    &:empty:before
-      content: attr(data-placeholder)
+    &:empty
       color: $mid
       font-style: italic
       text-transform: none
+      &:before
+        content: attr(data-placeholder)
 
 span[contenteditable]
   display: inline-block
@@ -33,7 +35,7 @@ a.control, label.control
   margin-bottom: 8px
   cursor: pointer
   overflow: hidden
-  color: $blue
+  color: $darkblue
   border: 1px solid currentColor
   &:hover
     color: $dark
@@ -266,9 +268,6 @@ span.note
   height: 56px
   width: 56px
   padding: 9px 8px
-  border-bottom-left-radius: 28px
-  border-top-left-radius: 28px
-  border-left: 1px solid $mid
   overflow: hidden
   top: 0
   left: -20px
