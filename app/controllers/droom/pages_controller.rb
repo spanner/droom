@@ -1,19 +1,20 @@
 module Droom
   class PagesController < Droom::EngineController
     respond_to :html
-    load_and_authorize_resource except: [:published, :welcome]
-    skip_before_action :authenticate_user!, only: [:published, :welcome]
-
-    def welcome
-      if @page = Droom::Page.published.find_by(slug: '_welcome')
-        render template: "droom/pages/published"
-      else
-        redirect_to dashboard_url
-      end
-    end
+    load_and_authorize_resource except: [:published]
+    skip_before_action :authenticate_user!, only: [:published]
 
     def new
       @page = Droom::Page.new(slug: params[:slug])
+      render layout: Droom.pages_layout
+    end
+
+    def show
+      render layout: Droom.page_layout
+    end
+
+    def edit
+      render layout: Droom.page_layout
     end
 
     def create
@@ -47,10 +48,10 @@ module Droom
     def published
       if @page = Droom::Page.published.find_by(slug: params[:slug])
         authenticate_user! unless @page.public?
-        render layout: "page"
+        render layout: Droom.page_layout
 
       elsif lookup_context.exists?(params[:slug], 'pages', false)
-        render template: "pages/#{params[:slug]}", layout: Droom.pages_layout
+        render template: "pages/#{params[:slug]}", layout: Droom.page_layout
 
       elsif can?(:create, Droom::Page)
         redirect_to droom.new_page_url(slug: params[:slug])
@@ -63,7 +64,7 @@ module Droom
   protected
 
     def page_params
-      params.require(:page).permit(:title, :subtitle, :slug, :main_image_id, :content, :public, :publish_now)
+      params.require(:page).permit(:title, :subtitle, :intro, :content, :public, :slug, :main_image_id, :main_image_caption, :main_image_weighting, :publish_now)
     end
 
   end

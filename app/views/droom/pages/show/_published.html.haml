@@ -17,6 +17,10 @@
     %h1.title
       = page.title
 
+- if story.published_intro?
+  #page_intro
+    = story.render(:published_intro).html_safe
+
 #page_content
   .content
     = page.render(:content).html_safe

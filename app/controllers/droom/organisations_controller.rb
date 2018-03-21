@@ -35,7 +35,7 @@ module Droom
     def signup
       if Droom.organisations_registerable?
         if @page = Droom::Page.published.find_by(slug: "_signup")
-          render template: "droom/pages/published"
+          render template: "droom/pages/published", layout: Droom.page_layout
         else
           @organisation = Droom::Organisation.new
           render

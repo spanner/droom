@@ -3,23 +3,29 @@
 
 - image_url = @page.main_image.url(:hero) if @page.main_image
 - image_weighting = @page.main_image_weighting.presence || 'center center'
-- @page.content = "<p></p>" unless @page.content?
+- @page.intro = "" unless @page.intro?
+- @page.content = "" unless @page.content?
+- @page.main_image_caption = "" unless @page.main_image_caption?
+
 
 = form_for @page, html: {id: "page_form", data: {editor: "ed"}} do |f|
-  %aside#instructions
-    #form_controls.pin
-      = f.submit "save and preview"
+  %aside#page_controls
+    %h3
+      %a.breadhead{href: droom.pages_url}
+        = t("pages.index")
+      = t "pages.edit"
     %p
-      = f.check_box :public
-      = f.label :public
-    %p
-      = f.hidden_field :slug, data: {ed: "slug"}
-      %span.label
-        Slug:
-      %span.ed-slug{contenteditable: true, data: {placeholder: "generated from title"}}<
-        = @page.slug
+      = f.submit "save & preview"
+      &nbsp;
+      or
+      &nbsp;
+      - if @page.persisted?
+        = link_to t(:cancel), droom.page_url(@page), class: "cancel"
+      - else
+        = link_to t(:cancel), droom.pages_url, class: "cancel"
 
-    = render "droom/pages/edit/instructions"
+    = render partial: "droom/pages/edit/instructions"
+
 
   %section#editor
     #page_editor
@@ -44,23 +50,38 @@
               %span.ed-subtitle{contenteditable: true, data: {placeholder: "Click to add optional strapline"}}<
                 = @page.subtitle
 
-      #page_content.ed-content.editing
+      #page_intro
+        = f.hidden_field :intro, data: {ed: 'intro'}
+        %p
+          %span.ed-intro{contenteditable: "plaintext-only", data: {placeholder: "Click here to give your page an introduction. This text may also be used as a preview in lists and email summaries."}}<
+            = @page.intro.html_safe
+
+      #page_content.ed-content.editing<
         = f.hidden_field :content, data: {ed: 'content'}
         .content{contenteditable: true}
           = @page.content.html_safe
 
         .placeholder
           %p
-            Click here to edit the main body of your page. The first paragraph will automatically be made a little bigger.
-            That might be the only paragraph you need, but there is no limit to the length of the page and you are welcome to add images, links and video clips.
-          %p
-            Click the
-            %svg.prefix
-              %use{"xlink:href" => "#plus_symbol"}
-            button on next to a blank line to insert an image, video clip, quote or button.
+            Click here to edit the main text of your page.
+
           %p
             %span.selected
               Select some text
             to bring up the editing toolbar, create a link or change formatting.
 
+          %p
+            Click the
+            %svg.prefix
+              %use{"xlink:href" => "#plus_symbol"}
+            button on next to a blank line to insert an image, video clip, quote or button.
 
+          %p
+            Once an image, video etc has been inserted in the text it can be styled and populated.
+            Drop a file or click the
+            %svg.prefix
+              %use{"xlink:href" => "#upload_symbol"}
+            upload button to add a new asset. Click the
+            %svg.prefix
+              %use{"xlink:href" => "#reuse_symbol"}
+            recycle button to choose a previously uploaded asset.

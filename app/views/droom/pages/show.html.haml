@@ -1,45 +1,7 @@
 - content_for :pagetitle do 
   = t "pages.show"
 
-- content_for :title do
-  %a.breadhead{href: droom.pages_url}
-    = t "pages.index"
-  = t "pages.show"
+%section#preview
+  #page_preview
+    = render "droom/pages/show/page", page: @page
 
-#page_form
-  %aside#instructions
-    = form_for @page, url: droom.publish_page_url(@page), method: "put", html: {id: "page_form"} do |f|
-      = link_to "◂ edit", droom.edit_page_url(@page), class: "edit button"
-      = f.submit "▸ publish", class: "publish"
-
-    - if @page.published?
-      %p
-        This
-        %strong
-          = @page.public? ? "public" : "private"
-        page can be reached at
-        %br
-        = link_to published_page_url(@page.slug), class: "web", target: "_blank" do
-          %svg.prefix
-            %use{"xlink:href" => "#web_symbol"}
-          %span.label
-            = published_page_url(@page.slug)
-
-    - if @page.publication_required?
-      %p.warning
-        %svg.prefix
-          %use{"xlink:href" => "#warning_symbol"}
-        %span.label
-          - if @page.published?
-            The published page is not up to date.
-            Press 'publish' above to make this preview version public.
-          - else
-            This page has not been published. Press 'publish' above to make it available.
-    - else
-      %p
-        The published page is up to date and matches this preview.
-
-
-  %section#preview
-    #page_preview
-      = render "droom/pages/show/page", page: @page

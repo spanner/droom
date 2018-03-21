@@ -1,9 +1,3 @@
-a.breadhead
-  display: block
-  color: $pale
-  font-size: 1rem
-  letter-spacing: 0
-
 h1.pagetitle
   a.breadhead:before
     content: "< "
@@ -73,7 +67,6 @@ h1.pagetitle
       line-height: 1.6
       color: $dark
 
-
 #page_masthead
   position: relative
   width: 100%
@@ -110,10 +103,34 @@ h1.pagetitle
       font-size: 1rem
       color: white
       margin: 0.5em 0 0 0
+    [contenteditable]
+      color: white
+
+#page_intro, #page_content
+  margin: 20px 4%
+  width: 80%
+  max-width: 45em
+  form
+    input[type="text"], input[type="password"], input[type="url"], input[type="email"], textarea
+      box-sizing: border-box
+      width: 100%
+      padding: 10px
+      +book
+      font-size: 1rem
+      margin-bottom: 0.25em
+      border: 1px solid $pale
+      outline: none
+    textarea
+      height: 200px
+
+#page_intro
+  font-size: 1.4em
+  line-height: 1.4
+  margin-bottom: 1rem
+  .ed-intro
+    display: block
 
 #page_content
-  margin: 20px 4%
-  width: 92%
   min-height: 500px
 
   & > p:first-child
@@ -251,31 +268,97 @@ h1.pagetitle
         margin-left: 0
         margin-top: -0.1em
 
+aside#page_controls
+  position: fixed
+  z-index: 1000
+  max-width: 240px
+  top: 20px
+  right: 20px
+  padding: 20px
+  background-color: $menubg
+  box-shadow: 0 1px 6px $shadow
+  h3
+    margin-top: 0
+    font-weight: bold
+    font-size: 1.25em
+  a.breadhead
+    display: block
+    color: $pale
+    font-weight: normal
+    font-size: 1rem
+    letter-spacing: 0
+    &:hover
+      color: $hover
+    &:before
+      content: "< "
+  span.slug_prefix
+    color: $pale
+  span.ed-slug
+    font-weight: bold
+  p:last-child
+    margin-bottom: 0
+  ul
+    list-style: none
+    padding: 0
+    li
+      svg.prefix + span.label
+        width: calc(100% - 2em)
+    a
+      cursor: pointer
+      color: $green
+      +hover
+    a.missing, a.new
+      color: $red
+      +hover
+      span
+        width: calc(100% - 50px)
+  .helper
+    margin-top: 1em
+    p
+      margin: 0
+    a.show
+      float: right
+      margin-top: -0.5em
+      color: $green
+      cursor: pointer
+      transition: color 0.5s ease-out
+      svg
+        transition: transform 0.5s ease-out
+    div.help
+      clear: right
+      max-height: 0
+      overflow: hidden
+      transition: max-height 0.5s ease-out
+      h3
+        margin: 0
+      ul
+        list-style: none
+        clear: both
+        padding: 0
+        a
+          cursor: pointer
+          color: $green
+          +hover
+        a.missing, a.new
+          color: $red
+          +hover
+          span
+            width: calc(100% - 50px)
+    &.showing
+      a.show
+        color: $pale
+        svg
+          transform: rotate(225deg)
+      div.help
+        max-height: 50vh
+
+
 #page_form
   display: block
 
-  aside#instructions
-    width: 28%
-    float: right
-    margin: 0 2% 3em 2%
-    p:first-child
-      margin-top: 0
-    ul
-      list-style: none
-      padding: 0
-      a
-        cursor: pointer
-        color: $green
-        +hover
-      a.missing, a.new
-        color: $red
-        +hover
-        span
-          width: calc(100% - 50px)
-
   section#preview
     position: relative
-    width: 66%
+    width: 100%
     margin: 0
     background-color: white
     margin-bottom: 3em
@@ -284,10 +367,9 @@ h1.pagetitle
       position: relative
       width: 100%
       border: 1px solid $pale
-      box-shadow: 0 1px 6px $shadow
 
   section#editor
-    width: 66%
+    width: 100%
     margin: 0
     background-color: white
     margin-bottom: 3em
@@ -296,8 +378,6 @@ h1.pagetitle
       box-sizing: border-box
       position: relative
       width: 100%
-      border: 1px solid $pale
-      box-shadow: 0 1px 6px $shadow
 
     .content
       width: 100%

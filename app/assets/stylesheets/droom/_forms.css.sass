@@ -1,11 +1,12 @@
 div.popup
-  [contenteditable]:not([contenteditable=false]), input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea
+  input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false]), 
     padding: 8px
     border: 1px solid $pale
     background-color: white
     font-size: 1.2em
 
-[contenteditable]:not([contenteditable=false]), input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea
+input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false])
+  -webkit-appearance: none
   box-sizing: border-box
   outline: none
   &.strong
@@ -47,7 +48,6 @@ div.popup
 
 select
   -webkit-appearance: none
-  -webkit-border-radius: 0
   -webkit-padding-end: 24px
   font-size: 1.2em
   border: 1px solid $pale

@@ -1,5 +1,43 @@
 - page ||= @page
 
+%aside#page_controls
+  - if can? :publish, @page
+    = form_for @page, url: droom.publish_page_url(@page), method: "put", html: {id: "page_form"} do |f|
+      %h3
+        %a.breadhead{href: droom.pages_url}
+          = t("pages.index")
+        = t "pages.preview"
+
+      %p<
+        = f.submit "publish"
+        &nbsp;
+        or
+        &nbsp;
+        = link_to "edit further", droom.edit_page_url(@page), class: "cancel"
+      %p<
+        = f.hidden_field :slug, data: {ed: "slug"}
+        To
+        &nbsp;
+        %span.slug_prefix<>
+          \/news/
+        %span.ed-slug{contenteditable: true, data: {placeholder: "auto"}}<>
+          = @page.slug
+
+  - if @page.publication_required?
+    %p
+      %span.label
+        - if @page.published?
+          The
+          = link_to droom.page_url(@page.slug), class: "web", target: "_blank" do
+            published version of this page
+          is out of date.
+          Press 'publish' above to make this version public.
+        - else
+          This page is hidden. Press 'publish' above to make it available.
+  - else
+    %p
+      The published news page is up to date and matches this preview.
+
 - if page.illustrated?
   - image_url = page.main_image.url(:hero)
   #page_masthead
@@ -16,6 +54,11 @@
   #page_title
     %h1.title
       = page.title
+
+- if page.intro?
+  #page_intro
+    %p
+      = page.render(:intro).html_safe
 
 #page_content
   .content

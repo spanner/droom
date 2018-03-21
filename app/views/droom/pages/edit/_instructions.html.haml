@@ -1,54 +1,50 @@
-%p
-  Here you can compose a page for public or private presentation.
-  The structure is simple and general-purpose. Each page consists of:
-
 %ul
   %li
     %a.title{data: {"ed-check" => "title"}}
       %svg.prefix
         %use.check{"xlink:href" => "#cross_symbol"}
-      %span
+      %span.label
         Main page heading
-  %li
-    %a.subtitle{data: {"ed-check" => "subtitle"}}
-      %svg.prefix
-        %use.check{"xlink:href" => "#cross_symbol"}
-      %span
-        Optional strapline
   %li
     %a.image{data: {"ed-check" => "main_image"}}
       %svg.prefix
         %use.check{"xlink:href" => "#cross_symbol"}
-      %span
-        A big masthead image
+      %span.label
+        A masthead image
   %li
     %a.text{data: {"ed-check" => "content"}}
       %svg.prefix
         %use.check{"xlink:href" => "#cross_symbol"}
-      %span
+      %span.label
         A block of html
         %span.count
 
-%p
-  The only requirements for publication are that the page has a title and some text.
+%div.helper.ed-help
+  %p
+    %a.show
+      %svg.prefix
+        %use{"xlink:href" => "#plus_symbol"}
+      %span.label
+        Help
 
-%h3
-  Tips and guides
+  .help
+    %h3
+      Tips and guides
 
-%ul
-  %li
-    =help_link("suggestions", "pages", "Suggestions for your page")
-  %li
-    =help_link("variables", "pages", "Variables you can include")
-  %li
-    =help_link("images", "pages", "Image tips and suggestions")
-  %li 
-    =help_link("media", "pages", "How to add images and video")
-  %li 
-    =help_link("youtube", "pages", "How to add youtube video")
-  %li
-    =help_link("formatting", "pages", "How to add links and formatting")
-  %li
-    =help_link("formatting", "pages", "Linking to other pages")
-  %li
-    =help_link("slug", "pages", "Check the page slug")
+    %ul
+      %li
+        =help_link("suggestions", "pages", "Suggestions for your page")
+      %li
+        =help_link("variables", "pages", "Variables you can include")
+      %li
+        =help_link("images", "pages", "Image tips and suggestions")
+      %li 
+        =help_link("media", "pages", "How to add images and video")
+      %li 
+        =help_link("youtube", "pages", "How to add youtube video")
+      %li
+        =help_link("formatting", "pages", "How to add links and formatting")
+      %li
+        =help_link("formatting", "pages", "Linking to other pages")
+      %li
+        =help_link("slug", "pages", "Check the page slug")
