@@ -21,6 +21,11 @@
       %br
       = f.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
 
+    %p.secondary
+      = f.label :organisation_type_id
+      %br
+      = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
+
     %p.secondary.tagger
       = f.label :keywords
       %br
@@ -31,11 +36,12 @@
       %br
       = f.text_area :description, class: "rte", placeholder: t("placeholders.organisation.description")
  
-    %p.admin
-      = f.label :organisation_type_id
-      = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
-
+    - if admin?
+      %p.admin
+        = f.check_box :external
+        = f.label :external
+    
     .buttons
-      = f.submit t(:save_organisation)
+      = f.submit t(:save)
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'

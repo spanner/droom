@@ -11,7 +11,6 @@ module Droom
     belongs_to :approved_by, :class_name => 'Droom::User'
     belongs_to :disapproved_by, :class_name => 'Droom::User'
 
-    accepts_nested_attributes_for :owner
     after_save :capture_owner
 
     has_attached_file :image,
@@ -37,22 +36,26 @@ module Droom
     validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
 
     scope :added_since, -> date { where("created_at > ?", date) }
+    scope :disapproved, -> { where.not(disapproved_at: nil) }
     scope :approved, -> { where.not(approved_at: nil) }
-    scope :unapproved, -> { where(approved_at: nil, disapproved_at: nil) }
+    scope :pending, -> { where(approved_at: nil, disapproved_at: nil) }
 
     default_scope -> {order("name ASC")}
 
-    def self.for_selection
+    def self.for_selection(with_external=false)
       organisations = self.order("name asc").map{|f| [f.name, f.id] }
+      organisations = organisations.where(external: false) unless with_external
       organisations.unshift(['', ''])
       organisations
     end
 
-    def send_registration_confirmation_messages
-      # Droom.mailer is a configuration variable that usually contains `Droom::Mailer` :)
-      Droom.mailer.send(:org_confirmation, self).deliver_later
-      Droom::User.admins.each do |admin|
-        Droom.mailer.send(:org_notification, self, admin).deliver_later
+    def self.from_signup(params)
+      owner_params = params.delete :owner_attributes
+      transaction do
+        owner = Droom::User.from_email(owner_params[:email]).first || Droom::User.create(owner_params.merge(defer_confirmation: true))
+        org = Droom::Organisation.create(params.merge(owner: owner))
+        org.reindex
+        org
       end
     end
 
@@ -60,6 +63,13 @@ module Droom
       Searchkick.callbacks(:bulk) do
         u = Droom::User.first
         all.each {|o| o.approve!(u)}
+      end
+    end
+
+    def self.disapprove_all
+      Searchkick.callbacks(:bulk) do
+        u = Droom::User.first
+        all.each {|o| o.disapprove!(u)}
       end
     end
 
@@ -86,7 +96,6 @@ module Droom
           disapproved_at: nil,
           disapproved_by: nil
         })
-        activities.each(&:reindex)
       end
     end
 
@@ -102,7 +111,6 @@ module Droom
           approved_at: nil,
           approved_by: nil
         })
-        activities.each(&:reindex)
       end
     end
 
@@ -110,10 +118,22 @@ module Droom
       disapproved_at?
     end
 
+    def pending?
+      !approved? && !disapproved?
+    end
+
     def send_welcome_message
       if owner
         owner.generate_confirmation_token unless owner.confirmation_token?
         Droom.mailer.send(:org_welcome, self, owner.confirmation_token).deliver_later
+      end
+    end
+
+    def send_registration_confirmation_messages
+      # Droom.mailer is a configuration variable that usually contains `Droom::Mailer` :)
+      Droom.mailer.send(:org_confirmation, self).deliver_later
+      Droom::User.admins.each do |admin|
+        Droom.mailer.send(:org_notification, self, admin).deliver_later
       end
     end
 
@@ -239,12 +259,14 @@ module Droom
         name: name || "",
         chinese_name: chinese_name || "",
         description: description,
-        approved: approved?
+        people: users.map(&:name).join(', '),
+        approved: approved?,
+        external: external?
       }
     end
 
     def capture_owner
-      if owner and owner.organisation != self
+      if owner and !owner.organisation
         owner.update_column :organisation_id, self.id
       end
     end

@@ -19,7 +19,7 @@
     = t :organisations_introduction, org_count: Droom::Organisation.count, person_count: Droom::User.count
 
   - if admin?
-    - pending_count = Droom::Organisation.unapproved.count
+    - pending_count = Droom::Organisation.pending.count
     - if pending_count > 0
       %p
         = link_to droom.pending_organisations_url, class: "actions" do

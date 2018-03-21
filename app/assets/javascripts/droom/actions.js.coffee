@@ -69,6 +69,7 @@ jQuery ($) ->
         replacement.activate().signal_confirmation()
         @_container = replacement
 
+
   # ## Actions
   #
   # The 'remove' action takes out the parent element of this node designated by the usual 'affected'
@@ -90,6 +91,7 @@ jQuery ($) ->
           $(@).parents(removed).first().fadeOut 'fast', () ->
             $(@).remove()
             $(affected).trigger "refresh"
+
 
   # The 'remove_all' action takes out on success anything matching the given selector:
   #
@@ -114,6 +116,7 @@ jQuery ($) ->
       affected = $(@).attr('data-affected')
       $(@).remote
         on_success: (response) =>
+          console.log "affected", $(affected)
           $(affected).trigger "refresh"
 
 

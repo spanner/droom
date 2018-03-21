@@ -3,7 +3,7 @@
 
 - content_for :standfirst do
   %p
-    = t :pending_organisations_introduction, count: Droom::Organisation.unapproved.count
+    = t :pending_organisations_introduction, count: Droom::Organisation.pending.count
     = t :click_below_to_approve
 
 #pending_organisations{:data => {:refreshable => true, :url => droom.pending_organisations_url}}

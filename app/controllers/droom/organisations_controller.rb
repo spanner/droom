@@ -12,7 +12,7 @@ module Droom
 
     def show
       unless admin?
-        raise ActiveRecord::RecordNotFound if @organisation.disapproved?
+        raise ActiveRecord::RecordNotFound unless @organisation.approved?
       end
       render
     end
@@ -22,7 +22,7 @@ module Droom
     end
 
     def pending
-      @organisations = Droom::Organisation.unapproved
+      @organisations = Droom::Organisation.pending
       render
     end
 
@@ -47,8 +47,7 @@ module Droom
 
     def register
       if Droom.organisations_registerable?
-        #todo: check that organisation has user, required fields.
-        @organisation = Droom::Organisation.create registration_params
+        @organisation = Droom::Organisation.from_signup registration_params
         @user = @organisation.owner
         @organisation.send_registration_confirmation_messages
         render
@@ -81,7 +80,7 @@ module Droom
 
     def organisation_params
       if params[:organisation]
-        params.require(:organisation).permit(:name, :description, :keywords, :owner, :owner_id, :chinese_name, :phone, :address, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image_date, :image_name, :logo_data, :logo_name)
+        params.require(:organisation).permit(:name, :description, :keywords, :owner, :owner_id, :chinese_name, :phone, :address, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image, :logo, :external)
       else
         {}
       end
@@ -96,7 +95,7 @@ module Droom
     end
 
     def set_view
-      @view = params[:view] if %w{page listed quick full}.include?(params[:view])
+      @view = params[:view] if %w{page listed gridded quick full status}.include?(params[:view])
     end
 
     def search_organisations
@@ -115,13 +114,20 @@ module Droom
         @page = arguments[:page] = (params[:page].presence || 1).to_i
       end
 
-      arguments[:fields] = ['name^10', 'chinese_name', 'description', 'url', 'address']
+      criteria = {}
+
+      if params[:external] and params[:external] != 'false'
+        @external = criteria[:external] = !!params[:external]
+      else
+        @external = criteria[:external] = false
+      end
 
       unless admin?
-        arguments[:where] = {
-          approved: true
-        }
+        criteria[:approved] = true
       end
+
+      arguments[:fields] = ['name^10', 'chinese_name', 'description', 'url', 'address', 'people']
+      arguments[:where] = criteria
 
       @organisations = Droom::Organisation.search @terms, arguments
     end

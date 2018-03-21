@@ -62,7 +62,7 @@ en:
   cancel: "cancel"
   choose_new_password: "Choose a new password"
   clear_search: "Clear search"
-  click_below_to_approve: "Please click below to approve or disapprove each registration."
+  click_below_to_approve: "Please click below to approve or disapprove."
   click_to_choose_file: "Click to choose a file"
   click_to_download: "Click to download %{name}"
   click_to_download_zipfile: "Click to download all attached documents as a zipfile"
@@ -147,7 +147,7 @@ en:
   edit_your_preferences_note: "These are administrative settings like your password and preferred email address. "
   edit_your_profile: "Edit your address book card"
   edit_your_profile_note: 'This is the contact information that <a href="%{url}" data-action="popup">other people see</a> when you are listed.'
-  email_note: "This should be the email address at which you received your invitation, and other correspondence from us."
+  email_note: "This should be the email address at which you received your invitation and any other correspondence from us."
   errors:
     attributes:
       name:
@@ -255,6 +255,7 @@ en:
         name: "Organisation Name"
         url: "Web link"
         description: "Brief description"
+        external: "External organisation?"
       permission:
         service_id: "Service"
         name: "Title or link text"
@@ -356,6 +357,7 @@ en:
   no_future_events: "There are no current or future events to display."
   no_groups: "You have no group memberships"
   no_invitations: "Nobody has been invited"
+  no_organisations: "There are no organisations to show here."
   no_past_events: "There are no past events to display."
   no_past_events: No past events to show
   no_people: "Sorry: there are no directory entries accessible by your account."
@@ -374,6 +376,9 @@ en:
   organisation_owner: "Your account"
   organisation_confirmation: "When your organisation is accepted, an email will be sent to this address explaining how to set a password and submit funding proposals."
   organisation_information: "Applying organisation"
+  organisation_registered: "Registration received"
+  organisation_registered_please_wait: "Your application will be processed shortly and you will receive an email explaining how to proceed."
+  organisation_registered_thanks: "Thank you for registering %{name}."
   other: "other"
   other_documents: "Other available documents"
   other_future_events: "Here is a general list of events coming up."
@@ -403,15 +408,15 @@ en:
   password_notice: "You must choose a password before you can proceed (unless you remember your old one: in that case you can just log in)."
   password_requirement: "At least six characters"
   password_requirements: "Ideally your password should include numbers and punctuation and should not resemble a dictionary word."
-  password_reset_complete: "Thank you for persevering with all the account administration. Your password has been reset and you have been signed in automatically."
-  password_reset_instructions: "Please enter your email address below. A message will be sent containing a link that will let you reset your password."
+  password_reset_complete: "Thank you for persevering with the account administration. Your password has been reset and you have been signed in automatically."
+  password_reset_instructions: "Please enter your email address below. A message will be sent containing reset instructions."
   password_reset_message_sent: "A message has been sent to your email address containing a link that will let you reset your password. Please allow a few minutes for it to arrive, and keep an eye on your spam folder. The address it will come from is %{sender}."
   password_reset_welcome: "Please use the form below to set a new password for your account. A confirmation box will appear when your password meets the requirements, and the submit button will go green and become clickable when the passwords match."
   password_set: "Thank you. Your password has been set and your account is fully active."
   pending_organisations_introduction:
-    zero: "There are no organisations waiting for approval."
-    one: "There is one organisation waiting for approval."
-    other: "There are %{count} organisation waiting for approval."
+    zero: "There are no new organisation applications."
+    one: "There is one new organisation application."
+    other: "There are %{count} new organisation applications."
   person_email: "Email"
   person_forename: "Forename"
   person_name: "Name"

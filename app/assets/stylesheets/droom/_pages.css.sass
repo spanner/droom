@@ -87,12 +87,14 @@ h1.pagetitle
   .fg
     position: absolute
     bottom: 20px
-    left: 4%
-    width: 92%
+    left: 0
+    width: 100%
     h1.title
       font-size: 3em
       color: white
-      margin: 0
+      margin: 20px 4%
+      width: 80%
+      max-width: 65rem
       a.breadhead
         color: $pale
         font-size: 1.2rem
@@ -109,13 +111,12 @@ h1.pagetitle
 #page_intro, #page_content
   margin: 20px 4%
   width: 80%
-  max-width: 45em
+  max-width: 65rem
   form
     input[type="text"], input[type="password"], input[type="url"], input[type="email"], textarea
       box-sizing: border-box
       width: 100%
       padding: 10px
-      +book
       font-size: 1rem
       margin-bottom: 0.25em
       border: 1px solid $pale

@@ -1,0 +1,52 @@
+- gridded ||= nil
+- organisation ||= gridded || @organisation
+- cssclass = "organisation gridbox"
+- cssclass << " pending" if organisation.pending?
+- cssclass << " disapproved" if organisation.disapproved?
+
+%div{id: "organisation_#{organisation.id}", class: cssclass, data: {refreshable: true, url: droom.organisation_path(organisation, view: 'gridded')} }
+  - unless admin? and organisation.pending?
+    = action_menu(organisation)
+    = action_menulink(organisation)
+      
+  .content
+    - if admin? and organisation.pending?
+      = render partial: "droom/organisations/show/status", locals: {organisation: organisation}
+
+    %h2.name<
+      - if organisation.url
+        = link_to organisation.name, organisation.url, :class => "name"
+      - else
+        %span.nolink
+          = organisation.name
+      - if organisation.chinese_name?
+        %span.chinese_name
+          = organisation.chinese_name
+
+    - if organisation.tags.any?
+      %ul.tags
+        - organisation.tags.each do |tag|
+          %li.tag
+            %svg.prefix
+              %use{"xlink:href" => "#tag_symbol"}
+            %span.label
+              = tag.name
+
+    %p.details.notes
+      - if organisation.organisation_type
+        = t "organisation_types.#{organisation.organisation_type.name.downcase}"
+        - if organisation.activities.any?
+          = t :with_activities_count, count: organisation.activities.count
+
+    - if organisation.description?
+      = sanitize organisation.description
+    - else
+      %p.nodescription
+        = t :no_description
+
+    - if organisation.users.any?
+      %ul.people
+        = render partial: "droom/users/show/listed_minimal", collection: organisation.users
+    - elsif organisation.owner
+      %ul.people
+        = render partial: "droom/users/show/listed_minimal", object: organisation.owner

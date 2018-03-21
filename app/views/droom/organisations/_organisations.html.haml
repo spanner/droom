@@ -1,7 +1,14 @@
-.organisations_list.autogrid{:data => {:refreshable => true, :url => "#{droom.organisations_path}.js"}}
-  = render 'droom/shared/search', url: organisations_url
+- if @organisations.any?
 
-  = render :partial => 'droom/organisations/show/listed', :collection => @organisations
+  .organisations_list.autogrid{:data => {:refreshable => true, :url => "#{droom.organisations_path}.js"}}
+    = render 'droom/shared/search', url: organisations_url
 
-.pagination.lower
-  = paginate @organisations, :params => {:format => nil}
+    = render :partial => 'droom/organisations/show/gridded', :collection => @organisations
+
+  .pagination.lower
+    = paginate @organisations, :params => {:format => nil}
+
+
+- else
+  %p.none
+    = t :no_organisations

@@ -1,32 +1,24 @@
 - organisation ||= @organisation
 
 - if admin?
-  %section.status
+  .status
     - if organisation.approved?
-      %h2.stamp.success
+      - approved_by = " by #{organisation.approved_by.name}" if organisation.approved_by
+      %span.success{title: "Approved#{approved_by}"}
         %svg.prefix
           %use{"xlink:href" => "#tick_symbol"}
-        %span.label.message
-          Approved
-        - if user = organisation.approved_by
-          %span.notes
-            by
-            = user.name
 
     - elsif organisation.disapproved?
-      %h2.stamp.warning
+      - rejected_by = " by #{organisation.disapproved_by.name}" if organisation.disapproved_by
+      %span.warning{title: "Rejected#{rejected_by}"}
         %svg.prefix
           %use{"xlink:href" => "#tick_symbol"}
-        %span.label.message
-          Rejected
-        - if user = organisation.disapproved_by
-          %span.notes
-            by
-            = user.name
 
     - else
-      Click to:
-      %br
-      = link_to "Approve", droom.approve_organisation_url(@organisation), class: "button approve"
-      or
-      = link_to "Reject", droom.disapprove_organisation_url(@organisation), class: "button reject"
+      = link_to droom.approve_organisation_url(organisation), class: "approve", data: {action: "affect", affected: "#organisation_#{organisation.id}"} do
+        %svg.prefix
+          %use{"xlink:href" => "#tick_button_symbol"}
+      = link_to droom.disapprove_organisation_url(organisation), class: "reject", data: {action: "remove", removed: "#organisation_#{organisation.id}"} do
+        %svg.prefix
+          %use{"xlink:href" => "#cross_button_symbol"}
+

@@ -6,6 +6,16 @@
   h1.pagetitle
     font-size: 2rem
     margin: 10px 0
+    &.success
+      color: $green
+    svg.icon
+      display: block
+      float: left
+      width: 32px
+      height: 32px
+      margin: 14px 8px 0 -40px
+      & + span.label
+        margin-left: 0
   label
     font-size: 1.1em
     &.minor
@@ -13,7 +23,6 @@
   input[type="text"], input[type="password"], input[type="email"]
     width: 400px
     padding: 10px 0
-    +book
     &.login
       font-size: 1.25em
       margin-bottom: 0.25em
@@ -32,7 +41,6 @@
     text-align: right
     +pale
     +hover
-
 
 ul.people
   margin: 10px 0 0 -2px
