@@ -1,3 +1,39 @@
+#account
+  position: relative
+  clear: both
+  width: 400px
+  margin: 100px
+  h1.pagetitle
+    font-size: 2rem
+    margin: 10px 0
+  label
+    font-size: 1.1em
+    &.minor
+      font-size: 0.9em
+  input[type="text"], input[type="password"], input[type="email"]
+    width: 400px
+    padding: 10px 0
+    +book
+    &.login
+      font-size: 1.25em
+      margin-bottom: 0.25em
+      border: none
+      border-bottom: 1px solid $pale
+      outline: none
+    &.preferences
+      font-size: 2em
+    &.ok
+      border-color: $green
+    &.notok
+      border-color: $error
+  p.confirmation
+    display: none
+  a.reminder
+    text-align: right
+    +pale
+    +hover
+
+
 ul.people
   margin: 10px 0 0 -2px
   padding: 0

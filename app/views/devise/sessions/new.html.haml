@@ -1,22 +1,8 @@
-- welcome_page = Droom::Page.published.find_by(slug: "_welcome")
-
 - content_for(:pagetitle) do
-  =t :please_sign_in
+  =t :sign_in
 
-- if welcome_page && welcome_page.content?
-  - content_for(:pagetitle) do
-    = welcome_page.title
-
-  .welcome
-    = render "droom/pages/show/page", page: welcome_page
-
-
-- else
-  - content_for(:pagetitle) do
+#account
+  %h1.pagetitle
     =t :please_sign_in
 
-  #account
-    %h1.pagetitle
-      =t :please_sign_in
-
-    = render partial: 'devise/sessions/login_form'
+  = render partial: 'devise/sessions/login_form'

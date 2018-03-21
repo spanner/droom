@@ -4,10 +4,10 @@ module Droom
     layout :no_layout_if_pjax
     helper Droom::DroomHelper
 
-    skip_before_action :verify_authenticity_token, only: [:register, :signup]
-    skip_before_action :authenticate_user!, only: [:register, :signup]
+    skip_before_action :verify_authenticity_token, only: [:signup, :register]
+    skip_before_action :authenticate_user!, only: [:signup, :register]
     before_action :search_organisations, only: [:index]
-    load_and_authorize_resource except: [:register, :signup]
+    load_and_authorize_resource except: [:signup, :register]
     before_action :set_view, only: [:show, :edit, :update, :create]
 
     def show
@@ -32,13 +32,26 @@ module Droom
       respond_with @organisation
     end
 
+    def signup
+      if Droom.organisations_registerable?
+        if @page = Droom::Page.published.find_by(slug: "_signup")
+          render template: "droom/pages/published"
+        else
+          @organisation = Droom::Organisation.new
+          render
+        end
+      else
+        head :not_allowed
+      end
+    end
+
     def register
       if Droom.organisations_registerable?
         #todo: check that organisation has user, required fields.
-        @organisation = Droom::Organisation.create organisation_params
+        @organisation = Droom::Organisation.create registration_params
         @user = @organisation.owner
         @organisation.send_registration_confirmation_messages
-        respond_with @organisation
+        render
       else
         head :not_allowed
       end
@@ -68,7 +81,15 @@ module Droom
 
     def organisation_params
       if params[:organisation]
-        params.require(:organisation).permit(:name, :description, :keywords, :owner, :owner_id, :chinese_name, :phone, :address, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image_date, :image_name, :logo_data, :logo_name, owner_attributes: [:given_name, :family_name, :chinese_name, :email])
+        params.require(:organisation).permit(:name, :description, :keywords, :owner, :owner_id, :chinese_name, :phone, :address, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image_date, :image_name, :logo_data, :logo_name)
+      else
+        {}
+      end
+    end
+
+    def registration_params
+      if params[:organisation]
+        params.require(:organisation).permit(:name, :description, :keywords, :chinese_name, :organisation_type_id, :url, owner_attributes: [:given_name, :family_name, :chinese_name, :email])
       else
         {}
       end

@@ -5,36 +5,38 @@ module Droom::Api
     skip_before_action :assert_local_request, only: [:register]
 
     def index
-      render json: @organisations
+      return_organisations
     end
 
     def show
-      render json: @organisation
+      return_organisation
     end
 
     def update
       if @organisation.update_attributes(organisation_params)
-        render json: @organisation
+        return_organisation
       else
-        render json: {errors: @organisation.errors}, status: :unprocessable_entity
+        return_errors
       end
     end
 
     def create
       if @organisation && @organisation.persisted?
-        render json: @organisation
+        return_organisation
       else
-        render json: {
-          errors: @organisation.errors.to_a
-        }
+        return_errors
       end
     end
 
     def register
       if Droom.organisations_registerable?
-        @organisation = Droom::Organisation.create organisation_params
+        @organisation = Droom::Organisation.create registration_params
         @organisation.send_registration_confirmation_messages
-        render json: @organisation
+        if @organisation && @organisation.persisted?
+          return_organisation
+        else
+          return_errors
+        end
       else
         head :not_allowed
       end
@@ -45,10 +47,28 @@ module Droom::Api
       head :ok
     end
 
+    def return_organisations
+      render json: @organisations, each_serializer: Droom::OrganisationSerializer
+    end
+
+    def return_organisation
+      render json: @organisation, serializer: Droom::OrganisationSerializer
+    end
+
+    def return_errors
+      render json: {
+        errors: @organisation.errors.to_a
+      }
+    end
+
     protected
 
     def organisation_params
-      params.require(:organisation).permit(:name, :chinese_name, :description, :phone, :address, :owner_id, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image_data, :image_name, :logo_data, :logo_name)
+      params.require(:organisation).permit(:name, :description, :keywords, :owner, :owner_id, :chinese_name, :phone, :address, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image_date, :image_name, :logo_data, :logo_name)
+    end
+
+    def registration_params
+      params.require(:organisation).permit(:name, :description, :keywords, :chinese_name, :organisation_type_id, :url, owner_attributes: [:given_name, :family_name, :chinese_name, :email])
     end
 
   end

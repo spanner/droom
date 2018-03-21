@@ -22,7 +22,6 @@ Droom::Engine.routes.draw do
     resources :pages
     resources :tags
     resources :organisations do
-      get :signup, on: :collection
       post :register, on: :collection
     end
   end
@@ -74,6 +73,7 @@ Droom::Engine.routes.draw do
     get "suggest", on: :collection
     put "reposition", on: :member
   end
+
   resources :folders do
     get "dropbox", on: :member, as: :dropbox
     resources :documents
@@ -81,11 +81,16 @@ Droom::Engine.routes.draw do
   end
 
   resources :organisations do
-    get :pending, on: :collection
-    post :register, on: :collection
-    get :approve, on: :member
-    get :disapprove, on: :member
     resources :users
+    collection do
+      get :signup
+      post :register
+      get :pending
+    end
+    member do
+      get :approve
+      get :disapprove
+    end
   end
 
   resources :users do
@@ -118,5 +123,6 @@ Droom::Engine.routes.draw do
   get "/noticeboard" => "scraps#index", as: :noticeboard
   get "/profile" => "users#edit", as: :profile, defaults: {view: "profile"}
   get "/page/:slug" => "pages#published", as: :published_page, defaults: {format: "html"}
+  get "/signup" => "organisations#signup", as: :signup
 
 end

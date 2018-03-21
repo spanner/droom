@@ -375,6 +375,11 @@ en:
   other_documents: "Other available documents"
   other_future_events: "Here is a general list of events coming up."
   page_body: "Page body (in markdown format, please)"
+  page_fragments:
+    sign_in_button: "sign in"
+    sign_in_link: "sign in"
+    sign_up_button: "sign up"
+    sign_up_link: "sign up"
   page_slug: "Slug"
   page_slug_explanation: "The 'slug' is a unique identifier that we use to build an address for this page. Users will find the page at /help/slug. If you leave this field blank we will derive a slug automatically from the page title."
   page_summary: "Page summary"

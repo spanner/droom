@@ -63,11 +63,7 @@ module Droom::Concerns::Published
   def interpolations
     {
       site_title: I18n.t('site_title')
-    }.merge custom_interpolations
-  end
-
-  def custom_interpolations
-    {}
+    }
   end
 
   protected

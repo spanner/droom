@@ -85,7 +85,7 @@ module Droom
     end
 
     def page_layout
-      @@page_layout ||= "application"
+      @@page_layout ||= "page"
     end
 
     def devise_layout
