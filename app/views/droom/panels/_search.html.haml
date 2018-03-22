@@ -1,4 +1,7 @@
 .panel{:data => {:panel => 'search'}}
+  %a.close
+    %svg
+      %use{"xlink:href" => "#big_x_symbol"}
 
   %form#suggestions{:action => droom.suggestions_url}
     %p

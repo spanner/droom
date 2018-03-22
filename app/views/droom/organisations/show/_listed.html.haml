@@ -1,0 +1,29 @@
+- listed ||= nil
+- organisation ||= listed || @organisation
+- open ||= organisation == @organisation
+
+.organisation.listed{:id => "organisation_#{organisation.id}", :class => open ? "name open" : "name", :data => {:action => "collapser", :refreshable => true, :url => droom.organisation_path(organisation, :format => :js)} }
+  .heading
+    - if admin? and organisation.pending?
+      = render partial: "droom/organisations/show/status", locals: {organisation: organisation}
+    %h2.name<
+      = link_to organisation.name, organisation_url(organisation), :class => "name"
+
+      = action_menulink(organisation) unless organisation.pending?
+    = action_menu(organisation) unless organisation.pending?
+      
+  %p.preview
+    = shorten(organisation.description, :length => 128)
+
+  .detail
+    %p
+      = organisation.description.html_safe
+
+    - if organisation.url?
+      %p.note
+        = t(:website) + ": "
+        = link_to organisation.url_without_protocol, organisation.url_with_protocol, :class => "external"
+
+    - if organisation.users.any?
+      %ul.people
+        = render :partial => "droom/users/user", :collection => organisation.users.in_name_order

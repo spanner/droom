@@ -1,0 +1,17 @@
+%p
+  Dear
+  = @user.formal_name + ','
+
+%p
+  %strong
+    Welcome!
+  Your application on behalf of
+  %strong
+    = @organisation.name
+  has been approved.
+
+%h3
+  = link_to "Click here to sign in and complete your registration", confirmation_url(@user, :confirmation_token => @token)
+
+%p
+  If you have not already, you will be asked to set a password on arrival.

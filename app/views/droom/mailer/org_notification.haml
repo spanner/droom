@@ -1,0 +1,38 @@
+%p
+  Dear
+  = @admin.formal_name + ','
+
+%p
+  An organisation has applied to join.
+  Please review and respond below.
+
+%h2
+  = @organisation.name
+
+%p
+  = sanitize @organisation.description
+
+%p
+  Applying individual:
+  %br
+  %strong
+    = @user.formal_name
+  %br
+  = mail_to @user.email, @user.email
+
+%p{style: "margin: 30px 0"}
+  Click to:
+  %br
+  %a{href: droom.approve_organisation_url(@organisation), style: "display: inline-block; font-size: 1.3em; padding: 10px; margin: 10px; background-color: green; color: white"}
+    Approve application
+  %span{style: "display: inline-block; font-size: 1.3em;"}
+    &nbsp;
+    &nbsp;
+  %a{href: droom.disapprove_organisation_url(@organisation), style: "display: inline-block; font-size: 1.3em; padding: 10px; margin: 10px; background-color: red; color: white"}
+    Reject application
+
+%p
+  Best wishes,
+%p
+  The machinery
+

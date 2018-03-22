@@ -16,7 +16,7 @@
 - cssclasses << 'open' if open
 - cssclasses << 'invited' if event.attended_by?(current_user)
 
-- div_data = {:action => "collapser", refreshable: event_path(event, format: :js)}
+- div_data = {refreshable: event_path(event, format: :js)}
 - if show_folder && !full_attachments
   - div_data[:droppable] = droom.folder_documents_path(event.folder)
   - div_data[:queue] = "#queue_to_#{event.folder.id}"
@@ -37,28 +37,28 @@
         = action_menulink(event)
       = action_menu(event)
 
-      .detail
-        %p.practicalities
+      %p.practicalities
+        %time
+          = l(event.start_time, :format => :natural)
+
+        - if event.finish?
+          = t :to
           %time
-            = l(event.start_time, :format => :natural)
+            = l(event.finish_time, :format => :natural)
+        - if event.timezone == "London"
+          = "(#{t(:uk_time)})"
 
-          - if event.finish?
-            = t :to
-            %time
-              = l(event.finish_time, :format => :natural)
-          - if event.timezone == "London"
-            = "(#{t(:uk_time)})"
+        - if event.venue
+          %span.location
+            = t(:at)
+            - if event.venue.url
+              = link_to event.venue.definite_name + ".", event.venue.url
+            - elsif Droom.show_venue_map?
+              = link_to event.venue.definite_name + ".", venues_url(:id => event.venue.id)
+            - else
+              = event.venue.definite_name + "."
 
-          - if event.venue
-            %span.location
-              = t(:at)
-              - if event.venue.url
-                = link_to event.venue.definite_name + ".", event.venue.url
-              - elsif Droom.show_venue_map?
-                = link_to event.venue.definite_name + ".", venues_url(:id => event.venue.id)
-              - else
-                = event.venue.definite_name + "."
-
+      .detail
         - if show_folder && !full_attachments
           - if event.folder.populated? || can?(:edit, event.folder)
             .attachments

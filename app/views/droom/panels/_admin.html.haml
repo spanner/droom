@@ -1,5 +1,9 @@
 #admin.panel
   - if admin?
+    %a.close
+      %svg
+        %use{"xlink:href" => "#big_x_symbol"}
+
     %h4
       = t :admin
     %ul

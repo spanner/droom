@@ -253,6 +253,7 @@ jQuery ($) ->
       @id = @container.attr('data-panel')
       @links = $("a[data-panel='#{@id}']")
       @header = $('#masthead').find("a[data-panel='#{@id}']")
+      @closer = @container.find('a.close')
       box = @header.offsetParent()
       @container.appendTo(box)
       @patch = $('<div class="patch" />').appendTo(box)
@@ -260,7 +261,7 @@ jQuery ($) ->
       @showing = false
 
       # Open on hover or click. Close with wobble catcher on exit. 
-      @links.bind "click", @showOrGo
+      @links.bind "click", @toggle
       @links.bind "touchstart", @showOrGo
       $(@header).hover(@show, @hideSoon)
       $(@patch).hover(@show, @hideSoon)
@@ -269,20 +270,22 @@ jQuery ($) ->
       # To open remotely just trigger a show event on the panel.
       @container.bind "show", @show
       @container.bind "hide", @hide
+      @closer.bind "click", @hide
       @set()
       Panel.remember(@)
-    
+
     setup: () =>
-      position = @header.position()
-      offset = @header.offset()
-      top = position.top + @header.outerHeight()
-      @patch.css
-        left: position.left + 1
-        top: top - 3
-        width: @header.outerWidth() - 2
-      @container.css
-        right: 0
-        top: top - 1
+      if $(window).width() > 700
+        position = @header.position()
+        offset = @header.offset()
+        top = position.top + @header.outerHeight()
+        @patch.css
+          left: position.left + 1
+          top: top - 3
+          width: @header.outerWidth() - 2
+        @container.css
+          right: 0
+          top: top - 1
 
     set: () =>
       if @header.hasClass('here') then @show() else @hide()
@@ -294,7 +297,7 @@ jQuery ($) ->
       if @showing then @hide() else @show()
     
     # We hit this method on click or touchstart. It has two purposes: to prevent annoying hover-based double taps,
-    # and to allow a click on the menu header *while it is showing* (probably because of a hover evet) to active the underlying link.
+    # and to allow a click on the menu header *while it is showing* (probably because of a hover event) to activate the underlying link.
     #
     showOrGo: (e) =>
       unless @showing
@@ -309,10 +312,10 @@ jQuery ($) ->
       @patch.removeClass('up')
       @header.removeClass('up')
       @showing = false
-          
+
     hideSoon: () =>
       @timer = window.setTimeout @hide, 500
-      
+
     show: (e) =>
       window.clearTimeout @timer
       unless @showing

@@ -1,7 +1,10 @@
 .panel{:data => {:panel => 'configuration'}}
+  %a.close
+    %svg
+      %use{"xlink:href" => "#big_x_symbol"}
+
   %p.account_controls
     = t(:signed_in_as, :name => current_user.name).html_safe
-    = link_to t(:sign_out), droom.destroy_user_session_url, :method => :delete, :class => 'signout'
 
   %p
     = link_to t(:edit_your_profile), droom.edit_user_url(current_user, view: 'profile'), :data => {:action => "popup", :affected => ".people_list"}
@@ -20,3 +23,11 @@
       %br
       %span.note
         = t(:edit_your_organisation_note)
+
+  %p
+    = link_to droom.destroy_user_session_url, :method => :delete, :class => 'signout' do
+      %svg
+        %use{"xlink:href" => "#cross_button_symbol"}
+      %span.label
+        = t(:sign_out)
+    
