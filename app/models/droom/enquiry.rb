@@ -11,7 +11,7 @@ module Droom
     validates :message, presence: true
     validates :email, format: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i
 
-    scope :open, -> { where(closed: false) }
+    scope :unclosed, -> { where(closed: false) }
     scope :closed, -> { where(closed: true) }
     default_scope -> { order('created_at DESC') }
 

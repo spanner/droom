@@ -92,19 +92,22 @@ span.notcol
   grid-column-gap: 2em
   grid-row-gap: 30px
   grid-auto-rows: 20px
-  .gridbox
+  &.compact
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))
+  
+.gridbox
+  position: relative
+  grid-column-end: span 1
+  border: 1px solid $pale
+  border-radius: 5px
+  box-sizing: border-box
+  margin-bottom: 0
+  & > a.menu
+    position: absolute
+    top: 10px
+    right: 10px
+    z-index: 10
+  .content
     position: relative
-    grid-column-end: span 1
-    border: 1px solid $pale
-    border-radius: 5px
+    padding: 20px
     box-sizing: border-box
-    margin-bottom: 0
-    & > a.menu
-      position: absolute
-      top: 10px
-      right: 10px
-      z-index: 10
-    .content
-      position: relative
-      padding: 20px
-      box-sizing: border-box

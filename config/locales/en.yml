@@ -143,6 +143,8 @@ en:
   edit_symbol: "❡"
   edit_user: "Edit user"
   edit_user_profile_symbol: "✒"
+  edit_your_organisation: "Describe your organisation"
+  edit_your_organisation_note: "This information will form part of your funding proposals."
   edit_your_preferences: "Edit your account settings"
   edit_your_preferences_note: "These are administrative settings like your password and preferred email address. "
   edit_your_profile: "Edit your address book card"

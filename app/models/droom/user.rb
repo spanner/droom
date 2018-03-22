@@ -109,6 +109,7 @@ module Droom
       end
     end 
 
+
     ## Session ID
     #
     # Allows us to invalidate a session by remote control when the user signs out on a satellite site.
@@ -128,6 +129,7 @@ module Droom
     def authenticatable_salt
       session_id.presence || reset_session_id!
     end
+
 
     ## Auth tokens
     #
@@ -179,12 +181,21 @@ module Droom
     has_many :images
     has_many :videos
 
+
     ## Organisation affiliation
     #
     belongs_to :organisation
 
     def org_admin?
       organisation && organisation_admin?
+    end
+
+    def external?
+      !organisation || organisation.external?
+    end
+
+    def internal?
+      organisation && !organisation.external?
     end
 
 
@@ -312,7 +323,6 @@ module Droom
     ## Mugshot
     #
     has_attached_file :image,
-                      :default_url => nil,
                       :styles => {
                         :standard => "520x520#",
                         :icon => "32x32#",

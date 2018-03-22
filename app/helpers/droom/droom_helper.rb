@@ -89,6 +89,10 @@ module Droom
       user_signed_in? && current_user.admin?
     end
 
+    def external?
+      Droom.require_internal_organisation? && current_user.external?
+    end
+
     def pageclass
       controller.controller_name
     end

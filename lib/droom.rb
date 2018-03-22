@@ -59,6 +59,7 @@ module Droom
                  :separate_calendars,
                  :second_time_zone,
                  :require_login_permission,
+                 :require_internal_organisation,
                  :default_permissions,
                  :api_local
   
@@ -266,7 +267,11 @@ module Droom
     def require_login_permission?
       !!@@require_login_permission
     end
-    
+
+    def require_internal_organisation?
+      !!@@require_internal_organisation
+    end
+
     def default_permissions
       @@default_permissions ||= %w{droom.login droom.calendar droom.directory droom.attach droom.library}
     end

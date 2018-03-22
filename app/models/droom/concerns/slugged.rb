@@ -2,7 +2,7 @@ module Droom::Concerns::Slugged
   extend ActiveSupport::Concern
 
   included do
-    validates :slug, uniqueness: true
+    validates :slug, presence: true, uniqueness: true
   end
 
   def slug_from_title

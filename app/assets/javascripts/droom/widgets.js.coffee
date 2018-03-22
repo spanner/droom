@@ -264,6 +264,7 @@ jQuery ($) ->
         password = @password_field.val()
         ok = false
         if password.length < 6
+          console.log "checkPassword: too short", password
           @meter?.tooShort()
         else
           @meter?.check(password)
@@ -349,12 +350,15 @@ jQuery ($) ->
       @_warnings.text("Password too short.")
 
     check: (value) =>
+      console.log "PasswordMeter: check", @_ready
+      
       if @_ready
         result = zxcvbn(value)
         @display(result)
         result.score
 
     display: (result) =>
+      console.log "display", result
       if result.score < 2
         @_warnings.text(result.feedback.warning) if result.feedback?.warning
         @_suggestions.text(result.feedback?.suggestions)

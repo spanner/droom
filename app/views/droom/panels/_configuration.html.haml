@@ -13,3 +13,10 @@
     %br
     %span.note
       = t(:edit_your_preferences_note)
+
+  - if current_user.org_admin? && current_user.organisation
+    %p
+      = link_to t(:edit_your_organisation), droom.edit_organisation_url(current_user.organisation, view: 'quick'), :data => {:action => "popup"}
+      %br
+      %span.note
+        = t(:edit_your_organisation_note)

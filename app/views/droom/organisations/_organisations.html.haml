@@ -1,12 +1,16 @@
+- view ||= 'gridded'
+- cssclass = 'organisations_list autogrid'
+- cssclass << ' compact' if @external
+
 - if @organisations.any?
 
-  .organisations_list.autogrid{:data => {:refreshable => true, :url => "#{droom.organisations_path}.js"}}
+  %div{class: cssclass, data: {refreshable: true, url: "#{droom.organisations_path}.js"}}
     = render 'droom/shared/search', url: organisations_url
 
-    = render :partial => 'droom/organisations/show/gridded', :collection => @organisations
+    = render partial: "droom/organisations/show/#{view}", collection: @organisations
 
   .pagination.lower
-    = paginate @organisations, :params => {:format => nil}
+    = paginate @organisations, params: {format: nil}
 
 
 - else

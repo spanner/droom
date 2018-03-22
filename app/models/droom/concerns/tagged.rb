@@ -7,7 +7,11 @@ module Droom::Concerns::Tagged
   end
 
   def tag_list
-    tags.map(&:name).uniq.join(",")
+    tag_names.join(",")
+  end
+
+  def tag_names
+    tags.map(&:name).uniq
   end
 
   def tags_with_synonyms

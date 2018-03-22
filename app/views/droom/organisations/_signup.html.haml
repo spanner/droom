@@ -18,6 +18,11 @@
       %span.col.last>
         = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
 
+    %p.secondary.tagger
+      = f.label :keywords
+      %br
+      = f.text_field :keywords, placeholder: t("placeholders.organisation.keywords"), class: "tags"
+
     %p.description.onecol<
       %span.col>
         = f.text_area :description, placeholder: t("placeholders.organisation.description")

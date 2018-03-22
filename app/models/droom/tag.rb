@@ -10,7 +10,7 @@ module Droom
     has_many :taggings
     has_many :taggees, :through => :taggings
     has_many :tag_synonyms
-    belongs_to :tag_type
+    belongs_to :tag_type, optional: true
 
     before_save :downcase
 

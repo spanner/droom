@@ -5,7 +5,7 @@
 - cssclass << " disapproved" if organisation.disapproved?
 
 %div{id: "organisation_#{organisation.id}", class: cssclass, data: {refreshable: true, url: droom.organisation_path(organisation, view: 'gridded')} }
-  - unless admin? and organisation.pending?
+  - unless organisation.pending?
     = action_menu(organisation)
     = action_menulink(organisation)
       

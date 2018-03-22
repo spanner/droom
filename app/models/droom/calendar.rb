@@ -6,8 +6,7 @@ module Droom
     has_many :events
 
     before_validation :slug_from_name
-    validates :slug, :presence => true, :uniqueness => true
-    
+
     def self.for_selection
       self.all.map{|c| [c.name, c.id] }
     end

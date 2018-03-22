@@ -9,6 +9,9 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
   -webkit-appearance: none
   box-sizing: border-box
   outline: none
+  padding: 8px
+  border: 1px solid $pale
+  font-size: 1.2rem
   &.strong
     font-weight: bold
   &.destination
@@ -39,6 +42,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
     font-weight: lighter
   &.placeholder
     color: $pale
+    font-weight: lighter
   &[data-placeholder]
     &:empty:before
       content: attr(data-placeholder)
@@ -88,7 +92,9 @@ input[type="submit"]
   &.next
     float: right
   &.disabled
-    +button(white, $palest)
+    +buttonbg(white)
+    color: $pale
+    box-shadow: none
 
 #margin
   input[type="text"], input[type="email"], input[type="password"]
@@ -105,16 +111,24 @@ input[type="submit"]
     margin-top: 0
   p:last-child, h2:last-child, h3:last-child, ul:last-child
     margin-bottom: 0
+  &.rte
+    min-height: 4em
 
 fieldset.disabled
   input[type="submit"]
     +button(white, $pale)
 
-label.required
-  font-weight: bold
-
-label.inline
-  display: inline-block
+label
+  &.required
+    font-weight: bold
+  &.important
+    font-weight: bold
+  &.disabled
+    color: $pale
+  &.inline
+    display: inline-block
+    vertical-align: top
+    white-space: nowrap
 
 .error
   color: $error
@@ -145,6 +159,10 @@ span.erratic
 
 a.button
   +button
+  &.edit
+    +buttonbg($green, white)
+  &.delete
+    +buttonbg($red, white)
 
 form.waiting
   input.submit
@@ -313,3 +331,9 @@ form.faceter, form.droom_faceter
         padding: 10px 0 0 6px
 
 
+input:required, div.rte.required
+  background:
+    image: image-url("droom/required.png")
+    position: top right
+    size: 20px
+    repeat: no-repeat

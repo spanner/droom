@@ -4,7 +4,6 @@ module Droom
     layout :no_layout_if_pjax
     helper Droom::DroomHelper
 
-    skip_before_action :verify_authenticity_token, only: [:signup, :register]
     skip_before_action :authenticate_user!, only: [:signup, :register]
     before_action :search_organisations, only: [:index]
     load_and_authorize_resource except: [:signup, :register]
@@ -88,7 +87,7 @@ module Droom
 
     def registration_params
       if params[:organisation]
-        params.require(:organisation).permit(:name, :description, :keywords, :chinese_name, :organisation_type_id, :url, owner_attributes: [:given_name, :family_name, :chinese_name, :email])
+        params.require(:organisation).permit(:name, :description, :keywords, :chinese_name, :organisation_type_id, :url, owner: [:given_name, :family_name, :chinese_name, :email])
       else
         {}
       end

@@ -50,7 +50,7 @@ module Droom
     end
 
     def self.from_signup(params)
-      owner_params = params.delete :owner_attributes
+      owner_params = params.delete :owner
       transaction do
         owner = Droom::User.from_email(owner_params[:email]).first || Droom::User.create(owner_params.merge(defer_confirmation: true))
         org = Droom::Organisation.create(params.merge(owner: owner))
