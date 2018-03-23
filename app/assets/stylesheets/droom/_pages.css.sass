@@ -1,3 +1,6 @@
+$page_width: 86%
+$page_max_width: 65rem
+
 h1.pagetitle
   a.breadhead:before
     content: "< "
@@ -93,8 +96,8 @@ h1.pagetitle
       font-size: 3em
       color: white
       margin: 20px 4%
-      width: 80%
-      max-width: 65rem
+      width: $page_width
+      max-width: $page_max_width
       a.breadhead
         color: $pale
         font-size: 1.2rem
@@ -110,8 +113,8 @@ h1.pagetitle
 
 #page_intro, #page_content
   margin: 20px 4%
-  width: 80%
-  max-width: 65rem
+  width: $page_width
+  max-width: $page_max_width
   form
     input[type="text"], input[type="password"], input[type="url"], input[type="email"], textarea
       box-sizing: border-box
@@ -476,3 +479,13 @@ aside#page_controls
             margin-left: 0
             margin-top: -0.1em
 
+
+
+@media screen and (orientation: portrait) and (max-width: 700px)
+  #page_masthead
+    padding-bottom: 100%
+    .fg
+      bottom: 10px
+      #page_title
+        h1.title
+          font-size: 2em

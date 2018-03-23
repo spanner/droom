@@ -21,7 +21,7 @@
     &.minor
       font-size: 0.9em
   input[type="text"], input[type="password"], input[type="email"]
-    width: 400px
+    width: 100%
     padding: 10px 0
     &.login
       font-size: 1.25em
@@ -128,9 +128,6 @@ ul.people
         margin-top: 4px
 
 form.user
-  p
-    margin: 0
-    margin-bottom: 10px
   p.names
     input[type="text"]
       width: 100%
@@ -167,10 +164,6 @@ form.user
       margin-right: 10px
       &:last-child
         margin-right: 0
-  p.organisation
-    clear: left
-    select
-      font-size: 1em
   p.memberships
     label.inline
       margin-right: 10px
@@ -190,7 +183,7 @@ form.user
     position: relative
     display: block
     float: left
-    width: calc(100% - 100px)
+    width: calc(100% - 96px)
     +clearfix
     textarea
       width: 100%
@@ -211,9 +204,6 @@ form.user
     float: left
     margin-right: 25px
 
-  p.admin
-    float: right
-
   p.memberships
     clear: left
 
@@ -223,3 +213,9 @@ form.user
     margin-top: 20px
 
 
+
+@media (max-width: 700px)
+  #account
+    width: 90%
+    margin: 40px auto
+    

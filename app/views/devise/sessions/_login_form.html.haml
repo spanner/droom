@@ -7,7 +7,7 @@
     = hidden_field_tag :backto, CGI.escape(params[:backto])
 
   %p
-    = f.email_field :email, class: 'login', placeholder: t('placeholders.session.email')
+    = f.email_field :email, class: 'login', autofocus: true, placeholder: t('placeholders.session.email')
 
   %p
     = f.password_field :password, class: 'login', placeholder: t('placeholders.session.password')

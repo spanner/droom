@@ -38,6 +38,11 @@ jQuery ($) ->
     else
       $('body').addClass('landscape')
 
+  if 'ontouchstart' in window
+    $('body').addClass('touch')
+  else
+    $('body').addClass('no-touch')
+
   $.activate_with () ->
     @find_including_self('form.droom_faceter').faceting_search()
     @find_including_self('#flashes p:parent').flash()

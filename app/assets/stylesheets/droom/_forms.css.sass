@@ -51,6 +51,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
       font-weight: lighter
 
 select
+  position: relative
   -webkit-appearance: none
   -webkit-padding-end: 24px
   font-size: 1.2em
@@ -59,7 +60,12 @@ select
   outline: none
   border-radius: 0
   border-bottom-right-radius: 12px
-  background-color: white
+  background:
+    color: white
+    position: top 4px right 4px
+    image: image-url('droom/symbols/select.svg')
+    size: 16px
+    repeat: no-repeat
   &:hover
     color: $hover
   &.small
@@ -182,6 +188,8 @@ textarea
 // and much in need of updating.
 
 form
+  p
+    margin: 0 0 1em 0
   .columns
     position: relative
     width: 540px
@@ -337,3 +345,17 @@ input:required, div.rte.required
     position: top right
     size: 20px
     repeat: no-repeat
+
+
+
+@media (max-width: 700px)
+  form
+    p.admin
+      float: none
+      margin: 1em 0
+      input[type="text"], input[type="email"], input[type="password"], select, textarea
+        width: 100%
+        margin-left: 0
+      &+.buttons
+        width: 100%
+        margin-top: 2em

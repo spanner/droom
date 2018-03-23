@@ -43,10 +43,9 @@ module Droom
     default_scope -> {order("name ASC")}
 
     def self.for_selection(with_external=false)
-      organisations = self.order("name asc").map{|f| [f.name, f.id] }
+      organisations = order("name asc")
       organisations = organisations.where(external: false) unless with_external
-      organisations.unshift(['', ''])
-      organisations
+      organisations.map{|f| [f.name, f.id] }.unshift(['', ''])
     end
 
     def self.from_signup(params)

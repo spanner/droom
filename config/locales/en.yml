@@ -154,7 +154,7 @@ en:
   edit_your_preferences_note: "These are administrative settings like your password and preferred email address. "
   edit_your_profile: "Edit your address book card"
   edit_your_profile_note: 'This is the contact information that <a href="%{url}" data-action="popup">other people see</a> when you are listed.'
-  email_note: "This should be the email address at which you received your invitation and any other correspondence from us."
+  email_note: "This can be any address that we have on file for you."
   errors:
     attributes:
       name:

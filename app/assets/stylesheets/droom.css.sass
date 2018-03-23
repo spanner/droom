@@ -324,26 +324,6 @@ form.event
       font-size: 1em
       height: 250px
 
-form.event, form.user
-  p.admin
-    clear: both
-    float: right
-    margin: 16px 4px
-    label
-      display: inline-block
-    select
-      width: 120px
-  .buttons
-    margin: 10px 0
-    float: left
-  p.guidance
-    clear: both
-
-form.user
-  select, textarea, iframe
-    max-width: 757px
-    box-sizing: border-box
-
 form.folder
   input.name
     width: 480px
@@ -833,6 +813,8 @@ ul.dropdown
 
 div.nested_set
   position: relative
+  p:first-child
+    margin-top: 0
   .repeating
     position: relative
     a.remove

@@ -14,7 +14,7 @@
             = link_to '#', :class => "remove", :data => {:action => "remove_fields", :holder => "fieldset"} do
               %svg
                 %use{"xlink:href" => "#cross_button_symbol"}
-            - if email.persisted?
+            - if address.persisted?
               = f.hidden_field :_destroy, data: {role: "destroy"}
         %span.col.last>
           = f.select :address_type_id, Droom::AddressType.for_selection(:address)

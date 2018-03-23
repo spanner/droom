@@ -9,12 +9,10 @@
       = t :password_reset_instructions
 
     %p
-      = f.label :email
-      %br
-      = f.email_field :email, :class => 'login'
+      = f.email_field :email, class: 'login', autofocus: true, placeholder: t('placeholders.session.email')
       %span.note
         = t :email_note
-        
+
     .controls
       .save.button
         %p
