@@ -8,20 +8,22 @@
   margin-left: -24px
   margin-top: -3px
 
-[contenteditable]
-  outline: none
-  color: $darkblue
-  &[data-placeholder]
-    &:empty
-      color: $mid
-      font-style: italic
-      text-transform: none
-      &:before
-        content: attr(data-placeholder)
+#editor
+  [contenteditable]
+    outline: none
+    color: $darkblue
+    font-size: inherit
+    &[data-placeholder]
+      &:empty
+        color: $mid
+        font-style: italic
+        text-transform: none
+        &:before
+          content: attr(data-placeholder)
 
-span[contenteditable]
-  display: inline-block
-  cursor: text
+  span[contenteditable]
+    display: inline-block
+    cursor: text
 
 a.control, label.control
   pointer-events: auto
@@ -206,9 +208,6 @@ span.note
       padding-bottom: 56%
       width: 100%
       background-color: $verypale
-    &:hover, &.hold
-      .ed-buttons
-        display: block
     .ed-controls
       position: absolute
       bottom: 0
@@ -259,6 +258,11 @@ span.note
       a.save
         +button($green)
         display: none
+
+.touch
+  .ed-buttons
+    display: block
+
 
 .ed-inserter
   position: absolute
@@ -530,3 +534,9 @@ ul.ed-assets
     color: white
     width: 48px
     cursor: pointer
+
+
+
+@media (max-width: 700px)
+  .ed-inserter
+    padding-left: 24px

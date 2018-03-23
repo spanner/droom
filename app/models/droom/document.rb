@@ -11,6 +11,8 @@ module Droom
 
     acts_as_list scope: :folder_id
 
+    before_create :inherit_confidentiality
+
     validates :file, :presence => true
     do_not_validate_attachment_file_type :file
 
@@ -141,6 +143,19 @@ module Droom
       confidential = private?
       confidential ||= folder.confidential? if folder
       confidential
+    end
+
+    # called from containing folder when confidentiality changes
+    # calls save properly to allow for various indexing regimes.
+    def set_confidentiality!(confidentiality)
+      assign_attributes private: confidentiality
+      save!
+    end
+
+    # called before_create
+    def inherit_confidentiality
+      write_attribute :private, folder && folder.confidential?
+      true
     end
 
     def enqueue_for_indexing!

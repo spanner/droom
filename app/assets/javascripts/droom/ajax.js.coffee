@@ -47,6 +47,7 @@ jQuery ($) ->
       event.preventDefault()
       xhr.setRequestHeader('X-PJAX', 'true')
       @_control.addClass('waiting')
+      @_control.find('input[type=submit]').addClass('waiting')
       @_options.on_request?(xhr, settings) ? true
 
     gotFiles: (event, elements) =>
@@ -59,6 +60,7 @@ jQuery ($) ->
     fail: (event, xhr, status) =>
       event.stopPropagation()
       @_control.removeClass('waiting').addClass('erratic')
+      @_control.find('input[type=submit]').removeClass('waiting')
       @_control.trigger 'remote:error', xhr, status
       @_control.trigger 'remote:complete', status
 
@@ -73,7 +75,7 @@ jQuery ($) ->
       @_control.removeClass('waiting')
       @_control.trigger 'remote:success', data
       @_control.trigger 'remote:complete', status
-        
+
     cancel: (e) =>
       e.preventDefault() if e
       @_control.trigger 'remote:cancel'

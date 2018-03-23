@@ -146,31 +146,6 @@ p.stretcher
   height: 1px
   overflow: hidden
 
-.datemark
-  +outset
-  text-align: right
-  color: $mid
-  padding-top: 5px
-  a, a:visited
-    color: $mid
-  span
-    display: block
-    text-align: center
-  span.mon
-    text-transform: uppercase
-    font-size: 1em
-    line-height: 1
-  span.dom
-    font-size: 2em
-    font-weight: bold
-    line-height: 1
-  span.year
-    font-size: 1em
-    line-height: 1
-  &.editing
-    a, a:visited
-      color: $dark
-
 .relations
   position: relative
 
@@ -210,53 +185,6 @@ p.stretcher
 .preview
   color: $mid
 
-div.event, div.document, div.group
-  position: relative
-  clear: both
-  margin-bottom: 10px
-  &.quiet
-    color: $pale
-    a
-      color: $pale
-
-form.event, form.document
-  position: relative
-  margin-left: $datemark_width + $datemark_margin
-
-div.event, form.event, div.project
-  .summary
-    .heading
-      p.name
-        margin: 0
-      p.practicalities
-        margin: 0
-        margin-top: 0
-        color: $mid
-        span.admin
-          margin-left: 20px
-    p.visibility
-      float: right
-      margin: 10px 16px 0 10px
-    .detail
-      p
-        margin-top: 0
-  .col
-    display: block
-    width: 100%
-    margin-right: 0
-
-div.organisation
-  position: relative
-  p.actions
-    float: right
-    margin: 0
-    & + h2
-      width: 70%
-  h2.name
-    margin-bottom: 0
-  p.description
-    margin-top: 0.25em
-
 
 ul.enquiries
   padding-left: 0
@@ -288,41 +216,6 @@ span.admin.documents
 .users
   .person_picker
     font-size: 1.8em
-
-
-form.event
-  span.interlabel
-    display: inline-block
-    padding: 8px
-  p.name
-    margin: 0
-  div.datemark
-    border: none
-    padding: 4px 0
-    margin-top: 1px
-    margin-left: -$datemark_width
-    margin-right: $datemark_margin - 4px
-  input.name
-    width: 470px
-    font-size: 1.5em
-  p.practicalities
-    margin: 10px 0
-  input.timepicker
-    width: 70px
-    font-size: 1.2em
-    padding: 4px
-    &.start
-      font-weight: bold
-  input.venuepicker
-    font-size: 1.2em
-    width: 241px
-    padding: 4px
-  .description
-    margin-top: 0.5em
-    textarea
-      width: 470px
-      font-size: 1em
-      height: 250px
 
 form.folder
   input.name
@@ -886,34 +779,6 @@ div.kal
   background-color: white
   z-index: 300
 
-div.timepicker
-  box-shadow: 0 2px 2px #444
-  position: absolute
-  display: none
-  height: 191px
-  width: 60px
-  overflow-x: hidden
-  overflow-y: auto
-  background: #fff
-  border: 1px solid #aaa
-  z-index: 99
-  margin: 0
-  ul
-    list-style-type: none
-    margin: 0
-    padding: 0
-  li
-    cursor: pointer
-    padding: 4px 3px
-    &.selected
-      background: $link
-      color: #fff
-      font-weight: bold
-    &:hover
-      background: $verypale
-    &:active
-      background: $link
-      color: #fff
 
 #stream, .search_results, .suggestion_search
   .scrolled
@@ -1199,6 +1064,7 @@ ul.checklist
 @import droom/columns
 @import droom/datepicker
 @import droom/ed
+@import droom/events
 @import droom/forms
 @import droom/folders
 @import droom/help

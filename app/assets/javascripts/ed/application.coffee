@@ -13,7 +13,7 @@ root.Ed = Ed
 
 class Ed.Application extends Backbone.Marionette.Application
   defaults:
-    asset_styles: ['left', 'full', 'right']
+    asset_styles: null # ['left', 'full', 'right']
 
   initialize: (opts={}) ->
     root._ed = @

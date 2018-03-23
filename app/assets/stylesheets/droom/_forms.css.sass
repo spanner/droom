@@ -50,6 +50,10 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
       text-transform: none
       font-weight: lighter
 
+[contenteditable]:not([contenteditable=false])
+  border: none
+
+
 select
   position: relative
   -webkit-appearance: none
@@ -70,7 +74,6 @@ select
     color: $hover
   &.small
     font-size: 0.9em
-    padding: 2px
     -webkit-padding-end: 16px
 
 input[type="submit"]

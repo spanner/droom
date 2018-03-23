@@ -34,7 +34,7 @@ module Droom
     protected
 
     # This is done in a cascading way so that we trigger all the right reindexings.
-    # It should be a rare and special event and we prefer thorough to quick.
+    # It should be a rare and special event, and we prefer thorough to quick.
     #
     def distribute_confidentiality
       folder.set_confidentiality!(private?)

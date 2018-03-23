@@ -14,7 +14,6 @@ module Droom
     belongs_to :event_type
     has_folder :within => :event_type #... and subfolders via agenda_categories
     after_destroy :destroy_related_folder
-    after_save :distribute_confidentiality
 
     has_many :invitations, :dependent => :destroy
     has_many :users, :through => :invitations
@@ -394,10 +393,6 @@ module Droom
       else
         value
       end
-    end
-
-    def distribute_confidentiality
-      folder.set_confidentiality!(confidential?)
     end
 
   private
