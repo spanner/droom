@@ -1,7 +1,3 @@
 #enquire
-  .header
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = t :test_enquiry
-
+  = render 'droom/shared/popup_header', title: t(:test_enquiry)
   = render :partial => 'droom/enquiries/form'

@@ -1,0 +1,7 @@
+- drag_flag ||= 'popup'
+- title ||= ''
+
+.header{data: {draggable: ".popup", remembered: drag_flag}}
+  = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+  %h2
+    = title

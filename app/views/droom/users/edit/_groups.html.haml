@@ -1,7 +1,7 @@
 - user ||= @user
 
 #note
-  = render partial: 'droom/users/edit/header', locals: { user: user}
+  = render 'droom/shared/popup_header', title: t(:groups_for, name: user.name)
 
   = form_for user, :html => {class: 'poppedup'}, data: {remote: true, type: :html} do |f|
     = hidden_field_tag :view, @view

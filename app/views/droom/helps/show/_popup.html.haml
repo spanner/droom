@@ -11,11 +11,8 @@
         %h3.title
           = help.title
   - else
-  .header{data: {draggable: ".popup", remembered: "help"}}
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = help.title
-
+    = render 'droom/shared/popup_header', title:  help.title, drag_flag: "help"
+  
   .body
     .content
       = clean_html(help.content.presence || "<p></p>")

@@ -1,24 +1,22 @@
 - user ||= @user
+- me = user == current_user
 
 #edit_user
-  .header
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      - if @user == current_user
-        = t :edit_your_account
-      - else
-        = t :edit_account_of, name: @user.name
+  = render 'droom/shared/popup_header', title: me ? t(:edit_your_account) : t(:edit_account_of, name: user.name)
 
   = form_for @user, :html => {:class => 'edit user password', :autocomplete => false} do |f|
     %p
-      = t :account_preamble
-
-    %p
-      = t :account_emails
+      - if me
+        = t :account_emails
+      - else
+        = t :admin_account_emails
     = render "droom/users/edit/emails", f: f, user: user
 
     %p
-      = t :account_password
+      - if me
+        = t :account_password
+      - else
+        = t :admin_account_password
     = render "droom/users/edit/admin_password_fields", f: f, user: user
 
     - unless @user.confirmed?

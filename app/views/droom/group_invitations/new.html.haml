@@ -1,6 +1,3 @@
 #new_group_invitation
-  .header
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2
-      = t :invite_group_to, :name => @event.name
+  = render 'droom/shared/popup_header', title: t(:invite_group_to, :name => @event.name)
   = render :partial => 'form'

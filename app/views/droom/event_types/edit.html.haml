@@ -1,7 +1,3 @@
 #group
-  .header
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = t :edit_group
-
+  = render 'droom/shared/popup_header', title: t(:edit_group)
   = render :partial => "form"

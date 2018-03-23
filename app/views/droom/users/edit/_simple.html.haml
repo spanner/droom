@@ -1,18 +1,16 @@
 - user ||= @user
 
+- if user == current_user
+  - title = t :edit_your_profile
+- elsif user.new_record?
+  - title = t :add_new_user
+  - if Droom.use_organisations? && @user.organisation
+    - title << [t(:to), " ", user.organisation.name].join(" ")
+- else
+  - title = t(:edit_profile_of, name: user.name)
+
 #edit_user
-  .header{data: {draggable: ".popup", remembered: "user"}}
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      - if @user == current_user
-        = t :edit_your_profile
-      - elsif @user.new_record?
-        = t :add_new_user
-        - if Droom.use_organisations? && @user.organisation
-          to
-          = @user.organisation.name
-      - else
-        = t :edit_profile_of, name: @user.name
+  = render 'droom/shared/popup_header', title: title
 
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
     = render partial: 'droom/users/edit/user_fields', locals: {f: f, user: user, minimal: true}

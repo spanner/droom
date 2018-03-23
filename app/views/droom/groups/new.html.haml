@@ -1,7 +1,3 @@
 #group
-  .header{data: {draggable: ".popup", remembered: "popup"}}
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = t :add_group
-      
+  = render 'droom/shared/popup_header', title: t(:add_group)
   = render :partial => 'form'

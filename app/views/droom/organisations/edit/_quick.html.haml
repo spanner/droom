@@ -1,13 +1,7 @@
 - organisation ||= @organisation
 
 #edit_organisation
-  .header{data: {draggable: ".popup", remembered: "organisation"}}
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      - if organisation.new_record?
-        = t :add_organisation
-      - else
-        = t :quick_edit_organisation
+  = render 'droom/shared/popup_header', title: organisation.new_record? ? t(:add_organisation) : :edit_organisation
 
   = form_for [droom, organisation], :html => {:class => 'edit organisation'} do |f|
     %p.name.twocol<

@@ -1,7 +1,3 @@
 #scrap
-  .header{data: {draggable: ".popup", remembered: "popup"}}
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = t :add_notice
-
+  = render 'droom/shared/popup_header', title: t(:add_notice)
   = render :partial => 'form'

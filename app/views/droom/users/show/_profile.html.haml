@@ -5,10 +5,7 @@
   - mugstyle =  ""
 
 #user
-  .header{data: {draggable: ".popup", remembered: "user"}}
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = t :profile
+  = render 'droom/shared/popup_header', title: t(:profile)
 
   .user
     .mugshot.full{style: mugstyle}

@@ -1,7 +1,3 @@
 #document
-  .header{data: {draggable: ".popup", remembered: "popup"}}
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2
-      = t :edit_document
-
+  = render 'droom/shared/popup_header', title: t(:edit_document)
   = render :partial => 'form'

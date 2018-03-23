@@ -1,0 +1,227 @@
+//User profile preview
+// #TODO move into CDR
+
+#user_profile
+  position: relative
+  width: 100%
+
+  header#user_title
+    width: 100%
+    clear: both
+    margin-bottom: 15px
+    .user_title
+      font-size: 3.2em
+      margin: 30px 0 30px -2px
+      &.smaller
+        font-size: 2.6em
+      &.bigger
+        font-size: 4em
+        margin-left: -8px
+      &.biggest
+        font-size: 6em
+        margin-left: -10px
+      .addendum
+        +pale
+        font-size: 50%
+
+  #user_profile_detail
+    position: relative
+    width: 100%
+    min-height: 600px
+    margin-bottom: 200px
+
+    aside#right_pane
+      display: block
+      position: absolute
+      float: right
+      width: 30%
+      right: 0
+      top: 0
+
+      section
+        margin-bottom: 1em
+
+        ul.address_book
+          list-style: none
+          margin: 0
+          padding: 0
+          li
+            clear: left
+            padding: 5px 0
+            +clearfix
+            svg.icon
+              float: left
+            span.contact
+              float: left
+              width: calc(100% - 24px)
+              overflow: hidden
+
+      section.contacts
+        h2.section
+          margin-top: 0
+
+    #left_pane
+      float: left
+      width: 65%
+
+      #left_pane_contents
+        width: 100%
+        clear: both
+
+        section.personal_info
+          width: 100%
+          clear: both
+          margin-bottom: 11em
+
+          #personal_info_content
+            width: 100%
+            clear: both
+
+            #left_pane
+              width: 25%
+              float: left
+
+            #right_pane
+              width: 75%
+              float: left
+
+              .right_pane_container
+                width: 100%
+                clear: both
+
+                .right_pane_contents
+                  width: 50%
+                  float: left
+
+        section.account_info
+          width: 100%
+          clear: both
+          margin-bottom: 3em
+
+          #account_info_container
+            .liveliness
+              margin: 1em 0
+              &.unreachable
+                color: $red
+              &.unresponsive
+                color: $red
+              &.external
+                color: $green
+              &.internal
+                color: $green
+              svg.icon.small
+                margin-left: -24px
+                &+span.label
+                  margin-left: 0
+                  line-height: 28px
+          
+            width: 100%
+            .account_info_contents
+              width: 100%
+              clear: both
+
+              .left_pane
+                width: 33%
+                float: left
+
+              .mid_pane
+                width: 33%
+                float: left
+
+              .right_pane
+                width: 34%
+                float: left
+
+        section.rs_with_croucher
+          width: 100%
+          clear: both
+          margin-bottom: 1em
+        section.statuses_info
+          width: 100%
+          margin-bottom: 1em
+
+          #statuses_container
+            width: 100%
+
+        section.groups_info
+          width: 100%
+          margin-bottom: 1em
+
+        section.notes_info
+          width: 100%
+
+
+    .editable
+      position: relative
+      border-left: 1px dotted transparent
+      padding-left: 9px
+      margin-left: -10px
+      transition: border-color 0.5s ease-in
+      & > span.user_controls
+        position: absolute
+        overflow: hidden
+        opacity: 0
+        transition: opacity 0.5s ease-in
+        top: -3px
+        left: -79px
+        width: 80px
+        font-size: 14px
+        font-weight: normal
+        background-color: white
+        a.new, a.edit, a.pick
+          display: inline-block
+          vertical-align: top
+          float: right
+          padding: 2px 5px 2px 10px
+          border: 1px dotted $pale
+          border-right: 0
+          border-top-left-radius: 20px
+          border-bottom-left-radius: 20px
+        a.detach, a.delete
+          display: inline-block
+          vertical-align: top
+          float: right
+          padding: 2px 5px
+          border: 1px dotted $pale
+          border-right: 0
+          border-left: 0
+        a.edit
+          color: $blue
+          +hover
+        a.new
+          color: $green
+          +hover
+        a.pick
+          color: $blue
+          +hover
+        a.detach
+          color: $blue
+          +hover
+          padding: 2px 5px
+        a.delete
+          color: $red
+          +hover
+          padding: 2px 5px
+        a.copy
+          display: none
+        &:hover
+          visibility: visible
+      &:hover
+        border-color: $pale_for_edit
+        & > span.user_controls
+          opacity: 1
+
+#edit_account_info
+  with: 100%
+  clear: both
+
+  .edit_account_info_content
+    width: 100%
+    clear: both
+
+    .content_box
+      width: 33%
+      float: left
+    .last_content_box
+      width: 34%
+      float: left

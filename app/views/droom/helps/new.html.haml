@@ -1,7 +1,3 @@
 #help
-  .header{data: {draggable: ".popup", remembered: "help"}}
-    = link_to "X", '#', :class => "closer", :data => {:action => "close"}
-    %h2.titlebar
-      = t "helps.new"
-
+  = render 'droom/shared/popup_header', title: t('helps.new'), drag_flag: "help"
   = render :partial => 'form'
