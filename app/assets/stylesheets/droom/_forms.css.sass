@@ -1,4 +1,8 @@
 div.popup
+  form
+    p
+      margin: 0 0 1em 0
+
   input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false]), 
     padding: 8px
     border: 1px solid $pale
@@ -50,9 +54,16 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
       text-transform: none
       font-weight: lighter
 
-[contenteditable]:not([contenteditable=false])
+[contenteditable]:not([contenteditable=false]):not(.rte)
   border: none
 
+[contenteditable]
+  &[placeholder]
+    &:empty:before
+      content: attr(placeholder)
+      color: $pale
+      text-transform: none
+      font-weight: lighter
 
 select
   position: relative
@@ -191,8 +202,6 @@ textarea
 // and much in need of updating.
 
 form
-  p
-    margin: 0 0 1em 0
   .columns
     position: relative
     width: 100%
@@ -226,7 +235,6 @@ form
   .buttons
     clear: left
     margin-top: 1em
-
 
 form#login
   a.reminder
