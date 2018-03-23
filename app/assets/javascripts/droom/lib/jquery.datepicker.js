@@ -707,14 +707,16 @@
               top += this.offsetHeight;
               break;
           }
-          if(top + calEl.offsetHeight > viewPort.t + viewPort.h) {
-            top = pos.top  - calEl.offsetHeight;
-          }
+          // if(top + calEl.offsetHeight > viewPort.t + viewPort.h) {
+          //   top = pos.top  - calEl.offsetHeight;
+          // }
           if(top < viewPort.t) {
             top = pos.top + this.offsetHeight + calEl.offsetHeight;
           }
           if(left + calEl.offsetWidth > viewPort.l + viewPort.w) {
-            left = pos.left - calEl.offsetWidth;
+            overflow = (left + calEl.offsetWidth) - (viewPort.l + viewPort.w)
+            left = pos.left + this.offsetWidth - calEl.offsetWidth;
+            cal.addClass('right');
           }
           if(left < viewPort.l) {
             left = pos.left + this.offsetWidth

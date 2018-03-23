@@ -1,5 +1,6 @@
 - url ||= ""
 - exit_url ||= nil
+- placeholder ||= t('placeholders.search')
 - q = @q == '*' ? "" : @q
 
 %form.search.quick{action: url, id: "quick_search"}<
@@ -7,7 +8,7 @@
   = hidden_field_tag :show, params[:show]
   = hidden_field_tag :sort, params[:sort]
 
-  %input#search_box{type: "text", name: "q", value: q}
+  %input#search_box{type: "text", name: "q", value: q, placeholder: placeholder}
   %label{for: "search_box", title: t('tooltips.filter')}
     %svg
       %use{"xlink:href" => "#search_plain_symbol"}

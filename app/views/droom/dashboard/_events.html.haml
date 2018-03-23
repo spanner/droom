@@ -1,11 +1,12 @@
+- calendar = Droom::Calendar.where(name: 'main').first_or_create
+- events = calendar.events.future_and_current.order('start ASC').limit(5)
+
 .divider
 %section
   #events{:data => {:refreshable => true, :url => droom.events_url(:limit => 5)}}
-    - calendar = Droom::Calendar.where(name: 'main').first_or_create
-    - events = calendar.events.future_and_current.order('start ASC').limit(5)
 
     %h2.section
-      = link_to t(:future_events), main_app.calendar_url
+      = link_to t(:calendar), main_app.calendar_url
       - if calendar.events.future_and_current.count > 5
         %span.addendum
           =t(:click_for_more, count: calendar.events.future_and_current.count - 5)
@@ -15,7 +16,12 @@
 
     - if events.any?
       = render :partial => "droom/events/event", :collection => events, :locals => {:brief => true}
+
     - else
-      %p.nothing
-        = t :no_future_events
-  
+      - past_events ||= calendar.events.past.limit(5)
+      - if past_events.any?
+        = render :partial => "droom/events/event", :collection => past_events, :locals => {:brief => true}
+
+      - else
+        %p.nothing
+          = t :no_events

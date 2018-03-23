@@ -1,11 +1,12 @@
 module Droom
   class OrganisationsController < Droom::EngineController
-    respond_to :html, :js
-    layout :no_layout_if_pjax
+    include Droom::Concerns::Searchable
     helper Droom::DroomHelper
 
+    respond_to :html, :js
+    layout :no_layout_if_pjax
+
     skip_before_action :authenticate_user!, only: [:signup, :register]
-    before_action :search_organisations, only: [:index]
     load_and_authorize_resource except: [:signup, :register]
     before_action :set_view, only: [:show, :edit, :update, :create]
 
@@ -97,38 +98,26 @@ module Droom
       @view = params[:view] if %w{page listed gridded quick full status}.include?(params[:view])
     end
 
-    def search_organisations
-      if params[:q].present?
-        @terms = params[:q]
-        arguments = { order: {_score: :desc}}
-      else
-        @terms = '*'
-        arguments = { order: {name: :asc}}
-      end
+    ## Searchable configuration
+    #
+    def search_fields
+      ['name^10', 'chinese_name', 'description', 'url', 'address', 'people']
+    end
 
-      if params[:show] == "all"
-        arguments[:limit] = 1000
-      else
-        @per_page = arguments[:per_page] = (params[:show].presence || 50).to_i
-        @page = arguments[:page] = (params[:page].presence || 1).to_i
-      end
+    def search_highlights
+      {tag: "<strong>"}
+    end
 
-      criteria = {}
+    def search_default_sort
+      "created_at"
+    end
 
-      if params[:external] and params[:external] != 'false'
-        @external = criteria[:external] = !!params[:external]
-      else
-        @external = criteria[:external] = false
-      end
+    def search_criterion_params
+      [:external]
+    end
 
-      unless admin?
-        criteria[:approved] = true
-      end
-
-      arguments[:fields] = ['name^10', 'chinese_name', 'description', 'url', 'address', 'people']
-      arguments[:where] = criteria
-
-      @organisations = Droom::Organisation.search @terms, arguments
+    def non_admin_filter
+      { approved: true }
     end
 
   end

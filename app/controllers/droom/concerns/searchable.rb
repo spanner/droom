@@ -32,7 +32,7 @@ module Droom::Concerns::Searchable
       end
     end
 
-    @order ||= @sort == "date" ? :desc : :asc
+    @order ||= @sort == "date" || @sort == 'created_at' ? :desc : :asc
     order = [{@sort => {order: @order}}]
 
     criteria = search_criterion_params.each_with_object({}) do |p, h|
@@ -40,7 +40,8 @@ module Droom::Concerns::Searchable
       h[p] = true if h[p] == "true"
       h[p] = false if h[p] == "false"
     end
-    criteria[:app] = params[:app_id]
+
+    criteria.merge(non_admin_filter) unless admin?
 
     options = {
       where: criteria,
@@ -49,17 +50,16 @@ module Droom::Concerns::Searchable
     options.merge!({ per_page: @show, page: @page }) if paginated?
     options[:fields] = fields if fields.any?
     options[:aggs] = aggregations if aggregations.any?
-    options[:match] = search_match
-    options[:highlight] = search_highlights
-    options[:includes] = search_includes
+    options[:match] = search_match if search_match
+    options[:highlight] = search_highlights if search_highlights
+    options[:includes] = search_includes if search_includes
 
     Rails.logger.warn "SEARCH OPTIONS: #{options.inspect}"
 
-    search_results = controller_path.classify.constantize.search @q, options
+    klass = controller_path.classify.constantize
+    search_results = klass.search @q, options
     instance_variable_set("@#{controller_name}", search_results)
 
-    # nginx limits each header to 8k (including furniture).
-    #
     if paginated?
       @total = search_results.total_count
     end
@@ -79,6 +79,10 @@ module Droom::Concerns::Searchable
 
   def search_match
     nil
+  end
+
+  def non_admin_filter
+    {}
   end
 
   def search_aggregations
