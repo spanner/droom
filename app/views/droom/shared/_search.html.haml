@@ -1,6 +1,6 @@
 - url ||= ""
 - exit_url ||= nil
-- q = @terms == '*' ? "" : @terms
+- q = @q == '*' ? "" : @q
 
 %form.search.quick{action: url, id: "quick_search"}<
   = hidden_field_tag :page, params[:page]
