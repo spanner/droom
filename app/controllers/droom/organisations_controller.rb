@@ -18,6 +18,7 @@ module Droom
     end
 
     def index
+      @external = params[:external]
       render
     end
 
@@ -109,7 +110,7 @@ module Droom
     end
 
     def search_default_sort
-      "created_at"
+      "name"
     end
 
     def search_criterion_params

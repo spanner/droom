@@ -260,7 +260,8 @@ module Droom
         description: description,
         people: users.map(&:name).join(', '),
         approved: approved?,
-        external: external?
+        external: external?,
+        created_at: created_at
       }
     end
 

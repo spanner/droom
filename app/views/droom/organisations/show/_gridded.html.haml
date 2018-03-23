@@ -35,8 +35,6 @@
     %p.details.notes
       - if organisation.organisation_type
         = t "organisation_types.#{organisation.organisation_type.name.downcase}"
-        - if organisation.activities.any?
-          = t :with_activities_count, count: organisation.activities.count
 
     - if organisation.description?
       = sanitize organisation.description
