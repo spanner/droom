@@ -119,7 +119,8 @@ ul.uploads
       span.progress, a.cancel
         display: none
 
-//Older but still in use
+
+//Older but still in use for user profiles etc.
 
 .image-upload
   position: relative
@@ -140,8 +141,9 @@ ul.uploads
       image: image-url('droom/minisymbols.png')
   a.box
     display: block
-    width: 84px
-    height: 84px
+    width: 100%
+    height: 100%
+    box-sizing: border-box
     border: 1px solid $pale
     background:
       color: white
@@ -183,3 +185,6 @@ ul.uploads
     width: 120px
     padding: 5px
     margin: 20px 0 0 0
+
+
+

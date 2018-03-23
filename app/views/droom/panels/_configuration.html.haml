@@ -26,7 +26,7 @@
 
   %p
     = link_to droom.destroy_user_session_url, :method => :delete, :class => 'signout' do
-      %svg
+      %svg.prefix
         %use{"xlink:href" => "#cross_button_symbol"}
       %span.label
         = t(:sign_out)

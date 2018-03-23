@@ -28,6 +28,16 @@
 #= require_self
 
 jQuery ($) ->
+
+  # set flags that scripts can observe cheaply.
+  #
+  if window.matchMedia('@media (max-width: 700px)')
+    $('body').addClass('mobile')
+  if window.matchMedia('@media (orientation: portrait)')
+    $('body').addClass('portrait')
+  if window.matchMedia('@media (orientation: landscape)')
+    $('body').addClass('landscape')
+
   $.activate_with () ->
     @find_including_self('form.droom_faceter').faceting_search()
     @find_including_self('#flashes p:parent').flash()
@@ -45,8 +55,7 @@ jQuery ($) ->
     @find_including_self('[data-action="reveal"]').reveals()
     @find_including_self('[data-action="remove"]').removes()
     @find_including_self('[data-action="remove_all"]').removes_all()
-    @find_including_self('[data-action="copy"]').copier()   # UPDATE
-    @find_including_self('[data-action="column_toggle"]').column_expander()
+    @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="setter"]').setter()
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-action="twister"]').twister()

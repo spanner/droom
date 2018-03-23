@@ -80,11 +80,9 @@ jQuery ($) ->
       @_content.activate()
       @show()
       @_header = @_content.find('.header')
-      console.log "onward forms:", @_content.find('form').length
       @_content.find('form').remote
         on_cancel: @reset
         on_success: @receive
-      console.log "onward links:", @_content.find('a.popup').length
       @_content.find('a.popup ').remote
         on_cancel: @reset
         on_success: @receive
@@ -144,54 +142,31 @@ jQuery ($) ->
       @_iteration = 0
 
     place: (e) =>
-      unless @_container.data('droom-positioned')
-        width = @_container.children().first().width() || 580
-        w = $(window)
-        height_limit = w.height() - 100
-        height = [@_container.height(), height_limit].min()
-        left = parseInt((w.width() - width) / 2)
-        top = parseInt((w.height() - height - 40) / 2)  # allowing for padding
-        placement = 
-          left: left
-          top: top
-          width: width
-          "max-height": height_limit
-        if @_container.is(":visible")
-          @_container.animate placement
-        else
-          @_container.css placement
+      if $('body').hasClass('mobile')
+        @_container.css
+          top: 0
+          left: 0
+
+      else
+        unless @_container.data('droom-positioned')
+          width = @_container.children().first().width() || 580
+          w = $(window)
+          height_limit = w.height() - 100
+          height = [@_container.height(), height_limit].min()
+          left = parseInt((w.width() - width) / 2)
+          top = parseInt((w.height() - height - 40) / 2)  # allowing for padding
+          placement = 
+            left: left
+            top: top
+            width: width
+            "max-height": height_limit
+          if @_container.is(":visible")
+            @_container.animate placement
+          else
+            @_container.css placement
 
     focus: () =>
       @_container.find('[autofocus]').focus()
-
-
-  # Popup forms will usually contain one or more .column divs. The columns are a standard width and
-  # the number of columns determines the width of the popup. Columns can also be hidden, initially,
-  # then revealed if the user clicks a 'more' or 'detail' link. The expander action is defined here.
-  #
-  $.fn.column_expander = (popup) ->
-    @click (e) ->
-      e.preventDefault() if e
-      link = $(@)
-      container = link.parents('popup').first()
-      if affected = link.attr('data-affected')
-        # swap between text and the alt text held in data-alt
-        text = link.text()
-        alt = link.attr('data-alt')
-        link.text(alt).attr('data-alt', text)
-        # Point in the other direction
-        if link.hasClass('left') then link.addClass('right').removeClass('left') else link.addClass('left').removeClass('right')
-        # Toggle visibility of the column.
-        # Contained form fields are disabled when hidden, detaching them from form submission.
-        container.find(affected).each (i, col) ->
-          if $(col).is(":visible")
-            $(col).addClass('hidden').find('input, select, textarea').attr('disabled', true)
-          else
-            $(col).removeClass('hidden').find('input, select, textarea').removeAttr('disabled')
-        # We finish by triggering a resize event on the popup container, which will trigger a place() on the popup..
-        container.trigger('resize')
-
-
 
 
 
@@ -275,7 +250,7 @@ jQuery ($) ->
       Panel.remember(@)
 
     setup: () =>
-      if $(window).width() > 700
+      unless $('body').hasClass('mobile')
         position = @header.position()
         offset = @header.offset()
         top = position.top + @header.outerHeight()
