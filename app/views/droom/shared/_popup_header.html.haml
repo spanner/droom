@@ -2,6 +2,8 @@
 - title ||= ''
 
 .header{data: {draggable: ".popup", remembered: drag_flag}}
-  = link_to "X", '#', :class => "closer", :data => {:action => "close"}
+  = link_to '#', :class => "closer", :data => {:action => "close"} do
+    %svg
+      %use{"xlink:href" => "#big_x_symbol"}
   %h2
     = title

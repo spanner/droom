@@ -1,7 +1,17 @@
 - organisation ||= @organisation
 
+- if organisation.new_record?
+  - title = t(:add_organisation)
+- elsif organisation.external?
+  - if organisation == current_user.organisation
+    - title = t(:edit_your_organisation)
+  - else
+    - title = t(:edit_organisation_external)
+- else
+  - title = t(:edit_organisation)
+
 #edit_organisation
-  = render 'droom/shared/popup_header', title: organisation.new_record? ? t(:add_organisation) : :edit_organisation
+  = render 'droom/shared/popup_header', title: title
 
   = form_for [droom, organisation], :html => {:class => 'edit organisation'} do |f|
     %p.name.twocol<

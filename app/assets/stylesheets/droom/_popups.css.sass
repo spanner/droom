@@ -1,8 +1,8 @@
 #help
-  width: 360px
+  max-width: 360px
 
 #edit_user.wide
-  width: 800px
+  max-width: 800px
 
 div.popup
   form.event
@@ -36,7 +36,7 @@ div.popup
 
 div.popup
   #event, #document, #user, #group, #event_type, #membership, #folder
-    width: 580px
+    max-width: 580px
     > p
       margin: 10px 20px 0 20px
 
@@ -82,20 +82,20 @@ div.popup
   a.closer
     display: block
     float: right
-    width: 16px
-    height: 18px
-    margin-top: 5px
-    +text-hidden
-    background:
-      image: image-url('droom/crosses.png')
-      color: transparent
-      position: 0 0
-      repeat: no-repeat
+    width: 20px
+    height: 20px
+    margin-top: 3px
+    margin-right: 0
+    color: $pale
+    svg
+      width: 20px
+      height: 20px
     &:hover
-      background-position: 0 -32px
+      color: $link
+
   form
     margin: 20px
-    [contenteditable], input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea
+    [contenteditable], input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea, select
       box-sizing: border-box
       width: 100%
     textarea.rte, div.rte

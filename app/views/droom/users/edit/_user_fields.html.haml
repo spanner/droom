@@ -4,32 +4,31 @@
 - if user.image?
   - img = user.image.url(:thumb)
 
-.image-upload{:data => {:role => "imagepicker"}}
-  %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
-  = f.file_field :image
+%p.names
+  - if Droom.use_titles?
+    %span.title>
+      = f.text_field :title, placeholder: t("placeholders.user.title")
+  %span.name>
+    = f.text_field :given_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.given_name")
+  %span.name>
+    = f.text_field :family_name, :required => true, placeholder: t("placeholders.user.family_name")
+  - if Droom.use_chinese_names?
+    %span.chinese_name>
+      = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
+  - if Droom.use_honours?
+    %span.honours>
+      = f.text_field :honours, placeholder: t("placeholders.user.honours")
 
-.hanging
-  %p.names
-    - if Droom.use_titles?
-      %span.title>
-        = f.text_field :title, placeholder: t("placeholders.user.title")
-    %span.name>
-      = f.text_field :given_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.given_name")
-    %span.name>
-      = f.text_field :family_name, :required => true, placeholder: t("placeholders.user.family_name")
-    - if Droom.use_chinese_names?
-      %span.chinese_name>
-        = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
-    - if Droom.use_honours?
-      %span.honours>
-        = f.text_field :honours, placeholder: t("placeholders.user.honours")
-
-  .contacts.non-file-data
-    = render "droom/users/edit/emails", f: f, user: user
-    - unless minimal
-      = render "droom/users/edit/phones", f: f, user: user
-      = render "droom/users/edit/addresses", f: f, user: user
+.contacts.non-file-data
+  = render "droom/users/edit/emails", f: f, user: user
+  - unless minimal
+    = render "droom/users/edit/phones", f: f, user: user
+    = render "droom/users/edit/addresses", f: f, user: user
 
 - if Droom.use_biogs?
+  .image-upload{:data => {:role => "imagepicker"}}
+    %a.box{:href => "#", :style => "background-image: url(#{img})", :data => {:action => "pick"}}
+    = f.file_field :image
+
   .description
     = f.text_area :description, class: "rte", data: {placeholder: t("placeholders.user.description")}

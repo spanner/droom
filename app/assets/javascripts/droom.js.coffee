@@ -31,12 +31,12 @@ jQuery ($) ->
 
   # set flags that scripts can observe cheaply.
   #
-  if window.matchMedia('@media (max-width: 700px)')
+  if window.matchMedia('(max-width: 700px)').matches
     $('body').addClass('mobile')
-  if window.matchMedia('@media (orientation: portrait)')
-    $('body').addClass('portrait')
-  if window.matchMedia('@media (orientation: landscape)')
-    $('body').addClass('landscape')
+    if window.matchMedia('(orientation: portrait)').matches
+      $('body').addClass('portrait')
+    else
+      $('body').addClass('landscape')
 
   $.activate_with () ->
     @find_including_self('form.droom_faceter').faceting_search()

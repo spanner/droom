@@ -376,14 +376,6 @@ form.document
     font-size: 1em
     height: 60px
 
-form.organisation
-  input.name
-    width: 520px
-    font-size: 2em
-  input.url, textarea, select
-    width: 520px
-
-
 form.group, form.event_type, form.service, form.permission
   input[type="text"], textarea, select
     width: 520px
@@ -843,15 +835,13 @@ div.nested_set
   position: relative
   .repeating
     position: relative
-    .controls
-      display: none
+    a.remove
       position: absolute
       top: -6px
-      right: -6px
-      z-index: 100
-    &:hover
-      .controls
-        display: block
+      left: -6px
+      svg
+        width: 20px
+        height: 20px
 
 ul.downloads
   margin: 0

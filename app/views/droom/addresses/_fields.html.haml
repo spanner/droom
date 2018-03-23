@@ -7,14 +7,14 @@
   = uf.fields_for :addresses, address, :child_index => fields_counter || 'field_counter' do |f|
 
     %fieldset.repeating
-      %p.twocol.addendum
-        %span.col>
+      %p.twocol.addendum<
+        %span.col<
           = f.text_area :address, :placeholder => t("placeholders.address.address")
+          - unless user.new_record? || fields_counter == 0
+            = link_to '#', :class => "remove", :data => {:action => "remove_fields", :holder => "fieldset"} do
+              %svg
+                %use{"xlink:href" => "#cross_button_symbol"}
+            - if email.persisted?
+              = f.hidden_field :_destroy, data: {role: "destroy"}
         %span.col.last>
           = f.select :address_type_id, Droom::AddressType.for_selection(:address)
-
-      - unless user.new_record?
-        .controls
-          = link_to t(:remove), '#', :class => "remove minimal", :data => {:action => "remove_fields", :holder => "fieldset"}
-          - if address.persisted?
-            = f.hidden_field :_destroy, data: {role: "destroy"}

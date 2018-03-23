@@ -131,38 +131,26 @@ form.user
   p
     margin: 0
     margin-bottom: 10px
-  .image-upload
-    width: 86px
-    height: 86px
-    margin-right: 10px
-    float: left
-  .hanging
-    position: relative
-    display: block
-    float: left
-    width: calc(100% - 100px)
-    +clearfix
-    p.names
-      input[type="text"]
-        width: 100%
-        box-sizing: border-box
-      span.title
-        display: inline-block
-        vertical-align: top
-        width: calc(16% - 10px)
-        margin-right: 10px
-      span.name
-        display: inline-block
-        vertical-align: top
-        width: calc(32% - 10px)
-        margin-right: 10px
-      span.chinese_name, span.honours
-        display: inline-block
-        vertical-align: top
-        width: 20%
-        margin-right: 0
+  p.names
+    input[type="text"]
+      width: 100%
+      box-sizing: border-box
+    span.title
+      display: inline-block
+      vertical-align: top
+      width: calc(16% - 10px)
+      margin-right: 10px
+    span.name
+      display: inline-block
+      vertical-align: top
+      width: calc(32% - 10px)
+      margin-right: 10px
+    span.chinese_name, span.honours
+      display: inline-block
+      vertical-align: top
+      width: 20%
+      margin-right: 0
   .contacts
-    overflow: hidden
     margin-top: 10px
     input[type="text"], input[type="email"]
       width: 100%
@@ -186,10 +174,28 @@ form.user
   p.memberships
     label.inline
       margin-right: 10px
+
+  .image-upload
+    width: 86px
+    height: 86px
+    margin-right: 10px
+    float: left
+    background:
+      color: white
+      position: center center
+      size: contain
+      image: image_url('droom/missing/user.png')
+
   div.description
-    clear: left
+    position: relative
+    display: block
+    float: left
+    width: calc(100% - 100px)
+    +clearfix
     textarea
       width: 100%
+    div.rte
+      min-height: 86px
   div.address_book
     clear: both
     margin-top: 24px
@@ -217,36 +223,3 @@ form.user
     margin-top: 20px
 
 
-
-
-
-@media (max-width: 700px)
-  form.user
-    .image-upload
-      display: none
-    .hanging
-      position: relative
-      display: block
-      float: none
-      width: 100%
-      +clearfix
-      p.names
-        input[type="text"]
-          width: 100%
-          box-sizing: border-box
-        span.title
-          display: inline-block
-          vertical-align: top
-          width: calc(16% - 10px)
-          margin-right: 10px
-        span.name
-          display: inline-block
-          vertical-align: top
-          width: calc(32% - 10px)
-          margin-right: 10px
-        span.chinese_name, span.honours
-          display: inline-block
-          vertical-align: top
-          width: 20%
-          margin-right: 0
-  
