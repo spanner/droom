@@ -95,8 +95,9 @@ Droom::Engine.routes.draw do
 
   resources :users do
     get "activity" => "users#activity", as: :activity
-    get "preferences", on: :member, as: :preferences
-    get "admin", on: :collection
+    get :preferences, on: :member, as: :preferences
+    put :preference, on: :member, as: :set_preference
+    get :admin, on: :collection
     put :set_password, on: :collection
     put :reinvite, on: :member
     put "/subsume/:other_id" => "users#subsume", as: 'subsume'

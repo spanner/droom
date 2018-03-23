@@ -61,7 +61,10 @@ module Droom
                  :require_login_permission,
                  :require_internal_organisation,
                  :default_permissions,
-                 :api_local
+                 :api_local,
+                 :mc_api_key,
+                 :mc_news_template,
+                 :mc_news_list
   
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
@@ -280,22 +283,37 @@ module Droom
       !!@@api_local
     end
 
-    # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it 
+    ## Mailchimp integration
+    # supports list management and eventually, message composition.
+    #
+    def mc_api_key
+      @@mc_api_key
+    end
+
+    def mc_news_template
+      @@mc_news_template
+    end
+
+    def mc_news_list
+      @@mc_news_list
+    end
+
+    def mc_opt_in?
+      !!@@mc_opt_in
+    end
+
+    def mailchimp_configured?
+      mc_api_key.present? && mc_news_list.present? && mc_news_list.present?
+    end
+
+
+    # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it
     # doesn't exist you just get back the default value, or nil if there isn't one. This is where you
     # set the defaults.
     #
     def user_defaults
       @@user_defaults ||= Droom::LazyHash.new({
-        :email =>  {
-          :enabled? => true,
-          :mailing_lists? => true,
-          :event_invitations? => false,
-          :digest? => false
-        },
-        :dropbox => {
-          :strategy => "clicked",
-          :events? => true,
-        }
+        :mailchimp? => true
       })
     end
     

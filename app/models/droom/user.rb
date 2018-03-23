@@ -1,4 +1,5 @@
 require 'digest'
+require 'gibbon'
 
 module Droom
   class User < ApplicationRecord
@@ -29,6 +30,10 @@ module Droom
     before_save :ensure_authentication_token
     before_save :org_admin_if_alone
     after_save :send_confirmation_if_directed
+
+    after_save :enqueue_mailchimp_job
+    after_destroy :remove_from_mailchimp_list
+
 
     # People are often invited into the system in batches or after offline contact.
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
@@ -667,13 +672,56 @@ module Droom
     has_many :scraps, :foreign_key => "created_by_id"
     has_many :documents, :foreign_key => "created_by_id"
 
+
+    ## Mailchimp integration
+    #
+    def enqueue_mailchimp_job
+      Droom::MailchimpSubscriptionJob.perform_later(id, Time.now.to_i)
+    end
+
+    # callback from preference change
+    # def after_change_mailchimp_preference
+    #   Rails.logger.warn "🐵 after_change_mailchimp callback"
+    #   update_mailchimp
+    # end
+
+    def upsert_in_mailchimp_list
+      if Droom.mailchimp_configured?
+        status = pref?(:mailchimp?) ? "subscribed" : "unsubscribed"
+        possible_previous_address = mailchimp_email.presence || email
+        hashed = Digest::MD5.hexdigest(possible_previous_address.downcase)
+        begin
+          gibbon.lists(Droom.mc_news_list).members(hashed).upsert(body: {email_address: email, status: "subscribed", merge_fields: {FNAME: given_name, LNAME: family_name}})
+          update_column :mailchimp_updated_at, Time.now
+          update_column :mailchimp_email, email
+        rescue Gibbon::MailChimpError => e
+          Rails.logger.warn "🐵 Mailchimp error on subscriber creation: #{e.message}"
+          # TODO Notify someone...
+        end
+      end
+    end
+
+    def remove_from_mailchimp_list
+      if Droom.mailchimp_configured?
+        hashed = Digest::MD5.hexdigest(mailchimp_email.downcase).to_s
+        begin
+          gibbon.lists(Droom.mc_news_list).members(hashed).delete
+        rescue Gibbon::MailChimpError => e
+          Rails.logger.warn "🙈 Ignoring Mailchimp error on subscriber deletion: #{e.message}"
+        end
+      end
+    end
+
+    def gibbon
+      Gibbon::Request.new(api_key: Droom.mc_api_key, symbolize_keys: true)
+    end
+
     ## Search
     #
     searchkick callbacks: :async
 
     def search_data
       data = {
-        id: id,
         uid: uid,
         title: title,
         name: name,

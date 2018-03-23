@@ -17,7 +17,7 @@ module Droom
       @preference.save
       render :partial => "preference"
     end
-    
+
   protected
 
     def build_preference

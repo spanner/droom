@@ -65,9 +65,7 @@ module Droom
     def update
       if @user.update_attributes(user_params)
         respond_with @user, location: user_url(view: @view) do |format|
-          format.js {
-            render partial: "droom/users/show/#{@view}"
-          }
+          format.js { head :no_content }
         end
       end
     end
@@ -144,7 +142,7 @@ module Droom
 
 
     def user_params
-      params.require(:user).permit(
+      permitted_params = [
         :title,
         :family_name,
         :given_name,
@@ -159,24 +157,36 @@ module Droom
         :admin,
         :gender,
         :dob,
-        :preferences_attributes,
         :confirm,
         :old_id,
-        :send_confirmation,
-        :defer_confirmation,
         :address,
         :post_code,
         :country_code,
         :mobile,
-        :organisation_id,
         :female,
-        :image,
-        group_ids: [],
+        :image
+      ]
+      
+      permitted_params += [
+        :admin,
+        :organisation_id,
+        :send_confirmation,
+        :defer_confirmation,
+        group_ids: []
+      ] if current_user.admin?
+
+      permitted_params += [
         emails_attributes: [:id, :_destroy, :email, :address_type_id, :default],
         phones_attributes: [:id, :_destroy, :phone, :address_type_id, :default],
         addresses_attributes: [:id, :_destroy, :address, :address_type_id, :default],
         preferences_attributes: [:id, :_destroy, :uuid, :key, :value]
-      )
+      ]
+
+      if params[:user]
+        params.require(:user).permit(*permitted_params)
+      else
+        {}
+      end
     end
 
     def password_params
