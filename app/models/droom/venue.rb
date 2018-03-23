@@ -1,4 +1,4 @@
-# require 'geocoder'
+require 'geocoder'
 
 module Droom
   class Venue < ApplicationRecord
@@ -8,10 +8,9 @@ module Droom
     has_many :events, :dependent => :nullify
 
     before_validation :slug_from_name
-
     # for migration purposes only:
-    # before_validation :reverse_geocode
     # reverse_geocoded_by :lat, :lng, :address => :address
+    # after_validation :reverse_geocode
 
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
