@@ -18,7 +18,7 @@ module Droom
     end
 
     def index
-      @external = params[:external]
+      @external = params[:external] unless params[:external] == 'false'
       render
     end
 
