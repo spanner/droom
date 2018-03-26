@@ -116,7 +116,6 @@ jQuery ($) ->
       affected = $(@).attr('data-affected')
       $(@).remote
         on_success: (response) =>
-          console.log "affected", $(affected)
           $(affected).trigger "refresh"
 
 
@@ -231,7 +230,7 @@ jQuery ($) ->
 
 
 
-  # The setter action sets a single boolean object property by putting a single parameter to the link href.
+  # The setter action sets a single boolean object property by PUTting a single parameter to the link href.
   # :property and :url data- attributes are required. True/false state is signalled by yes/no css class that
   # presumably also affects apperance.
   #
@@ -416,7 +415,7 @@ jQuery ($) ->
       @_converse = @_input.attr('data-converse')
       @_input.bind "click", @set
       @set()
-      
+
     set: () =>
       if @_input.is(":checked") then @show() else @hide()
 

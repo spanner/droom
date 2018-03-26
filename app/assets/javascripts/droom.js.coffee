@@ -103,6 +103,7 @@ jQuery ($) ->
     @find_including_self('[data-role="venuepicker"]').venue_picker()
     @find_including_self('[data-role="slug"]').slug_field()
     @find_including_self('[data-droppable]').droploader()
+    @find_including_self('[data-sortable]').sortable_list()
 
     # page widgets
 

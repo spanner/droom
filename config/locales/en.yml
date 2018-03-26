@@ -104,7 +104,6 @@ en:
       minicalendar_month: "%B"
       year: "%Y"
       month: "%B %Y"
-      
   delete_event: "Delete Event"
   delete_folder: "Delete Folder"
   delete_group: "Delete Group"
@@ -553,6 +552,8 @@ en:
       minicalendar_month: "%B"
       year: "%Y"
       month: "%B %Y"
+      mon: "%b"
+      dom: "%d"
       time_on_date: "%l:%M%P on %-d %B %Y"
       filename: "%Y-%B-%d"
   to: "to"

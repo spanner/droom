@@ -1,5 +1,11 @@
 jQuery ($) ->
 
+  $.fn.sortable_list = ->
+    @each ->
+      new Sortable @,
+        sort: true
+
+
   $.fn.sortable_files = ->
     @each ->
       new SortableFiling(@)
