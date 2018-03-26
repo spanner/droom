@@ -20,8 +20,12 @@
         - unless @user.confirmed?
           = f.check_box :send_confirmation
           = f.label :send_confirmation
+        %br
         = f.check_box :admin
         = f.label :admin
+        %br
+        = f.check_box :organisation_admin
+        = f.label :organisation_admin
 
     .buttons
       - if user == current_user

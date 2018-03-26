@@ -283,6 +283,7 @@ en:
         description: "Notes"
         slug: "Key"
       user:
+        admin: "Site admin"
         given_name: "Forename"
         family_name: "Surname"
         chinese_name: "中国姓名"
@@ -293,8 +294,9 @@ en:
         dob: "Date of birth"
         organisation_id: "Organisation"
         group_ids: "Group memberships"
+        organisation_admin: "Organisation admin?"
         send_confirmation: "Invite now"
-        admin: "Administrator?"
+        admin: "Site admin?"
         gender: "Gender:"
         gender_f: "female"
         gender_m: "male"

@@ -170,6 +170,7 @@ module Droom
       permitted_params += [
         :admin,
         :organisation_id,
+        :organisation_admin,
         :send_confirmation,
         :defer_confirmation,
         group_ids: []
