@@ -44,6 +44,9 @@ module Droom
 
     def create
       @user = Droom::User.new(user_params)
+      if current_user.organisation_admin? && !current_user.admin?
+        @user.organisation = current_user.organisation
+      end
       # add marker to block the automatic devise confirmation message
       @user.defer_confirmation!
       # add marker to send confirmation once the user is saved and permissions are known
@@ -140,7 +143,6 @@ module Droom
       @users = Droom::User.search query, arguments
     end
 
-
     def user_params
       permitted_params = [
         :title,
@@ -167,14 +169,21 @@ module Droom
         :image
       ]
       
-      permitted_params += [
-        :admin,
-        :organisation_id,
-        :organisation_admin,
-        :send_confirmation,
-        :defer_confirmation,
-        group_ids: []
-      ] if current_user.admin?
+      if current_user.organisation_admin?
+        permitted_params += [
+          :organisation_admin,
+          :send_confirmation
+        ]
+      elsif current_user.admin?
+        permitted_params += [
+          :admin,
+          :organisation_id,
+          :organisation_admin,
+          :send_confirmation,
+          :defer_confirmation,
+          group_ids: []
+        ]
+      end
 
       permitted_params += [
         emails_attributes: [:id, :_destroy, :email, :address_type_id, :default],
