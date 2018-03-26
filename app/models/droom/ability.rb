@@ -4,8 +4,10 @@ module Droom
 
     def initialize(user)
       user ||= Droom::User.new
+
       can :create, Droom::Enquiry
       can :read, Droom::Page
+      can :read, Droom::Tag
 
       if user.persisted?
         if user.admin?
@@ -21,8 +23,6 @@ module Droom
             can :manage, Droom::User, organisation_id: user.organisation_id
           end
 
-
-          
           if !Droom.require_internal_organisation? || user.internal?
 
             if !Droom.require_login_permission? || user.permitted?('droom.login')
