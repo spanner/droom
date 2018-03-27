@@ -44,7 +44,8 @@
 
     - if organisation.users.any?
       %ul.people
-        = render partial: "droom/users/show/listed_minimal", collection: organisation.users
+        = render partial: "droom/users/show/listed_minimal", collection: organisation.users.in_name_order
+
     - elsif organisation.owner
       %ul.people
         = render partial: "droom/users/show/listed_minimal", object: organisation.owner
