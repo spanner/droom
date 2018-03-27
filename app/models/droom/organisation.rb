@@ -259,6 +259,8 @@ module Droom
         name: name || "",
         chinese_name: chinese_name || "",
         description: description,
+        tags: tag_names,
+        all_tags: tags_with_synonyms,
         people: users.map(&:name).join(', '),
         approved: approved?,
         external: external?,

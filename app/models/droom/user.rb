@@ -746,6 +746,10 @@ module Droom
       organisation.name if organisation
     end
 
+    def organisation_tags
+      organisation.tags if organisation
+    end
+
     def confirm_account
       if confirmed_at.nil?
         'No'

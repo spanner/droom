@@ -15,7 +15,7 @@ module Droom::Concerns::Tagged
   end
 
   def tags_with_synonyms
-    tags.includes(:tag_synonyms).map(&:with_synonyms).flatten.uniq
+    tags.includes(:tag_synonyms).map(&:with_synonyms).flatten.uniq.join(' ')
   end
 
   def tag_list=(tag_list)
@@ -39,7 +39,5 @@ module Droom::Concerns::Tagged
       self.tags = Droom::Tag.from_list(somewords)
     end
   end
-
-
 
 end
