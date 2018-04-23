@@ -10,7 +10,7 @@
           %input.weight{type: "radio", name: "weighting", value: "left top"}
           %span.tl
         %label.sector>
-          %input.weight{type: "radio", name: "weighting", value: "center center"}
+          %input.weight{type: "radio", name: "weighting", value: "center top"}
           %span.tc
         %label.sector>
           %input.weight{type: "radio", name: "weighting", value: "right top"}
