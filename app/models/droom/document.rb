@@ -21,18 +21,6 @@ module Droom
     scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
     scope :not_public, -> { where("public <> 1 OR private = 1)") }
 
-    scope :visible_to, -> user {
-      if user
-        select('droom_documents.*')
-          .joins('LEFT OUTER JOIN droom_folders AS df ON droom_documents.folder_id = df.id')
-          .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON df.id = dpf.folder_id')
-          .where(["(droom_documents.public = 1 OR dpf.user_id = ?)", user.id])
-          .group('droom_documents.id')
-      else
-        all_public
-      end
-    }
-
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_documents.name LIKE :f OR droom_documents.file_file_name LIKE :f', :f => fragment)

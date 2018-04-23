@@ -25,10 +25,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'settingslogic'
   s.add_dependency 'request_store'
-
-  s.add_dependency "devise"
-  s.add_dependency "devise_security_extension"
-  s.add_dependency "devise_zxcvbn"
   s.add_dependency "cancancan"
 
   s.add_dependency "acts_as_tree"
@@ -38,9 +34,9 @@ Gem::Specification.new do |s|
   s.add_dependency "haml_coffee_assets"
 
   s.add_dependency "paperclip"
+  s.add_dependency "aws-sdk-s3"
   s.add_dependency "paperclip-av-transcoder"
   s.add_dependency "video_info"
-  s.add_dependency "fog"
   s.add_dependency "friendly_mime"
 
   s.add_dependency "geocoder"
@@ -51,16 +47,11 @@ Gem::Specification.new do |s|
   s.add_dependency "uuidtools"
   s.add_dependency "signed_json"
 
-  s.add_dependency "vcard"
-  s.add_dependency "rdiscount"
-
   s.add_dependency "searchkick"
   s.add_dependency "yomu"
 
   s.add_dependency "mail_form"
   s.add_dependency "mustache"
-
-  s.add_dependency "gibbon"
 
   s.add_development_dependency "mysql2"
   s.add_development_dependency "rspec-rails"

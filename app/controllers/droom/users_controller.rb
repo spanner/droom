@@ -4,26 +4,11 @@ module Droom
     respond_to :html, :js
     layout :no_layout_if_pjax
     before_action :set_view, only: [:show, :new, :edit, :update]
-    before_action :search_users, only: [:admin]
+    before_action :search_users, only: [:index, :admin]
     # before_action :self_unless_admin, only: [:edit, :update]
     load_and_authorize_resource except: [:set_password]
 
-    # :index is the old user-list view, preserved for historical compatibility but now v. clunky.
-    # :admin is the new elasticsearch index. The actual search work is done in `search_users`.
-    #
-    def index
-      @users = @users.in_name_order.includes(:permissions)
-      @users = @users.matching(params[:q]) unless params[:q].blank?
-      @users = @users.from_email(params[:email]) unless params[:email].blank?
-      @users = paginated(@users, params[:pp].presence || 24)
-      respond_with @users do |format|
-        format.js { render :partial => 'droom/users/users' }
-        format.vcf { render :vcf => @users.map(&:to_vcf) }
-      end
-    end
-
     def show
-      #find_user_by_user_id
       @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
       respond_with @user do |format|
         format.js {
@@ -97,13 +82,6 @@ module Droom
       else
         render template: "/droom/users/request_password"
       end
-    end
-
-    def subsume
-      user = Droom::User.find(params[:user_id])
-      other_user = Droom::User.find(params[:other_id])
-      user.subsume(other_user)
-      render json: {subsume: "queued"}
     end
 
     def destroy

@@ -7,10 +7,6 @@ Droom::Engine.routes.draw do
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]
 
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
-    get '/authenticate/:tok' => 'users#authenticate', as: 'authenticate'
-    get '/deauthenticate/:tok' => 'users#deauthenticate', as: 'deauthenticate'
-    #post '/reindex_user' => 'users#reindex_user', as: 'reindex'
-    #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
     resources :users do
       post 'reindex', on: :member, as: :reindex
       get "whoami" , on: :collection, as: :whoami
@@ -24,16 +20,6 @@ Droom::Engine.routes.draw do
     resources :organisations do
       post :register, on: :collection
     end
-  end
-
-  devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords'}
-
-  # intermediate confirmation step to allow invitation without setting a password
-  devise_scope :user do
-    get "/users/:id/welcome/:confirmation_token" => "users/confirmations#show", as: :welcome
-    patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
-    get "/users/passwords/show" => "users/passwords#show", as: :show_confirmation
-    get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
   end
 
   resources :helps
@@ -97,7 +83,6 @@ Droom::Engine.routes.draw do
     get "activity" => "users#activity", as: :activity
     get :preferences, on: :member, as: :preferences
     put :preference, on: :member, as: :set_preference
-    get :admin, on: :collection
     put :set_password, on: :collection
     put :reinvite, on: :member
     put "/subsume/:other_id" => "users#subsume", as: 'subsume'

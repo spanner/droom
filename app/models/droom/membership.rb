@@ -6,12 +6,10 @@ module Droom
 
     has_one :mailing_list_membership, :dependent => :destroy
 
-    after_create :link_folder
     after_create :create_mailing_list_membership
     after_create :create_invitations
     after_create :create_permissions
 
-    after_destroy :unlink_folder
     after_destroy :destroy_invitations
     after_destroy :destroy_permissions
     after_destroy :destroy_similar
@@ -43,14 +41,6 @@ module Droom
     end
 
   protected
-
-    def link_folder
-      user.find_or_add_personal_folders(group.folder)
-    end
-
-    def unlink_folder
-      user.remove_personal_folders(group.folder) if user
-    end
     
     def create_mailing_list_membership
       self.mailing_list_membership = Droom::MailingListMembership.where(address: user.email, listname: group.mailing_list_name).first_or_create

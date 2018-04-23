@@ -1,13 +1,9 @@
-#main.users
-
-  %p.standfirst
-    = t(:users_introduction)
-
-  %form.filter{:action => droom.users_url(:format => :html), :autocomplete => 'off', :data => {:action => "table_filter"}}
-    %p
-      = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
-
-  = render :partial => "droom/users/users"
-
 - content_for :title do 
   = t :people
+
+- content_for :standfirst do
+  %p
+    = t(:users_introduction)
+
+#users
+  = render :partial => "droom/users/users"

@@ -6,9 +6,6 @@ module Droom
     belongs_to :group_invitation
     belongs_to :created_by, :class_name => "User"
 
-    after_create :link_folder
-    after_destroy :unlink_folder
-
     validates_uniqueness_of :user_id, :scope => [:event_id, :group_invitation_id]
 
     scope :to_event, -> event {
@@ -32,15 +29,7 @@ module Droom
     scope :not_accepted, -> { where("response < 2") }
     scope :responded, -> { where("response <> 1") }
     scope :not_responded,-> {  where("response == 1") }
-  
-    def link_folder
-      user.add_personal_folders(event.folder)
-    end
-    
-    def unlink_folder
-      user.remove_personal_folders(event.folder) if user
-    end
-    
+      
     def status
       if response < 1
         "refused"
@@ -58,6 +47,6 @@ module Droom
     def refused?
       response && response < 1
     end
-  
+
   end
 end
