@@ -41,12 +41,12 @@
 - if page.illustrated?
   - image_url = page.main_image.url(:hero)
   #page_masthead
-    .bg{style: "background-image: url('#{image_url}')"}
+    .bg{style: "background-image: url('#{image_url}'); background-position: #{page.main_image_weighting}"}
     .darken
     .fg
       #page_title
         %h1.title
-          = sanitize(page.title)
+          = page.render(:title).html_safe
         - if page.subtitle?
           %p.subtitle
             = page.render(:subtitle).html_safe
