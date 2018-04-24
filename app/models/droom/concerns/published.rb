@@ -30,6 +30,7 @@ module Droom::Concerns::Published
         published_subtitle: subtitle,
         published_intro: intro,
         published_image_id: main_image_id,
+        published_image_weighting: main_image_weighting,
         published_content: content,
         published_at: Time.now
       })

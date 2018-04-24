@@ -3,12 +3,12 @@
 - if page.published_image
   - image_url = page.published_image.url(:hero)
   #page_masthead
-    .bg{style: "background-image: url('#{image_url}')"}
+    .bg{style: "background-image: url('#{image_url}'); background-position: #{page.published_image_weighting}"}
     .darken
     .fg
       #page_title
         %h1.title
-          = sanitize(page.published_title)
+          = page.render(:title).html_safe
         - if page.published_subtitle?
           %p.subtitle
             = page.render(:published_subtitle).html_safe
