@@ -1,8 +1,8 @@
 module Droom
-  class ConfirmationsController < Devise::ConfirmationsController
+  class ConfirmationsController < Droom::ConfirmationsController
 
     # If user not yet confirmed, show password form (rather than just confirming, as is normal)
-    # If already confirmed, allow devise to do whatever a devise does.
+    # If already confirmed, allow Droom to do whatever a Droom does.
     #
     def show
       if self.resource = resource_class.confirm_by_token(params[:confirmation_token])
@@ -14,14 +14,14 @@ module Droom
       elsif user_signed_in?
         redirect_to after_sign_in_path_for(current_user)
       else
-        render :template => "devise/confirmations/failure"
+        render :template => "Droom/confirmations/failure"
       end
     end
 
     # the purpose of this is to add another step between user creation and user confirmation, such that
     # we perform the confirmation only if a password is supplied and validates.
     #
-    # NB. in the tortured RESTfulness of devise, that means turning confirmation#show into a password form
+    # NB. in the tortured RESTfulness of Droom, that means turning confirmation#show into a password form
     # and using confirmations#update to update the user object accordingly.
     #
     def update
@@ -38,7 +38,7 @@ module Droom
           render :action => "show"
         end
       else
-        render :template => "devise/confirmations/failure"
+        render :template => "Droom/confirmations/failure"
       end
     end
 

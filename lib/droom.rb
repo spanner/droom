@@ -19,6 +19,7 @@ module Droom
                  :layout,
                  :dashboard_layout,
                  :page_layout,
+                 :droom_layout,
                  :devise_layout,
                  :email_layout,
                  :email_host,
@@ -72,6 +73,10 @@ module Droom
   class PasswordRequired < DroomError; end
 
   class << self
+    def configure
+      yield self
+    end
+
     def home_url
       @@home_url ||= "http://example.com"
     end
@@ -92,8 +97,12 @@ module Droom
       @@page_layout ||= "page"
     end
 
+    def droom_layout
+      @@Droom_layout ||= "application"
+    end
+
     def devise_layout
-      @@devise_layout ||= "application"
+      @@Droom_layout ||= "application"
     end
 
     def email_host

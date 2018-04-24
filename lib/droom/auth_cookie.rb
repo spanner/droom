@@ -1,7 +1,7 @@
 require 'signed_json'
 require "active_support/core_ext/hash/slice"
 
-# NB. there is vital callback glue in droom/config/initializers/devise.rb
+# NB. there is vital callback glue in droom/config/initializers/Droom.rb
 #
 
 module Droom

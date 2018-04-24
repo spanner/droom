@@ -32,7 +32,7 @@ module Droom
       if current_user.organisation_admin? && !current_user.admin?
         @user.organisation = current_user.organisation
       end
-      # add marker to block the automatic devise confirmation message
+      # add marker to block the automatic Droom confirmation message
       @user.defer_confirmation!
       # add marker to send confirmation once the user is saved and permissions are known
       @user.send_confirmation!

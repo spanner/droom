@@ -649,7 +649,7 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>app/views/devise/confirmations/failure.en.html.haml</key>
+		<key>app/views/Droom/confirmations/failure.en.html.haml</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -679,7 +679,7 @@
 				<integer>19</integer>
 			</dict>
 		</dict>
-		<key>app/views/devise/confirmations/new.html.haml</key>
+		<key>app/views/Droom/confirmations/new.html.haml</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -693,7 +693,7 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>app/views/devise/confirmations/show.html.haml</key>
+		<key>app/views/Droom/confirmations/show.html.haml</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -723,7 +723,7 @@
 				<integer>23</integer>
 			</dict>
 		</dict>
-		<key>app/views/devise/passwords/edit.html.haml</key>
+		<key>app/views/Droom/passwords/edit.html.haml</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -737,7 +737,7 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>app/views/devise/passwords/new.html.haml</key>
+		<key>app/views/Droom/passwords/new.html.haml</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -751,7 +751,7 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>app/views/devise/sessions/new.html.haml</key>
+		<key>app/views/Droom/sessions/new.html.haml</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -1767,7 +1767,7 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>db/migrate/20130217152644_devise_confirmable.rb</key>
+		<key>db/migrate/20130217152644_Droom_confirmable.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -2033,11 +2033,11 @@
 		<string>config/routes.rb</string>
 		<string>app/assets/stylesheets/droom.css.sass</string>
 		<string>app/models/droom/user.rb</string>
-		<string>app/views/devise/passwords/edit.html.haml</string>
-		<string>app/views/devise/sessions/new.html.haml</string>
-		<string>app/views/devise/passwords/new.html.haml</string>
-		<string>app/views/devise/confirmations/new.html.haml</string>
-		<string>app/views/devise/confirmations/show.html.haml</string>
+		<string>app/views/Droom/passwords/edit.html.haml</string>
+		<string>app/views/Droom/sessions/new.html.haml</string>
+		<string>app/views/Droom/passwords/new.html.haml</string>
+		<string>app/views/Droom/confirmations/new.html.haml</string>
+		<string>app/views/Droom/confirmations/show.html.haml</string>
 		<string>droom.gemspec</string>
 		<string>app/models/droom/ability.rb</string>
 		<string>app/models/droom/group.rb</string>
