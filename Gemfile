@@ -21,8 +21,6 @@ gemspec
 #   gem "database_cleaner"
 #   gem 'shoulda-matchers'
 #   gem 'awesome_print'
-#   gem 'devise'
-#   gem 'devise-encryptable'
 #   gem 'acts_as_fu'
 #   gem 'cucumber-rails'
 # end
