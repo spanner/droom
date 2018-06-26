@@ -376,8 +376,8 @@ en:
   no_user_description: "This person has not yet supplied a description of him or herself."
   normal_RSS_link: "normal RSS link"
   not_known: "not known"
-  notice_contract: "⇡ less"
-  notice_expand: "⇣ more"
+  notice_contract: "⇡ show less"
+  notice_expand: "⇣ show more"
   noticeboard_introduction: 'Introductory text for the noticeboard.'
   of_the: "of the"
   or: "or"

@@ -89,19 +89,21 @@ span.notcol
 .autogrid
   display: grid
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
-  grid-column-gap: 2em
-  grid-row-gap: 30px
+  grid-column-gap: 20px
+  grid-row-gap: 20px
   grid-auto-rows: 20px
   &.compact
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))
-  
+
 .gridbox
   position: relative
   grid-column-end: span 1
-  border: 1px solid $pale
-  border-radius: 5px
   box-sizing: border-box
   margin-bottom: 0
+  opacity: 0
+  transition: opacity 0.25s ease-out
+  &.ready
+    opacity: 1
   & > a.menu
     position: absolute
     top: 10px
@@ -109,5 +111,5 @@ span.notcol
     z-index: 10
   .content
     position: relative
-    padding: 20px
+    padding: 16px 20px
     box-sizing: border-box

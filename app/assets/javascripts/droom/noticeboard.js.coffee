@@ -7,9 +7,10 @@ $.fn.gridBox = ->
     $el = $(@)
     contents = $el.find('.content')
     row = 20
-    space = 30
+    space = 20
     rows_touched = Math.ceil((contents.outerHeight() + row) / (row + space))
     $el.css "grid-row-end", "span #{rows_touched}"
+    $el.addClass('ready')
 
 $.fn.noticeboard = ->
   @each ->
