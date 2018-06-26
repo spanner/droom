@@ -5,18 +5,21 @@
 
 - if notice.body? || notice.note?
   - body = clean_html(notice.body || "")
-  - short_body = body.truncate(body_limit, :separator => " ").html_safe
+  - short_body = truncate strip_tags(body), length: body_limit, :separator => " "
   - caption = clean_html(notice.note || "")
-  - short_caption = caption.truncate(caption_limit, :separator => " ").html_safe
+
+  - short_caption = truncate strip_tags(caption), length: caption_limit, :separator => " "
   - truncated = body != short_body || caption != short_caption
 
   .notice_body
     %div{class: truncated ? "compact" : ""}
       - unless omit_body
         = short_body
+
       - if !omit_caption && short_caption.present?
         %figcaption
           = short_caption
+
       - if truncated
         %a.reveal
           =t (:notice_expand)
@@ -24,10 +27,10 @@
     - if truncated
       .expanded
         - unless omit_body
-          = body
+          = sanitize(body)
         - if !omit_caption && caption.present?
           %figcaption
-            = caption
+            = sanitize(caption)
         %a.reveal
           =t (:notice_contract)
 
