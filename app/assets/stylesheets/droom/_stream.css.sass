@@ -157,12 +157,12 @@ div.popup
       margin: 20px
       .specifics.event
         display: inline-block
-      .text
+      div.text
         display: block
       p.name, p.url
         width: 420px
     &.document
-      .text
+      div.text
         display: block
       margin: 20px
       .specifics.document
@@ -172,14 +172,14 @@ div.popup
       input.name
         font-size: 1.5rem
     &.quote
-      .text
+      div.text
         display: block
       p.name
         display: none
       p.url
         width: 540px
     &.text
-      .text
+      div.text
         display: block
       p.name, p.url
         width: 540px
@@ -239,7 +239,7 @@ div.popup
           position: absolute
           visibility: hidden
         input[type="radio"]:checked + label
-          background-color: white
+          background-color: $coolgrey00
           color: $dark
 
 

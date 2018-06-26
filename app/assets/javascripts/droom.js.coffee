@@ -24,7 +24,7 @@
 #= require droom/uploader
 #= require droom/draggables
 #= require droom/widgets
-#= require droom/noticeboard
+#= require droom/grid
 #= require_self
 
 jQuery ($) ->
@@ -114,7 +114,8 @@ jQuery ($) ->
     @find_including_self('form#suggestions').suggestion_form()
     @find_including_self('.sortable_files').sortable_files()
     @find_including_self('[data-draggable]').draggable()
-    @find_including_self('.gridbox').gridBox()
+    @find_including_self('.gridbox:not(.notice)').gridBox()
+    @find_including_self('.notice').notice()
     @find_including_self('.tagger').tagger()
     @find_including_self('form.search.quick').quick_search_form()
 

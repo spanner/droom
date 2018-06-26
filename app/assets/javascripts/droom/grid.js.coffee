@@ -8,16 +8,9 @@ $.fn.gridBox = ->
     contents = $el.find('.content')
     row = 20
     space = 20
-    rows_touched = Math.ceil((contents.outerHeight() + row) / (row + space))
+    rows_touched = Math.ceil(contents.outerHeight() / (row + space))
     $el.css "grid-row-end", "span #{rows_touched}"
     $el.addClass('ready')
-
-$.fn.noticeboard = ->
-  @each ->
-    $el = $(@)
-    $el.autoGrid()
-    $el.find('.notice').notice()
-    $(document.location.hash).highlight()
 
 $.fn.highlight = ->
   if @offset()
@@ -25,15 +18,16 @@ $.fn.highlight = ->
     @addClass('flash')
     @trigger 'expand'
 
-
 $.fn.notice = ->
   @each ->
+    console.log "notice!", @
+    $(@).gridBox()
     new Notice(@)
-
 
 class Notice
   constructor: (element) ->
     @_container = $(element)
+    @_container.gridBox()
     @_container.on 'refreshed', @refresh
     @_expander = @_container.find('a.reveal')
     if @_expander.length
@@ -49,6 +43,9 @@ class Notice
   toggleExpansion: (e) =>
     @_container.toggleClass('expanded')
     @reflow()
+
+  reflow: =>
+    @_container.gridBox()
 
   refresh: (e, new_container) =>
     @_container = $(new_container)

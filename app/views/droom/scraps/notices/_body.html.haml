@@ -30,3 +30,13 @@
             = caption
         %a.reveal
           =t (:notice_contract)
+
+  .footnote
+    %p
+      - if notice.created_by
+        = t :posted_by
+        = notice.created_by.informal_name
+      - else
+        = t :posted
+      = time_ago_in_words notice.created_at
+      = t :ago
