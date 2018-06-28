@@ -49,6 +49,9 @@ class Ed.Model extends Backbone.Model
     @_original_attributes = _.pick @attributes, @savedAttributes
     @set 'changed', false
 
+  clearTemporaryAttributes: =>
+    # noop here
+
   # rails-compatible JSON representation wrapped in root key.
   toJSON: =>
     root = @apiRoot()

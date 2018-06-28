@@ -234,6 +234,26 @@ class Ed.Views.Content extends Ed.View
       target: @ui.content
     @_toolbar.render()
 
+    @ui.content.on "focus", @ensureP
+    @ui.content.on "blur", @removeEmptyP
+
+  ## Contenteditable helpers from chemistry
+  # Small intervention to make contenteditable behave in a slightly saner way,
+  # eg. by definitely typing into an (apparently) empty <p> element.
+  #
+  ensureP: (e) =>
+    el = e.target
+    if el.innerHTML.trim() is ""
+      el.style.minHeight = el.offsetHeight + 'px'
+      p = document.createElement('p')
+      p.innerHTML = "&#8203;"
+      el.appendChild p
+
+  clearP: (e) =>
+    el = e.target
+    content = el.innerHTML
+    el.innerHTML = "" if content is "<p>&#8203;</p>" or content is "<p><br></p>" or content is "<p>​</p>"  # there's a zwsp in that last string
+
 
 class Ed.Views.Checker extends Ed.View
   template: false

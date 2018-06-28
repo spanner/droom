@@ -11,6 +11,7 @@ class Ed.Config
     trap_errors: true
     display_errors: false
     badger_errors: true
+    insertions: ["image", "video", "quote", "button"]
 
   production:
     display_errors: false

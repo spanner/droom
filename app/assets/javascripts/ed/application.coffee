@@ -18,7 +18,7 @@ class Ed.Application extends Backbone.Marionette.Application
   initialize: (opts={}) ->
     root._ed = @
     root.onerror = @reportError
-    Backbone.original_sync = Backbone.sync
+    @original_backbone_sync = Backbone.sync
     Backbone.sync = @sync
     Backbone.Marionette.Renderer.render = @render
 
@@ -80,8 +80,9 @@ class Ed.Application extends Backbone.Marionette.Application
           xhr
       opts.success = (data, status, request) ->
         model.finishProgress(true)
+        model.clearTemporaryAttributes()  # eg image file data for upload
         original_success(data, status, request)
-    Backbone.original_sync method, model, opts
+    @original_backbone_sync method, model, opts
 
   # Override render (in marionette) to use our hamlcoffee templates through JST
   #

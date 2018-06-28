@@ -29,24 +29,22 @@ a.control, label.control
   pointer-events: auto
   display: inline-block
   vertical-align: top
-  width: 36px
-  height: 36px
+  width: 24px
+  height: 24px
   background-color: $translucent
-  border-radius: 36px
-  margin-left: 2px
+  border-radius: 12px
+  margin-left: 4px
   margin-bottom: 8px
   cursor: pointer
-  overflow: hidden
-  color: $darkblue
-  border: 1px solid currentColor
+  color: currentColor
   &:hover
     color: $dark
     background-color: white
   input[type="file"]
     display: none
   svg
-    width: 36px
-    height: 36px
+    width: 24px
+    height: 24px
     transition: transform 0.5s ease-out
   &.delete
     color: $red
@@ -58,12 +56,6 @@ a.control, label.control
     color: $green
   &.properties:hover
     color: $mid
-  &.small
-    width: 24px
-    height: 24px
-    svg
-      width: 24px
-      height: 24px
 
 span.note
   color: $pale
@@ -267,16 +259,16 @@ span.note
 .ed-inserter
   position: absolute
   box-sizing: border-box
+  white-space: nowrap
   display: none
   z-index: 1000
-  height: 56px
-  width: 56px
-  padding: 9px 8px
+  height: 36px
+  width: 30px
+  padding: 6px 0
   overflow: hidden
   top: 0
-  left: -20px
+  left: 0
   transition: width 0.25s ease-out
-  background-color: white
   a.control.show
     &:hover
       color: $green

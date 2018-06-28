@@ -235,6 +235,9 @@ class Ed.Views.AssetInserter extends Ed.View
   tagName: "div"
   className: "ed-inserter"
 
+  ui:
+    adders: "a.add"
+
   events:
     "click a.show": "toggleButtons"
     "click a.image": "addImage"
@@ -245,6 +248,10 @@ class Ed.Views.AssetInserter extends Ed.View
 
   onRender: () =>
     @_p = null
+    permitted_insertions = _ed.config('insertions')
+    @ui.adders.each (i, el) =>
+      $el = $(el)
+      $el.hide() if permitted_insertions.indexOf($el.data('insert')) is -1
 
   #TODO shouldn't we know about the holding editable so as to tell it about new assets?
   # and also todo: please can we just render this with no special calls?
@@ -305,8 +312,8 @@ class Ed.Views.AssetInserter extends Ed.View
   place: ($el) =>
     position = $el.offset()
     @$el.css
-      top: position.top - 16
-      left: position.left - 60
+      top: position.top - 10
+      left: position.left - 28
 
   show: () =>
     @place(@_p)

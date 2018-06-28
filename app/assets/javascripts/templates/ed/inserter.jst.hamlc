@@ -1,16 +1,19 @@
-.ed-buttons<
-  %a.control.show>
+.cms-buttons<
+  %a.control.show{title: "Insert something..."}>
     %svg.icon
-      %use{"xlink:href" => "#insert_symbol"}
-  %a.control.add.image>
+      %use{"xlink:href" => "#plus_symbol"}
+  %a.control.add.image{title: "Insert image", data: {insert: "image"}}>
     %svg.icon
       %use{"xlink:href" => "#image_symbol"}
-  %a.control.add.video>
+  %a.control.add.video{title: "Insert video", data: {insert: "video"}}>
     %svg.icon
       %use{"xlink:href" => "#video_symbol"}
-  %a.control.add.quote>
+  %a.control.add.quote{title: "Insert quote", data: {insert: "quote"}}>
     %svg.icon
       %use{"xlink:href" => "#quote_symbol"}
-  %a.control.add.blocks>
+  %a.control.add.biglink{title: "Insert button", data: {insert: "biglink"}}>
+    %svg.icon
+      %use{"xlink:href" => "#biglink_symbol"}
+  %a.control.add.blocks{title: "Insert blocks", data: {insert: "blocks"}}>
     %svg.icon
       %use{"xlink:href" => "#blocks_symbol"}

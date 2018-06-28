@@ -10,9 +10,7 @@ module Droom
 
     def index
       @scraps = paginated(@scraps, 50)
-      respond_with(@scraps) do |format|
-        format.js { render :partial => 'droom/scraps/noticeboard' }
-      end
+      respond_with(@scraps)
     end
   
     def show
