@@ -49,6 +49,10 @@ module Droom
       self.file_file_name = name
     end
 
+    def file_data=(data)
+      self.file = data
+    end
+
     protected
     
     # *read_dimensions* is called after post processing to record in the database the original width, height and

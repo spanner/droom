@@ -123,90 +123,6 @@ class Ed.Model extends Backbone.Model
 
 class Ed.Collection extends Backbone.Collection
 
-  initialize: (models, @options={}) ->
-    @_class_name = @constructor.name
-    @_nested = @options.nested    # normally only set by hasMany
-    @setOriginalIds()
-    @prepareLoader()
-    @setDefaults()
-    @on 'add remove reset', @setDefaults
-
-  setDefaults: =>
-    # noop here
-
-  prepareLoader: =>
-    @_loaded?.reject()
-    @_loaded = $.Deferred()
-    @_loading = false
-
-  load: =>
-    unless @_loading or @isLoaded()
-      @_loading = true
-      @fetch(reset: true).done(@loaded).fail(@notLoaded)
-    @_loaded.promise()
-
-  reload: =>
-    @log "reload!"
-    @prepareLoader()
-    @load()
-
-  parse: (response) =>
-    if @prepareData(response)
-      response.data
-
-  prepareData: (response) =>
-    # noop here. 
-    # subclass can amend data or return false to stop parsing.
-    true
-
-  loaded: (data, status, xhr) =>
-    @_loading = false
-    @sort()
-    @setOriginalIds()
-    @_loaded?.resolve(data)
-    @trigger('loaded')
-
-  whenLoaded: (dothis) =>
-    @_loaded.done(dothis)
-
-  whenLoadedOrFailed: (dothis) =>
-    @_loaded.always(dothis)
-
-  loadAnd: (dothis) =>
-    @whenLoaded(dothis)
-    @load() unless @_loading or @isLoaded()
-
-  reloadAnd: (dothis) =>
-    @whenLoaded(dothis)
-    @reload()
-
-  isLoaded: =>
-    debugger unless @_loaded
-    @_loaded?.state() is 'resolved'
-
-  notLoaded: (error) =>
-    @_loaded.reject(error)
-
-
-  ## Change management
-  #
-  hasAnyChanges: =>
-    @hasCollectionChanges() or @hasModelChanges()
-
-  hasCollectionChanges: =>
-    !_.isEqual @pluck('id'), @_original_ids
-
-  hasModelChanges: =>
-    !!@findWhere changed: true
-
-  setOriginalIds: =>
-    @_original_ids = @pluck('id')
-
-  resetChanges: =>
-    @setOriginalIds()
-    @each (m) -> m.resetChanges()
-
-
   ## Housekeeping
   #
   log: ->
@@ -311,7 +227,7 @@ class Ed.Collections.Blocks extends Backbone.Collection
 # are uploaded on the side during editing.
 #
 class Ed.Models.Image extends Ed.Model
-  savedAttributes: ["file", "file_name", "remote_url", "caption"]
+  savedAttributes: ["file_data", "file_name", "remote_url", "caption"]
 
   defaults:
     url: ""
@@ -322,12 +238,12 @@ class Ed.Models.Image extends Ed.Model
     caption: ""
 
   build: =>
-    @on 'change:file', @getThumbs
+    @on 'change:file_data', @getThumbs
     @getThumbs()
 
-  getThumbs: () =>
+  getThumbs: =>
     window.nim = @
-    if @get('file') and not @get('url')
+    if @has('file_data') and not @has('url')
       img = document.createElement('img')
       img.onload = =>
         @set 'icon_url', @extractImage(img, 64)
@@ -335,7 +251,7 @@ class Ed.Models.Image extends Ed.Model
         @set 'full_url', @extractImage(img, 640)
         @set 'hero_url', @get 'full_url'
         @set 'url', @get 'full_url'
-      img.src = @get('file')
+      img.src = @get('file_data')
 
   extractImage: (img, w=64) =>
     if img.height > img.width
@@ -368,7 +284,8 @@ class Ed.Models.Video extends Ed.Model
     icon_url: ""
 
   build: =>
-    @getVideo() if @isNew() and @has('file')
+    @on 'change:file_data', @getVideo
+    @getVideo()
 
   getVideo: () =>
     unless @has('thumb_url')
@@ -378,7 +295,7 @@ class Ed.Models.Video extends Ed.Model
         @set 'half_url', @extractImage(vid, 540, 10)
         @set 'full_url', @extractImage(vid, 1120, 10)
         @set 'url', @get 'full_url'
-      vid.src = @get('file')
+      vid.src = @get('file_data')
 
   extractImage: (vid, w=48, t=0) =>
     unless @get('poster_url')

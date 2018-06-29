@@ -377,7 +377,19 @@ ul.ed-assets
       pointer-events: none
       .label
         display: none
-    a
+    a.delete
+      display: none
+      position: absolute
+      top: -15px
+      right: -5px
+      width: 16px
+      height: 16px
+      box-sizing: border-box
+      color: $red
+      svg.icon
+        width: 16px
+        height: 16px
+    a.preview
       display: block
       width: 48px
       height: 48px
@@ -392,25 +404,9 @@ ul.ed-assets
         position: center center
         size: cover
         repeat: no-repeat
-      &.add
-        background-color: $green
-        color: white
-      &.detach
-        background-color: $dark
-        color: white
-      &.yt
-        &:after
-          content: ""
-          position: absolute
-          top: 15px
-          right: 14px
-          width: 20px
-          height: 20px
-          background:
-            image: image-url('droom/playable.png')
-            position: 0 0
-            repeat: no-repeat
-            size: contain
+    &:hover
+      a.delete
+        display: block
     input
       position: absolute
       left: 1000px

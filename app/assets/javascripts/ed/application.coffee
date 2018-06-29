@@ -38,10 +38,10 @@ class Ed.Application extends Backbone.Marionette.Application
   #
   initUI: (fn) =>
     @model = new Ed.Models.Editable
-    @loadAssets()
-    @_editor = new Ed.Views.Editor
-      model: @model
-      el: @el
+    @loadAssets().done =>
+      @_editor = new Ed.Views.Editor
+        model: @model
+        el: @el
 
   reset: =>
     @initUI()
@@ -89,7 +89,7 @@ class Ed.Application extends Backbone.Marionette.Application
   #
   render: (template, data) ->
     if template?
-      if jst_function = JST["ed/#{template}"]
+      if jst_function = JST[template]
         jst_function(data)
       else if _.isFunction(template)
         template(data)
@@ -141,11 +141,11 @@ class Ed.Application extends Backbone.Marionette.Application
     if console?.log? and @logging()
       console.log arguments...
 
-  logging: (level) =>
-    !!@_log_level
+  logging: () =>
+    @_logging or @config('logging')
 
-  startLogging: (level) =>
-    @_log_level = level ? 'info'
+  startLogging: =>
+    @_logging = true
 
   stopLogging: (level) =>
-    @_log_level = null
+    @_logging = false

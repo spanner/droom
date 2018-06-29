@@ -3,22 +3,19 @@
 # The submenu for each asset picker is a chooser-list derived AssetList.
 #
 class Ed.Views.ListedAsset extends Ed.View
-  template: "listed"
+  template: "ed/listed"
   tagName: "li"
   className: "asset"
 
-  ui:
-    img: 'img'
-
   events:
-    "click a.delete": "deleteModel"
+    "click a.delete": "deleteMe"
     "click a.preview": "selectMe"
 
   bindings:
     "a.preview":
       attributes: [
         name: 'style'
-        observe: 'thumb_url'
+        observe: 'icon_url'
         onGet: "backgroundUrl"
       ,
         name: "class"
@@ -28,20 +25,8 @@ class Ed.Views.ListedAsset extends Ed.View
         name: "title"
         observe: "title"
       ]
-    ".file_size":
-      observe: "file_size"
-      onGet: "inBytes"
-    ".width":
-      observe: "width"
-      onGet: "inPixels"
-    ".height":
-      observe: "height"
-      onGet: "inPixels"
-    ".duration":
-      observe: "duration"
-      onGet: "inTime"
 
-  deleteModel: (e) =>
+  deleteMe: (e) =>
     e?.preventDefault()
     @model.remove()
 
@@ -54,18 +39,6 @@ class Ed.Views.ListedAsset extends Ed.View
       "background-image: url('#{url}')"
     else
       ""
-
-
-class Ed.Views.NoListedAsset extends Ed.View
-  template: "no_assets"
-  tagName: "li"
-  className: "empty"
-
-
-class Ed.Views.NoListedImage extends Ed.View
-  template: "no_images"
-  tagName: "li"
-  className: "empty"
 
 
 class Ed.Views.AssetList extends Ed.CollectionView
@@ -147,7 +120,7 @@ class Ed.Views.Asset extends Ed.View
 #
 class Ed.Views.Image extends Ed.Views.Asset
   editorView: "ImageEditor"
-  template: "image"
+  template: "ed/image"
   className: "image full"
   defaultSize: "full"
 
@@ -165,9 +138,10 @@ class Ed.Views.Image extends Ed.Views.Asset
       ]
 
   wrap: =>
+    @log "🤡 wrap", @$el.data('image')
     if image_id = @$el.data('image')
-      @model = new Ed.Models.Image(id: image_id)
-      @model.load()
+      @log "🤡 ->", _ed.images.get(image_id)
+      @model = _ed.images.get(image_id)
       @triggerMethod 'wrap'
 
   onRender: =>
@@ -201,12 +175,11 @@ class Ed.Views.MainImage extends Ed.Views.Asset
   defaultSize: "hero"
 
   wrap: =>
-    @log "MainImage wrap", @el
     @$el.addClass 'editing'
+    @log "🤡 wrap", @$el.data('image')
     if image_id = @$el.data('image')
-      @log "got image_id", image_id
-      image = new Ed.Models.Image(id: image_id)
-      @setModel(image)
+      @log "🤡 ->", _ed.images.get(image_id)
+      @setModel _ed.images.get(image_id)
     else
       @setModel(null)
 
@@ -237,14 +210,12 @@ class Ed.Views.MainImage extends Ed.Views.Asset
         ]
       @ui.overlay.show()
       @ui.prompt.hide()
-      @_remover?.show()
     else
       @log "unbindImage"
       @$el.css
         'background-image': ''
       @ui.prompt.show()
       @ui.overlay.hide()
-      @_remover?.hide()
     @stickit()
 
   # not a simple binding because in this context, weighting is a property of the Editable not the image
@@ -262,7 +233,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 #
 class Ed.Views.Video extends Ed.Views.Asset
   editorView: "VideoEditor"
-  template: "video"
+  template: "ed/video"
   className: "video full"
   defaultSize: "full"
 
@@ -318,7 +289,7 @@ class Ed.Views.Video extends Ed.Views.Asset
 
 
 class Ed.Views.Block extends Ed.View
-  template: "block"
+  template: "ed/block"
   className: "block"
 
   ui:
@@ -352,7 +323,7 @@ class Ed.Views.Block extends Ed.View
 
 
 class Ed.Views.Blocks extends Ed.CompositeView
-  template: "blockset"
+  template: "ed/blockset"
   tagName: "section"
   className: "blockset"
   childViewContainer: ".blocks"
@@ -405,7 +376,7 @@ class Ed.Views.Blocks extends Ed.CompositeView
 #
 class Ed.Views.Quote extends Ed.Views.Asset
   editorView: "QuoteEditor"
-  template: "quote"
+  template: "ed/quote"
   className: "quote full"
   defaultSize: "full"
 
@@ -447,7 +418,7 @@ class Ed.Views.Quote extends Ed.Views.Asset
 
 class Ed.Views.Button extends Ed.Views.Asset
   editorView: "ButtonEditor"
-  template: "button"
+  template: "ed/button"
   tagName: "a"
   className: "button full"
   defaultSize: "full"

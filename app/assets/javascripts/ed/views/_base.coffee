@@ -74,6 +74,7 @@ class Ed.View extends Backbone.Marionette.View
     "background-color: #{color}" if color
 
   styleBackgroundImage: ([url, data]=[]) =>
+    debugger
     url ||= data
     if url
       "background-image: url('#{url}')"
@@ -121,18 +122,14 @@ class Ed.View extends Backbone.Marionette.View
     e?.preventDefault()
 
   log: ->
-    if _ed.logging() and console?.log?
-      console.log "[#{@constructor.name}]", arguments...
+    _ed.log "[#{@constructor.name}]", arguments...
 
-## Collection View
+
+## Collection Views
 #
-# Adds some conventional lifecycle and useful bindings to our various composite views:
-# map, directory, list of activities at venue or from organisation.
-
+# Adds some conventional lifecycle and useful bindings to our various list and selection views.
+#
 class Ed.CollectionView extends Backbone.Marionette.CollectionView
-
-  initialize: =>
-    @render()
 
   log: ->
     _cms.log "[#{@constructor.name}]", arguments...
@@ -149,8 +146,8 @@ class Ed.CompositeView extends Backbone.Marionette.CompositeView
     # each subclass should have its own way of lifting data from the DOM to populate a collection.
 
   beforeWrap: =>
+    # ...possibly with some dom manipulation
     @bindUIElements()
-    # possibly with some dom manipulation
 
 
 

@@ -3,7 +3,7 @@
 # This view inserts a new asset element into the html stream with a management view wrapped around it.
 #
 class Ed.Views.AssetInserter extends Ed.View
-  template: "inserter"
+  template: "ed/inserter"
   tagName: "div"
   className: "ed-inserter"
 
@@ -129,6 +129,8 @@ class Ed.Views.AssetEditor extends Ed.View
 
   initialize: (opts={}) =>
     @_size ?= _.result @, 'defaultSize'
+    if collection_name = @getOption('collectionName')
+      @collection = _ed[collection_name]
     super
 
   onRender: =>
@@ -250,37 +252,33 @@ class Ed.Views.AssetEditor extends Ed.View
 
 
 class Ed.Views.ImageEditor extends Ed.Views.AssetEditor
-  template: "image_editor"
+  template: "ed/image_editor"
   pickerView: "ImagePicker"
   importerView: "ImageImporter"
-
-  initialize: (data, options={}) ->
-    @collection ?= new Ed.Collections.Images
-    super
+  uploaderView: "AssetUploader"
+  collectionName: "images"
 
 
 class Ed.Views.MainImageEditor extends Ed.Views.ImageEditor
-  template: "main_image_editor"
+  template: "ed/main_image_editor"
 
 
 class Ed.Views.VideoEditor extends Ed.Views.AssetEditor
-  template: "video_editor"
+  template: "ed/video_editor"
   pickerView: "VideoPicker"
   importerView: "VideoImporter"
-
-  initialize: ->
-    @collection ?= new Ed.Collections.Videos
-    super
+  uploaderView: "AssetUploader"
+  collectionName: "videos"
 
 
 class Ed.Views.QuoteEditor extends Ed.Views.AssetEditor
-  template: "quote_editor"
+  template: "ed/quote_editor"
   importerView: false
   uploaderView: false
 
 
 class Ed.Views.ButtonEditor extends Ed.Views.AssetEditor
-  template: "button_editor"
+  template: "ed/button_editor"
   importerView: false
   uploaderView: false
 
@@ -300,13 +298,10 @@ class Ed.Views.AssetPicker extends Ed.Views.MenuView
     list: ".pick"
     closer: "a.close"
 
-  initialize: ->
-    super
-    @collection.on 'add remove reset', @setVisibility
-
   onRender: =>
     super
     @setVisibility()
+    @collection.on 'add remove reset', @setVisibility
 
   onOpen: =>
     unless @_list_view
@@ -314,9 +309,7 @@ class Ed.Views.AssetPicker extends Ed.Views.MenuView
       @_list_view = new Ed.Views[list_view_class]
         collection: @collection
       @ui.list.append @_list_view.el
-      @log "🤡 onOpen appending list view to", @ui.list
       @_list_view.on "select", @selectModel
-    @collection.reload()
     @_list_view.render()
 
   # passed back to the Asset view.
@@ -329,15 +322,15 @@ class Ed.Views.AssetPicker extends Ed.Views.MenuView
       @$el.show()
     else
       @$el.hide()
-    
+
 
 class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
-  template: "image_picker"
+  template: "ed/image_picker"
   listView: "ImageList"
 
 
 class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
-  template: "video_picker"
+  template: "ed/video_picker"
   listView: "VideoList"
 
 
@@ -346,7 +339,7 @@ class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
 # Take a file, turn it into an Asset and call setModel on the Asset container.
 #
 class Ed.Views.AssetUploader extends Ed.View
-  template: "asset_uploader"
+  template: "ed/asset_uploader"
   tagName: "div"
   className: "uploader"
 
@@ -369,8 +362,8 @@ class Ed.Views.AssetUploader extends Ed.View
     @trigger 'pick'
     @ui.filefield.click()
 
+  # but triggerPick is called from a real click event, which we allow to continue.
   triggerPick: =>
-    # event is allowed to continue.
     @trigger 'pick'
 
   # then `getPickedFile` is called on filefield change.
@@ -387,11 +380,12 @@ class Ed.Views.AssetUploader extends Ed.View
       reader.readAsDataURL(file)
 
   createModel: (data, file) =>
-    model = @collection.add
+    model_data =
       file_data: data
       file_name: file.name
       file_size: file.size
       file_type: file.type
+    model = @collection.add model_data, at: 0
     @trigger "select", model
     model.save().done =>
       @trigger "create", model
@@ -445,11 +439,11 @@ class Ed.Views.AssetUploader extends Ed.View
 
 
   class Ed.Views.ImageImporter extends Ed.Views.AssetImporter
-    template: "image_importer"
+    template: "ed/image_importer"
 
 
   class Ed.Views.VideoImporter extends Ed.Views.AssetImporter
-    template: "video_importer"
+    template: "ed/video_importer"
 
 
 
@@ -469,7 +463,7 @@ class Ed.Views.AssetUploader extends Ed.View
 # These are small thumbnail galleries with add and import controls alongside.
 #
 class Ed.Views.ListedAsset extends Ed.View
-  template: "listed"
+  template: "ed/listed"
   tagName: "li"
   className: "asset"
 
@@ -532,7 +526,7 @@ class Ed.Views.ListedAsset extends Ed.View
 
 
 class Ed.Views.NoListedAsset extends Ed.View
-  template: "none"
+  template: "ed/none"
   tagName: "li"
   className: "empty"
 
@@ -625,7 +619,7 @@ class Ed.Views.Toolbar extends Ed.View
 class Ed.Views.AssetStyler extends Ed.View
   tagName: "div"
   className: "styler"
-  template: "styler"
+  template: "ed/styler"
   events:
     "click a.right": "setRight"
     "click a.left": "setLeft"
@@ -652,7 +646,7 @@ class Ed.Views.AssetStyler extends Ed.View
 class Ed.Views.ImageWeighter extends Ed.Views.MenuView
   tagName: "div"
   className: "weighter"
-  template: "weighter"
+  template: "ed/weighter"
 
   ui:
     head: ".menu-head"
