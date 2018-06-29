@@ -18,7 +18,7 @@ class Ed.View extends Backbone.Marionette.View
     # possibly with some dom manipulation
 
   onRender: =>
-    @stickit()
+    @stickit() if @model
     # _.defer -> balanceText('.balanced')
 
   onDestroy: =>
@@ -65,6 +65,33 @@ class Ed.View extends Backbone.Marionette.View
     "yt" if provider is "YouTube"
 
 
+  ## style-binding helpers
+  #
+  styleColor: (color) =>
+    "color: #{color}" if color
+
+  styleBackgroundColor: (color) =>
+    "background-color: #{color}" if color
+
+  styleBackgroundImage: ([url, data]=[]) =>
+    url ||= data
+    if url
+      "background-image: url('#{url}')"
+    else 
+      ""
+
+  styleBackgroundImageAndPosition: ([url, weighting]=[]) =>
+    weighting ?= 'center center'
+    "background-image: url('#{url}'); background-position: #{weighting}"
+
+  urlAtSize: (url) =>
+    @model.get("#{@_size}_url") ? url
+
+  styleBackgroundAtSize: (url) =>
+    if url
+      "background-image: url('#{@urlAtSize(url)}')"
+
+
   ## Contenteditable helpers
 
   ensureP: (e) =>
@@ -97,8 +124,21 @@ class Ed.View extends Backbone.Marionette.View
     if _ed.logging() and console?.log?
       console.log "[#{@constructor.name}]", arguments...
 
+## Collection View
+#
+# Adds some conventional lifecycle and useful bindings to our various composite views:
+# map, directory, list of activities at venue or from organisation.
 
-class Ed.Views.CompositeView extends Backbone.Marionette.CompositeView
+class Ed.CollectionView extends Backbone.Marionette.CollectionView
+
+  initialize: =>
+    @render()
+
+  log: ->
+    _cms.log "[#{@constructor.name}]", arguments...
+
+
+class Ed.CompositeView extends Backbone.Marionette.CompositeView
 
   initialize: =>
     @beforeWrap()
@@ -114,25 +154,36 @@ class Ed.Views.CompositeView extends Backbone.Marionette.CompositeView
 
 
 
-class Ed.Views.MenuView extends Backbone.Marionette.View
+# The menu view has a head and a toggled body.
+# Examples include the image and video pickers.
+#
+class Ed.Views.MenuView extends Ed.View
 
-  onRender: =>
-    @stickit() if @model
+  ui:
+    head: ".menu-head"
+    body: ".menu-body"
+    closer: "a.close"
 
-  toggleMenu: =>
-    if @showing()
-      @close()
-    else
-      @open()
+  events:
+    "click @ui.head": "toggleMenu"
+    "click @ui.closer": "close"
+
+  toggleMenu: (e) =>
+    e?.preventDefault()
+    if @showing() then @close() else @open()
 
   showing: =>
     @$el.hasClass('open')
 
-  open: =>
+  open: (e) =>
+    e?.preventDefault()
     @$el.addClass('open')
-    @ui.body.show()
+    @triggerMethod 'open'
+    @trigger 'opened'
 
-  close: =>
+  close: (e) =>
+    e?.preventDefault()
     @_menu_view?.close()
-    @ui.body.hide()
     @$el.removeClass('open')
+    @triggerMethod 'close'
+    @trigger 'closed'

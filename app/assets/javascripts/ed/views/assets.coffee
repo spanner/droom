@@ -3,7 +3,7 @@
 # The submenu for each asset picker is a chooser-list derived AssetList.
 #
 class Ed.Views.ListedAsset extends Ed.View
-  template: "assets/listed"
+  template: "listed"
   tagName: "li"
   className: "asset"
 
@@ -57,16 +57,21 @@ class Ed.Views.ListedAsset extends Ed.View
 
 
 class Ed.Views.NoListedAsset extends Ed.View
-  template: "assets/no_asset"
+  template: "no_assets"
+  tagName: "li"
+  className: "empty"
+
+
+class Ed.Views.NoListedImage extends Ed.View
+  template: "no_images"
   tagName: "li"
   className: "empty"
 
 
 class Ed.Views.AssetList extends Ed.CollectionView
   childView: Ed.Views.ListedAsset
-  emptyView: Ed.Views.NoListedAsset
   tagName: "ul"
-  className: "cms-assets"
+  className: "ed-assets"
 
   childViewTriggers:
     'select': 'select'
@@ -101,17 +106,14 @@ class Ed.Views.Asset extends Ed.View
     "click @ui.catcher": "pickFile"
 
   initialize: =>
+    super
     @_size ?= _.result @, 'defaultSize'
-    @bindUIElements();
-    @wrap() or @render()
-
-  wrap: =>
-    #required in subclass to extract model properties from html.
 
   onRender: =>
+    @log "onRender", @el
     @$el.attr "contenteditable", false
     @stickit() if @model
-    @addHelpers()
+    @addEditor()
 
   addEditor: =>
     if editor_view_class = Ed.Views[@getOption('editorView')]
@@ -145,7 +147,7 @@ class Ed.Views.Asset extends Ed.View
 #
 class Ed.Views.Image extends Ed.Views.Asset
   editorView: "ImageEditor"
-  template: "assets/image"
+  template: "image"
   className: "image full"
   defaultSize: "full"
 
@@ -173,87 +175,6 @@ class Ed.Views.Image extends Ed.Views.Asset
     super
 
 
-
-# Main image is an asset view but it has the main editable as model,
-# and on selection we assign the asset to its main_image association
-# rather than embedding a view with the asset as model.
-#
-class Ed.Views.MainImage extends Ed.Views.Asset
-  editorView: Ed.Views.MainImageEditor
-  template: false
-  defaultSize: "hero"
-
-  wrap: =>
-    @$el.addClass 'editing'
-    if image_id = @$el.data('image')
-      @log "got image_id", image_id
-      image = new Ed.Models.Image(id: image_id)
-      @setModel(image)
-    else
-      @setModel(null)
-
-    @model.on "change:main_image_weighting", @setWeighting
-    if weighting = @$el.css('background-position')
-      named_weighting = weighting.replace(/^100%/g, 'right').replace(/^50%/g, 'center').replace(/^0%*/g, 'left').replace(/100%$/g, 'bottom').replace(/50%$/g, 'center').replace(/0%*$/g, 'top')
-      @model.set 'main_image_weighting', named_weighting
-
-  setModel: (image) =>
-    @log "setModel", image
-    @bindImage(image)
-    @model.setImage(image)
-    @_progress?.setModel(image)
-
-  bindImage: (image) =>
-    if @image
-      @unstickit @image
-    if image
-      @log "bindImage", image
-      @image = image
-      @addBinding @image, ":el",
-        attributes: [
-          name: "style"
-          observe: "url"
-          onGet: "backgroundAtSizeAndPosition"
-        ]
-      @ui.overlay.show()
-      @ui.prompt.hide()
-      @_remover?.show()
-    else
-      @log "unbindImage"
-      @$el.css
-        'background-image': ''
-      @ui.prompt.show()
-      @ui.overlay.hide()
-      @_remover?.hide()
-    @stickit()
-
-  # not a simple binding because weighting is a property of the Editable, not of the image
-  # and we can only bind the `style` attribute as a whole.
-  setWeighting: (model, weighting) =>
-    @log "setWeighting", weighting, @el
-    if weighting
-      @$el.css
-        'background-position': weighting
-    else
-      @$el.css('background-position', '')
-
-  # bindings for use within an asset model.
-  #
-  imageUrlAtSize: (url) =>
-    @image?.get("#{@_size}_url") ? url
-
-  backgroundAtSizeAndPosition: (url) =>
-    style = ""
-    if url
-      style += "background-image: url('#{@imageUrlAtSize(url)}')"
-      if weighting = @model.get('main_image_weighting')
-        style += "; background-position: #{weighting}"
-    style
-
-  remove: () =>
-    @setModel null
-
-
 class Ed.Views.BackgroundImage extends Ed.Views.Image
   template: false
   className: "bg"
@@ -270,11 +191,78 @@ class Ed.Views.BackgroundImage extends Ed.Views.Image
       ]
 
 
+# Main image is an asset view but it has the main editable as model,
+# and on selection we assign the asset to its main_image association
+# rather than embedding a view with the asset as model.
+#
+class Ed.Views.MainImage extends Ed.Views.Asset
+  editorView: "MainImageEditor"
+  template: false
+  defaultSize: "hero"
+
+  wrap: =>
+    @log "MainImage wrap", @el
+    @$el.addClass 'editing'
+    if image_id = @$el.data('image')
+      @log "got image_id", image_id
+      image = new Ed.Models.Image(id: image_id)
+      @setModel(image)
+    else
+      @setModel(null)
+
+    # @model.on "change:main_image_weighting", @setWeighting
+    # if weighting = @$el.css('background-position')
+    #   named_weighting = weighting.replace(/^100%/g, 'right').replace(/^50%/g, 'center').replace(/^0%*/g, 'left').replace(/100%$/g, 'bottom').replace(/50%$/g, 'center').replace(/0%*$/g, 'top')
+    #   @model.set 'main_image_weighting', named_weighting
+
+  # setModel is overridden to assign an the incoming image to our existing model as its `main_image` attribute.
+  #
+  setModel: (image) =>
+    @log "setModel", image
+    @bindImage(image)
+    @model.setImage(image)
+    @_progress?.setModel(image)
+
+  bindImage: (image) =>
+    if @image
+      @unstickit @image
+    if image
+      @log "bindImage", image
+      @image = image
+      @addBinding @image, ":el",
+        attributes: [
+          name: "style"
+          observe: "url"
+          onGet: "styleBackgroundAtSize"
+        ]
+      @ui.overlay.show()
+      @ui.prompt.hide()
+      @_remover?.show()
+    else
+      @log "unbindImage"
+      @$el.css
+        'background-image': ''
+      @ui.prompt.show()
+      @ui.overlay.hide()
+      @_remover?.hide()
+    @stickit()
+
+  # not a simple binding because in this context, weighting is a property of the Editable not the image
+  # and we can only bind the `style` attribute as a whole.
+  # setWeighting: (model, weighting) =>
+  #   @log "setWeighting", weighting, @el
+  #   if weighting
+  #     @$el.css
+  #       'background-position': weighting
+  #   else
+  #     @$el.css('background-position', '')
+
+
 ## Video assets
 #
 class Ed.Views.Video extends Ed.Views.Asset
   editorView: "VideoEditor"
-  template: "assets/video"
+  template: "video"
   className: "video full"
   defaultSize: "full"
 
@@ -330,7 +318,7 @@ class Ed.Views.Video extends Ed.Views.Asset
 
 
 class Ed.Views.Block extends Ed.View
-  template: "ed/block"
+  template: "block"
   className: "block"
 
   ui:
@@ -363,8 +351,8 @@ class Ed.Views.Block extends Ed.View
     html or "<p></p>"
 
 
-class Ed.Views.Blocks extends Ed.Views.CompositeView
-  template: "ed/blockset"
+class Ed.Views.Blocks extends Ed.CompositeView
+  template: "blockset"
   tagName: "section"
   className: "blockset"
   childViewContainer: ".blocks"
@@ -415,9 +403,9 @@ class Ed.Views.Blocks extends Ed.Views.CompositeView
 #
 # Just html, with no reference to an external asset, but editable and stylable like an embedded object.
 #
-class Cms.Views.Quote extends Cms.Views.Asset
+class Ed.Views.Quote extends Ed.Views.Asset
   editorView: "QuoteEditor"
-  template: "assets/quote"
+  template: "quote"
   className: "quote full"
   defaultSize: "full"
 
@@ -438,7 +426,7 @@ class Cms.Views.Quote extends Cms.Views.Asset
       observe: "caption"
 
   wrap: =>
-    @model = new Cms.Models.Quote
+    @model = new Ed.Models.Quote
       utterance: @$el.find('blockquote').text()
       caption: @$el.find('figcaption').text()
     @log "→ wrapped quote", @el, _.clone(@model.attributes)
@@ -459,7 +447,7 @@ class Cms.Views.Quote extends Cms.Views.Asset
 
 class Ed.Views.Button extends Ed.Views.Asset
   editorView: "ButtonEditor"
-  template: "ed/button"
+  template: "button"
   tagName: "a"
   className: "button full"
   defaultSize: "full"

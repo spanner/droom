@@ -1,5 +1,8 @@
 require 'paperclip'
 
+Paperclip::DataUriAdapter.register
+Paperclip::UriAdapter.register
+
 Paperclip.interpolates :user do |attachment, style|
   attachment.instance.user_id
 end

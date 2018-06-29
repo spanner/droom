@@ -1,4 +1,4 @@
-.cms-buttons<
+.ed-buttons<
   %a.control.show{title: "Insert something..."}>
     %svg.icon
       %use{"xlink:href" => "#plus_symbol"}

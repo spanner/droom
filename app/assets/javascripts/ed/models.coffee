@@ -57,12 +57,14 @@ class Ed.Model extends Backbone.Model
     root = @apiRoot()
     json = {}
     json[root] = {}
+    @log "savedAttributes", root, _.result @, "savedAttributes"
     if attributes = _.result @, "savedAttributes"
       for att in attributes
         getter = "get" + att.charAt(0).toUpperCase() + att.slice(1)
         json[root][att] = @[getter]?() ? @get(att)
     else
       json[root] = super
+    @log "-> json", json
     json
 
   revert: =>
@@ -100,8 +102,121 @@ class Ed.Model extends Backbone.Model
   remove: =>
     @collection?.remove(@)
 
+  ## Housekeeping
+  #
+  touch: () =>
+    @set 'updated_at', moment(),
+      stickitChange: true
+
+  isDestroyed: () =>
+    @get('deleted_at')
+
+  log: ->
+    _ed.log "[#{@constructor.name}]", arguments...
+
+  confirm: ->
+    _ed.confirm arguments...
+
+  complain: ->
+    _ed.complain arguments...
+
 
 class Ed.Collection extends Backbone.Collection
+
+  initialize: (models, @options={}) ->
+    @_class_name = @constructor.name
+    @_nested = @options.nested    # normally only set by hasMany
+    @setOriginalIds()
+    @prepareLoader()
+    @setDefaults()
+    @on 'add remove reset', @setDefaults
+
+  setDefaults: =>
+    # noop here
+
+  prepareLoader: =>
+    @_loaded?.reject()
+    @_loaded = $.Deferred()
+    @_loading = false
+
+  load: =>
+    unless @_loading or @isLoaded()
+      @_loading = true
+      @fetch(reset: true).done(@loaded).fail(@notLoaded)
+    @_loaded.promise()
+
+  reload: =>
+    @log "reload!"
+    @prepareLoader()
+    @load()
+
+  parse: (response) =>
+    if @prepareData(response)
+      response.data
+
+  prepareData: (response) =>
+    # noop here. 
+    # subclass can amend data or return false to stop parsing.
+    true
+
+  loaded: (data, status, xhr) =>
+    @_loading = false
+    @sort()
+    @setOriginalIds()
+    @_loaded?.resolve(data)
+    @trigger('loaded')
+
+  whenLoaded: (dothis) =>
+    @_loaded.done(dothis)
+
+  whenLoadedOrFailed: (dothis) =>
+    @_loaded.always(dothis)
+
+  loadAnd: (dothis) =>
+    @whenLoaded(dothis)
+    @load() unless @_loading or @isLoaded()
+
+  reloadAnd: (dothis) =>
+    @whenLoaded(dothis)
+    @reload()
+
+  isLoaded: =>
+    debugger unless @_loaded
+    @_loaded?.state() is 'resolved'
+
+  notLoaded: (error) =>
+    @_loaded.reject(error)
+
+
+  ## Change management
+  #
+  hasAnyChanges: =>
+    @hasCollectionChanges() or @hasModelChanges()
+
+  hasCollectionChanges: =>
+    !_.isEqual @pluck('id'), @_original_ids
+
+  hasModelChanges: =>
+    !!@findWhere changed: true
+
+  setOriginalIds: =>
+    @_original_ids = @pluck('id')
+
+  resetChanges: =>
+    @setOriginalIds()
+    @each (m) -> m.resetChanges()
+
+
+  ## Housekeeping
+  #
+  log: ->
+    _ed.log "[#{@constructor.name}]", arguments...
+
+  confirm: ->
+    _ed.confirm arguments...
+
+  complain: ->
+    _ed.complain arguments...
 
 
 # The page object itself doesn't do much: most of the work here goes into managing its
@@ -197,6 +312,7 @@ class Ed.Collections.Blocks extends Backbone.Collection
 #
 class Ed.Models.Image extends Ed.Model
   savedAttributes: ["file", "file_name", "remote_url", "caption"]
+
   defaults:
     url: ""
     hero_url: ""
@@ -235,7 +351,7 @@ class Ed.Models.Image extends Ed.Model
     canvas.toDataURL('image/png')
 
 
-class Ed.Collections.Images extends Backbone.Collection
+class Ed.Collections.Images extends Ed.Collection
   model: Ed.Models.Image
   url: "/api/images"
 
@@ -280,7 +396,7 @@ class Ed.Models.Video extends Ed.Model
       canvas.toDataURL('image/jpeg')
 
 
-class Ed.Collections.Videos extends Backbone.Collection
+class Ed.Collections.Videos extends Ed.Collection
   model: Ed.Models.Video
   url: "/api/videos"
 

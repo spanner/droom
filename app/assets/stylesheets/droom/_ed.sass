@@ -29,33 +29,42 @@ a.control, label.control
   pointer-events: auto
   display: inline-block
   vertical-align: top
-  width: 24px
-  height: 24px
-  background-color: $translucent
-  border-radius: 12px
-  margin-left: 4px
+  width: 32px
+  height: 32px
+  margin-left: 2px
   margin-bottom: 8px
   cursor: pointer
-  color: currentColor
+  overflow: hidden
+  color: white
+  opacity: 1
+  transition: color 0.25s ease-out, opacity 0.25s ease-out
+  border-radius: 16px
+  border: 1px solid white
+  background-color: white
   &:hover
-    color: $dark
-    background-color: white
+    opacity: 1
   input[type="file"]
     display: none
   svg
-    width: 24px
-    height: 24px
+    width: 32px
+    height: 32px
     transition: transform 0.5s ease-out
   &.delete
     color: $red
-    &:hover
-      color: $reddish
-  &.choose:hover
+  &.import
+    color: $blue
+  &.choose
     color: $orange
-  &.add:hover
+  &.add
     color: $green
-  &.properties:hover
+  &.properties
     color: $mid
+  &.small
+    width: 24px
+    height: 24px
+    svg
+      width: 24px
+      height: 24px
 
 span.note
   color: $pale
@@ -85,16 +94,6 @@ span.note
     line-height: 100px
     &.processing
       font-size: 1rem
-
-.ed-buttons
-  display: none
-  pointer-events: none
-  z-index: 300
-  .editor, .picker, .ed-menu
-    display: inline-block
-    margin-right: 2px
-    a.control, label.control
-      border: none
 
 .ed-content, .ed-intro
   .placeholder
@@ -141,8 +140,6 @@ span.note
 .ed-image
   background:
     color: $mid
-  a.control, label.control
-    box-shadow: 0 0 6px $shadow
 
 .editing
   .blockset
@@ -212,19 +209,18 @@ span.note
         display: none
   .ed-buttons
     position: absolute
-    width: calc(100% - 20px)
-    top: 10px
-    left: 10px
-    .picker, .styler, .config, .weighter, .remover
+    width: calc(100% - 24px)
+    top: 12px
+    left: 12px
+    .uploader, .importer, .picker, .styler, .config, .weighter, .remover
       display: block
       margin: 0
-    .picker
+    .uploader, .importer, .picker
       float: left
-    .remover
+      margin-right: 4px
+    .delete, .styler, .weighter
       float: right
-      margin: 0 4px
-    .styler
-      float: right
+      margin-left: 4px
     .thumbnails, .select
       display: inline-block
       vertical-align: top
@@ -285,28 +281,49 @@ span.note
     display: block
     width: 250px
     a.control
-      width: 36px
-      height: 36px
-      margin-right: 8px
-      svg
-        width: 36px
-        height: 36px
+      margin-right: 2px
 
 .ed-menu
+  display: inline-block
+  text-align: left
   .menu-body
-    display: none
     position: absolute
+    display: none
     z-index: 500
     left: 10px
-    top: 40px
+    top: 10px
     width: 340px
     overflow: hidden
     padding: 0
     background-color: white
     box-sizing: border-box
     pointer-events: auto
-    box-shadow: 0 3px 4px $shadow
-    border-radius: 4px
+    border-radius: 8px
+    box-shadow: 0 2px 8px $shadow
+    a.sidestep, a.close
+      cursor: pointer
+      color: $pale
+      &:hover
+        color: $mid
+    a.sidestep
+      color: $mid
+      +hover
+    a.close
+      display: block
+      position: absolute
+      top: 10px
+      right: 10px
+      svg
+        width: 28px
+        height: 28px
+    h3
+      margin: 10px 0 10px 10px
+      svg
+        width: 32px
+        height: 32px
+      svg, span.label
+        display: inline-block
+        vertical-align: middle
     .weighter &
       right: 32px
       left: auto
@@ -316,11 +333,9 @@ span.note
 .open
   .ed-menu
     &>a.control, &>label.control
-      border-bottom-right-radius: 0
-      border-bottom-left-radius: 0
+      border-radius: 0
       background-color: white
-      box-shadow: 0 3px 4px $shadow
-      padding-bottom: 4px
+      padding-bottom: 5px
       z-index: 501
     .menu-body
       display: block

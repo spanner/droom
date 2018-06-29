@@ -1,4 +1,4 @@
-.cms-menu
+.ed-menu
   %a.control.import.menu-head
     %svg.icon.filled
       %use{"xlink:href" => "#download_button_symbol"}
@@ -10,11 +10,11 @@
       %svg.icon
         %use{"xlink:href" => "#download_symbol"}
       %span.label 
-        = t('headings.import_image')
+        Import image
 
-    .cms-importer
-      %input.remote_url{type: "url", placeholder: t("placeholders.image.remote_url")}>
+    .ed-importer
+      %input.remote_url{type: "url", placeholder: "From URL..."}>
       %a.button.submit>
-        = t('buttons.import')
+        Import
       %p.waiter
-        = t('waiters.image_import')
+        Please wait: fetching and processing remote image

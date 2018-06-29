@@ -3,7 +3,7 @@
 # This view inserts a new asset element into the html stream with a management view wrapped around it.
 #
 class Ed.Views.AssetInserter extends Ed.View
-  template: "ed/inserter"
+  template: "inserter"
   tagName: "div"
   className: "ed-inserter"
 
@@ -113,8 +113,8 @@ class Ed.Views.AssetEditor extends Ed.View
   uploaderView: "AssetUploader"
 
   ui:
-    catcher: ".cms-dropmask"
-    buttons: ".cms-buttons"
+    catcher: ".ed-dropmask"
+    buttons: ".ed-buttons"
     deleter: "a.delete"
 
   triggers:
@@ -132,7 +132,7 @@ class Ed.Views.AssetEditor extends Ed.View
     super
 
   onRender: =>
-    @$el.attr('data-cms', true)
+    @$el.attr('data-ed', true)
     @addHelpers()
 
   addHelpers: =>
@@ -153,7 +153,7 @@ class Ed.Views.AssetEditor extends Ed.View
         @_importer.$el.appendTo @ui.buttons
         @_importer.render()
         @_importer.on "select", @setModel
-        @_uploader.on "create", @update
+        @_importer.on "create", @update
         @_importer.on "open", => @closeOtherHelpers(@_importer)
 
     if picker_view_class_name = @getOption('pickerView')
@@ -165,7 +165,7 @@ class Ed.Views.AssetEditor extends Ed.View
         @_picker.on "select", @setModel
         @_picker.on "open", => @closeOtherHelpers(@_picker)
 
-    if _Ed.getOption('asset_styles')
+    if _ed.getOption('asset_styles')
       if styler_view_class_name = @getOption('stylerView')
         if styler_view_class = Ed.Views[styler_view_class_name]
           @_styler = new styler_view_class
@@ -250,16 +250,21 @@ class Ed.Views.AssetEditor extends Ed.View
 
 
 class Ed.Views.ImageEditor extends Ed.Views.AssetEditor
-  template: "assets/image_editor"
+  template: "image_editor"
   pickerView: "ImagePicker"
+  importerView: "ImageImporter"
 
   initialize: (data, options={}) ->
     @collection ?= new Ed.Collections.Images
     super
 
 
+class Ed.Views.MainImageEditor extends Ed.Views.ImageEditor
+  template: "main_image_editor"
+
+
 class Ed.Views.VideoEditor extends Ed.Views.AssetEditor
-  template: "assets/video_editor"
+  template: "video_editor"
   pickerView: "VideoPicker"
   importerView: "VideoImporter"
 
@@ -269,59 +274,130 @@ class Ed.Views.VideoEditor extends Ed.Views.AssetEditor
 
 
 class Ed.Views.QuoteEditor extends Ed.Views.AssetEditor
-  template: "assets/quote_editor"
+  template: "quote_editor"
   importerView: false
   uploaderView: false
 
 
 class Ed.Views.ButtonEditor extends Ed.Views.AssetEditor
-  template: "assets/button_editor"
+  template: "button_editor"
   importerView: false
   uploaderView: false
 
 
+## Asset pickers
+#
+# Display a list of assets, receive a selection click and call setModel on the Asset container.
+#
+class Ed.Views.AssetPicker extends Ed.Views.MenuView
+  tagName: "div"
+  className: "picker"
+  listView: "AssetList"
 
-  ## Asset pickers
+  ui:
+    head: ".menu-head"
+    body: ".menu-body"
+    list: ".pick"
+    closer: "a.close"
+
+  initialize: ->
+    super
+    @collection.on 'add remove reset', @setVisibility
+
+  onRender: =>
+    super
+    @setVisibility()
+
+  onOpen: =>
+    unless @_list_view
+      list_view_class = @getOption('listView')
+      @_list_view = new Ed.Views[list_view_class]
+        collection: @collection
+      @ui.list.append @_list_view.el
+      @log "🤡 onOpen appending list view to", @ui.list
+      @_list_view.on "select", @selectModel
+    @collection.reload()
+    @_list_view.render()
+
+  # passed back to the Asset view.
+  selectModel: (model) =>
+    @close()
+    @trigger "select", model
+
+  setVisibility: =>
+    if @collection.length
+      @$el.show()
+    else
+      @$el.hide()
+    
+
+class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
+  template: "image_picker"
+  listView: "ImageList"
+
+
+class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
+  template: "video_picker"
+  listView: "VideoList"
+
+
+## Asset uploaders
+#
+# Take a file, turn it into an Asset and call setModel on the Asset container.
+#
+class Ed.Views.AssetUploader extends Ed.View
+  template: "asset_uploader"
+  tagName: "div"
+  className: "uploader"
+
+  ui:
+    label: "label"
+    filefield: 'input[type="file"]'
+    prompt: ".prompt"
+
+  events:
+    "click @ui.filefield": "containEvent"
+    "change @ui.filefield": "getPickedFile"
+    "click @ui.label": "triggerPick"
+
+  ## Picked-file handlers
   #
-  # Display a list of assets, receive a selection click and call setModel on the Asset container.
-  #
-  class Ed.Views.AssetPicker extends Ed.Views.MenuView
-    tagName: "div"
-    className: "picker"
-    listView: "AssetsList"
+  # `pickFile` can be called from outside the uploader.
+  pickFile: (e) =>
+    e?.preventDefault()
+    e?.stopPropagation()
+    @trigger 'pick'
+    @ui.filefield.click()
 
-    ui:
-      head: ".menu-head"
-      body: ".menu-body"
-      list: ".pick"
-      closer: "a.close"
+  triggerPick: =>
+    # event is allowed to continue.
+    @trigger 'pick'
 
-    onOpen: =>
-      unless @_list_view
-        list_view_class = @getOption('listView')
-        @_list_view = new Ed.Views[list_view_class]
-          collection: @collection
-        @ui.list.append @_list_view.el
-        @log "🤡 onOpen appending list view to", @ui.list
-        @_list_view.on "select", @selectModel
-      @collection.reload()
-      @_list_view.render()
+  # then `getPickedFile` is called on filefield change.
+  getPickedFile: (e) =>
+    if files = @ui.filefield[0].files
+      @readLocalFile files[0]
 
-    # passed back to the Asset view.
-    selectModel: (model) =>
-      @close()
-      @trigger "select", model
+  # `readLocalFile` is called either from here or from the outer Editor on file drop.
+  readLocalFile: (file) =>
+    if file?
+      reader = new FileReader()
+      reader.onloadend = =>
+        @createModel reader.result, file
+      reader.readAsDataURL(file)
 
+  createModel: (data, file) =>
+    model = @collection.add
+      file_data: data
+      file_name: file.name
+      file_size: file.size
+      file_type: file.type
+    @trigger "select", model
+    model.save().done =>
+      @trigger "create", model
 
-  class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
-    template: "assets/image_picker"
-    listView: "ImageList"
-
-
-  class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
-    template: "assets/video_picker"
-    listView: "VideoList"
-
+  containEvent: (e) =>
+    e?.stopPropagation()
 
 
   ## Asset importers
@@ -369,11 +445,11 @@ class Ed.Views.ButtonEditor extends Ed.Views.AssetEditor
 
 
   class Ed.Views.ImageImporter extends Ed.Views.AssetImporter
-    template: "assets/image_importer"
+    template: "image_importer"
 
 
   class Ed.Views.VideoImporter extends Ed.Views.AssetImporter
-    template: "assets/video_importer"
+    template: "video_importer"
 
 
 
@@ -393,7 +469,7 @@ class Ed.Views.ButtonEditor extends Ed.Views.AssetEditor
 # These are small thumbnail galleries with add and import controls alongside.
 #
 class Ed.Views.ListedAsset extends Ed.View
-  template: "ed/listed"
+  template: "listed"
   tagName: "li"
   className: "asset"
 
@@ -456,103 +532,27 @@ class Ed.Views.ListedAsset extends Ed.View
 
 
 class Ed.Views.NoListedAsset extends Ed.View
-  template: "ed/none"
+  template: "none"
   tagName: "li"
   className: "empty"
 
 
-class Ed.Views.AssetsList extends Backbone.Marionette.CompositeView
-  template: "ed/list"
-  childViewContainer: "ul.ed-assets"
+
+class Ed.Views.AssetList extends Ed.CollectionView
   childView: Ed.Views.ListedAsset
   emptyView: Ed.Views.NoListedAsset
+  tagName: "ul"
+  className: "ed-assets"
 
-  events:
-    "click a.import": "importAsset"
-    "click a.next": "nextPage"
-    "click a.prev": "prevPage"
-
-  childViewEvents:
+  childViewTriggers:
     'select': 'select'
 
-  ui:
-    'heading': 'span.heading'
-    'search_field': 'input.q'
-    'prev_button': 'a.prev'
-    'next_button': 'a.next'
-    'import_field': 'input.remote_url'
-    'import_button': 'a.import'
 
-  initialize: (opts={}) =>
-    @_q = ""
-    @_p = 1
-    @_title = opts.title ? "Assets"
-    @_master_collection = @collection.clone()
-    @_master_collection.on "reset", @selectAssets
-    @_filterSoon = _.debounce @selectAssets, 250
-    $.al = @
+class Ed.Views.ImageList extends Ed.Views.AssetList
 
-  onRender: =>
-    @ui.heading.text @_title
-    @ui.search_field.on 'input', @_filterSoon
-    @selectAssets()
 
-  # passed through to the picker.
-  #
-  select: (model) =>
-    @trigger 'select', model
+class Ed.Views.VideoList extends Ed.Views.AssetList
 
-  open: =>
-    @$el.slideDown 'fast'
-
-  close: =>
-    @$el.slideUp 'fast'
-
-  closeAndRemove: (callback) =>
-    @$el.slideUp 'fast', =>
-      @remove()
-      callback?()
-
-  importAsset: =>
-    if remote_url = @ui.import_field.val()
-      @ui.import_button.addClass('waiting')
-      imported = @collection.add
-        remote_url: remote_url
-      imported.save().done =>
-        @ui.import_button.removeClass('waiting')
-        @ui.import_field.val("")
-        @trigger 'selected', imported
-
-  selectAssets: (e, q) =>
-    first = (@_p - 1) * 20
-    last = first + 20
-    if q = @ui.search_field.val()
-      re = new RegExp(q, 'i')
-      matches = @_master_collection.select (image) ->
-        re.test(image.get('title')) or re.test(image.get('caption'))
-    else
-      matches = @_master_collection.toArray()
-
-    @collection.reset matches.slice(first,last)
-
-    total = matches.length
-    if total > last
-      @ui.next_button.removeClass('inactive')
-    else
-      @ui.next_button.addClass('inactive')
-    if first == 0
-      @ui.prev_button.addClass('inactive')
-    else
-      @ui.prev_button.removeClass('inactive')
-
-  nextPage: =>
-    @_p = @_p + 1
-    @selectAssets()
-
-  prevPage: =>
-    @_p = @_p - 1
-    @_p = 1 if @_p < 1
-    @selectAssets()
 
 
 ## Toolbar
@@ -625,7 +625,7 @@ class Ed.Views.Toolbar extends Ed.View
 class Ed.Views.AssetStyler extends Ed.View
   tagName: "div"
   className: "styler"
-  template: "ed/styler"
+  template: "styler"
   events:
     "click a.right": "setRight"
     "click a.left": "setLeft"
@@ -652,7 +652,7 @@ class Ed.Views.AssetStyler extends Ed.View
 class Ed.Views.ImageWeighter extends Ed.Views.MenuView
   tagName: "div"
   className: "weighter"
-  template: "ed/weighter"
+  template: "weighter"
 
   ui:
     head: ".menu-head"
@@ -667,129 +667,10 @@ class Ed.Views.ImageWeighter extends Ed.Views.MenuView
 
 
 
-## Asset-pickers
-#
-# These menus are embedded in the asset view. They select from an asset collection to
-# set the model in the asset view, with the option to upload or import new items.
-#
-
-class Ed.Views.AssetPicker extends Ed.Views.MenuView
-  tagName: "div"
-  className: "picker"
-  menuView: Ed.Views.AssetsList
-
-  ui:
-    head: ".menu-head"
-    body: ".menu-body"
-    label: "label"
-    filefield: 'input[type="file"]'
-
-  events:
-    "click @ui.head": "toggleMenu"
-    "click @ui.filefield": "containEvent" # always artificial
-
-  onRender: =>
-    @ui.label.on "click", @close
-    @ui.filefield.on 'change', @getPickedFile
-
-  open: =>
-    @ui.body.show()
-    unless @_menu_view
-      @_menu_view = new Ed.Views.AssetsList
-        collection: @collection
-        title: @getOption('title')
-      @ui.body.append @_menu_view.el
-      @_menu_view.render()
-      @_menu_view.on "select", @select
-    @_menu_view.open()
-    @$el.addClass('open')
-
-  # passed through again to reach the Asset view.
-  select: (model) =>
-    @close()
-    @trigger "select", model
-
-  pickFile: (e) =>
-    console.log "pickFile", e.target or e.originalEvent.target
-    @ui.filefield.click()
-
-  getPickedFile: (e) =>
-    if files = @ui.filefield[0].files
-      @readLocalFile files[0]
-
-  readLocalFile: (file) =>
-    if file?
-      reader = new FileReader()
-      reader.onloadend = => 
-        @createModel reader.result, file
-      reader.readAsDataURL(file)
-
-  containEvent: (e) =>
-    e?.stopPropagation()
 
 
-class Ed.Views.AssetRemover extends Backbone.Marionette.View
-  template: "ed/remover"
-  className: "remover"
-
-  ui:
-    deleter: "a.delete"
-
-  triggers:
-    "click @ui.deleter": "remove"
-
-  show: =>
-    @$el.show()
-
-  hide: =>
-    @$el.hide()
-
-class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
-  template: "ed/image_picker"
-  title: "Images"
-
-  initialize: (data, options={}) ->
-    @collection ?= _ed.images
-    super
-
-  createModel: (data, file) =>
-    model = @collection.add
-      file: data
-      file_name: file.name
-      file_size: file.size
-      file_type: file.type
-    @select(model)
-    model.save().done =>
-      @trigger "create", model
 
 
-class Ed.Views.MainImagePicker extends Ed.Views.ImagePicker
-  template: "ed/main_image_picker"
-  title: "Images"
-
-
-class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
-  template: "ed/video_picker"
-  title: "Videos"
-
-  initialize: ->
-    @collection ?= _ed.videos
-    super
-
-  createModel: (data, file) =>
-    model = @collection.unshift
-      file: data
-      file_name: file.name
-      file_size: file.size
-      file_type: file.type
-    @select(model)
-    model.save().done =>
-      @trigger "create", model
-
-
-class Ed.Views.QuotePicker extends Ed.Views.AssetPicker
-  template: "ed/quote_picker"
-  title: "Quotes"
 
 
 class Ed.Views.ProgressBar extends Ed.View

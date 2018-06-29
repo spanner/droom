@@ -70,6 +70,7 @@ class Ed.Application extends Backbone.Marionette.Application
   sync: (method, model, opts) =>
     unless method is "read" or !model.startProgress
       original_success = opts.success
+      opts.attrs = model.toJSON()
       model.startProgress("Saving")
       opts.beforeSend = (xhr, settings) ->
         settings.xhr = () ->
@@ -133,10 +134,18 @@ class Ed.Application extends Backbone.Marionette.Application
       $('.wait').hide()
 
 
-  ## Debug logging
+  ## Logging
+  #todo: log level threshold
   #
-  logging: () =>
-    @_logging or @config('logging')
+  log: =>
+    if console?.log? and @logging()
+      console.log arguments...
 
-  startLogging: =>
-    @_logging = true
+  logging: (level) =>
+    !!@_log_level
+
+  startLogging: (level) =>
+    @_log_level = level ? 'info'
+
+  stopLogging: (level) =>
+    @_log_level = null
