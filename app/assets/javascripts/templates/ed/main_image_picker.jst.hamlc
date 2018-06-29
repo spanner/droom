@@ -1,9 +1,0 @@
-%label.control.add.upload
-  %svg.icon.filled
-    %use{"xlink:href" => "#up_symbol"}
-  %input{type: "file"}
-.ed-menu
-  %a.control.choose.menu-head
-    %svg.icon.filled
-      %use{"xlink:href" => "#reuse_symbol"}
-  .assets.menu-body

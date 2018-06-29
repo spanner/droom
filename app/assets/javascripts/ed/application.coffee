@@ -88,7 +88,7 @@ class Ed.Application extends Backbone.Marionette.Application
   #
   render: (template, data) ->
     if template?
-      if jst_function = JST[template]
+      if jst_function = JST["ed/#{template}"]
         jst_function(data)
       else if _.isFunction(template)
         template(data)

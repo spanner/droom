@@ -8,14 +8,14 @@
   margin-left: -24px
   margin-top: -3px
 
-#editor
-  [contenteditable]
+#editor, .editor
+  [contenteditable]:not([contenteditable=false])
     outline: none
-    color: $darkblue
     font-size: inherit
+    padding: 0
     &[data-placeholder]
       &:empty
-        color: $mid
+        color: $pale
         font-style: italic
         text-transform: none
         &:before
@@ -116,6 +116,8 @@ span.note
     size: cover
   p
     color: $pale
+  .darken
+    display: none
   .ed-dropmask
     position: absolute
     top: 0
@@ -123,15 +125,14 @@ span.note
     width: 100%
     height: 100%
     display: flex
-    align-items: flex-start
-    justify-content: flex-start
+    align-items: center
+    justify-content: center
     p
       color: white
       pointer-events: none
       mix-blend-mode: normal
       font-size: 1rem
-      text-shadow: 0 0 6px $dark
-      margin: 20px 4%
+      padding-bottom: 2em
   &.droppable
     .ed-dropmask
       background-color: $green
@@ -139,7 +140,7 @@ span.note
 
 .ed-image
   background:
-    color: $dark
+    color: $mid
   a.control, label.control
     box-shadow: 0 0 6px $shadow
 
@@ -211,6 +212,7 @@ span.note
         display: none
   .ed-buttons
     position: absolute
+    width: calc(100% - 20px)
     top: 10px
     left: 10px
     .picker, .styler, .config, .weighter, .remover
@@ -221,7 +223,7 @@ span.note
     .remover
       float: right
       margin: 0 4px
-    .styler, .weighter
+    .styler
       float: right
     .thumbnails, .select
       display: inline-block
@@ -254,7 +256,6 @@ span.note
 .touch
   .ed-buttons
     display: block
-
 
 .ed-inserter
   position: absolute

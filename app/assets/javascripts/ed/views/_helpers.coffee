@@ -1,3 +1,392 @@
+## Asset inserter
+#
+# This view inserts a new asset element into the html stream with a management view wrapped around it.
+#
+class Ed.Views.AssetInserter extends Ed.View
+  template: "ed/inserter"
+  tagName: "div"
+  className: "ed-inserter"
+
+  ui:
+    adders: "a.add"
+
+  events:
+    "click a.show": "toggleButtons"
+    "click a.image": "addImage"
+    "click a.video": "addVideo"
+    "click a.quote": "addQuote"
+    "click a.button": "addButton"
+    "click a.blocks": "addBlocks"
+
+  onRender: () =>
+    @_p = null
+    permitted_insertions = _ed.config('insertions')
+    @ui.adders.each (i, el) =>
+      $el = $(el)
+      $el.hide() if permitted_insertions.indexOf($el.data('insert')) is -1
+
+  #TODO shouldn't we know about the holding editable so as to tell it about new assets?
+  # and also todo: please can we just render this with no special calls?
+  attendTo: ($el) =>
+    @_target_el = $el
+    @$el.appendTo $('body')
+    @_target_el.on "click keyup focus", @followCaret
+
+  followCaret: (e)=>
+    selection = @el.ownerDocument.getSelection()
+    if !selection or selection.rangeCount is 0
+      current = $(e.target)
+    else
+      range = selection.getRangeAt(0)
+      current = $(range.commonAncestorContainer)
+    @_p = current.closest('p')
+    if @_p.length and @isBlank(@_p.text())# and not @_p.is(':first-child')
+      @show(@_p)
+    else
+      @hide()
+
+  toggleButtons: (e) =>
+    e?.preventDefault()
+    if @$el.hasClass('showing')
+      @trigger 'contract'
+      @$el.removeClass('showing')
+    else
+      @trigger 'expand'
+      @$el.addClass('showing')
+
+  addImage: =>
+    @insert new Ed.Views.Image
+
+  addVideo: =>
+    @insert new Ed.Views.Video
+
+  addQuote: =>
+    @insert new Ed.Views.Quote
+
+  addButton: =>
+    @insert new Ed.Views.Button
+
+  addBlocks: =>
+    @insert new Ed.Views.Blocks
+
+  insert: (view) =>
+    if @_p
+      @_p.before view.el
+      # @_p.remove() if @isBlank(@_p.text())
+    else
+      @_target_el.append view.el
+      @_target_el.append $("<p />")
+    view.render()
+    view.focus?()
+    @_target_el.trigger 'input'
+    @hide()
+
+  place: ($el) =>
+    position = $el.offset()
+    @$el.css
+      top: position.top - 6
+      left: position.left - 36
+
+  show: () =>
+    @place(@_p)
+    @$el.show()
+    @_target_el.parents('.scroller').on 'scroll', => @place(@_p)
+
+  hide: () =>
+    @$el.hide()
+    @$el.removeClass('showing')
+    @_target_el.parents('.scroller').off 'scroll'
+
+
+
+## Asset editors
+#
+# Wrap around an embedded asset to present controls for editing or replacing it.
+# The editor is responsible for adding pickers, stylers, importers and so on.
+# We also catch some events here and pass them on, so as to present a broad target,
+# including click to select and drop to upload. 
+#
+class Ed.Views.AssetEditor extends Ed.View
+  defaultSize: "full"
+  stylerView: "AssetStyler"
+  importerView: "AssetImporter"
+  uploaderView: "AssetUploader"
+
+  ui:
+    catcher: ".cms-dropmask"
+    buttons: ".cms-buttons"
+    deleter: "a.delete"
+
+  triggers:
+    "click @ui.deleter": "remove"
+
+  events:
+    "click @ui.catcher": "closeHelpers"
+    "dragenter @ui.catcher": "lookAvailable"
+    "dragover @ui.catcher": "dragOver"
+    "dragleave @ui.catcher": "lookNormal"
+    "drop @ui.catcher": "catchFiles"
+
+  initialize: (opts={}) =>
+    @_size ?= _.result @, 'defaultSize'
+    super
+
+  onRender: =>
+    @$el.attr('data-cms', true)
+    @addHelpers()
+
+  addHelpers: =>
+    if uploader_view_class_name = @getOption('uploaderView')
+      if uploader_view_class = Ed.Views[uploader_view_class_name]
+        @_uploader = new uploader_view_class
+          collection: @collection
+        @_uploader.$el.appendTo @ui.buttons
+        @_uploader.render()
+        @_uploader.on "select", @setModel
+        @_uploader.on "create", @update
+        @_uploader.on "pick", => @closeHelpers()
+
+    if importer_view_class_name = @getOption('importerView')
+      if importer_view_class = Ed.Views[importer_view_class_name]
+        @_importer = new importer_view_class
+          collection: @collection
+        @_importer.$el.appendTo @ui.buttons
+        @_importer.render()
+        @_importer.on "select", @setModel
+        @_uploader.on "create", @update
+        @_importer.on "open", => @closeOtherHelpers(@_importer)
+
+    if picker_view_class_name = @getOption('pickerView')
+      if picker_view_class = Ed.Views[picker_view_class_name ]
+        @_picker = new picker_view_class
+          collection: @collection
+        @_picker.$el.appendTo @ui.buttons
+        @_picker.render()
+        @_picker.on "select", @setModel
+        @_picker.on "open", => @closeOtherHelpers(@_picker)
+
+    if _Ed.getOption('asset_styles')
+      if styler_view_class_name = @getOption('stylerView')
+        if styler_view_class = Ed.Views[styler_view_class_name]
+          @_styler = new styler_view_class
+            model: @model
+          @_styler.$el.appendTo @ui.buttons
+          @_styler.render()
+          @_styler.on "styled", @setStyle
+          @_styler.on "open", => @closeOtherHelpers(@_styler)
+
+
+  ## Selection controls
+  #
+  setModel: (model) =>
+    @log "🤡 setModel", model
+    @model = model
+    @_styler?.setModel(model)
+    if @model
+      @trigger "select", @model
+      @stickit()
+
+  update: =>
+    @trigger 'update'
+
+  ## Styling controls
+  #
+  setSize: (size) =>
+    @_size = size
+    @stickit() if @model
+
+  setStyle: (style) =>
+    @$el.removeClass('right left full').addClass(style)
+    size = if style is "full" then "full" else "half"
+    @setSize size
+    @update()
+
+
+  ## Dropped-file handlers
+  # Live here so as to be applied to the whole asset element.
+  # Dropped file is passed to our uploader for processing.
+  #
+  dragOver: (e) =>
+    e?.preventDefault()
+    if e.originalEvent.dataTransfer
+      e.originalEvent.dataTransfer.dropEffect = 'copy'
+
+  catchFiles: (e) =>
+    @lookNormal()
+    if e?.originalEvent.dataTransfer?.files.length
+      @containEvent(e)
+      @readFile e.originalEvent.dataTransfer.files
+    else
+      console.log "unreadable drop", e
+
+  readFile: (files) =>
+    @_uploader.readLocalFile(files[0]) if @_uploader and files.length
+
+  lookAvailable: (e) =>
+    e?.stopPropagation()
+    @$el.addClass('droppable')
+
+  lookNormal: (e) =>
+    e?.stopPropagation()
+    @$el.removeClass('droppable')
+
+  ## Click handler
+  # allows click anywhere to upload. Event is relayed to uploader.
+  #
+  pickFile: (e) =>
+    e?.preventDefault()
+    @_uploader?.pickFile(e)
+
+  ## Menu display
+
+  closeHelpers: =>
+    # event allowed through
+    _.each [@_picker, @_importer, @_styler], (h) ->
+      h?.close()
+
+  closeOtherHelpers: (helper) =>
+    _.each [@_picker, @_importer, @_styler], (h) ->
+      h?.close() unless h is helper
+
+
+class Ed.Views.ImageEditor extends Ed.Views.AssetEditor
+  template: "assets/image_editor"
+  pickerView: "ImagePicker"
+
+  initialize: (data, options={}) ->
+    @collection ?= new Ed.Collections.Images
+    super
+
+
+class Ed.Views.VideoEditor extends Ed.Views.AssetEditor
+  template: "assets/video_editor"
+  pickerView: "VideoPicker"
+  importerView: "VideoImporter"
+
+  initialize: ->
+    @collection ?= new Ed.Collections.Videos
+    super
+
+
+class Ed.Views.QuoteEditor extends Ed.Views.AssetEditor
+  template: "assets/quote_editor"
+  importerView: false
+  uploaderView: false
+
+
+class Ed.Views.ButtonEditor extends Ed.Views.AssetEditor
+  template: "assets/button_editor"
+  importerView: false
+  uploaderView: false
+
+
+
+  ## Asset pickers
+  #
+  # Display a list of assets, receive a selection click and call setModel on the Asset container.
+  #
+  class Ed.Views.AssetPicker extends Ed.Views.MenuView
+    tagName: "div"
+    className: "picker"
+    listView: "AssetsList"
+
+    ui:
+      head: ".menu-head"
+      body: ".menu-body"
+      list: ".pick"
+      closer: "a.close"
+
+    onOpen: =>
+      unless @_list_view
+        list_view_class = @getOption('listView')
+        @_list_view = new Ed.Views[list_view_class]
+          collection: @collection
+        @ui.list.append @_list_view.el
+        @log "🤡 onOpen appending list view to", @ui.list
+        @_list_view.on "select", @selectModel
+      @collection.reload()
+      @_list_view.render()
+
+    # passed back to the Asset view.
+    selectModel: (model) =>
+      @close()
+      @trigger "select", model
+
+
+  class Ed.Views.ImagePicker extends Ed.Views.AssetPicker
+    template: "assets/image_picker"
+    listView: "ImageList"
+
+
+  class Ed.Views.VideoPicker extends Ed.Views.AssetPicker
+    template: "assets/video_picker"
+    listView: "VideoList"
+
+
+
+  ## Asset importers
+  #
+  # Take a URL, turn it into an Asset and call setModel on the Asset container.
+  #
+  class Ed.Views.AssetImporter extends Ed.Views.MenuView
+    tagName: "div"
+    className: "importer"
+
+    ui:
+      head: ".menu-head"
+      body: ".menu-body"
+      url: "input.remote_url"
+      button: "a.submit"
+      closer: "a.close"
+      waiter: "p.waiter"
+
+    events:
+      "click @ui.head": "toggleMenu"
+      "click @ui.closer": "close"
+      "click @ui.button": "createModel"
+
+    createModel: =>
+      if remote_url = @ui.url.val()
+        model = @collection.add
+          remote_url: remote_url
+        @trigger 'select', model
+        @disableForm()
+        model.save().done =>
+          @trigger 'create', model
+          @resetForm()
+          @close()
+
+    disableForm: =>
+      @ui.url.attr('disabled', true)
+      @ui.button.addClass('waiting')
+      @ui.waiter.show()
+
+    resetForm: =>
+      @ui.button.removeClass('waiting')
+      @ui.url.removeAttr('disabled')
+      @ui.waiter.hide()
+      @ui.url.val("")
+
+
+  class Ed.Views.ImageImporter extends Ed.Views.AssetImporter
+    template: "assets/image_importer"
+
+
+  class Ed.Views.VideoImporter extends Ed.Views.AssetImporter
+    template: "assets/video_importer"
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Asset-choosers
 #
 # The submenu for each asset picker is a chooser-list.
@@ -66,7 +455,7 @@ class Ed.Views.ListedAsset extends Ed.View
       ""
 
 
-class Ed.Views.NoAsset extends Ed.View
+class Ed.Views.NoListedAsset extends Ed.View
   template: "ed/none"
   tagName: "li"
   className: "empty"
@@ -76,7 +465,7 @@ class Ed.Views.AssetsList extends Backbone.Marionette.CompositeView
   template: "ed/list"
   childViewContainer: "ul.ed-assets"
   childView: Ed.Views.ListedAsset
-  emptyView: Ed.Views.NoAsset
+  emptyView: Ed.Views.NoListedAsset
 
   events:
     "click a.import": "importAsset"
@@ -226,104 +615,6 @@ class Ed.Views.Toolbar extends Ed.View
         ]
 
 
-## Asset inserter
-#
-# This view inserts a new asset element into the html stream with a management view wrapped around it.
-#
-class Ed.Views.AssetInserter extends Ed.View
-  template: "ed/inserter"
-  tagName: "div"
-  className: "ed-inserter"
-
-  ui:
-    adders: "a.add"
-
-  events:
-    "click a.show": "toggleButtons"
-    "click a.image": "addImage"
-    "click a.video": "addVideo"
-    "click a.quote": "addQuote"
-    "click a.button": "addButton"
-    "click a.blocks": "addBlocks"
-
-  onRender: () =>
-    @_p = null
-    permitted_insertions = _ed.config('insertions')
-    @ui.adders.each (i, el) =>
-      $el = $(el)
-      $el.hide() if permitted_insertions.indexOf($el.data('insert')) is -1
-
-  #TODO shouldn't we know about the holding editable so as to tell it about new assets?
-  # and also todo: please can we just render this with no special calls?
-  attendTo: ($el) =>
-    @_target_el = $el
-    @$el.appendTo $('body')
-    @_target_el.on "click keyup focus", @followCaret
-
-  followCaret: (e)=>
-    selection = @el.ownerDocument.getSelection()
-    if !selection or selection.rangeCount is 0
-      current = $(e.target)
-    else
-      range = selection.getRangeAt(0)
-      current = $(range.commonAncestorContainer)
-    @_p = current.closest('p')
-    if @_p.length and @isBlank(@_p.text())# and not @_p.is(':first-child')
-      @show(@_p)
-    else
-      @hide()
-
-  toggleButtons: (e) =>
-    e?.preventDefault()
-    if @$el.hasClass('showing')
-      @trigger 'contract'
-      @$el.removeClass('showing')
-    else
-      @trigger 'expand'
-      @$el.addClass('showing')
-
-  addImage: =>
-    @insert new Ed.Views.Image
-
-  addVideo: =>
-    @insert new Ed.Views.Video
-
-  addQuote: =>
-    @insert new Ed.Views.Quote
-
-  addButton: =>
-    @insert new Ed.Views.Button
-
-  addBlocks: =>
-    @insert new Ed.Views.Blocks
-
-  insert: (view) =>
-    if @_p
-      @_p.before view.el
-      # @_p.remove() if @isBlank(@_p.text())
-    else
-      @_target_el.append view.el
-      @_target_el.append $("<p />")
-    view.render()
-    view.focus?()
-    @_target_el.trigger 'input'
-    @hide()
-
-  place: ($el) =>
-    position = $el.offset()
-    @$el.css
-      top: position.top - 10
-      left: position.left - 28
-
-  show: () =>
-    @place(@_p)
-    @$el.show()
-    @_target_el.parents('.scroller').on 'scroll', => @place(@_p)
-
-  hide: () =>
-    @$el.hide()
-    @$el.removeClass('showing')
-    @_target_el.parents('.scroller').off 'scroll'
 
 
 

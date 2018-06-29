@@ -9,8 +9,9 @@ class Ed.View extends Backbone.Marionette.View
     @wrap()
     @render()
 
+  # each subclass should have its own way of lifting data from the DOM to populate a model.
   wrap: =>
-    # each subclass should have its own way of lifting data from the DOM to populate a model.
+    false
 
   beforeWrap: =>
     @bindUIElements()
