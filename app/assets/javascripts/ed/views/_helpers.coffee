@@ -135,7 +135,7 @@ class Ed.Views.AssetEditor extends Ed.View
     super
 
   onRender: =>
-    @log "onRender", @el
+    @log "🚜 onRender", @el
     @$el.attr('data-ed', true)
     @addHelpers()
 

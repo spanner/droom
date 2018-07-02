@@ -353,6 +353,7 @@ class Ed.Views.Quote extends Ed.Views.Asset
   defaultSize: "full"
 
   ui:
+    holder: ".holder"
     quote: "blockquote"
     caption: "figcaption"
 
@@ -372,18 +373,18 @@ class Ed.Views.Quote extends Ed.Views.Asset
     @model = new Ed.Models.Quote
       utterance: @$el.find('blockquote').text()
       caption: @$el.find('figcaption').text()
-    @log "→ wrapped quote", @el, _.clone(@model.attributes)
+    @log "🚜 wrapped quote", @el, _.clone(@model.attributes)
 
   focus: =>
     @ui.quote.focus()
 
   classFromLength: (text="") =>
     l = text.replace(/&nbsp;/g, ' ').trim().length
-    if l < 24
+    if l < 28
       "veryshort"
-    else if l < 48
+    else if l < 64
       "short"
-    else if l < 96
+    else if l < 128
       "shortish"
     else
       ""
