@@ -47,6 +47,7 @@ class Ed.Views.Editor extends Ed.View
       update: "disableWhenBusy"
 
   wrap: =>
+    window.ed = @model
     @ui.title.each (i, el) =>
       @subviews.push new Ed.Views.Title
         el: el

@@ -34,6 +34,10 @@ class Ed.View extends Backbone.Marionette.View
     @log "thisOrThat", thing, other_thing
     thing or other_thing or ""
 
+  thisButNotThat:  ([thing, other_thing]=[]) =>
+    @log "thisButNotThat", thing, other_thing
+    !!thing and not !!other_thing
+
   ifBlank: (value) =>
     not value?.trim()
 

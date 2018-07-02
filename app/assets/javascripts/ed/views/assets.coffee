@@ -220,7 +220,7 @@ class Ed.Views.Video extends Ed.Views.Asset
       observe: "embed_code"
       updateMethod: "html"
     "video":
-      observe: ["file_url", "embed_code"]
+      observe: ["url", "embed_code"]
       visible: "thisButNotThat"
       attributes: [
         name: "id"
@@ -243,8 +243,7 @@ class Ed.Views.Video extends Ed.Views.Asset
 
   wrap: =>
     if video_id = @$el.data('video')
-      @model = new Ed.Models.Video(id: video_id)
-      @model.load()
+      @model = _ed.videos.get(video_id)
       @triggerMethod 'wrap'
 
   onRender: =>

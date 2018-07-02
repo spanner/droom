@@ -84,7 +84,7 @@ class Ed.Views.AssetInserter extends Ed.View
   place: ($el) =>
     position = $el.offset()
     @$el.css
-      top: position.top - 6
+      top: position.top - 10
       left: position.left - 32
 
   show: () =>
