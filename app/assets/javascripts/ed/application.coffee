@@ -119,19 +119,15 @@ class Ed.Application extends Backbone.Marionette.Application
   confirm: (message, duration=4000) =>
     @notify message, duration, 'confirmation'
 
-  complain: (message, duration=10000) =>
+  complain: (message, duration=20000) =>
     @notify message, duration, 'error'
 
   notify: (html_or_text, duration=4000, notice_type='information') =>
-    if @_notice_list
-      @notices.add
-        message: html_or_text
-        duration: duration
-        notice_type: notice_type
-    else
-      failure_notice = $('<div class="complete_failure" />').appendTo($("#notices"))
-      failure_notice.html("<h2>System failure</h2>" + html_or_text)
-      $('.wait').hide()
+    @log "🤡 notify", html_or_text, notice_type
+    @notices.add
+      message: html_or_text
+      duration: duration
+      notice_type: notice_type
 
 
   ## Logging

@@ -126,6 +126,7 @@ class Ed.Views.AssetEditor extends Ed.View
     "dragover @ui.catcher": "dragOver"
     "dragleave @ui.catcher": "lookNormal"
     "drop @ui.catcher": "catchFiles"
+    "click @ui.catcher": "pickFile"
 
   initialize: (opts={}) =>
     @_size ?= _.result @, 'defaultSize'
@@ -181,7 +182,6 @@ class Ed.Views.AssetEditor extends Ed.View
   ## Selection controls
   #
   setModel: (model) =>
-    @log "🦋 setModel", model
     @model = model
     @_styler?.setModel @model
     @trigger "select", @model
@@ -224,11 +224,11 @@ class Ed.Views.AssetEditor extends Ed.View
 
   lookAvailable: (e) =>
     e?.stopPropagation()
-    @$el.addClass('droppable')
+    @ui.catcher.addClass('droppable')
 
   lookNormal: (e) =>
     e?.stopPropagation()
-    @$el.removeClass('droppable')
+    @ui.catcher.removeClass('droppable')
 
   ## Click handler
   # allows click anywhere to upload. Event is relayed to uploader.
@@ -253,7 +253,7 @@ class Ed.Views.ImageEditor extends Ed.Views.AssetEditor
   template: "ed/image_editor"
   pickerView: "ImagePicker"
   importerView: "ImageImporter"
-  uploaderView: "AssetUploader"
+  uploaderView: "ImageUploader"
   collectionName: "images"
 
 
@@ -265,7 +265,7 @@ class Ed.Views.VideoEditor extends Ed.Views.AssetEditor
   template: "ed/video_editor"
   pickerView: "VideoPicker"
   importerView: "VideoImporter"
-  uploaderView: "AssetUploader"
+  uploaderView: "VideoUploader"
   collectionName: "videos"
 
 
@@ -372,10 +372,13 @@ class Ed.Views.AssetUploader extends Ed.View
   # `readLocalFile` is called either from here or from the outer Editor on file drop.
   readLocalFile: (file) =>
     if file?
-      reader = new FileReader()
-      reader.onloadend = =>
-        @createModel reader.result, file
-      reader.readAsDataURL(file)
+      if problem = @badFile(file)
+        @complain problem
+      else
+        reader = new FileReader()
+        reader.onloadend = =>
+          @createModel reader.result, file
+        reader.readAsDataURL(file)
 
   createModel: (data, file) =>
     model_data =
@@ -390,6 +393,29 @@ class Ed.Views.AssetUploader extends Ed.View
 
   containEvent: (e) =>
     e?.stopPropagation()
+
+  badFile: (file) =>
+    problem = false
+    if size_limit = @getOption('sizeLimit')
+      if file.size > size_limit
+        nice_size = Math.floor(file.size / 10485.76) / 100
+        problem = "Sorry: there is a limit of #{size_limit}MB for this type of file and #{file.name} is <strong>#{nice_size}MB</strong>."
+    if mime_types = @getOption('permittedTypes')
+      unless matchy = _.any(mime_types, (mt) -> file.type.match(mt))
+        problem = "Sorry: files of type #{file.type} are not supported here."
+    problem
+
+
+class Ed.Views.ImageUploader extends Ed.Views.AssetUploader
+  permittedTypes: ["image/jpeg", "image/png", "image/gif"]
+  sizeLimit: "1"
+
+
+class Ed.Views.VideoUploader extends Ed.Views.AssetUploader
+  permittedTypes: ["video/mp4", "video/ogg", "video/webm"]
+  sizeLimit: "100"
+
+
 
 
   ## Asset importers

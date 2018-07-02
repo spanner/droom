@@ -15,6 +15,7 @@ class Ed.Views.Editor extends Ed.View
     image_caption: ".ed-imagecaption"
     checkers: '[data-ed-check]'
     helpers: '.ed-help'
+    notices: '#notices'
 
   bindings:
     '[data-ed="title"]':
@@ -47,7 +48,6 @@ class Ed.Views.Editor extends Ed.View
       update: "disableWhenBusy"
 
   wrap: =>
-    window.ed = @model
     @ui.title.each (i, el) =>
       @subviews.push new Ed.Views.Title
         el: el
@@ -86,11 +86,14 @@ class Ed.Views.Editor extends Ed.View
         model: @model
 
   onRender: =>
-    @log "🦋 editor", @el
     @stickit()
     @placeCaret()
-    window.m = @model
     # _.defer -> balanceText('.balanced')
+    notices = new Ed.Views.Notices
+      collection: _ed.notices
+      model: @model
+    notices.$el.appendTo @ui.notices
+
 
   placeCaret: =>
     if title_el = @ui.title.get(0)
@@ -300,4 +303,42 @@ class Ed.Views.Checker extends Ed.View
     if value then "#tick_symbol" else "#cross_symbol"
 
 
+class Ed.Views.Notice extends Ed.View
+  template: "ed/notice"
+  tagName: "li"
 
+  events:
+    "click": "fadeOut"
+
+  bindings:
+    ".message":
+      observe: "message"
+      updateMethod: "html"
+    ":el":
+      attributes: [
+        name: "class"
+        observe: "notice_type"
+      ]
+
+  onRender: =>
+    @stickit()
+    _.delay @fadeOut, @model.get('duration') ? 4000
+
+  fadeOut: (duration=500) =>
+    @$el.fadeOut duration, @close
+
+  close: (e) =>
+    @$el.stop(true, false).hide()
+    @model.discard()
+
+  ifError: (value) =>
+    value is 'error'
+
+  ifConfirmation: (value) =>
+    value is 'confirmation'
+
+
+class Ed.Views.Notices extends Ed.CollectionView
+  childView: Ed.Views.Notice
+  tagName: "ul"
+  className: "notices"

@@ -1,3 +1,2 @@
 .holder
   %img{src: ""}
-%figcaption{contenteditable: "plaintext-only", data: {placeholder: "Optional image caption"}}<

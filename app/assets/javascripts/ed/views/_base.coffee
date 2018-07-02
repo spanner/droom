@@ -132,12 +132,21 @@ class Ed.View extends Backbone.Marionette.View
   log: ->
     _ed.log "[#{@constructor.name}]", arguments...
 
+  complain: ->
+    _ed.complain arguments...
+
+  confirm: ->
+    _ed.confirm arguments...
+
 
 ## Collection Views
 #
 # Adds some conventional lifecycle and useful bindings to our various list and selection views.
 #
 class Ed.CollectionView extends Backbone.Marionette.CollectionView
+
+  initialize: =>
+    @render()
 
   log: ->
     _cms.log "[#{@constructor.name}]", arguments...
