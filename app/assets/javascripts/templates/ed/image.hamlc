@@ -1,7 +1,3 @@
 .holder
   %img{src: ""}
-  .ed-buttons
-  .ed-dropmask
-    %p.prompt
-      Click or drop image file here
 %figcaption{contenteditable: "plaintext-only", data: {placeholder: "Optional image caption"}}<

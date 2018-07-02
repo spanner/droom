@@ -63,20 +63,14 @@ class Ed.Views.VideoList extends Ed.Views.AssetList
 #
 class Ed.Views.Asset extends Ed.View
   defaultSize: "full"
+  tagName: "figure"
+  className: "ed-embed"
   editorView: "AssetEditor"
 
   ui:
-    buttons: ".ed-buttons"
-    catcher: ".ed-dropmask"
-    prompt: ".prompt"
+    holder: ".holder"
     overlay: ".darken"
-
-  events:
-    "dragenter": "lookAvailable"
-    "dragover @ui.catcher": "dragOver"
-    "dragleave @ui.catcher": "lookNormal"
-    "drop @ui.catcher": "catchFiles"
-    "click @ui.catcher": "pickFile"
+    prompt: ".prompt"
 
   initialize: =>
     super
@@ -92,15 +86,15 @@ class Ed.Views.Asset extends Ed.View
     if editor_view_class = Ed.Views[@getOption('editorView')]
       @_editor = new editor_view_class
         model: @model
-      @_editor.$el.appendTo @$el
-      @_editor.render()
+      @_editor.$el.appendTo @ui.holder
       @_editor.on 'remove', @remove
       @_editor.on 'update', @update
       @_editor.on 'select', @setModel
 
   update: =>
-    @log "update", @$el.parent()
-    @$el.parent().trigger 'input'
+    content_parent = @$el.parent('[contenteditable]')
+    @log "🦋 update", content_parent
+    content_parent.trigger 'input'
 
   remove: () =>
     @$el.slideUp 'fast', =>
@@ -115,13 +109,12 @@ class Ed.Views.Asset extends Ed.View
     @update()
 
 
-
 ## Image assets
 #
 class Ed.Views.Image extends Ed.Views.Asset
   editorView: "ImageEditor"
   template: "ed/image"
-  className: "image full"
+  className: "image full ed-embed"
   defaultSize: "full"
 
   bindings:
@@ -133,14 +126,12 @@ class Ed.Views.Image extends Ed.Views.Asset
     "img":
       attributes: [
         name: "src"
-        observe: ["file_url", "file_data"]
+        observe: ["url", "file_data"]
         onGet: "thisOrThat"
       ]
 
   wrap: =>
-    @log "🤡 wrap", @$el.data('image')
     if image_id = @$el.data('image')
-      @log "🤡 ->", _ed.images.get(image_id)
       @model = _ed.images.get(image_id)
       @triggerMethod 'wrap'
 
@@ -149,25 +140,8 @@ class Ed.Views.Image extends Ed.Views.Asset
     super
 
 
-class Ed.Views.BackgroundImage extends Ed.Views.Image
-  template: false
-  className: "bg"
-
-  bindings:
-    ":el":
-      attributes: [
-        name: "data-image",
-        observe: "id"
-      ,
-        name: "style",
-        observe: ["file_url", "file_data"]
-        onGet: "styleBackgroundImage"
-      ]
-
-
-# Main image is an asset view but it has the main editable as model,
-# and on selection we assign the asset to its main_image association
-# rather than embedding a view with the asset as model.
+# Main image is an asset view, functionally, but has the main editable as model,
+# and on selection we assign the asset to the model's main_image association.
 #
 class Ed.Views.MainImage extends Ed.Views.Asset
   editorView: "MainImageEditor"
@@ -176,9 +150,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 
   wrap: =>
     @$el.addClass 'editing'
-    @log "🤡 wrap", @$el.data('image')
     if image_id = @$el.data('image')
-      @log "🤡 ->", _ed.images.get(image_id)
       @setModel _ed.images.get(image_id)
     else
       @setModel(null)
@@ -194,13 +166,17 @@ class Ed.Views.MainImage extends Ed.Views.Asset
     @log "setModel", image
     @bindImage(image)
     @model.setImage(image)
-    @_progress?.setModel(image)
+    if image
+      @ui.prompt.hide()
+    else
+      @ui.prompt.show()
 
   bindImage: (image) =>
     if @image
       @unstickit @image
     if image
       @log "bindImage", image
+      @ui.overlay.show()
       @image = image
       @addBinding @image, ":el",
         attributes: [
@@ -208,14 +184,11 @@ class Ed.Views.MainImage extends Ed.Views.Asset
           observe: "url"
           onGet: "styleBackgroundAtSize"
         ]
-      @ui.overlay.show()
-      @ui.prompt.hide()
     else
       @log "unbindImage"
+      @ui.overlay.hide()
       @$el.css
         'background-image': ''
-      @ui.prompt.show()
-      @ui.overlay.hide()
     @stickit()
 
   # not a simple binding because in this context, weighting is a property of the Editable not the image
@@ -234,7 +207,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
 class Ed.Views.Video extends Ed.Views.Asset
   editorView: "VideoEditor"
   template: "ed/video"
-  className: "video full"
+  className: "video full ed-embed"
   defaultSize: "full"
 
   bindings:
@@ -377,7 +350,7 @@ class Ed.Views.Blocks extends Ed.CompositeView
 class Ed.Views.Quote extends Ed.Views.Asset
   editorView: "QuoteEditor"
   template: "ed/quote"
-  className: "quote full"
+  className: "quote full ed-embed"
   defaultSize: "full"
 
   ui:

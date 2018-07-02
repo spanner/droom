@@ -85,6 +85,7 @@ class Ed.Views.Editor extends Ed.View
         model: @model
 
   onRender: =>
+    @log "🦋 editor", @el
     @stickit()
     @placeCaret()
     window.m = @model

@@ -126,12 +126,13 @@ span.note
     display: flex
     align-items: center
     justify-content: center
-    p
-      color: white
+    p.prompt
+      color: $menubg
       pointer-events: none
       mix-blend-mode: normal
       font-size: 1rem
-      padding-bottom: 2em
+      margin: 0
+      padding: 0.5em 1em
   &.droppable
     .ed-dropmask
       background-color: $green
@@ -140,6 +141,7 @@ span.note
 .ed-image
   background:
     color: $mid
+
 
 .editing
   .blockset
@@ -185,7 +187,6 @@ span.note
     .holder
       display: block
       position: relative
-      z-index: 100
     figcaption
       display: block
       min-height: 1em
@@ -266,7 +267,13 @@ span.note
   top: 0
   left: 0
   transition: width 0.25s ease-out
-  a.control.show
+  a.control
+    width: 28px
+    height: 28px
+    color: $mid
+    svg
+      width: 24px
+      height: 24px
     &:hover
       color: $green
   &.showing

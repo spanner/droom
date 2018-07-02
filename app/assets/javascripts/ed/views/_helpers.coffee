@@ -85,7 +85,7 @@ class Ed.Views.AssetInserter extends Ed.View
     position = $el.offset()
     @$el.css
       top: position.top - 6
-      left: position.left - 36
+      left: position.left - 32
 
   show: () =>
     @place(@_p)
@@ -134,6 +134,7 @@ class Ed.Views.AssetEditor extends Ed.View
     super
 
   onRender: =>
+    @log "onRender", @el
     @$el.attr('data-ed', true)
     @addHelpers()
 
@@ -177,16 +178,13 @@ class Ed.Views.AssetEditor extends Ed.View
           @_styler.on "styled", @setStyle
           @_styler.on "open", => @closeOtherHelpers(@_styler)
 
-
   ## Selection controls
   #
   setModel: (model) =>
-    @log "🤡 setModel", model
+    @log "🦋 setModel", model
     @model = model
-    @_styler?.setModel(model)
-    if @model
-      @trigger "select", @model
-      @stickit()
+    @_styler?.setModel @model
+    @trigger "select", @model
 
   update: =>
     @trigger 'update'
