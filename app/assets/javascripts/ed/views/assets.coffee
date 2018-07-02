@@ -391,7 +391,7 @@ class Ed.Views.Quote extends Ed.Views.Asset
 class Ed.Views.Button extends Ed.Views.Asset
   editorView: "ButtonEditor"
   template: "ed/button"
-  tagName: "a"
+  tagName: "figure"
   className: "button full"
   defaultSize: "full"
 

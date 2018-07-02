@@ -15,6 +15,6 @@
     .ed-importer
       %input.remote_url{type: "url", placeholder: "From URL or Youtube ID"}>
       %a.button.submit>
-        Importy
+        Import
       %p.waiter
         Please wait: fetching and preparing video embed.

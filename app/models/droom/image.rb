@@ -73,9 +73,9 @@ module Droom
     end
 
     def read_remote_url
-      if remote_url? && !image?
-        self.image = open(remote_url)
-        self.image_name = File.basename(remote_url)
+      if file_url? && !file_data?
+        self.image = open(file_url)
+        self.image_name = File.basename(file_url)
       end
     end
 

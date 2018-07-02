@@ -17,4 +17,4 @@
       %a.button.submit>
         Import
       %p.waiter
-        Please wait: fetching and processing remote image
+        Please wait: fetching and processing remote image.

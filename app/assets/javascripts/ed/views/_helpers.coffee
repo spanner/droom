@@ -416,8 +416,6 @@ class Ed.Views.VideoUploader extends Ed.Views.AssetUploader
   sizeLimit: "100"
 
 
-
-
   ## Asset importers
   #
   # Take a URL, turn it into an Asset and call setModel on the Asset container.

@@ -194,7 +194,7 @@ class Ed.Views.Content extends Ed.View
     @ui.content.find('figure.quote').each (i, el) =>
       @subviews.push new Ed.Views.Quote
         el: el
-    @ui.content.find('a.button').each (i, el) =>
+    @ui.content.find('figure.button').each (i, el) =>
       @subviews.push new Ed.Views.Button
         el: el
 
@@ -235,9 +235,9 @@ class Ed.Views.Content extends Ed.View
     @_inserter.attendTo @ui.content
     @_inserter.on 'expand', @dontShowPlaceholder
 
-    @_toolbar = new Ed.Views.Toolbar
-      target: @ui.content
-    @_toolbar.render()
+    # @_toolbar = new Ed.Views.Toolbar
+    #   target: @ui.content
+    # @_toolbar.render()
 
     @ui.content.on "focus", @ensureP
     @ui.content.on "blur", @removeEmptyP

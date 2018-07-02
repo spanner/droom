@@ -633,11 +633,6 @@ jQuery ($) ->
       @_container.disable()
 
 
-  # HTML-editing support is provided by WysiHTML, which is an ugly but effective iframe-based solution.
-  # Any textarea with the 'data-editable' attribute will be handed over to WysiHTML for processing.
-  #
-  #todo: make this true
-  #
   $.fn.html_editable = ()->
     editor = new MediumEditor @,
       placeholder: false
