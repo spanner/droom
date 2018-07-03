@@ -388,6 +388,7 @@ en:
   organisation_registered: "Registration received"
   organisation_registered_please_wait: "Your application will be processed shortly and you will receive an email explaining how to proceed."
   organisation_registered_thanks: "Thank you for registering %{name}."
+  organisations_introduction: "This page shows all the organisations taking part here and the users who are allowed to sign in as their representatives."
   other: "other"
   other_documents: "Other available documents"
   other_future_events: "Here is a general list of events coming up."
@@ -423,9 +424,9 @@ en:
   password_reset_welcome: "Please use the form below to set a new password for your account. A confirmation box will appear when your password meets the requirements, and the submit button will go green and become clickable when the passwords match."
   password_set: "Thank you. Your password has been set and your account is fully active."
   pending_organisations_introduction:
-    zero: "There are no new organisation applications."
-    one: "There is one new organisation application."
-    other: "There are %{count} new organisation applications."
+    zero: "No applications"
+    one: "Review one application"
+    other: "Review %{count} applications"
   person_email: "Email"
   person_forename: "Forename"
   person_name: "Name"
@@ -460,6 +461,7 @@ en:
       url: "Link destination"
       body: "Body text or quote"
       caption: "Optional caption"
+    search: "Search"
     session:
       email: "Email"
       password: "Password"

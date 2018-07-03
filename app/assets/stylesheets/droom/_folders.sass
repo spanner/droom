@@ -7,7 +7,6 @@ ul.filing
   li.document
     position: relative
     white-space: nowrap
-    overflow: hidden
   li.files
     display: inline-block
     width: 100%
@@ -59,8 +58,7 @@ ul#folders, div.attachments
       margin-top: -1px
 
   li.folder
-    overflow: hidden
-    ul
+    ul:not(.actions)
       padding-left: 16px
       margin: 0
       &.uploads

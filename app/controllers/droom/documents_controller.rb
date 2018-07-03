@@ -39,8 +39,8 @@ module Droom
     end
     
     def update
-      @document.save!
-      render :partial => 'listing', :object => @document.with_event
+      @document.update_attributes(document_params)
+      render :partial => 'listing', :object => @document
     end
 
     def reposition

@@ -15,18 +15,17 @@
           %use{"xlink:href" => "#plus_symbol"}
         %span.label
           = t(:add_user)
-  %p
-    = t :organisations_introduction, org_count: Droom::Organisation.count, person_count: Droom::User.count
 
-  - if admin?
-    - pending_count = Droom::Organisation.pending.count
-    - if pending_count > 0
-      %p
-        = link_to droom.pending_organisations_url, class: "actions" do
-          %svg.icon
+      - pending_count = Droom::Organisation.pending.count
+      - if pending_count > 0
+        = link_to droom.pending_organisations_url, class: "add" do
+          %svg.icon.small
             %use{"xlink:href" => "#list_symbol"}
           %span.label
             = t(:pending_organisations_introduction, count: pending_count)
+
+  %p
+    = t :organisations_introduction, org_count: Droom::Organisation.count, person_count: Droom::User.count
 
 #main.organisations
   = render :partial => 'droom/organisations/organisations'

@@ -2,9 +2,14 @@
   = t :library
 
 - content_for :standfirst do
+  - if can?(:manage, Droom::Folder)
+    .admin.right
+      = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
+      %br
+      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
   %p
     = t :library_introduction
-
+  
 
 - content_for :filter do
   #finder
@@ -18,12 +23,5 @@
     .scroller
       #found
 
-
 #main.folders{:data => {:panel => false}}
   = render :partial => 'folders'
-
-  - if can?(:manage, Droom::Folder)
-    %p.action
-      = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
-      %br
-      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
