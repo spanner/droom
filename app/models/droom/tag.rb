@@ -40,7 +40,7 @@ module Droom
 
     ## Elasticsearch indexing
     #
-    searchkick word_start: [:name, :synonyms]
+    searchkick _all: false, default_fields: [:name, :synonyms], word_start: [:name, :synonyms]
 
     def search_data
       {

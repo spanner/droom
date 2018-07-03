@@ -718,7 +718,7 @@ module Droom
 
     ## Search
     #
-    searchkick callbacks: :async
+    searchkick _all: false, callbacks: :async, default_fields: [:name, :chinese_name, :emails, :organisation_name]
 
     def search_data
       data = {

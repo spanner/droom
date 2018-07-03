@@ -108,7 +108,7 @@ module Droom
 
     ## Search
     #
-    searchkick callbacks: false, highlight: [:title, :content]
+    searchkick _all: false, callbacks: false, default_fields: [:name, :content], highlight: [:name, :content]
     attr_accessor :updating_index
     after_save :enqueue_for_indexing, unless: :updating_index?
 
