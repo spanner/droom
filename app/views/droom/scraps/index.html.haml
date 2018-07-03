@@ -10,8 +10,9 @@
           %use{"xlink:href" => "#plus_button_symbol"}
         %span.label
           = t(:add_notice)
-      
 
-= render :partial => "noticeboard_introduction"
+- content_for :standfirst do
+  = render :partial => "noticeboard_introduction"
+
 = render :partial => "noticeboard"
 

@@ -28,6 +28,8 @@ module Droom
 
     scope :added_since, -> date { where("created_at > ?", date)}
 
+    scope :this_year, -> { where("created_at > ?", Date.today.beginning_of_year)}
+
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
       where('droom_scraps.name LIKE :f OR droom_scraps.body LIKE :f OR droom_scraps.note LIKE :f', :f => fragment)

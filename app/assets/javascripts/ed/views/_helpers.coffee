@@ -40,7 +40,7 @@ class Ed.Views.AssetInserter extends Ed.View
       range = selection.getRangeAt(0)
       current = $(range.commonAncestorContainer)
     @_p = current.closest('p')
-    if @_p.length and @isBlank(@_p.text())# and not @_p.is(':first-child')
+    if @_p.length and (@isBlank(@_p.text()) or @_p.text() is "​") # there's a zwsp in the last ""
       @show(@_p)
     else
       @hide()
