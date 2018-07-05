@@ -267,8 +267,8 @@ jQuery ($) ->
           console.log "checkPassword: too short", password
           @meter?.tooShort()
         else
+          console.log "checkPassword: OK", password
           @meter?.check(password)
-          #TODO: agree and apply complexity requirements
           ok = true
 
         if ok
@@ -303,11 +303,11 @@ jQuery ($) ->
 
     confirmable: () =>
       @confirmation_field.attr('required', true)
-      @confirmation_block.enable()
+      @confirmation_block.show()
       @unsubmittable()
 
     unconfirmable: () =>
-      @confirmation_block.disable()
+      @confirmation_block.hide()
       @confirmation_field.attr('required', false)
       @unsubmittable()# if @required()
 
