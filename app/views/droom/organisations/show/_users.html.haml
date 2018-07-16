@@ -1,0 +1,22 @@
+- organisation ||= @organisation
+
+%section.personnel{data: {refreshable: droom.organisation_url(organisation, view: 'users')}}
+  %h2
+    Login users
+
+  - if organisation.users.any?
+    %ul.people{data: {step: 1, intro: "These are all the people who are allowed to sign in and act on behalf of your organisation."}}
+
+      = render :partial => "droom/users/user", :collection => organisation.users.in_name_order
+
+      - if Droom.users_can_invite?
+        %li.person
+          = link_to droom.new_organisation_user_url(organisation.id, view: 'simple'), class: "add", data: {action: "popup", affected: "section.personnel", step: 2, intro: "Click here to invite another person."} do
+            %span.mugshot
+              %svg
+                %use{"xlink:href" => "#plus_symbol"}
+            %span.contact
+              %span.name
+                Invite someone
+                %br
+                to join you

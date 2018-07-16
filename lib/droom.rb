@@ -60,6 +60,7 @@ module Droom
                  :second_time_zone,
                  :require_login_permission,
                  :require_internal_organisation,
+                 :users_can_invite,
                  :default_permissions,
                  :api_local,
                  :mc_api_key,
@@ -273,6 +274,10 @@ module Droom
 
     def require_internal_organisation?
       !!@@require_internal_organisation
+    end
+
+    def users_can_invite?
+      !!@@users_can_invite
     end
 
     def default_permissions

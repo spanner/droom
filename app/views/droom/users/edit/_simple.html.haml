@@ -5,7 +5,7 @@
 - elsif user.new_record?
   - title = t :add_new_user
   - if Droom.use_organisations? && @user.organisation
-    - title << [t(:to), " ", user.organisation.name].join(" ")
+    - title = [title, t(:to), user.organisation.name].join(" ")
 - else
   - title = t(:edit_profile_of, name: user.name)
 
@@ -13,7 +13,11 @@
   = render 'droom/shared/popup_header', title: title
 
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
+
     = render partial: 'droom/users/edit/user_fields', locals: {f: f, user: user, minimal: true}
+
+    - unless @user.confirmed?
+      = f.hidden_field :send_confirmation, value: true
 
     - if Droom.use_organisations?
       - if admin?
@@ -22,10 +26,6 @@
           = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
       - else
         = f.hidden_field :organisation_id
-
-
-    - unless @user.confirmed?
-      = f.hidden_field :send_confirmation, value: true
 
     .buttons
       - if user == current_user

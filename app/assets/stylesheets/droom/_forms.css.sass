@@ -14,6 +14,7 @@ div.popup
 input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false])
   -webkit-appearance: none
   box-sizing: border-box
+  position: relative
   outline: none
   padding: 8px
   border: 1px solid $pale
@@ -39,22 +40,30 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
     background-position: right -97px
   &::-webkit-input-placeholder
     color: $pale
+    font-size: 0.8rem
     font-weight: lighter
   &::-moz-placeholder
     color: $pale
+    font-size: 0.8rem
     font-weight: lighter
   &:-ms-input-placeholder
     color: $pale
+    font-size: 0.8rem
     font-weight: lighter
   &.placeholder
     color: $pale
+    font-size: 0.8rem
     font-weight: lighter
-  &[data-placeholder]
-    &:empty:before
-      content: attr(data-placeholder)
-      color: $pale
-      text-transform: none
-      font-weight: lighter
+  &[data-placeholder]:empty:before
+    content: attr(data-placeholder)
+    color: $pale
+    text-transform: none
+    font-weight: lighter
+    font-size: 0.8rem
+    line-height: 1.1
+    position: absolute
+    bottom: 8px
+    left: 8px
 
 [contenteditable]:not([contenteditable=false]):not(.rte)
   border: none
@@ -66,6 +75,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
       color: $pale
       text-transform: none
       font-weight: lighter
+      font-size: 0.8rem
 
 select
   position: relative
@@ -77,11 +87,12 @@ select
   outline: none
   border-radius: 0
   border-bottom-right-radius: 12px
+  color: $mid
   background:
     color: white
     position: top 4px right 4px
     image: image-url('droom/symbols/select.svg')
-    size: 16px
+    size: 10px
     repeat: no-repeat
   &:hover
     color: $hover
@@ -199,7 +210,7 @@ textarea
   line-height: 1.5
 
 
-// This is very old layout from the early droom days
+// This is old layout from the early droom days
 // and much in need of updating.
 
 form
@@ -225,17 +236,7 @@ form
     clear: left
     input[type="text"], input[type="email"], input[type="password"], select, textarea
       width: 97%
-  p.admin
-    float: right
-    input[type="text"], input[type="email"], input[type="password"], select, textarea
-      width: 90px
-      margin-left: 6px
-    &+.buttons
-      width: 50%
-      margin-top: 2em
-  .buttons
-    clear: left
-    margin-top: 1em
+
 
 form#login
   a.reminder

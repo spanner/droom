@@ -397,8 +397,9 @@ class Ed.Views.AssetUploader extends Ed.View
   badFile: (file) =>
     problem = false
     if size_limit = @getOption('sizeLimit')
-      if file.size > size_limit
-        nice_size = Math.floor(file.size / 10485.76) / 100
+      mb = file.size / 1048576
+      if mb > size_limit
+        nice_size = Math.floor(mb * 100) / 100
         problem = "Sorry: there is a limit of #{size_limit}MB for this type of file and #{file.name} is <strong>#{nice_size}MB</strong>."
     if mime_types = @getOption('permittedTypes')
       unless matchy = _.any(mime_types, (mt) -> file.type.match(mt))
@@ -408,12 +409,12 @@ class Ed.Views.AssetUploader extends Ed.View
 
 class Ed.Views.ImageUploader extends Ed.Views.AssetUploader
   permittedTypes: ["image/jpeg", "image/png", "image/gif"]
-  sizeLimit: "1"
+  sizeLimit: 10
 
 
 class Ed.Views.VideoUploader extends Ed.Views.AssetUploader
   permittedTypes: ["video/mp4", "video/ogg", "video/webm"]
-  sizeLimit: "100"
+  sizeLimit: 100
 
 
   ## Asset importers

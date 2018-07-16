@@ -150,6 +150,7 @@ module Droom
         :given_name,
         :chinese_name,
         :honours,
+        :organisation_id,
         :affiliation,
         :email,
         :password,
