@@ -952,15 +952,18 @@ jQuery ($) ->
 
     finishDrag: (e) =>
       final_position = @moveContainer(e)
+      adjusted_position =
+        left: final_position.left -  + window.pageXOffset
+        top: final_position.top - window.pageYOffset
       $(document)
         .off "mousemove", @moveContainer
         .off "mouseup", @finishDrag
-      @storePosition(final_position) if @_remembered
+      @storePosition(adjusted_position) if @_remembered
       @_container_start = null
       @_drag_start = null
       @_handle.removeClass('dragging')
       @_container.removeClass('dragging')
-      @_container.data('droom-positioned', true)
+      @_container.data('droom-positioned', adjusted_position)
 
     storePosition: (position) =>
       cookie_name = "draggable_#{@_remembered}"
@@ -969,8 +972,11 @@ jQuery ($) ->
     recallPosition: =>
       cookie_name = "draggable_#{@_remembered}"
       if position = $.cookie cookie_name
-        @_container.css JSON.parse(position)
-        @_container.data('droom-positioned', true)
+        position = JSON.parse(position)
+        @_container.css
+          left: position.left + window.pageXOffset
+          top: position.top + window.pageYOffset
+        @_container.data('droom-positioned', position)
 
 
   #todo: make this a case of the page turner?

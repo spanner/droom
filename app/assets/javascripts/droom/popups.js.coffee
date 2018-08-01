@@ -148,22 +148,28 @@ jQuery ($) ->
           left: 0
 
       else
-        unless @_container.data('droom-positioned')
-          width = @_container.children().first().width() || 580
-          w = $(window)
-          height_limit = w.height() - 100
-          height = [@_container.height(), height_limit].min()
-          left = parseInt((w.width() - width) / 2)
-          top = parseInt((w.height() - height - 40) / 2)  # allowing for padding
+        width = @_container.children().first().width() || 580
+        w = $(window)
+        height_limit = w.height() - 100
+        height = [@_container.height(), height_limit].min()
+        if pos = @_container.data('droom-positioned')
+          placement = 
+            left: pos.left + window.pageXOffset
+            top: pos.top + window.pageYOffset
+            width: width
+            "max-height": height_limit
+        else
+          left = parseInt((w.width() - width) / 2) + window.pageXOffset
+          top = parseInt((w.height() - height - 40) / 2) + window.pageYOffset
           placement = 
             left: left
             top: top
             width: width
             "max-height": height_limit
-          if @_container.is(":visible")
-            @_container.animate placement
-          else
-            @_container.css placement
+        if @_container.is(":visible")
+          @_container.animate placement
+        else
+          @_container.css placement
 
     focus: () =>
       @_container.find('[autofocus]').focus()

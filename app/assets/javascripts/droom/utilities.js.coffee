@@ -103,9 +103,11 @@ jQuery ($) ->
     
   $.fn.signal = (color, duration) ->
     color ?= "#f7f283"
+    $el = $(@)
+    fade_to = $el.css('backgroundColor') or '#ffffff'
     duration ?= 1000
     @each ->
-      $(@).css('backgroundColor', color).animate({'backgroundColor': '#ffffff'}, duration)
+      $(@).css('backgroundColor', color).animate({'backgroundColor': fade_to}, duration)
       
   $.fn.signal_confirmation = ->
     @signal('#c7ebb4')
