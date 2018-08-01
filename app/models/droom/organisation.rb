@@ -11,8 +11,6 @@ module Droom
     belongs_to :approved_by, :class_name => 'Droom::User'
     belongs_to :disapproved_by, :class_name => 'Droom::User'
 
-    after_save :capture_owner
-
     has_attached_file :image,
                       styles: {
                         thumb: ["128x96#", :png],
@@ -52,8 +50,9 @@ module Droom
     def self.from_signup(params)
       owner_params = params.delete :owner
       transaction do
-        owner = Droom::User.from_email(owner_params[:email]).first || Droom::User.create(owner_params.merge(defer_confirmation: true))
+        owner = Droom::User.from_email(owner_params[:email]).first || Droom::User.create(owner_params.merge(defer_confirmation: true, organisation_admin: true))
         org = Droom::Organisation.create(params.merge(owner: owner))
+        org.users << owner
         org.reindex
         org
       end
@@ -130,7 +129,7 @@ module Droom
     end
 
     def send_registration_confirmation_messages
-      # Droom.mailer is a configuration variable that usually contains `Droom::Mailer` :)
+      # Droom.mailer is a configuration variable that usually contains `Droom::Mailer`
       Droom.mailer.send(:org_confirmation, self).deliver_later
       Droom::User.admins.each do |admin|
         Droom.mailer.send(:org_notification, self, admin).deliver_later
@@ -274,12 +273,6 @@ module Droom
         external: external?,
         created_at: created_at
       }
-    end
-
-    def capture_owner
-      if owner and !owner.organisation
-        owner.update_column :organisation_id, self.id
-      end
     end
 
   end

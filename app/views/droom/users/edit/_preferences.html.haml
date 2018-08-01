@@ -28,11 +28,9 @@
       - if admin?
         = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
         %br
-      - if @user.organisation && organisation_admin?(@user.organisation)
         = f.check_box :organisation_admin, class: "fancy"
         = f.label :organisation_admin
         %br
-      - if admin?
         = f.check_box :admin, class: "fancy"
         = f.label :admin
 
