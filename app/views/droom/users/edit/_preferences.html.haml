@@ -19,10 +19,14 @@
         = t :admin_account_password
     = render "droom/users/edit/admin_password_fields", f: f, user: user
 
-    - unless @user.confirmed?
-      %p.admin
-        = f.check_box :send_confirmation
-        = f.label :send_confirmation
+    %p.admin
+      - if @user.organisation && organisation_admin?(@user.organisation)
+        = f.check_box :organisation_admin, class: "fancy"
+        = f.label :organisation_admin
+        %br
+      - if admin?
+        = f.check_box :admin, class: "fancy"
+        = f.label :admin
 
     .buttons
       - if @user == current_user
@@ -32,4 +36,7 @@
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'
   
-
+      - if admin? || @user.organisation && organisation_admin?(@user.organisation)
+        %p
+          = f.check_box :send_confirmation, class: "fancy"
+          = f.label :send_confirmation

@@ -40,8 +40,8 @@ div.popup
   top: 10px
   left: 55px
   min-height: 100px
-  max-height: 620px
-  max-width: 1200px
+  max-height: 80vh
+  max-width: 80vw
   width: 580px
   height: auto
   z-index: 6000
@@ -101,15 +101,17 @@ div.popup
 
     p.admin
       float: right
+      margin-top: 1em
       input[type="text"], input[type="email"], input[type="password"], select, textarea
         width: 90px
       &+.buttons
         width: 50%
-        margin-top: 2em
 
   .buttons
     clear: left
     margin-top: 1em
+    p
+      margin-top: 0.5em
 
   .header
     position: relative

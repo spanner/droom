@@ -34,6 +34,12 @@ module Droom
       user_signed_in? && current_user.admin?
     end
 
+    def organisation_admin?(organisation=nil)
+      user_signed_in? &&
+        current_user.admin? || 
+        (current_user.organisation_admin? && !organisation || current_user.organisation == organisation)
+    end
+
     def set_pagination_headers
       if results = instance_variable_get("@#{name_from_controller}")
         if results.respond_to? :total_count

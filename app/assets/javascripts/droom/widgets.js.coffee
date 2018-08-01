@@ -303,11 +303,11 @@ jQuery ($) ->
 
     confirmable: () =>
       @confirmation_field.attr('required', true)
-      @confirmation_block.show()
+      @confirmation_block.addClass('available')
       @unsubmittable()
 
     unconfirmable: () =>
-      @confirmation_block.hide()
+      @confirmation_block.removeClass('available')
       @confirmation_field.attr('required', false)
       @unsubmittable()# if @required()
 
@@ -328,7 +328,6 @@ jQuery ($) ->
     constructor: (element) ->
       @_container = $(element)
       @_warnings = @_container.find('[data-role="warnings"]')
-      @_suggestions = @_container.find('[data-role="suggestions"]')
       @_gauge = @_container.find('[data-role="gauge"]')
       @_score = @_container.find('[data-role="score"]')
       @_notes = @_container.find('[data-role="notes"]')
@@ -351,21 +350,19 @@ jQuery ($) ->
 
     check: (value) =>
       console.log "PasswordMeter: check", @_ready
-      
       if @_ready
         result = zxcvbn(value)
         @display(result)
         result.score
 
     display: (result) =>
-      console.log "display", result
-      if result.score < 2
+      console.log "PasswordMeter: display", result
+      @_container.removeClass('s0 s1 s2 s3 s4 acceptable').addClass('s' + result.score)
+      if result.score < 3
         @_warnings.text(result.feedback.warning) if result.feedback?.warning
-        @_suggestions.text(result.feedback?.suggestions)
-        @_container.slideDown()
       else
-        @_container.removeClass('s0 s1 s2 s3 s4 acceptable').slideUp()
-
+        @_warnings.text("")
+        @_container.addClass('acceptable')
 
 
 

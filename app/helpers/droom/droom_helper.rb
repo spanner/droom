@@ -89,6 +89,12 @@ module Droom
       user_signed_in? && current_user.admin?
     end
 
+    def organisation_admin?(organisation=nil)
+      user_signed_in? &&
+        current_user.admin? || 
+        (current_user.organisation_admin? && !organisation || current_user.organisation == organisation)
+    end
+
     def external?
       Droom.require_internal_organisation? && current_user.external?
     end

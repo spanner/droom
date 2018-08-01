@@ -15,18 +15,6 @@
   = form_for user, :html => {:class => 'edit user', :autocomplete => false} do |f|
     = render partial: 'droom/users/edit/user_fields', locals: {f: f, user: user}
 
-    - if admin?
-      %p.admin
-        - unless @user.confirmed?
-          = f.check_box :send_confirmation
-          = f.label :send_confirmation
-          %br
-        = f.check_box :admin
-        = f.label :admin
-        %br
-        = f.check_box :organisation_admin
-        = f.label :organisation_admin
-
     .buttons
       - if user == current_user
         = f.submit t(:save_your_profile)
@@ -34,3 +22,8 @@
         = f.submit t(:save_profile)
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'
+
+      - if admin? && !@user.confirmed?
+        %p
+          = f.check_box :send_confirmation, class: "fancy"
+          = f.label :send_confirmation

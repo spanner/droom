@@ -301,7 +301,7 @@ en:
         gender_f: "female"
         gender_m: "male"
         group_ids: "Groups"
-        send_confirmation: "Send invitation"
+        send_confirmation: "Send invitation now"
         defer_confirmation: "Send no email"
   helps:
     edit: "Edit help note"

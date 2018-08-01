@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'paperclip'
-require 'fog'
 require 'devise'
 require 'devise_security_extension'
 require 'devise_zxcvbn'
