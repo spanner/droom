@@ -704,7 +704,7 @@ module Droom
     def remove_from_mailchimp_list
       if Droom.mailchimp_configured?
         possible_previous_address = mailchimp_email.presence || email
-        hashed = Digest::MD5.hexdigest(mailchimp_email.downcase).to_s
+        hashed = Digest::MD5.hexdigest(possible_previous_address.downcase).to_s
         begin
           gibbon.lists(Droom.mc_news_list).members(hashed).delete
         rescue Gibbon::MailChimpError => e
