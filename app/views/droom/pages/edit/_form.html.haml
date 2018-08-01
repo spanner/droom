@@ -34,10 +34,11 @@
         = f.hidden_field :main_image_weighting, data: {ed: "main_image_weighting"}
 
         .bg.ed-image{style: "background-image: url('#{image_url}'); background-position: #{image_weighting}", data: {image: @page.main_image_id, placeholder: "Click or drop here to add your main image"}}
-          .ed-buttons
-          .ed-dropmask
-            %p.prompt
-              Click or drop an image here
+          .holder
+            .ed-buttons
+            .ed-dropmask
+              %p.prompt
+                Click or drop an image here
         .darken
         .fg
           #page_title
@@ -46,15 +47,15 @@
             %h1.title
               %span.ed-title{contenteditable: true, data: {placeholder: "Click to edit page title"}}<
                 = @page.title
-            %p.subtitle
-              %span.ed-subtitle{contenteditable: true, data: {placeholder: "Click to add optional strapline"}}<
-                = @page.subtitle
+            / %p.subtitle
+            /   %span.ed-subtitle{contenteditable: true, data: {placeholder: "Click to add optional strapline"}}<
+            /     = @page.subtitle
 
-      #page_intro
-        = f.hidden_field :intro, data: {ed: 'intro'}
-        %p
-          %span.ed-intro{contenteditable: "plaintext-only", data: {placeholder: "Click here to give your page an introduction. This text may also be used as a preview in lists and email summaries."}}<
-            = @page.intro.html_safe
+      / #page_intro
+      /   = f.hidden_field :intro, data: {ed: 'intro'}
+      /   %p
+      /     %span.ed-intro{contenteditable: true, data: {placeholder: "Click here to give your page an introduction. This text may also be used as a preview in lists and email summaries."}}<
+      /       = @page.intro.html_safe
 
       #page_content.ed-content.editing<
         = f.hidden_field :content, data: {ed: 'content'}

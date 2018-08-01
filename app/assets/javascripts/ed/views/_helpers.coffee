@@ -146,6 +146,7 @@ class Ed.Views.AssetEditor extends Ed.View
           collection: @collection
         @_uploader.$el.appendTo @ui.buttons
         @_uploader.render()
+        @log "uploader", @el, @ui.buttons
         @_uploader.on "select", @setModel
         @_uploader.on "create", @update
         @_uploader.on "pick", => @closeHelpers()

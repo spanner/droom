@@ -154,6 +154,7 @@ class Ed.Views.MainImage extends Ed.Views.Asset
       @setModel _ed.images.get(image_id)
     else
       @setModel(null)
+    @triggerMethod 'wrap'
 
     # @model.on "change:main_image_weighting", @setWeighting
     # if weighting = @$el.css('background-position')
@@ -166,10 +167,10 @@ class Ed.Views.MainImage extends Ed.Views.Asset
     @log "setModel", image
     @bindImage(image)
     @model.setImage(image)
-    if image
-      @ui.prompt.hide()
-    else
-      @ui.prompt.show()
+    # if image
+    #   @ui.prompt.hide()
+    # else
+    #   @ui.prompt.show()
 
   bindImage: (image) =>
     if @image
