@@ -388,7 +388,7 @@ en:
   organisation_information: "Applying organisation"
   organisation_registered: "Registration received"
   organisation_registered_please_wait: "Your application will be processed shortly and you will receive an email explaining how to proceed."
-  organisation_registered_thanks: "Thank you for registering %{name}."
+  organisation_registered_thanks: "Thank you for registering"
   organisations_introduction: "This page shows all the organisations taking part here and the users who are allowed to sign in as their representatives."
   other: "other"
   other_documents: "Other available documents"

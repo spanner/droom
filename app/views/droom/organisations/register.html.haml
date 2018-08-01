@@ -6,7 +6,9 @@
       =t :organisation_registered
 
   %p
-    = t :organisation_registered_thanks, name: @organisation.name
+    = t :organisation_registered_thanks
+    %strong
+      = @organisation.name + '.'
 
   %p
     = t :organisation_registered_please_wait
