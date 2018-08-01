@@ -1,9 +1,11 @@
 - user ||= @user
 - user.addresses.build(address_type: Droom::AddressType.default) unless user.addresses.any?
 
-#address_fields.nested_set
-  = render :partial => 'droom/addresses/fields', :collection => user.addresses
+.nested_set
+  #address_fields
+    = render :partial => 'droom/addresses/fields', :collection => user.addresses
 
-- unless user.new_record?
-  %p.action
-    = link_to t(:add_address), droom.new_user_address_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#address_fields'}
+  - unless user.new_record?
+    = link_to droom.new_user_address_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#address_fields'} do
+      %svg.icon>
+        %use{"xlink:href" => "#plus_button_symbol"}

@@ -61,10 +61,9 @@ a.reinvite
 
 a.waiting
   color: $mid
-  padding-left: 23px
   background:
     image: image-url('droom/spinner.gif')
-    position: 2px 8px
+    position: 2px 2px
     repeat: no-repeat
   svg
     display: none
@@ -708,17 +707,28 @@ div.nested_set
   position: relative
   p:last-child
     margin-bottom: 0.25em
+  margin-bottom: 0.75em
   p:first-child
     margin-top: 0
   .repeating
     position: relative
-    a.remove
-      position: absolute
-      top: -6px
-      left: -6px
-      svg
-        width: 20px
-        height: 20px
+  a.remove, a.add
+    position: absolute
+    background-color: white
+    border: 2px solid white
+    width: 20px
+    height: 20px
+    border-radius: 12px
+    svg
+      width: 20px
+      height: 20px
+  a.remove
+    position: absolute
+    top: -8px
+    left: -10px
+  a.add
+    bottom: -8px
+    right: 70px
 
 ul.downloads
   margin: 0

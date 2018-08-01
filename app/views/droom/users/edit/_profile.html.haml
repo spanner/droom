@@ -23,7 +23,7 @@
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'
 
-      - if admin? && !@user.confirmed?
+      - if !@user.confirmed? && (admin? || @user.organisation && organisation_admin?(@user.organisation))
         %p
           = f.check_box :send_confirmation, class: "fancy"
           = f.label :send_confirmation

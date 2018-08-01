@@ -1,9 +1,11 @@
 - user ||= @user
 - user.phones.build(address_type: Droom::AddressType.default) unless user.phones.any?
 
-#phone_fields.nested_set
-  = render :partial => 'droom/phones/fields', :collection => user.phones
+.nested_set
+  #phone_fields
+    = render :partial => 'droom/phones/fields', :collection => user.phones
 
-- unless user.new_record?
-  %p.action
-    = link_to t(:add_phone), droom.new_user_phone_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#phone_fields'}
+  - unless user.new_record?
+    = link_to droom.new_user_phone_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#phone_fields'} do
+      %svg.icon>
+        %use{"xlink:href" => "#plus_button_symbol"}

@@ -11,6 +11,11 @@
       - else
         = t :admin_account_emails
     = render "droom/users/edit/emails", f: f, user: user
+    
+    - if !@user.confirmed? && (admin? || @user.organisation && organisation_admin?(@user.organisation))
+      %p
+        = f.check_box :send_confirmation, class: "fancy"
+        = f.label :send_confirmation
 
     %p
       - if me
@@ -20,6 +25,9 @@
     = render "droom/users/edit/admin_password_fields", f: f, user: user
 
     %p.admin
+      - if admin?
+        = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
+        %br
       - if @user.organisation && organisation_admin?(@user.organisation)
         = f.check_box :organisation_admin, class: "fancy"
         = f.label :organisation_admin
@@ -35,8 +43,3 @@
         = f.submit t(:save_preferences)
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'
-  
-      - if admin? || @user.organisation && organisation_admin?(@user.organisation)
-        %p
-          = f.check_box :send_confirmation, class: "fancy"
-          = f.label :send_confirmation
