@@ -35,6 +35,14 @@
       %br
       = f.text_field :keywords, placeholder: t("placeholders.organisation.keywords"), class: "tags"
 
+    - if admin? || organisation_admin?(organisation)
+      %p.secondary.admins
+        = f.label :administrator_ids
+        %br
+        - @organisation.users.each do |u|
+          = f.check_box :administrator_ids, {multiple: true, class: "fancy"}, u.id
+          = f.label :administrator_ids, u.name, value: u.id
+
     .description
       = f.label :description
       %br
@@ -42,7 +50,7 @@
  
     - if admin?
       %p.admin
-        = f.check_box :external
+        = f.check_box :external, class: 'fancy'
         = f.label :external
     
     .buttons

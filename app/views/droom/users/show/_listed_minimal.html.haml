@@ -1,6 +1,7 @@
 - user ||= listed_minimal ||= @user
 - liclass = "person small"
 - liclass << " unconfirmed" unless user.confirmed?
+- liclass << " org_admin" if user.organisation_admin?
 
 - if user.image?
   - mugstyle = "background-image: url(#{user.image.url(:thumb)})"
@@ -16,8 +17,8 @@
         %use{"xlink:href" => "#unknown_symbol"}
   %span.contact
     %span.name
-      = link_to truncate(user.colloquial_name, length: 32), user_url(user), data: {action: "popup"}
+      = link_to truncate(user.colloquial_name, length: 32), user_url(user), class: "name", data: {action: "popup"}
       = action_menulink(user)
-      %br
-      = mail_to user.email, user.email, class: "email"
+    %br
+    = mail_to user.email, user.email, class: "email"
   = action_menu(user)

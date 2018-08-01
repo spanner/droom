@@ -263,6 +263,7 @@ en:
         url: "Web link"
         description: "Brief description"
         external: "External organisation?"
+        administrator_ids: "Administrators"
       permission:
         service_id: "Service"
         name: "Title or link text"

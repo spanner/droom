@@ -137,6 +137,14 @@ module Droom
       end
     end
 
+    def administrator_ids
+      users.where(organisation_admin: true).pluck(:id)
+    end
+
+    def administrator_ids=(ids)
+      users.update_all(organisation_admin: false)
+      users.where(id: ids).update_all(organisation_admin: true)
+    end
 
     ## Images
     #
