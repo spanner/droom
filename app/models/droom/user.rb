@@ -34,6 +34,9 @@ module Droom
     after_save :enqueue_mailchimp_job
     after_destroy :remove_from_mailchimp_list
 
+    scope :admins, -> { where(admin: true) }
+    scope :gatekeepers, -> { where(admin: true, gatekeeper: true) }
+
 
     # People are often invited into the system in batches or after offline contact.
     # set user.defer_confirmation to a true or call user.defer_confirmation! +before saving+
@@ -176,9 +179,6 @@ module Droom
     scope :in_name_order, -> {
       order("family_name ASC, given_name ASC")
     }
-
-    scope :admins, -> { where(admin: true) }
-
 
     ## Editor assets
     #

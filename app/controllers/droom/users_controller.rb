@@ -178,6 +178,7 @@ module Droom
       elsif current_user.admin?
         permitted_params += [
           :admin,
+          :gatekeeper,
           :organisation_id,
           :organisation_admin,
           :send_confirmation,

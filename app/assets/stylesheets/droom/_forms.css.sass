@@ -242,6 +242,9 @@ input.fancy[type="checkbox"]
     color: $dark
     &:before
       background-image: image_url('droom/symbols/chosen.svg')
+  &[disabled] + label
+    opacity: 0.25
+    pointer-events: none
 
 input.fancy[type="radio"]
   & + label
@@ -251,6 +254,9 @@ input.fancy[type="radio"]
     color: $dark
     &:before
       background-image: image_url('droom/symbols/checked.svg')
+  &[disabled] + label
+    opacity: 0.25
+    pointer-events: none
 
 
 // This is old layout from the early droom days

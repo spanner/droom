@@ -169,7 +169,6 @@ jQuery ($) ->
 
   $.fn.droom_image_picker = () ->
     @each ->
-      console.log "droom_image_picker", @
       new DroomImagePicker @
 
   class DroomImagePicker extends FilePicker
@@ -349,14 +348,12 @@ jQuery ($) ->
       @_warnings.text("Password too short.")
 
     check: (value) =>
-      console.log "PasswordMeter: check", @_ready
       if @_ready
         result = zxcvbn(value)
         @display(result)
         result.score
 
     display: (result) =>
-      console.log "PasswordMeter: display", result
       @_container.removeClass('s0 s1 s2 s3 s4 acceptable').addClass('s' + result.score)
       if result.score < 3
         @_warnings.text(result.feedback.warning) if result.feedback?.warning
@@ -621,12 +618,10 @@ jQuery ($) ->
         if @_controller.is(":checked") then @enable() else @disable()
 
     enable: () =>
-      console.log "subordinate enable", @_container
       @_container.enable()
       @_container.find('input[type="text"]').first().focus()
 
     disable: () =>
-      console.log "subordinate disable", @_container
       @_container.disable()
 
 

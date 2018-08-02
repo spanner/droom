@@ -33,6 +33,10 @@
         %br
         = f.check_box :admin, class: "fancy"
         = f.label :admin
+        %br
+        %span.subordinate{data: {dependent: "#user_admin"}}
+          = f.check_box :gatekeeper, class: "fancy"
+          = f.label :gatekeeper
 
     .buttons
       - if @user == current_user

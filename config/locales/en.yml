@@ -294,6 +294,7 @@ en:
         address: "Postal address"
         dob: "Date of birth"
         organisation_id: "Organisation"
+        gatekeeper: "Admissions?"
         group_ids: "Group memberships"
         organisation_admin: "Organisation admin?"
         send_confirmation: "Invite now"

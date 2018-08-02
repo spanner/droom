@@ -129,9 +129,8 @@ module Droom
     end
 
     def send_registration_confirmation_messages
-      # Droom.mailer is a configuration variable that usually contains `Droom::Mailer`
       Droom.mailer.send(:org_confirmation, self).deliver_later
-      Droom::User.admins.each do |admin|
+      Droom::User.gatekeepers.each do |admin|
         Droom.mailer.send(:org_notification, self, admin).deliver_later
       end
     end
@@ -144,6 +143,7 @@ module Droom
       users.update_all(organisation_admin: false)
       users.where(id: ids).update_all(organisation_admin: true)
     end
+
 
     ## Images
     #
