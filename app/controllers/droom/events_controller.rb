@@ -79,20 +79,19 @@ module Droom
       @event.created_by = current_user
     end
     
-    # NB. the stored timezone parameter is just an interface convenience: we use it to check boxes in the form. 
+    # NB. the stored timezone parameter is just an interface convenience: we use it to display a consistent form.
     # The event start and finish dates are stored as datetimes with zones.
     #
     def composite_dates
       if params[:event]
         if params[:event][:start_date].present?
-          # We adjust the given datetimes so that they are considered to happen in the given zone, if there is one. 
+          # We adjust the given datetimes so that they are considered to happen in the given zone, if there is one.
           # If none is given, everything happen within the configured time zone for the application.
           date = Time.zone.parse(params[:event][:start_date])
           timezone = ActiveSupport::TimeZone.new(params[:event][:timezone]) if params[:event][:timezone].present?
+          date = date.change(offset: timezone.utc_offset) if timezone
           timezone ||= Time.zone
-          
-          # This is done without changing the apparent time: it is already correct with the given zone and no translation is required.
-          date = date.change(offset: timezone) if timezone
+
           if params[:event][:start_time].present?
             start_time = Tod::TimeOfDay.parse(params[:event][:start_time])
             params[:event][:start] = start_time.on(date, timezone)

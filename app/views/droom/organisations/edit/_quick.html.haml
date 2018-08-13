@@ -20,15 +20,16 @@
       %span.col>
         = f.text_field :chinese_name, placeholder: t("placeholders.organisation.chinese_name")
 
-    %p.secondary
-      = f.label :url
-      %br
-      = f.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
+    %p.secondary.twocol
+      %span.col>
+        = f.label :url
+        %br
+        = f.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
 
-    %p.secondary
-      = f.label :organisation_type_id
-      %br
-      = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
+      %span.col>
+        = f.label :organisation_type_id
+        %br
+        = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
 
     %p.secondary.tagger
       = f.label :keywords

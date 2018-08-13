@@ -450,6 +450,10 @@ en:
       address: "Postal address"
     email:
       email: "Email address"
+    event:
+      datemark: "Click to change date"
+      description: "Please give a brief description"
+      venue_name: "Venue name"
     organisation:
       name: "Organisation name"
       chinese_name: "中国姓名"

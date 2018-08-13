@@ -2,7 +2,7 @@
 
 = form_for @event, :html => {:class => 'edit event', :remote => true, :data => {:type => :html}} do |f|
   .datemark{data: {role: "datepicker"}}
-    %a{:href => "#"}
+    %a{:href => "#", title: t("placeholders.event.datemark")}
       - if @event.start
         %span.mon= @event.start.strftime('%b')
         %span.dom= @event.start.strftime('%d')
@@ -26,7 +26,7 @@
         %span.interlabel
           = t :at
       %span.venue
-        = f.text_field :venue_name, :class => "venuepicker", :placeholder => t(:venue_name), :autocomplete => "off",  data: {role: "venuepicker", width: 300}
+        = f.text_field :venue_name, :class => "venuepicker", :placeholder => t("placeholders.event.venue_name"), :autocomplete => "off",  data: {role: "venuepicker", width: 300}
       - if Droom.second_time_zone?
         %span.timezone
           = f.check_box :timezone, {id: "event_timezone_UK"}, "London", "Hong Kong"
@@ -34,15 +34,13 @@
             = t :uk_time
 
     .description
-      = f.label :description
-      %br
-      = f.text_area :description, class: "rte"
+      = f.text_area :description, class: "rte", placeholder: t("placeholders.event.description")
     
     %p.admin
       - if Droom::EventType.count > 1
         = f.label :event_type_id, t(:file_under)
         = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
-      - if Droom::Calendar.count > 1
+      - if Droom.separate_calendars? && Droom::Calendar.count > 1
         = f.label :calendar_id
         = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
       - else
