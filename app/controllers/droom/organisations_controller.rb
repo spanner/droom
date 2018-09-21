@@ -1,5 +1,5 @@
 module Droom
-  class OrganisationsController < Droom::EngineController
+  class OrganisationsController < Droom::ApplicationController
     include Droom::Concerns::Searchable
     helper Droom::DroomHelper
 

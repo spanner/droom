@@ -1,5 +1,5 @@
 module Droom
-  class UsersController < Droom::EngineController
+  class UsersController < Droom::ApplicationController
     helper Droom::DroomHelper
     respond_to :html, :js
     layout :no_layout_if_pjax

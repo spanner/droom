@@ -14,7 +14,7 @@ module Droom
     isolate_namespace Droom
 
     initializer "droom.integration" do
-      Devise.parent_controller = "Droom::EngineController"
+      Devise.parent_controller = "Droom::ApplicationController"
     end
 
     config.assets.paths << Droom::Engine.root.join('node_modules')

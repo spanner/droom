@@ -3,6 +3,8 @@ require 'gibbon'
 
 module Droom
   class User < ApplicationRecord
+    include Droom::Concerns::Imaged
+
     validates :family_name, :presence => true
     validates :given_name, :presence => true
     validates :uid, :uniqueness => true, :presence => true
@@ -180,12 +182,6 @@ module Droom
       order("family_name ASC, given_name ASC")
     }
 
-    ## Editor assets
-    #
-    has_many :pages
-    has_many :images
-    has_many :videos
-
 
     ## Organisation affiliation
     #
@@ -323,44 +319,6 @@ module Droom
     def documents
       Document.visible_to(self)
     end
-
-
-    ## Mugshot
-    #
-    has_attached_file :image,
-                      :styles => {
-                        :standard => "520x520#",
-                        :icon => "32x32#",
-                        :thumb => "130x130#"
-                      }
-
-    do_not_validate_attachment_file_type :image
-
-    def image_url(style=:original, decache=true)
-      if image?
-        url = image.url(style, decache)
-        url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
-      end
-    end
-
-    def image_url=(address)
-      if address.present?
-        begin
-          self.image = URI(address)
-        rescue OpenURI::HTTPError => e
-          Rails.logger.warn "Cannot read image url #{address} because: #{e}. Skipping."
-        end
-      end
-    end
-
-    def thumbnail
-      image_url(:thumb)
-    end
-
-    def icon
-      image_url(:icon)
-    end
-
 
     ## Address book
     #

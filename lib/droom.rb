@@ -73,6 +73,15 @@ module Droom
   class PasswordRequired < DroomError; end
 
   class << self
+    #
+    # For a more orthodox do |config| initializer...
+    #
+    def configure
+      yield self
+    end
+
+    # or you can set Droom.home_url etc directly.
+    #
     def home_url
       @@home_url ||= "http://example.com"
     end

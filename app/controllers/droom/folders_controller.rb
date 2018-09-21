@@ -1,5 +1,5 @@
 module Droom
-  class FoldersController < Droom::EngineController
+  class FoldersController < Droom::ApplicationController
     respond_to :html, :json, :js
     layout :no_layout_if_pjax
   

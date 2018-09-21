@@ -1,5 +1,5 @@
 module Droom
-  class DocumentsController < Droom::EngineController
+  class DocumentsController < Droom::ApplicationController
     respond_to :html, :js, :json
     layout :no_layout_if_pjax
 

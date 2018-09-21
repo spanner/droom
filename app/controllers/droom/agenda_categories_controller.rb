@@ -1,5 +1,5 @@
 module Droom
-  class AgendaCategoriesController < Droom::EngineController
+  class AgendaCategoriesController < Droom::ApplicationController
     respond_to :html, :js
     layout :no_layout_if_pjax
 

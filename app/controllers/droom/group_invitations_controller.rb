@@ -1,5 +1,5 @@
 module Droom
-  class GroupInvitationsController < Droom::EngineController
+  class GroupInvitationsController < Droom::ApplicationController
     respond_to :js, :html
     layout :no_layout_if_pjax
     

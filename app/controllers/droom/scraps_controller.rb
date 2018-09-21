@@ -1,5 +1,5 @@
 module Droom
-  class ScrapsController < Droom::EngineController
+  class ScrapsController < Droom::ApplicationController
     respond_to :html, :js, :json, :atom
     layout :no_layout_if_pjax
   

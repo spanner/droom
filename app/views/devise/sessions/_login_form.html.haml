@@ -11,9 +11,9 @@
 
   %p
     = f.password_field :password, class: 'login', placeholder: t('placeholders.session.password')
+    = link_to t(:forgot_password), new_password_path(resource_name), class: "reminder note right"
 
   .controls
     .save.button
       %p
-        = link_to t(:forgot_password), new_password_path(resource_name), class: "reminder"
         = f.submit t(:sign_in), :class => "submit"

@@ -1,5 +1,5 @@
 module Droom
-  class VenuesController < Droom::EngineController
+  class VenuesController < Droom::ApplicationController
     respond_to :json, :html
 
     load_and_authorize_resource

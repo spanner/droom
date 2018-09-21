@@ -1,5 +1,5 @@
 module Droom
-  class EngineController < ::ApplicationController
+  class ApplicationController < ::ApplicationController
     helper Droom::DroomHelper
 
   protected

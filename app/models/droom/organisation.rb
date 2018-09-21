@@ -1,27 +1,14 @@
 module Droom
   class Organisation < ApplicationRecord
     include Droom::Concerns::Tagged
+    include Droom::Concerns::Imaged
 
     has_many :users
-    has_many :images, through: :users
-    has_many :videos, through: :users
-
     belongs_to :organisation_type
     belongs_to :owner, :class_name => 'Droom::User'
     belongs_to :approved_by, :class_name => 'Droom::User'
     belongs_to :disapproved_by, :class_name => 'Droom::User'
 
-    has_attached_file :image,
-                      styles: {
-                        thumb: ["128x96#", :png],
-                        standard: ["640x480>", :jpg],
-                        hero: ["1920x1080>", :jpg]
-                      },
-                      convert_options: {
-                        thumb: "-strip",
-                        standard: "-quality 50 -strip",
-                        hero: "-quality 25 -strip"
-                      }
     has_attached_file :logo,
                       default_url: :nil,
                       styles: {
@@ -30,7 +17,6 @@ module Droom
                         thumb: "130x130#"
                       }
 
-    validates_attachment :image, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
     validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
 
     scope :added_since, -> date { where("created_at > ?", date) }
@@ -142,44 +128,6 @@ module Droom
     def administrator_ids=(ids)
       users.update_all(organisation_admin: false)
       users.where(id: ids).update_all(organisation_admin: true)
-    end
-
-
-    ## Images
-    #
-    def image_url(style=:standard, decache=true)
-      if image?
-        url = image.url(style, decache)
-        url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
-      else
-        ""
-      end
-    end
-
-    # Images usually come to us as data: urls but can also be given as actual url or assigned directly to image.
-    #
-    def image_url=(address)
-      if address.present?
-        self.image = URI(address)
-      end
-    rescue OpenURI::HTTPError => e
-      Rails.logger.warn "Cannot read image url #{address} because: #{e}. Skipping."
-    end
-
-    # image_data should be a fully specified data: url in base64 with prefix. Paperclip knows what to do with it.
-    #
-    def image_data=(data_uri)
-      if data_uri.present?
-        self.image = data_uri
-      end
-    end
-
-    # If image_data is given then the file name should be also supplied as `image_name`.
-    # You normally want to call this method after image_url= or image_data=, eg by ordering
-    # parameters in the controller.
-    #
-    def image_name=(name)
-      self.image_file_name = name
     end
 
     def logo_url(style=:standard, decache=true)

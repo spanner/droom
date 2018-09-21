@@ -1,5 +1,5 @@
 module Droom
-  class EnquiriesController < Droom::EngineController
+  class EnquiriesController < Droom::ApplicationController
     respond_to :html, :js
     layout :no_layout_if_pjax
 

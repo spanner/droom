@@ -1,7 +1,7 @@
 require 'tod'
 
 module Droom
-  class EventsController < Droom::EngineController
+  class EventsController < Droom::ApplicationController
     require "uri"
     require "icalendar"
     respond_to :html, :json, :ics, :js

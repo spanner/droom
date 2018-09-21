@@ -1,5 +1,5 @@
 module Droom
-  class PreferencesController < Droom::EngineController
+  class PreferencesController < Droom::ApplicationController
     respond_to :js, :html
     layout :no_layout_if_pjax
     

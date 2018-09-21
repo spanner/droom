@@ -1,5 +1,5 @@
 module Droom
-  class GroupPermissionsController < Droom::EngineController
+  class GroupPermissionsController < Droom::ApplicationController
     respond_to :js, :html
     layout :no_layout_if_pjax
     

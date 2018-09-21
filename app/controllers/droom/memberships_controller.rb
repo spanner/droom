@@ -1,5 +1,5 @@
 module Droom
-  class MembershipsController < Droom::EngineController
+  class MembershipsController < Droom::ApplicationController
     respond_to :js, :html
     layout :no_layout_if_pjax
     

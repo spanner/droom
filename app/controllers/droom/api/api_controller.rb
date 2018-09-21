@@ -1,5 +1,5 @@
 module Droom::Api
-  class ApiController < Droom::EngineController
+  class ApiController < Droom::ApplicationController
 
     respond_to :json
     skip_before_action :verify_authenticity_token
