@@ -61,7 +61,7 @@ class Ed.Views.VideoList extends Ed.Views.AssetList
 #
 # The html we get and set can include a number of embedded assets...
 #
-class Ed.Views.Asset extends Ed.View
+class Ed.Views.Asset extends Ed.WrappedView
   defaultSize: "full"
   tagName: "figure"
   className: "ed-embed"
@@ -77,7 +77,6 @@ class Ed.Views.Asset extends Ed.View
     @_size ?= _.result @, 'defaultSize'
 
   onRender: =>
-    @log "onRender", @el
     @$el.attr "contenteditable", false
     @stickit() if @model
     @addEditor()
@@ -86,7 +85,8 @@ class Ed.Views.Asset extends Ed.View
     if editor_view_class = Ed.Views[@getOption('editorView')]
       @_editor = new editor_view_class
         model: @model
-      @_editor.$el.appendTo @ui.holder
+      @_editor.$el.appendTo @el
+      @_editor.render()
       @_editor.on 'remove', @remove
       @_editor.on 'update', @update
       @_editor.on 'select', @setModel

@@ -11,9 +11,8 @@ module Droom
 
     belongs_to :created_by, :class_name => "Droom::User"
 
+    belongs_to :calendar
     belongs_to :event_type
-    has_folder :within => :event_type #... and subfolders via agenda_categories
-    after_destroy :destroy_related_folder
 
     has_many :invitations, :dependent => :destroy
     has_many :users, :through => :invitations
@@ -24,14 +23,16 @@ module Droom
     has_many :agenda_categories, :dependent => :destroy
     has_many :categories, :through => :agenda_categories
 
-    belongs_to :venue
+    belongs_to :venue, optional: true
     accepts_nested_attributes_for :venue
 
-    belongs_to :event_set
+    belongs_to :event_set, optional: true
     accepts_nested_attributes_for :event_set
 
-    belongs_to :calendar
     has_many :scraps
+
+    has_folder :within => :event_type #... and subfolders via agenda_categories
+    after_destroy :destroy_related_folder
 
     validates :start, :presence => true, :date => true
     validates :finish, :date => {:after => :start, :allow_nil => true}

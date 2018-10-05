@@ -4,7 +4,7 @@
 # The only thing we bring to here and take away is the composed html. The body editor
 # can read its output well enough to reconstitute editing state.
 
-class Ed.Views.Editor extends Ed.View
+class Ed.Views.Editor extends Ed.WrappedView
   ui:
     title: ".ed-title"
     subtitle: ".ed-subtitle"
@@ -114,7 +114,7 @@ class Ed.Views.Editor extends Ed.View
       $el.enable()
 
 
-class Ed.Views.Title extends Ed.View
+class Ed.Views.Title extends Ed.WrappedView
   template: false
   bindings: 
     ':el':
@@ -124,7 +124,7 @@ class Ed.Views.Title extends Ed.View
     @model.set 'title', @$el.text().trim()
 
 
-class Ed.Views.Subtitle extends Ed.View
+class Ed.Views.Subtitle extends Ed.WrappedView
   template: false
   bindings: 
     ':el':
@@ -134,7 +134,7 @@ class Ed.Views.Subtitle extends Ed.View
     @model.set 'subtitle', @$el.text().trim()
 
 
-class Ed.Views.Slug extends Ed.View
+class Ed.Views.Slug extends Ed.WrappedView
   template: false
   bindings: 
     ':el':
@@ -144,7 +144,7 @@ class Ed.Views.Slug extends Ed.View
     @model.set 'slug', @$el.text().trim()
 
 
-class Ed.Views.Intro extends Ed.View
+class Ed.Views.Intro extends Ed.WrappedView
   template: false
   bindings: 
     ':el':
@@ -154,7 +154,7 @@ class Ed.Views.Intro extends Ed.View
     @model.set 'intro', @$el.text().trim()
 
 
-class Ed.Views.ImageCaption extends Ed.View
+class Ed.Views.ImageCaption extends Ed.WrappedView
   template: false
   bindings: 
     ':el':
@@ -164,7 +164,7 @@ class Ed.Views.ImageCaption extends Ed.View
     @model.set 'main_image_caption', @$el.text().trim()
 
 
-class Ed.Views.Content extends Ed.View
+class Ed.Views.Content extends Ed.WrappedView
   template: false
   ui:
     content: ".content"
@@ -260,7 +260,7 @@ class Ed.Views.Content extends Ed.View
     el.innerHTML = "" if content is "<p>&#8203;</p>" or content is "<p><br></p>" or content is "<p>​</p>"  # there's a zwsp in that last string
 
 
-class Ed.Views.Checker extends Ed.View
+class Ed.Views.Checker extends Ed.WrappedView
   template: false
 
   ui:

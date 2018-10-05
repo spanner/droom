@@ -5,17 +5,6 @@ class Ed.View extends Backbone.Marionette.View
 
   initialize: =>
     @subviews = []
-    @beforeWrap()
-    @wrap()
-    @render()
-
-  # each subclass should have its own way of lifting data from the DOM to populate a model.
-  wrap: =>
-    false
-
-  beforeWrap: =>
-    @bindUIElements()
-    # possibly with some dom manipulation
 
   onRender: =>
     @stickit() if @model
@@ -137,6 +126,24 @@ class Ed.View extends Backbone.Marionette.View
 
   confirm: ->
     _ed.confirm arguments...
+
+
+class Ed.WrappedView extends Ed.View
+  template: false
+
+  initialize: =>
+    @subviews = []
+    @beforeWrap()
+    @wrap()
+    @render()
+
+  # each subclass should have its own way of lifting data from the DOM to populate a model.
+  wrap: =>
+    false
+
+  beforeWrap: =>
+    @bindUIElements()
+    # possibly with some dom manipulation
 
 
 ## Collection Views
