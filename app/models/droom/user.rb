@@ -52,6 +52,11 @@ module Droom
     #
     attr_accessor :defer_confirmation, :send_confirmation, :confirming
 
+    def ability
+      @ability ||= Ability.new(self)
+    end
+    delegate :can?, :cannot?, to: :ability
+
     # send_confirmation_notification? is called by devise's immediate confirmation mechanism.
     # If the defer_confirmation flag has been set as usual, we postpone.
     #

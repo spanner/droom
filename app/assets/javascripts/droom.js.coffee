@@ -28,6 +28,7 @@
 #= require_self
 
 jQuery ($) ->
+  console.log "loading droom"
 
   # set flags that scripts can observe cheaply.
   #

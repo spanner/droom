@@ -230,10 +230,11 @@ jQuery ($) ->
       panel.hide() for panel in @panels
 
     constructor: (element) ->
+      console.log "panel", element
       @container = $(element)
       @id = @container.attr('data-panel')
       @links = $("a[data-panel='#{@id}']")
-      @header = $('#masthead').find("a[data-panel='#{@id}']")
+      @header = $("a[data-panel='#{@id}']")
       @closer = @container.find('a.close')
       box = @header.offsetParent()
       @container.appendTo(box)

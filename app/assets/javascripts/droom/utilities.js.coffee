@@ -140,6 +140,7 @@ jQuery ($) ->
     $.activations.push fn
   
   $.fn.activate = () ->
+    console.log "base activate"
     $.each $.activations, (i, fn) =>
       fn.apply(@)
     @
