@@ -118,10 +118,6 @@ module Droom
       @@email_from ||= "please-change-email_from-in-droom-initializer@example.com"
     end
 
-    def email_from_name
-      @@email_from ||= "Please Set Email-From Name In Droom Initializer"
-    end
-
     def email_return_path
       @@email_return_path ||= email_from
     end
