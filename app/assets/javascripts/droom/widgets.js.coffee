@@ -247,7 +247,7 @@ jQuery ($) ->
       @checkPassword()
 
     checkPassword: () =>
-      # no password is ok, if password is not required
+      # no password is ok if password is not required
       if @empty()
         @unconfirmable()
         @password_field.removeClass('valid invalid')
@@ -332,7 +332,7 @@ jQuery ($) ->
       @_notes = @_container.find('[data-role="notes"]')
       @_original_warning = @_warnings.html()
       @_original_notes = @_notes.html()
-      @_zxcvbn_ready = false
+      @_ready = false
       $.withZxcbvn =>
         @_ready = true
 
@@ -345,7 +345,7 @@ jQuery ($) ->
     tooShort: () =>
       @clear()
       @_container.addClass('s0')
-      @_warnings.text("Password too short.")
+      @_warnings.text("Password too short. Please continue.")
 
     check: (value) =>
       if @_ready
@@ -355,10 +355,10 @@ jQuery ($) ->
 
     display: (result) =>
       @_container.removeClass('s0 s1 s2 s3 s4 acceptable').addClass('s' + result.score)
+      @_warnings.text("")
       if result.score < 3
-        @_warnings.text(result.feedback.warning) if result.feedback?.warning
+        @_warnings.text("Warning: " + result.feedback.warning) if result.feedback?.warning
       else
-        @_warnings.text("")
         @_container.addClass('acceptable')
 
 
