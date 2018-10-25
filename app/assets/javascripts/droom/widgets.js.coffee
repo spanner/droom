@@ -263,10 +263,8 @@ jQuery ($) ->
         password = @password_field.val()
         ok = false
         if password.length < 6
-          console.log "checkPassword: too short", password
           @meter?.tooShort()
         else
-          console.log "checkPassword: OK", password
           @meter?.check(password)
           ok = true
 
@@ -357,9 +355,13 @@ jQuery ($) ->
       @_container.removeClass('s0 s1 s2 s3 s4 acceptable').addClass('s' + result.score)
       @_warnings.text("")
       if result.score < 3
-        @_warnings.text("Warning: " + result.feedback.warning) if result.feedback?.warning
+        if result.feedback?.warning
+          @_warnings.text("Warning: " + result.feedback.warning + ". We suggest you choose something harder to guess.")
+        else
+          @_warnings.text("This password is relatively easy to guess. We suggest you add more words.")
       else
         @_container.addClass('acceptable')
+        @_warnings.text("Good password.")
 
 
 
