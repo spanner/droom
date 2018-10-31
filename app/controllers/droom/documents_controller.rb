@@ -19,7 +19,7 @@ module Droom
 
     def show
       if @document.file
-        redirect_to @document.file.expiring_url(Time.now + 600)
+        redirect_to @document.file.expiring_url(600)
       else
         raise ActiveRecord::RecordNotFound
       end
