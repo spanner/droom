@@ -6,6 +6,25 @@ module Droom::Concerns::Tagged
     has_many :tags, through: :taggings, class_name: "Droom::Tag"
   end
 
+  class_methods do
+    def tagged_like(thing, limit=nil, offset=nil)
+      with_tags_like thing.tag_names, limit, offset
+    end
+
+    def with_tags_like(tags, limit=nil, offset=nil)
+      matchers = tags.map { |tag_name| { term: { tags: tag_name } }}
+      args = { body: {
+        query: { bool: {should: matchers} },
+        sort: "_score"
+      }}
+      # args[:size] = limit if limit
+      # args[:from] = offset if offset
+      projects = self.search args
+      Rails.logger.warn "with_tags_like response: #{projects.response.inspect}"
+      projects
+    end
+  end
+
   def tag_list
     tag_names.join(",")
   end

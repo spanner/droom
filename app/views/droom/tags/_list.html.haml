@@ -1,0 +1,9 @@
+- tags ||= []
+- if tags.any?
+  %ul.tags
+    - tags.each do |tag|
+      %li.tag
+        %svg.prefix
+          %use{"xlink:href" => "#tag_symbol"}
+        %span.label
+          = tag.name
