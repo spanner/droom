@@ -14,8 +14,6 @@ module Droom
     def droom_section_nav
       if @section && template_exists?("droom/nav/_#{@section}")
         render partial: "droom/nav/#{@section}"
-      else
-        content_tag('pre', @section)
       end
     end
 
