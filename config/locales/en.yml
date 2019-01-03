@@ -356,6 +356,13 @@ en:
   my_future_events: "Your invitations"
   my_group_documents: "Your documents"
   my_past_events: "Your past events"
+  nav:
+    events:
+      future: "Future events"
+      past: "Past events"
+    library:
+      documents: "Browse documents"
+      folders: "Explore folders"
   networks: "Networks"
   new_event_note: ""
   new_membership_instructions: "Start typing a name here and a list of possible matches will appear. Click on someone to add them to the %{name} group."
@@ -537,6 +544,7 @@ en:
   "on": "on"
   signed_in_as: "Signed in as <strong>%{name}</strong>."
   slug_note: "Spaces and odd characters will be replaced with dashes"
+  sorry_no_matches: "Sorry: we have found nothing matching <strong>%{q}</strong>."
   stream: "Stream"
   stream_events: "Stream events"
   subfolder_count:

@@ -56,7 +56,10 @@ Droom::Engine.routes.draw do
 
   resources :calendars, only: [:show]
   resources :events do
-    get "calendar", on: :collection
+    collection do
+      get :calendar
+      get :past
+    end
     resources :invitations do
       member do
         put :accept

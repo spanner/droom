@@ -1,15 +1,5 @@
-- content_for :pagetitle do
-  = t(:noticeboard_title)
-
 - content_for :title do
   = t(:noticeboard_title)
-  - if can? :create, Droom::Scrap
-    %span.addendum
-      = link_to droom.new_scrap_url, :class => "add", :data => {:action => "popup", :affected => "#noticeboard"} do
-        %svg.prefix
-          %use{"xlink:href" => "#plus_button_symbol"}
-        %span.label
-          = t(:add_notice)
 
 - content_for :standfirst do
   = render :partial => "noticeboard_introduction"

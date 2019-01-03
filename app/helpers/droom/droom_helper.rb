@@ -1,6 +1,24 @@
 module Droom
   module DroomHelper
 
+    def template_exists?(path)
+      lookup_context.find_all(path).any?
+    end
+
+    def partial_exists?(path)
+      path_parts = path.split('/')
+      path_parts.push "_" + path_parts.pop
+      lookup_context.find_all(path_parts.join('/')).any?
+    end
+
+    def droom_section_nav
+      if @section && template_exists?("droom/nav/_#{@section}")
+        render partial: "droom/nav/#{@section}"
+      else
+        content_tag('pre', @section)
+      end
+    end
+
     def clean_html(html)
       fragment = Loofah.fragment(html)
       fragment.xpath('text()').wrap('<p/>')

@@ -5,8 +5,6 @@
 - if @organisations.any?
 
   %div{class: cssclass, data: {refreshable: true, url: "#{droom.organisations_path}.js"}}
-    = render 'droom/shared/search', url: organisations_url
-
     = render partial: "droom/organisations/show/#{view}", collection: @organisations
 
   .pagination.lower

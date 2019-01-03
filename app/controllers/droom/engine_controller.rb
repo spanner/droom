@@ -1,6 +1,7 @@
 module Droom
   class EngineController < ::ApplicationController
     helper Droom::DroomHelper
+    before_action :set_section
 
   protected
 
@@ -50,6 +51,14 @@ module Droom
           }.to_json
         end
       end
+    end
+
+    def partial_exists?(path)
+      lookup_context.find_all(path).any?
+    end
+
+    def set_section
+      @section = controller_name.to_sym
     end
 
   end

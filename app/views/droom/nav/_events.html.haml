@@ -1,0 +1,19 @@
+%nav.section
+  = link_to_unless_current t("nav.events.future"), droom.events_url do
+    %span.here
+      = t("nav.events.future")
+  = link_to_unless_current t("nav.events.past"), droom.past_events_url do
+    %span.here
+      = t("nav.events.past")
+
+  - years = Droom::Event.pluck(:start).compact.map(&:year)
+  - years.uniq.sort.reverse.take(4).each do |y|
+    = link_to_unless_current y, events_url(year: y) do
+      %span.here
+        = y
+
+  - if can?(:create, Droom::Event)
+    = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => "#events"}
+
+  = render 'droom/shared/search', url: droom.events_url
+

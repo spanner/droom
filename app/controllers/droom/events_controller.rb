@@ -22,6 +22,12 @@ module Droom
       respond_with @events
     end
 
+    def past
+      @direction = "past"
+      get_events
+      render template: "droom/events/index"
+    end
+
     def show
       respond_with @event do |format|
         format.js { render :partial => 'droom/events/event' }
@@ -65,8 +71,7 @@ module Droom
       if params[:year].present?
         @year = params[:year].to_i
         @events = paginated(events.in_year(@year).order('start ASC'))
-      elsif params[:direction] == 'past'
-        @direction = 'past'
+      elsif @direction == 'past'
         @events = paginated(events.past.order('start DESC'))
       else
         @direction = 'future'

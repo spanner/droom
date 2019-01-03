@@ -8,7 +8,7 @@
     .pagination.lower
       = paginate @documents, :params => {:format => nil}
 
-  - else
+  - elsif @q
     .nomatch
       %p
-        = t :sorry_no_matches
+        = t(:sorry_no_matches, q: @q).html_safe
