@@ -27,13 +27,7 @@ module Droom::Concerns::Searchable
     end
 
     @sort = search_default_sort unless search_permitted_sorts.include?(@sort)
-    unless @sort == '_score'
-      if sort_locale = params[:sortloc].presence
-        @sort += ".#{sort_locale}"
-      end
-    end
-
-    @order = params[:order].presence || search_descending_sort_defaults.include?(params[:sort]) ? :desc : :asc
+    @order = params[:order].presence || search_descending_sort_defaults.include?(@sort) ? :desc : :asc
     sort_order = [{@sort => {order: @order}}]
 
     criteria = search_criterion_params.each_with_object({}) do |p, h|

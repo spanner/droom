@@ -7,21 +7,26 @@ module Droom::Concerns::Tagged
   end
 
   class_methods do
-    def tagged_like(thing, limit=nil, offset=nil)
-      with_tags_like thing.tag_names, limit, offset
+    def tagged_like(thing, options={})
+      with_tags_like thing.tag_names, options
     end
 
-    def with_tags_like(tags, limit=nil, offset=nil)
-      matchers = tags.map { |tag_name| { term: { tags: tag_name } }}
+    def with_tags_like(tags, options={})
+      bool_query = {
+        should: tags.map { |tag_name| {term: { tags: tag_name } }}
+      }
+      if options[:since]
+        bool_query[:filter] = {range: { created_at: {gte: options[:since]} }}
+      end
       args = { body: {
-        query: { bool: {should: matchers} },
+        query: { bool: bool_query },
         sort: "_score"
       }}
-      # args[:size] = limit if limit
-      # args[:from] = offset if offset
-      projects = self.search args
-      Rails.logger.warn "with_tags_like response: #{projects.response.inspect}"
-      projects
+      args[:limit] = options[:limit] if options[:limit]
+      args[:offset] = options[:offset] if options[:offset]
+      matches = self.search args
+      Rails.logger.warn "with_tags_like response: #{matches.response.inspect}"
+      matches
     end
   end
 

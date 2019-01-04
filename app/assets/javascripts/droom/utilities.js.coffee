@@ -105,10 +105,12 @@ jQuery ($) ->
     color ?= "#f7f283"
     $el = $(@)
     fade_to = $el.css('backgroundColor') or '#ffffff'
+    fade_to = "rgba(255, 255, 255, 0)" if fade_to is "rgba(0, 0, 0, 0)"
+    console.log "fade_to", fade_to
     duration ?= 1000
     @each ->
       $(@).css('backgroundColor', color).animate({'backgroundColor': fade_to}, duration)
-      
+
   $.fn.signal_confirmation = ->
     @signal('#c7ebb4')
 
