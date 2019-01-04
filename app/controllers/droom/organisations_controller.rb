@@ -96,7 +96,7 @@ module Droom
     end
 
     def set_view
-      @view = params[:view] if %w{page listed gridded quick full status users}.include?(params[:view])
+      @view = params[:view] if %w{page listed gridded quick full status users pending}.include?(params[:view])
     end
 
     ## Searchable configuration

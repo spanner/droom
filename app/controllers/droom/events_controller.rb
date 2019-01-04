@@ -150,14 +150,13 @@ module Droom
 
     # special case for calendar subscription
     # in which the user's authentication token is given as url param
+    # later authenticate_user! action will cause subscription to fail if no user found here.
     #
     def authenticate_from_param
       if params[:tok].present?
         user = Droom::User.find_by(authentication_token: params[:tok])
         if user && user.data_room_user?
           sign_in user
-        else
-          raise Droom::PermissionDenied
         end
       end
     end
