@@ -551,7 +551,7 @@ en:
     zero: ""
     one: "one subfolder"
     other: "%{count} subfolders"
-  subscribe_to_calendar: "Subscribe to the calendar"
+  subscribe_to_calendar: "Subscribe"
   suggestions: "Suggestions"
   test_enquiry: "Test enquiry"
   thank_you: "Thank you"

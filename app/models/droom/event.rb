@@ -321,7 +321,7 @@ module Droom
         ""
       end
     end
-    
+
     def plain_description
       strip_tags(description)
     end

@@ -1,7 +1,4 @@
 #calendar
-  %p.action
-    = link_to t(:subscribe_to_calendar), "webcal://#{Settings.host}/events.ics", class: "subscribe"
-
   = render :partial => 'events'
 
 - content_for :title do
