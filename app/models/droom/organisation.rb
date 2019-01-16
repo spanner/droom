@@ -41,6 +41,8 @@ module Droom
 
     default_scope -> {order("name ASC")}
 
+    attr_accessor :other_id
+
     def self.for_selection(with_external=false)
       organisations = order("name asc")
       organisations = organisations.where(external: false) unless with_external
@@ -255,6 +257,17 @@ module Droom
     def self.normalize_url(url="")
       url = "http://#{url}" unless url.blank? or url =~ /^https?:\/\//
       url.strip
+    end
+
+    def subsume(org)
+      Droom::Organisation.transaction do
+        self.users << org.users
+        self.tags << org.tags
+        self.chinese_name = org.chinese_name unless chinese_name?
+        self.description = org.description unless description?
+        self.save
+        chinese_name.destroy
+      end
     end
 
     ## Search

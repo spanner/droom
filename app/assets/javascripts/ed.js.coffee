@@ -1,5 +1,5 @@
 #= require hamlcoffee
-#= require 'honeybadger-js/honeybadger'
+#= require 'honeybadger/lib/honeybadger'
 #= require 'underscore/underscore'
 #= require 'backbone/backbone'
 #= require 'backbone.marionette/lib/backbone.marionette'

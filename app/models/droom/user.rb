@@ -407,8 +407,12 @@ module Droom
       from_email(emails).first
     end
 
+    ## Emails
+    # Internally, a flexible list
+    # Externally, a single account email
+    #
     def email
-      if email_record = emails.preferred.first
+      if email_record = get_email
         email_record.email
       end
     end
@@ -421,18 +425,37 @@ module Droom
       add_email(email)
     end
 
+    def get_email(address_type=nil)
+      if address_type
+        self.emails.where(address_type: address_type).preferred.first
+      else
+        self.emails.preferred.first
+      end
+    end
+
     def add_email(email, address_type=nil)
       if email && email.present?
         if persisted?
-          emails.where(email: email).first_or_create(address_type: address_type)
+          emails.where(email: email).first_or_create(address_type: address_type, default: true)
         else
-          self.emails.build(email: email, address_type: address_type)
+          emails.build(email: email, address_type: address_type, default: true)
         end
       end
     end
 
+    ## Addresses
+    # Internally, a flexible list
+    # Externally, address and correspondence_address
+    # TODO: `phone` should return first non-correspondence record?
+    #
     def address
-      if address_record = addresses.preferred.first
+      if address_record = get_address
+        address_record.address
+      end
+    end
+
+    def correspondence_address
+      if address_record = get_address(correspondence_address_type)
         address_record.address
       end
     end
@@ -446,21 +469,44 @@ module Droom
     end
 
     def correspondence_address=(address)
-      add_address(address, AddressType.where(name: "Correspondence").first_or_create)
+      add_address(address, correspondence_address_type)
+    end
+
+    def get_address(address_type=nil)
+      if address_type
+        self.addresses.where(address_type: address_type).preferred.first
+      else
+        self.addresses.preferred.first
+      end
     end
 
     def add_address(address, address_type=nil)
       if address && address.present?
         if persisted?
-          self.addresses.where(address: address).first_or_create(address_type: address_type)
+          self.addresses.where(address: address).first_or_create(address_type: address_type, default: true)
         else
-          self.phones.build(address: address, address_type: address_type)
+          self.phones.build(address: address, address_type: address_type, default: true)
         end
       end
     end
 
+    def correspondence_address_type
+      AddressType.where(name: "Correspondence").first_or_create
+    end
+
+    ## Phones
+    # Internally, a flexible list
+    # Externally, phone and mobile
+    # TODO: `phone` should return first non-mobile record?
+    #
     def phone
-      if phone_record = phones.preferred.first
+      if phone_record = get_phone
+        phone_record.phone
+      end
+    end
+
+    def mobile
+      if phone_record = get_phone(mobile_phone_type)
         phone_record.phone
       end
     end
@@ -474,21 +520,33 @@ module Droom
     end
 
     def mobile=(phone)
-      add_phone(phone, AddressType.where(name: "Mobile").first_or_create)
+      add_phone(phone, mobile_phone_type)
+    end
+
+    def get_phone(address_type=nil)
+      if address_type
+        self.phones.where(address_type: address_type).preferred.first
+      else
+        self.phones.preferred.first
+      end
     end
 
     def add_phone(phone, address_type=nil)
       if phone && phone.present?
         if persisted?
-          self.phones.where(phone: phone).first_or_create(address_type: address_type)
+          self.phones.where(phone: phone).first_or_create(address_type: address_type, default: true)
         else
-          self.phones.build(phone: phone, address_type: address_type)
+          self.phones.build(phone: phone, address_type: address_type, default: true)
         end
       end
     end
 
+    def mobile_phone_type
+      AddressType.where(name: "Mobile").first_or_create
+    end
 
-    ## Suggestion box
+
+    ## Old suggestion box
     #
     scope :matching, -> fragment {
       where('droom_users.given_name LIKE :f OR droom_users.family_name LIKE :f OR droom_users.chinese_name LIKE :f OR droom_users.title LIKE :f OR droom_users.email LIKE :f OR droom_users.phone LIKE :f OR CONCAT(droom_users.given_name, " ", droom_users.family_name) LIKE :f OR CONCAT(droom_users.family_name, " ", droom_users.given_name) LIKE :f', :f => "%#{fragment}%")

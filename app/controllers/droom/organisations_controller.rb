@@ -72,6 +72,12 @@ module Droom
       redirect_to organisation_url
     end
 
+    def merge
+      @other_org = Droom::Organisation.find(params[:other_id])
+      @other_org.subsume(@organisation)
+      head :no_content
+    end
+
     def destroy
       @organisation.destroy
       head :ok
@@ -96,7 +102,7 @@ module Droom
     end
 
     def set_view
-      @view = params[:view] if %w{page listed gridded quick full status users pending}.include?(params[:view])
+      @view = params[:view] if %w{page listed gridded quick full status users pending subsume}.include?(params[:view])
     end
 
     ## Searchable configuration

@@ -1,6 +1,5 @@
 - listed ||= nil
 - user ||= listed || @user
-- invitation ||= @invitation
 - membership ||= false
 - event ||= false
 - group ||= false
@@ -13,20 +12,12 @@
 - else
   - mugstyle = ""
 
-- if invitation
-  - liclass << " #{invitation.status}"
-  - event = invitation.event
 - if membership
   - group = membership.group
 
-%li{id: "user_#{user.id}", class: liclass, data: {refreshable: true, url: droom.user_path(user, view: 'listed', invitation_id: invitation ? invitation.id : nil)} }
+%li{id: "user_#{user.id}", class: liclass, data: {refreshable: true, url: droom.user_path(user, view: 'listed')} }
   - if user.confirmed?
     %span.mugshot{style: mugstyle}
-      - if invitation
-        - if can? :edit, invitation
-          = link_to invitation.status, toggle_event_invitation_url(event, invitation), class: "invitation #{invitation.status}", data: {action: "affect", method: "put", affected: "#user_#{user.id}"}
-        - else
-          %span{class: "invitation #{invitation.status}"}
   - else
     %span.mugshot
       %svg
@@ -39,6 +30,3 @@
     %br
     = mail_to user.email, user.email, class: "email"
     = action_menu(user, event: event, group: group)
-
-
-// #todo: reinvite button if permitteds

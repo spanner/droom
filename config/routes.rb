@@ -9,6 +9,7 @@ Droom::Engine.routes.draw do
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
     get '/authenticate/:tok' => 'users#authenticate', as: 'authenticate'
     get '/deauthenticate/:tok' => 'users#deauthenticate', as: 'deauthenticate'
+
     #post '/reindex_user' => 'users#reindex_user', as: 'reindex'
     #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
     resources :users do
@@ -34,6 +35,8 @@ Droom::Engine.routes.draw do
     patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
     get "/users/passwords/show" => "users/passwords#show", as: :show_confirmation
     get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
+    post '/api/users/sign_in' => 'users/sessions#create', as: :api_sign_in
+    delete '/api/users/sign_out' => 'users/sessions#destroy', as: :api_sign_out
   end
 
   resources :helps
@@ -94,6 +97,7 @@ Droom::Engine.routes.draw do
     member do
       get :approve
       get :disapprove
+      put :merge
     end
   end
 

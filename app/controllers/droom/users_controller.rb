@@ -23,13 +23,7 @@ module Droom
     end
 
     def show
-      #find_user_by_user_id
-      @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
-      respond_with @user do |format|
-        format.js {
-          render partial: "droom/users/show/#{@view}"
-        }
-      end
+      respond_with @user
     end
 
     def new
