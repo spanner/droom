@@ -1,6 +1,5 @@
 module Droom::Users
   class SessionsController < Devise::SessionsController
-    respond_to :html, :json
     before_action :set_access_control_headers
     skip_before_action :verify_authenticity_token
 

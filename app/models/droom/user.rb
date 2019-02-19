@@ -734,7 +734,7 @@ module Droom
     ## Mailchimp integration
     #
     def enqueue_mailchimp_job
-      Droom::MailchimpSubscriptionJob.perform_later(id, Time.now.to_i)
+      Droom::MailchimpSubscriptionJob.perform_later(id, Time.now.to_i) if saved_change_to_email?
     end
 
     # callback from preference change

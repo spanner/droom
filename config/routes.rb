@@ -28,15 +28,13 @@ Droom::Engine.routes.draw do
   end
 
   devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords'}
-
-  # intermediate confirmation step to allow invitation without setting a password
   devise_scope :user do
     get "/users/:id/welcome/:confirmation_token" => "users/confirmations#show", as: :welcome
     patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
     get "/users/passwords/show" => "users/passwords#show", as: :show_confirmation
     get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
-    post '/api/users/sign_in' => 'users/sessions#create', as: :api_sign_in
-    delete '/api/users/sign_out' => 'users/sessions#destroy', as: :api_sign_out
+    post '/api/users/sign_in' => 'api/sessions#create', as: :api_sign_in
+    delete '/api/users/sign_out' => 'api/sessions#destroy', as: :api_sign_out
   end
 
   resources :helps
