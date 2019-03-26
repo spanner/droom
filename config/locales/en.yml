@@ -463,11 +463,12 @@ en:
       description: "Please give a brief description"
       venue_name: "Venue name"
     organisation:
-      name: "Organisation name"
       chinese_name: "中国姓名"
-      url: "Full url including http part"
       description: "Brief description. Please keep within about 100 words. Select some text to add formatting and links."
+      email_domain: "@example.com"
       keywords: "Type and select"
+      name: "Organisation name"
+      url: "Full url including http part"
     phone:
       phone: "Phone number"
     scrap:

@@ -49,8 +49,8 @@ jQuery ($) ->
     @find_including_self('[data-refreshable]').refresher()
     @find_including_self('.hidden').find('input, select, textarea').attr('disabled', true)
     @find_including_self('.temporary').disappearAfter(1000)
-    @find_including_self('span.subordinate').subordinate()
-    @find_including_self('span.insubordinate').insubordinate()
+    @find_including_self('.subordinate').subordinate()
+    @find_including_self('.insubordinate').insubordinate()
 
     # link actions
 
