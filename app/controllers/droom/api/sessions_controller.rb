@@ -4,16 +4,20 @@ module Droom::Api
   class SessionsController < Devise::SessionsController
     respond_to :json
     skip_before_action :verify_authenticity_token
-    before_action :set_access_control_headers
     skip_before_action :authenticate_user!
+    before_action :set_access_control_headers
     before_action :assert_local_request, if: :api_local?
 
     # POST /api/users/sign_in
     def create
-      self.resource = warden.authenticate!(auth_options)
-      sign_in(resource_name, resource)
-      yield resource if block_given?
-      render json: resource
+      self.resource = warden.authenticate(auth_options)
+      if resource
+        sign_in(resource_name, resource)
+        yield resource if block_given?
+        render json: resource
+      else
+        head :unauthorized
+      end
     end
 
     protected
@@ -27,7 +31,9 @@ module Droom::Api
     end
 
     def assert_local_request
-      raise CanCan::AccessDenied if (Rails.env.production? || Rails.env.staging?) && (request.host != 'localhost' || request.port != Settings.api_port)
+      if (Rails.env.production? || Rails.env.staging?) && (request.host != 'localhost' || request.port != Settings.api_port)
+        raise CanCan::AccessDenied
+      end
     end
   end
 end
