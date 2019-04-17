@@ -18,6 +18,7 @@ module Droom
   class DroomError < StandardError; end
   class AuthRequired < DroomError; end
   class PermissionDenied < DroomError; end
+  class ConfirmationRequired < DroomError; end
   class PasswordRequired < DroomError; end
   class OrganisationRequired < DroomError; end
 

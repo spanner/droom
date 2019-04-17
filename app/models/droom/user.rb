@@ -3,8 +3,8 @@ require 'gibbon'
 
 module Droom
   class User < ApplicationRecord
-    validates :family_name, :presence => true
-    validates :given_name, :presence => true
+    # validates :family_name, :presence => true
+    # validates :given_name, :presence => true
     validates :uid, :uniqueness => true, :presence => true
 
     has_many :preferences, :foreign_key => "created_by_id"
@@ -723,7 +723,7 @@ module Droom
     end
 
     def data_room_user?
-      !Droom.require_login_permission || admin? || permitted?('droom.login')
+      !Droom.require_login_permission? || admin? || permitted?('droom.login')
     end
 
 
@@ -886,8 +886,10 @@ module Droom
 
     def send_confirmation_if_directed
       unless confirming # avoid the double hit caused by devise updating the confirmation token.
-        self.confirming = true
-        self.send_confirmation_instructions if email? && send_confirmation?
+        if email? && send_confirmation?
+          self.confirming = true
+          self.send_confirmation_instructions
+        end
       end
     end
 

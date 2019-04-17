@@ -38,7 +38,7 @@ module Droom
 
     def sign_up_form
       proc {
-        ApplicationController.renderer.render(partial: 'droom/organisations/signup').html_safe
+        ApplicationController.renderer.render(template: 'devise/registrations/new', layout: false, locals: {resource_name: 'user', resource: Droom::User.new}).html_safe
       }
     end
 

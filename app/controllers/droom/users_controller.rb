@@ -104,7 +104,7 @@ module Droom
     end
 
     def reinvite
-      @user.send_confirmation_instructions unless @user.confirmed?
+      @user.send_confirmation_instructions
       head :ok
     end
 

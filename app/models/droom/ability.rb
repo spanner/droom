@@ -90,6 +90,9 @@ module Droom
 
           end
         end
+
+      elsif Droom::registerable?
+        can :create, Droom::User
       end
     end
   end

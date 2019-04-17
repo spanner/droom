@@ -27,8 +27,10 @@ Droom::Engine.routes.draw do
     end
   end
 
-  devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords'}
+  devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords', registrations: 'droom/users/registrations'}
   devise_scope :user do
+    get "/signup" => "users/registrations#new", as: :signup
+    get "/users/registrations/confirm" => "users/registrations#confirm", as: :confirm_registration
     get "/users/:id/welcome/:confirmation_token" => "users/confirmations#show", as: :welcome
     patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
     get "/users/passwords/show" => "users/passwords#show", as: :show_confirmation
@@ -88,8 +90,6 @@ Droom::Engine.routes.draw do
   resources :organisations do
     resources :users
     collection do
-      get :signup
-      post :register
       get :pending
     end
     member do
@@ -130,6 +130,5 @@ Droom::Engine.routes.draw do
   get "/noticeboard" => "scraps#index", as: :noticeboard
   get "/profile" => "users#edit", as: :profile, defaults: {view: "profile"}
   get "/page/:slug" => "pages#published", as: :published_page, defaults: {format: "html"}
-  get "/signup" => "organisations#signup", as: :signup
 
 end

@@ -4,11 +4,13 @@ module Droom::Concerns::ControllerHelpers
   included do
     rescue_from CanCan::AccessDenied, :with => :not_allowed
     rescue_from Droom::PermissionDenied, :with => :not_allowed
+    rescue_from Droom::ConfirmationRequired, :with => :prompt_for_confirmation
     rescue_from Droom::PasswordRequired, :with => :prompt_for_password
     rescue_from Droom::OrganisationRequired, :with => :prompt_for_organisation
 
     before_action :authenticate_user!
     before_action :set_exception_context
+    before_action :check_user_is_confirmed
     before_action :check_user_has_password, except: [:set_password]
     before_action :check_user_has_organisation, except: [:set_organisation]
     before_action :note_current_user
@@ -74,6 +76,16 @@ module Droom::Concerns::ControllerHelpers
   #  Post-registration or post-confirmation helpers to allow for late password-setting
   #  and any other configuration steps that should happen between confirmation and use of site.
   #
+  def check_user_is_confirmed
+    if user_signed_in? && !current_user.confirmed?
+      raise Droom::ConfirmationRequired
+    end
+  end
+
+  def prompt_for_confirmation
+    render template: "/devise/registrations/confirm", locals: {resource: current_user}
+  end
+
   def check_user_has_password
     if user_signed_in? && !current_user.encrypted_password?
       @destination = request.fullpath
