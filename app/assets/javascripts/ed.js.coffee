@@ -1,5 +1,4 @@
 #= require hamlcoffee
-#= require 'honeybadger/lib/honeybadger'
 #= require 'underscore/underscore'
 #= require 'backbone/backbone'
 #= require 'backbone.marionette/lib/backbone.marionette'
@@ -20,7 +19,6 @@ jQuery ($) ->
   document.execCommand('defaultParagraphSeparator', false, 'p')
 
   $.fn.edify = (options={}) ->
-    console.log "edify", @, options
     @each ->
       args = _.extend options,
         el: @

@@ -1,6 +1,6 @@
 Ed = {}
-Ed.version = '0.1.0'
-Ed.subtitle = "𝞪"
+Ed.version = '0.2.0'
+Ed.subtitle = "β"
 Ed.Models = {}
 Ed.Collections = {}
 Ed.Views = {}
