@@ -1,7 +1,6 @@
 module Droom
   class CalendarsController < Droom::EngineController
     respond_to :html, :json, :rss, :ics
-    layout :no_layout_if_pjax
 
     load_and_authorize_resource
 

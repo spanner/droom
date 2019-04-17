@@ -1,0 +1,14 @@
+#account
+  %h1.pagetitle.success<
+    %svg.icon
+      %use{"xlink:href" => "#tick_symbol"}
+    %span.label
+      =t :organisation_registered
+
+  %p
+    = t :organisation_registered_thanks
+    %strong
+      = @organisation.name + '.'
+
+  %p
+    = t :organisation_registered_please_wait

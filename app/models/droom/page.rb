@@ -14,7 +14,7 @@ module Droom
         sign_in_button: render_fragment('sign_in_button'),
         sign_in_form: sign_in_form
       }
-      if Droom.organisations_registerable?
+      if Droom.registerable?
         itp.merge!({
           user_count: Droom::User.count,
           organisation_count: Droom::Organisation.count,

@@ -1,7 +1,6 @@
 module Droom
   class EnquiriesController < Droom::EngineController
     respond_to :html, :js
-    layout :no_layout_if_pjax
 
     skip_before_action :authenticate_user!, only: [:new, :create, :show]
 

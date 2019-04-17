@@ -6,7 +6,6 @@ module Droom
     require "icalendar"
 
     respond_to :html, :json, :ics, :js
-    layout :no_layout_if_pjax
 
     prepend_before_action :authenticate_from_param, only: [:subscribe]
     before_action :get_my_events, :only => [:subscribe]

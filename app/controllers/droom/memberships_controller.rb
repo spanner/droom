@@ -1,7 +1,6 @@
 module Droom
   class MembershipsController < Droom::EngineController
     respond_to :js, :html
-    layout :no_layout_if_pjax
     
     load_and_authorize_resource :group, :class => Droom::Group
     load_and_authorize_resource :membership, :through => :group, :class => Droom::Membership

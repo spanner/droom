@@ -2,7 +2,6 @@ module Droom
   class UsersController < Droom::EngineController
     helper Droom::DroomHelper
     respond_to :html, :js
-    layout :no_layout_if_pjax
     before_action :set_view, only: [:show, :new, :edit, :update]
     before_action :search_users, only: [:admin]
     # before_action :self_unless_admin, only: [:edit, :update]
@@ -85,7 +84,6 @@ module Droom
           flash[:notice] = t(:password_set)
           redirect_to params[:destination].presence || droom.dashboard_url
         else
-          @omit_navigation = true
           render
         end
       else

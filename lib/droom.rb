@@ -13,6 +13,7 @@ module Droom
   
   mattr_accessor :root_path,
                  :home_url,
+                 :cors_domains,
                  :suggestible_classes,
                  :searchable_classes,
                  :mailer,
@@ -36,8 +37,9 @@ module Droom
                  :use_separate_mobile_number,
                  :use_titles,
                  :use_honours,
+                 :registerable,
                  :use_organisations,
-                 :organisations_registerable,
+                 :require_organisation,
                  :enable_mailing_lists,
                  :mailman_table_name,
                  :mailing_lists_active_by_default,
@@ -71,10 +73,24 @@ module Droom
   class AuthRequired < DroomError; end
   class PermissionDenied < DroomError; end
   class PasswordRequired < DroomError; end
+  class OrganisationRequired < DroomError; end
 
   class << self
+    #
+    # Droom.configure do |config|
+    #   config.home_url = "https://something.com"
+    # end
+    #
+    def configure
+      yield self
+    end
+
     def home_url
       @@home_url ||= "http://example.com"
+    end
+
+    def cors_domains
+      @cors_domains || []
     end
 
     def mailer
@@ -168,13 +184,17 @@ module Droom
     def use_biogs?
       !!@@use_biogs
     end
-    
+
+    def registerable?
+      !!@registerable
+    end
+
     def use_organisations?
       !!@@use_organisations
     end
 
-    def organisations_registerable?
-      !!@@organisations_registerable
+    def require_organisation?
+      !!@@require_organisation
     end
 
     def stream_shared?

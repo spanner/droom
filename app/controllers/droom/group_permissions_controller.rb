@@ -1,7 +1,6 @@
 module Droom
   class GroupPermissionsController < Droom::EngineController
     respond_to :js, :html
-    layout :no_layout_if_pjax
     
     load_and_authorize_resource :group, :class => Droom::Group
     load_and_authorize_resource :group_permission, :through => :group, :class => Droom::GroupPermission

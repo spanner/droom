@@ -1,7 +1,6 @@
 module Droom
   class ServicesController < Droom::EngineController
     respond_to :js, :html
-    layout :no_layout_if_pjax
 
     load_and_authorize_resource
 

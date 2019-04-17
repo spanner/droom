@@ -1,7 +1,6 @@
 module Droom
   class DocumentsController < Droom::EngineController
     respond_to :html, :js, :json
-    layout :no_layout_if_pjax
 
     before_action :get_folder, except: [:index, :suggest, :reposition]
     before_action :select_documents, only: [:index, :suggest]

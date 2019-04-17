@@ -1,7 +1,6 @@
 module Droom
   class GroupInvitationsController < Droom::EngineController
     respond_to :js, :html
-    layout :no_layout_if_pjax
     
     load_and_authorize_resource :event, :class => Droom::Event
     load_and_authorize_resource :group_invitation, :through => :event, :class => Droom::GroupInvitation

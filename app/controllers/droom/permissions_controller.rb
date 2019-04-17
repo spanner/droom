@@ -1,7 +1,6 @@
 module Droom
   class PermissionsController < Droom::EngineController
     respond_to :js, :html
-    layout :no_layout_if_pjax
 
     load_and_authorize_resource :service, :class => Droom::Service
     load_and_authorize_resource :permission, :through => :service, :class => Droom::Permission

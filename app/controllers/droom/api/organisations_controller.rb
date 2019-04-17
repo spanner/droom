@@ -28,20 +28,6 @@ module Droom::Api
       end
     end
 
-    def register
-      if Droom.organisations_registerable?
-        @organisation = Droom::Organisation.create registration_params
-        @organisation.send_registration_confirmation_messages
-        if @organisation && @organisation.persisted?
-          return_organisation
-        else
-          return_errors
-        end
-      else
-        head :not_allowed
-      end
-    end
-
     def destroy
       @organisation.destroy
       head :ok
@@ -56,9 +42,7 @@ module Droom::Api
     end
 
     def return_errors
-      render json: {
-        errors: @organisation.errors.to_a
-      }
+      render json: { errors: @organisation.errors.to_a }
     end
 
     protected
