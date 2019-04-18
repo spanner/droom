@@ -539,6 +539,7 @@ en:
   set_password: "Set password"
   set_password_preamble: "We notice this is the first time that your account has been used. Before we go any further, please choose a password to secure the account."
   set_preferences: "Account preferences"
+  set_up_organisation: "Set up your organisation"
   show_future_events: "future events"
   show_past_events: "past events"
   sign_in: "Sign in"
@@ -596,6 +597,10 @@ en:
   user_profile_personal: "Personal Information"
   user_profile_rs_with_croucher: "Relationship with Croucher"
   user_profile_statuses: "Statuses"
+  user_setup:
+    check_name: "Please check that your name is correct"
+    give_name: "Please give your name"
+    set_password: "and choose a strong password"
   user_updated: "Preferences for %{name} have been updated."
   users_introduction: "This is a list of everyone known to the data room. It may include many people who do not have access to the data room itself but whom we authenticate for access to other services."
   venue_name: "Venue name"
@@ -607,7 +612,7 @@ en:
   welcome_preamble: "Welcome to the Croucher Foundation. We notice that this is the first time you have used your Croucher Foundation account so before we go any further, please choose a password."
   would_you_like_to_return: "You probably want to return to"
   year: "YEAR"
-  your_future_events: 
+  your_future_events:
     zero: "You have no invitations at the moment."
     one: "You have one invitation:"
     other: "You have been invited to %{count} events:"

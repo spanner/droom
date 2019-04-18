@@ -5,7 +5,7 @@ module Droom
     before_action :set_view, only: [:show, :new, :edit, :update]
     before_action :search_users, only: [:admin]
     # before_action :self_unless_admin, only: [:edit, :update]
-    load_and_authorize_resource except: [:set_password]
+    load_and_authorize_resource except: [:setup]
 
     # :index is the old user-list view, preserved for historical compatibility but now v. clunky.
     # :admin is the new elasticsearch index. The actual search work is done in `search_users`.
@@ -76,8 +76,8 @@ module Droom
     # set a password. Normally this would only happen when they hit the confirmation link, which checks the account
     # then redirects to the dashboard.
     #
-    def set_password
-      current_user.assign_attributes(password_params.merge(confirmed: true))
+    def setup
+      current_user.assign_attributes(setup_params.merge(confirmed: true))
       if current_user.save
         sign_in current_user, :bypass => true
         if current_user.data_room_user?
@@ -193,8 +193,8 @@ module Droom
       end
     end
 
-    def password_params
-      params.require(:user).permit(:password, :password_confirmation)
+    def setup_params
+      params.require(:user).permit(:title, :given_name, :family_name, :chinese_name, :honours, :password, :password_confirmation)
     end
 
     def set_view

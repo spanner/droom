@@ -1,13 +1,13 @@
-#session
-  %h2
-    Thank you
+#account
+  %h1.pagetitle
+    Please check your email
   %p
-    An email has been sent to
+    A message has been sent to
     = resource.email + '.'
-    Please click on the 'begin registration' link to complete the registration process.
+    Click on its 'begin registration' link to continue the registration process.
   %p
-    = link_to new_user_confirmation_path do
+    = link_to new_user_confirmation_path, class: "waiter" do
       %svg.prefix
         %use{"xlink:href" => "#message_symbol"}
       %span.label
-        Resend confirmation message
+        Resend message

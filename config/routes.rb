@@ -104,7 +104,7 @@ Droom::Engine.routes.draw do
     get :preferences, on: :member, as: :preferences
     put :preference, on: :member, as: :set_preference
     get :admin, on: :collection
-    put :set_password, on: :collection
+    put :setup, on: :collection
     put :reinvite, on: :member
     put "/subsume/:other_id" => "users#subsume", as: 'subsume'
     resources :events

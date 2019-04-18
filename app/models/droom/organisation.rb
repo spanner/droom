@@ -49,15 +49,9 @@ module Droom
       organisations.map{|f| [f.name, f.id] }.unshift(['', ''])
     end
 
-    def self.from_signup(params)
-      owner_params = params.delete :owner
-      transaction do
-        owner = Droom::User.from_email(owner_params[:email]).first || Droom::User.create(owner_params.merge(defer_confirmation: true, organisation_admin: true))
-        org = Droom::Organisation.create(params.merge(owner: owner))
-        org.users << owner
-        org.reindex
-        org
-      end
+    def self.matching_email(email)
+      domain = email.split('@').last
+      where(joinable: true, email_domain: domain)
     end
 
     def self.approve_all

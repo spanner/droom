@@ -119,8 +119,8 @@ input[type="submit"]
   &.next
     float: right
   &.disabled
-    +buttonbg(white)
-    color: $pale
+    +buttonbg($coolgrey00)
+    color: $mid
     box-shadow: none
 
 #margin
@@ -395,12 +395,13 @@ form.faceter, form.droom_faceter
         padding: 10px 0 0 6px
 
 
-input:required, div.rte.required
+input:required, input[required]:not([type="submit"]), div.rte.required
   background:
     image: image-url("droom/required.png")
     position: top right
     size: 20px
     repeat: no-repeat
+
 
 
 

@@ -5,14 +5,14 @@ module Droom::Concerns::ControllerHelpers
     rescue_from CanCan::AccessDenied, :with => :not_allowed
     rescue_from Droom::PermissionDenied, :with => :not_allowed
     rescue_from Droom::ConfirmationRequired, :with => :prompt_for_confirmation
-    rescue_from Droom::PasswordRequired, :with => :prompt_for_password
+    rescue_from Droom::SetupRequired, :with => :prompt_for_setup
     rescue_from Droom::OrganisationRequired, :with => :prompt_for_organisation
 
     before_action :authenticate_user!
     before_action :set_exception_context
-    before_action :check_user_is_confirmed
-    before_action :check_user_has_password, except: [:set_password]
-    before_action :check_user_has_organisation, except: [:set_organisation]
+    before_action :check_user_is_confirmed, except: [:setup]
+    before_action :check_user_setup, except: [:setup]
+    before_action :check_user_has_organisation, except: [:setup_organisation]
     before_action :note_current_user
     before_action :set_access_control_headers
     before_action :set_section
@@ -86,15 +86,16 @@ module Droom::Concerns::ControllerHelpers
     render template: "/devise/registrations/confirm", locals: {resource: current_user}
   end
 
-  def check_user_has_password
-    if user_signed_in? && !current_user.encrypted_password?
+  def check_user_setup
+    if user_signed_in? && !current_user.encrypted_password? || !current_user.names?
       @destination = request.fullpath
-      raise Droom::PasswordRequired
+      raise Droom::SetupRequired
     end
   end
 
-  def prompt_for_password
-    render template: "/droom/users/password_required"
+  def prompt_for_setup
+    Rails.logger.warn "🚜 prompt_for_setup: #{user_signed_in?.inspect}, #{current_user.inspect}"
+    render template: "/droom/users/setup", locals: {user: current_user}
   end
 
   def check_user_has_organisation
@@ -106,7 +107,7 @@ module Droom::Concerns::ControllerHelpers
 
   def prompt_for_organisation
     @organisations = Droom::Organisation.matching_email(current_user.email)
-    render template: "/droom/users/organisation_required"
+    render template: "/droom/users/setup_organisation"
   end
 
 

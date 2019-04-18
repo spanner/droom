@@ -54,6 +54,7 @@ module Droom
                   :users_can_invite,
                   :default_permissions,
                   :api_local,
+                  :mc_opt_in,
                   :mc_api_key,
                   :mc_news_template,
                   :mc_news_list

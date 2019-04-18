@@ -1,5 +1,7 @@
+// either we have @organisation, or we do not
+
 - content_for :pagetitle do
-  Please set password
+  = t :set_up_organisation
 
 - content_for :title do
   =t :hello
@@ -9,4 +11,4 @@
   %p
     = t :set_password_preamble
 
-= render "droom/users/confirmations/password_required", user: current_user
+= render "droom/users/edit/setup_organisation", user: current_user

@@ -96,6 +96,10 @@ module Droom
       !password_set?
     end
 
+    def names?
+      (given_name? and family_name?) || (Droom.use_chinese_names? && chinese_name?)
+    end
+
     # Our old user accounts store passwords as salted sha512 digests. Current standard uses BCrypt
     # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
   
@@ -736,7 +740,9 @@ module Droom
     ## Mailchimp integration
     #
     def enqueue_mailchimp_job
-      Droom::MailchimpSubscriptionJob.perform_later(id, Time.now.to_i) if saved_change_to_email?
+      if Droom.mailchimp_configured? && saved_change_to_email?
+        Droom::MailchimpSubscriptionJob.perform_later(id, Time.now.to_i)
+      end
     end
 
     # callback from preference change
