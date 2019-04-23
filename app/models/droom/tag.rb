@@ -22,6 +22,10 @@ module Droom
       joins(:tag_type).where(droom_tag_type: {name: names})
     }
 
+    scope :by_term, -> {
+      order(name: :asc)
+    }
+
     def self.find_or_create(term)
       if term.present?
         where(name: term.strip.downcase).first_or_create
@@ -29,7 +33,7 @@ module Droom
     end
 
     def self.from_list(list=[], or_create=true)
-      list = list.split(/[,;]\s*/) if String === list
+      list = list.split(/[,;]\s*/) if list.is_a? String
       list.uniq.map { |t| find_or_create(t) }
     end
 

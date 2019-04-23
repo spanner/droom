@@ -61,6 +61,8 @@ en:
   calendar: "Calendar"
   calendar_introduction: 'This is a chronological list of all our future events, with the next first.<br />You can also see a similar <a href="%{url}">list of all past events</a>.'
   calendar_past_introduction: 'This is a chronological list of all our past events, with the most recent first.<br />You can also see a similar <a href="%{url}">list of events coming up</a>.'
+  can_join_organisation: "Your confirmed email address allows you to join the existing <strong>%{name}</strong> account. Please click here to proceed."
+  can_join_organisations: "Your confirmed email address allows you to join any of the organisations listed below. Please click on one of the buttons to proceed."
   can_still_log_in: 'Your password has not changed until you complete this process, <br />so if you remember the old one you can still <a href="%{url}">log in</a>'
   cancel: "cancel"
   choose_new_password: "Choose a new password"
@@ -319,6 +321,7 @@ en:
   invite_to_group: "Invite and add to group"
   invite_user: "Invite a new user"
   invite_user_to: "Invite a person to %{name}"
+  join_organisation: "Join %{name}"
   latest_enquiries: "Latest enquiries"
   library: "Library"
   library_introduction: "The library is organised into folders, which are usually attached to an event or group. You can browse through the folder hierarchy below, or search for a particular document on the right."
@@ -391,6 +394,7 @@ en:
   noticeboard_introduction: 'Introductory text for the noticeboard.'
   of_the: "of the"
   or: "or"
+  or_create_organisation: "Alternatively, you can apply to register a new organisation below. Your application will require the approval of an HKFx administrator."
   organisation_applications: "Organisations applying to join"
   organisation_owner: "Your account"
   organisation_confirmation: "When your organisation is accepted, an email will be sent to this address explaining how to set a password and submit funding proposals."
@@ -399,6 +403,8 @@ en:
   organisation_registered_please_wait: "Your application will be processed shortly and you will receive an email explaining how to proceed."
   organisation_registered_thanks: "Thank you for registering"
   organisation_step1: "You will receive an email confirming your address and inviting you either to join an existing HKFx organisation or propose a new one."
+  organisation_tag_instructions: "Please choose tags to describe your organisation."
+  organisation_type: "Organisation type"
   organisations_introduction: "This page shows all the organisations taking part here and the users who are allowed to sign in as their representatives."
   other: "other"
   other_documents: "Other available documents"
@@ -424,6 +430,7 @@ en:
     preview: "Preview page"
   password_confirmation_instructions: "Please confirm your password."
   password_confirmation_requirements: "We will not be able to remind you of your password but you can always set a new one if you forget it."
+  password_guidance: "As you type your password its strength will be evaluated and suggestions given. You are not obliged to choose a complicated password but it is highly recommended for your own protection: obvious passwords can be cracked in a few seconds. You can add numbers and punctuation to increase complexity, but spaces are also allowed so the easy way is just to type more words."
   password_instructions: "Please choose a password of at least six letters."
   password_leave_same: "Leave this field blank to keep your existing password."
   password_notice: "You must choose a password before you can proceed (unless you remember your old one: in that case you can just log in)."
@@ -465,9 +472,9 @@ en:
       venue_name: "Venue name"
     organisation:
       chinese_name: "中国姓名"
-      description: "Brief description. Please keep within about 100 words. Select some text to add formatting and links."
+      description: "Brief description. Please keep within about 100 words."
       email_domain: "@example.com"
-      keywords: "Type and select"
+      keywords: "Start typing here then choose from the list"
       name: "Organisation name"
       url: "Full url including http part"
     phone:
@@ -514,6 +521,7 @@ en:
   quick_search: "Quick search"
   quick_search_prompt: "Type anything here"
   recent_events: "Past events"
+  register_organisation: "Apply to register your organisation"
   reject: "reject"
   remove: "Remove"
   save: "Save"
@@ -539,7 +547,9 @@ en:
   set_password: "Set password"
   set_password_preamble: "We notice this is the first time that your account has been used. Before we go any further, please choose a password to secure the account."
   set_preferences: "Account preferences"
-  set_up_organisation: "Set up your organisation"
+  setup_organisation: "Set up your organisation"
+  setup_organisation_preamble: "Welcome! Please describe your organisation."
+  setup_or_join_organisation_preamble: "Welcome! Please join one of the organisations listed below or set up a new one."
   show_future_events: "future events"
   show_past_events: "past events"
   sign_in: "Sign in"
