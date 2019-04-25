@@ -126,6 +126,7 @@ Droom::Engine.routes.draw do
   end
 
   put "/set_password" => "users#set_password", as: :set_my_password
+  put "/set_organisation" => "users#set_organisation", as: :set_my_organisation
   get "/enquire" => "enquiries#new", as: :enquire
   get "/noticeboard" => "scraps#index", as: :noticeboard
   get "/profile" => "users#edit", as: :profile, defaults: {view: "profile"}

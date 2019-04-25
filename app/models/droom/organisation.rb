@@ -41,6 +41,9 @@ module Droom
 
     default_scope -> {order("name ASC")}
 
+    after_save :capture_owner
+    after_create :send_notifications
+
     attr_accessor :other_id
 
     def self.for_selection(with_external=false)
@@ -122,6 +125,10 @@ module Droom
         owner.generate_confirmation_token unless owner.confirmation_token?
         Droom.mailer.send(:org_welcome, self, owner.confirmation_token).deliver_later
       end
+    end
+
+    def send_notifications
+      send_registration_confirmation_messages if external?
     end
 
     def send_registration_confirmation_messages
@@ -261,6 +268,15 @@ module Droom
         self.description = org.description unless description?
         self.save
         chinese_name.destroy
+      end
+    end
+
+    def capture_owner
+      unless owner
+        if user = users.first
+          update_column :owner_id, user.id
+          user.update_column :organisation_admin,  true
+        end
       end
     end
 

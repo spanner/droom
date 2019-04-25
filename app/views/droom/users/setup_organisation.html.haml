@@ -20,9 +20,9 @@
 - if @organisations.any?
   %section.join_organisation
     - @organisations.each do |org|
-      = form_for current_user, html: {class: "user"} do |f|
+      = form_for current_user, url: set_my_organisation_url, method: :put, html: {class: "user"} do |f|
         = hidden_field_tag :destination, @destination
-        = f.hidden_field :organisation, value: org.id
+        = f.hidden_field :organisation_id, value: org.id
         %p
           = f.submit value: t(:join_organisation, name: org.name)
 
@@ -33,7 +33,8 @@
   %h2
     = t :register_organisation
 
-  = form_for current_user, html: {class: "user"} do |f|
+  - current_user.organisation ||= Droom::Organisation.new
+  = form_for current_user, url: set_my_organisation_url, method: :put, html: {class: "user"} do |f|
     = hidden_field_tag :destination, @destination
     = f.fields_for :organisation do |orgf|
       %p.name.twocol<
@@ -55,10 +56,10 @@
       %p.instructions
         = t :organisation_tag_instructions
 
-      %ul.taglist
+      %ul.taglist{data: {role: 'chooser'}}
         - Droom::Tag.by_term.each do |tag|
-          %li.checkbod
-            = orgf.check_box :tags, {multiple: true, class: 'fancy'}, tag.id
+          %li.checkbox
+            = orgf.check_box :tags, {multiple: true, class: 'fancy'}, tag.id, nil
             = orgf.label :tags, tag.name, value: tag.id
 
 

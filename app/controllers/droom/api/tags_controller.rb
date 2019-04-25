@@ -3,6 +3,7 @@ require 'active_model_serializers'
 module Droom::Api
   class TagsController < Droom::Api::ApiController
     skip_before_action :authenticate_user!
+    skip_before_action :check_user_has_organisation
     before_action :search_tags, only: [:index]
     load_resource class: "Droom::Tag"
 

@@ -7,12 +7,13 @@ module Droom::Concerns::ControllerHelpers
     rescue_from Droom::ConfirmationRequired, :with => :prompt_for_confirmation
     rescue_from Droom::SetupRequired, :with => :prompt_for_setup
     rescue_from Droom::OrganisationRequired, :with => :prompt_for_organisation
+    rescue_from Droom::OrganisationApprovalRequired, :with => :await_organisation_approval
 
     before_action :authenticate_user!
     before_action :set_exception_context
-    before_action :check_user_is_confirmed, except: [:setup]
-    before_action :check_user_setup, except: [:setup]
-    before_action :check_user_has_organisation, except: [:setup_organisation]
+    before_action :check_user_is_confirmed, except: [:setup], unless: :devise_controller?
+    before_action :check_user_setup, except: [:setup], unless: :devise_controller?
+    before_action :check_user_has_organisation, except: [:setup_organisation], unless: :devise_controller?
     before_action :note_current_user
     before_action :set_access_control_headers
     before_action :set_section
@@ -87,27 +88,36 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def check_user_setup
-    if user_signed_in? && !current_user.encrypted_password? || !current_user.names?
+    if user_signed_in? && (!current_user.encrypted_password? || !current_user.names?)
       @destination = request.fullpath
       raise Droom::SetupRequired
     end
   end
 
   def prompt_for_setup
-    Rails.logger.warn "🚜 prompt_for_setup: #{user_signed_in?.inspect}, #{current_user.inspect}"
     render template: "/droom/users/setup", locals: {user: current_user}
   end
 
   def check_user_has_organisation
-    if user_signed_in? && Droom.use_organisations? && Droom.require_organisation? && !current_user.organisation
-      @destination = request.fullpath
-      raise Droom::OrganisationRequired
+    if user_signed_in? && Droom.use_organisations? && Droom.require_organisation?
+      if !current_user.organisation
+        @destination = request.fullpath
+        raise Droom::OrganisationRequired
+
+      elsif !current_user.organisation.approved?
+        raise Droom::OrganisationApprovalRequired
+      end
     end
   end
 
   def prompt_for_organisation
     @organisations = Droom::Organisation.matching_email(current_user.email)
     render template: "/droom/users/setup_organisation"
+  end
+
+  def await_organisation_approval
+    @organisations = Droom::Organisation.matching_email(current_user.email)
+    render template: "/droom/users/await_organisation_approval"
   end
 
 

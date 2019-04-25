@@ -27,6 +27,8 @@ module Droom
            unlock_strategy: :both,
            unlock_in: 10.minutes
 
+    belongs_to :organisation, optional: true
+    accepts_nested_attributes_for :organisation
 
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
@@ -685,7 +687,7 @@ module Droom
     #
     def preference(key)
       pref = preferences.where(key: key).first_or_initialize
-      pref.value = Droom.user_default(key) unless pref.persisted?
+      pref.value = Droom.config.user_default(key) unless pref.persisted?
       pref
     end
 

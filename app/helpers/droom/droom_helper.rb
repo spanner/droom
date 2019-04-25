@@ -1,8 +1,8 @@
 module Droom
   module DroomHelper
 
-    def template_exists?(path)
-      lookup_context.find_all(path).any?
+    def droom_template_exists?(path)
+      lookup_context.find_all("droom/#{path}").any?
     end
 
     def partial_exists?(path)
@@ -12,7 +12,7 @@ module Droom
     end
 
     def droom_section_nav
-      if @section && template_exists?("droom/nav/_#{@section}")
+      if @section && droom_template_exists?("nav/_#{@section}")
         render partial: "droom/nav/#{@section}"
       end
     end
@@ -111,7 +111,7 @@ module Droom
         (current_user.organisation_admin? && !organisation || current_user.organisation == organisation)
     end
 
-    def external?
+    def external_user?
       Droom.require_internal_organisation? && current_user.external?
     end
 

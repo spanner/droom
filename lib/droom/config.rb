@@ -315,17 +315,13 @@ module Droom
     # set the defaults.
     #
     def user_defaults
-      @user_defaults ||= Droom::LazyHash.new({
-        :mailchimp? => true
-      })
+      @user_defaults ||= Droom::LazyHash.new({})
     end
  
-    # Here we are overriding droom default settings in a host app initializer to create local default settings.
+    # We are probably overriding droom default settings in a host app initializer to create local default settings.
     # key should be dot-separated and string-like:
     #
-    #   Droom.set_default('email.digest', true)
-    #
-    # LazyHash#deep_set is a setter that can take compound keys and set nested values. It's defined in lib/lazy_hash.rb.
+    #   config.set_user_default('email.digest', true)
     #
     def set_user_default(key, value)
       user_defaults.set(key, value)

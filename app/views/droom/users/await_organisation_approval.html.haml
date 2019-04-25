@@ -1,0 +1,21 @@
+// either we have @organisation, or we do not
+
+- content_for :pagetitle do
+  = t :setup_organisation
+
+- content_for :title do
+  =t :hello
+  = current_user.formal_name.strip
+
+
+%p.large
+  Hello
+  = current_user.formal_name + '.'
+  Thank you for registering
+  %strong
+    = current_user.organisation.name + '.'
+  The application has been received and an HKFx administrator will attend to it very soon.
+%p
+  You can
+  = link_to "sign out", droom.destroy_user_session_path, :method => :delete
+  safely, and look out for a welcome email.

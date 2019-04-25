@@ -2,10 +2,11 @@ module Droom
   class UsersController < Droom::EngineController
     helper Droom::DroomHelper
     respond_to :html, :js
+    skip_before_action :check_user_has_organisation, only: [:setup, :set_organisation]
     before_action :set_view, only: [:show, :new, :edit, :update]
     before_action :search_users, only: [:admin]
     # before_action :self_unless_admin, only: [:edit, :update]
-    load_and_authorize_resource except: [:setup]
+    load_and_authorize_resource except: [:setup, :set_organisation]
 
     # :index is the old user-list view, preserved for historical compatibility but now v. clunky.
     # :admin is the new elasticsearch index. The actual search work is done in `search_users`.
@@ -88,6 +89,14 @@ module Droom
         end
       else
         render template: "/droom/users/request_password"
+      end
+    end
+
+    def set_organisation
+      if current_user.update_attributes(set_organisation_params)
+        redirect_to params[:destination].presence || droom.dashboard_url
+      else
+        render template: "/droom/users/setup_organisation"
       end
     end
 
@@ -195,6 +204,10 @@ module Droom
 
     def setup_params
       params.require(:user).permit(:title, :given_name, :family_name, :chinese_name, :honours, :password, :password_confirmation)
+    end
+
+    def set_organisation_params
+      params.require(:user).permit(:organisation_id, organisation_attributes: [:name, :chinese_name, :url, :organisation_type_id, :description, :tags])
     end
 
     def set_view
