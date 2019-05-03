@@ -30,7 +30,11 @@ module Droom
 
     def create
       @document.save!
-      render :partial => 'listing'
+      if %w{listing simple}.include?(params[:view])
+        render :partial => params[:view]
+      else
+        render :partial => 'listing'
+      end
     end
     
     def edit

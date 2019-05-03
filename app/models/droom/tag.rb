@@ -19,7 +19,7 @@ module Droom
     }
 
     scope :of_type, -> names {
-      joins(:tag_type).where(droom_tag_type: {name: names})
+      joins(:tag_type).where(droom_tag_types: {name: names})
     }
 
     scope :by_term, -> {
