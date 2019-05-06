@@ -1,9 +1,4 @@
 div.popup
-  form
-    p
-      margin: 0 0 1em 0
-    li p
-      display: inline
 
   input[type="text"], input[type="password"], input[type="email"],  input[type="tel"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false]), 
     padding: 8px
@@ -223,6 +218,12 @@ ul.taglist
     max-width: 300px
     label
       white-space: nowrap
+      overflow: hidden
+
+.popup
+  ul.taglist
+    column-count: 2
+    margin: 0 0 1em 0
 
 input.fancy[type="checkbox"], input.fancy[type="radio"]
   display: none
@@ -252,7 +253,7 @@ input.fancy[type="checkbox"]
       background-image: image_url('droom/symbols/unchosen.svg')
   &:checked + label
     color: $dark
-    font-weight: bold
+    font-weight: normal
     &:before
       background-image: image_url('droom/symbols/chosen.svg')
   &[disabled] + label
