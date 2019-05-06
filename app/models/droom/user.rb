@@ -408,7 +408,7 @@ module Droom
     end
 
     def active_for_authentication?
-      emails.any?
+      super && emails.any?
     end
 
     def self.find_by_any_email(emails)
