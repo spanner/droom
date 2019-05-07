@@ -17,6 +17,10 @@ module Droom::Users
     end
 
     def after_sign_up_path_for(resource)
+      root_url
+    end
+
+    def after_inactive_sign_up_path_for(resource)
       confirm_registration_url
     end
 

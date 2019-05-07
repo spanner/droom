@@ -27,9 +27,21 @@ Droom::Engine.routes.draw do
     end
   end
 
-  devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords', registrations: 'droom/users/registrations'}
+  devise_for :users,
+             class_name: 'Droom::User',
+             module: :devise,
+             skip: :registrations,
+             controllers: {
+               confirmations: 'droom/users/confirmations',
+               sessions: 'droom/users/sessions',
+               passwords: 'droom/users/passwords',
+               registrations: 'droom/users/registrations'
+             }
+
+
   devise_scope :user do
     get "/signup" => "users/registrations#new", as: :signup
+    post '/register' => 'users/registrations#create', as: :register
     get "/users/registrations/confirm" => "users/registrations#confirm", as: :confirm_registration
     get "/users/:id/welcome/:confirmation_token" => "users/confirmations#show", as: :welcome
     patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
@@ -37,6 +49,7 @@ Droom::Engine.routes.draw do
     get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
     post '/api/users/sign_in' => 'api/sessions#create', as: :api_sign_in
     delete '/api/users/sign_out' => 'api/sessions#destroy', as: :api_sign_out
+
   end
 
   resources :helps
