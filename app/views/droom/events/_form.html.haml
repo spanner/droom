@@ -40,7 +40,7 @@
       - if Droom::EventType.count > 1
         = f.label :event_type_id, t(:file_under)
         = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
-      - if Droom.separate_calendars? && Droom::Calendar.count > 1
+      - if Droom.config.separate_calendars? && Droom::Calendar.count > 1
         = f.label :calendar_id
         = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
       - else

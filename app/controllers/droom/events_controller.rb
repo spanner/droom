@@ -89,7 +89,7 @@ module Droom
   
     def get_my_events
       @events = Droom::Event.accessible_by(current_ability)
-      if Droom.separate_calendars?
+      if Droom.config.separate_calendars?
         @events = @events.in_calendar(Droom::Calendar.default_calendar)
       end
       Rails.logger.warn "events: #{@events.inspect}"
