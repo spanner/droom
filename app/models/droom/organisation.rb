@@ -38,6 +38,8 @@ module Droom
     scope :approved, -> { where.not(approved_at: nil) }
     scope :pending, -> { where(approved_at: nil, disapproved_at: nil) }
     scope :by_date, -> { order(created_at: :asc) }
+    scope :external, -> { where(external: true) }
+    scope :internal, -> { where(external: false) }
 
     default_scope -> {order("name ASC")}
 

@@ -40,6 +40,8 @@ module Droom
 
     scope :admins, -> { where(admin: true) }
     scope :gatekeepers, -> { where(admin: true, gatekeeper: true) }
+    scope :external, -> { joins(:organisation).where(droom_organisations: {external: true}) }
+    scope :internal, -> { joins(:organisation).where(droom_organisations: {external: false}) }
 
 
     # People are often invited into the system in batches or after offline contact.
