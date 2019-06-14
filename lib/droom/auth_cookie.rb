@@ -3,7 +3,6 @@ require "active_support/core_ext/hash/slice"
 
 # NB. there is vital callback glue in droom/config/initializers/devise.rb
 #
-
 module Droom
   class AuthCookie
 
@@ -13,8 +12,7 @@ module Droom
 
     # Sets the cookie, referencing the given resource.id (e.g. User)
     def set(resource, opts={})
-      cookie_string = set_auth_values(resource)
-      Rails.logger.warn "cookie_string -> #{cookie_string}"
+      cookie_string = encoded_value(resource)
       cookie_values = cookie_options.merge(opts).merge(:value => cookie_string)
       @cookies[cookie_name] = cookie_values
     end
@@ -67,8 +65,7 @@ module Droom
       Settings.auth.cookie_name
     end
 
-    # Note that this is destructive to all previous authentication tokens even if the cookie is not eventually set.
-    def set_auth_values(resource)
+    def encoded_value(resource)
       signer.encode([resource.ensure_authentication_token, Time.now])
     end
 

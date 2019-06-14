@@ -105,6 +105,7 @@ module Droom
       (given_name? and family_name?) || (Droom.use_chinese_names? && chinese_name?)
     end
 
+
     # Our old user accounts store passwords as salted sha512 digests. Current standard uses BCrypt
     # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
   
@@ -127,6 +128,14 @@ module Droom
         end
       end
     end 
+
+    # This is called from a warden hook during every authenticated request, either to the data room or its API.
+    # The value of last_request_at is used to invalidate stale sessions.
+    #
+    def set_last_request_at!(time=Time.now)
+      Rails.logger.warn "⏰ set_last_request_at! #{time}"
+      update_column :last_request_at, time
+    end
 
 
     ## Session ID
@@ -788,6 +797,7 @@ module Droom
       Gibbon::Request.new(api_key: Droom.mc_api_key, symbolize_keys: true)
     end
 
+
     ## Search
     #
     searchkick _all: false, callbacks: :async, default_fields: [:name, :chinese_name, :emails, :organisation_name]
@@ -882,6 +892,7 @@ module Droom
         save!
       end
     end
+
 
   protected
 

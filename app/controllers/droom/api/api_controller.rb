@@ -5,8 +5,8 @@ module Droom::Api
     skip_before_action :verify_authenticity_token
     before_action :set_access_control_headers
 
-    skip_before_action :authenticate_user!, if: :api_local?
-    before_action :assert_local_request, if: :api_local?
+    # skip_before_action :authenticate_user!, if: :api_local?
+    # before_action :assert_local_request, if: :api_local?
 
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
     rescue_from "Droom::Error", with: :blew_up
@@ -50,8 +50,8 @@ module Droom::Api
       true
     end
 
-    def api_local?
-      Droom::api_local?
-    end
+    # def api_local?
+    #   Droom::api_local?
+    # end
   end
 end

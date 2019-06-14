@@ -254,34 +254,32 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = "/droom/users/auth"
 
 
-
   config.warden do |manager|
-    # for shared-cookie auth
+    # For shared-cookie auth, where user has signed in at some other service before coming here.
+    # This is very similar to the work done by droom_client in remote services.
     manager.strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
     manager.default_strategies :database_authenticatable, :cookie_authenticatable, scope: :user
   end
 
   # Set shared domain cookie and (revocable) session id on sign in.
+  # The shared cookie is our SSO mechanism and will allow access to remote services (with a token check)
   #
   Warden::Manager.after_authentication do |user, warden, options|
     Droom::AuthCookie.new(warden.cookies).set(user)
+    user.set_last_request_at!
   end
 
-  # Unset shared domain cookie on sign out.
+  # On every authenticated request, shared cookie is `set` again so that the encoded date is now.
+  #
+  Warden::Manager.after_set_user do |user, warden, options|
+    user.set_last_request_at!
+  end
+
+  # Unset session id and shared domain cookie on sign out.
   #
   Warden::Manager.before_logout do |user, warden, options|
     Droom::AuthCookie.new(warden.cookies).unset
     user.reset_session_id! if user
   end
-
-  # # Sign out if user was retrieved from session and session id is not valid.
-  # # Note that we should not kill the whole precess here: cookie auth might could succeed even though this old local session is no good.
-  # #
-  # Warden::Manager.after_fetch do |user, warden, options|
-  #   Rails.logger.warn "after_fetch! #{user.session_id}, #{warden.raw_session['session_validity_check']}"
-  #   if warden.raw_session["session_validity_check"].present? && user.session_id != warden.raw_session["session_validity_check"]
-  #     warden.logout
-  #   end
-  # end
 
 end
