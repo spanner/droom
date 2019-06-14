@@ -21,6 +21,7 @@ module Droom
            :session_limitable,
            :lockable,
            :registerable,
+           :timeoutable,
            reconfirmable: false,
            lock_strategy: :failed_attempts,
            maximum_attempts: 10,
