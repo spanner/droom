@@ -1,3 +1,6 @@
+section.join_organisation
+  margin-bottom: 4em
+
 #account
   position: relative
   clear: both
@@ -136,24 +139,22 @@ ul.people
         margin-top: 4px
 
 form.user
+  h3
+    margin: 1em 0 0 0
+    & + p
+      margin-top: 0.25em
   p.names
+    label
+      display: block
     input[type="text"]
       width: 100%
       box-sizing: border-box
     span.title
-      display: inline-block
-      vertical-align: top
-      width: calc(16% - 10px)
-      margin-right: 10px
+      +column(15%, 1%)
     span.name
-      display: inline-block
-      vertical-align: top
-      width: calc(32% - 10px)
-      margin-right: 10px
+      +column(31%, 1%)
     span.chinese_name, span.honours
-      display: inline-block
-      vertical-align: top
-      width: 20%
+      +column(19%, 1%)
       margin-right: 0
   .contacts
     margin-top: 10px

@@ -1,17 +1,19 @@
 div.popup
-  form
-    p
-      margin: 0 0 1em 0
-    li p
-      display: inline
 
-  input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false]), 
+  input[type="text"], input[type="password"], input[type="email"],  input[type="tel"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false]), 
     padding: 8px
     border: 1px solid $pale
     background-color: white
     font-size: 1.2em
 
-input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false])
+input.required, textarea.required, textarea[required], input[required]:not([type="submit"]), div.rte.required
+  background:
+    image: image-url("droom/required.png")
+    position: top right
+    size: 20px
+    repeat: no-repeat
+
+input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false])
   -webkit-appearance: none
   box-sizing: border-box
   position: relative
@@ -119,8 +121,8 @@ input[type="submit"]
   &.next
     float: right
   &.disabled
-    +buttonbg(white)
-    color: $pale
+    +buttonbg($coolgrey00)
+    color: $mid
     box-shadow: none
 
 #margin
@@ -186,6 +188,8 @@ span.erratic
 a.button
   +button
   &.edit
+    +buttonbg($blue, white)
+  &.submit
     +buttonbg($green, white)
   &.delete
     +buttonbg($red, white)
@@ -205,6 +209,22 @@ textarea
 
 // checkbox cosmetics
 
+ul.taglist
+  list-style: none
+  padding: 0
+  column-count: 3
+  li
+    margin-right: 20px
+    max-width: 300px
+    label
+      white-space: nowrap
+      overflow: hidden
+
+.popup
+  ul.taglist
+    column-count: 2
+    margin: 0 0 1em 0
+
 input.fancy[type="checkbox"], input.fancy[type="radio"]
   display: none
   & + label
@@ -215,7 +235,6 @@ input.fancy[type="checkbox"], input.fancy[type="radio"]
     cursor: pointer
     font-size: 1rem
     margin-right: 1em
-    white-space: nobreak
     &:before
       display: inline-block
       vertical-align: middle
@@ -234,6 +253,7 @@ input.fancy[type="checkbox"]
       background-image: image_url('droom/symbols/unchosen.svg')
   &:checked + label
     color: $dark
+    font-weight: normal
     &:before
       background-image: image_url('droom/symbols/chosen.svg')
   &[disabled] + label
@@ -246,6 +266,7 @@ input.fancy[type="radio"]
       background-image: image_url('droom/symbols/unchecked.svg')
   &:checked + label
     color: $dark
+    font-weight: bold
     &:before
       background-image: image_url('droom/symbols/checked.svg')
   &[disabled] + label
@@ -393,15 +414,6 @@ form.faceter, form.droom_faceter
       span.note
         display: block
         padding: 10px 0 0 6px
-
-
-input:required, div.rte.required
-  background:
-    image: image-url("droom/required.png")
-    position: top right
-    size: 20px
-    repeat: no-repeat
-
 
 
 @media (max-width: 700px)

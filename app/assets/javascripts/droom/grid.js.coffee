@@ -20,7 +20,6 @@ $.fn.highlight = ->
 
 $.fn.notice = ->
   @each ->
-    console.log "notice!", @
     $(@).gridBox()
     new Notice(@)
 

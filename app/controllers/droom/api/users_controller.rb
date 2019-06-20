@@ -13,19 +13,35 @@ module Droom::Api
       render json: @user
     end
 
-    # This would usually be a session-continuation check from a front end.
+    # This would usually be a session-init call from a front end SPA
     #
     def whoami
       render json: current_user
     end
 
-    # This is a almost always a preliminary call at the initial auth stage,
-    # so the client is not yet setting auth headers. We look for a token in params too.
+    # This is called on every request by a remote service.
+    # Lots of care has to be taken here, to respond quickly but lapse correctly,
+    # and never to set up a cascade of mutual enquiry.
     #
     def authenticate
       token = params[:tok]
-      if @user = Droom::User.find_by(authentication_token: token)
-        render json: @user
+      @user = Droom::User.find_by(authentication_token: token)
+      if @user
+        if @user.respond_to(:timedout?) && @user.last_request_at?
+          # here we borrow the devise timeout strategy but cannot refer to the session,
+          # so we use a last_request_at column.
+          if @user.timedout?(@user.last_request_at)
+            render json: { errors: "Session timed out" }, status: :unauthorized
+          else
+            # last_request_at has to be touched on requests to any of our services,
+            # so we do it in a Warden callback after any successful authentication,
+            # including this one because of this sign_in call.
+            sign_in @user
+            render json: @user
+          end
+        else
+          render json: @user
+        end
       else
         render json: { errors: "Token not recognised" }, status: :unauthorized
       end
@@ -98,7 +114,7 @@ module Droom::Api
     end
 
     def user_params
-      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :affiliation, :email, :phone, :description, :address, :post_code, :correspondence_address, :country_code, :mobile, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image_data, :image_name)
+      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :affiliation, :email, :phone, :mobile, :description, :address, :post_code, :correspondence_address, :country_code, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image_data, :image_name)
     end
 
   end

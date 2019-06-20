@@ -9,6 +9,7 @@ Droom::Engine.routes.draw do
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
     get '/authenticate/:tok' => 'users#authenticate', as: 'authenticate'
     get '/deauthenticate/:tok' => 'users#deauthenticate', as: 'deauthenticate'
+
     #post '/reindex_user' => 'users#reindex_user', as: 'reindex'
     #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
     resources :users do
@@ -26,14 +27,29 @@ Droom::Engine.routes.draw do
     end
   end
 
-  devise_for :users, class_name: 'Droom::User', module: :devise, controllers: {confirmations: 'droom/users/confirmations', sessions: 'droom/users/sessions', passwords: 'droom/users/passwords'}
+  devise_for :users,
+             class_name: 'Droom::User',
+             module: :devise,
+             skip: :registrations,
+             controllers: {
+               confirmations: 'droom/users/confirmations',
+               sessions: 'droom/users/sessions',
+               passwords: 'droom/users/passwords',
+               registrations: 'droom/users/registrations'
+             }
 
-  # intermediate confirmation step to allow invitation without setting a password
+
   devise_scope :user do
+    get "/signup" => "users/registrations#new", as: :signup
+    post '/register' => 'users/registrations#create', as: :register
+    get "/users/registrations/confirm" => "users/registrations#confirm", as: :confirm_registration
     get "/users/:id/welcome/:confirmation_token" => "users/confirmations#show", as: :welcome
     patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
     get "/users/passwords/show" => "users/passwords#show", as: :show_confirmation
     get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
+    post '/api/users/sign_in' => 'api/sessions#create', as: :api_sign_in
+    delete '/api/users/sign_out' => 'api/sessions#destroy', as: :api_sign_out
+
   end
 
   resources :helps
@@ -56,7 +72,11 @@ Droom::Engine.routes.draw do
 
   resources :calendars, only: [:show]
   resources :events do
-    get "calendar", on: :collection
+    collection do
+      get :calendar
+      get :past
+      get "subscribe/:tok", action: "subscribe", as: :subscribe
+    end
     resources :invitations do
       member do
         put :accept
@@ -83,13 +103,12 @@ Droom::Engine.routes.draw do
   resources :organisations do
     resources :users
     collection do
-      get :signup
-      post :register
       get :pending
     end
     member do
       get :approve
       get :disapprove
+      put :merge
     end
   end
 
@@ -98,7 +117,7 @@ Droom::Engine.routes.draw do
     get :preferences, on: :member, as: :preferences
     put :preference, on: :member, as: :set_preference
     get :admin, on: :collection
-    put :set_password, on: :collection
+    put :setup, on: :collection
     put :reinvite, on: :member
     put "/subsume/:other_id" => "users#subsume", as: 'subsume'
     resources :events
@@ -120,10 +139,10 @@ Droom::Engine.routes.draw do
   end
 
   put "/set_password" => "users#set_password", as: :set_my_password
+  put "/set_organisation" => "users#set_organisation", as: :set_my_organisation
   get "/enquire" => "enquiries#new", as: :enquire
   get "/noticeboard" => "scraps#index", as: :noticeboard
   get "/profile" => "users#edit", as: :profile, defaults: {view: "profile"}
   get "/page/:slug" => "pages#published", as: :published_page, defaults: {format: "html"}
-  get "/signup" => "organisations#signup", as: :signup
 
 end

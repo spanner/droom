@@ -1,0 +1,14 @@
+%nav.section
+  = link_to_unless_current t("nav.library.folders"), droom.folders_url do
+    %span.here
+      = t("nav.library.folders")
+
+  = link_to_unless_current t("nav.library.documents"), droom.documents_url do
+    %span.here
+      = t("nav.library.documents")
+
+  - if can?(:manage, Droom::Folder)
+    = link_to t("nav.library.add"), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
+
+  = render 'droom/shared/search', url: droom.documents_url
+

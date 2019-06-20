@@ -24,8 +24,15 @@ module Droom
     scope :approved, -> { where.not(approved_at: nil) }
     scope :pending, -> { where(approved_at: nil, disapproved_at: nil) }
     scope :by_date, -> { order(created_at: :asc) }
+    scope :external, -> { where(external: true) }
+    scope :internal, -> { where(external: false) }
 
     default_scope -> {order("name ASC")}
+
+    after_save :capture_owner
+    after_create :send_notifications
+
+    attr_accessor :other_id
 
     def self.for_selection(with_external=false)
       organisations = order("name asc")
@@ -33,15 +40,9 @@ module Droom
       organisations.map{|f| [f.name, f.id] }.unshift(['', ''])
     end
 
-    def self.from_signup(params)
-      owner_params = params.delete :owner
-      transaction do
-        owner = Droom::User.from_email(owner_params[:email]).first || Droom::User.create(owner_params.merge(defer_confirmation: true, organisation_admin: true))
-        org = Droom::Organisation.create(params.merge(owner: owner))
-        org.users << owner
-        org.reindex
-        org
-      end
+    def self.matching_email(email)
+      domain = email.split('@').last
+      where(joinable: true, email_domain: domain)
     end
 
     def self.approve_all
@@ -112,6 +113,10 @@ module Droom
         owner.generate_confirmation_token unless owner.confirmation_token?
         Droom.mailer.send(:org_welcome, self, owner.confirmation_token).deliver_later
       end
+    end
+
+    def send_notifications
+      send_registration_confirmation_messages if external?
     end
 
     def send_registration_confirmation_messages
@@ -203,6 +208,26 @@ module Droom
     def self.normalize_url(url="")
       url = "http://#{url}" unless url.blank? or url =~ /^https?:\/\//
       url.strip
+    end
+
+    def subsume(org)
+      Droom::Organisation.transaction do
+        self.users << org.users
+        self.tags << org.tags
+        self.chinese_name = org.chinese_name unless chinese_name?
+        self.description = org.description unless description?
+        self.save
+        chinese_name.destroy
+      end
+    end
+
+    def capture_owner
+      unless owner
+        if user = users.first
+          update_column :owner_id, user.id
+          user.update_column :organisation_admin,  true
+        end
+      end
     end
 
     ## Search

@@ -1,7 +1,6 @@
 module Droom
   class GroupsController < Droom::ApplicationController
     respond_to :html, :js
-    layout :no_layout_if_pjax
 
     before_action :get_groups, :only => [:index]
     load_and_authorize_resource

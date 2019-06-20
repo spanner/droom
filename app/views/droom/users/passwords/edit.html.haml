@@ -1,14 +1,10 @@
-- content_for :title do
+%h1.pagetitle
   =t :choose_new_password
 
-- content_for :standfirst do
-  %p
-    = t :password_reset_welcome
+%p
+  = t :password_reset_welcome
 
-%section.body
-  = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "user reset" }) do |f|
-    = devise_error_messages!
-    = f.hidden_field :reset_password_token
+= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "user reset" }) do |f|
+  = f.hidden_field :reset_password_token
   
-    = render "droom/users/confirmations/password_required", user: resource
-  
+  = render "droom/users/edit/password_fields", f: f, user: resource, with_submit: true

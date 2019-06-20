@@ -1,0 +1,10 @@
+- simple ||= nil
+- document ||= simple || @document
+- omit_buttons ||= false
+
+%li.document{:id => "document_#{document.id}", data: {doc_id: document.id}}
+  = link_to document.name, droom.folder_document_url(document.folder, document), class: "document #{document.file_extension.downcase}", target: "_blank"
+  - unless omit_buttons
+    = link_to droom.folder_document_url(document.folder, document), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#document_#{document.id}", :affected => ".minimonth", :confirm => t(:confirm_delete_document, :name => document.name)} do
+      %svg.suffix.small
+        %use{"xlink:href" => "#cross_button_symbol"}

@@ -3,34 +3,8 @@
 
 
 = form_for [droom, organisation], url: droom.register_organisations_path, method: "post", html: {class: 'edit organisation signup'} do |f|
-  %fieldset
-    %h2
-      =t :organisation_information
-    %p.name.twocol<
-      %span.col>
-        = f.text_field :name, :required => true, :autofocus => true, placeholder: t("placeholders.organisation.name")
-      %span.col>
-        = f.text_field :chinese_name, placeholder: t("placeholders.organisation.chinese_name")
-
-    %p.url.twocol<
-      %span.col.first>
-        = f.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
-      %span.col.last>
-        = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
-
-    %p.secondary.tagger
-      = f.label :keywords
-      %br
-      = f.text_field :keywords, placeholder: t("placeholders.organisation.keywords"), class: "tags"
-
-    %p.description.onecol<
-      %span.col>
-        = f.text_area :description, placeholder: t("placeholders.organisation.description")
-
   = f.fields_for :owner, user do |uf|
     %fieldset
-      %h2
-        =t :organisation_owner
       %p.names.threecol<
         %span.col.first>
           = uf.text_field :given_name, :required => true, placeholder: t("placeholders.user.given_name")
@@ -44,7 +18,7 @@
           = uf.text_field :email, :required => true, placeholder: t("placeholders.user.email")
 
       %p.formnote
-        = t :organisation_confirmation
+        = t :organisation_step1
 
   .buttons
     = f.submit t(:sign_up)

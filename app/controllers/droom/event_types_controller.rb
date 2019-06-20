@@ -1,7 +1,6 @@
 module Droom
   class EventTypesController < Droom::ApplicationController
     respond_to :html, :js
-    layout :no_layout_if_pjax
     load_and_authorize_resource
 
     def index

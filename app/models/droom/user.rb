@@ -3,10 +3,10 @@ require 'gibbon'
 
 module Droom
   class User < ApplicationRecord
-    include Droom::Concerns::Imaged
+      include Droom::Concerns::Imaged
 
-    validates :family_name, :presence => true
-    validates :given_name, :presence => true
+    # validates :family_name, :presence => true
+    # validates :given_name, :presence => true
     validates :uid, :uniqueness => true, :presence => true
 
     has_many :preferences, :foreign_key => "created_by_id"
@@ -22,11 +22,16 @@ module Droom
            :rememberable,
            :session_limitable,
            :lockable,
+           :registerable,
+           :timeoutable,
            reconfirmable: false,
            lock_strategy: :failed_attempts,
            maximum_attempts: 10,
            unlock_strategy: :both,
            unlock_in: 10.minutes
+
+    belongs_to :organisation, optional: true
+    accepts_nested_attributes_for :organisation
 
     before_validation :ensure_uid!
     before_save :ensure_authentication_token
@@ -38,6 +43,8 @@ module Droom
 
     scope :admins, -> { where(admin: true) }
     scope :gatekeepers, -> { where(admin: true, gatekeeper: true) }
+    scope :external, -> { joins(:organisation).where(droom_organisations: {external: true}) }
+    scope :internal, -> { joins(:organisation).where(droom_organisations: {external: false}) }
 
 
     # People are often invited into the system in batches or after offline contact.
@@ -101,6 +108,11 @@ module Droom
       !password_set?
     end
 
+    def names?
+      (given_name? and family_name?) || (Droom.use_chinese_names? && chinese_name?)
+    end
+
+
     # Our old user accounts store passwords as salted sha512 digests. Current standard uses BCrypt
     # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
   
@@ -123,6 +135,14 @@ module Droom
         end
       end
     end 
+
+    # This is called from a warden hook during every authenticated request, either to the data room or its API.
+    # The value of last_request_at is used to invalidate stale sessions.
+    #
+    def set_last_request_at!(time=Time.now)
+      Rails.logger.warn "⏰ set_last_request_at! #{time}"
+      update_column :last_request_at, time
+    end
 
 
     ## Session ID
@@ -186,6 +206,12 @@ module Droom
     scope :in_name_order, -> {
       order("family_name ASC, given_name ASC")
     }
+
+    ## Editor assets
+    #
+    has_many :pages
+    has_many :images
+    has_many :videos
 
 
     ## Organisation affiliation
@@ -363,15 +389,19 @@ module Droom
     end
 
     def active_for_authentication?
-      emails.any?
+      super && emails.any?
     end
 
     def self.find_by_any_email(emails)
       from_email(emails).first
     end
 
+    ## Emails
+    # Internally, a flexible list
+    # Externally, a single account email
+    #
     def email
-      if email_record = emails.preferred.first
+      if email_record = get_email
         email_record.email
       end
     end
@@ -384,18 +414,37 @@ module Droom
       add_email(email)
     end
 
+    def get_email(address_type=nil)
+      if address_type
+        self.emails.where(address_type: address_type).preferred.first
+      else
+        self.emails.preferred.first
+      end
+    end
+
     def add_email(email, address_type=nil)
       if email && email.present?
         if persisted?
-          emails.where(email: email).first_or_create(address_type: address_type)
+          emails.where(email: email).first_or_create(address_type: address_type, default: true)
         else
-          self.emails.build(email: email, address_type: address_type)
+          emails.build(email: email, address_type: address_type, default: true)
         end
       end
     end
 
+    ## Addresses
+    # Internally, a flexible list
+    # Externally, address and correspondence_address
+    # TODO: `phone` should return first non-correspondence record?
+    #
     def address
-      if address_record = addresses.preferred.first
+      if address_record = get_address
+        address_record.address
+      end
+    end
+
+    def correspondence_address
+      if address_record = get_address(correspondence_address_type)
         address_record.address
       end
     end
@@ -409,21 +458,44 @@ module Droom
     end
 
     def correspondence_address=(address)
-      add_address(address, AddressType.where(name: "Correspondence").first_or_create)
+      add_address(address, correspondence_address_type)
+    end
+
+    def get_address(address_type=nil)
+      if address_type
+        self.addresses.where(address_type: address_type).preferred.first
+      else
+        self.addresses.preferred.first
+      end
     end
 
     def add_address(address, address_type=nil)
       if address && address.present?
         if persisted?
-          self.addresses.where(address: address).first_or_create(address_type: address_type)
+          self.addresses.where(address: address).first_or_create(address_type: address_type, default: true)
         else
-          self.phones.build(address: address, address_type: address_type)
+          self.phones.build(address: address, address_type: address_type, default: true)
         end
       end
     end
 
+    def correspondence_address_type
+      AddressType.where(name: "Correspondence").first_or_create
+    end
+
+    ## Phones
+    # Internally, a flexible list
+    # Externally, phone and mobile
+    # TODO: `phone` should return first non-mobile record?
+    #
     def phone
-      if phone_record = phones.preferred.first
+      if phone_record = get_phone
+        phone_record.phone
+      end
+    end
+
+    def mobile
+      if phone_record = get_phone(mobile_phone_type)
         phone_record.phone
       end
     end
@@ -437,21 +509,33 @@ module Droom
     end
 
     def mobile=(phone)
-      add_phone(phone, AddressType.where(name: "Mobile").first_or_create)
+      add_phone(phone, mobile_phone_type)
+    end
+
+    def get_phone(address_type=nil)
+      if address_type
+        self.phones.where(address_type: address_type).preferred.first
+      else
+        self.phones.preferred.first
+      end
     end
 
     def add_phone(phone, address_type=nil)
       if phone && phone.present?
         if persisted?
-          self.phones.where(phone: phone).first_or_create(address_type: address_type)
+          self.phones.where(phone: phone).first_or_create(address_type: address_type, default: true)
         else
-          self.phones.build(phone: phone, address_type: address_type)
+          self.phones.build(phone: phone, address_type: address_type, default: true)
         end
       end
     end
 
+    def mobile_phone_type
+      AddressType.where(name: "Mobile").first_or_create
+    end
 
-    ## Suggestion box
+
+    ## Old suggestion box
     #
     scope :matching, -> fragment {
       where('droom_users.given_name LIKE :f OR droom_users.family_name LIKE :f OR droom_users.chinese_name LIKE :f OR droom_users.title LIKE :f OR droom_users.email LIKE :f OR droom_users.phone LIKE :f OR CONCAT(droom_users.given_name, " ", droom_users.family_name) LIKE :f OR CONCAT(droom_users.family_name, " ", droom_users.given_name) LIKE :f', :f => "%#{fragment}%")
@@ -584,7 +668,7 @@ module Droom
     #
     def preference(key)
       pref = preferences.where(key: key).first_or_initialize
-      pref.value = Droom.user_default(key) unless pref.persisted?
+      pref.value = Droom.config.user_default(key) unless pref.persisted?
       pref
     end
 
@@ -626,7 +710,7 @@ module Droom
     end
 
     def data_room_user?
-      !Droom.require_login_permission || admin? || permitted?('droom.login')
+      !Droom.require_login_permission? || admin? || permitted?('droom.login')
     end
 
 
@@ -639,7 +723,9 @@ module Droom
     ## Mailchimp integration
     #
     def enqueue_mailchimp_job
-      Droom::MailchimpSubscriptionJob.perform_later(id, Time.now.to_i)
+      if Droom.mailchimp_configured? && saved_change_to_email?
+        Droom::MailchimpSubscriptionJob.perform_later(id, Time.now.to_i)
+      end
     end
 
     # callback from preference change
@@ -679,6 +765,7 @@ module Droom
     def gibbon
       Gibbon::Request.new(api_key: Droom.mc_api_key, symbolize_keys: true)
     end
+
 
     ## Search
     #
@@ -775,6 +862,7 @@ module Droom
       end
     end
 
+
   protected
 
     def ensure_uid!
@@ -789,8 +877,10 @@ module Droom
 
     def send_confirmation_if_directed
       unless confirming # avoid the double hit caused by devise updating the confirmation token.
-        self.confirming = true
-        self.send_confirmation_instructions if email? && send_confirmation?
+        if email? && send_confirmation?
+          self.confirming = true
+          self.send_confirmation_instructions
+        end
       end
     end
 

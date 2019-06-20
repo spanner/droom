@@ -1,18 +1,4 @@
 #calendar
-  %p.navigation
-    = link_to_unless_current "Future events", events_url(direction: "future")
-    \|
-    = link_to_unless_current "Past events", events_url(direction: "past")
-    - years = Droom::Event.pluck(:start).compact.map(&:year)
-    - years.uniq.sort.reverse.each do |y|
-      \|
-      = link_to_unless_current y, events_url(year: y)
-
-  %p.action
-    = link_to t(:subscribe_to_calendar), "webcal://#{Settings.host}/events.ics", class: "subscribe"
-    - if can?(:create, Droom::Event)
-      = link_to t(:add_event), droom.new_event_url, :class => "add", :data => {:action => "popup", :affected => "#events"}
-
   = render :partial => 'events'
 
 - content_for :title do

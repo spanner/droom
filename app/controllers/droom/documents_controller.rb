@@ -1,7 +1,6 @@
 module Droom
   class DocumentsController < Droom::ApplicationController
     respond_to :html, :js, :json
-    layout :no_layout_if_pjax
 
     before_action :get_folder, except: [:index, :suggest, :reposition]
     before_action :select_documents, only: [:index, :suggest]
@@ -31,7 +30,11 @@ module Droom
 
     def create
       @document.save!
-      render :partial => 'listing'
+      if %w{listing simple}.include?(params[:view])
+        render :partial => params[:view]
+      else
+        render :partial => 'listing'
+      end
     end
     
     def edit

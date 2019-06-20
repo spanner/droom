@@ -1,0 +1,10 @@
+%nav.section
+  = link_to_unless_current t("nav.directory.browse"), droom.noticeboard_url do
+    %span.here
+      = t("nav.noticeboard.browse")
+
+  - if can? :create, Droom::Scrap
+    = link_to droom.new_scrap_url, :class => "add", :data => {:action => "popup", :affected => "#noticeboard"} do
+      = t("nav.noticeboard.add")
+
+  / = render 'droom/shared/search', url: droom.noticeboard_url

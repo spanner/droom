@@ -1,4 +1,7 @@
 - content_for :title do
-  = t(:search_title)
+  - if @searching
+    = t(:search_title)
+  - else
+    = t(:documents)
 
 = render :partial => "documents"

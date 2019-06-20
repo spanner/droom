@@ -4,10 +4,12 @@ module Droom
   class EventsController < Droom::ApplicationController
     require "uri"
     require "icalendar"
+
     respond_to :html, :json, :ics, :js
-    layout :no_layout_if_pjax
-    
-    before_action :get_events, :only => [:index]
+
+    prepend_before_action :authenticate_from_param, only: [:subscribe]
+    before_action :get_my_events, :only => [:subscribe]
+    before_action :get_events, :only => [:index, :calendar]
     before_action :composite_dates, :only => [:update, :create]
     before_action :build_event, :only => [:new, :create]
     load_and_authorize_resource
@@ -20,6 +22,34 @@ module Droom
 
     def calendar
       respond_with @events
+    end
+
+    def subscribe
+      cal = Icalendar::Calendar.new
+      @events.each do |event|
+        cal.add_event(event.icalendar_event)
+      end
+      render plain: cal.to_ical, content_type: 'text/calendar'
+    end
+
+    class Array
+      def to_ics
+        to_icalendar.to_ical
+      end
+  
+      def to_icalendar
+        cal = Icalendar::Calendar.new
+        self.flatten.each do |item|
+          cal.add_event(item.icalendar_event) if item.respond_to? :icalendar_event
+        end
+        cal
+      end
+    end
+
+    def past
+      @direction = "past"
+      get_events
+      render template: "droom/events/index"
     end
 
     def show
@@ -57,20 +87,25 @@ module Droom
 
   protected
   
-    def get_events
-      events = Droom::Event.accessible_by(current_ability)
-      if Droom.separate_calendars?
-        events = events.in_calendar(Droom::Calendar.default_calendar)
+    def get_my_events
+      @events = Droom::Event.accessible_by(current_ability)
+      if Droom.config.separate_calendars?
+        @events = @events.in_calendar(Droom::Calendar.default_calendar)
       end
+      Rails.logger.warn "events: #{@events.inspect}"
+      @events
+    end
+
+    def get_events
+      get_my_events
       if params[:year].present?
         @year = params[:year].to_i
-        @events = paginated(events.in_year(@year).order('start ASC'))
-      elsif params[:direction] == 'past'
-        @direction = 'past'
-        @events = paginated(events.past.order('start DESC'))
+        @events = paginated(@events.in_year(@year).order('start ASC'))
+      elsif @direction == 'past'
+        @events = paginated(@events.past.order('start DESC'))
       else
         @direction = 'future'
-        @events = paginated(events.future_and_current.order('start ASC'))
+        @events = paginated(@events.future_and_current.order('start ASC'))
       end
     end
     
@@ -109,6 +144,19 @@ module Droom
         params.require(:event).permit(:name, :description, :event_set_id, :event_type_id, :calendar_id, :all_day, :master_id, :url, :start, :finish, :timezone, :venue_id, :venue_name)
       else
         {}
+      end
+    end
+
+    # special case for calendar subscription
+    # in which the user's authentication token is given as url param
+    # later authenticate_user! action will cause subscription to fail if no user found here.
+    #
+    def authenticate_from_param
+      if params[:tok].present?
+        user = Droom::User.find_by(authentication_token: params[:tok])
+        if user && user.data_room_user?
+          sign_in user
+        end
       end
     end
 

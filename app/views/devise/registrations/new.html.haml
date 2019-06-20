@@ -1,0 +1,6 @@
+= form_for(resource, as: resource_name, url: droom.register_path, method: "post") do |f|
+
+  = render "devise/shared/error_messages", resource: resource
+
+  = f.email_field :email, autofocus: true, autocomplete: "email", placeholder: t("placeholders.registration.email"), class: "half"
+  = f.submit t('registration.submit')

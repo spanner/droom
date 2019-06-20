@@ -1,0 +1,68 @@
+// either we have @organisation, or we do not
+
+- content_for :pagetitle do
+  = t :setup_organisation
+
+- content_for :title do
+  =t :hello
+  = current_user.formal_name.strip
+
+- content_for :standfirst do
+  %p
+    - if @organisations.length > 1
+      = t :can_join_organisations
+    - if @organisations.any?
+      = t(:can_join_organisation, name: @organisations.first.name).html_safe
+    - else
+      = t :setup_organisation_preamble
+
+
+- if @organisations.any?
+  %section.join_organisation
+    - @organisations.each do |org|
+      = form_for current_user, url: set_my_organisation_url, method: :put, html: {class: "user"} do |f|
+        = hidden_field_tag :destination, @destination
+        = f.hidden_field :organisation_id, value: org.id
+        %p
+          = f.submit value: t(:join_organisation, name: org.name)
+
+      %p
+        = t :or_create_organisation
+
+%section.new_organisation
+  %h2
+    = t :register_organisation
+
+  - current_user.organisation ||= Droom::Organisation.new
+  = form_for current_user, url: set_my_organisation_url, method: :put, html: {class: "user"} do |f|
+    = hidden_field_tag :destination, @destination
+    = f.fields_for :organisation do |orgf|
+      %p.name.twocol<
+        %span.col>
+          = orgf.text_field :name, required: true, autofocus: true, placeholder: t("placeholders.organisation.name")
+        %span.col>
+          = orgf.text_field :chinese_name, placeholder: t("placeholders.organisation.chinese_name")
+
+      %p.url.twocol<
+        %span.col.first>
+          = orgf.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
+        %span.col.last>
+          = orgf.select :organisation_type_id, Droom::OrganisationType.for_selection, include_blank: true, prompt: t(:organisation_type), required: true, class: 'preferences'
+
+      %p.description.onecol<
+        %span.col>
+          = orgf.text_area :description, required: true, placeholder: t("placeholders.organisation.description")
+
+      %p.instructions
+        = t :organisation_tag_instructions
+
+      %ul.taglist{data: {role: 'chooser'}}
+        - Droom::Tag.by_term.each do |tag|
+          %li.checkbox
+            = orgf.check_box :tags, {multiple: true, class: 'fancy'}, tag.id, nil
+            = orgf.label :tags, tag.name, value: tag.id
+
+
+
+    %p.buttons{:data => {:role => "confirmation"}}>
+      = f.submit t :continue

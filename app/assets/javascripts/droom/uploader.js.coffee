@@ -57,7 +57,6 @@ jQuery ($) ->
       else
         console.log "unreadable drop", e
 
-
     readFiles: (files) =>
       if files
         for file in files

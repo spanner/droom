@@ -1,0 +1,30 @@
+- user ||= current_user
+- destination ||= '/'
+
+- content_for :pagetitle do
+  Set up your account
+
+- content_for :title do
+  =t :hello
+  = current_user.formal_name.strip
+
+- content_for :standfirst do
+  %p
+    = t :set_password_preamble
+
+= form_for user, url: droom.setup_users_path, method: "PUT", html: {class: "user"} do |f|
+  = hidden_field_tag :destination, destination
+
+  %h3
+    - if user.names?
+      = t "user_setup.check_name"
+    - else
+      = t "user_setup.give_name"
+  = render "droom/users/edit/name_fields", f: f, user: user, with_label: false
+
+  %h3
+    = t "user_setup.set_password"
+  = render "droom/users/edit/password_fields", f: f, user: user, with_label: false, with_submit: false
+
+  %p.buttons{:data => {:role => "confirmation"}}>
+    = f.submit t :continue

@@ -2,26 +2,8 @@
   = t :library
 
 - content_for :standfirst do
-  - if can?(:manage, Droom::Folder)
-    .admin.right
-      = link_to t(:hide_empty_folders), '#', :class => "toggle", :data => {:action => "toggle", :affected => ".folder.empty"}
-      %br
-      = link_to t(:add_root_folder), droom.new_folder_url, :class => "add", :data => {:action => "popup", :affected => "#folders"}
   %p
     = t :library_introduction
-  
-
-- content_for :filter do
-  #finder
-    %form.filter{:action => droom.suggest_documents_url, autocomplete: 'off', spellcheck: "false", data: {action: "quick_search"}}
-      %p
-        = search_field_tag :q, params[:q], :results => 5, :autosave => 'document_filter'
-        %br
-        %span.formnote.right
-          = link_to 'Full search...', documents_url
-
-    .scroller
-      #found
 
 #main.folders{:data => {:panel => false}}
   = render :partial => 'folders'

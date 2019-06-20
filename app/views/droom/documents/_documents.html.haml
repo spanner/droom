@@ -32,4 +32,4 @@
     - else
       .nomatch
         %h2
-          = t :sorry_no_matches
+          = t(:sorry_no_matches, q: @q).html_safe

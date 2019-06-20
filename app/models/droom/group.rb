@@ -8,13 +8,13 @@ module Droom
     has_folder
 
     has_many :group_invitations, :dependent => :destroy
-    has_many :events, -> { uniq }, :through => :group_invitations
+    has_many :events, -> { distinct }, :through => :group_invitations
 
     has_many :memberships, :dependent => :destroy
-    has_many :users, -> { uniq.order("family_name ASC, given_name ASC") }, :through => :memberships
+    has_many :users, -> { distinct.order("family_name ASC, given_name ASC") }, :through => :memberships
 
     has_many :group_permissions, :dependent => :destroy
-    has_many :permissions, -> { uniq }, :through => :group_permissions
+    has_many :permissions, -> { distinct }, :through => :group_permissions
     
     before_validation :slug_from_name
     before_validation :ensure_mailing_list_name

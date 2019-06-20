@@ -27,7 +27,7 @@
           = t :at
       %span.venue
         = f.text_field :venue_name, :class => "venuepicker", :placeholder => t("placeholders.event.venue_name"), :autocomplete => "off",  data: {role: "venuepicker", width: 300}
-      - if Droom.second_time_zone?
+      - if Droom.config.second_time_zone?
         %span.timezone
           = f.check_box :timezone, {id: "event_timezone_UK"}, "London", "Hong Kong"
           %label{for: "event_timezone_UK"}
@@ -40,7 +40,7 @@
       - if Droom::EventType.count > 1
         = f.label :event_type_id, t(:file_under)
         = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
-      - if Droom.separate_calendars? && Droom::Calendar.count > 1
+      - if Droom.config.separate_calendars? && Droom::Calendar.count > 1
         = f.label :calendar_id
         = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
       - else

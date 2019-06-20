@@ -1,7 +1,6 @@
 module Droom
   class ScrapsController < Droom::ApplicationController
     respond_to :html, :js, :json, :atom
-    layout :no_layout_if_pjax
   
     before_action :get_scraps, :only => [:index]
     before_action :get_scraptype, :only => [:new, :create, :update]

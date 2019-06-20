@@ -1,0 +1,12 @@
+#account
+  %h1.pagetitle
+    Please check your email
+  %p
+    We have sent an invitation message.
+    Click on its 'begin registration' link to continue the registration process.
+  / %p
+  /   = link_to new_user_confirmation_path, class: "waiter" do
+  /     %svg.prefix
+  /       %use{"xlink:href" => "#message_symbol"}
+  /     %span.label
+  /       Resend message

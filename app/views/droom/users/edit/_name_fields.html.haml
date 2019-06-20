@@ -1,0 +1,16 @@
+- user ||= f.object
+- with_submit ||= false
+- with_label ||= false
+
+%fieldset{data: {role: 'names'}}
+  %p.names
+    - if Droom.use_titles?
+      %span.title>
+        = f.text_field :title, placeholder: t("placeholders.user.title")
+    %span.name>
+      = f.text_field :given_name, :required => true, :autofocus => true, placeholder: t("placeholders.user.given_name")
+    %span.name>
+      = f.text_field :family_name, :required => true, placeholder: t("placeholders.user.family_name")
+    - if Droom.use_chinese_names?
+      %span.chinese_name>
+        = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")

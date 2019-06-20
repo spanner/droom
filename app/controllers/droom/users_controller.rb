@@ -2,11 +2,11 @@ module Droom
   class UsersController < Droom::ApplicationController
     helper Droom::DroomHelper
     respond_to :html, :js
-    layout :no_layout_if_pjax
+    skip_before_action :check_user_has_organisation, only: [:setup, :set_organisation]
     before_action :set_view, only: [:show, :new, :edit, :update]
     before_action :search_users, only: [:admin]
     # before_action :self_unless_admin, only: [:edit, :update]
-    load_and_authorize_resource except: [:set_password]
+    load_and_authorize_resource except: [:setup, :set_organisation]
 
     # :index is the old user-list view, preserved for historical compatibility but now v. clunky.
     # :admin is the new elasticsearch index. The actual search work is done in `search_users`.
@@ -23,13 +23,7 @@ module Droom
     end
 
     def show
-      #find_user_by_user_id
-      @invitation = Droom::Invitation.find(params[:invitation_id]) if params[:invitation_id].present?
-      respond_with @user do |format|
-        format.js {
-          render partial: "droom/users/show/#{@view}"
-        }
-      end
+      respond_with @user
     end
 
     def new
@@ -83,19 +77,26 @@ module Droom
     # set a password. Normally this would only happen when they hit the confirmation link, which checks the account
     # then redirects to the dashboard.
     #
-    def set_password
-      current_user.assign_attributes(password_params.merge(confirmed: true))
+    def setup
+      current_user.assign_attributes(setup_params.merge(confirmed: true))
       if current_user.save
         sign_in current_user, :bypass => true
         if current_user.data_room_user?
           flash[:notice] = t(:password_set)
           redirect_to params[:destination].presence || droom.dashboard_url
         else
-          @omit_navigation = true
           render
         end
       else
         render template: "/droom/users/request_password"
+      end
+    end
+
+    def set_organisation
+      if current_user.update_attributes(set_organisation_params)
+        redirect_to params[:destination].presence || droom.dashboard_url
+      else
+        render template: "/droom/users/setup_organisation"
       end
     end
 
@@ -112,7 +113,7 @@ module Droom
     end
 
     def reinvite
-      @user.send_confirmation_instructions unless @user.confirmed?
+      @user.send_confirmation_instructions
       head :ok
     end
 
@@ -201,8 +202,12 @@ module Droom
       end
     end
 
-    def password_params
-      params.require(:user).permit(:password, :password_confirmation)
+    def setup_params
+      params.require(:user).permit(:title, :given_name, :family_name, :chinese_name, :honours, :password, :password_confirmation)
+    end
+
+    def set_organisation_params
+      params.require(:user).permit(:organisation_id, organisation_attributes: [:name, :chinese_name, :url, :organisation_type_id, :description, :tags])
     end
 
     def set_view

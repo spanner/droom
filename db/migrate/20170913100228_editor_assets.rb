@@ -31,22 +31,22 @@ class EditorAssets < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     add_index :droom_videos, :user_id
-  end
 
-  create_table :droom_pages, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
-    t.string :slug
-    t.string :title
-    t.text :published_title
-    t.text :content
-    t.text :published_content
-    t.integer :image_id
-    t.integer :published_image_id
-    t.integer :user_id
-    t.boolean :public
-    t.timestamps
-    t.datetime :published_at
+    create_table :droom_pages, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
+      t.string :slug
+      t.string :title
+      t.text :published_title
+      t.text :content
+      t.text :published_content
+      t.integer :image_id
+      t.integer :published_image_id
+      t.integer :user_id
+      t.boolean :public
+      t.timestamps
+      t.datetime :published_at
+    end
+    add_index :droom_pages, :user_id
+    add_index :droom_pages, :slug
   end
-  add_index :droom_pages, :user_id
-  add_index :droom_pages, :slug
 
 end

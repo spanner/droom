@@ -1,0 +1,413 @@
+$page_width: 86%
+$page_max_width: 65rem
+
+h1.pagetitle
+  a.breadhead:before
+    content: "< "
+
+.darken
+  position: absolute
+  width: 100%
+  height: 100%
+  left: 0
+  bottom: 0
+  max-height: 100%
+  pointer-events: none
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.25) 20%, transparent 45%)
+  &.darker
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 45%)
+
+#pages
+  .page
+    position: relative
+    width: 240px
+    height: 360px
+    float: left
+    display: inline-block
+    vertical-align: top
+    overflow: hidden
+    margin-right: 20px
+    margin-bottom: 20px
+    border: 1px solid $pale
+    border-radius: 4px
+    &.new
+      display: flex
+      justify-content: center
+      align-items: center
+      a
+        display: block
+        color: $green
+        font-size: 1.6em
+        font-weight: lighter
+        text-align: center
+        svg
+          display: block
+          margin: 10px auto
+          width: 40px
+          height: 40px
+    .head
+      position: relative
+      width: 240px
+      height: 240px
+      border-radius: 4px 4px 0 0
+      background:
+        color: $mid
+        position: center center
+        repeat: no-repeat
+        size: cover
+      h3
+        position: absolute
+        bottom: 10px
+        left: 10px
+        color: white
+        font-size: 0.9rem
+        font-weight: bold
+
+    .body
+      width: 220px
+      margin: 10px
+      font-size: 0.75rem
+      line-height: 1.6
+      color: $dark
+
+#page_masthead
+  position: relative
+  width: 100%
+  height: 0
+  padding-bottom: 50%
+  overflow: hidden
+  .bg
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background:
+      color: $pale
+      position: center center
+      repeat: no-repeat
+      size: cover
+  .fg
+    position: absolute
+    bottom: 20px
+    left: 0
+    width: 100%
+    h1.title
+      font-size: 3em
+      color: white
+      margin: 20px 4%
+      width: $page_width
+      max-width: $page_max_width
+      a.breadhead
+        color: $pale
+        font-size: 1.2rem
+        letter-spacing: 0
+        &:hover
+          color: white
+    p.subtitle
+      font-size: 1rem
+      color: white
+      margin: 0.5em 0 0 0
+    [contenteditable]
+      color: white
+
+#page_intro, #page_content
+  margin: 20px 4%
+  width: $page_width
+  max-width: $page_max_width
+  form
+    input[type="text"], input[type="password"], input[type="url"], input[type="email"], textarea
+      box-sizing: border-box
+      width: 100%
+      padding: 10px
+      font-size: 1rem
+      margin-bottom: 0.25em
+      border: 1px solid $pale
+      outline: none
+      &.half
+        width: 50%
+    textarea
+      height: 200px
+
+#page_intro
+  font-size: 1.4em
+  line-height: 1.4
+  margin-bottom: 1rem
+  .ed-intro
+    display: block
+
+#page_content
+  min-height: 500px
+
+  & > p:first-child
+    font-size: 1.25em
+    line-height: 1.5
+  ul
+    list-style: square
+    padding-left: 0
+  ol
+    padding-left: 0
+  .blocks
+    display: flex
+    flex-flow: row nowrap
+    align-items: flex-start
+    justify-content: space-between
+    margin: 0 auto
+    .block
+      position: relative
+      box-sizing: border-box
+      display: inline-block
+      figure.full
+        margin: 12px 0
+      p:empty
+        display: none
+      p:first-child, h2:first-child
+        margin-top: 0
+      h3
+        margin-bottom: 0
+        font-weight: bold
+        font-size: 1rem
+        &+p
+          margin-top: 0.25em
+        &+ul
+          margin-top: 0.25em
+    &.two
+      .block
+        width: 46%
+    &.three .block
+      width: 29%
+      font-size: 1rem
+    &.four .block
+      width: 24%
+      font-size: 0.9rem
+
+
+aside#page_controls
+  position: fixed
+  z-index: 1000
+  max-width: 240px
+  top: 60px
+  right: 20px
+  padding: 20px
+  background-color: $menubg
+  box-shadow: 0 1px 6px $shadow
+  h3
+    margin-top: 0
+    font-weight: bold
+    font-size: 1.25em
+  a.breadhead
+    display: block
+    color: $pale
+    font-weight: normal
+    font-size: 1rem
+    letter-spacing: 0
+    &:hover
+      color: $hover
+    &:before
+      content: "< "
+  span.slug_prefix
+    color: $pale
+  span.ed-slug
+    border: none
+  p:last-child
+    margin-bottom: 0
+  ul
+    list-style: none
+    padding: 0
+    li
+      svg.prefix + span.label
+        width: calc(100% - 2em)
+    a
+      cursor: pointer
+      color: $green
+      +hover
+    a.missing, a.new
+      color: $red
+      +hover
+      span
+        width: calc(100% - 50px)
+  .helper
+    margin-top: 1em
+    p
+      margin: 0
+    a.show
+      float: right
+      margin-top: -0.5em
+      color: $green
+      cursor: pointer
+      transition: color 0.5s ease-out
+      svg
+        transition: transform 0.5s ease-out
+    div.help
+      clear: right
+      max-height: 0
+      overflow: hidden
+      transition: max-height 0.5s ease-out
+      h3
+        margin: 0
+      ul
+        list-style: none
+        clear: both
+        padding: 0
+        a
+          cursor: pointer
+          color: $green
+          +hover
+        a.missing, a.new
+          color: $red
+          +hover
+          span
+            width: calc(100% - 50px)
+    &.showing
+      a.show
+        color: $pale
+        svg
+          transform: rotate(225deg)
+      div.help
+        max-height: 50vh
+
+
+#page_form
+  display: block
+
+  section#preview
+    position: relative
+    width: 100%
+    margin: 0
+    background-color: white
+    margin-bottom: 3em
+    #page_preview
+      box-sizing: border-box
+      position: relative
+      width: 100%
+      border: 1px solid $pale
+
+  section#editor
+    width: 100%
+    margin: 0
+    background-color: white
+    margin-bottom: 3em
+
+    #page_editor
+      box-sizing: border-box
+      position: relative
+      width: 100%
+
+    .content
+      width: 100%
+      min-height: 400px
+      padding-bottom: 96px
+      display: none
+      figure
+        margin: 24px -20px
+        video
+          width: 100%
+          height: auto
+          background-color: $pale
+        .embed
+          position: relative
+          width: 100%
+          padding-bottom: 56.25%
+          overflow: hidden
+          &:empty
+            display: none
+          iframe
+            position: absolute
+            width: 100%
+            height: 100%
+        figcaption
+          color: $dark
+          font-style: italic
+        a.save
+          float: right
+          +button($green)
+          font-size: 0.9rem
+          display: none
+        &.quote
+          blockquote
+            transition: font-size 0.5s ease-out
+          &.shortish
+            blockquote
+              font-size: 1.2em
+              line-height: 1.4
+          &.short
+            blockquote
+              font-size: 1.6em
+              line-height: 1.3
+          &.veryshort
+            blockquote
+              font-size: 2em
+              line-height: 1.2
+        &.right
+          display: inline-block
+          float: right
+          width: 50%
+          margin: 6px -20px 24px 24px
+          &.quote
+            margin: 6px 24px 24px 0
+          .styler
+            float: left
+            clear: left
+        &.left
+          display: inline-block
+          float: left
+          width: 50%
+          margin: 6px 24px 24px -20px
+          &.quote
+            margin: 6px 24px 24px 0
+          .styler
+            float: left
+            clear: left
+        &.full
+          display: block
+          clear: both
+          margin: 1.5em -20px
+          width: calc(100% + 40px)
+          &.quote
+            margin: 1.5em 0
+            blockquote, figcaption
+              margin-left: 10%
+              text-align: left
+        img
+          width: 100%
+          height: auto
+        blockquote
+          color: $mid
+          margin: 0
+          &:before
+            content: '“'
+            font-size: 120%
+            position: absolute
+            width: 0.5em
+            text-align: right
+            margin-left: -0.55em
+            margin-top: -0.1em
+          &:after
+            content: '”'
+            font-size: 120%
+            position: absolute
+            margin-left: 0
+            margin-top: -0.1em
+
+
+@media screen and (orientation: portrait) and (max-width: 700px)
+  #page_masthead
+    padding-bottom: 100%
+    .fg
+      bottom: 10px
+      #page_title
+        h1.title
+          font-size: 2em
+
+@media (max-width: 700px)
+  aside#page_controls
+    position: relative
+    max-width: none
+    top: auto
+    right: auto
+    padding: none
+    box-shadow: none
+    padding-top: 3em
+    margin-top: 3em
+    border-top: 2px solid $dark
+    background-color: $coolgrey00

@@ -55,6 +55,7 @@ module Droom::Concerns::Published
 
   def render(attribute=:published_content)
     if renderable_attributes.include? attribute
+      Rails.logger.warn "🚜 rendering #{attribute} with interpolations #{interpolations.inspect}"
       Mustache.render(read_attribute(attribute), interpolations)
     else
       ""

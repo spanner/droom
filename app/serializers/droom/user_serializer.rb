@@ -2,6 +2,7 @@ require 'active_model_serializers'
 
 class Droom::UserSerializer < ActiveModel::Serializer
   attributes :uid,
+             :authentication_token,
              :status,
              :title,
              :given_name,
@@ -11,11 +12,10 @@ class Droom::UserSerializer < ActiveModel::Serializer
              :honours,
              :affiliation,
              :email,
-             :emails,
              :phone,
-             :phones,
+             :mobile,
              :address,
-             :addresses,
+             :correspondence_address,
              :country_code,
              :images,
              :confirmed,
@@ -34,30 +34,6 @@ class Droom::UserSerializer < ActiveModel::Serializer
 
   def password_set
     object.password_set?
-  end
-
-  def emails
-    object.emails.by_preference.map(&:email)
-  end
-
-  def email
-    emails.first
-  end
-
-  def phones
-    object.phones.by_preference.map(&:phone)
-  end
-
-  def phone
-    phones.first
-  end
-
-  def addresses
-    object.addresses.by_preference.map(&:address)
-  end
-
-  def address
-    addresses.first
   end
 
   def images

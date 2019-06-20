@@ -1,6 +1,22 @@
 module Droom
   module DroomHelper
 
+    def droom_template_exists?(path)
+      lookup_context.find_all("droom/#{path}").any?
+    end
+
+    def partial_exists?(path)
+      path_parts = path.split('/')
+      path_parts.push "_" + path_parts.pop
+      lookup_context.find_all(path_parts.join('/')).any?
+    end
+
+    def droom_section_nav
+      if @section && droom_template_exists?("nav/_#{@section}")
+        render partial: "droom/nav/#{@section}"
+      end
+    end
+
     def clean_html(html)
       fragment = Loofah.fragment(html)
       fragment.xpath('text()').wrap('<p/>')
@@ -95,7 +111,7 @@ module Droom
         (current_user.organisation_admin? && !organisation || current_user.organisation == organisation)
     end
 
-    def external?
+    def external_user?
       Droom.require_internal_organisation? && current_user.external?
     end
 

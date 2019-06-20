@@ -1,0 +1,13 @@
+%nav.section
+  = link_to_unless_current t("nav.directory.browse"), droom.organisations_url do
+    %span.here
+      = t("nav.directory.browse")
+
+  - if admin?
+    = link_to droom.new_organisation_url, class: 'add', data: {action: "popup", prepended: "#organisations"} do
+      = t(:add_organisation)
+
+    = link_to droom.new_user_url, class: 'add', data: {action: "popup", prepended: "#organisations"} do
+      = t(:add_user)
+
+  = render 'droom/shared/search', url: droom.organisations_url

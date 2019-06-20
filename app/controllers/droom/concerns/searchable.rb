@@ -8,16 +8,17 @@ module Droom::Concerns::Searchable
 
   protected
 
-  def search_and_sort
+  def search_and_sort(preset_options={})
     fields = search_fields
     aggregations = aggregated? ? search_aggregations : []
     @sort ||= params[:sort].presence || search_default_sort
-    @order = params[:order].presence
 
-    if params[:q].present?
-      @q = params[:q]
+    if @q = preset_options[:q].presence
+      preset_options.delete(:q)
       @sort = '_score'
-      @order = :desc
+      @searching = false
+    elsif @q = params[:q].presence
+      @sort = '_score'
       @searching = true
     else
       @q = "*"
@@ -26,14 +27,8 @@ module Droom::Concerns::Searchable
     end
 
     @sort = search_default_sort unless search_permitted_sorts.include?(@sort)
-    unless @sort == '_score'
-      if sort_locale = params[:sortloc].presence
-        @sort += ".#{sort_locale}"
-      end
-    end
-
-    @order ||= @sort == "date" || @sort == 'created_at' ? :desc : :asc
-    order = [{@sort => {order: @order}}]
+    @order = params[:order].presence || search_descending_sort_defaults.include?(@sort) ? :desc : :asc
+    sort_order = [{@sort => {order: @order}}]
 
     criteria = search_criterion_params.each_with_object({}) do |p, h|
       h[p] = params[p] if params[p].present?
@@ -41,11 +36,11 @@ module Droom::Concerns::Searchable
       h[p] = false if h[p] == "false"
     end
 
-    criteria.merge(non_admin_filter) unless admin?
+    criteria.merge!(non_admin_filter) unless admin?
 
     options = {
       where: criteria,
-      order: order
+      order: sort_order
     }
     options.merge!({ per_page: @show, page: @page }) if paginated?
     options[:fields] = fields if fields.any?
@@ -53,8 +48,11 @@ module Droom::Concerns::Searchable
     options[:match] = search_match if search_match
     options[:highlight] = search_highlights if search_highlights
     options[:includes] = search_includes if search_includes
+    options[:misspellings] = search_misspellings if search_misspellings
+    options.deep_merge!(preset_options)
 
-    Rails.logger.warn "SEARCH OPTIONS: #{options.inspect}"
+    Rails.logger.warn "SEARCH: #{@q.inspect}"
+    Rails.logger.warn "MERGED SEARCH OPTIONS: #{options.inspect}"
 
     klass = controller_path.classify.constantize
     search_results = klass.search @q, options
@@ -81,6 +79,10 @@ module Droom::Concerns::Searchable
     nil
   end
 
+  def search_misspellings
+    {edit_distance: 1}
+  end
+
   def non_admin_filter
     {}
   end
@@ -99,6 +101,10 @@ module Droom::Concerns::Searchable
 
   def search_default_sort
     "name"
+  end
+
+  def search_descending_sort_defaults
+    ["_score", "date", "created_at"]
   end
 
   def search_includes
