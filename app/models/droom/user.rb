@@ -227,7 +227,7 @@ module Droom
     end
 
     def internal?
-      organisation && !organisation.external?
+      !organisation && !organisation.external?
     end
 
 
@@ -642,11 +642,11 @@ module Droom
     #
     #   current_user.pref("email:enabled?")
     #
-    # Default settings are defined in Droom.user_defaults and can be defined in an initializer if the default droom
-    # defaults are not right for your application.
+    # Default settings are defined in Droom.config.user_defaults and can be defined in an initializer
+    # if the default defaults are not right for your application.
     #
-    # `User#pref(key)` returns the **value** of the preference (whether set or default) for the given key. It is intended
-    # for use in views:
+    # `User#pref(key)` returns the value of the preference (whether set or default) for the given key.
+    # It is used for decision-making in views:
     #
     #   - if current_user.pref("dropbox:enabled?")
     #     = link_to "copy to dropbox", dropbox_folder_url(folder)
@@ -659,6 +659,8 @@ module Droom
       end
     end
 
+    # pref?(key) can be used in views to make clear that a boolean is expected.
+    #
     def pref?(key)
       !!pref(key)
     end
@@ -672,7 +674,7 @@ module Droom
       pref
     end
 
-    # Setting preferences is normally handled either by the PreferencesController or by nesting preferences
+    # Setting preferences is handled by the PreferencesController or more often by nesting preferences
     # in a user form. `User#set_pref` is a convenient console method but not otherwise used much.
     #
     # Preferences are set in a simple key:value way, where key usually includes some namespacing prefixes:
@@ -682,7 +684,6 @@ module Droom
     def set_pref(key, value)
       preferences.where(key: key).first_or_create.set(value)
     end
-
 
 
     ## Permissions
@@ -722,6 +723,10 @@ module Droom
 
     ## Mailchimp integration
     #
+    def include_in_mailchimp?
+      data_room_user? && pref?('email.mailchimp')
+    end
+
     def enqueue_mailchimp_job
       if Droom.mailchimp_configured? && saved_change_to_email?
         Droom::MailchimpSubscriptionJob.perform_later(id, Time.now.to_i)

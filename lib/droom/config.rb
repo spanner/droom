@@ -54,7 +54,6 @@ module Droom
                   :users_can_invite,
                   :default_permissions,
                   :api_local,
-                  :mc_opt_in,
                   :mc_api_key,
                   :mc_news_template,
                   :mc_news_list
@@ -282,9 +281,6 @@ module Droom
       @default_permissions ||= %w{droom.login droom.calendar droom.directory droom.attach droom.library}
     end
  
-    def api_local?
-      !!@api_local
-    end
  
     ## Mailchimp integration
     # supports list management and eventually, message composition.
@@ -300,22 +296,22 @@ module Droom
     def mc_news_list
       @mc_news_list
     end
- 
-    def mc_opt_in?
-      !!@mc_opt_in
-    end
- 
+  
     def mailchimp_configured?
       mc_api_key.present? && mc_news_list.present? && mc_news_list.present?
     end
- 
- 
+
+
     # Droom's preferences are arbitrary and open-ended. You can ask for any preference key: if it
     # doesn't exist you just get back the default value, or nil if there isn't one. This is where you
     # set the defaults.
     #
     def user_defaults
       @user_defaults ||= Droom::LazyHash.new({})
+    end
+
+    def set_user_defaults(defaults={})
+      @user_defaults = Droom::LazyHash.new(defaults)
     end
  
     # We are probably overriding droom default settings in a host app initializer to create local default settings.
