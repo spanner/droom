@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'paperclip'
 require 'devise'
-require 'devise_security'
+require 'devise-security'
 require 'devise_zxcvbn'
 require 'cancan'
 require 'kaminari'
