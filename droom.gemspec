@@ -18,16 +18,17 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", "~> 5.2.0"
+  s.add_dependency "acts_as_list"
   s.add_dependency "responders"
 
   s.add_dependency "active_model_serializers"
   s.add_dependency "api-pagination"
 
-  s.add_dependency 'settingslogic'
-  s.add_dependency 'request_store'
+  s.add_dependency "settingslogic"
+  s.add_dependency "request_store"
 
   s.add_dependency "devise"
-  s.add_dependency "devise_security_extension"
+  s.add_dependency "devise-security"
   s.add_dependency "devise_zxcvbn"
   s.add_dependency "cancancan"
 
