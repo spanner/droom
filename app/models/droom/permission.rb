@@ -1,5 +1,3 @@
-require 'acts_as_list'
-
 module Droom
   class Permission < Droom::DroomRecord
     belongs_to :service

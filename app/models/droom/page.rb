@@ -1,5 +1,3 @@
-require 'mustache'
-
 module Droom
   class Page < Droom::DroomRecord
     include Droom::Concerns::Slugged

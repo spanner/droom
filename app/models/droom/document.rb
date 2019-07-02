@@ -1,5 +1,3 @@
-require 'open-uri'
-
 module Droom
   class Document < Droom::DroomRecord
     belongs_to :created_by, :class_name => "Droom::User"

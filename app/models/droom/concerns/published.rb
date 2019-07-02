@@ -1,5 +1,3 @@
-require 'mustache'
-
 module Droom::Concerns::Published
   extend ActiveSupport::Concern
 

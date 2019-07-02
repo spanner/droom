@@ -1,5 +1,3 @@
-require 'video_info'
-
 module Droom
   class Video < Droom::DroomRecord
     belongs_to :user

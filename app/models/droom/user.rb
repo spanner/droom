@@ -1,6 +1,3 @@
-require 'digest'
-require 'gibbon'
-
 module Droom
   class User < Droom::DroomRecord
       include Droom::Concerns::Imaged

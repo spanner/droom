@@ -8,10 +8,6 @@ require "droom/validators"
 require "droom/folders"
 require "droom/scrubbers"
 
-require 'searchkick'
-require 'active_model_serializers'
-
-
 module Droom  
   # Droom configuration is handled by accessors on the Droom base module.
   # Boolean items also offer the interrogative form.

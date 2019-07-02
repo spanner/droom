@@ -1,9 +1,3 @@
-require 'open-uri'
-require 'uuidtools'
-require 'icalendar'
-require 'date_validator'
-require 'tod'
-
 module Droom
   class Event < Droom::DroomRecord
     include Droom::Concerns::Slugged

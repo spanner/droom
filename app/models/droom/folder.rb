@@ -1,6 +1,3 @@
-require 'open-uri'
-require 'acts_as_tree'
-
 module Droom
   class Folder < Droom::DroomRecord
     include ActsAsTree

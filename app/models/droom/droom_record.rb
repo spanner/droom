@@ -1,5 +1,3 @@
-require 'searchkick'
-
 module Droom
   class DroomRecord < ActiveRecord::Base
     include Droom::Folders

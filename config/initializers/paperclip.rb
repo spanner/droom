@@ -1,5 +1,3 @@
-require 'paperclip'
-
 Paperclip::DataUriAdapter.register
 Paperclip::UriAdapter.register
 

@@ -1,5 +1,3 @@
-require 'geocoder'
-
 module Droom
   class Venue < Droom::DroomRecord
     include Droom::Concerns::Slugged
