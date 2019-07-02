@@ -1,5 +1,3 @@
-require 'active_model_serializers'
-
 module Droom::Api
   class TagsController < Droom::Api::ApiController
     skip_before_action :authenticate_user!

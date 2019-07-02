@@ -1,5 +1,3 @@
-require 'active_model_serializers'
-
 class Droom::ImageSerializer < ActiveModel::Serializer
   attributes :id,
              :file,

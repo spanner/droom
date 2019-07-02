@@ -1,5 +1,3 @@
-require 'active_model_serializers'
-
 module Droom::Api
   class PagesController < Droom::Api::ApiAssetsController
     before_action :set_access_control_headers

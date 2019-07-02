@@ -1,5 +1,3 @@
-require 'active_model_serializers'
-
 class Droom::OrganisationSerializer < ActiveModel::Serializer
   attributes :id,
              :name,
