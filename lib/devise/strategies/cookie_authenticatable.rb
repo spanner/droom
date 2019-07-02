@@ -27,6 +27,10 @@ module Devise
         cookie.set_since?(Time.now - Settings.auth.cookie_period.hours)
       end
 
+      def cookie_lifespan
+        (ENV['DROOM_AUTH_COOKIE_EXPIRY'] || Settings.auth.cookie_period).hours
+      end
+
       def resource
         # returns nil when user is missing.
         @resource ||= mapping.to.where(:authentication_token => cookie.token).first
