@@ -1,7 +1,7 @@
 require 'video_info'
 
 module Droom
-  class Video < ApplicationRecord
+  class Video < Droom::DroomRecord
     belongs_to :user
     belongs_to :organisation
 

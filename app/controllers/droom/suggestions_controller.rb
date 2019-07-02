@@ -1,5 +1,5 @@
 module Droom
-  class SuggestionsController < Droom::ApplicationController
+  class SuggestionsController < Droom::DroomController
     respond_to :html, :json, :js
     layout false
     before_action :get_classes

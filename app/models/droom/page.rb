@@ -1,7 +1,7 @@
 require 'mustache'
 
 module Droom
-  class Page < ApplicationRecord
+  class Page < Droom::DroomRecord
     include Droom::Concerns::Slugged
     include Droom::Concerns::Published
 

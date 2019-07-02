@@ -1,5 +1,5 @@
 module Droom
-  class Organisation < ApplicationRecord
+  class Organisation < Droom::DroomRecord
     include Droom::Concerns::Tagged
     include Droom::Concerns::Imaged
 

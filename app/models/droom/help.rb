@@ -1,5 +1,5 @@
 module Droom
-  class Help < ApplicationRecord
+  class Help < Droom::DroomRecord
 
     belongs_to :main_image, class_name: "Droom::Image"
 

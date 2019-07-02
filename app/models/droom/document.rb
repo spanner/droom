@@ -1,7 +1,7 @@
 require 'open-uri'
 
 module Droom
-  class Document < ApplicationRecord
+  class Document < Droom::DroomRecord
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :folder
     belongs_to :scrap, :dependent => :destroy
@@ -37,7 +37,7 @@ module Droom
       fragment = "%#{fragment}%"
       where('droom_documents.name LIKE :f OR droom_documents.file_file_name LIKE :f', :f => fragment)
     }
-    
+
     scope :in_folders, -> folders{
       placeholders = folders.map { "?" }.join(',')
       where(["folder_id IN(#{placeholders})", *folders.map(&:id)])

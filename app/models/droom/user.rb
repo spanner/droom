@@ -2,7 +2,7 @@ require 'digest'
 require 'gibbon'
 
 module Droom
-  class User < ApplicationRecord
+  class User < Droom::DroomRecord
       include Droom::Concerns::Imaged
 
     # validates :family_name, :presence => true

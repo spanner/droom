@@ -60,7 +60,7 @@
 # membership_id column. Again, you will want an index on that column.
 
 module Droom
-  class MailingListMembership < ApplicationRecord
+  class MailingListMembership < Droom::DroomRecord
     #
     ## Configuration
     #

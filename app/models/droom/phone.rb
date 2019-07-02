@@ -1,5 +1,5 @@
 module Droom
-  class Phone < ApplicationRecord
+  class Phone < Droom::DroomRecord
     include Droom::Concerns::AddressBookProperty
 
     scope :populated, -> {

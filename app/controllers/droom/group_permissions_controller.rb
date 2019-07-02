@@ -1,5 +1,5 @@
 module Droom
-  class GroupPermissionsController < Droom::ApplicationController
+  class GroupPermissionsController < Droom::DroomController
     respond_to :js, :html
     
     load_and_authorize_resource :group, :class => Droom::Group

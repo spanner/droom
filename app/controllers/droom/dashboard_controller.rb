@@ -1,5 +1,5 @@
 module Droom
-  class DashboardController < Droom::ApplicationController
+  class DashboardController < Droom::DroomController
     respond_to :html, :js
     skip_authorization_check
 

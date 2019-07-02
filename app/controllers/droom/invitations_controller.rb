@@ -1,5 +1,5 @@
 module Droom
-  class InvitationsController < Droom::ApplicationController
+  class InvitationsController < Droom::DroomController
     respond_to :js, :html
     
     load_and_authorize_resource :event, :class => Droom::Event

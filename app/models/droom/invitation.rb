@@ -1,5 +1,5 @@
 module Droom
-  class Invitation < ApplicationRecord
+  class Invitation < Droom::DroomRecord
         
     belongs_to :user
     belongs_to :event

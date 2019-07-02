@@ -1,5 +1,5 @@
 module Droom
-  class PagesController < Droom::ApplicationController
+  class PagesController < Droom::DroomController
     respond_to :html
     load_and_authorize_resource except: [:published]
     skip_before_action :authenticate_user!, only: [:published]

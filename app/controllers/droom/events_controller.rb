@@ -1,7 +1,7 @@
 require 'tod'
 
 module Droom
-  class EventsController < Droom::ApplicationController
+  class EventsController < Droom::DroomController
     require "uri"
     require "icalendar"
 

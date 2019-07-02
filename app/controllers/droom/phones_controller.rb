@@ -1,7 +1,7 @@
 # Address book data is always nested. Here we are only providing add-item form partials through #new.
 #
 module Droom
-  class PhonesController < Droom::ApplicationController
+  class PhonesController < Droom::DroomController
     layout false
     load_resource :user, class: "Droom::User"
     load_and_authorize_resource through: :user

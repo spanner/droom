@@ -1,5 +1,5 @@
 module Droom
-  class HelpsController < Droom::ApplicationController
+  class HelpsController < Droom::DroomController
     respond_to :html
     load_and_authorize_resource find_by: :slug
     before_action :get_view, only: :show

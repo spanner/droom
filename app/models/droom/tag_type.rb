@@ -1,5 +1,5 @@
 module Droom
-  class TagType < ApplicationRecord
+  class TagType < Droom::DroomRecord
 
     has_many :tags
 

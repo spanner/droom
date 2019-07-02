@@ -1,5 +1,5 @@
 module Droom
-  class ScrapsController < Droom::ApplicationController
+  class ScrapsController < Droom::DroomController
     respond_to :html, :js, :json, :atom
   
     before_action :get_scraps, :only => [:index]

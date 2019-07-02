@@ -1,5 +1,5 @@
 module Droom
-  class DocumentsController < Droom::ApplicationController
+  class DocumentsController < Droom::DroomController
     respond_to :html, :js, :json
 
     before_action :get_folder, except: [:index, :suggest, :reposition]

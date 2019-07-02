@@ -1,5 +1,5 @@
 module Droom
-  class Scrap < ApplicationRecord
+  class Scrap < Droom::DroomRecord
     belongs_to :created_by, :class_name => "Droom::User"
 
     belongs_to :event, :class_name => "Droom::Event", :dependent => :destroy

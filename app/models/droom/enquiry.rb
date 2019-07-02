@@ -1,5 +1,5 @@
 module Droom
-  class Enquiry < ApplicationRecord
+  class Enquiry < Droom::DroomRecord
     include MailForm::Shim
     include MailForm::Delivery
 

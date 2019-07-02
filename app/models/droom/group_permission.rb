@@ -1,5 +1,5 @@
 module Droom
-  class GroupPermission < ApplicationRecord
+  class GroupPermission < Droom::DroomRecord
     belongs_to :group
     belongs_to :permission
     has_many :user_permissions, :dependent => :destroy

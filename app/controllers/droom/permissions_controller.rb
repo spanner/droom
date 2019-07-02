@@ -1,5 +1,5 @@
 module Droom
-  class PermissionsController < Droom::ApplicationController
+  class PermissionsController < Droom::DroomController
     respond_to :js, :html
 
     load_and_authorize_resource :service, :class => Droom::Service

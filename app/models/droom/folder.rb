@@ -2,7 +2,7 @@ require 'open-uri'
 require 'acts_as_tree'
 
 module Droom
-  class Folder < ApplicationRecord
+  class Folder < Droom::DroomRecord
     include ActsAsTree
     include Droom::Concerns::Slugged
 

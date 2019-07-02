@@ -1,7 +1,7 @@
 # Event type is currenty our only source of confidentiality, which it distributes through its event-folders to their documents.
 #
 module Droom
-  class EventType < ApplicationRecord
+  class EventType < Droom::DroomRecord
     include Droom::Concerns::Slugged
 
     has_many :events, :dependent => :nullify

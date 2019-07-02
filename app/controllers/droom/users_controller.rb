@@ -1,5 +1,5 @@
 module Droom
-  class UsersController < Droom::ApplicationController
+  class UsersController < Droom::DroomController
     helper Droom::DroomHelper
     respond_to :html, :js
     skip_before_action :check_user_has_organisation, only: [:setup, :set_organisation]

@@ -1,5 +1,5 @@
 module Droom
-  class EnquiriesController < Droom::ApplicationController
+  class EnquiriesController < Droom::DroomController
     respond_to :html, :js
 
     skip_before_action :authenticate_user!, only: [:new, :create, :show]

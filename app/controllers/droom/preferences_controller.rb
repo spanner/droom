@@ -1,5 +1,5 @@
 module Droom
-  class PreferencesController < Droom::ApplicationController
+  class PreferencesController < Droom::DroomController
     respond_to :js, :html
     
     before_action :build_preference, :only => [:new, :create]

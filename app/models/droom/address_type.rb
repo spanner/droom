@@ -1,5 +1,5 @@
 module Droom
-  class AddressType < ApplicationRecord
+  class AddressType < Droom::DroomRecord
     has_many :emails
     has_many :phones
     has_many :addresses

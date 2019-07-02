@@ -1,7 +1,7 @@
 require "open-uri"
 
 module Droom
-  class Image < ApplicationRecord
+  class Image < Droom::DroomRecord
     belongs_to :user
     belongs_to :organisation
     attr_accessor :remote_url

@@ -1,7 +1,7 @@
 require 'acts_as_list'
 
 module Droom
-  class Permission < ApplicationRecord
+  class Permission < Droom::DroomRecord
     belongs_to :service
     has_many :group_permissions, :dependent => :destroy
     has_many :user_permissions, :dependent => :destroy

@@ -1,5 +1,5 @@
 module Droom
-  class OrganisationType < ApplicationRecord
+  class OrganisationType < Droom::DroomRecord
     include Droom::Concerns::Slugged
 
     has_many :organisations

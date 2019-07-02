@@ -1,7 +1,7 @@
 require 'geocoder'
 
 module Droom
-  class Venue < ApplicationRecord
+  class Venue < Droom::DroomRecord
     include Droom::Concerns::Slugged
 
     belongs_to :created_by, :class_name => "Droom::User"

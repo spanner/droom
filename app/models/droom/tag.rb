@@ -5,7 +5,7 @@
 # and can be attached to any model class by including the `Droom::Concerns::Tagged` concern.
 
 module Droom
-  class Tag < ApplicationRecord
+  class Tag < Droom::DroomRecord
 
     has_many :taggings
     has_many :taggees, :through => :taggings

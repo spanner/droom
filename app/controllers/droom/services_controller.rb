@@ -1,5 +1,5 @@
 module Droom
-  class ServicesController < Droom::ApplicationController
+  class ServicesController < Droom::DroomController
     respond_to :js, :html
 
     load_and_authorize_resource

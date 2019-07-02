@@ -5,7 +5,7 @@ require 'date_validator'
 require 'tod'
 
 module Droom
-  class Event < ApplicationRecord
+  class Event < Droom::DroomRecord
     include Droom::Concerns::Slugged
     include ActionView::Helpers::SanitizeHelper
 

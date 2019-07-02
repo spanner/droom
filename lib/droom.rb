@@ -37,6 +37,9 @@ module Droom
       yield @@config
     end
 
+    #
+    # = Droom.config.home_url
+    #
     def config
       @@config
     end

@@ -1,5 +1,5 @@
 module Droom
-  class GroupsController < Droom::ApplicationController
+  class GroupsController < Droom::DroomController
     respond_to :html, :js
 
     before_action :get_groups, :only => [:index]

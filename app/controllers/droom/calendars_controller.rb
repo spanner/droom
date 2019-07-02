@@ -1,5 +1,5 @@
 module Droom
-  class CalendarsController < Droom::ApplicationController
+  class CalendarsController < Droom::DroomController
     respond_to :html, :json, :rss, :ics
 
     load_and_authorize_resource

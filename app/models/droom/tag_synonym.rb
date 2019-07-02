@@ -1,5 +1,5 @@
 module Droom
-  class TagSynonym < ApplicationRecord
+  class TagSynonym < Droom::DroomRecord
 
     belongs_to :tag
   

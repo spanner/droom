@@ -1,5 +1,5 @@
 module Droom
-  class OrganisationTypesController < Droom::ApplicationController
+  class OrganisationTypesController < Droom::DroomController
     respond_to :html, :js
     load_and_authorize_resource
 

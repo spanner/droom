@@ -1,5 +1,5 @@
 module Droom
-  class FoldersController < Droom::ApplicationController
+  class FoldersController < Droom::DroomController
     respond_to :html, :json, :js
   
     before_action :get_root_folders, :only => [:index]

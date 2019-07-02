@@ -6,7 +6,7 @@
 #
 # It is also possible to have a loose folder: in that case it is considered public and available to everyone.
 #
-#TODO very old code! Rewrite as a Concern, or simplify away altogether?
+#TODO very old code! Rewrite as a Concern, or simplify away altogether.
 #
 module Droom
   module Folders

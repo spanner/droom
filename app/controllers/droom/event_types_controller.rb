@@ -1,5 +1,5 @@
 module Droom
-  class EventTypesController < Droom::ApplicationController
+  class EventTypesController < Droom::DroomController
     respond_to :html, :js
     load_and_authorize_resource
 

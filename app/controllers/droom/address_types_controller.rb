@@ -1,7 +1,7 @@
 # Address book data is always nested. Here we are only providing add-item form partials through #new.
 #
 module Droom
-  class AddressTypesController < Droom::ApplicationController
+  class AddressTypesController < Droom::DroomController
     load_and_authorize_resource
 
     def index
