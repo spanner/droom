@@ -9,7 +9,7 @@ module Devise
       end
 
       def authenticate!
-        if fresh? && resource && validate(resource)
+        if valid? && fresh? && resource && validate(resource)
           Rails.logger.warn "√√  cookie authenticated! #{resource.inspect}"
           success!(resource)
         else
@@ -24,11 +24,7 @@ module Devise
       end
 
       def fresh?
-        cookie.set_since?(Time.now - Settings.auth.cookie_period.hours)
-      end
-
-      def cookie_lifespan
-        (ENV['DROOM_AUTH_COOKIE_EXPIRY'] || Settings.auth.cookie_period).hours
+        cookie.fresh?
       end
 
       def resource

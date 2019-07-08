@@ -12,9 +12,7 @@ module Droom
 
     # Sets the cookie, referencing the given resource.id (e.g. User)
     def set(resource, opts={})
-      cookie_string = encoded_value(resource)
-      cookie_values = cookie_options.merge(opts).merge(:value => cookie_string)
-      @cookies[cookie_name] = cookie_values
+      @cookies[cookie_name] = cookie_options.merge(opts).merge(:value => encoded_value(resource))
     end
 
     # Unsets the cookie via the HTTP response.
@@ -28,16 +26,20 @@ module Droom
 
     # The Time at which the cookie was created.
     def created_at
-      valid? ? DateTime.parse(values[1]) : nil
+      DateTime.parse(values[1]) if valid?
     end
 
     # Whether the cookie appears valid.
     def valid?
-      present? && values.all?
+      present?
     end
 
     def present?
-      @cookies[cookie_name].present?
+      @cookies[cookie_name].present? && values.all?
+    end
+
+    def fresh?
+      set_since?(Time.now - cookie_lifespan.hours)
     end
 
     # Whether the cookie was set since the given Time
@@ -71,6 +73,10 @@ module Droom
 
     def auth_secret
       ENV['DROOM_AUTH_SECRET'] || Settings.auth.secret
+    end
+
+    def cookie_lifespan
+      ENV['DROOM_AUTH_COOKIE_EXPIRY'] || Settings.auth.cookie_period
     end
 
     def encoded_value(resource)
