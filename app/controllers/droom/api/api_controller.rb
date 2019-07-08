@@ -13,6 +13,7 @@ module Droom::Api
 
     protected
     
+    # TODO re-express for docker cluster
     def assert_local_request
       raise CanCan::AccessDenied if (Rails.env.production? || Rails.env.staging?) && (request.host != 'localhost' || request.port != Settings.api_port)
     end
@@ -50,8 +51,8 @@ module Droom::Api
       true
     end
 
-    # def api_local?
-    #   Droom::api_local?
-    # end
+    def api_local?
+      Droom::api_local?
+    end
   end
 end

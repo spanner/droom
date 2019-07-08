@@ -2,7 +2,6 @@ module Droom::Api
   class OrganisationsController < Droom::Api::ApiController
 
     load_and_authorize_resource class: "Droom::Organisation"
-    skip_before_action :assert_local_request, only: [:register]
 
     def index
       return_organisations
