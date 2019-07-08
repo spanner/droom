@@ -649,7 +649,7 @@ describe('Content TestCase', function () {
                 fireEvent(target, 'keydown', {
                     keyCode: MediumEditor.util.keyCode.BACKSPACE
                 });
-                expect(this.el.innerHTML).toBe('<p>lorem ipsum</p><ul><li></li><li>lorem ipsum</li></ul>');
+                expect(this.el.innerHTML).toMatch(/^<p>lorem ipsum<\/p><ul><li>(<br>)?<\/li><li>lorem ipsum<\/li><\/ul>$/);
             });
         });
 
@@ -737,7 +737,7 @@ describe('Content TestCase', function () {
         };
 
         this.el.parentNode.removeChild(this.el);
-        this.el = this.createElement('h1', 'editor', 'M');
+        this.el = this.createElement('h1', 'editor', 'Lorem ipsum dolor sit amet');
 
         var editor = this.newMediumEditor('h1.editor');
         editor.elements[0].focus();

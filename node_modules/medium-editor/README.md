@@ -44,15 +44,15 @@ Run in your console: `npm install medium-editor`
  For the latest version:
 
  ```html
- <script src="//cdn.jsdelivr.net/medium-editor/latest/js/medium-editor.min.js"></script>
- <link rel="stylesheet" href="//cdn.jsdelivr.net/medium-editor/latest/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
+ <script src="//cdn.jsdelivr.net/npm/medium-editor@latest/dist/js/medium-editor.min.js"></script>
+ <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/medium-editor@latest/dist/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
  ```
 
  For a custom one:
 
  ```html
- <script src="//cdn.jsdelivr.net/medium-editor/4.11.1/js/medium-editor.min.js"></script>
- <link rel="stylesheet" href="//cdn.jsdelivr.net/medium-editor/4.11.1/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
+ <script src="//cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/js/medium-editor.min.js"></script>
+ <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
  ```
 
 * Using [CDNJS](https://cdnjs.com/libraries/medium-editor).
