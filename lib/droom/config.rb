@@ -5,6 +5,7 @@ module Droom
                   :cors_domains,
                   :suggestible_classes,
                   :searchable_classes,
+                  :api_local,
                   :mailer,
                   :layout,
                   :dashboard_layout,
@@ -53,7 +54,6 @@ module Droom
                   :require_internal_organisation,
                   :users_can_invite,
                   :default_permissions,
-                  :api_local,
                   :mc_api_key,
                   :mc_news_template,
                   :mc_news_list
@@ -65,7 +65,11 @@ module Droom
     def cors_domains
       @cors_domains || []
     end
- 
+
+    def api_local?
+      !!@api_local
+    end
+
     def mailer
       @mailer || Droom::Mailer
     end

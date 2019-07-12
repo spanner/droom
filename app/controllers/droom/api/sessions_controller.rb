@@ -1,10 +1,10 @@
 module Droom::Api
   class SessionsController < Devise::SessionsController
+    include Droom::Concerns::LocalApi
+
     respond_to :json
-    skip_before_action :verify_authenticity_token
-    skip_before_action :authenticate_user!
+    skip_before_action :verify_authenticity_token, raise: false
     before_action :set_access_control_headers
-    before_action :assert_local_request, if: :api_local?
 
     # POST /api/users/sign_in
     def create
@@ -18,20 +18,9 @@ module Droom::Api
       end
     end
 
-    protected
-
     def api_controller?
       true
     end
 
-    def api_local?
-      Droom::api_local?
-    end
-
-    def assert_local_request
-      if (Rails.env.production? || Rails.env.staging?) && (request.host != 'localhost' || request.port != Settings.api_port)
-        raise CanCan::AccessDenied
-      end
-    end
   end
 end

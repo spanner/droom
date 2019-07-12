@@ -1,22 +1,15 @@
 module Droom::Api
   class ApiController < Droom::DroomController
+    include Droom::Concerns::LocalApi
 
     respond_to :json
     skip_before_action :verify_authenticity_token
     before_action :set_access_control_headers
 
-    # skip_before_action :authenticate_user!, if: :api_local?
-    # before_action :assert_local_request, if: :api_local?
-
     rescue_from "ActiveRecord::RecordNotFound", with: :not_found
     rescue_from "Droom::Error", with: :blew_up
 
     protected
-    
-    # TODO re-express for docker cluster
-    def assert_local_request
-      raise CanCan::AccessDenied if (Rails.env.production? || Rails.env.staging?) && (request.host != 'localhost' || request.port != Settings.api_port)
-    end
 
     def not_found(exception)
       render json: { errors: exception.message }.to_json, status: :not_found
@@ -49,10 +42,6 @@ module Droom::Api
     
     def api_controller?
       true
-    end
-
-    def api_local?
-      Droom::api_local?
     end
   end
 end

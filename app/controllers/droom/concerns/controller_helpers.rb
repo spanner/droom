@@ -2,6 +2,8 @@ module Droom::Concerns::ControllerHelpers
   extend ActiveSupport::Concern
 
   included do
+    protect_from_forgery
+
     rescue_from CanCan::AccessDenied, :with => :not_allowed
     rescue_from Droom::PermissionDenied, :with => :not_allowed
     rescue_from Droom::ConfirmationRequired, :with => :prompt_for_confirmation
@@ -9,14 +11,16 @@ module Droom::Concerns::ControllerHelpers
     rescue_from Droom::OrganisationRequired, :with => :prompt_for_organisation
     rescue_from Droom::OrganisationApprovalRequired, :with => :await_organisation_approval
 
-    before_action :authenticate_user!
+    before_action :authenticate_user!, except: [:cors_check]
     before_action :set_exception_context
-    before_action :check_user_is_confirmed, except: [:setup], unless: :devise_controller?
-    before_action :check_user_setup, except: [:setup], unless: :devise_controller?
-    before_action :check_user_has_organisation, except: [:setup_organisation], unless: :devise_controller?
-    before_action :note_current_user
+    before_action :check_user_is_confirmed, except: [:cors_check, :setup], unless: :devise_controller?
+    before_action :check_user_setup, except: [:cors_check, :setup], unless: :devise_controller?
+    before_action :check_user_has_organisation, except: [:cors_check, :setup_organisation], unless: :devise_controller?
+    before_action :require_data_room_permission, except: [:cors_check, :set_password]
+    before_action :note_current_user, except: [:cors_check]
+    before_action :set_section, except: [:cors_check]
     before_action :set_access_control_headers
-    before_action :set_section
+    skip_before_action :verify_authenticity_token, only: [:cors_check]
 
     layout :no_layout_if_pjax
   end
@@ -24,6 +28,10 @@ module Droom::Concerns::ControllerHelpers
 
   # CORS blanket approval
   #
+  def cors_check
+    head :ok
+  end
+  
   def set_access_control_headers
     if request.env["HTTP_ORIGIN"].present? && Droom.cors_domains.empty? || Droom.cors_domains.include?(request.env["HTTP_ORIGIN"])
       headers['Access-Control-Allow-Origin'] = request.env["HTTP_ORIGIN"]
@@ -37,6 +45,11 @@ module Droom::Concerns::ControllerHelpers
 
   ## Authorization helpers
   #
+  def authenticate_user_if_possible(opts={})
+    opts[:scope] = :user
+    warden.authenticate(opts) if !devise_controller? || opts.delete(:force)
+  end
+
   def admin?
     user_signed_in? && current_user.admin?
   end
@@ -49,9 +62,36 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def note_current_user
-    RequestStore.store[:current_user] = current_user if user_signed_in? && !devise_controller?
+    if user_signed_in? && !devise_controller?
+      RequestStore.store[:current_user] = current_user
+      current_user.set_last_request_at!
+    end
   end
 
+  def require_data_room_permission
+    if user_signed_in? && !devise_controller? && !api_controller?
+      raise Droom::PermissionDenied, "You do not have permission to access this service." unless current_user.data_room_user?
+    end
+  end
+
+  ## Exception reporting
+  #
+  def set_exception_context
+    Honeybadger.context({
+      :service => "Data room"
+    })
+    if user_signed_in?
+      Honeybadger.context({
+        :user_name => current_user.name,
+        :user_uid => current_user.uid,
+        :user_email => current_user.email
+      })
+    end
+  end
+
+
+  ## Error responses
+  #
   def not_allowed(exception)
     respond_to do |format|
       format.html { render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false }
@@ -60,16 +100,14 @@ module Droom::Concerns::ControllerHelpers
     end
   end
 
-
-  ## Exception reporting
-  #
-  def set_exception_context
-    Honeybadger.context({
-      :user_name => current_user.name,
-      :user_uid => current_user.uid,
-      :user_email => current_user.email,
-      :service => "Data room"
-    }) if user_signed_in?
+  def not_found(exception)
+    @error = exception.message
+    Honeybadger.notify(exception)
+    respond_to do |format|
+      format.html { render template: "errors/not_found", :status => 404 }
+      format.js { head :not_found }
+      format.json { head :not_found }
+    end
   end
 
 
@@ -170,8 +208,10 @@ module Droom::Concerns::ControllerHelpers
 
   def no_layout_if_pjax
     if pjax?
+      @pjax = true
       false
     else
+      @pjax = false
       default_layout
     end
   end
@@ -181,7 +221,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def default_layout
-    Droom.layout
+    Droom.config.layout
   end
 
 end
