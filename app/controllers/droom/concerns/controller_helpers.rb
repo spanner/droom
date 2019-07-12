@@ -25,6 +25,12 @@ module Droom::Concerns::ControllerHelpers
     layout :no_layout_if_pjax
   end
 
+  # Usually overridden in a base ApiController
+  #
+  def api_controller?
+    false
+  end
+
 
   # CORS blanket approval
   #
