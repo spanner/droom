@@ -15,6 +15,7 @@
   #finder
     %form.filter{:action => droom.users_url(:format => :js), :autocomplete => 'off', :data => {:action => "filter"}}
       %p
+        = hidden_field_tag :show, 10
         = search_field_tag :q, params[:q], :results => 5, :autosave => 'people_filter'
 
     .scroller

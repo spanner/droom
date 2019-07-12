@@ -38,17 +38,26 @@ jQuery ($) ->
     constructor: (element) ->
       @_container = $(element)
       @_url = @_container.attr('data-refreshable') or @_container.attr('data-url')
+      @_method = @_container.attr 'data-method'
+      @_data = @_container.attr 'data-params'
       @_container.bind "refresh", @refresh
 
     refresh: (e) =>
-      e.stopPropagation()
-      e.preventDefault()
+      if e
+        e.stopPropagation()
+        e.preventDefault()
+
       if @_url
         @_container.addClass('working')
-        $.ajax @_url,
+        params = 
           dataType: "html"
           beforeSend: @prep
           success: @replace
+        if @_method
+          params.method = @_method
+        if @_method.toLowerCase() is 'post' and @_data
+          params.data = @_data
+        $.ajax @_url, params
       else
         console.error "Cannot refresh: no URL to fetch"
 

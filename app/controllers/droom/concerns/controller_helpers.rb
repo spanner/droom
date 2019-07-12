@@ -3,6 +3,7 @@ module Droom::Concerns::ControllerHelpers
 
   included do
     protect_from_forgery
+    helper Droom::DroomHelper
 
     rescue_from CanCan::AccessDenied, :with => :not_allowed
     rescue_from Droom::PermissionDenied, :with => :not_allowed
