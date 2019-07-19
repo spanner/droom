@@ -681,7 +681,7 @@ jQuery ($) ->
 
   # The *folder* action is just a display convention that shows and hides the contents of a folder
   # when its link is clicked.
-      
+  #
   $.fn.folder = ->
     @each ->
       new Folder(@)
@@ -717,7 +717,7 @@ jQuery ($) ->
 
     toggle: (e) =>
       if e
-        e.preventDefault() 
+        e.preventDefault()
         e.stopPropagation()
       if @_container.hasClass('open') then @hide() else @show()
 
