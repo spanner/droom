@@ -39,7 +39,7 @@ module Droom
     end
 
     def fresh?
-      set_since?(Time.now - cookie_lifespan.hours)
+      set_since?(Time.now - cookie_lifespan.minutes)
     end
 
     # Whether the cookie was set since the given Time
