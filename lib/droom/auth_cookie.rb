@@ -12,7 +12,9 @@ module Droom
 
     # Sets the cookie, referencing the given resource.id (e.g. User)
     def set(resource, opts={})
-      @cookies[cookie_name] = cookie_options.merge(opts).merge(:value => encoded_value(resource))
+      cookie = cookie_options.merge(opts).merge(:value => encoded_value(resource))
+      Rails.logger.warn "🔫 auth_cooke.set will assign new time value: #{cookie.inspect}"
+      @cookies[cookie_name] = cookie
     end
 
     # Unsets the cookie via the HTTP response.
