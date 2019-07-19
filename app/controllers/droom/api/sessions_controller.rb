@@ -29,7 +29,7 @@ module Droom::Api
       Rails.logger.warn "⚠️ -> #{@user.inspect}"
       if @user
         # ie. if user includes timeoutable...
-        if @user.respond_to(:timedout?) && @user.last_request_at?
+        if @user.respond_to?(:timedout?) && @user.last_request_at?
           Rails.logger.warn "⚠️ checking timeout vs #{@user.last_request_at}"
           # here we borrow the devise timeout strategy but cannot refer to the session,
           # so we use a last_request_at column.
