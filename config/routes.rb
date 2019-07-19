@@ -7,8 +7,6 @@ Droom::Engine.routes.draw do
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]
 
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
-    get '/authenticate/:tok' => 'users#authenticate', as: 'authenticate'
-    get '/deauthenticate/:tok' => 'users#deauthenticate', as: 'deauthenticate'
 
     #post '/reindex_user' => 'users#reindex_user', as: 'reindex'
     #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
@@ -47,9 +45,12 @@ Droom::Engine.routes.draw do
     patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
     get "/users/passwords/show" => "users/passwords#show", as: :show_confirmation
     get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
+
+    # droom_client authentication calls
     post '/api/users/sign_in' => 'api/sessions#create', as: :api_sign_in
     delete '/api/users/sign_out' => 'api/sessions#destroy', as: :api_sign_out
-
+    get '/api/authenticate/:tok' => 'api/sessions#authenticate', as: 'authenticate'
+    get '/api/deauthenticate/:tok' => 'api/sessions#deauthenticate', as: 'deauthenticate'
   end
 
   resources :helps
