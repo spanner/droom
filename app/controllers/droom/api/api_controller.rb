@@ -7,7 +7,7 @@ module Droom::Api
     before_action :set_access_control_headers
 
     rescue_from ActiveRecord::RecordNotFound, with: :not_found
-    rescue_from Droom::Error, with: :blew_up
+    rescue_from Droom::DroomError, with: :blew_up
 
     protected
 
@@ -21,6 +21,7 @@ module Droom::Api
     end
 
     def blew_up(exception)
+      Rails.logger.warn "🔫 API blew_up: #{exception.message}"
       render json: { errors: exception.message }.to_json, status: :internal_server_error
     end
     
