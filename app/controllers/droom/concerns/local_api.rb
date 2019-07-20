@@ -11,7 +11,9 @@ module Droom::Concerns::LocalApi
   end
 
   def assert_local_request!
-    raise CanCan::AccessDenied if (Rails.env.production? || Rails.env.staging?) && !local_request?
+    if (Rails.env.production? || Rails.env.staging?) && !local_request?
+      raise CanCan::AccessDenied 
+    end
   end
 
   def local_request?

@@ -100,6 +100,7 @@ module Droom::Concerns::ControllerHelpers
   ## Error responses
   #
   def not_allowed(exception)
+    Rails.logger.warn "🔫 not_allowed: #{exception.message}"
     respond_to do |format|
       format.html { render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false }
       format.js { head :forbidden }
@@ -108,6 +109,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def not_found(exception)
+    Rails.logger.warn "🔫 not_found: #{exception.message}"
     @error = exception.message
     Honeybadger.notify(exception)
     respond_to do |format|

@@ -6,8 +6,8 @@ module Droom::Api
     skip_before_action :verify_authenticity_token
     before_action :set_access_control_headers
 
-    rescue_from "ActiveRecord::RecordNotFound", with: :not_found
-    rescue_from "Droom::Error", with: :blew_up
+    rescue_from ActiveRecord::RecordNotFound, with: :not_found
+    rescue_from Droom::Error, with: :blew_up
 
     protected
 
@@ -16,6 +16,7 @@ module Droom::Api
     end
 
     def not_allowed(exception)
+      Rails.logger.warn "🔫 API not_allowed: #{exception.message}"
       render json: { errors: "You do not have permission to access that resource" }.to_json, status: :forbidden
     end
 
