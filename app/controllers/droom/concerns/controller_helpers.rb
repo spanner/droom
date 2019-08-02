@@ -22,6 +22,7 @@ module Droom::Concerns::ControllerHelpers
     before_action :set_section, except: [:cors_check]
     before_action :set_access_control_headers
     skip_before_action :verify_authenticity_token, only: [:cors_check]
+    after_action :update_auth_cookie
 
     layout :no_layout_if_pjax
   end
@@ -78,6 +79,15 @@ module Droom::Concerns::ControllerHelpers
   def require_data_room_permission
     if user_signed_in? && !devise_controller? && !api_controller?
       raise Droom::PermissionDenied, "You do not have permission to access this service." unless current_user.data_room_user?
+    end
+  end
+
+  # For simplicity, we always update the auth cookie.
+  # avoiding a whole mess of warden callback-sequencing.
+  #
+  def update_auth_cookie
+    if user_signed_in?
+      Droom::AuthCookie.new(warden.cookies).set(current_user)
     end
   end
 

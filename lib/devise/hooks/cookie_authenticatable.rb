@@ -7,7 +7,7 @@ end
 
 # We used to set shared domain cookie on sign in here
 # but it proved impossible, or anyway very unreliable, to try and do that after session_limitable had set its unique_session_id.
-# so now we override the call to update_unique_session_id!, which is kind of hacky but ought to work.
+# so now the cookie is set or updated on every request, in an after_action.
 
 # Unset session id and shared domain cookie on sign out.
 #
