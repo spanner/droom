@@ -23,6 +23,7 @@ module Droom
   class OrganisationRequired < DroomError; end
   class OrganisationApprovalRequired < DroomError; end
 
+
   class << self
     #
     # Droom.configure do |config|
@@ -49,3 +50,5 @@ module Droom
 
   end
 end
+
+Devise.add_module :cookie_authenticatable, model: 'devise/models/cookie_authenticatable'

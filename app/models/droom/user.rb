@@ -12,7 +12,6 @@ module Droom
     ## Authentication
     #
     devise :database_authenticatable,
-           :cookie_authenticatable,
            :recoverable,
            :trackable,
            :confirmable,
@@ -21,6 +20,7 @@ module Droom
            :lockable,
            :registerable,
            :timeoutable,
+           :cookie_authenticatable,
            reconfirmable: false,
            lock_strategy: :failed_attempts,
            maximum_attempts: 10,
@@ -185,6 +185,18 @@ module Droom
         update_unique_session_id!(Devise.friendly_token)
       end
       unique_session_id
+    end
+
+    # overriding the same method in session_limitable to add an auth_cookie update:
+    # doing this in cookie_authenticable would never do things in the right order.
+    #
+    def update_unique_session_id!(unique_session_id)
+      raise Devise::Models::Compatibility::NotPersistedError, 'cannot update a new record' unless persisted?
+      update_attribute_without_validatons_or_callbacks(:unique_session_id, unique_session_id).tap do
+        Rails.logger.debug { "[devise-security][session_limitable] unique_session_id=#{unique_session_id}"}
+        # and also update session id in auth cookie
+        Droom::AuthCookie.new(warden.cookies).set(self)
+      end
     end
 
     def confirmed=(value)

@@ -1,4 +1,7 @@
 require 'devise'
+require 'devise-security'
+require 'devise/models/cookie_authenticatable'
+require 'devise/hooks/cookie_authenticatable'
 
 module Devise
   module Strategies
@@ -42,9 +45,4 @@ module Devise
     end
   end
 
-  module Models
-    module CookieAuthenticatable
-      # I'm sure this is configurable away, but who can find that sort of thing in devise?
-    end
-  end
 end
