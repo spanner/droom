@@ -254,6 +254,12 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = "/droom/users/auth"
 
 
+  ## Session maintenance
+  #
+  # The shared cookie is our SSO mechanism and will allow access to remote services
+  # with a unique_session_id check so that session_limitable still works
+  # and a last_request_at check that acts like timeoutable.
+  #
   config.warden do |manager|
     # For shared-cookie auth, where user has signed in at some other service before coming here.
     # This is very similar to the work done by droom_client in remote services.
@@ -261,17 +267,18 @@ Devise.setup do |config|
     manager.default_strategies :database_authenticatable, :cookie_authenticatable, scope: :user
   end
 
-  # Set shared domain cookie and (revocable) session id on sign in.
-  # The shared cookie is our SSO mechanism and will allow access to remote services (with a token check)
+  # On every authenticated request, shared cookie is `set` again so that the encoded date is brought forward.
   #
-  Warden::Manager.after_authentication do |user, warden, options|
-    Droom::AuthCookie.new(warden.cookies).set(user)
+  Warden::Manager.after_set_user do |user, warden, options|
+    Rails.logger.warn "⚠️ set_last_request_at! for #{user.inspect}"
     user.set_last_request_at!
   end
 
-  # On every authenticated request, shared cookie is `set` again so that the encoded date is now.
+  # Set shared domain cookie on sign in here.
   #
-  Warden::Manager.after_set_user do |user, warden, options|
+  Warden::Manager.after_authentication do |user, warden, options|
+    Rails.logger.warn "⚠️ after_authentication setting auth_cookie for #{user.inspect}"
+    Droom::AuthCookie.new(warden.cookies).set(user)
     user.set_last_request_at!
   end
 
