@@ -146,20 +146,22 @@ module Droom
     #
     # Allows us to invalidate a session by remote control when the user signs out on a satellite site.
 
-    def reset_session_id!
-      token = generate_authentication_token
-      self.update_column(:session_id, token)
-      token
+    def reset_session_ids!
+      self.update_columns({
+        session_id: Devise.friendly_token,
+        unique_session_id: Devise.friendly_token
+      })
     end
 
     def clear_session_id!
       self.update_column(:session_id, "")
     end
 
-    # Tell devise to tell warden to salt the session cookie with our session_id.
+    # Tell devise to tell warden to salt the session cookie with our unique_session_id.
     # If the session_id changes, eg due to remote logout, the session will no longer succeed in describing a user.
     def authenticatable_salt
-      session_id.presence || reset_session_id!
+      ensure_unique_session_id!
+      unique_session_id
     end
 
 
@@ -182,6 +184,13 @@ module Droom
         self.authentication_token = generate_authentication_token
       end
       authentication_token
+    end
+
+    def ensure_unique_session_id!
+      unless unique_session_id.present?
+        update_unique_session_id!(Devise.friendly_token)
+      end
+      unique_session_id
     end
 
     def confirmed=(value)

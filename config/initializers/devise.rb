@@ -279,7 +279,7 @@ Devise.setup do |config|
   #
   Warden::Manager.before_logout do |user, warden, options|
     Droom::AuthCookie.new(warden.cookies).unset
-    user.reset_session_id! if user
+    user.reset_session_ids! if user
   end
 
 end

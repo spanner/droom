@@ -82,7 +82,7 @@ module Droom
     end
 
     def encoded_value(resource)
-      signer.encode([resource.ensure_authentication_token, Time.now])
+      signer.encode([resource.ensure_unique_session_id!, Time.now])
     end
 
     def cookie_options
