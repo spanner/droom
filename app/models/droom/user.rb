@@ -169,14 +169,8 @@ module Droom
     #
     # Are no longer native to devise but we use them for domain-cookie auth.
 
-    def authenticate_token(token)
-      Devise.secure_compare(self.authentication_token, token)
-    end
-
-    def reset_authentication_token!
-      token = generate_authentication_token
-      self.update_column(:authentication_token, token)
-      token
+    def authenticate_safely(attribute, token)
+      Devise.secure_compare(send(attribute), token)
     end
 
     def ensure_authentication_token
