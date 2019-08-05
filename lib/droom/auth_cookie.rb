@@ -19,6 +19,7 @@ module Droom
 
     # Unsets the cookie via the HTTP response.
     def unset
+      Rails.logger.warn "⚠️ auth_cookie.unset #{cookie_name}"
       @cookies.delete cookie_name, cookie_options
     end
 

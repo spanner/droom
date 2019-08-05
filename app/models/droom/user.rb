@@ -146,8 +146,9 @@ module Droom
 
     ## Session ID
     #
-    # Allows us to invalidate a session by remote control when the user signs out on a satellite site.
-
+    # All signout operations (local or through the API) need to clear both our session ids so that both the auth
+    # cookie and the local session become invalid.
+    #
     def reset_session_ids!
       self.update_columns({
         session_id: Devise.friendly_token,
@@ -155,12 +156,16 @@ module Droom
       })
     end
 
-    def clear_session_id!
-      self.update_column(:session_id, "")
+    def clear_session_ids!
+      self.update_columns({
+        session_id: "",
+        unique_session_id: ""
+      })
     end
 
     # Tell devise to tell warden to salt the session cookie with our unique_session_id.
     # If the session_id changes, eg due to remote logout, the session will no longer succeed in describing a user.
+    #
     def authenticatable_salt
       ensure_unique_session_id!
       unique_session_id

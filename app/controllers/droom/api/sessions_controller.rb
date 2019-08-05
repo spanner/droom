@@ -13,7 +13,6 @@ module Droom::Api
     def create
       self.resource = warden.authenticate(auth_options)
       if resource
-        Rails.logger.warn "⚠️ api signin: #{resource.inspect}"
         sign_in(resource_name, resource)
         yield resource if block_given?
         render json: resource, serializer: Droom::UserAuthSerializer
@@ -29,20 +28,15 @@ module Droom::Api
     #
     def authenticate
       token = params[:tok]
-      Rails.logger.warn "⚠️ authenticate: #{params[:tok]}"
       @user = Droom::User.find_by(unique_session_id: token)
-      Rails.logger.warn "⚠️ -> #{@user.inspect}"
       if @user
         # ie. if user includes timeoutable...
         if @user.respond_to?(:timedout?) && @user.last_request_at?
-          Rails.logger.warn "⚠️ checking timeout vs #{@user.last_request_at}"
           # here we borrow the devise timeout strategy but cannot refer to the session,
           # so we use a last_request_at column.
           if @user.timedout?(@user.last_request_at)
-            Rails.logger.warn "⚠️ -> timed out"
             render json: { errors: "Session timed out" }, status: :unauthorized
           else
-            Rails.logger.warn "⚠️ -> we good"
             # last_request_at has to be touched on requests to any of our services,
             # so we do it in a Warden callback after any successful authentication, including this one because of this otherwise ineffective sign_in call.
             bypass_sign_in @user

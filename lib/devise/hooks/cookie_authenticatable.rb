@@ -2,7 +2,6 @@
 # session id is definitely unique.
 #
 Warden::Manager.after_set_user do |user, warden, options|
-  Rails.logger.warn "⚠️ set_last_request_at! for #{user.inspect}"
   user.set_last_request_at!
 end
 
@@ -14,5 +13,5 @@ end
 #
 Warden::Manager.before_logout do |user, warden, options|
   Droom::AuthCookie.new(warden.cookies).unset
-  user.reset_session_ids! if user
+  user.clear_session_ids! if user
 end
