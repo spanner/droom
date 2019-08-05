@@ -53,4 +53,4 @@ module Droom
   end
 end
 
-Devise.add_module :cookie_authenticatable, model: "devise/models/cookie_authenticatable", strategy: "devise/strategies/cookie_authenticatable"
+Devise.add_module :cookie_authenticatable, strategy: true, model: "devise/models/cookie_authenticatable"

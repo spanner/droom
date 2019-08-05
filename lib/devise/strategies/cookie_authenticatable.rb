@@ -1,11 +1,8 @@
-require 'devise'
-require 'devise-security'
-require 'devise/models/cookie_authenticatable'
-require 'devise/hooks/cookie_authenticatable'
+require 'devise/strategies/authenticatable'
 
 module Devise
   module Strategies
-    class CookieAuthenticatable < ::Devise::Strategies::Authenticatable
+    class CookieAuthenticatable < Authenticatable
 
       def valid?
         cookie.valid?
@@ -39,8 +36,9 @@ module Devise
         Rails.logger.warn "[cookie_authenticatable] ⚠️ cookie resource found: #{@resource}"
         @resource
       end
-
     end
   end
-
 end
+
+Warden::Strategies.add(:cookie_authenticatable, Devise::Strategies::CookieAuthenticatable)
+
