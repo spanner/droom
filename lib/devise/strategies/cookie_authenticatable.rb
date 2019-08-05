@@ -1,5 +1,6 @@
 require 'devise'
 require 'devise-security'
+require 'devise/models/cookie_authenticatable'
 
 module Devise
   module Strategies
