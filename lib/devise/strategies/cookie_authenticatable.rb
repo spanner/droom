@@ -1,7 +1,5 @@
 require 'devise'
 require 'devise-security'
-require 'devise/models/cookie_authenticatable'
-require 'devise/hooks/cookie_authenticatable'
 
 module Devise
   module Strategies
@@ -16,8 +14,9 @@ module Devise
       end
 
       def authenticate!
+        Rails.logger.warn "[cookie_authenticatable] ⚠️ cookie authenticate? #{cookie.inspect}"
         if valid? && fresh? && resource && validate(resource)
-          Rails.logger.warn "[cookie_authenticatable] ⚠️ cookie authenticated! #{resource}"
+          Rails.logger.warn "[cookie_authenticatable] ⚠️ cookie authenticated! #{resource.inspect}"
           success!(resource)
         else
           pass

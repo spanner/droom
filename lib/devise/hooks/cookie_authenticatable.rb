@@ -1,4 +1,5 @@
-# On every authenticated request, shared cookie is `set` again so that the encoded date is brought forward.
+# On every authenticated request, shared cookie is `set` again so that the encoded date is brought forward and the unique
+# session id is definitely unique.
 #
 Warden::Manager.after_set_user do |user, warden, options|
   Rails.logger.warn "⚠️ set_last_request_at! for #{user.inspect}"

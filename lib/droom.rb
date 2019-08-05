@@ -8,6 +8,7 @@ require "droom/validators"
 require "droom/folders"
 require "droom/scrubbers"
 
+
 module Droom  
   # Droom configuration is handled by accessors on the Droom base module.
   # Boolean items also offer the interrogative form.
@@ -51,4 +52,4 @@ module Droom
   end
 end
 
-Devise.add_module :cookie_authenticatable, model: 'devise/models/cookie_authenticatable'
+Devise.add_module :cookie_authenticatable, model: "devise/models/cookie_authenticatable", strategy: "devise/strategies/cookie_authenticatable"
