@@ -1,6 +1,7 @@
 require 'devise'
 require 'devise-security'
 require 'devise/models/cookie_authenticatable'
+require 'devise/hooks/cookie_authenticatable'
 
 module Devise
   module Strategies
@@ -20,6 +21,7 @@ module Devise
           Rails.logger.warn "[cookie_authenticatable] ⚠️ cookie authenticated! #{resource.inspect}"
           success!(resource)
         else
+          cookie.unset
           pass
         end
       end
@@ -38,10 +40,6 @@ module Devise
         @resource
       end
 
-      def pass
-        cookie.unset
-        super
-      end
     end
   end
 

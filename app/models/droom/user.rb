@@ -1,3 +1,5 @@
+require 'devise/strategies/cookie_authenticatable'
+
 module Droom
   class User < Droom::DroomRecord
       include Droom::Concerns::Imaged
@@ -12,6 +14,7 @@ module Droom
     ## Authentication
     #
     devise :database_authenticatable,
+           :cookie_authenticatable,
            :recoverable,
            :trackable,
            :confirmable,
@@ -20,7 +23,6 @@ module Droom
            :lockable,
            :registerable,
            :timeoutable,
-           :cookie_authenticatable,
            reconfirmable: false,
            lock_strategy: :failed_attempts,
            maximum_attempts: 10,
