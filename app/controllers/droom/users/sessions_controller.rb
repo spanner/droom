@@ -19,5 +19,9 @@ module Droom::Users
       end
     end
 
+    def all_signed_out?
+      !user_signed_in?
+    end
+
   end
 end
