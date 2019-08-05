@@ -22,7 +22,7 @@ module Droom::Concerns::ControllerHelpers
     before_action :set_section, except: [:cors_check]
     before_action :set_access_control_headers
     skip_before_action :verify_authenticity_token, only: [:cors_check]
-    after_action :update_auth_cookie
+    after_action :update_auth_cookie, unless: :api_controller?
 
     layout :no_layout_if_pjax
   end
@@ -82,8 +82,8 @@ module Droom::Concerns::ControllerHelpers
     end
   end
 
-  # For simplicity, we always update the auth cookie.
-  # avoiding a whole mess of warden callback-sequencing.
+  # For simplicity, we always update the auth cookie at the end of every request.
+  # This avoids a whole mess of warden callback-sequencing and race conditions between devise modules.
   #
   def update_auth_cookie
     if user_signed_in?

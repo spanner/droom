@@ -7,9 +7,14 @@ module Droom::Api
     before_action :set_access_control_headers
 
     # POST /api/users/sign_in
+    #
+    # Called in sign-in to a remote service.
+    #
     def create
+      Rails.logger.warn "⚠️ api session create: #{auth_options.inspect}"
       self.resource = warden.authenticate(auth_options)
       if resource
+        Rails.logger.warn "⚠️ api signin: #{resource.inspect}"
         sign_in(resource_name, resource)
         yield resource if block_given?
         render json: resource
