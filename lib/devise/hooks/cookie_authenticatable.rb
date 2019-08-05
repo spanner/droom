@@ -12,6 +12,7 @@ end
 # Unset session id and shared domain cookie on sign out.
 #
 Warden::Manager.before_logout do |user, warden, options|
-  Droom::AuthCookie.new(warden.cookies).unset
+  Rails.logger.warn "⚠️ before_logout: #{user}, #{warden}, #{options.inspect}"
   user.clear_session_ids! if user
+  Droom::AuthCookie.new(warden.cookies).unset
 end

@@ -86,8 +86,11 @@ module Droom::Concerns::ControllerHelpers
   # This avoids a whole mess of warden callback-sequencing and race conditions between devise modules.
   #
   def update_auth_cookie
-    if user_signed_in?
+    Rails.logger.warn "⚠️ update_auth_cookie: #{user_signed_in?.inspect}, #{user.unique_session_id.inspect}"
+    if user_signed_in? && user.unique_session_id?
       Droom::AuthCookie.new(warden.cookies).set(current_user)
+    else
+      Droom::AuthCookie.new(warden.cookies).unset
     end
   end
 
