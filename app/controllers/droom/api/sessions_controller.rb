@@ -11,13 +11,12 @@ module Droom::Api
     # Called in sign-in to a remote service.
     #
     def create
-      Rails.logger.warn "⚠️ api session create: #{auth_options.inspect}"
       self.resource = warden.authenticate(auth_options)
       if resource
         Rails.logger.warn "⚠️ api signin: #{resource.inspect}"
         sign_in(resource_name, resource)
         yield resource if block_given?
-        render json: resource
+        render json: resource, serializer: Droom::UserAuthSerializer
       else
         head :unauthorized
       end
