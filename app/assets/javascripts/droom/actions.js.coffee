@@ -55,8 +55,8 @@ jQuery ($) ->
           success: @replace
         if @_method
           params.method = @_method
-        if @_method.toLowerCase() is 'post' and @_data
-          params.data = @_data
+          if @_method.toLowerCase() is 'post' and @_data
+            params.data = @_data
         $.ajax @_url, params
       else
         console.error "Cannot refresh: no URL to fetch"
