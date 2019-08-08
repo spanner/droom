@@ -189,6 +189,7 @@ module Droom
 
     def ensure_unique_session_id!
       unless unique_session_id.present?
+        Rails.logger.warn "⚠️ ensure_unique_session_id!: no unique_session_id..."
         update_unique_session_id!(Devise.friendly_token)
       end
       unique_session_id
