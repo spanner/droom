@@ -1,5 +1,3 @@
-require 'devise/strategies/cookie_authenticatable'
-
 module Warden
   class SessionSerializer
     def user_serialize(user)

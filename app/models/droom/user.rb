@@ -1,5 +1,3 @@
-require 'devise/strategies/cookie_authenticatable'
-
 module Droom
   class User < Droom::DroomRecord
       include Droom::Concerns::Imaged
