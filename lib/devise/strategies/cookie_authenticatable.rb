@@ -22,6 +22,10 @@ module Devise
         end
       end
 
+      def store?
+        false
+      end
+
       private
 
       def cookie
