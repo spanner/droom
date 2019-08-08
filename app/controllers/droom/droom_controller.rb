@@ -3,6 +3,5 @@ module Droom
     include Droom::Concerns::ControllerHelpers
     helper Droom::DroomHelper
     helper ApplicationHelper
-    protect_from_forgery
   end
 end

@@ -2,7 +2,7 @@ module Droom::Concerns::ControllerHelpers
   extend ActiveSupport::Concern
 
   included do
-    protect_from_forgery
+    protect_from_forgery if :html_request?
     helper Droom::DroomHelper
 
     rescue_from CanCan::AccessDenied, :with => :not_allowed
@@ -33,6 +33,9 @@ module Droom::Concerns::ControllerHelpers
     false
   end
 
+  def html_request?
+    request.format.html?
+  end
 
   # CORS blanket approval
   #

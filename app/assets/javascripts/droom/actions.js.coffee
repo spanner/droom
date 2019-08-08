@@ -63,6 +63,7 @@ jQuery ($) ->
 
     prep: (xhr, settings) =>
       xhr.setRequestHeader('X-PJAX', 'true')
+      xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
       @_container.addClass('waiting')
       true
 

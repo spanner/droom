@@ -13,7 +13,6 @@ end
 #
 Warden::Manager.before_logout do |user, warden, options|
   Rails.logger.warn "⚠️ before_logout: #{user}, #{warden}, #{options.inspect}"
-  byebug
   user.clear_session_ids! if user
   Droom::AuthCookie.new(warden.cookies).unset
 end
