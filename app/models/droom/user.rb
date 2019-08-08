@@ -13,8 +13,7 @@ module Droom
 
     ## Authentication
     #
-    devise :database_authenticatable,
-           :cookie_authenticatable,
+    devise :cookie_authenticatable,
            :recoverable,
            :trackable,
            :confirmable,
