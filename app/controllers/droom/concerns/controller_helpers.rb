@@ -2,7 +2,7 @@ module Droom::Concerns::ControllerHelpers
   extend ActiveSupport::Concern
 
   included do
-    # protect_from_forgery if :html_request?
+    protect_from_forgery if :html_request?
     helper Droom::DroomHelper
 
     rescue_from CanCan::AccessDenied, :with => :not_allowed
