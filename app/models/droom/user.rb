@@ -185,15 +185,9 @@ module Droom
 
     def ensure_unique_session_id!
       unless unique_session_id.present?
-        Rails.logger.debug "⚠️ ensure_unique_session_id!: no unique_session_id..."
         update_unique_session_id!(Devise.friendly_token)
       end
       unique_session_id
-    end
-
-    def update_unique_session_id!(unique_session_id)
-      update_column(:unique_session_id, unique_session_id)
-      Rails.logger.debug "⚠️ unique_session_id=#{unique_session_id}"
     end
 
     def confirmed=(value)

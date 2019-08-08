@@ -64,7 +64,6 @@ module Droom::Concerns::ControllerHelpers
   #
   def read_auth_cookie
     cookie = Droom::AuthCookie.new(warden.cookies)
-    Rails.logger.warn "⚠️ read_auth_cookie #{cookie.inspect}"
     if cookie.valid? && cookie.fresh?
       if resource = Droom::User.where(unique_session_id: cookie.token).first
         if resource.valid_for_authentication?
@@ -75,7 +74,6 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def authenticate!
-    Rails.logger.warn "⚠️ CookieAuthenticatable.authenticate! #{valid?} && #{fresh?} && #{resource} && #{validate(resource)}"
     if valid? && fresh? && resource && validate(resource)
       success!(resource)
     else
