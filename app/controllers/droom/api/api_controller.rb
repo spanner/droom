@@ -3,7 +3,7 @@ module Droom::Api
     include Droom::Concerns::LocalApi
 
     respond_to :json
-    skip_before_action :verify_authenticity_token
+    skip_before_action :verify_authenticity_token, raise: false
     before_action :set_access_control_headers
 
     rescue_from ActiveRecord::RecordNotFound, with: :not_found

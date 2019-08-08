@@ -1,7 +1,7 @@
 module Droom::Users
   class ConfirmationsController < Devise::ConfirmationsController
     before_action :set_access_control_headers
-    skip_before_action :verify_authenticity_token
+    skip_before_action :verify_authenticity_token, raise: false
     skip_before_action :check_user_is_confirmed
     skip_before_action :check_user_setup
     skip_before_action :check_user_has_organisation

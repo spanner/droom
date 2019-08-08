@@ -1,7 +1,7 @@
 module Droom::Users
   class RegistrationsController < Devise::RegistrationsController
     before_action :set_access_control_headers
-    skip_before_action :verify_authenticity_token
+    skip_before_action :verify_authenticity_token, raise: false
     layout :default_layout
 
     def new

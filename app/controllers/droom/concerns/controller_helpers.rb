@@ -21,7 +21,7 @@ module Droom::Concerns::ControllerHelpers
     before_action :note_current_user, except: [:cors_check]
     before_action :set_section, except: [:cors_check]
     before_action :set_access_control_headers
-    skip_before_action :verify_authenticity_token, only: [:cors_check]
+    skip_before_action :verify_authenticity_token, only: [:cors_check], raise: false
     after_action :update_auth_cookie, unless: :api_controller?
 
     layout :no_layout_if_pjax
