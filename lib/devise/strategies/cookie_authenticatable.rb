@@ -13,6 +13,7 @@ module Devise
       end
 
       def authenticate!
+        Rails.logger.warn "⚠️ CookieAuthenticatable.authenticate! #{valid?} && #{fresh?} && #{resource} && #{validate(resource)}"
         if valid? && fresh? && resource && validate(resource)
           success!(resource)
         else

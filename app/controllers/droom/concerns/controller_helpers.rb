@@ -17,7 +17,7 @@ module Droom::Concerns::ControllerHelpers
     before_action :check_user_is_confirmed, except: [:cors_check, :setup], unless: :devise_controller?
     before_action :check_user_setup, except: [:cors_check, :setup], unless: :devise_controller?
     before_action :check_user_has_organisation, except: [:cors_check, :setup_organisation], unless: :devise_controller?
-    before_action :require_data_room_permission, except: [:cors_check, :set_password]
+    before_action :check_data_room_permission, except: [:cors_check, :set_password]
     before_action :note_current_user, except: [:cors_check]
     before_action :set_section, except: [:cors_check]
     before_action :set_access_control_headers
@@ -76,7 +76,7 @@ module Droom::Concerns::ControllerHelpers
     end
   end
 
-  def require_data_room_permission
+  def check_data_room_permission
     if user_signed_in? && !devise_controller? && !api_controller?
       raise Droom::PermissionDenied, "You do not have permission to access this service." unless current_user.data_room_user?
     end
@@ -86,7 +86,6 @@ module Droom::Concerns::ControllerHelpers
   # This avoids a whole mess of warden callback-sequencing and race conditions between devise modules.
   #
   def update_auth_cookie
-    Rails.logger.warn "⚠️ update_auth_cookie: #{user_signed_in?.inspect}"
     if user_signed_in? && current_user.unique_session_id?
       Droom::AuthCookie.new(warden.cookies).set(current_user)
     else
