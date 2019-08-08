@@ -34,6 +34,7 @@ module Devise
 
       def resource
         # returns nil when user is missing.
+        Rails.logger.warn "⚠️ CookieAuthenticatable.resource #{cookie.token} -> #{mapping.to.where(unique_session_id: cookie.token)}"
         @resource ||= mapping.to.where(unique_session_id: cookie.token).first
       end
     end
