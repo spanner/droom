@@ -7,7 +7,6 @@ require "droom/auth_cookie"
 require "droom/validators"
 require "droom/folders"
 require "droom/scrubbers"
-require "devise/strategies/cookie_authenticatable"
 
 
 module Droom  
@@ -52,5 +51,3 @@ module Droom
 
   end
 end
-
-Devise.add_module :cookie_authenticatable, strategy: true, model: "devise/models/cookie_authenticatable"

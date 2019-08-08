@@ -12,6 +12,7 @@ module Droom::Concerns::ControllerHelpers
     rescue_from Droom::OrganisationRequired, :with => :prompt_for_organisation
     rescue_from Droom::OrganisationApprovalRequired, :with => :await_organisation_approval
 
+    before_action :read_auth_cookie, except: [:cors_check]
     before_action :authenticate_user!, except: [:cors_check]
     before_action :set_exception_context
     before_action :check_user_is_confirmed, except: [:cors_check, :setup], unless: :devise_controller?
@@ -56,6 +57,35 @@ module Droom::Concerns::ControllerHelpers
 
   ## Authorization helpers
   #
+  # The droom auth cookie not an authentication mechanism, as Warden understands it, but a session store.
+  # We check the cookie first, pull out a user value and populate the Warden session if we can.
+  # This allows it to be retrieved with the usual fetch operation (as though it were local), which keeps
+  # all our callbacks in the right places and allows us to distinguish between new and existing SSO logins.
+  #
+  def read_auth_cookie
+    cookie = Droom::AuthCookie.new(warden.cookies)
+    Rails.logger.warn "⚠️ read_auth_cookie #{cookie.inspect}"
+    if cookie.valid? && cookie.fresh?
+      if resource = Droom::User.where(unique_session_id: cookie.token).first
+        if resource.valid_for_authentication?
+          warden.session_serializer.store(resource, :user)
+        end
+      end
+    end
+  end
+
+  def authenticate!
+    Rails.logger.warn "⚠️ CookieAuthenticatable.authenticate! #{valid?} && #{fresh?} && #{resource} && #{validate(resource)}"
+    if valid? && fresh? && resource && validate(resource)
+      success!(resource)
+    else
+      cookie.unset
+      pass
+    end
+  end
+
+
+
   def authenticate_user_if_possible(opts={})
     opts[:scope] = :user
     warden.authenticate(opts) if !devise_controller? || opts.delete(:force)
@@ -102,13 +132,13 @@ module Droom::Concerns::ControllerHelpers
     Honeybadger.context({
       :service => "Data room"
     })
-    if user_signed_in?
-      Honeybadger.context({
-        :user_name => current_user.name,
-        :user_uid => current_user.uid,
-        :user_email => current_user.email
-      })
-    end
+    # if user_signed_in?
+    #   Honeybadger.context({
+    #     :user_name => current_user.name,
+    #     :user_uid => current_user.uid,
+    #     :user_email => current_user.email
+    #   })
+    # end
   end
 
 
