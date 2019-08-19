@@ -28,8 +28,6 @@ module Droom::Api
     #
     def authenticate
       token = params[:tok]
-      # session_limitable assumes session cookie is present
-      warden.session(:user)['unique_session_id'] = token
       @user = Droom::User.find_by(unique_session_id: token)
       if @user
         # ie. if user includes timeoutable...
