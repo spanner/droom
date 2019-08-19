@@ -139,7 +139,6 @@ jQuery ($) ->
       $(@).trigger('close')
 
 
-
   # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
   # result of their action. Pass force: true to make the replacement immediately upon load. Can be useful for personalisation.
   #
@@ -147,15 +146,16 @@ jQuery ($) ->
     selector ?= '.holder'
     options = $.extend { force: false, confirm: false, slide: false, pjax: true, credentials: false }, opts
     @each ->
-      container = $(@).attr('data-replaced') || selector
-      affected = $(@).attr('data-affected')
-      $(@).remote
+      $el = $(@)
+      container = $el.attr('data-replaced') || selector
+      affected = $el.attr('data-affected')
+      $el.remote
         credentials: options.credentials
         pjax: options.pjax
-        on_success: (e, r) =>
-          r ?= e
-          replaced = if container is "self" then $(@) else $(@).self_or_ancestor(container).last()
-          replacement = $(r).insertAfter(replaced)
+        on_success: (e, response) =>
+          response ?= e
+          replaced = if container is "self" then $el else $el.self_or_ancestor(container).last()
+          replacement = $(response).insertAfter(replaced)
           replaced?.remove()
           replacement.activate()
           replacement.hide().slideDown() if options.slide
@@ -163,7 +163,7 @@ jQuery ($) ->
           replacement.trigger('updated')
           $(affected).trigger('refresh')
       if options.force
-        $.rails.handleRemote($(@))
+        $.rails.handleRemote($el)
 
 
 

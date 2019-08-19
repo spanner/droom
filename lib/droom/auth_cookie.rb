@@ -12,13 +12,14 @@ module Droom
 
     # Sets the cookie, referencing the given resource.id (e.g. User)
     def set(resource, opts={})
-      cookie = cookie_options.merge(opts).merge(value: encoded_value(resource))
+      cookie = cookie_options.merge(opts).merge(same_site: :lax, path: "/", value: encoded_value(resource))
       @cookies[cookie_name] = cookie
     end
 
     # Unsets the cookie via the HTTP response.
     def unset
-      @cookies.delete cookie_name, cookie_options
+      options = cookie_options.merge(opts).merge(same_site: :lax, path: "/")
+      @cookies.delete cookie_name, options
     end
 
     def token
