@@ -34,6 +34,7 @@ jQuery ($) ->
   $.fn.refresh = ->
     @trigger('refresh')
 
+
   class Refresher
     constructor: (element) ->
       @_container = $(element)

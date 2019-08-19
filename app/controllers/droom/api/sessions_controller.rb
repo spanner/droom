@@ -28,6 +28,8 @@ module Droom::Api
     #
     def authenticate
       token = params[:tok]
+      # session_limitable assumes session cookie is present
+      warden.session(:user)['unique_session_id'] = token
       @user = Droom::User.find_by(unique_session_id: token)
       if @user
         # ie. if user includes timeoutable...
@@ -37,8 +39,6 @@ module Droom::Api
           if @user.timedout?(@user.last_request_at)
             render json: { errors: "Session timed out" }, status: :unauthorized
           else
-            # last_request_at has to be touched on requests to any of our services,
-            # so we do it in a Warden callback after any successful authentication, including this one because of this otherwise ineffective sign_in call.
             bypass_sign_in @user
             render json: @user, serializer: Droom::UserAuthSerializer
           end
