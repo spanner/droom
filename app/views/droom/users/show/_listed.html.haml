@@ -15,7 +15,7 @@
 - if membership
   - group = membership.group
 
-%li{id: "user_#{user.id}", class: liclass, data: {refreshable: true, url: droom.user_path(user, view: 'listed')} }
+%li{id: "user_#{user.id}", class: liclass, data: {refreshing: true, url: droom.user_path(user, view: 'listed')} }
   - if user.confirmed?
     %span.mugshot{style: mugstyle}
   - else

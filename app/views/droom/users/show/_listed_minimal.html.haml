@@ -8,7 +8,7 @@
 - else
   - mugstyle = ""
 
-%li{id: "user_#{user.id}", class: liclass, data: {refreshable: true, url: droom.user_path(user, view: 'listed_minimal')} }
+%li{id: "user_#{user.id}", class: liclass, data: {refreshing: true, url: droom.user_path(user, view: 'listed_minimal')} }
   - if user.confirmed?
     %span.mugshot{style: mugstyle}
   - else

@@ -1,4 +1,4 @@
-.user#my_profile{:data => {:refreshable => true, :url => droom.user_path(current_user, view: 'my_profile')}}
+.user#my_profile{:data => {:refreshing => true, :url => droom.user_path(current_user, view: 'my_profile')}}
   .mugshot.full{:style => "background-image: url(#{current_user.image.url('thumb')})"}
   .detail
     %h3

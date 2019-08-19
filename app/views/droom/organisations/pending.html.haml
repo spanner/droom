@@ -6,7 +6,7 @@
     = t :pending_organisations_introduction, count: Droom::Organisation.pending.count
     = t :click_below_to_approve
 
-#pending_organisations{:data => {:refreshable => true, :url => droom.pending_organisations_url}}
+#pending_organisations{:data => {:refreshing => true, :url => droom.pending_organisations_url}}
   #main.body
     - if @organisations.any?
       = render :partial => 'droom/organisations/show/pending', collection: @organisations

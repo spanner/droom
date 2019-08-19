@@ -1,4 +1,4 @@
-#noticeboard.autogrid{:data => {:refreshable => scraps_path(:format => :js)}}
+#noticeboard.autogrid{:data => {:refreshing => scraps_path(:format => :js)}}
 
   - if @scraps.any?
     = render :partial => "notice", :collection => @scraps

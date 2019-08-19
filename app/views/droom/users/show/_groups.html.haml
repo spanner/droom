@@ -9,7 +9,7 @@
   - group_names = group_names.compact
 - group_names_size = group_names.any? ? group_names.size - 1 : 0
 
-%section{class: cssclass, data:{refreshable: true, url: droom.user_url(@user, view: 'groups', format: :js)}}
+%section{class: cssclass, data:{refreshing: true, url: droom.user_url(@user, view: 'groups', format: :js)}}
   - if @user && can?(:edit, @user)
     %span.user_controls
       = link_to t(:edit_user_profile_symbol), droom.edit_user_url(@user, view: 'groups'), class: "edit", data: {action: 'popup', affected: "section.groups_info,section.statuses_info"}

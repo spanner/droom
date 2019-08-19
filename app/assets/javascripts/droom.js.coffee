@@ -47,7 +47,7 @@ jQuery ($) ->
   $.activate_with () ->
     @find_including_self('form.droom_faceter').faceting_search()
     @find_including_self('#flashes p:parent').flash()
-    @find_including_self('[data-refreshable]').refresher()
+    @find_including_self('[data-refreshing]').refresher()
     @find_including_self('.hidden').find('input, select, textarea').attr('disabled', true)
     @find_including_self('.temporary').disappearAfter(1000)
     @find_including_self('.subordinate').subordinate()

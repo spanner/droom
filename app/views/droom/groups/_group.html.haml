@@ -1,7 +1,7 @@
 - group ||= @group
 - users = @users || group.users.page(1).per(20)
 
-%div.group{:id => "group_#{group.id}", :data => {:refreshable => true, :url => group_path(group, :format => :js)} }
+%div.group{:id => "group_#{group.id}", :data => {:refreshing => true, :url => group_path(group, :format => :js)} }
   %h2
     = group.name
     = action_menulink(group)

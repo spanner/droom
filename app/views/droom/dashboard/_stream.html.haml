@@ -5,5 +5,5 @@
       %span.action
         = link_to t(:add_to_stream), droom.new_scrap_url, :class => "add", :data => {:action => "popup", :prepended => ".preload", :affected => "#scraps"}
   #stream
-    #scraps.holder{:data => {:refreshable => true, :url => scraps_path(:format => :js)}}
+    #scraps.holder{:data => {:refreshing => true, :url => scraps_path(:format => :js)}}
       = link_to t(:loading_stream), droom.scraps_url(:format => :js, :show => 5), :data => {:action => "autofetch"}

@@ -3,7 +3,7 @@
 - aclass << " confidential" if organisation_type.confidential?
 - aclass << " public" if organisation_type.public?
 
-%div.organisation_type{:id => "organisation_type_#{organisation_type.id}", :data => {:refreshable => true, :url => organisation_type_path(organisation_type, :format => :js)} }
+%div.organisation_type{:id => "organisation_type_#{organisation_type.id}", :data => {:refreshing => true, :url => organisation_type_path(organisation_type, :format => :js)} }
   = action_menu(organisation_type)
 
   %h2.name

@@ -1,4 +1,4 @@
-#scraps.paginated{:data => {:refreshable => true, :url => scraps_path(:format => :js)}}
+#scraps.paginated{:data => {:refreshing => true, :url => scraps_path(:format => :js)}}
   - if @scraps.any?
     = render :partial => "thumb", :collection => @scraps
     .pagination.sliding

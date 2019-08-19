@@ -3,7 +3,7 @@
 - aclass << " confidential" if event_type.confidential?
 - aclass << " public" if event_type.public?
 
-%div.event_type{:id => "event_type_#{event_type.id}", :data => {:refreshable => true, :url => event_type_path(event_type, :format => :js)} }
+%div.event_type{:id => "event_type_#{event_type.id}", :data => {:refreshing => true, :url => event_type_path(event_type, :format => :js)} }
   = action_menu(event_type)
 
   %h2.name

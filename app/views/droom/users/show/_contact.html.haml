@@ -1,7 +1,7 @@
 - cssclass = 'contacts'
 - cssclass << ' editable' if can?(:edit, @user)
 
-%section{class: cssclass, data: {refreshable: true, url: droom.user_url(@user, view: 'contact', format: :js)}}
+%section{class: cssclass, data: {refreshing: true, url: droom.user_url(@user, view: 'contact', format: :js)}}
   - if @user && can?(:edit, @user)
     %span.user_controls
       = link_to t(:edit_user_profile_symbol), droom.edit_user_url(@user, view: 'contact'), class: "edit", data: {action: 'popup', affected: "section.contacts, section.user"}

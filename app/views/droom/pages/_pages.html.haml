@@ -1,4 +1,4 @@
-#pages{:data => {:refreshable => true, :url => "#{droom.pages_path}.js"}}
+#pages{:data => {:refreshing => true, :url => "#{droom.pages_path}.js"}}
   = render :partial => 'droom/pages/show/listed', :collection => @pages
 
   - if can? :create, Droom::Page

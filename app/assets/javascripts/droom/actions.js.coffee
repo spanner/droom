@@ -37,7 +37,7 @@ jQuery ($) ->
   class Refresher
     constructor: (element) ->
       @_container = $(element)
-      @_url = @_container.attr('data-refreshable') or @_container.attr('data-url')
+      @_url = @_container.attr('data-refreshing') or @_container.attr('data-url')
       @_method = @_container.attr 'data-method'
       @_data = @_container.attr 'data-params'
       @_container.bind "refresh", @refresh
@@ -140,23 +140,29 @@ jQuery ($) ->
 
 
   # *replace_with_remote_content* is a useful shortcut for links and forms that should simply be replaced with the
-  # result of their action.
+  # result of their action. Pass force: true to make the replacement immediately upon load. Can be useful for personalisation.
   #
   $.fn.replace_with_remote_content = (selector, opts) ->
     selector ?= '.holder'
-    options = $.extend { force: false }, opts
+    options = $.extend { force: false, confirm: false, slide: false, pjax: true, credentials: false }, opts
     @each ->
       container = $(@).attr('data-replaced') || selector
       affected = $(@).attr('data-affected')
-      autoload = options['force'] || ($(@).attr('data-autoload')? && $(@).attr('data-autoload') isnt 'false')
       $(@).remote
+        credentials: options.credentials
+        pjax: options.pjax
         on_success: (e, r) =>
-          replaced = $(@).self_or_ancestor(container).last()
+          r ?= e
+          replaced = if container is "self" then $(@) else $(@).self_or_ancestor(container).last()
           replacement = $(r).insertAfter(replaced)
           replaced?.remove()
           replacement.activate()
+          replacement.hide().slideDown() if options.slide
+          replacement.signal_confirmation() if options.confirm
+          replacement.trigger('updated')
           $(affected).trigger('refresh')
-      $(@).click() if autoload
+      if options.force
+        $.rails.handleRemote($(@))
 
 
 
@@ -236,8 +242,6 @@ jQuery ($) ->
             holder.find('input[type="file"]').disable()
           else
             holder.remove()
-
-
 
 
   # The setter action sets a single boolean object property by PUTting a single parameter to the link href.
@@ -440,42 +444,6 @@ jQuery ($) ->
       $(@_affected).find('input').attr('disabled', true)
       $(@_converse).stop().slideDown()
       $(@_converse).find('input').attr('disabled', false)
-
-
-  # Yet another toggle, preserved for cdr reviewers but I hope not for long.
-
-  $.fn.twister = ->
-    @each ->
-      new Twister(@)
-
-  class Twister
-    @currently_open: []
-    constructor: (element) ->
-      @_twister = $(element)
-      @_twisted = @_twister.find('.twisted')
-      @_toggles = @_twister.find('a.twisty')
-      @_toggles.click @toggle
-      @_open = @_twister.hasClass("showing")
-      @set()
-
-    set: () =>
-      if @_open then @open() else @close()
-      
-    toggle: (e) =>
-      e.preventDefault() if e
-      if @_open then @close() else @open()
-      
-    open: () =>
-      @_twister.addClass("showing")
-      @_twisted.show()
-      @_open = true
-      Twister.currently_open.push(@_id)
-      
-    close: () =>
-      @_twister.removeClass("showing")
-      @_twisted.hide()
-      @_open = false
-      Twister.currently_open.remove(@_id)  # remove is defined in lib/extensions
 
 
 

@@ -1,6 +1,6 @@
 - events ||= @events
 
-#events{:data => {:refreshable => true, :url => droom.events_url(:js)}}
+#events{:data => {:refreshing => true, :url => droom.events_url(:js)}}
   - if events.any?
     = render :partial => 'droom/events/event', :collection => events
   - else
