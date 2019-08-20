@@ -70,9 +70,7 @@ module Droom::Concerns::ControllerHelpers
         if resource.valid_for_authentication?
           Rails.logger.warn "✅ resource valid"
           warden.session_serializer.store(resource, :user)
-          warden.session(:user)['unique_session_id'] = cookie.token               # for session_limitable
-          Rails.logger.warn "✅ stored unique_session_id: #{warden.session(:user)['unique_session_id']}"
-          Rails.logger.warn "✅ the whole session user: #{warden.session(:user).inspect}"
+          warden.request.env['devise.skip_session_limitable'] = true
         end
       end
     end
