@@ -18,7 +18,7 @@ module Droom
 
     # Unsets the cookie via the HTTP response.
     def unset
-      options = cookie_options.merge(opts).merge(same_site: :lax, path: "/")
+      options = cookie_options.merge(same_site: :lax, path: "/")
       @cookies.delete cookie_name, options
     end
 
