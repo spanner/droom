@@ -12,7 +12,7 @@ module Droom::Concerns::ControllerHelpers
     rescue_from Droom::OrganisationRequired, :with => :prompt_for_organisation
     rescue_from Droom::OrganisationApprovalRequired, :with => :await_organisation_approval
 
-    before_action :read_auth_cookie, except: [:cors_check]
+    prepend_before_action :read_auth_cookie, except: [:cors_check]
     before_action :authenticate_user!, except: [:cors_check]
     before_action :set_exception_context
     before_action :check_user_is_confirmed, except: [:cors_check, :setup], unless: :devise_controller?
