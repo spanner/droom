@@ -1,12 +1,10 @@
 module Warden
   class SessionSerializer
     def user_serialize(user)
-      Rails.logger.warn "user_serialize(#{user})"
       user
     end
 
     def user_deserialize(key)
-      Rails.logger.warn "user_deserialize(#{key})"
       key
     end
   end

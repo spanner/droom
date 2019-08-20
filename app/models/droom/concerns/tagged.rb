@@ -24,9 +24,7 @@ module Droom::Concerns::Tagged
       }}
       args[:limit] = options[:limit] if options[:limit]
       args[:offset] = options[:offset] if options[:offset]
-      matches = self.search args
-      Rails.logger.warn "with_tags_like response: #{matches.response.inspect}"
-      matches
+      self.search args
     end
   end
 

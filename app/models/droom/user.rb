@@ -115,7 +115,6 @@ module Droom
       begin
         super(password)
       rescue BCrypt::Errors::InvalidHash
-        Rails.logger.warn "...trying sha512 on password input"
         stretches = 10
         salt = self.password_salt
         pepper = nil
@@ -135,7 +134,6 @@ module Droom
     # The value of last_request_at is used to invalidate stale sessions.
     #
     def set_last_request_at!(time=Time.now)
-      Rails.logger.warn "⏰ set_last_request_at! #{time}"
       update_column :last_request_at, time
     end
 

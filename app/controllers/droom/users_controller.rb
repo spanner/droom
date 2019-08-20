@@ -139,8 +139,6 @@ module Droom
         arguments[:page] = (params[:page].presence || 1).to_i
       end
 
-      Rails.logger.warn "User search params: #{arguments.inspect}"
-
       @users = Droom::User.search query, arguments
     end
 

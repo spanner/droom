@@ -90,7 +90,6 @@ module Droom
       if Droom.config.separate_calendars?
         @events = @events.in_calendar(Droom::Calendar.default_calendar)
       end
-      Rails.logger.warn "events: #{@events.inspect}"
       @events
     end
 

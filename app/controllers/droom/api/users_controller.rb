@@ -56,7 +56,6 @@ module Droom::Api
       params = user_params
       # remotely created users are not usually meant to access the data room, but can set send_confirmation if that's what they want.
       params[:defer_confirmation] = true
-      Rails.logger.warn "---> creating user with #{params.inspect}"
       @user ||= Droom::User.create(params)
     end
 

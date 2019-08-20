@@ -12,7 +12,6 @@ module Droom::Concerns::LocalApi
 
   def assert_local_request!
     if (Rails.env.production? || Rails.env.staging?) && !local_request?
-      Rails.logger.warn "⚠️ API REQUEST NOT LOCAL"
       raise CanCan::AccessDenied 
     end
   end

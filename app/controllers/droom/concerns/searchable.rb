@@ -51,9 +51,6 @@ module Droom::Concerns::Searchable
     options[:misspellings] = search_misspellings if search_misspellings
     options.deep_merge!(preset_options)
 
-    Rails.logger.warn "SEARCH: #{@q.inspect}"
-    Rails.logger.warn "MERGED SEARCH OPTIONS: #{options.inspect}"
-
     klass = controller_path.classify.constantize
     search_results = klass.search @q, options
     instance_variable_set("@#{controller_name}", search_results)

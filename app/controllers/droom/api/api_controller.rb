@@ -16,12 +16,10 @@ module Droom::Api
     end
 
     def not_allowed(exception)
-      Rails.logger.warn "🔫 API not_allowed: #{exception.message}"
       render json: { errors: "You do not have permission to access that resource" }.to_json, status: :forbidden
     end
 
     def blew_up(exception)
-      Rails.logger.warn "🔫 API blew_up: #{exception.message}"
       render json: { errors: exception.message }.to_json, status: :internal_server_error
     end
     

@@ -64,11 +64,9 @@ module Droom::Concerns::ControllerHelpers
   #
   def read_auth_cookie
     cookie = Droom::AuthCookie.new(warden.cookies)
-    Rails.logger.warn "🦋 read_auth_cookie: #{cookie.valid?.inspect}, #{cookie.fresh?.inspect}"
     if cookie.valid? && cookie.fresh?
       if resource = Droom::User.where(unique_session_id: cookie.token).first
         if resource.valid_for_authentication?
-          Rails.logger.warn "✅ resource valid"
           warden.session_serializer.store(resource, :user)
           warden.request.env['devise.skip_session_limitable'] = true
         end
@@ -112,7 +110,6 @@ module Droom::Concerns::ControllerHelpers
 
   def check_data_room_permission
     if user_signed_in? && !devise_controller? && !api_controller?
-      Rails.logger.warn "🦋 check_data_room_permission: data #{current_user.data_room_user?.inspect}"
       raise Droom::PermissionDenied, "You do not have permission to access this service." unless current_user.data_room_user?
     end
   end
@@ -147,7 +144,6 @@ module Droom::Concerns::ControllerHelpers
   ## Error responses
   #
   def not_allowed(exception)
-    Rails.logger.warn "🔫 not_allowed: #{exception.message}"
     respond_to do |format|
       format.html { render :file => "#{Rails.root}/public/403.html", :status => :forbidden, :layout => false }
       format.js { head :forbidden }
@@ -156,7 +152,6 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def not_found(exception)
-    Rails.logger.warn "🔫 not_found: #{exception.message}"
     @error = exception.message
     Honeybadger.notify(exception)
     respond_to do |format|
