@@ -67,9 +67,10 @@ module Droom::Concerns::ControllerHelpers
     Rails.logger.warn "🦋 read_auth_cookie: #{cookie.valid?.inspect}, #{cookie.fresh?.inspect}"
     if cookie.valid? && cookie.fresh?
       if resource = Droom::User.where(unique_session_id: cookie.token).first
-        Rails.logger.warn "🦋 resource valid?: #{resource.valid_for_authentication?.inspect}"
         if resource.valid_for_authentication?
+          Rails.logger.warn "✅ resource valid"
           warden.session_serializer.store(resource, :user)
+          warden.session(:user)['unique_session_id'] = cookie.token               # for session_limitable
         end
       end
     end
