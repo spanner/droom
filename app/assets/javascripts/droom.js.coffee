@@ -8,7 +8,6 @@
 #= require sortablejs/Sortable
 #= require jquery.cookie/jquery.cookie
 #= require ep-jquery-tokeninput/src/jquery.tokeninput
-#= require medium-editor/dist/js/medium-editor
 
 #= require droom/lib/jquery.datepicker
 #= require droom/lib/jquery.animate-colors
@@ -24,8 +23,10 @@
 #= require droom/uploader
 #= require droom/draggables
 #= require droom/widgets
+#= require droom/editors
 #= require droom/grid
 #= require_self
+
 
 jQuery ($) ->
   console.log "loading droom"
