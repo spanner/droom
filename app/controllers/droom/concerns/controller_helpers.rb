@@ -5,6 +5,7 @@ module Droom::Concerns::ControllerHelpers
     protect_from_forgery if :html_request?
     helper Droom::DroomHelper
 
+    rescue_from Droom::AccessDenied, :with => :not_authorized
     rescue_from CanCan::AccessDenied, :with => :not_allowed
     rescue_from Droom::PermissionDenied, :with => :not_allowed
     rescue_from Droom::ConfirmationRequired, :with => :prompt_for_confirmation
@@ -15,13 +16,16 @@ module Droom::Concerns::ControllerHelpers
     prepend_before_action :read_auth_cookie, except: [:cors_check]
     before_action :authenticate_user!, except: [:cors_check]
     before_action :set_exception_context
+
     before_action :check_user_is_confirmed, except: [:cors_check, :setup], unless: :devise_controller?
     before_action :check_user_setup, except: [:cors_check, :setup], unless: :devise_controller?
     before_action :check_user_has_organisation, except: [:cors_check, :setup_organisation], unless: :devise_controller?
     before_action :check_data_room_permission, except: [:cors_check, :set_password]
+
     before_action :note_current_user, except: [:cors_check]
     before_action :set_section, except: [:cors_check]
     before_action :set_access_control_headers
+
     skip_before_action :verify_authenticity_token, only: [:cors_check], raise: false
     after_action :update_auth_cookie, unless: :api_controller?
 
@@ -110,7 +114,7 @@ module Droom::Concerns::ControllerHelpers
 
   def check_data_room_permission
     if user_signed_in? && !devise_controller? && !api_controller?
-      raise Droom::PermissionDenied, "You do not have permission to access this service." unless current_user.data_room_user?
+      raise Droom::AccessDenied unless current_user.data_room_user?
     end
   end
 
@@ -143,6 +147,14 @@ module Droom::Concerns::ControllerHelpers
 
   ## Error responses
   #
+  def not_authorized(exception)
+    respond_to do |format|
+      format.html { render :file => "#{Rails.root}/public/401.html", :status => :forbidden, :layout => false }
+      format.js { head :unauthorized }
+      format.json { head :unauthorized }
+    end
+  end
+
   def not_allowed(exception)
     respond_to do |format|
       format.html { render :file => "#{Rails.root}/public/403.html", :status => :forbidden, :layout => false }

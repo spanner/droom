@@ -15,6 +15,10 @@ module Droom::Api
       render json: { errors: exception.message }.to_json, status: :not_found
     end
 
+    def not_authorized(exception)
+      render json: { errors: "You do not have permission to access this service" }.to_json, status: :forbidden
+    end
+
     def not_allowed(exception)
       render json: { errors: "You do not have permission to access that resource" }.to_json, status: :forbidden
     end
