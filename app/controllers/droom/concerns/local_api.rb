@@ -20,7 +20,7 @@ module Droom::Concerns::LocalApi
   def assert_local_request_or_signed_in!
     unless local_request? || user_signed_in?
       Rails.logger.warn "⚠️ NOT SIGNED IN AND API REQUEST NOT LOCAL: #{request.ip} is not in #{ENV['LOCAL_SUBNET']}"
-      raise Droom::AccessDenied 
+      raise Droom::AccessDenied
     end
   end
 

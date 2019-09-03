@@ -55,6 +55,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "searchkick"
   s.add_dependency "yomu"
+  s.add_dependency "typhoeus"
 
   s.add_dependency "mail_form"
   s.add_dependency "mustache"
