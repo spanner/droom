@@ -11,6 +11,10 @@ module Droom::Concerns::Tagged
       with_tags_like thing.tag_names, options
     end
 
+    def with_any_tag(tags, options={})
+      self.search where: {tags: tags}
+    end
+
     def with_tags_like(tags, options={})
       bool_query = {
         should: tags.map { |tag_name| {term: { tags: tag_name } }}
