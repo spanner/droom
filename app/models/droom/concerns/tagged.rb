@@ -11,8 +11,8 @@ module Droom::Concerns::Tagged
       with_tags_like thing.tag_names, options
     end
 
-    def with_any_tag(tags, options={})
-      self.search where: {tags: tags}
+    def tagged_at_all_like(thing, options={})
+      with_any_tag thing.tag_names, options
     end
 
     def with_tags_like(tags, options={})
@@ -29,6 +29,10 @@ module Droom::Concerns::Tagged
       args[:limit] = options[:limit] if options[:limit]
       args[:offset] = options[:offset] if options[:offset]
       self.search args
+    end
+
+    def with_any_tag(tags, options={})
+      self.search where: {tags: tags}
     end
   end
 
