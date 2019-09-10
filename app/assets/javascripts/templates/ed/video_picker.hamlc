@@ -1,0 +1,15 @@
+.ed-menu
+  %a.control.choose.menu-head
+    %svg.icon.filled
+      %use{"xlink:href" => "#video_button_symbol"}
+  .assets.menu-body
+    %a.close
+      %svg.icon
+        %use{"xlink:href" => "#close_symbol"}
+    %h3
+      %svg.icon
+        %use{"xlink:href" => "#video_symbol"}
+      %span.label 
+        Choose video
+
+    .pick
