@@ -1,5 +1,5 @@
 module Droom
-  class CroucherIndexJob < ActiveJob::Base
+  class IndexUserJob < ActiveJob::Base
     #queue_as :default
 
     def perform
