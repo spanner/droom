@@ -65,7 +65,6 @@ jQuery ($) ->
     @find_including_self('[data-action="copy"]').copier()
     @find_including_self('[data-action="setter"]').setter()
     @find_including_self('[data-action="toggle"]').toggle()
-    @find_including_self('[data-action="twister"]').twister()
     @find_including_self('[data-action="alternate"]').alternator()
     @find_including_self('[data-action="replace"]').replace_with_remote_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder", {force: true}

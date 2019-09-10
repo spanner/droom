@@ -579,7 +579,7 @@ class Ed.Views.VideoList extends Ed.Views.AssetList
 #
 
 class Ed.Views.Toolbar extends Ed.View
-  template: false
+  template: _.noop
   className: "ed-toolbar"
 
   initialize: (opts={}) =>
@@ -692,7 +692,7 @@ class Ed.Views.ImageWeighter extends Ed.Views.MenuView
 
 
 class Ed.Views.ProgressBar extends Ed.View
-  template: false
+  template: _.noop
   tagName: "span"
   className: "ed-progress"
   
@@ -740,7 +740,7 @@ class Ed.Views.ProgressBar extends Ed.View
 
 
 class Ed.Views.Helper extends Ed.View
-  template: false
+  template: _.noop
 
   ui:
     shower: "a.show"

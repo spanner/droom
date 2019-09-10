@@ -11,7 +11,7 @@ root.Ed = Ed
 # Ed is a standalone, unrouted backbone marionette application that you can attach to any dom element to 
 # manage its html content.
 
-class Ed.Application extends Backbone.Marionette.Application
+class Ed.Application extends Marionette.Application
   defaults:
     asset_styles: null # ['left', 'full', 'right']
 
@@ -20,7 +20,7 @@ class Ed.Application extends Backbone.Marionette.Application
     root.onerror = @reportError
     @original_backbone_sync = Backbone.sync
     Backbone.sync = @sync
-    Backbone.Marionette.Renderer.render = @render
+    Marionette.setRenderer @render
 
     @options = _.extend @defaults, opts
     @el = @options.el
@@ -111,9 +111,9 @@ class Ed.Application extends Backbone.Marionette.Application
     complaint = "<strong>#{message}</strong> at #{source} line #{lineno} col #{colno}."
     if @config('display_errors')
       @complain(complaint, 60000)
-    if @config('badger_errors')
-      Honeybadger.notify error,
-        message: complaint
+    # if @config('badger_errors')
+    #   Honeybadger.notify error,
+    #     message: complaint
     true if @config('trap_errors')
 
   confirm: (message, duration=4000) =>
@@ -123,7 +123,6 @@ class Ed.Application extends Backbone.Marionette.Application
     @notify message, duration, 'error'
 
   notify: (html_or_text, duration=4000, notice_type='information') =>
-    @log "🤡 notify", html_or_text, notice_type
     @notices.add
       message: html_or_text
       duration: duration

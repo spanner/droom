@@ -145,7 +145,7 @@ class Ed.Views.Image extends Ed.Views.Asset
 #
 class Ed.Views.MainImage extends Ed.Views.Asset
   editorView: "MainImageEditor"
-  template: false
+  template: _.noop
   defaultSize: "hero"
 
   wrap: =>

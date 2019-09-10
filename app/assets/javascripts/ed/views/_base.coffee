@@ -1,12 +1,13 @@
 # Base class with useful bits and pieces.
 
-class Ed.View extends Backbone.Marionette.View
-  template: false
+class Ed.View extends Marionette.View
+  template: _.noop
 
   initialize: =>
     @subviews = []
 
   onRender: =>
+    console.log "🦋 onRender", @model
     @stickit() if @model
     # _.defer -> balanceText('.balanced')
 
@@ -129,7 +130,7 @@ class Ed.View extends Backbone.Marionette.View
 
 
 class Ed.WrappedView extends Ed.View
-  template: false
+  template: _.noop
 
   initialize: =>
     @subviews = []
@@ -150,7 +151,7 @@ class Ed.WrappedView extends Ed.View
 #
 # Adds some conventional lifecycle and useful bindings to our various list and selection views.
 #
-class Ed.CollectionView extends Backbone.Marionette.CollectionView
+class Ed.CollectionView extends Marionette.CollectionView
 
   initialize: =>
     @render()
@@ -159,7 +160,7 @@ class Ed.CollectionView extends Backbone.Marionette.CollectionView
     _cms.log "[#{@constructor.name}]", arguments...
 
 
-class Ed.CompositeView extends Backbone.Marionette.CompositeView
+class Ed.CompositeView extends Marionette.CollectionView
 
   initialize: =>
     @beforeWrap()

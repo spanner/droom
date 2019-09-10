@@ -115,7 +115,7 @@ class Ed.Views.Editor extends Ed.WrappedView
 
 
 class Ed.Views.Title extends Ed.WrappedView
-  template: false
+  template: _.noop
   bindings: 
     ':el':
       observe: 'title'
@@ -125,7 +125,7 @@ class Ed.Views.Title extends Ed.WrappedView
 
 
 class Ed.Views.Subtitle extends Ed.WrappedView
-  template: false
+  template: _.noop
   bindings: 
     ':el':
       observe: 'subtitle'
@@ -135,7 +135,7 @@ class Ed.Views.Subtitle extends Ed.WrappedView
 
 
 class Ed.Views.Slug extends Ed.WrappedView
-  template: false
+  template: _.noop
   bindings: 
     ':el':
       observe: 'slug'
@@ -145,7 +145,7 @@ class Ed.Views.Slug extends Ed.WrappedView
 
 
 class Ed.Views.Intro extends Ed.WrappedView
-  template: false
+  template: _.noop
   bindings: 
     ':el':
       observe: 'intro'
@@ -155,7 +155,7 @@ class Ed.Views.Intro extends Ed.WrappedView
 
 
 class Ed.Views.ImageCaption extends Ed.WrappedView
-  template: false
+  template: _.noop
   bindings: 
     ':el':
       observe: 'main_image_caption'
@@ -165,7 +165,7 @@ class Ed.Views.ImageCaption extends Ed.WrappedView
 
 
 class Ed.Views.Content extends Ed.WrappedView
-  template: false
+  template: _.noop
   ui:
     content: ".content"
     placeholder: ".placeholder"
@@ -261,7 +261,7 @@ class Ed.Views.Content extends Ed.WrappedView
 
 
 class Ed.Views.Checker extends Ed.WrappedView
-  template: false
+  template: _.noop
 
   ui:
     counter: 'span.count'
