@@ -23,7 +23,8 @@ module Droom
            lock_strategy: :failed_attempts,
            maximum_attempts: 10,
            unlock_strategy: :both,
-           unlock_in: 10.minutes
+           unlock_in: 10.minutes,
+           timeout_in: Droom.config.session_timeout
 
     belongs_to :organisation, optional: true
     accepts_nested_attributes_for :organisation

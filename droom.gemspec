@@ -17,8 +17,9 @@ Gem::Specification.new do |s|
 
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "rails", "~> 5.2.0"
+  s.add_dependency "rails", "~> 5.2"
   s.add_dependency "responders"
+  s.add_dependency "acts_as_tree"
 
   s.add_dependency "active_model_serializers"
   s.add_dependency "api-pagination"
@@ -31,8 +32,6 @@ Gem::Specification.new do |s|
   s.add_dependency "devise_zxcvbn"
   s.add_dependency "cancancan"
 
-  s.add_dependency "acts_as_tree"
-  s.add_dependency "acts_as_list"
   s.add_dependency "kaminari"
   s.add_dependency "haml"
   s.add_dependency "haml_coffee_assets"

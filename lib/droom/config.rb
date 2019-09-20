@@ -56,7 +56,8 @@ module Droom
                   :default_permissions,
                   :mc_api_key,
                   :mc_news_template,
-                  :mc_news_list
+                  :mc_news_list,
+                  :session_timeout
 
     def home_url
       @home_url ||= "http://example.com"
@@ -283,6 +284,10 @@ module Droom
  
     def default_permissions
       @default_permissions ||= %w{droom.login droom.calendar droom.directory droom.attach droom.library}
+    end
+ 
+    def session_timeout
+      @@session_timeout ||= 15.minutes
     end
  
  

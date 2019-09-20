@@ -87,8 +87,6 @@ module Droom::Concerns::ControllerHelpers
     end
   end
 
-
-
   def authenticate_user_if_possible(opts={})
     opts[:scope] = :user
     warden.authenticate(opts) if !devise_controller? || opts.delete(:force)
@@ -135,7 +133,7 @@ module Droom::Concerns::ControllerHelpers
     Honeybadger.context({
       :service => "Data room"
     })
-    # if user_signed_in?
+    # if current_user
     #   Honeybadger.context({
     #     :user_name => current_user.name,
     #     :user_uid => current_user.uid,
