@@ -134,7 +134,7 @@ module Droom
       children.each {|folder| folder.set_confidentiality!(confidential?) }
     end
 
-  protected
+    protected
 
     def set_properties
       if holder
@@ -143,12 +143,25 @@ module Droom
         else
           self.name ||= holder.name
         end
-        self.slug ||= holder.slug
+        self.slug ||= unique_slug(holder.slug)
       end
       # folders originally only had slugs, so this happens from time to time
       self.name ||= self.slug
       self.public = !holder && (!parent || parent.public?)
       true
+    end
+
+    # Precaution against slug-collision within parent folder scope.
+    #
+    def unique_slug(base)
+      slug = base
+      addendum = 0
+      skope = parent ? parent.children : Folder.loose
+      while skope.find_by(slug: slug)
+        addendum += 1
+        slug = "#{base}_#{addendum}"
+      end
+      slug
     end
 
   end

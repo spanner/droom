@@ -13,6 +13,7 @@ Droom::Engine.routes.draw do
     resources :users do
       post 'reindex', on: :member, as: :reindex
       get "whoami" , on: :collection, as: :whoami
+      get "authenticable", on: :member, as: :authenticable
     end
     resources :events
     resources :venues
