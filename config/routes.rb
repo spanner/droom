@@ -52,6 +52,7 @@ Droom::Engine.routes.draw do
     delete '/api/users/sign_out' => 'api/sessions#destroy', as: :api_sign_out
     get '/api/authenticate/:tok' => 'api/sessions#authenticate', as: 'authenticate'
     get '/api/deauthenticate/:tok' => 'api/sessions#deauthenticate', as: 'deauthenticate'
+    get '/api/users/authenticable/:id' => 'api/users#authenticable', as: 'authenticable'
   end
 
   resources :helps
