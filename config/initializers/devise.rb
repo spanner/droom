@@ -262,7 +262,7 @@ Devise.setup do |config|
   # Unset session id and shared domain cookie on sign out.
   #
   Warden::Manager.before_logout do |user, warden, options|
-    Rails.logger.warn "⚠️ Warden logout is unsetting"
+    Rails.logger.warn "⚠️ Warden logout is unsetting after #{warden.request.fullpath}"
     user.clear_session_ids! if user
     Droom::AuthCookie.new(warden.cookies).unset
   end
