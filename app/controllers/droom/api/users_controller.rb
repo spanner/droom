@@ -24,7 +24,7 @@ module Droom::Api
     # a remote object is triggering user confirmation or automatic login.
     #
     def authenticable
-      render json: @user, serializer: UserAuthSerializer
+      render json: @user, serializer: Droom::UserAuthSerializer
     end
 
     def update
