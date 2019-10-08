@@ -30,7 +30,6 @@ module Droom
     accepts_nested_attributes_for :organisation
 
     before_validation :ensure_uid!
-    before_save :ensure_unique_session_id!
     before_save :ensure_authentication_token!
     before_save :org_admin_if_alone
     after_save :send_confirmation_if_directed
