@@ -30,7 +30,8 @@ module Droom
     accepts_nested_attributes_for :organisation
 
     before_validation :ensure_uid!
-    before_save :ensure_authentication_token
+    before_save :ensure_unique_session_id!
+    before_save :ensure_authentication_token!
     before_save :org_admin_if_alone
     after_save :send_confirmation_if_directed
 
@@ -175,7 +176,7 @@ module Droom
       Devise.secure_compare(send(attribute), token)
     end
 
-    def ensure_authentication_token
+    def ensure_authentication_token!
       if authentication_token.blank?
         self.authentication_token = generate_authentication_token
       end
