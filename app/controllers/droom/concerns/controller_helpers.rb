@@ -32,6 +32,7 @@ module Droom::Concerns::ControllerHelpers
     layout :no_layout_if_pjax
   end
 
+
   # Usually overridden in a base ApiController
   #
   def api_controller?
@@ -148,6 +149,7 @@ module Droom::Concerns::ControllerHelpers
   ## Error responses
   #
   def not_authorized(exception)
+    Rails.logger.warn "⚠️ not_authorized"
     respond_to do |format|
       format.html { render :file => "#{Rails.root}/public/401.html", :status => :forbidden, :layout => false }
       format.js { head :unauthorized }
@@ -156,6 +158,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def not_allowed(exception)
+    Rails.logger.warn "⚠️ not_allowed"
     respond_to do |format|
       format.html { render :file => "#{Rails.root}/public/403.html", :status => :forbidden, :layout => false }
       format.js { head :forbidden }
@@ -164,6 +167,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def not_found(exception)
+    Rails.logger.warn "⚠️ not_found"
     @error = exception.message
     Honeybadger.notify(exception)
     respond_to do |format|
@@ -185,6 +189,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def prompt_for_confirmation
+    Rails.logger.warn "⚠️ prompt_for_confirmation"
     render template: "/devise/registrations/confirm", locals: {resource: current_user}
   end
 
@@ -196,6 +201,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def prompt_for_setup
+    Rails.logger.warn "⚠️ prompt_for_setup"
     render template: "/droom/users/setup", locals: {user: current_user}
   end
 
@@ -212,11 +218,13 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def prompt_for_organisation
+    Rails.logger.warn "⚠️ prompt_for_organisation"
     @organisations = Droom::Organisation.matching_email(current_user.email)
     render template: "/droom/users/setup_organisation"
   end
 
   def await_organisation_approval
+    Rails.logger.warn "⚠️ await_organisation_approval"
     @organisations = Droom::Organisation.matching_email(current_user.email)
     render template: "/droom/users/await_organisation_approval"
   end
