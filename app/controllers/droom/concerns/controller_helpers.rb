@@ -20,7 +20,7 @@ module Droom::Concerns::ControllerHelpers
     before_action :check_user_is_confirmed, except: [:cors_check, :setup], unless: :devise_controller?
     before_action :check_user_setup, except: [:cors_check, :setup], unless: :devise_controller?
     before_action :check_user_has_organisation, except: [:cors_check, :setup_organisation], unless: :devise_controller?
-    before_action :check_data_room_permission, except: [:cors_check, :set_password]
+    before_action :check_data_room_permission, except: [:cors_check, :set_password], unless: :devise_controller?
 
     before_action :note_current_user, except: [:cors_check]
     before_action :set_section, except: [:cors_check]
