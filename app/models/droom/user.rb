@@ -152,6 +152,7 @@ module Droom
     end
 
     def clear_session_ids!
+      Rails.logger.warn "⚠️ clear_session_ids!"
       self.update_columns({
         session_id: "",
         unique_session_id: ""
@@ -184,6 +185,7 @@ module Droom
 
     def ensure_unique_session_id!
       unless unique_session_id.present?
+        Rails.logger.warn "✅ calling update_unique_session_id!"
         update_unique_session_id!(Devise.friendly_token)
       end
       unique_session_id
