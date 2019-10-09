@@ -79,6 +79,12 @@ module Droom
       defer_confirmation && defer_confirmation != "false"
     end
 
+    # For users of peripheral services we can leave it up to them to require or offer confirmation.
+    #
+    def confirmation_required?
+      !confirmed? && data_room_user?
+    end
+
     # send_confirmation? is called after save by our own later confirmation mechanism.
     # If the send_confirmation flag has been set, we confirm.
     #
