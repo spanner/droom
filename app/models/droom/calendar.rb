@@ -1,7 +1,7 @@
 module Droom
   class Calendar < Droom::DroomRecord
     include Droom::Concerns::Slugged
-    
+
     belongs_to :created_by, :class_name => "Droom::User"
     has_many :events
 
