@@ -862,7 +862,7 @@ module Droom
 
     def subsume!(other_user)
       Droom::User.transaction do
-        %w{emails phones addresses memberships organisations scraps documents invitations memberships user_permissions dropbox_tokens dropbox_documents personal_folders}.each do |association|
+        %w{emails phones addresses memberships scraps documents invitations memberships user_permissions dropbox_tokens dropbox_documents personal_folders}.each do |association|
           self.send(association.to_sym) << other_user.send(association.to_sym)
         end
         %w{encrypted_password password_salt family_name given_name chinese_name title gender organisation_id description image}.each do |property|

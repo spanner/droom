@@ -1,6 +1,3 @@
-#calendar
-  = render :partial => 'events'
-
 - content_for :title do
   - if @year
     = t(:events_in, period: @year)
@@ -13,3 +10,8 @@
   = render :partial => "droom/shared/calendar_holder"
   = render :partial => "droom/invitations/invitations"
   = render :partial => "droom/events/scrap_events"
+
+
+#calendar
+  = render :partial => 'shortcuts'
+  = render :partial => 'events'
