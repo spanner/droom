@@ -45,6 +45,8 @@ module Droom
 
     scope :latest, -> limit { order("droom_documents.updated_at DESC, droom_documents.created_at DESC").limit(limit) }
 
+    scope :unindexed, -> { where(indexed_at: nil) }
+
     def attach_to(holder)
       self.folder = holder.folder
     end

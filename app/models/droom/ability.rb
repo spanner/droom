@@ -25,7 +25,7 @@ module Droom
 
           if !Droom.require_internal_organisation? || user.internal?
 
-            if !Droom.require_login_permission? || user.permitted?('droom.login')
+            if user.data_room_user?
               can :read, :dashboard
               can :read, Droom::Event
               can :read, Droom::Scrap

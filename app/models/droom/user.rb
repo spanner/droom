@@ -237,7 +237,7 @@ module Droom
     end
 
     def internal?
-      !organisation && !organisation.external?
+      organisation && !organisation.external?
     end
 
 
