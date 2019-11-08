@@ -178,6 +178,7 @@ module Droom
         self.update_column(:indexed_at, Time.now)
         self.updating_index = false
       end
+      true
     end
 
     def updating_index?

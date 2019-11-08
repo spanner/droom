@@ -8,6 +8,7 @@
 #= require sortablejs/Sortable
 #= require jquery.cookie/jquery.cookie
 #= require ep-jquery-tokeninput/src/jquery.tokeninput
+#= require imagesloaded/imagesloaded.pkgd
 
 #= require droom/lib/jquery.datepicker
 #= require droom/lib/jquery.animate-colors
@@ -116,8 +117,11 @@ jQuery ($) ->
     @find_including_self('.sortable_files').sortable_files()
     @find_including_self('[data-draggable]').draggable()
     @find_including_self('.gridbox:not(.notice)').gridBox()
-    @find_including_self('.notice').notice()
     @find_including_self('.tagger').tagger()
     @find_including_self('form.search.quick').quick_search_form()
+
+    @find_including_self('#noticeboard').imagesLoaded =>
+      console.log "imagesLoaded ", @
+      $('.notice').notice()
 
     @
