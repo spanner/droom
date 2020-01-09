@@ -151,7 +151,7 @@ module Droom::Concerns::ControllerHelpers
   def not_authorized(exception)
     Rails.logger.warn "⚠️ not_authorized"
     respond_to do |format|
-      format.html { render :file => "#{Rails.root}/public/401.html", :status => :forbidden, :layout => false }
+      format.html { render :file => "#{Rails.root}/public/403.html", :status => :forbidden, :layout => false }
       format.js { head :unauthorized }
       format.json { head :unauthorized }
     end
