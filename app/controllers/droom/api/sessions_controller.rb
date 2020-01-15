@@ -39,6 +39,7 @@ module Droom::Api
             render json: { errors: "Session timed out" }, status: :unauthorized
           else
             bypass_sign_in @user
+            @user.set_last_request_at!
             render json: @user, serializer: Droom::UserAuthSerializer
           end
         else

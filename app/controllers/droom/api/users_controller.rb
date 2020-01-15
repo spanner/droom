@@ -19,7 +19,7 @@ module Droom::Api
       render json: current_user
     end
 
-    # This is a background call to get user information necessary for session creation.
+    # This is a background call to request the user information necessary for session creation.
     # It usually happens on acceptable of an invitation, or some other situation where
     # a remote object is triggering user confirmation or automatic login.
     #
