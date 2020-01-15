@@ -4,20 +4,32 @@
 
 jQuery ($) ->
 
+  # The date_picker uses a lightly customised version of jquery.datepicker to present a nice year/month/day interface
+  # below a date field that can also be filled in manually. The format is always dd-mm-yyyy.
+  #
   $.fn.date_picker = ()->
     @each ->
       new DatePicker(@)
 
   class DatePicker
     @month_names: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
     constructor: (element) ->
       @_container = $(element)
+      view = @_container.attr("data-view") ? 'days'
       if @_container.is("input")
         @_field = @_container
-        event = 'focus'
+        @_container = @_field.clone().attr('name', 'display-date').insertAfter(@_field)
+        if iso_date = @_field.val()
+          [y,m,d] = iso_date.split('-')
+          @_container.val [d, DatePicker.month_names[m-1], y].join(' ')
+        @_field.hide()
+        @_event = 'focus'
+        @_simple = true
       else
         @_field = @_container.find('input')
-        event = 'click'
+        @_event = 'click'
+        @_simple = false
         @_mon = @_container.find('span.mon')
         @_dom = @_container.find('span.dom')
         @_year = @_container.find('span.year')
@@ -26,9 +38,9 @@ jQuery ($) ->
         calendars: 1
         date: initial_date
         current: initial_date
-        view: 'days'
+        view: view
         position: 'bottom'
-        showOn: event
+        showOn: @_event
         onChange: @setDate
 
     getDate: () =>
@@ -36,16 +48,19 @@ jQuery ($) ->
         new Date(Date.parse(value))
 
     setDate: (date) =>
+      $('.datepicker').hide()
       if date
-        $('.datepicker').hide()
         d = $.zeroPad(date.getDate())
-        m = DatePicker.month_names[date.getMonth()]
+        m = date.getMonth()
         y = date.getFullYear()
-        dateString = [y, m, d].join('-')
-        @_field.val(dateString)
-        @_dom?.text(d)
-        @_mon?.text(m)
-        @_year?.text(y)
+        realDateString = [y, $.zeroPad(m+1), $.zeroPad(d)].join('-')
+        @_field.val(realDateString)
+        if @_simple
+          @_container.val [d, DatePicker.month_names[m], y].join(' ')
+        else
+          @_dom.text(d)
+          @_mon.text(DatePicker.month_names[m])
+          @_year.text(y)
 
 
   class TimePicker
@@ -63,8 +78,8 @@ jQuery ($) ->
       @field.focus @show
       @field.blur @hide
 
-    select: (value) =>
-      @field.val(value)
+    select: (item) =>
+      @field.val(item.value)
       @field.trigger('change')
 
     change: (e) =>
@@ -80,7 +95,6 @@ jQuery ($) ->
   $.fn.time_picker = ->
     @each ->
       new TimePicker(@)
-
 
 
 
@@ -320,17 +334,17 @@ jQuery ($) ->
       new PasswordMeter(@)
     @
 
-
   class PasswordMeter
     constructor: (element) ->
       @_container = $(element)
       @_warnings = @_container.find('[data-role="warnings"]')
+      @_suggestions = @_container.find('[data-role="suggestions"]')
       @_gauge = @_container.find('[data-role="gauge"]')
       @_score = @_container.find('[data-role="score"]')
       @_notes = @_container.find('[data-role="notes"]')
       @_original_warning = @_warnings.html()
       @_original_notes = @_notes.html()
-      @_ready = false
+      @_zxcvbn_ready = false
       $.withZxcbvn =>
         @_ready = true
 
@@ -343,7 +357,7 @@ jQuery ($) ->
     tooShort: () =>
       @clear()
       @_container.addClass('s0')
-      @_warnings.text("Password too short. Please continue.")
+      @_warnings.text("Password too short.")
 
     check: (value) =>
       if @_ready
@@ -352,13 +366,11 @@ jQuery ($) ->
         result.score
 
     display: (result) =>
-      @_container.removeClass('s0 s1 s2 s3 s4 acceptable').addClass('s' + result.score)
-      @_warnings.text("")
-      if result.score < 3
-        @_warnings.text("Warning: " + result.feedback.warning) if result.feedback?.warning
+      if result.score < 2
+        @_warnings.text(result.feedback.warning) if result.feedback?.warning
+        @_suggestions.text(result.feedback?.suggestions)
       else
-        @_container.addClass('acceptable')
-
+        @_container.removeClass('s0 s1 s2 s3 s4 acceptable')
 
 
 
