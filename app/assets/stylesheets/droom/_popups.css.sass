@@ -29,7 +29,6 @@ div.popup
         +pale
         margin-top: 0
 
-div.popup
   #event, #document, #user, #group, #event_type, #membership, #folder
     max-width: 580px
     > p
@@ -38,6 +37,7 @@ div.popup
 div.popup
   position: absolute
   overflow-x: hidden
+  overflow-y: auto
   top: 10px
   left: 55px
   min-height: 100px
@@ -45,6 +45,7 @@ div.popup
   max-width: 80vw
   width: 580px
   height: auto
+  padding: 0
   z-index: 6000
   background-color: $coolgrey00
   box-shadow: 1px 3px 8px $shadow
@@ -55,6 +56,7 @@ div.popup
     opacity: 0.8
   &.help
     width: 360px
+
   .header
     position: relative
     box-sizing: border-box
@@ -64,16 +66,21 @@ div.popup
     background-color: $text
     padding: 8px 10px 4px 20px
     cursor: move
+    z-index: 6010
     h2
       position: relative
       height: 24px
       line-height: 27px
+      box-sizing: border-box
       margin: 0
       margin-right: 40px
       font-weight: normal
       font-size: 0.9em
       color: white
       white-space: nowrap
+      span.context
+        font-weight: normal
+        color: $verypale
   a.closer
     display: block
     float: right
@@ -114,10 +121,6 @@ div.popup
       margin-top: 0.5em
 
   .header
-    position: relative
-    top: 0
-    left: 0
-    width: 100%
     a.next, a.prev, span.next, span.prev
       position: relative
       display: inline-block
