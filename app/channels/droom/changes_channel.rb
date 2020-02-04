@@ -1,5 +1,6 @@
 module Droom
   class ChangesChannel < Channel
+
     def subscribed
       stream_from "changes"
     end

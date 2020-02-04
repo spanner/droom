@@ -19,7 +19,7 @@ module Droom::Concerns::ChangesNotified
       object_class: self.class.to_s.underscore,
       object_id: id,
     }
-    Droom::ChangesChannel.broadcast 'changes', change_data.merge(additional_data)
+    Droom::ChangesChannel.broadcast_to 'changes', change_data.merge(additional_data)
   end
 
   def notify_of_creation(additional_data={})
