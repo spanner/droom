@@ -6,8 +6,6 @@ Droom::Engine.routes.draw do
   match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options]
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]
 
-  mount Droom::Engine.cable => "/cable"
-
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
 
     #post '/reindex_user' => 'users#reindex_user', as: 'reindex'

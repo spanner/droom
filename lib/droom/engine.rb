@@ -29,12 +29,6 @@ module Droom
   class Engine < ::Rails::Engine
     isolate_namespace Droom
 
-    class << self
-      def cable
-        @cable ||= ActionCable::Server::Base.new(config: Droom.cable_config)
-      end
-    end
-
     initializer "droom.integration" do
       Devise.parent_controller = "Droom::DroomController"
     end
@@ -49,16 +43,5 @@ module Droom
       Devise::PasswordsController.layout Droom.devise_layout
     end
 
-  end
-
-  class << self
-    def cable_config
-      unless @cable_config
-        @cable_config = ActionCable::Server::Configuration.new
-        @cable_config.connection_class = -> { Droom::Connection }
-        @cable_config.logger = ::Rails.logger
-      end
-      @cable_config
-    end
   end
 end
