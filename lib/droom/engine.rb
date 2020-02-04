@@ -26,10 +26,25 @@ require 'video_info'
 
 
 module Droom
+  class << self
+    def cable
+      @cable ||= ActionCable::Server::Configuration.new
+    end
+  end
+  
   class Engine < ::Rails::Engine
     isolate_namespace Droom
 
+    def cable
+      cable ||= ActionCable::Server::Base.new(config: Droom.cable)
+    end
+
+    config.droom_cable = Droom.cable
+    config.droom_cable.mount_path = "/cable"
+    config.droom_cable.connection_class = -> { Droom::Connection }
+
     initializer "droom.integration" do
+      Droom.cable.logger ||= ::Rails.logger
       Devise.parent_controller = "Droom::DroomController"
     end
 
