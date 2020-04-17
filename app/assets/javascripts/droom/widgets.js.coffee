@@ -78,8 +78,8 @@ jQuery ($) ->
       @field.focus @show
       @field.blur @hide
 
-    select: (item) =>
-      @field.val(item.value)
+    select: (value) =>
+      @field.val(value)
       @field.trigger('change')
 
     change: (e) =>
