@@ -4,7 +4,7 @@
 %section{class: cssclass, data: {refreshing: true, url: droom.user_url(@user, view: 'account_info', format: :js)}}
   - if @user && can?(:edit, @user)
     %span.user_controls
-      = link_to t(:edit_user_profile_symbol), droom.edit_user_url(@user, view: 'account_info'), class: "edit", data: {action: 'popup', affected: "section.account_info"}
+      = link_to t(:edit_user_profile_symbol), droom.edit_user_url(@user, view: 'preferences'), class: "edit", data: {action: 'popup', affected: "section.account_info"}
 
   %h2.section
     = t :user_profile_account
