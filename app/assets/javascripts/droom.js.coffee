@@ -70,6 +70,7 @@ jQuery ($) ->
     @find_including_self('[data-action="replace"]').replace_with_remote_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder", {force: true}
     @find_including_self('[data-action="slide"]').sliding_link()
+    @find_including_self('[data-action="proxy"]').click_proxy()
     @find_including_self('[data-action="fit"]').self_sizes()
     @find_including_self('form[data-action="filter"]').filter_form()
     @find_including_self('form[data-action="quick_search"]').quick_search_form()

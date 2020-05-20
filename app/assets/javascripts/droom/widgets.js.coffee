@@ -102,10 +102,12 @@ jQuery ($) ->
     @each ->
       new FilePicker @
 
-  $.fn.click_proxy = (target_selector) ->
-    this.bind "click", (e) ->
-      e.preventDefault()
-      $(target_selector).click()
+  $.fn.click_proxy = () ->
+    @each ->
+      target = $(@).attr('data-affected')
+      $(@).bind "click", (e) ->
+        e.preventDefault() if e
+        $(target).trigger "click"
 
   class FilePicker
     constructor: (element) ->
