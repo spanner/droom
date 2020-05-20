@@ -1,6 +1,6 @@
 jQuery ($) ->
 
   $.withZxcbvn = (fn) ->
-    url = "<%= URI.join( ENV['DROOM_URL'], asset_path('droom/zxcvbn.js')) %>"
+    url = "<%= URI.join( Settings.url, asset_path('droom/zxcvbn.js')) %>"
     console.log "URL: #{url}"
     $.getScript(url).done (response) => fn?(response)
