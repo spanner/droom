@@ -1,3 +1,5 @@
+require 'droom'
+
 module Droom
   class IndexDocumentJob < ActiveJob::Base
 
