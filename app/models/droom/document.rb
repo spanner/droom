@@ -108,9 +108,8 @@ module Droom
 
     ## Search
     #
-    searchkick _all: false, callbacks: false, default_fields: [:name, :content], highlight: [:name, :content]
-    attr_accessor :updating_index
-    after_save :enqueue_for_indexing, unless: :updating_index?
+    searchkick callbacks: false, default_fields: [:name, :content], highlight: [:name, :content]
+    after_save :enqueue_for_indexing
 
     def search_data
       {
@@ -159,30 +158,29 @@ module Droom
     end
 
     def enqueue_for_indexing!
+      Rails.logger.debug "⚠️ enqueue_for_indexing Droom::Document #{id}"
       Droom::IndexDocumentJob.perform_later(id, Time.now.to_i)
     end
 
     def enqueue_for_indexing
-      if name_changed? || file_file_name_changed? || file_fingerprint_changed?
-        Droom::IndexDocumentJob.perform_later(id, Time.now.to_i)
+      if saved_change_to_name? || saved_change_to_file_file_name? || saved_change_to_file_fingerprint?
+        enqueue_for_indexing!
       end
     end
 
     def update_index!
-      unless self.updating_index
-        self.updating_index = true
-        with_local_file do |path|
-          @file_content = Yomu.new(path).text
-          self.reindex
-        end
-        self.update_column(:indexed_at, Time.now)
-        self.updating_index = false
+      with_local_file do |path|
+        @file_content = Yomu.new(path).text
+        self.reindex
+        self.secondary_reindex
+      end
+      self.update_column(:indexed_at, Time.now)
       end
       true
     end
 
-    def updating_index?
-      !!updating_index
+    def secondary_reindex
+      # noop here
     end
 
     # Pass block to perform operations with a local file, which will be
