@@ -175,7 +175,6 @@ module Droom
         self.secondary_reindex
       end
       self.update_column(:indexed_at, Time.now)
-      end
       true
     end
 
