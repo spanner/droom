@@ -2,6 +2,7 @@ module Droom
   class OrganisationsController < Droom::DroomController
     include Droom::Concerns::Searchable
     helper Droom::DroomHelper
+    respond_to :html, :js
 
     load_and_authorize_resource
     before_action :set_view, only: [:show, :edit, :update, :create]
