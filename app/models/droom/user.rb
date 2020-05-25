@@ -1,3 +1,5 @@
+require 'vcard'
+
 module Droom
   class User < Droom::DroomRecord
       include Droom::Concerns::Imaged
@@ -592,7 +594,7 @@ module Droom
     ## Names
     #
     def title_ordinary?
-      ['Mr', 'Ms', 'Mrs', '', nil].include?(title)
+      title.empty? || ['mr', 'ms', 'mrs', 'mr.', 'ms.', 'mrs.'].include?(title.downcase.strip)
     end
 
     def title_if_it_matters
@@ -623,7 +625,9 @@ module Droom
     def to_vcf
       @vcard ||= Vcard::Vcard::Maker.make2 do |maker|
         maker.add_name do |n|
-          n.given = name || ""
+          n.family = family_name || ""
+          n.given = given_name || ""
+          n.prefix = title unless title_ordinary?
         end
         maker.add_addr {|a|
           a.location = 'home' # until we do this properly with multiple contact sets
@@ -633,9 +637,17 @@ module Droom
           a.street = "#{post_line1}, #{post_line2}"
           a.postalcode = post_code || ""
         }
-        maker.add_tel phone { |t| t.location = 'home' } unless phone.blank?
-        maker.add_tel mobile { |t| t.location = 'cell' } unless mobile.blank?
-        maker.add_email email { |e| t.location = 'home' }
+        emails.each do |email|
+          if location = email.address_type_name
+            maker.add_email email { |e| t.location = location.downcase }
+          end
+        end
+        phones.each do |phone|
+          if location = phone.address_type_name
+            location = 'Cell' if location == 'Mobile'
+            maker.add_tel phone { |e| t.location = location.downcase }
+          end
+        end
       end
       @vcard.to_s
     end
