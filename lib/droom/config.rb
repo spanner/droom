@@ -57,7 +57,8 @@ module Droom
                   :mc_api_key,
                   :mc_news_template,
                   :mc_news_list,
-                  :session_timeout
+                  :session_timeout,
+                  :enable_pubsub
 
     def home_url
       @home_url ||= "http://example.com"
@@ -288,6 +289,10 @@ module Droom
  
     def session_timeout
       @@session_timeout ||= 15.minutes
+    end
+    
+    def enable_pubsub?
+      !!@enable_pubsub
     end
  
  

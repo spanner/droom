@@ -12,14 +12,16 @@ module Droom::Concerns::ChangesNotified
   end
 
   def notify_of_change(event, additional_data={})
-    time = event == 'destroyed' ? Time.now.to_i : timestamp
-    change_data = {
-      event: event,
-      timestamp: time,
-      object_class: self.class.to_s.underscore,
-      object_id: id,
-    }
-    Droom::ChangesChannel.broadcast_to 'changes', change_data.merge(additional_data)
+    if Droom.config.enable_pubsub?
+      time = event == 'destroyed' ? Time.now.to_i : timestamp
+      change_data = {
+        event: event,
+        timestamp: time,
+        object_class: self.class.to_s.underscore,
+        object_id: id,
+      }
+      Droom::ChangesChannel.broadcast_to 'changes', change_data.merge(additional_data)
+    end
   end
 
   def notify_of_creation(additional_data={})
