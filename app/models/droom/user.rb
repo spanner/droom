@@ -645,7 +645,7 @@ module Droom
             a.country = address.country_code || ""
             a.region = address.region || ""
             a.locality = address.city || ""
-            a.street = "#{address.line1}, #{address.line2}"
+            a.street = "#{address.line_1}, #{address.line_2}"
             a.postalcode = address.postal_code || ""
           }
         end
