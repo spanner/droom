@@ -642,11 +642,11 @@ module Droom
           location = address.address_type_name || 'home'
           maker.add_addr {|a|
             a.location = location.downcase
-            a.country = country_code || ""
-            a.region = region || ""
-            a.locality = city || ""
-            a.street = "#{line1}, #{line2}"
-            a.postalcode = postal_code || ""
+            a.country = address.country_code || ""
+            a.region = address.region || ""
+            a.locality = address.city || ""
+            a.street = "#{address.line1}, #{address.line2}"
+            a.postalcode = address.postal_code || ""
           }
         end
       end
