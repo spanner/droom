@@ -650,7 +650,7 @@ module Droom
               a.street = "#{line1}, #{line2}"
               a.postalcode = postal_code || ""
             }
-          
+          end
         end
       end
       @vcard.to_s
