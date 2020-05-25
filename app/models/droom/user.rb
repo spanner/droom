@@ -630,27 +630,24 @@ module Droom
           n.prefix = title unless title_ordinary?
         end
         emails.each do |email|
-          if location = email.address_type_name
-            maker.add_email email { |e| t.location = location.downcase }
-          end
+          location = email.address_type_name || 'home'
+          maker.add_email email { |e| t.location = location.downcase }
         end
         phones.each do |phone|
-          if location = phone.address_type_name
-            location = 'Cell' if location == 'Mobile'
-            maker.add_tel phone { |e| t.location = location.downcase }
-          end
+          location = phone.address_type_name || 'cell'
+          location = 'cell' if location == 'Mobile'
+          maker.add_tel phone { |e| t.location = location.downcase }
         end
         addresses.each do |address|
-          if location = address.address_type_name
-            maker.add_addr {|a|
-              a.location = location.downcase
-              a.country = country_code || ""
-              a.region = region || ""
-              a.locality = city || ""
-              a.street = "#{line1}, #{line2}"
-              a.postalcode = postal_code || ""
-            }
-          end
+          location = address.address_type_name || 'home'
+          maker.add_addr {|a|
+            a.location = location.downcase
+            a.country = country_code || ""
+            a.region = region || ""
+            a.locality = city || ""
+            a.street = "#{line1}, #{line2}"
+            a.postalcode = postal_code || ""
+          }
         end
       end
       @vcard.to_s
