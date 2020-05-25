@@ -18,8 +18,13 @@ module Droom
       @users = paginated(@users, params[:pp].presence || 24)
       respond_with @users do |format|
         format.js { render :partial => 'droom/users/users' }
-        format.vcf { render :vcf => @users.map(&:to_vcf) }
       end
+    end
+
+    def download
+      @users = @users.matching(params[:q]) unless params[:q].blank?
+      @users = @users.in_name_order.includes(:emails, :phones, :addresses)
+      render :vcf => @users.map(&:to_vcf)
     end
 
     def show

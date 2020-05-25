@@ -119,6 +119,7 @@ Droom::Engine.routes.draw do
     get "activity" => "users#activity", as: :activity
     get :preferences, on: :member, as: :preferences
     put :preference, on: :member, as: :set_preference
+    get :download, on: :collection
     get :admin, on: :collection
     put :setup, on: :collection
     put :reinvite, on: :member
