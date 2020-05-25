@@ -594,7 +594,7 @@ module Droom
     ## Names
     #
     def title_ordinary?
-      title.empty? || ['mr', 'ms', 'mrs', 'mr.', 'ms.', 'mrs.'].include?(title.downcase.strip)
+      title.nil? || ['mr', 'ms', 'mrs', 'mr.', 'ms.', 'mrs.', ''].include?(title.downcase.strip)
     end
 
     def title_if_it_matters
