@@ -629,14 +629,6 @@ module Droom
           n.given = given_name || ""
           n.prefix = title unless title_ordinary?
         end
-        maker.add_addr {|a|
-          a.location = 'home' # until we do this properly with multiple contact sets
-          a.country = post_country || ""
-          a.region = post_region || ""
-          a.locality = post_city || ""
-          a.street = "#{post_line1}, #{post_line2}"
-          a.postalcode = post_code || ""
-        }
         emails.each do |email|
           if location = email.address_type_name
             maker.add_email email { |e| t.location = location.downcase }
@@ -647,6 +639,18 @@ module Droom
             location = 'Cell' if location == 'Mobile'
             maker.add_tel phone { |e| t.location = location.downcase }
           end
+        end
+        addresses.each do |address|
+          if location = address.address_type_name
+            maker.add_addr {|a|
+              a.location = location.downcase
+              a.country = country_code || ""
+              a.region = region || ""
+              a.locality = city || ""
+              a.street = "#{line1}, #{line2}"
+              a.postalcode = postal_code || ""
+            }
+          
         end
       end
       @vcard.to_s
