@@ -22,8 +22,8 @@ module Droom
     end
 
     def download
-      @users = @users.matching(params[:q]) unless params[:q].blank?
       @users = @users.in_name_order.includes(:emails, :phones, :addresses)
+      @users = @users.matching(params[:q]) unless params[:q].blank?
       render :vcf => @users.map(&:to_vcf)
     end
 

@@ -630,13 +630,17 @@ module Droom
           n.prefix = title unless title_ordinary?
         end
         emails.each do |email|
-          location = email.address_type_name || 'home'
-          maker.add_email email { |e| t.location = location.downcase }
+          if email.email?
+            location = email.address_type_name || 'home'
+            maker.add_email email.email { |e| t.location = location.downcase }
+          end
         end
         phones.each do |phone|
-          location = phone.address_type_name || 'cell'
-          location = 'cell' if location == 'Mobile'
-          maker.add_tel phone { |e| t.location = location.downcase }
+          if phone.phone?
+            location = phone.address_type_name || 'cell'
+            location = 'cell' if location == 'Mobile'
+            maker.add_tel phone.phone { |e| t.location = location.downcase }
+          end
         end
         addresses.each do |address|
           location = address.address_type_name || 'home'
