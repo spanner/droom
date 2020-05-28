@@ -45,7 +45,7 @@ module Droom
 
     # always an ajax call so for now we only confirm.
     def merge
-      @other_org = Droom::Organisation.find(params[:other_id])
+      @other_org = Droom::Organisation.find(merge_params[:other_id])
       @other_org.subsume(@organisation)
       head :no_content
     end
@@ -63,6 +63,10 @@ module Droom
       else
         {}
       end
+    end
+
+    def merge_params
+      params.require(:organisation).permit(:other_id)
     end
 
     def set_view
