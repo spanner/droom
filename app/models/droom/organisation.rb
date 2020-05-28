@@ -40,6 +40,12 @@ module Droom
       organisations.map{|f| [f.name, f.id] }.unshift(['', ''])
     end
 
+    def self.for_selection_with_owner(with_external=false)
+      organisations = order("name asc")
+      organisations = organisations.where(external: false).includes(:owner) unless with_external
+      organisations.map{|o| ["#{o.name} (#{o.owner_name || 'No owner'})", f.id] }.unshift(['', ''])
+    end
+
     def self.matching_email(email)
       domain = email.split('@').last
       where(joinable: true, email_domain: domain)
@@ -216,9 +222,16 @@ module Droom
         self.tags << org.tags
         self.chinese_name = org.chinese_name unless chinese_name?
         self.description = org.description unless description?
+        self.logo = org.logo unless logo?
+        self.owner = org.owner unless owner
+        subsume_other_resources(org)
         self.save
-        chinese_name.destroy
+        org.destroy
       end
+    end
+
+    def subsume_other_resources(org)
+      # noop here
     end
 
     def capture_owner
@@ -238,6 +251,7 @@ module Droom
       {
         name: name || "",
         chinese_name: chinese_name || "",
+        owner_name: owner_name,
         description: description,
         tags: tag_names,
         all_tags: tags_with_synonyms,
@@ -246,6 +260,10 @@ module Droom
         external: external?,
         created_at: created_at
       }
+    end
+
+    def owner_name
+      owner.name if owner
     end
 
   end

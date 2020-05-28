@@ -43,6 +43,7 @@ module Droom
       redirect_to organisation_url
     end
 
+    # always an ajax call so for now we only confirm.
     def merge
       @other_org = Droom::Organisation.find(params[:other_id])
       @other_org.subsume(@organisation)
