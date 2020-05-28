@@ -114,6 +114,8 @@ jQuery ($) ->
         replacement.activate().signal_confirmation()
       if @_reporter?
         $(@_reporter).html(data).show().signal_confirmation().delay(5000).slideUp()
+      if data.refresh
+        $(data.refresh).refresh()
       @reset()
 
     show: (e) =>
