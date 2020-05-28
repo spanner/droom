@@ -4,7 +4,7 @@
 #edit_organisation
   = render 'droom/shared/popup_header', title: title
 
-  = form_for [droom, organisation], url: merge_organisation_url(organisation), :html => {:class => 'edit organisation'} do |f|
+  = form_for [droom, organisation], url: merge_organisation_url(organisation), method: 'put', html: {:class => 'edit organisation'} do |f|
 
     %p
       You are about to transfer all the users, assets and history of
