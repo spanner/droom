@@ -8,7 +8,7 @@ module Droom::Concerns::ChangesNotified
   end
 
   def timestamp
-    (updated_at || created_at || Time.now).to_f
+    (try(:updated_at) || try(:created_at) || Time.now).to_f
   end
 
   def notify_of_change(event, additional_data={})
