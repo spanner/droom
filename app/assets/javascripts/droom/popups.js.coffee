@@ -107,7 +107,6 @@ jQuery ($) ->
         addition.activate().signal_confirmation()
       if @_removed?
         $(@_removed).remove()
-        addition.activate().signal_confirmation()
       if @_replaced?
         replacement = $(data)
         $(@_replaced).after(replacement)
