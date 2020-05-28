@@ -26,6 +26,7 @@ jQuery ($) ->
       @_iteration = 0
       @_affected = @_link.data('affected')
       @_replaced = @_link.data('replaced')
+      @_removed = @_link.data('removed')
       @_aftered = @_link.data('appended')
       @_befored = @_link.data('prepended')
       @_reporter = @_link.data('reporter')
@@ -103,6 +104,9 @@ jQuery ($) ->
       if @_befored?
         addition = $(data)
         $(@_befored).before(addition)
+        addition.activate().signal_confirmation()
+      if @_removed?
+        $(@_removed).remove()
         addition.activate().signal_confirmation()
       if @_replaced?
         replacement = $(data)
