@@ -43,7 +43,7 @@ module Droom
     def self.for_selection_with_owner(with_external=false)
       organisations = order("name asc")
       organisations = organisations.where(external: false).includes(:owner) unless with_external
-      organisations.map{|o| ["#{o.name} (#{o.owner_name || 'No owner'})", f.id] }.unshift(['', ''])
+      organisations.map{|o| ["#{o.name} (#{o.owner_name || 'No owner'})", o.id] }.unshift(['', ''])
     end
 
     def self.matching_email(email)
