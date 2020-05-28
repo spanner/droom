@@ -35,14 +35,14 @@ module Droom
     attr_accessor :other_id
 
     def self.for_selection(with_external=false)
-      organisations = order("name asc")
+      organisations = approved.order("name asc")
       organisations = organisations.where(external: false) unless with_external
       organisations.map{|f| [f.name, f.id] }.unshift(['', ''])
     end
 
     def self.for_selection_with_owner(with_external=false)
-      organisations = order("name asc")
-      organisations = organisations.where(external: false).includes(:owner) unless with_external
+      organisations = approved.order("name asc").includes(:owner)
+      organisations = organisations.where(external: false) unless with_external
       organisations.map{|o| ["#{o.name} (#{o.owner_name || 'No owner'})", o.id] }.unshift(['', ''])
     end
 
