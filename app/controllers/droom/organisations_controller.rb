@@ -47,9 +47,7 @@ module Droom
     def merge
       @other_org = Droom::Organisation.find(merge_params[:other_id])
       @other_org.subsume(@organisation)
-      render json: {
-        refresh: "#organisation_#{@other_org.id}"            # we shouldn't know this really
-      }
+      head :no_content
     end
 
     def destroy

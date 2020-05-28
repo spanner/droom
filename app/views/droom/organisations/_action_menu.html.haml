@@ -8,6 +8,6 @@
       %li
         = link_to t(:add_user), droom.new_organisation_user_url(organisation), :class => 'add', :data => {:action => "popup", :affected => "#organisation_#{organisation.id}"}
       %li
-        = link_to t(:subsume_organisation), droom.edit_organisation_url(organisation, view: "subsume"), :class => 'delete', :data => {:action => "popup", :removed => "#organisation_#{organisation.id}"}
+        = link_to t(:subsume_organisation), droom.edit_organisation_url(organisation, view: "subsume"), :class => 'delete', :data => {:action => "popup", :affected => "#organisations"}
       %li
         = link_to t(:delete_organisation), droom.organisation_url(organisation), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#organisation_#{organisation.id}", :confirm => t(:confirm_delete_organisation, :name => organisation.name)}
