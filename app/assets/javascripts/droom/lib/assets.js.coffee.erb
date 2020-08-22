@@ -1,5 +1,11 @@
 jQuery ($) ->
 
   $.withZxcbvn = (fn) ->
-    url = "<%= asset_path('droom/zxcvbn.js') %>"
-    $.getScript(url).done (response) => fn?(response)
+    origin_url = window.location.origin
+    asset_path = "<%= asset_path('droom/zxcvbn.js') %>"
+    droom_url = "<%= ENV['DROOM_URL'] %>"
+
+    if origin_url != droom_url
+      asset_path = droom_url + asset_path
+
+    $.getScript(asset_path).done (response) => fn?(response)
