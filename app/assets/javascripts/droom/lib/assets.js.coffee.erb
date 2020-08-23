@@ -1,7 +1,7 @@
 jQuery ($) ->
 
   $.withZxcbvn = (fn) ->
-    asset_path = "<%=asset_path('droom/zxcvbn.js')%>"
-    asset_path =  "https://data.croucher.org.hk/"+ asset_path
+    based_url = "<%= Rails.env == 'production' ? 'https://data.croucher.org.hk/' : ENV['DROOM_URL']%>"
+    asset_path = based_url + "<%=asset_path('droom/zxcvbn.js')%>"
 
     $.getScript(asset_path).done (response) => fn?(response)
