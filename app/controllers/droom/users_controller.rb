@@ -210,7 +210,7 @@ module Droom
     end
 
     def set_organisation_params
-      params.require(:user).permit(:organisation_id, organisation_attributes: [:name, :chinese_name, :url, :organisation_type_id, :description, :tags])
+      params.require(:user).permit(:organisation_id, organisation_attributes: [:name, :chinese_name, :url, :organisation_type_id, :description, :tags, :owner_id])
     end
 
     def set_view
