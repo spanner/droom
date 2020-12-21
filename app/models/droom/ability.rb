@@ -45,11 +45,7 @@ module Droom
               #
               if user.permitted?('droom.calendar')
                 can :manage, Droom::Event
-                can :manage, Droom::EventSet
                 can :manage, Droom::Venue
-                can :manage, Droom::Invitation
-                can :manage, Droom::GroupInvitation
-                can :manage, Droom::AgendaCategory
               end
 
               if user.permitted?('droom.directory')

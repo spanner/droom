@@ -14,9 +14,6 @@ module Droom
     has_many :group_invitations, :dependent => :destroy
     has_many :groups, :through => :group_invitations
 
-    has_many :agenda_categories, :dependent => :destroy
-    has_many :categories, :through => :agenda_categories
-
     belongs_to :venue, optional: true
     accepts_nested_attributes_for :venue
 
@@ -25,7 +22,7 @@ module Droom
 
     has_many :scraps
 
-    has_folder :within => :event_type #... and subfolders via agenda_categories
+    has_folder :within => :event_type
     after_destroy :destroy_related_folder
 
     validates :start, :presence => true, :date => true
@@ -240,16 +237,6 @@ module Droom
 
     def venue_name=(name)
       self.venue = Droom::Venue.where(name: name).first_or_create
-    end
-
-    def find_or_create_agenda_category(category)
-      agenda_categories.where(category_id: category.id).first_or_create
-    end
-        
-    def categories_for_selection
-      cats = categories.map{|c| [c.name, c.id] }
-      cats.unshift(['', ''])
-      cats
     end
 
     def attended_by?(user)

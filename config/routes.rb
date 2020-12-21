@@ -80,16 +80,7 @@ Droom::Engine.routes.draw do
       get :past
       get "subscribe/:tok", action: "subscribe", as: :subscribe
     end
-    resources :invitations do
-      member do
-        put :accept
-        put :refuse
-        put :toggle
-      end
-    end
-    resources :group_invitations
     resources :documents
-    resources :agenda_categories
   end
 
   resources :documents do

@@ -323,46 +323,6 @@ module Droom
     }
 
 
-    ## Folder permissions
-    #
-    # To simplify the business of showing and listing documents, we have adopted the convention that all
-    # documents live in a folder. User accounts have links to those folders through the very thin
-    # PersonalFolder joining class, and at the view level we only ever show folder and subfolder lists.
-    # The only place we ever need a list of all the documents visible to this person is when searching, and
-    # for that we use the Document.visible_to scope, usually by way of the #documents method defined below.
-    #
-    # Personal folders are created and destroyed along with invitations and memberships.
-    #
-    # BEWARE: This whole mechanism is largely superseded now by a much simpler confidentiality flag.
-    # It proved too onerous in the administration and makes permission checks quite expensive.
-    # The whole personal folder / dropbox folder machinery is likely to be deprecated soon.
-    #
-    has_many :personal_folders
-    has_many :folders, :through => :personal_folders
-
-    def add_personal_folders(folders=[])
-      self.folders << folders if folders
-    end
-
-    def remove_personal_folders(folders=[])
-      self.folders.delete(folders) if folders
-    end
-
-    def find_or_add_personal_folders(folders=[])
-      folders = [folders].flatten
-      folders.each do |folder|
-        self.folders << folder unless self.folders.include?(folder)
-      end
-    end
-
-    def has_folder?(folder)
-      folder && personal_folders.of_folder(folder).any?
-    end
-
-    def documents
-      Document.visible_to(self)
-    end
-
     ## Address book
     #
     # Can hold multiple emails, phones and addresses for each user.

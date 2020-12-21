@@ -1,8 +1,0 @@
-- invitations ||= false
-- if invitations || current_user
-  - invitations ||= current_user.invitations.future
-  - if invitations && invitations.length > 0
-    %h2.section
-      = t :your_invitations
-    %ul.invitations
-      = render :partial => "droom/invitations/invitation", :collection => current_user.invitations.future
