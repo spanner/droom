@@ -1,4 +1,4 @@
-class FlattenedMigrations < ActiveRecord::Migration[5.2]
+class SelectedDroomMigrations < ActiveRecord::Migration[5.2]
   def change
 
     create_table "droom_address_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
