@@ -18,10 +18,6 @@ module Droom::Concerns::AddressBookProperty
       where(default: true)
     }
 
-    scope :other_than, -> thing {
-      where.not(id: thing.id)
-    }
-
     scope :of_type, -> name {
       joins(:address_type).where(droom_address_types: {name: name})
     }

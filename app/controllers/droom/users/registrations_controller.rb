@@ -4,18 +4,6 @@ module Droom::Users
     skip_before_action :verify_authenticity_token, raise: false
     layout :default_layout
 
-    def new
-      if Droom.registerable?
-        if @page = Droom::Page.published.find_by(slug: "_signup")
-          render template: "droom/pages/published", layout: Droom.page_layout
-        else
-          super
-        end
-      else
-        head :forbidden
-      end
-    end
-
     def after_sign_up_path_for(resource)
       root_url
     end

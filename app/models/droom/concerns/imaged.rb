@@ -29,7 +29,25 @@ module Droom::Concerns::Imaged
     end
   end
 
-  # Images usually come to us as data: urls but can also be given as actual url or assigned directly to image.
+  def icon_url(decache=true)
+    if image?
+      url = image.url(:icon, decache)
+      url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
+    else
+      ""
+    end
+  end
+
+  def thumbnail_url(decache=true)
+    if image?
+      url = image.url(:thumbnail, decache)
+      url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
+    else
+      ""
+    end
+  end
+
+  # Images usually come to us as data: urls but can also be given as actual url or assigned directly as file.
   #
   def image_url=(address)
     if address.present?

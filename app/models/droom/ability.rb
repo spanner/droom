@@ -6,7 +6,6 @@ module Droom
       user ||= Droom::User.new
 
       can :create, Droom::Enquiry
-      can :read, Droom::Page
       can :read, Droom::Tag
 
       if user.persisted?

@@ -1,6 +1,10 @@
+form.edit
+  label
+    font-weight: bold
+
 div.popup
   input[type="text"], input[type="password"], input[type="email"],  input[type="tel"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false]), 
-    padding: 8px
+    padding: 0.5em
     border: 1px solid $pale
     background-color: white
     font-size: 1.2em
@@ -17,9 +21,11 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
   box-sizing: border-box
   position: relative
   outline: none
-  padding: 8px
+  padding: 0.5em
   border: 1px solid $pale
   font-size: 1.2rem
+  &.major
+    font-size: 1.8rem
   &.strong
     font-weight: bold
   &.destination
@@ -45,27 +51,19 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
       image: image-url('droom/spinner.gif')
       position: right 3px top 3px
       repeat: no-repeat
+  &:placeholder-shown
+    padding: 0.2em 0.5em 0.8em 0.5em
   &::-webkit-input-placeholder
-    color: $pale
+    color: $mid
     font-weight: lighter
-  &::-moz-placeholder
-    color: $pale
+    font-size: 0.9rem
+  &::placeholder
+    color: $mid
     font-weight: lighter
-  &:-ms-input-placeholder
-    color: $pale
-    font-weight: lighter
+    font-size: 0.9rem
   &.placeholder
-    color: $pale
-    font-weight: lighter
-  &[data-placeholder]:empty:before
-    content: attr(data-placeholder)
-    color: $pale
-    text-transform: none
-    font-weight: lighter
-    line-height: 1.1
-    position: absolute
-    bottom: 8px
-    left: 8px
+    color: $mid
+    font-size: 0.9rem
 
 [contenteditable]:not([contenteditable=false]):not(.rte)
   border: none
@@ -104,7 +102,6 @@ select
 input[type="submit"], button.confirm
   +button($green)
   display: inline-block
-  transition: width 0.5s ease-out, height 0.5s ease-out, font-size 0.5s ease-out, padding 0.5s ease-out
   &.unavailable
     background-color: $mid
     opacity: 0.5
@@ -147,6 +144,11 @@ input[type="submit"], button.confirm
     +buttonbg($coolgrey00)
     color: $mid
     box-shadow: none
+  svg
+    width: 1.2rem
+    height: 1.2rem
+    display: inline-block
+    vertical-align: middle
 
 input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus, select:-webkit-autofill, select:-webkit-autofill:hover, select:-webkit-autofill:focus
   transition: background-color 5000s ease-in-out 0s
@@ -221,6 +223,11 @@ span.erratic
 
 a.button
   +button
+  svg
+    width: 1.2rem
+    height: 1.2rem
+    display: inline-block
+    vertical-align: middle
   &.edit
     +buttonbg($blue, white)
   &.submit
@@ -342,15 +349,6 @@ form
     input[type="text"], input[type="email"], input[type="password"], select, textarea
       width: 97%
 
-
-form#login
-  a.reminder
-    padding: 2px
-    line-height: 1.2
-    float: right
-    text-align: right
-    font-size: 0.9rem
-    color: $pale
 
 form.faceter, form.droom_faceter
   width: 750px

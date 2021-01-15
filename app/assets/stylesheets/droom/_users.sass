@@ -25,13 +25,13 @@ section.join_organisation
       font-size: 0.9em
   input[type="text"], input[type="password"], input[type="email"]
     width: 100%
-    padding: 10px 0
     &.login
-      font-size: 1.25em
-      margin-bottom: 0.25em
+      font-size: 1rem
+      padding: 1rem
+      margin-bottom: 1rem
       border: none
       border-bottom: 1px solid $pale
-      outline: none
+      text-align: center
     &.preferences
       font-size: 2em
     &.ok
@@ -41,9 +41,15 @@ section.join_organisation
   p.confirmation
     display: none
   a.reminder
-    text-align: right
     +pale
     +hover
+    display: block
+    margin: 1em 0
+
+form#login
+  text-align: center
+  div.controls
+    margin-top: 2em
 
 ul.people
   margin: 10px 0 0 -2px

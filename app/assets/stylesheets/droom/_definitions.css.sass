@@ -138,27 +138,28 @@ $weibo: #e6162d
   cursor: pointer
   text-align: center
   text-decoration: none
-  font-size: 16px
-  padding: 9px 27px
-  box-shadow: 0 2px 2px rgba(0,0,0,0.6)
+  font-size: 1.2rem
+  padding: 0.75em 1em
   +buttonbg($color, $text_color)
+  transition: box-shadow 0.25s ease-out, color 0.25s ease-out, background-color 0.25s ease-out, opacity 0.25s ease-out
+  border-radius: 3px
   &:hover
     text-decoration: none
-    background-color: lighten($color, 10)
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6)
   &:active
     position: relative
     top: 1px
-    box-shadow: 0 1px 2px rgba(0,0,0,0.6) inset
-    background-color: darken($color, 10)
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6)
   &.unavailable
-    border: solid 1px darken($pale, 10)
-    color: lighten($pale, 15)
+    color: white
     background-color: $pale
     opacity: 0.75
     pointer-events: none
   &.waiting
-    opacity: 0.25
+    color: white
     background-color: $pale
+    opacity: 0.25
+    pointer-events: none
 
 =minibutton($color: $green, $text_color: white)
   +button($color, $text_color)

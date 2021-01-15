@@ -73,8 +73,6 @@ module Droom
 
     scope :added_since, -> date { where("created_at > ?", date)}
 
-    scope :other_than, -> event { where.not(id: event.id) }
-
     scope :except_these_uuids, -> uuids {
       placeholders = uuids.map{'?'}.join(',')
       where(["uuid NOT IN (#{placeholders})", *uuids])

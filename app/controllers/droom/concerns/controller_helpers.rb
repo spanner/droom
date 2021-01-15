@@ -70,11 +70,10 @@ module Droom::Concerns::ControllerHelpers
   def read_auth_cookie
     cookie = Droom::AuthCookie.new(warden.cookies)
     if cookie.valid? && cookie.fresh?
-      if resource = Droom::User.where(unique_session_id: cookie.token).first
-        if resource.valid_for_authentication?
-          warden.session_serializer.store(resource, :user)
-          warden.request.env['devise.skip_session_limitable'] = true
-        end
+      resource = Droom::User.where(unique_session_id: cookie.token).first
+      if resource && resource.valid_for_authentication?
+        warden.session_serializer.store(resource, :user)
+        warden.request.env['devise.skip_session_limitable'] = true
       end
     end
   end
@@ -90,7 +89,8 @@ module Droom::Concerns::ControllerHelpers
 
   def authenticate_user_if_possible(opts={})
     opts[:scope] = :user
-    warden.authenticate(opts) if !devise_controller? || opts.delete(:force)
+    force = opts.delete(:force)
+    warden.authenticate(opts) if !devise_controller? || force
   end
 
   def admin?
@@ -122,7 +122,7 @@ module Droom::Concerns::ControllerHelpers
   #
   def update_auth_cookie
     if user_signed_in? && current_user.unique_session_id?
-      Rails.logger.warn "✅ setting auth_cookie after #{request.fullpath}"
+      Rails.logger.warn "✅ setting auth_cookie after #{request.fullpath} with user #{current_user.inspect}"
       Droom::AuthCookie.new(warden.cookies).set(current_user)
     else
       Rails.logger.warn "⚠️ unsetting auth_cookie after #{request.fullpath}"

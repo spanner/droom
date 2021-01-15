@@ -4,10 +4,10 @@ module Droom
     include Droom::Concerns::Imaged
 
     has_many :users
-    belongs_to :organisation_type
-    belongs_to :owner, :class_name => 'Droom::User'
-    belongs_to :approved_by, :class_name => 'Droom::User'
-    belongs_to :disapproved_by, :class_name => 'Droom::User'
+    belongs_to :organisation_type, optional: true
+    belongs_to :owner, optional: true, class_name: 'Droom::User'
+    belongs_to :approved_by, optional: true, class_name: 'Droom::User'
+    belongs_to :disapproved_by, optional: true, class_name: 'Droom::User'
 
     has_attached_file :logo,
                       default_url: :nil,
@@ -245,8 +245,7 @@ module Droom
 
     ## Search
     #
-    searchkick _all: false, callbacks: :async, default_fields: [:name, :chinese_name, :description]
-
+    searchkick _all: false, callbacks: :async, default_fields: [:name, :chinese_name, :description], highlight: [:name, :chinese_name, :description], word_start: [:name, :chinese_name, :description]
     def search_data
       {
         name: name || "",

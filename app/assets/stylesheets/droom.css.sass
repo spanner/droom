@@ -273,7 +273,7 @@ h2.stamp
     font-size: 1rem
     color: $pale
 
-a.dl, a.ul
+a.pdf, a.doc, a.docx, a.xls, a.xlx
   display: inline-block
   min-height: 40px
   padding-left: 44px
@@ -593,46 +593,33 @@ span.erratic
 span.action
   display: inline-block
 
-*.action
+.action
   font-weight: normal
   a.add
     color: $green
+  a.edit
+    color: $purple
+  a.delete
+    color: $darkred
+  a.revert
+    color: $mid
+  a.subscribe
+    color: $blue
+  a.dl
+    color: $blue
+  a.ul
+    color: $red
+  a
     font-weight: normal
     white-space: nowrap
-    +icon_link("droom/add.png")
     &:hover
-      color: #89d690
+      color: $warmred
     &.waiting
       color: $pale
       background-image: image-url('droom/spinner.gif')
       pointer-events: none
-  a.edit
-    color: $blue
-    font-weight: normal
-    white-space: nowrap
-    +icon_link("droom/edit.png")
-    &:hover
-      color: #00d5ff
-  a.delete
-    color: $darkred
-    font-weight: normal
-    white-space: nowrap
-    +icon_link("droom/delete.png")
-    &:hover
-      color: $warmred
-  a.revert
-    color: $mid
-    font-weight: normal
-    white-space: nowrap
-    &:hover
-      color: $warmred
-  a.subscribe
-    color: $blue
-    font-weight: normal
-    white-space: nowrap
-    +icon_link("droom/subscribe.png")
-    &:hover
-      color: $warmred
+      svg:
+        display: none
 
 div.copyholder
   display: inline-block
