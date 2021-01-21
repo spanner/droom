@@ -2,6 +2,7 @@ module Droom
   class Organisation < Droom::DroomRecord
     include Droom::Concerns::Tagged
     include Droom::Concerns::Imaged
+    include Droom::Concerns::Suggested
 
     has_many :users
     belongs_to :organisation_type, optional: true
@@ -26,6 +27,11 @@ module Droom
     scope :by_date, -> { order(created_at: :asc) }
     scope :external, -> { where(external: true) }
     scope :internal, -> { where(external: false) }
+
+    scope :matching, -> fragment {
+      fragment = "%#{fragment}%"
+      where('droom_organisations.name LIKE :f', :f => fragment)
+    }
 
     default_scope -> {order("name ASC")}
 

@@ -1,14 +1,12 @@
 module Droom
   class Group < Droom::DroomRecord
     include Droom::Concerns::Slugged
+    include Droom::Concerns::Suggested
 
-    belongs_to :created_by, :class_name => "Droom::User"
-    belongs_to :leader, :class_name => 'Droom::User'
+    belongs_to :created_by, optional: true, class_name: "Droom::User"
+    belongs_to :leader, optional: true, class_name: 'Droom::User'
 
     has_folder
-
-    has_many :group_invitations, :dependent => :destroy
-    has_many :events, -> { distinct }, :through => :group_invitations
 
     has_many :memberships, :dependent => :destroy
     has_many :users, -> { distinct.order("family_name ASC, given_name ASC") }, :through => :memberships
@@ -78,32 +76,19 @@ module Droom
       self.memberships.for(user).first
     end
 
-    def invite_to(event)
-      group_invitations.where(event_id: event.id).first_or_create
-    end
 
-    def uninvite_from(event)
-      group_invitation = group_invitations.find_by(event_id: event.id)
-      group_invitation.invitations.to_event(event).each do |invitation|
-        invitation.destroy!
-      end
-      group_invitation.destroy!
-    end
+    ## Search
+    #
+    searchkick callbacks: :async
 
-    def invited_to?(event)
-      group_invitations.to_event(event).any?
-    end
-
-    def as_suggestion
+    def search_data
       {
-        :type => 'group',
-        :prompt => name,
-        :value => name,
-        :id => id
+        id: id,
+        name: name
       }
     end
 
-  protected
+    protected
 
     def ensure_mailing_list_name
       ensure_presence_of_unique(:mailing_list_name, slug)

@@ -9,8 +9,9 @@ module Droom
     before_action :get_my_events, :only => [:subscribe]
     before_action :get_events, :only => [:index, :calendar]
     before_action :composite_dates, :only => [:update, :create]
-    before_action :build_event, :only => [:new, :create]
-    load_and_authorize_resource
+    load_and_authorize_resource :calendar
+    load_and_authorize_resource through: :calendar, shallow: true
+    
 
     def index
       respond_with @events do |format|
@@ -63,6 +64,7 @@ module Droom
     end
 
     def create
+      @event.created_by = current_user
       if @event.save
         render :partial => "event"
       else
@@ -83,7 +85,7 @@ module Droom
       head :ok
     end
 
-  protected
+    protected
   
     def get_my_events
       @events = Droom::Event.accessible_by(current_ability)
@@ -105,11 +107,7 @@ module Droom
         @events = paginated(@events.future_and_current.order('start ASC'))
       end
     end
-    
-    def build_event
-      @event = Droom::Event.new(event_params)
-      @event.created_by = current_user
-    end
+
     
     # NB. the stored timezone parameter is just an interface convenience: we use it to display a consistent form.
     # The event start and finish dates are stored as datetimes with zones.

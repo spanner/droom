@@ -5,16 +5,16 @@
 
 = fields_for user do |uf|
   = uf.fields_for :emails, email, :child_index => fields_counter || 'field_counter' do |f|
-    %fieldset.repeating
+    - if email.persisted?
+      = f.hidden_field :_destroy, data: {role: "destroy"}
+    %fieldset.repeating.holder
       %p.twocol.addendum
         %span.col>
           = f.email_field :email, :placeholder => t("placeholders.email.email"), required: true, class: "required"
           - unless user.new_record? || fields_counter == 0
-            = link_to '#', :class => "remove", :data => {:action => "remove_fields", :holder => "fieldset"} do
+            = link_to '#', :class => "remove", :data => {:action => "remove_fields", affected: "#email_fields"} do
               %svg
                 %use{"xlink:href" => "#cross_button_symbol"}
-            - if email.persisted?
-              = f.hidden_field :_destroy, data: {role: "destroy"}
         %span.col.last>
           = f.select :address_type_id, Droom::AddressType.for_selection(:email)
 

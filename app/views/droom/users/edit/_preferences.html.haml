@@ -10,6 +10,9 @@
         = t :account_emails
       - else
         = t :admin_account_emails
+
+    %h3
+      Email
     = render "droom/users/edit/emails", f: f, user: user
     
     - if !@user.confirmed? && (admin? || @user.organisation && organisation_admin?(@user.organisation))
@@ -17,12 +20,18 @@
         = f.check_box :send_confirmation, class: "fancy"
         = f.label :send_confirmation
 
-    %p
-      - if me
+    %h3
+      Password
+
+    - if me
+      = render "droom/users/edit/password_fields", f: f, user: user
+      %p.note
         = t :account_password
-      - else
+    - else
+      = render "droom/users/edit/admin_password_fields", f: f, user: user
+      %p.note
         = t :admin_account_password
-    = render "droom/users/edit/admin_password_fields", f: f, user: user
+        
 
     %p.admin
       - if admin?

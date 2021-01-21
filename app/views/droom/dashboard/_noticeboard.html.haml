@@ -3,7 +3,7 @@
 
 %section.latest_notices{:data => {:refreshing => true, :url => scraps_path(:format => :js)}}
   %h2.section
-    = link_to t(:Noticeboard), droom.noticeboard_url
+    = link_to t(:Noticeboard), droom.all_notices_url
     - if can? :create, Droom::Scrap
       %span.action
         = link_to t(:add), droom.new_scrap_url, :class => "add", :data => {:action => "popup", :affected => "#noticeboard"}

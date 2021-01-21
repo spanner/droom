@@ -188,19 +188,6 @@ ul.enquiries
     a.email
       color: $pale
 
-
-form.invitation
-  min-height: 200px
-  input.name
-    width: 470px
-    font-size: 2em
-  ul.groups
-    padding-left: 4px
-    list-style: none
-    margin: 30px 0
-    span.formnote
-      padding-left: 24px
-
 span.admin.documents
   margin-bottom: 0
   margin-top: 1.5em
@@ -695,23 +682,28 @@ div.nested_set
     margin-top: 0
   .repeating
     position: relative
+    fieldset
+      margin-bottom: 0.75em
   a.remove, a.add
     position: absolute
     background-color: white
     border: 2px solid white
-    width: 20px
-    height: 20px
-    border-radius: 12px
+    width: 16px
+    height: 16px
+    border-radius: 10px
     svg
-      width: 20px
-      height: 20px
+      width: 16px
+      height: 16px
+      display: block
   a.remove
     position: absolute
-    top: -8px
+    top: -4px
     left: -10px
+    color: $red
   a.add
-    bottom: -8px
+    bottom: -4px
     right: 70px
+    color: $green
 
 ul.downloads
   margin: 0

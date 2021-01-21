@@ -2,7 +2,7 @@ module Droom
   class Calendar < Droom::DroomRecord
     include Droom::Concerns::Slugged
 
-    belongs_to :created_by, :class_name => "Droom::User"
+    belongs_to :created_by, :class_name => "Droom::User", optional: true
     has_many :events
 
     before_validation :slug_from_name

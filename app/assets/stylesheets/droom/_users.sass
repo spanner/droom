@@ -116,25 +116,6 @@ ul.people
         repeat: no-repeat
         position: center center
         size: cover
-      .invitation
-        display: block
-        position: absolute
-        overflow: hidden
-        top: -6px
-        right: -6px
-        width: 14px
-        height: 14px
-        text-indent: 20px
-        background:
-          repeat: no-repeat
-          position: 0 0
-          image: image-url('droom/acceptance.png')
-        &.refused
-          background-position: 0 -130px
-        &.accepted
-          background-position: 0 -162px
-        &.maybe
-          background-position: 0 -98px
 
     span.contact
       display: block
@@ -156,11 +137,11 @@ form.user
       width: 100%
       box-sizing: border-box
     span.title
-      +column(15%, 1%)
+      +column(16%, 1%)
     span.name
-      +column(31%, 1%)
+      +column(34%, 1%)
     span.chinese_name, span.honours
-      +column(19%, 1%)
+      +column(12%, 1%)
       margin-right: 0
   .contacts
     margin-top: 10px

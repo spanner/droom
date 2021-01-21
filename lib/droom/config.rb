@@ -229,17 +229,11 @@ module Droom
     end
  
     def suggestible_classes
-      @suggestible_classes ||= {
-        "event" => "Droom::Event", 
-        "user" => "Droom::User", 
-        "document" => "Droom::Document",
-        "group" => "Droom::Group",
-        "venue" => "Droom::Venue"
-      }
+      @suggestible_classes ||= {}
     end
  
-    def add_suggestible_class(label, klass=nil)
-      klass ||= label.camelize
+    def add_suggestible_class(klass)
+      label = klass.to_s.underscore.sub('droom/', '')
       suggestible_classes[label] = klass.to_s
     end
  

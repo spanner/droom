@@ -2,17 +2,15 @@ module Droom
   class Membership < Droom::DroomRecord
     belongs_to :user
     belongs_to :group
-    belongs_to :created_by, :class_name => "User"
+    belongs_to :created_by, optional: true, class_name: "Droom::User"
 
     has_one :mailing_list_membership, :dependent => :destroy
 
     after_create :link_folder
     after_create :create_mailing_list_membership
-    after_create :create_invitations
     after_create :create_permissions
 
     after_destroy :unlink_folder
-    after_destroy :destroy_invitations
     after_destroy :destroy_permissions
     after_destroy :destroy_similar
     
@@ -43,34 +41,14 @@ module Droom
     end
 
   protected
-
-    def link_folder
-      user.find_or_add_personal_folders(group.folder)
-    end
-
-    def unlink_folder
-      user.remove_personal_folders(group.folder) if user
-    end
     
     def create_mailing_list_membership
       self.mailing_list_membership = Droom::MailingListMembership.where(address: user.email, listname: group.mailing_list_name).first_or_create
     end
 
-    def create_invitations
-      group.group_invitations.each do |gi|
-        gi.create_personal_invitation_for(user)
-      end
-    end
-
     def create_permissions
       group.group_permissions.each do |gp|
         gp.create_permission_for(user)
-      end
-    end
-
-    def destroy_invitations
-      group.group_invitations.each do |gi|
-        gi.invitations.for_user(user).destroy_all
       end
     end
 

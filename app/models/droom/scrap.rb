@@ -1,10 +1,12 @@
 module Droom
   class Scrap < Droom::DroomRecord
-    belongs_to :created_by, :class_name => "Droom::User"
+    belongs_to :created_by, :class_name => "Droom::User", optional: true
+    belongs_to :noticeboard, :class_name => "Droom::Noticeboard", optional: true, dependent: :destroy
 
-    belongs_to :event, :class_name => "Droom::Event", :dependent => :destroy
+    # content associations
+    belongs_to :event, :class_name => "Droom::Event", optional: true, dependent: :destroy
     accepts_nested_attributes_for :event
-    belongs_to :document, :class_name => "Droom::Document", :dependent => :destroy
+    belongs_to :document, :class_name => "Droom::Document", optional: true, dependent: :destroy
     accepts_nested_attributes_for :document
 
     has_attached_file :image,
@@ -87,15 +89,6 @@ module Droom
       else
         ""
       end
-    end
-
-    def as_search_result
-      {
-        :type => 'scrap',
-        :prompt => name,
-        :value => name,
-        :id => id
-      }
     end
     
     def next_younger

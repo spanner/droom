@@ -1,7 +1,8 @@
 .datemark
-  +outset
   text-align: right
   color: $mid
+  background-color: white
+  border: 1px solid $pale
   a, a:visited
     color: $mid
   span
@@ -11,6 +12,7 @@
     text-transform: uppercase
     font-size: 1em
     line-height: 1
+    background-color: $red
   span.dom
     font-size: 2em
     font-weight: bold
@@ -41,12 +43,6 @@ div.event, form.event, div.project
     .heading
       p.name
         margin: 0
-      p.practicalities
-        margin: 0
-        margin-top: 0
-        color: $mid
-        span.admin
-          margin-left: 20px
     p.visibility
       float: right
       margin: 10px 16px 0 10px
@@ -62,22 +58,26 @@ div.event, form.event, div.project
 form.event
   span.interlabel
     display: inline-block
-    padding: 8px
-    width: 20px
-    text-align: center
+    padding: 8px 4px
   p.name
     margin: 0
   div.datemark
-    border: none
-    padding: 4px 0
-    margin-top: 1px
-    margin-left: -$datemark_width
-    margin-right: $datemark_margin - 4px
-  input.name
-    width: 500px
-    font-size: 1.5em
-  p.practicalities
-    margin: 10px 0
+    padding: 0 0 4px 0
+    margin: 0
+    margin-right: 10px
+    & + .settings
+      display: inline-block
+      width: calc(100% - 62px)
+      input.name
+        width: 100%
+        font-size: 1.5em
+      p.practicalities
+        margin: 10px 0
+        color: $mid
+        display: flex
+        flex-flow: row nowrap
+        align-item: felex-start
+        justify-content: space-between
   input.timepicker
     width: 70px
     font-size: 1.2em

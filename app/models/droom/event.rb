@@ -1,18 +1,13 @@
 module Droom
   class Event < Droom::DroomRecord
     include Droom::Concerns::Slugged
+    include Droom::Concerns::Suggested
     include ActionView::Helpers::SanitizeHelper
 
-    belongs_to :created_by, :class_name => "Droom::User"
+    belongs_to :created_by, optional: true, class_name: "Droom::User"
 
     belongs_to :calendar
     belongs_to :event_type
-
-    has_many :invitations, :dependent => :destroy
-    has_many :users, :through => :invitations
-
-    has_many :group_invitations, :dependent => :destroy
-    has_many :groups, :through => :group_invitations
 
     belongs_to :venue, optional: true
     accepts_nested_attributes_for :venue
@@ -78,13 +73,6 @@ module Droom
       where(["uuid NOT IN (#{placeholders})", *uuids])
     }
 
-    scope :without_invitations_to, -> user {
-      select("droom_events.*")
-        .joins("LEFT OUTER JOIN droom_invitations ON droom_events.id = droom_invitations.event_id AND droom_invitations.user_id = #{sanitize(user.id)}")
-        .group("droom_events.id")
-        .having("COUNT(droom_invitations.id) = 0")
-    }
-
     scope :with_documents, -> {
       select("droom_events.*")
         .joins("INNER JOIN droom_document_attachments ON droom_events.id = droom_document_attachments.attachee_id AND droom_document_attachments.attachee_type = 'Droom::Event'")
@@ -148,10 +136,6 @@ module Droom
 
     ## Instance methods
     #
-    def invite(user)
-      self.users << user
-    end
-
     def attach(doc)
       self.documents << doc
     end
@@ -193,7 +177,15 @@ module Droom
     def start_date
       start.to_date if start
     end
-    
+
+    def start_datetime
+      if start?
+        start_time.on(start_date)
+      elsif start_date
+        start_date.start_of_day
+      end
+    end
+
     def finish
       tz = timezone || Time.zone
       if finish = read_attribute(:finish)
@@ -207,6 +199,14 @@ module Droom
 
     def finish_date
       finish.to_date if finish
+    end
+
+    def finish_datetime
+      if finish?
+        finish_time.on(finish_date)
+      elsif finish_date
+        finish_date.end_of_day
+      end
     end
 
     def month
@@ -237,10 +237,6 @@ module Droom
       self.venue = Droom::Venue.where(name: name).first_or_create
     end
 
-    def attended_by?(user)
-      user && user.invited_to?(self)
-    end
-
     def confidential?
       private? || event_type && event_type.confidential?
     end
@@ -256,15 +252,10 @@ module Droom
       return true if self.public?
       return false unless user
       return true if user.admin?
-      return true if user.invited_to?(self)
       return false if self.private?
       return true
     end
     
-    def has_anyone?
-      invitations.any?
-    end
-
     def has_documents?
       all_documents.any?
     end
@@ -313,7 +304,6 @@ module Droom
       event.dtstart = (all_day? ? start_date : start) if start?
       event.dtend = (all_day? ? finish_date : finish) if finish?
       event.url = url_with_protocol if url?
-      event.attendees = invitations.accepted.map{|inv| "mailto:#{inv.user.email}"} if invitations.accepted.any?
       event.location = venue.name if venue
       event
     end
@@ -330,29 +320,29 @@ module Droom
       json
     end
 
-    def as_suggestion
-      {
-        :type => 'event',
-        :prompt => name,
-        :value => name,
-        :id => id
-      }
-    end
-
-    def as_search_result
-      {
-        :type => 'event',
-        :prompt => name,
-        :value => name,
-        :id => id
-      }
-    end
-    
     def folder_name
       "#{name} (#{month_name} #{year})"
     end
 
-  protected
+    ## Search
+    #
+    searchkick callbacks: :async
+
+    def search_data
+      {
+        id: id,
+        name: name,
+        slug: slug,
+        venue_name: venue_name,
+        date: start_datetime
+      }
+    end
+
+    def venue_name
+      venue.name if venue
+    end
+
+    protected
 
     # This is mostly for ical/webcal distributions but we also use it in the API.
     #
@@ -375,7 +365,7 @@ module Droom
       end
     end
 
-  private
+    private
 
     def destroy_related_folder
       if event_folder = self.folder

@@ -1,11 +1,11 @@
 - content_for :title do
-  = t(:noticeboard_title)
+  = @noticeboard.name
 
 - content_for :standfirst do
   = render :partial => "noticeboard_introduction"
 
   - if can? :create, Droom::Scrap
     %p.admin
-      = link_to t(:add_notice), droom.new_scrap_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#noticeboard"}
+      = link_to t(:add_notice), droom.new_noticeboard_scrap_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#noticeboard"}
 
 = render :partial => "droom/noticeboards/noticeboard"

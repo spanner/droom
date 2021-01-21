@@ -1,8 +1,10 @@
 module Droom
   class Document < Droom::DroomRecord
-    belongs_to :created_by, :class_name => "Droom::User"
+    include Droom::Concerns::Suggested
+
+    belongs_to :created_by, optional: true, class_name: "Droom::User"
     belongs_to :folder
-    belongs_to :scrap, :dependent => :destroy
+    belongs_to :scrap, dependent: :destroy, optional: true
 
     has_attached_file :file,
                       fog_directory: -> a { a.instance.file_bucket }
@@ -23,7 +25,6 @@ module Droom
       if user
         select('droom_documents.*')
           .joins('LEFT OUTER JOIN droom_folders AS df ON droom_documents.folder_id = df.id')
-          .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON df.id = dpf.folder_id')
           .where(["(droom_documents.public = 1 OR dpf.user_id = ?)", user.id])
           .group('droom_documents.id')
       else
@@ -77,24 +78,6 @@ module Droom
       else
         ""
       end
-    end
-
-    def as_suggestion
-      {
-        :type => 'document',
-        :prompt => name,
-        :value => name,
-        :id => id
-      }
-    end
-
-    def as_search_result
-      {
-        :type => 'document',
-        :prompt => name,
-        :value => name,
-        :id => id
-      }
     end
 
     ## Filing

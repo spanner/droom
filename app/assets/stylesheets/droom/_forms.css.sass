@@ -140,9 +140,9 @@ input[type="submit"], button.confirm
     padding: 20px
   &.next
     float: right
-  &.disabled
-    +buttonbg($coolgrey00)
-    color: $mid
+  &.disabled, &[disabled]
+    +buttonbg($coolgrey0)
+    color: white
     box-shadow: none
   svg
     width: 1.2rem
@@ -283,6 +283,7 @@ input.fancy[type="checkbox"], input.fancy[type="radio"]
     cursor: pointer
     font-size: 1rem
     margin-right: 1em
+    font-weight: lighter
     &:before
       display: inline-block
       vertical-align: middle

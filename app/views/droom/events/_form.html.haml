@@ -1,6 +1,4 @@
-- @event.calendar ||= Droom::Calendar.default_calendar
-
-= form_for @event, :html => {:class => 'edit event', :remote => true, :data => {:type => :html}} do |f|
+= form_for [@calendar, @event], :html => {:class => 'edit event', :remote => true, :data => {:type => :html}} do |f|
   .datemark{data: {role: "datepicker"}}
     %a{:href => "#", title: t("placeholders.event.datemark")}
       - if @event.start
@@ -13,7 +11,7 @@
         %span.year= t(:year)
     = f.hidden_field :start_date
 
-  .summary
+  .settings
     %p.name
       = f.text_field :name, :class => 'name', :placeholder => t(:event_name), :autofocus => true
 
@@ -33,21 +31,27 @@
           %label{for: "event_timezone_UK"}
             = t :uk_time
 
-    .description
-      = f.text_area :description, class: "rte", placeholder: t("placeholders.event.description")
-    
-    %p.admin
-      - if Droom::EventType.count > 1
-        = f.label :event_type_id, t(:file_under)
-        = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
-      - if Droom.config.separate_calendars? && Droom::Calendar.count > 1
-        = f.label :calendar_id
-        = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
-      - else
-        = f.hidden_field :calendar_id
+  .description
+    = f.text_area :description, class: "rte", placeholder: t("placeholders.event.description")
+  
+  %p.admin
+    - if Droom::EventType.count > 1
+      = f.label :event_type_id, t(:file_under)
+      = f.select :event_type_id, Droom::EventType.for_selection, {}, class: "small"
+    - if Droom.config.separate_calendars? && Droom::Calendar.count > 1
+      = f.label :calendar_id
+      = f.select :calendar_id, Droom::Calendar.for_selection, {}, class: "small"
+    - else
+      = f.hidden_field :calendar_id
 
-    .buttons
-      = f.submit t(:save_event)
-      %br
-      = t :or
-      = link_to t(:cancel), "/", :class => 'cancel'
+  .buttons
+    = f.submit t(:save_event)
+    %br
+    = t :or
+    = link_to t(:cancel), "/", :class => 'cancel'
+
+  - if @event.errors.any?
+    %ul.errors
+      - @event.errors.full_messages.each do |message|
+        %li
+          = message

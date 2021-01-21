@@ -1,8 +1,9 @@
 module Droom
   class Venue < Droom::DroomRecord
     include Droom::Concerns::Slugged
+    include Droom::Concerns::Suggested
 
-    belongs_to :created_by, :class_name => "Droom::User"
+    belongs_to :created_by, optional: true, class_name: "Droom::User"
     has_many :events, :dependent => :nullify
 
     before_validation :slug_from_name
@@ -61,25 +62,6 @@ module Droom
       }
     end
 
-    def as_suggestion
-      {
-        :type => 'venue',
-        :prompt => name,
-        :value => name,
-        :detail => address.to_s,
-        :id => id
-      }
-    end
-
-    def as_search_result
-      {
-        :type => 'venue',
-        :prompt => name,
-        :value => name,
-        :id => id
-      }
-    end
-
     def as_ri_cal_calendar
       RiCal.Calendar do |cal|
         events.primary.each do |event|
@@ -91,6 +73,26 @@ module Droom
     def to_ical
       self.as_ri_cal_calendar.to_s
     end
-    
+
+    ## Search
+    #
+    searchkick callbacks: :async, _all: false, default_fields: [:name, :address, :postcode], word_start: [:name, :address, :postcode]
+
+    def search_data
+      data = {
+        id: id,
+        name: name,
+        postcode: post_code,
+        address: address,
+      }
+      if lat? && lng?
+        data[:loc] = {
+          lon: lng,
+          lat: lat
+        }
+      end
+      data
+    end
+
   end
 end

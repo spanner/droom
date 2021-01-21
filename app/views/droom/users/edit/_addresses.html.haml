@@ -1,9 +1,8 @@
 - user ||= @user
 - user.addresses.build(address_type: Droom::AddressType.default) unless user.addresses.any?
 
-.nested_set
-  #address_fields
-    = render :partial => 'droom/addresses/fields', :collection => user.addresses
+#address_fields.nested_set{data: {min: 1, max: 4}}
+  = render :partial => 'droom/addresses/fields', :collection => user.addresses
 
   - unless user.new_record?
     = link_to droom.new_user_address_url(user), :class => "add", :data => {:action => "append_fields", :affected => '#address_fields'} do

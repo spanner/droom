@@ -3,10 +3,9 @@ module Droom
     include ActsAsTree
     # don't use Slugged: we need to apply a dynamic parent scope.
 
-    belongs_to :created_by, :class_name => "Droom::User"
-    belongs_to :holder, :polymorphic => true
+    belongs_to :created_by, optional: true, class_name: "Droom::User"
+    belongs_to :holder, polymorphic: true, optional: true
     has_many :documents, -> {order(position: :asc, file_file_name: :asc)}, :dependent => :destroy
-    has_many :personal_folders, :dependent => :destroy
     acts_as_tree :order => "droom_folders.name ASC"
 
     before_validation :set_properties
@@ -22,8 +21,7 @@ module Droom
     scope :visible_to, -> user {
       if user
         select('droom_folders.*')
-          .joins('LEFT OUTER JOIN droom_personal_folders AS dpf ON droom_folders.id = dpf.folder_id')
-          .where(["(droom_folders.public = 1 OR dpf.user_id = ?)", user.id])
+          .where("(droom_folders.public = 1)")
           .group('droom_folders.id')
       else
         all_public

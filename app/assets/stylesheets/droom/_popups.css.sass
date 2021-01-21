@@ -1,9 +1,5 @@
 div.popup
   max-height: 60vh
-  form.event
-    margin-left: $datemark_width + $datemark_margin
-  form.document
-    margin-left: 60px
   div.user
     margin: 20px 20px
     div.mugshot
@@ -35,11 +31,8 @@ div.popup
       margin: 10px 20px 0 20px
 
 div.popup
-  position: absolute
   overflow-x: hidden
   overflow-y: auto
-  top: 10px
-  left: 55px
   min-height: 100px
   max-height: 80vh
   max-width: 80vw
@@ -163,6 +156,8 @@ div.mask
   opacity: 0
   visibility: hidden
   transition: opacity 0.5s ease-in
+  display: grid
+  place-items: center
   &.up
     opacity: 1
     visibility: visible

@@ -2,7 +2,8 @@ require 'vcard'
 
 module Droom
   class User < Droom::DroomRecord
-      include Droom::Concerns::Imaged
+    include Droom::Concerns::Imaged
+    include Droom::Concerns::Suggested
 
     # validates :family_name, :presence => true
     # validates :given_name, :presence => true
@@ -27,9 +28,6 @@ module Droom
            unlock_strategy: :both,
            unlock_in: 10.minutes,
            timeout_in: Droom.config.session_timeout
-
-    belongs_to :organisation, optional: true
-    accepts_nested_attributes_for :organisation
 
     before_validation :ensure_uid!
     before_save :ensure_authentication_token!
@@ -228,7 +226,8 @@ module Droom
 
     ## Organisation affiliation
     #
-    belongs_to :organisation
+    belongs_to :organisation, optional: true
+    accepts_nested_attributes_for :organisation
 
     def org_admin?
       organisation && organisation_admin?
@@ -291,35 +290,6 @@ module Droom
       select("droom_users.*")
         .joins("INNER JOIN droom_memberships as dm ON droom_users.id = dm.user_id")
         .where("dm.group_id" => group)
-    }
-
-    ## Event invitations
-    #
-    has_many :invitations, :dependent => :destroy
-    has_many :events, :through => :invitations
-
-    def invite_to(event)
-      invitations.where(event_id: event.id).first_or_create if event && invitable?
-    end
-
-    def uninvite_from(event)
-      invitations.to_event(event).destroy_all
-    end
-
-    def invited_to?(event)
-      event && !!invitation_to(event)
-    end
-
-    def invitation_to(event)
-      invitations.to_event(event).first
-    end
-
-    def invitable?
-      email?
-    end
-
-    scope :personally_invited_to_event, -> event {
-      joins('LEFT OUTER JOIN droom_invitations on droom_users.id = droom_invitations.user_id').where('droom_invitations.group_invitation_id is null AND droom_invitations.event_id = ?', event.id)
     }
 
 
@@ -524,24 +494,6 @@ module Droom
     scope :matching_email, -> fragment {
       joins(:emails).where("droom_emails.email LIKE :f", :f => "%#{fragment}%")
     }
-
-    def as_suggestion
-      {
-        :type => 'person',
-        :prompt => formal_name,
-        :value => formal_name,
-        :id => id
-      }
-    end
-
-    def as_search_result
-      {
-        :type => 'person',
-        :prompt => name,
-        :value => name,
-        :id => id
-      }
-    end
 
 
     # For select box
@@ -839,7 +791,7 @@ module Droom
 
     def subsume!(other_user)
       Droom::User.transaction do
-        %w{emails phones addresses memberships scraps documents invitations memberships user_permissions dropbox_tokens dropbox_documents personal_folders}.each do |association|
+        %w{emails phones addresses memberships scraps documents memberships user_permissions}.each do |association|
           self.send(association.to_sym) << other_user.send(association.to_sym)
         end
         %w{encrypted_password password_salt family_name given_name chinese_name title gender organisation_id description image}.each do |property|

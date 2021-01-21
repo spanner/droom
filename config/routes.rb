@@ -3,8 +3,8 @@ Droom::Engine.routes.draw do
   root to: "dashboard#index"
   get "/dashboard" => "dashboard#index", :as => :dashboard
 
-  match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options]
-  match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options]
+  match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options], defaults: {format: "json"}
+  match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options], defaults: {format: "json"}
 
   namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
 
@@ -66,14 +66,14 @@ Droom::Engine.routes.draw do
   end
 
   resources :preferences
-  resources :invitations
   resources :memberships
-  resources :scraps
   resources :enquiries do
     get "test", on: :collection
   end
 
-  resources :calendars, only: [:show]
+  resources :calendars, only: [:show] do
+    resources :events
+  end
   resources :events do
     collection do
       get :calendar
@@ -82,6 +82,11 @@ Droom::Engine.routes.draw do
     end
     resources :documents
   end
+
+  resources :noticeboards do
+    resources :scraps
+  end
+  resources :scraps
 
   resources :documents do
     get "suggest", on: :collection
@@ -136,8 +141,7 @@ Droom::Engine.routes.draw do
   put "/set_password" => "users#set_password", as: :set_my_password
   put "/set_organisation" => "users#set_organisation", as: :set_my_organisation
   get "/enquire" => "enquiries#new", as: :enquire
-  get "/noticeboard" => "scraps#index", as: :noticeboard
+  get "/noticeboard" => "scraps#index", as: :all_notices
   get "/profile" => "users#edit", as: :profile, defaults: {view: "profile"}
-  get "/page/:slug" => "pages#published", as: :published_page, defaults: {format: "html"}
 
 end

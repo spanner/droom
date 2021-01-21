@@ -1,9 +1,13 @@
 div.menu
   position: absolute
   z-index: 50
-  display: none
-  box-shadow: 0 4px 6px $shadow
+  max-height: 0
+  overflow: auto
+  transition: max-height 0.25s ease-out, box-shadow 0.25s ease-out;
   background-color: $admin
+  &.up
+    box-shadow: 0 4px 6px $shadow
+    max-height: 140px
   ul.actions
     padding: 0
     margin: 8px 10px 3px 5px
@@ -33,6 +37,7 @@ a.menu
   padding-top: 3px
   overflow: hidden
   opacity: 0.4
+  transition: opacity 0.25s ease-out, box-shadow 0.25s ease-out;
   background:
     color: transparent
     position: 0 0
@@ -45,7 +50,7 @@ a.menu
     background-position: 0 0
     opacity: 1
   &.up
-    box-shadow: 0 4px 6px $dark
+    box-shadow: 0 4px 6px $shadow
     opacity: 1
     visibility: visible
     background:
