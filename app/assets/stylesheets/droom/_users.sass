@@ -46,11 +46,6 @@ section.join_organisation
     display: block
     margin: 1em 0
 
-form#login
-  text-align: center
-  div.controls
-    margin-top: 2em
-
 ul.people
   margin: 10px 0 0 -2px
   padding: 0
@@ -205,8 +200,58 @@ form.user
     clear: left
 
 
+table.users
+  font-weight: lighter
+  width: 100%
+  a
+    +inverted
+  a.admin
+    display: none
+    margin-left: 0.25em
+    &.edit
+      color: $blue
+      +hover
+    &.remove
+      color: $red
+      +hover
+  tbody.user
+    td
+      padding: 0 8px
+      vertical-align: top
+    td:first-child
+      padding-left: 0
+    td:last-child
+      padding-right: 0
+    td.organisation
+      padding-left: 0
+      a
+        color: $pale
+        +hover
+    td.address
+      color: $pale
+    td.name
+      font-weight: bold
+      svg
+        width: 0.9em
+        height: 0.9em
+    td.email, td.phone
+      white-space: nowrap
+    td.phone
+      text-align: right
+    tr:first-child
+      td
+        border-top: 1px solid $pale
+        padding-top: 12px;
+    tr:last-child
+      td
+        padding-bottom: 12px;
+    &:hover
+      a.admin
+        display: inline-block
+
+
 @media (max-width: 700px)
   #account
     width: 90%
     margin: 40px auto
-    
+

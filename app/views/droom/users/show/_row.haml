@@ -1,0 +1,29 @@
+- user ||= row ||= @user
+
+
+%tbody.user{id: "user_#{user.id}", data: {refreshing: true, url: droom.user_path(user, view: 'row')} }
+  %tr.upper
+    %td.name
+      = link_to user.colloquial_name, droom.user_url(user), data: {action: "popup"}
+      - if current_user.admin?
+        = link_to droom.edit_user_url(user), :class => 'admin edit', :data => {:action => "popup", :affected => "#user_#{user.id}"} do
+          %svg
+            %use{href: "/lms-sprites.svg#sprite-edit_button"}
+        = link_to droom.user_url(user), :class => 'admin remove', data: {confirm: "Really delete #{user.name}?", method: "delete", remote: true, removed: "#user_#{user.id}"} do
+          %svg
+            %use{href: "/lms-sprites.svg#sprite-cross_button"}
+
+    %td.email
+      - if user.email.present?
+        = mail_to user.email, user.email, class: "email"
+    %td.phone
+      - if user.phone.present?
+        = link_to user.phone, "tel:#{user.phone}"
+  %tr.lower
+    %td.organisation
+      - if user.organisation
+        = link_to user.organisation.name, droom.organisation_url(user.organisation), class: "organisation"
+    %td.address{colspan: 2}
+      - if user.address.present?
+        = truncate(user.address, length: 96)
+

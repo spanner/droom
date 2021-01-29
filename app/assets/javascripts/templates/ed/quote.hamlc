@@ -1,3 +1,0 @@
-.holder
-  %blockquote{contenteditable: "plaintext-only"}<
-  %figcaption{contenteditable: "plaintext-only", data: {placeholder: "Optional attribution"}}<

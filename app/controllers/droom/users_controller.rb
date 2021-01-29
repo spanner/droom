@@ -1,23 +1,22 @@
 module Droom
   class UsersController < Droom::DroomController
+    include Droom::Concerns::Searchable
     helper Droom::DroomHelper
-    respond_to :html, :js
+
+    respond_to :html
     skip_before_action :check_user_has_organisation, only: [:setup, :set_organisation]
     before_action :set_view, only: [:show, :new, :edit, :update]
     before_action :search_users, only: [:admin]
     # before_action :self_unless_admin, only: [:edit, :update]
     load_and_authorize_resource except: [:setup, :set_organisation]
 
-    # :index is the old user-list view, preserved for historical compatibility but now v. clunky.
-    # :admin is the new elasticsearch index. The actual search work is done in `search_users`.
+    # :index is a minimal search and facet view.
     #
     def index
-      @users = @users.in_name_order.includes(:permissions)
-      @users = @users.matching(params[:q]) unless params[:q].blank?
-      @users = @users.from_email(params[:email]) unless params[:email].blank?
-      @users = paginated(@users, params[:pp].presence || 24)
-      respond_with @users do |format|
-        format.js { render :partial => 'droom/users/users' }
+      if pjax?
+        render partial: "droom/users/show/table"
+      else
+        render
       end
     end
 
@@ -225,5 +224,22 @@ module Droom
     def find_user_by_user_id
       @user ||= Droom::User.find_by_id(params[:user_id])
     end
+
+
+    ## Searchable configuration
+    #
+    def search_fields
+      ['name^10', 'chinese_name^10', 'emails', 'addresses', 'phones']
+    end
+
+    def search_default_sort
+      :family_name
+    end
+
+    def search_criterion_params
+      [:organisation_name, :privileged, :groups]
+    end
+
   end
 end
+

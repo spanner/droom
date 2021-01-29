@@ -1,0 +1,24 @@
+- view ||= 'listed'
+- users ||= @users
+
+%div#users{data: {refreshing: true, url: "#{droom.users_path(page: @page, per_page: @show)}.js"}}
+  - if users.any?
+    - if users.current_page > 1
+      .pagination.upper
+        = paginate users, :params => {:format => nil}
+
+    %ul.user_list.banded
+      = render partial: "droom/users/show/#{view}", collection: users
+
+    .pagination.lower
+      = paginate users, :params => {:format => nil}
+
+  - elsif params[:q].present?
+    %h2
+      No users matching
+      %strong
+        = "#{params[:q]}."
+
+  - else
+    %h2
+      Nobody to display.

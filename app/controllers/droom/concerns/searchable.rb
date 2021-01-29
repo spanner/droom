@@ -50,6 +50,7 @@ module Droom::Concerns::Searchable
     options[:match] = search_match if search_match
     options[:highlight] = search_highlights if search_highlights
     options[:includes] = search_includes if search_includes
+    options[:load] = search_load_models
     options[:misspellings] = search_misspellings if search_misspellings
     options.deep_merge!(preset_options)
 
@@ -108,6 +109,10 @@ module Droom::Concerns::Searchable
 
   def search_includes
     []
+  end
+
+  def search_load_models
+    true
   end
 
   def init_pagination

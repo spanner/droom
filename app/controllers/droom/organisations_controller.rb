@@ -2,7 +2,7 @@ module Droom
   class OrganisationsController < Droom::DroomController
     include Droom::Concerns::Searchable
     helper Droom::DroomHelper
-    respond_to :html, :js
+    respond_to :html
 
     load_and_authorize_resource
     before_action :set_view, only: [:show, :edit, :update, :create]
@@ -14,7 +14,11 @@ module Droom
 
     def index
       @external = params[:external] unless params[:external] == 'false'
-      render
+      if pjax?
+        render partial: "droom/organisations/list", locals: {organisations: @organisations}
+      else
+        render
+      end
     end
 
     def pending

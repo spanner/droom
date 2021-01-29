@@ -1,6 +1,0 @@
-.select
-.thumbnail
-  %a.thumbnail.add
-    %svg.icon.filled
-      %use{"xlink:href" => "#plus_symbol"}
-  

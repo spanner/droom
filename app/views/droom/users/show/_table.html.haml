@@ -1,0 +1,20 @@
+- users ||= @users
+
+%div#users{data: {refreshing: true, url: "#{droom.users_path(page: @page, per_page: @show)}.js"}}
+  - if users.any?
+    %table.users
+      %tbody
+        = render partial: "droom/users/show/row", collection: users
+
+    .pagination.lower
+      = paginate users, :params => {:format => nil}
+
+  - elsif params[:q].present?
+    %h2
+      No users matching
+      %strong
+        = "#{params[:q]}."
+
+  - else
+    %h2
+      Nobody to display.

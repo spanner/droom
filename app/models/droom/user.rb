@@ -111,7 +111,7 @@ module Droom
     end
 
     def names?
-      (given_name? and family_name?) || (Droom.use_chinese_names? && chinese_name?)
+      (given_name? && family_name?) || (Droom.use_chinese_names? && chinese_name?)
     end
 
 
@@ -714,13 +714,15 @@ module Droom
     ## Search
     #
     searchkick _all: false, callbacks: :async, default_fields: [:name, :chinese_name, :emails, :organisation_name]
-
+    scope :search_import, -> { includes(:organisation, :emails, :phones, :addresses, :groups) }
     def search_data
       data = {
         uid: uid,
-        title: title,
-        name: name,
-        chinese_name: chinese_name,
+        title: strip_if_present(title),
+        name: strip_if_present(name),
+        given_name: strip_if_present(given_name),
+        family_name: strip_if_present(family_name),
+        chinese_name: strip_if_present(chinese_name),
         emails: emails.map(&:email),
         addresses: addresses.map(&:address),
         organisation: organisation_id,
@@ -733,12 +735,22 @@ module Droom
       data.merge(additional_search_data)
     end
 
+    def strip_if_present(value)
+      if value.is_a?(Array)
+        value.map{|v| strip_if_present(v) }
+      elsif value.present?
+        value.strip
+      else
+        ""
+      end
+    end
+
     def group_slugs
       groups.pluck(:slug).map(&:presence).compact.uniq
     end
 
     def organisation_name
-      organisation.name if organisation
+      organisation.name.strip if organisation && organisation.name?
     end
 
     def organisation_tags

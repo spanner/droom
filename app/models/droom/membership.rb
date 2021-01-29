@@ -6,11 +6,9 @@ module Droom
 
     has_one :mailing_list_membership, :dependent => :destroy
 
-    after_create :link_folder
     after_create :create_mailing_list_membership
     after_create :create_permissions
 
-    after_destroy :unlink_folder
     after_destroy :destroy_permissions
     after_destroy :destroy_similar
     

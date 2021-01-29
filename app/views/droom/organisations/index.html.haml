@@ -27,5 +27,22 @@
   %p
     = t :organisations_introduction, org_count: Droom::Organisation.count, person_count: Droom::User.count
 
-#main.organisations
-  = render :partial => 'droom/organisations/organisations'
+%section.standard
+  %form.search_and_facet{:action => droom.organisations_url, :id => "organisation_search", data: {target: '#organisations'}}
+    = hidden_field_tag :page, params[:page]
+    = hidden_field_tag :show, params[:show]
+    = hidden_field_tag :sort, params[:sort]
+
+    .facet<
+      %svg.prefix
+        %use{href: "/lms-sprites.svg#sprite-next"}
+      %span.label
+        Filters
+
+    .search<
+      = text_field_tag :q, params[:q], name: 'q', class: 'search', placeholder: t(:search), data: {slow: true}
+      %label{for: "q"}
+        %svg.icon
+          %use{href: "/lms-sprites.svg#sprite-search"}
+
+  = render "droom/organisations/list", organisations: @organisations

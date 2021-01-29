@@ -2,7 +2,7 @@
 - organisation ||= listed || @organisation
 - open ||= organisation == @organisation
 
-.organisation.listed{:id => "organisation_#{organisation.id}", :class => open ? "name open" : "name", :data => {:action => "collapser", :refreshing => true, :url => droom.organisation_path(organisation, view: "listed")} }
+%li.organisation.listed.row{:id => "organisation_#{organisation.id}", :class => open ? "name open" : "name", :data => {:action => "collapser", :refreshing => true, :url => droom.organisation_path(organisation, view: "listed")} }
   .heading
     - if admin? and organisation.pending?
       = render partial: "droom/organisations/show/status", locals: {organisation: organisation}
@@ -16,8 +16,9 @@
     = shorten(organisation.description, :length => 128)
 
   .detail
-    %p
-      = organisation.description.html_safe
+    - if organisation.description?
+      %p
+        = organisation.description
 
     - if organisation.url?
       %p.note

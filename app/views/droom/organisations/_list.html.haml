@@ -1,0 +1,16 @@
+- view ||= 'listed'
+- cssclass = 'organisations_list'
+- cssclass << ' compact' if @external
+
+- if @organisations.any?
+
+  %div#organisations{class: cssclass, data: {refreshing: true, url: "#{droom.organisations_path(page: @page, per_page: @show)}.js"}}
+    = render partial: "droom/organisations/show/#{view}", collection: @organisations
+
+  .pagination.lower
+    = paginate @organisations, params: {format: nil}
+
+
+- else
+  %p.none
+    = t :no_organisations

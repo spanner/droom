@@ -1,0 +1,7 @@
+- user ||= link ||= @user
+
+%li{id: "user_#{user.id}", data: {refreshing: true, url: droom.user_path(user, view: 'link')} }
+  = link_to user_url(user), data: {action: "popup"} do
+    = user.colloquial_name
+  - if user.email.present?
+    = mail_to user.email, "<#{user.email}>", class: "email"

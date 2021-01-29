@@ -217,6 +217,10 @@ en:
     other: "%{count} members"
   group_name: "Name"
   has_been_created: "has been added to the system"
+  headings:
+    users: "Address book"
+    organisations: "Organisations"
+    groups: "Directory"
   hello: "Hello world"
   hello_name: "Hello %{name}."
   help: "Help"
@@ -392,6 +396,7 @@ en:
   organisation_tag_instructions: "Please choose tags to describe your organisation."
   organisation_type: "Organisation type"
   organisations_introduction: "This page shows all the organisations taking part here and the users who are allowed to sign in as their representatives."
+  organisations: "Directory"
   other: "other"
   other_documents: "Other available documents"
   other_future_events: "Here is a general list of events coming up."

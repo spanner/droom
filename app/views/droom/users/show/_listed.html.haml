@@ -7,26 +7,23 @@
 - liclass << " unconfirmed" unless user.confirmed?
 - ineditable ||= false
 
-- if user.image?
-  - mugstyle = "background-image: url(#{user.image.url(:thumb)})"
-- else
-  - mugstyle = ""
-
 - if membership
   - group = membership.group
 
-%li{id: "user_#{user.id}", class: liclass, data: {refreshing: true, url: droom.user_path(user, view: 'listed')} }
-  - if user.confirmed?
-    %span.mugshot{style: mugstyle}
-  - else
-    %span.mugshot
-      %svg
-        %use{"xlink:href" => "#unknown_symbol"}
-
-  %span.contact
-    %span.name
-      = link_to truncate(user.colloquial_name, length: 32), user_url(user), data: {action: "popup"}
-      = action_menulink(user)
-    %br
-    = mail_to user.email, user.email, class: "email"
-    = action_menu(user, event: event, group: group)
+%li.user.listed.row{id: "user_#{user.id}", class: liclass, data: {refreshing: true, url: droom.user_path(user, view: 'listed')} }
+  %span.user
+    %h2.name
+      - if user.image?
+        %span.mugshot{style: "background-image: url(#{user.image.url(:thumb)})"}
+      - else
+        %span.mugshot
+          %svg
+            %use{"xlink:href" => "#user_symbol"}
+      = link_to user.colloquial_name, droom.user_url(user), data: {action: "popup"}
+      - if user.organisation
+        %br
+        = link_to user.organisation.name, droom.organisation_url(user.organisation)
+    - if Droom.use_biogs? && user.description?
+      .description
+        = sanitize(user.description.html_safe)
+    = render "droom/users/show/contacts", user: user
