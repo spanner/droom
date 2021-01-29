@@ -46,98 +46,39 @@ section.join_organisation
     display: block
     margin: 1em 0
 
-ul.people
-  margin: 10px 0 0 -2px
+ul.users
+  margin: 0
   padding: 0
   list-style: none
-  li.person
+  display: flex
+  li
     display: inline-block
-    vertical-align: top
-    width: 250px
-    margin-bottom: 20px
-    line-height: 1.25
-    &.small
-      margin-bottom: 10px
-      span.mugshot
-        margin-top: 7px
-    &:last-child
-      margin-bottom: 0
+    margin-right: 2em
     a
       color: $dark
-      white-space: nowrap
-      &.email
-        color: $mid
-      &.add
-        color: $green
-        span.mugshot
-          background: none
-        &.waiting
-          padding-left: 0
-          background-position: 16px 16px
-          span.mugshot
-            visibility: hidden
       +hover
-    &.org_admin
-      a.name
-        font-weight: bold
-    &.unconfirmed
-      a
-        color: $pale
-        &.reinvite
-          color: $blue
-          &.reinvited
-            color: $green
-          &.erratic
-            color: $red
-      span.mugshot
-        color: $pale
-        background-image: none
-    &.refused
-      opacity: 0.4
-    span.mugshot
-      position: relative
-      display: block
-      float: left
-      width: 32px
-      height: 32px
-      border-radius: 16px
-      border: 1px solid $pale
-      margin-right: 9px
-      margin-top: 11px
-      svg
-        width: 32px
-        height: 32px
-      background:
-        repeat: no-repeat
-        position: center center
-        size: cover
-
+    a.add
+      color: $green
+      +hover
+    &:last-child
+      margin-right: 0
+    svg.prefix
+      vertical-align: top
+      margin-top: 0.2em
+    span.label
+      white-space: nowrap
     span.contact
       display: block
-      overflow: hidden
-      span.name
-        display: inline-block
-        font-size: 1em
-        margin-top: 4px
+      a.email
+        color: $pale
+        +hover
 
 form.user
+  max-width: 900px
   h3
-    margin: 1em 0 0 0
+    margin: 1em 0 0.5em 0
     & + p
       margin-top: 0.25em
-  p.names
-    label
-      display: block
-    input[type="text"]
-      width: 100%
-      box-sizing: border-box
-    span.title
-      +column(16%, 1%)
-    span.name
-      +column(34%, 1%)
-    span.chinese_name, span.honours
-      +column(12%, 1%)
-      margin-right: 0
   .contacts
     margin-top: 10px
     input[type="text"], input[type="email"]

@@ -79,6 +79,10 @@ module Droom
       defer_confirmation && defer_confirmation != "false"
     end
 
+    def deconfirm!
+      self.update confirmed_at: nil
+    end
+
     # For users of peripheral services we can leave it up to them to require or offer confirmation.
     #
     def confirmation_required?

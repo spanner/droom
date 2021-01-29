@@ -1,2 +1,5 @@
+- content_for :breadhead do
+  = link_to t(:organisations), droom.organisations_url
+
 - @view ||= 'page'
 = render partial: "droom/organisations/show/#{@view}"

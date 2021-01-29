@@ -117,6 +117,17 @@ a.comma-separated
     &:after
       content: ""
 
+a.addendum
+  &.new
+    color: $green
+    +hover
+  &.edit
+    color: $blue
+    +hover
+  svg
+    width: 0.5em
+    height: 0.5em
+
 .unavailable
   +small
   +pale
@@ -686,9 +697,9 @@ ul.dropdown
 
 div.nested_set
   position: relative
+  margin-bottom: 10px
   p:last-child
-    margin-bottom: 0.25em
-  margin-bottom: 0.75em
+    margin-bottom: 0
   p:first-child
     margin-top: 0
   .repeating

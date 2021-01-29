@@ -71,9 +71,9 @@ span.notcol
       +column(36%)
   &.addendum
     .col:first-child, .col.first
-      +column(calc(100% - 76px), 10px)
+      +column(calc(85% - 10px), 10px)
     .col:last-child, .col.last
-      +column(66px)
+      +column(15%, 0)
 
 .threecol
   .col
@@ -87,6 +87,15 @@ span.notcol
 .fourcol
   .col
     +column(23.5%, 2%)
+
+.namecols
+  margin: 0
+  span.title
+    +column(calc(15% - 10px), 10px)
+  span.name
+    +column(calc(35% - 10px), 10px)
+  span.chinese_name, span.honours
+    +column(15%, 0)
 
 .autogrid
   display: grid

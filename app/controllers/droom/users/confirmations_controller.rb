@@ -13,10 +13,13 @@ module Droom::Users
     # possibly also an organisation-joining form.
     #
     def show
+      Rails.logger.warn "😈 Confirmations#show"
       @resource = self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+      Rails.logger.warn "😈 resource: #{resource_name}: #{@resource.inspect}"
       if @resource
         sign_in(resource_name, @resource)
-         redirect_to droom.dashboard_url
+          Rails.logger.warn "😈 redirecting..."
+         redirect_to droom.root_url
       else
         render :template => "droom/users/confirmations/failure"
       end

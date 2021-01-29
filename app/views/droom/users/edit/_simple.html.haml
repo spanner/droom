@@ -19,14 +19,6 @@
     - unless @user.confirmed?
       = f.hidden_field :send_confirmation, value: true
 
-    - if Droom.use_organisations?
-      - if admin?
-        %p.organisation.admin
-          = f.label :organisation_id
-          = f.select :organisation_id, Droom::Organisation.for_selection, :class => 'preferences'
-      - else
-        = f.hidden_field :organisation_id
-
     .buttons
       - if user == current_user
         = f.submit t(:save_your_profile)

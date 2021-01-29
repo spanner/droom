@@ -3,7 +3,7 @@
 - with_label ||= false
 
 %fieldset{data: {role: 'names'}}
-  %p.names
+  %p.namecols
     - if Droom.use_titles?
       %span.title>
         = f.text_field :title, placeholder: t("placeholders.user.title")
@@ -14,3 +14,6 @@
     - if Droom.use_chinese_names?
       %span.chinese_name>
         = f.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
+    - if Droom.use_honours?
+      %span.honours>
+        = f.text_field :honours, placeholder: t("placeholders.user.honours")

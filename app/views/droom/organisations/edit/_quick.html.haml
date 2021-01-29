@@ -1,4 +1,5 @@
 - organisation ||= @organisation
+- organisation_types = Droom::OrganisationType.for_selection
 
 - if organisation.new_record?
   - title = t(:add_organisation)
@@ -14,29 +15,30 @@
   = render 'droom/shared/popup_header', title: title
 
   = form_for [droom, organisation], :html => {:class => 'edit organisation'} do |f|
-    %p.name.twocol<
+    %p.name{class: Droom.config.use_chinese_names? ? "twocol" : "onecol"}
       %span.col>
         = f.text_field :name, :required => true, :autofocus => true, placeholder: t("placeholders.organisation.name")
-      %span.col>
-        = f.text_field :chinese_name, placeholder: t("placeholders.organisation.chinese_name")
+      - if Droom.config.use_chinese_names?
+        %span.col>
+          = f.text_field :chinese_name, placeholder: t("placeholders.organisation.chinese_name")
 
-    %p.secondary.twocol
+    %p.secondary{class: organisation_types.any? ? "twocol" : "onecol"}
       %span.col>
         = f.label :url
         %br
         = f.url_field :url, :class => "url", placeholder: t("placeholders.organisation.url")
-
-      %span.col>
-        = f.label :organisation_type_id
-        %br
-        = f.select :organisation_type_id, Droom::OrganisationType.for_selection, :class => 'preferences'
+      - if organisation_types.any?
+        %span.col>
+          = f.label :organisation_type_id
+          %br
+          = f.select :organisation_type_id, organisation_types, :class => 'preferences'
 
     %p.secondary.tagger
       = f.label :keywords
       %br
       = f.text_field :keywords, placeholder: t("placeholders.organisation.keywords"), class: "tags"
 
-    - if admin? || organisation_admin?(organisation)
+    - if @organisation.persisted? && (admin? || organisation_admin?(organisation))
       %p.secondary.admins
         = f.label :administrator_ids
         %br
@@ -49,7 +51,7 @@
       %br
       = f.text_area :description, class: "rte", placeholder: t("placeholders.organisation.description")
  
-    - if admin?
+    - if admin? && Droom::registerable?
       %p.admin
         = f.check_box :external, class: 'fancy'
         = f.label :external

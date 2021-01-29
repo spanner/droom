@@ -1,5 +1,14 @@
+- content_for :breadhead do
+  = link_to t(:site_title), droom.root_url
+
+- content_for :title_class do
+  larger
+
 - content_for :title do
   = t "headings.users"
+  = link_to droom.new_user_url, :class => "addendum add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#users"} do
+    %svg.icon
+      %use{href: "/lms-sprites.svg#sprite-plus_button"}
 
 - content_for :standfirst do
   %p

@@ -1,45 +1,33 @@
-- organisation ||= @organisation
-- image_url = organisation.image_url(:hero)
+- content_for :title do
+  - if current_user.organisation == @organisation
+    Manage your organisation
+  - else
+    = @organisation.name
 
-- content_for :pagetitle do
-  = organisation.name
+- if current_user.organisation == @organisation
+  - content_for :standfirst do
+    %p
+      %strong
+        Hello
+        = current_user.name
+      and welcome. This is where you manage the
+      %strong
+        = @organisation.name
+      organisation.
 
-- content_for :body_class do 
-  organisation
+%div{id: "organisation_#{@organisation.id}", data: {refreshing: droom.organisation_url(@organisation, view: 'page')}}
 
-- if image_url.present?
-  - content_for :masthead do
-    #page_masthead
-      .bg{style: "background-image: url('#{image_url}')"}
-      .darken
-      .fg
-        = action_menu(organisation)
-        %h1.title
-          = link_to t(:directory), main_app.directory_url, class: "breadhead"
-          = organisation.name
-          = action_menulink(organisation)
-          - if organisation.chinese_name
-            %span.chinese_name
-              = organisation.chinese_name
+  %section.description
+    - if @organisation.description?
+      = sanitize(@organisation.description)
 
-- else
-  - content_for :title do 
-    = link_to t(:directory), main_app.directory_url, class: "breadhead"
-    = organisation.name
-    = action_menulink(organisation)
-    - if organisation.chinese_name
-      %span.chinese_name
-        = organisation.chinese_name
+    - else
+      = link_to droom.edit_organisation_url(@organisation), class: "edit", data: {action: "popup", affected: "#organisation_#{@organisation.id}"} do
+        %svg.icon.small
+          %use{"xlink:href" => "#plus_symbol"}
+        %span.label
+          = t(:describe_organisation)
 
-    = action_menu(organisation)
+  = render partial: "droom/organisations/show/users", locals: {organisation: @organisation}
 
-- content_for :margin do
-  = render "droom/organisations/show/links", organisation: organisation
-  = render "droom/organisations/show/personnel", organisation: organisation
-  = render "droom/organisations/show/marginal_extras"
-
-
-%section.description
-  = sanitize organisation.description
-
-= render "droom/organisations/show/extras"
+  = render "droom/organisations/show/extras"

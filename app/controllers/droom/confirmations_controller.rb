@@ -18,6 +18,10 @@ module Droom
       end
     end
 
+    def after_sign_in_path_for(resource)
+      dashboard_url
+    end
+
     # the purpose of this is to add another step between user creation and user confirmation, such that
     # we perform the confirmation only if a password is supplied and validates.
     #
@@ -43,7 +47,7 @@ module Droom
     end
 
     def after_confirmation_path_for(resource_name, resource)
-      dashboard_url
+      droom.dashboard_url
     end
 
   protected

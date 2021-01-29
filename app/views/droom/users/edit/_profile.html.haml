@@ -4,8 +4,6 @@
   - title = t :edit_your_profile
 - elsif user.new_record?
   - title = t :add_new_user
-  - if Droom.use_organisations? && @user.organisation
-    - title << [t(:to), " ", user.organisation.name].join(" ")
 - else
   - title = t(:edit_profile_of, name: user.name)
 
@@ -23,7 +21,11 @@
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'
 
-      - if !@user.confirmed? && (admin? || @user.organisation && organisation_admin?(@user.organisation))
-        %p
-          = f.check_box :send_confirmation, class: "fancy"
-          = f.label :send_confirmation
+      - if !@user.confirmed?
+        - if admin?
+          %p.admin
+            = f.check_box :send_confirmation, class: "fancy"
+            = f.label :send_confirmation
+        - elsif @user.organisation && organisation_admin?(@user.organisation)
+          - @user.send_confirmation = true
+          = f.hidden_field :send_confirmation

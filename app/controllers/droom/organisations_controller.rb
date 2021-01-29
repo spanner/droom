@@ -34,6 +34,7 @@ module Droom
 
     def update
       @organisation.update(organisation_params)
+      @organisation.approve!(current_user)
       respond_with @organisation
     end
 
