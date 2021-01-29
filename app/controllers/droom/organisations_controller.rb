@@ -27,13 +27,13 @@ module Droom
     end
 
     def create
-      @organisation.update_attributes(organisation_params)
+      @organisation.update(organisation_params)
       @organisation.approve!(current_user)
       respond_with @organisation
     end
 
     def update
-      @organisation.update_attributes(organisation_params)
+      @organisation.update(organisation_params)
       respond_with @organisation
     end
 

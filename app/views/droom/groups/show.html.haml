@@ -5,7 +5,9 @@
   %p
     = @group.description
 
-  = render :partial => 'droom/memberships/memberships'
+  %h2
+    Members
+  = render partial: 'droom/users/show/link', collection: @group.users
 
   - if current_user.admin?
     .holder

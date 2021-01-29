@@ -64,7 +64,7 @@ module Droom
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
-      if @user.update_attributes(user_params)
+      if @user.update(user_params)
         respond_with @user, location: user_url(view: @view) do |format|
           format.js { head :no_content }
         end
@@ -97,7 +97,7 @@ module Droom
     end
 
     def set_organisation
-      if current_user.update_attributes(set_organisation_params)
+      if current_user.update(set_organisation_params)
         redirect_to params[:destination].presence || droom.dashboard_url
       else
         render template: "/droom/users/setup_organisation"

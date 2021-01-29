@@ -28,7 +28,7 @@ module Droom
     end
 
     def create
-      @folder.update_attributes(folder_params)
+      @folder.update(folder_params)
       respond_with @folder do |format|
         format.js { render :partial => "droom/folders/folder" }
       end
@@ -39,7 +39,7 @@ module Droom
     end
     
     def update
-      @folder.update_attributes(folder_params)
+      @folder.update(folder_params)
       respond_with @folder do |format|
         format.js { render :partial => "droom/folders/folder" }
       end

@@ -110,6 +110,12 @@ a.setter
     color: $hover
   +waitable
 
+a.comma-separated
+  &:after
+    content: ", "
+  &:last-child
+    &:after
+      content: ""
 
 .unavailable
   +small
@@ -704,11 +710,15 @@ div.nested_set
     position: absolute
     top: -4px
     left: -10px
-    color: $red
+    color: $verypale
+    &:hover
+      color: $red
   a.add
     bottom: -4px
     right: 70px
-    color: $green
+    color: $verypale
+    &:hover
+      color: $green
 
 ul.downloads
   margin: 0

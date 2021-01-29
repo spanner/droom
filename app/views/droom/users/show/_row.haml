@@ -2,7 +2,7 @@
 
 
 %tbody.user{id: "user_#{user.id}", data: {refreshing: true, url: droom.user_path(user, view: 'row')} }
-  %tr.upper
+  %tr
     %td.name
       = link_to user.colloquial_name, droom.user_url(user), data: {action: "popup"}
       - if current_user.admin?
@@ -16,14 +16,26 @@
     %td.email
       - if user.email.present?
         = mail_to user.email, user.email, class: "email"
+      - if user.emails.count > 1
+        = link_to droom.user_url(user), class: "and_more", data: {action: "popup"} do
+          \ +
+          = user.emails.count - 1
+          more
     %td.phone
       - if user.phone.present?
         = link_to user.phone, "tel:#{user.phone}"
-  %tr.lower
+  %tr
     %td.organisation
-      - if user.organisation
+      - if user.groups.any?
+        - user.groups.uniq.each do |g|
+          = link_to droom.group_url(g), class: 'group comma-separated' do
+            %svg.prefix
+              %use{href: "#group_symbol"}
+            %span.label
+              = g.name
+          
+      - elsif user.organisation
         = link_to user.organisation.name, droom.organisation_url(user.organisation), class: "organisation"
     %td.address{colspan: 2}
       - if user.address.present?
         = truncate(user.address, length: 96)
-

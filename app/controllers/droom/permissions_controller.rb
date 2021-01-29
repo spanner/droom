@@ -28,7 +28,7 @@ module Droom
     end
 
     def update
-      @permission.update_attributes(permission_params)
+      @permission.update(permission_params)
       respond_with @service, @permission
     end
     

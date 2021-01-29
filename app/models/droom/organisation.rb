@@ -75,7 +75,7 @@ module Droom
     #
     def approve!(approving_user=nil)
       unless approved?
-        self.update_attributes({
+        self.update({
           approved_at: Time.now,
           approved_by: approving_user,
           disapproved_at: nil,
@@ -89,7 +89,7 @@ module Droom
     #
     def approve
       unless approved?
-        self.update_attributes({
+        self.update({
           approved_at: Time.now,
           disapproved_at: nil,
           disapproved_by: nil
@@ -103,7 +103,7 @@ module Droom
 
     def disapprove!(user)
       unless disapproved?
-        self.update_attributes({
+        self.update({
           disapproved_at: Time.now,
           disapproved_by: user,
           approved_at: nil,

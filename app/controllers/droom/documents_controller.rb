@@ -42,12 +42,12 @@ module Droom
     end
     
     def update
-      @document.update_attributes(document_params)
+      @document.update(document_params)
       render :partial => 'listing', :object => @document
     end
 
     def reposition
-      @document.update_attributes(reposition_params)
+      @document.update(reposition_params)
       head :ok
     end
 

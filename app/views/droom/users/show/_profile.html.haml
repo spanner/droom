@@ -15,7 +15,7 @@
         - if can? :manage, user
           = link_to droom.edit_user_url(user), :class => 'addendum edit', :data => {:action => "popup", :affected => "#user_#{user.id}"} do
             %svg
-              %use{href: "#edit_button"}
+              %use{href: "/lms-sprites.svg#sprite-edit_button"}
       %p.contact
         - if user.organisation
           %strong

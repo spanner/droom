@@ -3,7 +3,7 @@
 
 %li{class: cssclass}
   %span.contact
-    = phone.phone
+    = link_to phone.phone, "tel:#{phone.phone}"
   - if phone.address_type
     %span.contact_type
       = phone.address_type.name
