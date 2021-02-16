@@ -1,6 +1,9 @@
 - if user_signed_in?
   #controls>
     .headers
+      %a.signout{href: droom.destroy_user_session_url, data: {method: "delete"}}<
+        %svg.icon
+          %use{"xlink:href" => "#door_button_symbol"}
       - if current_user.admin?
         = link_to t("masthead.admin"), '#', :class => "admin_header", :title => t("masthead.admin"), :data => {:panel => 'admin'}
       = link_to t("masthead.search"), '#', :class => "search_header", :title => t("masthead.search"), :data => {:panel => 'search'}

@@ -98,6 +98,9 @@ select
   &.small
     font-size: 0.9em
     -webkit-padding-end: 16px
+  &.disabled, &:disabled, &[disabled]
+    opacity: 0.25
+    border-style: dotted
 
 input[type="submit"], button.confirm
   +button($green)
