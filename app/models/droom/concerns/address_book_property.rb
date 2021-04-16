@@ -3,7 +3,7 @@ module Droom::Concerns::AddressBookProperty
 
   included do
     belongs_to :user
-    belongs_to :address_type
+    belongs_to :address_type, optional: true
     after_save :undefault_others
 
     scope :preferred, -> {
