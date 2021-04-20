@@ -34,9 +34,9 @@ module Droom
               can :read, Droom::Venue
 
               if Droom.config.hide_directory?
-                cannot :index Droom::Organisation
+                cannot :index, Droom::Organisation
                 can :show, Droom::Organisation, id: user.organisation_id
-                cannot :index Droom::User
+                cannot :index, Droom::User
                 can :show, Droom::User, organisation_id: user.organisation_id
               else
                 can :read, Droom::User
