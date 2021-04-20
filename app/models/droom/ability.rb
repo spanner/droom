@@ -33,13 +33,15 @@ module Droom
               can :read, Droom::Noticeboard
               can :read, Droom::Venue
 
-              unless Droom.config.hide_directory?
+              if Droom.config.hide_directory?
+                cannot :index Droom::Organisation
+                can :show, Droom::Organisation, id: user.organisation_id
+                cannot :index Droom::User
+                can :show, Droom::User, organisation_id: user.organisation_id
+              else
                 can :read, Droom::User
                 can :read, Droom::Group
                 can :read, Droom::Organisation
-              else
-                can :read, Droom::Organisation, id: user.organisation_id
-                can :read, Droom::User, organisation_id: user.organisation_id
               end
 
               # If someone has been allowed to create something, they are generally allowed to edit or remove it.
