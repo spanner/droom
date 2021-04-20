@@ -283,7 +283,7 @@ module Droom
     end
  
     def session_timeout
-      @@session_timeout ||= 15.minutes
+      @@session_timeout ||= 12.hours
     end
     
     def enable_pubsub?
