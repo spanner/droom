@@ -1,10 +1,12 @@
+- editor = current_user.organisation_admin? && current_user.organisation == @organisation
+
 - content_for :title do
-  - if current_user.organisation == @organisation
+  - if editor
     Manage your organisation
   - else
     = @organisation.name
 
-- if current_user.organisation == @organisation
+- if editor
   - content_for :standfirst do
     %p
       %strong
@@ -21,7 +23,7 @@
     - if @organisation.description?
       = sanitize(@organisation.description)
 
-    - else
+    - elsif editor
       = link_to droom.edit_organisation_url(@organisation), class: "edit", data: {action: "popup", affected: "#organisation_#{@organisation.id}"} do
         %svg.icon.small
           %use{"xlink:href" => "#plus_symbol"}

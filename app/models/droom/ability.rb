@@ -26,13 +26,21 @@ module Droom
 
             if user.data_room_user?
               can :read, :dashboard
-              can :read, Droom::Event
-              can :read, Droom::Scrap
-              can :read, Droom::Venue
-              can :read, Droom::User
-              can :read, Droom::Group
-              can :read, Droom::Organisation
               can :index, :suggestions
+              can :read, Droom::Event
+              can :read, Droom::Calendar
+              can :read, Droom::Scrap
+              can :read, Droom::Noticeboard
+              can :read, Droom::Venue
+
+              unless Droom.config.hide_directory?
+                can :read, Droom::User
+                can :read, Droom::Group
+                can :read, Droom::Organisation
+              else
+                can :read, Droom::Organisation, id: user.organisation_id
+                can :read, Droom::User, organisation_id: user.organisation_id
+              end
 
               # If someone has been allowed to create something, they are generally allowed to edit or remove it.
               # This rule must sit after the user rules because users have no created_by_id column.

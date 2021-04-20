@@ -6,7 +6,7 @@
 
       = render :partial => "droom/users/show/link", :collection => organisation.users.in_name_order
 
-      - if Droom.users_can_invite?
+      - if Droom.users_can_invite? && current_user.organisation_admin?
         %li.user
           = link_to droom.new_organisation_user_url(organisation.id, view: 'simple'), class: "add", data: {action: "popup", affected: "section.personnel", step: 2, intro: "Click here to invite another person."} do
             %svg.prefix

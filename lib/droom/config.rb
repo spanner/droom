@@ -58,7 +58,8 @@ module Droom
                   :mc_news_template,
                   :mc_news_list,
                   :session_timeout,
-                  :enable_pubsub
+                  :enable_pubsub,
+                  :hide_directory
 
     def home_url
       @home_url ||= "http://example.com"
@@ -287,6 +288,10 @@ module Droom
     
     def enable_pubsub?
       !!@enable_pubsub
+    end
+ 
+    def hide_directory?
+      !!@hide_directory
     end
  
  
