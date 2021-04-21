@@ -420,7 +420,7 @@ module Droom
         if persisted?
           self.addresses.where(address: address).first_or_create(address_type: address_type, default: true)
         else
-          self.phones.build(address: address, address_type: address_type, default: true)
+          self.addresses.build(address: address, address_type: address_type, default: true)
         end
       end
     end
