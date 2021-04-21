@@ -5,6 +5,6 @@
     = link_to t(:preferences), droom.edit_user_url(current_user), :data => {:action => "popup"}
     = link_to t(:profile), droom.edit_user_url(current_user), :data => {:action => "popup", :affected => ".people_list"}
     = link_to t(:help_pages), "/help"
-    = link_to t(:sign_out), droom.sign_out_path, :method => :delete
+    = link_to t(:sign_out), droom.sign_out_path, :method => :delete, data: {goto: "/"}
     - if admin?
       = link_to t(:hide_admin), '#', :data => {:action => 'toggle', :affected => '.admin, a.menu, .action'}
