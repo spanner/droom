@@ -210,5 +210,28 @@ module Droom
     def day_names
       ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     end
+
+    def check_recaptcha?
+      if ENV['RECAPTCHA_CHECK'] && ENV['RECAPTCHA_CHECK'] == 'true'
+        true
+      else
+        false
+      end
+    end
+
+    def recaptcha_execute(action)
+      id = "recaptcha_token_#{SecureRandom.hex(10)}"
+  
+      raw %Q{
+        <input name="recaptcha_token" type="hidden" id="#{id}"/>
+        <script>
+          grecaptcha.ready(function() {
+            grecaptcha.execute('#{ENV['RECAPTCHA_SITE_KEY']}', {action: '#{action}'}).then(function(token) {
+              document.getElementById("#{id}").value = token;
+            });
+          });
+        </script>
+      }
+    end
   end
 end
