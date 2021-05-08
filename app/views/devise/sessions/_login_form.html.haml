@@ -2,20 +2,22 @@
   %p.standfirst.green
     = flash[:notice]
 
-= form_for(resource, as: resource_name, url: session_path(resource_name), html: {id: "login"}) do |f|
+= form_for(resource, as: resource_name, url: session_path(resource_name), html: {id: "login", data: {role: "login"}}) do |f|
   - if params[:backto].present?
     = hidden_field_tag :backto, CGI.escape(params[:backto])
 
+  %h1
+    = t(:sign_in)
+
   %p
+    = t(:sign_in_intro)
+
+  %p.email
     = f.email_field :email, class: 'login', autofocus: true, placeholder: t('placeholders.session.email')
+    = f.submit t(:sign_in_by_email), name: "emailme", class: "submit", data: {login: "indirect"}
 
-  %p
+  %p.password
     = f.password_field :password, class: 'login', placeholder: t('placeholders.session.password')
-
-  .controls
-    .save.button
-      %p
-        = f.submit t(:sign_in), :class => "submit"
-
+    = f.submit t(:sign_in_with_password), name: "login", class: "submit", data: {login: "direct"}
+    %br
     = link_to t(:forgot_password), new_password_path(resource_name), class: "reminder note right"
-
