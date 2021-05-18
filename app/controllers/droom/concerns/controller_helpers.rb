@@ -151,7 +151,7 @@ module Droom::Concerns::ControllerHelpers
   def not_authorized(exception)
     Rails.logger.warn "⚠️ not_authorized"
     respond_to do |format|
-      format.html { render :file => "#{Rails.root}/public/403.html", :status => :forbidden, :layout => false }
+      format.html { render template: "droom/errors/403", :status => :unauthorized }
       format.js { head :unauthorized }
       format.json { head :unauthorized }
     end
@@ -160,7 +160,7 @@ module Droom::Concerns::ControllerHelpers
   def not_allowed(exception)
     Rails.logger.warn "⚠️ not_allowed"
     respond_to do |format|
-      format.html { render :file => "#{Rails.root}/public/403.html", :status => :forbidden, :layout => false }
+      format.html { render template: "droom/errors/401", :status => :forbidden }
       format.js { head :forbidden }
       format.json { head :forbidden }
     end
@@ -171,7 +171,7 @@ module Droom::Concerns::ControllerHelpers
     @error = exception.message
     Honeybadger.notify(exception)
     respond_to do |format|
-      format.html { render template: "errors/not_found", :status => 404 }
+      format.html { render template: "droom/errors/not_found", :status => :not_found }
       format.js { head :not_found }
       format.json { head :not_found }
     end
