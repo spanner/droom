@@ -148,11 +148,36 @@ module Droom
       update_column :last_request_at, time
     end
 
+    # Generate short-term, single-use login token and send by email
+    #
+    def invite_to_sign_in
+      generate_login_link
+      send_login_link
+    end
+
+    def generate_login_link
+      self.update_columns({
+        login_token: generate_unique_token(:login_token),
+        login_token_created_at: Time.now
+      })
+    end
+
+    def send_login_link
+      Rails.logger.warn("📩 send_login_link: #{self.inspect}")
+      Droom::Mailer.login_link(self).deliver_later
+    end
+
+    def reset_login_token!
+      self.update_column(:login_token, nil)
+    end
 
     ## Session ID
     #
     # All signout operations (local or through the API) need to clear both our session ids so that both the auth
     # cookie and the local session become invalid.
+    #
+    # NB. unique_session_id is used by session_limitable
+    #     session_id is used by our SSO auth_cookie
     #
     def reset_session_ids!
       self.update_columns({
@@ -162,7 +187,6 @@ module Droom
     end
 
     def clear_session_ids!
-      Rails.logger.warn "⚠️ clear_session_ids!"
       self.update_columns({
         session_id: "",
         unique_session_id: ""
@@ -188,14 +212,13 @@ module Droom
 
     def ensure_authentication_token!
       if authentication_token.blank?
-        self.authentication_token = generate_authentication_token
+        self.authentication_token = generate_unique_token(:authentication_token)
       end
       authentication_token
     end
 
     def ensure_unique_session_id!
       unless unique_session_id.present?
-        Rails.logger.warn "✅ calling update_unique_session_id!"
         update_unique_session_id!(Devise.friendly_token)
       end
       unique_session_id
@@ -381,7 +404,7 @@ module Droom
     ## Addresses
     # Internally, a flexible list
     # Externally, address and correspondence_address
-    # TODO: `phone` should return first non-correspondence record?
+    # TODO: `address` should return first non-correspondence record?
     #
     def address
       if address_record = get_address
@@ -434,7 +457,7 @@ module Droom
     # Externally, phone and mobile
     # TODO: `phone` should return first non-mobile record?
     #
-    def phone
+    def phone             
       if phone_record = get_phone
         phone_record.phone
       end
@@ -481,26 +504,7 @@ module Droom
     end
 
 
-    ## Old suggestion box
-    #
-    scope :matching, -> fragment {
-      where('droom_users.given_name LIKE :f OR droom_users.family_name LIKE :f OR droom_users.chinese_name LIKE :f OR droom_users.title LIKE :f OR droom_users.email LIKE :f OR droom_users.phone LIKE :f OR CONCAT(droom_users.given_name, " ", droom_users.family_name) LIKE :f OR CONCAT(droom_users.family_name, " ", droom_users.given_name) LIKE :f', :f => "%#{fragment}%")
-    }
-
-    scope :matching_in_col, -> col, fragment {
-      where("droom_users.#{col} LIKE :f", :f => "%#{fragment}%")
-    }
-
-    scope :matching_name, -> fragment {
-      where("droom_users.family_name LIKE :f", :f => "%#{fragment}%")
-    }
-
-    scope :matching_email, -> fragment {
-      joins(:emails).where("droom_emails.email LIKE :f", :f => "%#{fragment}%")
-    }
-
-
-    # For select box
+    # For select input
     #
     def self.for_selection
       self.published.map{|p| [p.name, p.id] }
@@ -848,10 +852,10 @@ module Droom
       self.update_column(:confirmed_at, Time.now) if password_set? && !confirmed?
     end
 
-    def generate_authentication_token
+    def generate_unique_token(attribute = :authentication_token)
       loop do
         token = Devise.friendly_token
-        break token unless User.where(authentication_token: token).first
+        break token unless User.where(attribute => token).first
       end
     end
 

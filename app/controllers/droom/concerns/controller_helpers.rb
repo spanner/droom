@@ -13,17 +13,17 @@ module Droom::Concerns::ControllerHelpers
     rescue_from Droom::OrganisationRequired, :with => :prompt_for_organisation
     rescue_from Droom::OrganisationApprovalRequired, :with => :await_organisation_approval
 
-    prepend_before_action :read_auth_cookie, except: [:cors_check]
-    before_action :authenticate_user!, except: [:cors_check]
+    prepend_before_action :read_auth_cookie, except: [:cors_check, :inviteme]
+    before_action :authenticate_user!, except: [:cors_check, :inviteme]
     before_action :set_exception_context
 
-    before_action :check_user_is_confirmed, except: [:cors_check, :setup], unless: :devise_controller?
-    before_action :check_user_setup, except: [:cors_check, :setup], unless: :devise_controller?
-    before_action :check_user_has_organisation, except: [:cors_check, :setup_organisation], unless: :devise_controller?
-    before_action :check_data_room_permission, except: [:cors_check, :set_password], unless: :devise_controller?
+    before_action :check_user_is_confirmed, except: [:cors_check, :setup, :inviteme], unless: :devise_controller?
+    before_action :check_user_setup, except: [:cors_check, :setup, :inviteme], unless: :devise_controller?
+    before_action :check_user_has_organisation, except: [:cors_check, :setup_organisation, :inviteme], unless: :devise_controller?
+    before_action :check_data_room_permission, except: [:cors_check, :set_password, :inviteme], unless: :devise_controller?
 
-    before_action :note_current_user, except: [:cors_check]
-    before_action :set_section, except: [:cors_check]
+    before_action :note_current_user, except: [:cors_check, :inviteme]
+    before_action :set_section, except: [:cors_check, :inviteme]
     before_action :set_access_control_headers
 
     skip_before_action :verify_authenticity_token, only: [:cors_check], raise: false

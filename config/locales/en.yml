@@ -321,6 +321,8 @@ en:
   loading_documents: "Loading documents"
   loading_people: "Loading people"
   loading_stream: "Loading stream: please wait."
+  login_message:
+    subject: "Data Room Login Link"
   list_info_one_page:
     zero: "No items found"
     one: "Displaying <b>1</b> item"
@@ -546,7 +548,7 @@ en:
   show_past_events: "past events"
   sign_in: "Sign in"
   sign_in_by_email: "Send link"
-  sign_in_intro: "Please enter your email below. You can sign in either by clicking the link in a login message or by entering your password."
+  sign_in_intro: "Please enter your email address. You can sign in either by sending yourself a login message or by entering your password below."
   sign_in_with_password: "Sign in"
   sign_out: "Sign out"
   sign_up: "Sign up"

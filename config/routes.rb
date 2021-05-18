@@ -6,14 +6,11 @@ Droom::Engine.routes.draw do
   match '/suggestions'  => 'suggestions#index', as: "suggestions", via: [:get, :options], defaults: {format: "json"}
   match '/suggestions/:type'  => 'suggestions#index', via: [:get, :options], defaults: {format: "json"}
 
-  namespace :api, defaults: {format: 'json'}, constraints: {format: /(json|xml)/} do
-
-    #post '/reindex_user' => 'users#reindex_user', as: 'reindex'
-    #post '/users/:uid/reindex' => 'users#reindex', as: 'reindex'
+  namespace :api, defaults: {format: 'json'} do
     resources :users do
-      post 'reindex', on: :member, as: :reindex
-      get "whoami" , on: :collection, as: :whoami
-      get "authenticable", on: :member, as: :authenticable
+      get :whoami, on: :collection, as: :whoami
+      # post :inviteme, on: :collection, as: :inviteme
+      post :reindex, on: :member, as: :reindex
     end
     resources :events
     resources :venues
@@ -37,15 +34,20 @@ Droom::Engine.routes.draw do
                registrations: 'droom/users/registrations'
              }
 
-
   devise_scope :user do
     get "/signup" => "users/registrations#new", as: :signup
     post '/register' => 'users/registrations#create', as: :register
     get "/users/registrations/confirm" => "users/registrations#confirm", as: :confirm_registration
     get "/users/:id/welcome/:confirmation_token" => "users/confirmations#show", as: :welcome
     patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
+
+    # password reset
     get "/users/passwords/show" => "users/passwords#show", as: :show_confirmation
     get "/users/passwords/completed" => "users/passwords#completed", as: :complete_confirmation
+
+    # login by emailed one-time link
+    post '/inviteme' => 'api/users#inviteme', as: :inviteme
+    get '/users/signin/:u/:t' => 'users/sessions#signmein', as: :signmein
 
     # droom_client authentication calls
     post '/api/users/sign_in' => 'api/sessions#create', as: :api_sign_in

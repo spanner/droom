@@ -3,7 +3,7 @@ module Droom::Api
 
     before_action :get_users, only: [:index]
     before_action :find_or_create_user, only: [:create]
-    load_resource find_by: :uid, class: "Droom::User"
+    load_resource find_by: :uid, class: "Droom::User", except: [:inviteme]
 
     def index
       render json: @users
@@ -13,19 +13,23 @@ module Droom::Api
       render json: @user
     end
 
-    # This would usually be a session-init call from a front end SPA
+    # This is the beginning of the login-by-emailed-link route.
+    # TODO consider need for anti-automation measures here
+    #
+    def inviteme
+      if inviteme_params[:email].present?
+        if user = Droom::User.from_email(inviteme_params[:email]).first
+          user.invite_to_sign_in
+        end
+      end
+      # response must not be a way to discover user email addresses.
+      head :no_content
+    end
+
+    # This would usually be a session-resumption call from a front end SPA
     #
     def whoami
       render json: current_user
-    end
-
-    # This is a background call to request the user information necessary for session creation.
-    # It usually happens on acceptable of an invitation, or some other situation where
-    # a remote object is triggering user confirmation or automatic login.
-    #
-    def authenticable
-      @user.ensure_unique_session_id!
-      render json: @user, serializer: Droom::UserAuthSerializer
     end
 
     def update
@@ -49,6 +53,15 @@ module Droom::Api
     def reindex
       @user.reindex_async
       head :ok
+    end
+
+    # This is a background call to request the user information necessary for session creation.
+    # It usually happens on acceptance of an invitation, or some other situation where
+    # a remote object is triggering user confirmation or automatic login.
+    #
+    def authenticable
+      @user.ensure_unique_session_id!
+      render json: @user, serializer: Droom::UserAuthSerializer
     end
 
   protected
@@ -81,6 +94,10 @@ module Droom::Api
 
     def user_params
       params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :affiliation, :email, :phone, :mobile, :description, :address, :post_code, :correspondence_address, :country_code, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image_data, :image_name)
+    end
+
+    def inviteme_params
+      params.require(:user).permit(:email)
     end
 
   end

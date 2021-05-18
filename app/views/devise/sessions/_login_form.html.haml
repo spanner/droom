@@ -9,15 +9,24 @@
   %h1
     = t(:sign_in)
 
-  %p
-    = t(:sign_in_intro)
+  %fieldset
+    %p
+      = t(:sign_in_intro)
 
-  %p.email
-    = f.email_field :email, class: 'login', autofocus: true, placeholder: t('placeholders.session.email')
-    = f.submit t(:sign_in_by_email), name: "emailme", class: "submit", data: {login: "indirect"}
+    %p.email
+      = f.email_field :email, class: 'login', autofocus: true, tabindex: 1, placeholder: t('placeholders.session.email')
+      %button.submit.inviteme{name: "inviteme"}
+        = t(:sign_in_by_email)
 
-  %p.password
-    = f.password_field :password, class: 'login', placeholder: t('placeholders.session.password')
-    = f.submit t(:sign_in_with_password), name: "login", class: "submit", data: {login: "direct"}
-    %br
-    = link_to t(:forgot_password), new_password_path(resource_name), class: "reminder note right"
+    %p.password
+      = f.password_field :password, class: 'login', tabindex: 2, placeholder: t('placeholders.session.password')
+      = f.submit t(:sign_in_with_password), name: "login", class: "submit"
+      %br
+      = link_to t(:forgot_password), new_password_path(resource_name), class: "reminder note right"
+
+  .confirmation
+    %p.messages
+    %a.reset
+      %span
+        Back to login form
+    

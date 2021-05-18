@@ -1,0 +1,11 @@
+- content_for(:pagetitle) do
+  Login Error
+
+#account
+  #error
+    %h1
+      Login error
+    %p
+      Sorry: either this login link is incorrect or it has expired. Please
+      = link_to "return to the login page", droom.new_user_session_url
+      to request another invitation message.

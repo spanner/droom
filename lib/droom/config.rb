@@ -52,6 +52,7 @@ module Droom
                   :second_time_zone,
                   :require_login_permission,
                   :require_internal_organisation,
+                  :login_token_ttl,
                   :users_can_invite,
                   :default_permissions,
                   :mc_api_key,
@@ -292,6 +293,10 @@ module Droom
  
     def hide_directory?
       !!@hide_directory
+    end
+ 
+    def login_token_ttl
+      @login_token_ttl || 1.hour
     end
  
  

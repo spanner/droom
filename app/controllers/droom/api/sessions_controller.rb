@@ -7,7 +7,8 @@ module Droom::Api
     skip_before_action :verify_authenticity_token, raise: false
     before_action :set_access_control_headers
 
-    # POST /api/users/sign_in
+
+    # POST /api/sessions/sign_in
     #
     # Called in sign-in to a remote service.
     #
@@ -25,7 +26,7 @@ module Droom::Api
     # This is called on every request by a remote service.
     # Care has to be taken here, to respond quickly but lapse correctly,
     # and never to set up a cascade of mutual enquiry.
-    # also must make sure that we check, *not sign in*, as signing in would create a new session id.
+    # also must make sure that we only check and not sign in, as signing in would create a new session id.
     #
     def authenticate
       token = params[:tok]
