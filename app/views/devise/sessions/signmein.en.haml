@@ -4,9 +4,8 @@
 #account
   #error
     %h1
-      Hello
-      = current_user.name
+      Login error
     %p
-      %a{href: droom.dashboard_url}
-        Welcome back. Please click here to continue to the data room.
-      Your email login link will only work once so you can discard that message now.
+      Sorry: either this login link is incorrect or it has expired. Please
+      = link_to "return to the login page", droom.new_user_session_url
+      to request another invitation message.

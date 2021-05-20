@@ -15,7 +15,6 @@ module Droom
         else
           can :update, Droom::User, :id => user.id
           can :new, [Droom::Email, Droom::Phone, Droom::Address], :user_id => user.id
-          can :read, :dashboard
 
           if user.organisation && user.organisation_admin?
             can :manage, Droom::Organisation, id: user.organisation_id

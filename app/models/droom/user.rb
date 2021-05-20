@@ -18,7 +18,7 @@ module Droom
            :recoverable,
            :trackable,
            :confirmable,
-           :session_limitable,
+           # :session_limitable,
            :lockable,
            :registerable,
            :timeoutable,
@@ -219,7 +219,7 @@ module Droom
 
     def ensure_unique_session_id!
       unless unique_session_id.present?
-        update_unique_session_id!(Devise.friendly_token)
+        self.unique_session_id = generate_unique_token(:unique_session_id)
       end
       unique_session_id
     end
