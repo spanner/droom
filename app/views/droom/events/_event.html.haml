@@ -46,7 +46,7 @@
         - if event.timezone == "London"
           = "(#{t(:uk_time)})"
 
-        - if event.venue
+        - if event.venue && event.venue.name.present?
           %span.location
             = t(:at)
             - if event.venue.url
@@ -56,7 +56,7 @@
             - else
               = event.venue.definite_name + "."
 
-      .detail
+      .details
         - if show_folder && !full_attachments
           - if event.folder.populated? || can?(:read, event.folder)
             .attachments
