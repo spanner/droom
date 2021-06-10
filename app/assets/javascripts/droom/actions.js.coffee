@@ -99,9 +99,13 @@ jQuery ($) ->
       affected = $(@).attr('data-affected')
       $(@).remote
         on_success: (response) =>
-          $(@).parents(removed).first().fadeOut 'fast', () ->
-            $(@).remove()
-            $(affected).trigger "refresh"
+          if $(@).parents('.menu').first().length == 1
+            $(@).parents('.menu').first().fadeOut 'fast', () ->
+            $(removed).remove()
+          else
+            $(@).parents(removed).first().fadeOut 'fast', () ->
+              $(@).remove()
+              $(affected).trigger "refresh"
 
 
   # The 'remove_all' action takes out on success anything matching the given selector:
