@@ -28,8 +28,8 @@ Gem::Specification.new do |s|
   s.add_dependency "settingslogic"
   s.add_dependency "request_store"
 
-  s.add_dependency "devise"
-  s.add_dependency "devise-security"
+  s.add_dependency "devise", "4.7.3"
+  s.add_dependency "devise-security", "0.15.0"
   s.add_dependency "devise_zxcvbn"
   s.add_dependency "cancancan"
 
