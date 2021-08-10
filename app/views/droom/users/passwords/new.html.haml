@@ -1,8 +1,7 @@
 #account
-  %h1.pagetitle
-    =t :forgot_password
-
   = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
+    %h1.pagetitle
+      =t :forgot_password
 
     %p
       = t :password_reset_instructions
