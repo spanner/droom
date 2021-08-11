@@ -99,9 +99,13 @@ Droom::Engine.routes.draw do
 
   resources :folders do
     get "dropbox", on: :member, as: :dropbox
+    get "move_folder", on: :member
+    put "moved", on: :member
     resources :documents
     resources :folders
   end
+
+  get "child_folders" => "folders#child_folders"
 
   resources :organisations do
     resources :users

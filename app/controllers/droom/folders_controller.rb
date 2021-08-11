@@ -50,8 +50,34 @@ module Droom
       head :ok
     end
 
-    def with_parent
-      
+    def move_folder
+      respond_with @folder
+    end
+
+    def moved
+      if params.include?('new_parent_id') && params.include?('id') 
+        folder = Droom::Folder.find(params[:id])
+        folder.parent_id = params[:new_parent_id]
+        folder.save
+      end
+      head :ok
+    end
+
+    def child_folders
+      if params.include?('target_parent_id')
+        target_parent_id = params[:target_parent_id]
+        mapped_children = ''
+        if target_parent_id != '' && folder = Droom::Folder.find(target_parent_id)
+          child_folders = folder.children
+          if child_folders.any?
+            mapped_children = {}
+            child_folders.map{|child| 
+              mapped_children[child.id] = child.name
+            }
+          end
+        end
+      end
+      render json: mapped_children
     end
     
   protected

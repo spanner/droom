@@ -35,6 +35,7 @@ en:
   add_root_folder: "Add root folder"
   add_service: "Add service"
   add_subfolder: Add sub-folder
+  move_folder: "Move folder"
   add_to_stream: "add to stream"
   add_user: "Add User"
   added_to: "has been added to '%{group}'."
