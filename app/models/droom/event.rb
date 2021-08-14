@@ -27,6 +27,7 @@ module Droom
 
     has_folder :within => :event_type #... and subfolders via agenda_categories
     after_destroy :destroy_related_folder
+    around_update :update_folder_name
 
     validates :start, :presence => true, :date => true
     validates :finish, :date => {:after => :start, :allow_nil => true}
@@ -395,6 +396,17 @@ module Droom
     def destroy_related_folder
       if event_folder = self.folder
         event_folder.destroy
+      end
+    end
+
+    def update_folder_name
+      is_changed = self.name_changed?
+      yield
+      if is_changed
+        if event_folder = self.folder
+          event_folder.name = self.folder_name
+          event_folder.save
+        end
       end
     end
 
