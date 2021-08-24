@@ -45,6 +45,7 @@ module Droom
               #
               if user.permitted?('droom.calendar')
                 can :manage, Droom::Event
+                can :manage, Droom::EventType
                 can :manage, Droom::EventSet
                 can :manage, Droom::Venue
                 can :manage, Droom::Invitation
