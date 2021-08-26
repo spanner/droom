@@ -136,7 +136,9 @@ Droom::Engine.routes.draw do
 
   resources :groups do
     resources :memberships
-    resources :group_permissions
+    resources :group_permissions do
+      post :upsert, on: :collection
+    end
   end
 
   resources :event_types
