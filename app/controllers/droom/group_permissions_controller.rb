@@ -14,7 +14,7 @@ module Droom
       @group_permission = Droom::GroupPermission.find_or_initialize_by(group_permission_params)
       @group_permission.delete_permissions(params[:read_permission])
       @group_permission.save
-      render :partial => 'droom/group_permissions/action_menu'
+      render json: {classname: params[:classname], linkid: params[:linkid]}
     end
 
     def delete_by_permission_id
