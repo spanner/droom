@@ -894,12 +894,9 @@ module Droom
       end
     end
 
-    def delete_user_permissions(group_ids)
+    def delete_user_permissions(group_ids = [])
       self.user_permissions.each do |perm|
         group_id = perm.group_permission.group_id
-        puts "****************************************"
-        puts group_ids.map(&:to_i)
-        puts group_id
         perm.delete unless group_ids.map(&:to_i).include?(group_id)
       end
     end
