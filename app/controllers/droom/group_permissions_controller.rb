@@ -12,13 +12,19 @@ module Droom
 
     def upsert
       @group_permission = Droom::GroupPermission.find_or_initialize_by(group_permission_params)
-      @group_permission.delete_permissions(params[:read_permission])
+      @group_permission.delete_permissions(params[:read_only])
       @group_permission.save
-      render json: {classname: params[:classname], linkid: params[:linkid]}
+
+      html_tag = "<a class=#{params[:classname]} id=#{params[:linkid]}></a>"
+      render html: html_tag.html_safe
     end
 
-    def delete_by_permission_id
-
+    def delete_by_ids
+      @group_permission = Droom::GroupPermission.find_by(group_permission_params)
+      @group_permission.delete_permissions if @group_permission
+      
+      html_tag = "<a class=#{params[:classname]} id=#{params[:linkid]}></a>"
+      render html: html_tag.html_safe
     end
 
     def destroy

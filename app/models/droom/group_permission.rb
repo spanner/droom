@@ -14,14 +14,14 @@ module Droom
       end
     end
 
-    def delete_permissions(read_permission)
+    def delete_permissions(read_only = false)
       klass = Droom::Permission
-      if @permission = klass.find(self.permission_id)
-        @read_permission = klass.find_by(name: "#{@permission.name}.read")
-        self.permission_id = @read_permission.id if read_permission == 'true'
+      if permission = klass.find(self.permission_id)
+        read_permission = klass.find_by(name: "#{permission.name}.read")
+        self.permission_id = read_permission.id if read_only == 'true'
 
-        self.class.where(group_id: self.group_id, permission_id: @read_permission.try(:id)).destroy_all
-        self.class.where(group_id: self.group_id, permission_id: @permission.id).destroy_all
+        self.class.where(group_id: self.group_id, permission_id: read_permission.try(:id)).destroy_all
+        self.class.where(group_id: self.group_id, permission_id: permission.id).destroy_all
       end
     end
 

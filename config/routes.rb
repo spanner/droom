@@ -138,6 +138,7 @@ Droom::Engine.routes.draw do
     resources :memberships
     resources :group_permissions do
       post :upsert, on: :collection
+      delete :delete_by_ids, on: :collection, as: :delete
     end
   end
 
