@@ -30,6 +30,7 @@ module Droom
                   :registerable,
                   :use_organisations,
                   :require_organisation,
+                  :external_organisations,
                   :enable_mailing_lists,
                   :mailman_table_name,
                   :mailing_lists_active_by_default,
@@ -60,7 +61,7 @@ module Droom
                   :mc_news_list,
                   :session_timeout,
                   :enable_pubsub,
-                  :hide_directory
+                  :hide_directory,
 
     def home_url
       @home_url ||= "http://example.com"
@@ -181,7 +182,11 @@ module Droom
     def require_organisation?
       !!@require_organisation
     end
- 
+
+    def external_organisations?
+      !!@external_organisations
+    end
+
     def stream_shared?
       !!@stream_shared
     end

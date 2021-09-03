@@ -128,7 +128,7 @@ module Droom
     end
 
     def send_notifications
-      send_registration_confirmation_messages if external?
+      send_registration_confirmation_messages if external? && Droom.config.external_organisations?
     end
 
     def send_registration_confirmation_messages
