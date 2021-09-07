@@ -65,7 +65,7 @@ module Droom
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
-      @user.delete_user_permissions(user_params[:group_ids])
+      @user.delete_user_permissions(user_params[:group_ids]) unless user_params[:group_ids].blank?
       if @user.update_attributes(user_params)
         respond_with @user, location: user_url(view: @view) do |format|
           format.js { head :no_content }
