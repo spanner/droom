@@ -40,7 +40,7 @@
             - service.permissions.each_with_index do |perm, i|
 
               - next if perm.name.include?('.read')
-              - read_permission = perm.read_permission
+              - read_permission = perm.get_read_permission
 
               %td.toggle{:class => "s_#{service.id}  p_#{perm.id} #{'d' if i == width-1}".strip}
                 = render :partial => 'droom/group_permissions/toggle', :locals => {:group => group, :permission => perm, :read_permission => read_permission}

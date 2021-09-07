@@ -20,9 +20,10 @@ module Droom
     end
 
     def delete_by_ids
-      @group_permission = Droom::GroupPermission.find_by(group_permission_params)
-      @group_permission.delete_permissions if @group_permission
-      
+      get_gp_permissions(group_permission_params)
+      @group_permission.try(:destroy_all)
+      @read_group_permission.try(:destroy_all)
+
       html_tag = "<a class=#{params[:classname]} id=#{params[:linkid]}></a>"
       render html: html_tag.html_safe
     end
@@ -36,6 +37,20 @@ module Droom
 
     def group_permission_params
       params.require(:group_permission).permit(:permission_id, :group_id)
+    end
+
+    def get_gp_permissions(params)
+      gp_klass = Droom::GroupPermission
+      perm_klass = Droom::Permission
+
+      permission = perm_klass.find(params[:permission_id])
+      read_permission = permission.get_read_permission
+
+      @group_permission = gp_klass.where(params)
+      unless @group_permission.present?
+        params[:permission_id] = read_permission.id
+        @read_group_permission = gp_klass.where(params)
+      end
     end
 
   end

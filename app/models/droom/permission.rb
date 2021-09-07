@@ -8,8 +8,8 @@ module Droom
 
     validates :slug, :uniqueness => true
 
-    def read_permission
-      self.class.find_by("name LIKE ?", "#{self.name}.%")
+    def get_read_permission
+      self.class.find_by(name: "#{self.name}.read")
     end
 
     def define_permission_color(group_permission, group, read_permission)

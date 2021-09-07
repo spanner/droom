@@ -172,25 +172,25 @@ jQuery ($) ->
       if options.force
         $.rails.handleRemote($el)
 
-  $.fn.replace_parent_content = (selector, opts) ->
+
+  # *update_main_content* is used in services page, action from popup and effected on main content
+  $.fn.update_main_content = (selector, opts) ->
     selector ?= '.holder'
     options = $.extend { force: false, confirm: false, slide: false, pjax: true, credentials: false }, opts
     @each ->
       $el = $(@)
-      container = $el.attr('data-replaced') || selector
+      container = selector
       $el.remote
         credentials: options.credentials
         pjax: options.pjax
         on_success: (e, response) =>
           response ?= e
-          console.log 'response', $(response)
-          console.log 'container', container
-          console.log 'parent', $(container).parents('div.menu').siblings('a')
           className = $(response).attr "class"
-          console.log 'className', className
-          $(container).parents('div.menu').siblings('a').removeClass().addClass(className)
-      if options.force
-        $.rails.handleRemote($el)
+          id = $(response).attr "id"
+          @_selector = $("[data-menu=\"#{id}\"]")
+          $(@_selector).removeClass().addClass(className)
+          $(".menu").hide()
+
 
   # The reinviter is an ordinary remote link.
   #
