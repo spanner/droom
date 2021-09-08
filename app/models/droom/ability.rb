@@ -76,7 +76,7 @@ module Droom
               if user.permitted?('droom.stream')
                 can :create, Droom::Scrap
                 can :read, Droom::Scrap
-              elsif user.permitted?('droom.stream')
+              elsif user.permitted?('droom.stream.read')
                 can :read, Droom::Scrap
               end
 
