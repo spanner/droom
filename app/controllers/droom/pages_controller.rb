@@ -6,7 +6,7 @@ module Droom
 
     def new
       @page = Droom::Page.new(slug: params[:slug])
-      render layout: Droom.pages_layout
+      render layout: Droom.page_layout
     end
 
     def show
