@@ -18,7 +18,7 @@ module Droom
     end
 
     def create
-      if @page.update_attributes(page_params)
+      if @page.update(page_params)
         redirect_to droom.page_url(@page)
       else
         render action: :new
@@ -26,7 +26,7 @@ module Droom
     end
 
     def update
-      if @page.update_attributes(page_params)
+      if @page.update(page_params)
         redirect_to droom.page_url(@page)
       else
         render action: :edit

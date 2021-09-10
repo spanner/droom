@@ -25,12 +25,12 @@ module Droom
     end
 
     def update
-      @scrap.update_attributes(scrap_params(@scraptype))
+      @scrap.update(scrap_params(@scraptype))
       respond_with(@scrap)
     end
 
     def create
-      @scrap.update_attributes(scrap_params(@scraptype))
+      @scrap.update(scrap_params(@scraptype))
       respond_with(@scrap)
     end
   

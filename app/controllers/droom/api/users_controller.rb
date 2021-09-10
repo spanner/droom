@@ -29,7 +29,7 @@ module Droom::Api
     end
 
     def update
-      @user.update_attributes(user_params)
+      @user.update(user_params)
       render json: @user
     end
 

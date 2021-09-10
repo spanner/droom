@@ -71,7 +71,7 @@ module Droom
     end
 
     def update
-      if @event.update_attributes(event_params)
+      if @event.update(event_params)
         render :partial => "event"
       else
         respond_with @event
