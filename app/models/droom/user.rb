@@ -119,7 +119,7 @@ module Droom
 
     # Our old user accounts store passwords as salted sha512 digests. Current standard uses BCrypt
     # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
-  
+
     def valid_password?(password)
       begin
         super(password)
@@ -137,7 +137,7 @@ module Droom
           return false
         end
       end
-    end 
+    end
 
     # This is called from a warden hook during every authenticated request, either to the data room or its API.
     # The value of last_request_at is used to invalidate stale sessions.
@@ -894,6 +894,12 @@ module Droom
       end
     end
 
+    def delete_user_permissions(group_ids = [])
+      self.user_permissions.each do |perm|
+        group_id = perm.group_permission.group_id
+        perm.delete unless group_ids.map(&:to_i).include?(group_id)
+      end
+    end
 
   protected
 

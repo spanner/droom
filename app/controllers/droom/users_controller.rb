@@ -65,6 +65,7 @@ module Droom
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
+      @user.delete_user_permissions(user_params[:group_ids]) unless user_params[:group_ids].blank?
       if @user.update_attributes(user_params)
         respond_with @user, location: user_url(view: @view) do |format|
           format.js { head :no_content }
@@ -129,14 +130,14 @@ module Droom
       filters[:groups] = params[:account_group] if params[:account_group].present?
       filters[:account_confirmation] = params[:account_confirmed] if params[:account_confirmed].present?
       filters[:organisation] = params[:organisation] if params[:organisation].present?
-  
+
       query = params[:q].presence || '*'
       arguments = {
         where: filters,
         aggs: [:groups, :account_confirmation, :organisation],
         order: {name: :asc}
       }
-  
+
       if params[:show] == "all"
         arguments[:limit] = 1000
       else
@@ -173,7 +174,7 @@ module Droom
         :female,
         :image
       ]
-      
+
       if current_user.organisation_admin?
         permitted_params += [
           :organisation_admin,
