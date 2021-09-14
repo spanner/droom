@@ -75,7 +75,7 @@ module Droom
       current_user.admin? || current_user.permitted?(permission_code)
     end
 
-    def action_menulink(thing, group = nil, html_options={})
+    def action_menulink(thing, html_options={}, group=nil)
       if can?(:edit, thing)
         classname = thing.class.to_s.underscore.split('/').last
         html_options.reverse_merge!({
