@@ -7,5 +7,6 @@
     = action_menulink(group)
   = action_menu(group)
 
+  - @group_id = group.id
   .scroller
     = render partial: "droom/groups/users", locals: {group: group, users: users}
