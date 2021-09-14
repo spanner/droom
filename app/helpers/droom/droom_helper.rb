@@ -75,12 +75,12 @@ module Droom
       current_user.admin? || current_user.permitted?(permission_code)
     end
 
-    def action_menulink(thing, html_options={})
+    def action_menulink(thing, group = nil, html_options={})
       if can?(:edit, thing)
         classname = thing.class.to_s.underscore.split('/').last
         html_options.reverse_merge!({
           :class => "",
-          :data => {:menu => "#{classname}_#{thing.id}"}
+          :data => {:menu => "#{classname}_#{thing.id}#{group}"}
         })
         html_options[:class] << ' menu'
         link_to t(:edit), "#", html_options if can?(:edit, thing)
