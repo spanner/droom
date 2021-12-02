@@ -2,8 +2,9 @@ module Droom::Users
   class PasswordsController < Devise::PasswordsController
     respond_to :html, :json
     before_action :set_access_control_headers
-    skip_before_action :require_no_authentication, only: [:completed]
+    skip_before_action :require_no_authentication, only: [:completed, :edit]
     before_action :remember_original_destination, only: [:new]
+    before_action :clear_session, only: [:edit]
 
     def show
       render
@@ -11,6 +12,10 @@ module Droom::Users
 
     def completed
       render
+    end
+
+    def clear_session
+      sign_out(resource_name)
     end
 
     def after_resetting_password_path_for(resource)
