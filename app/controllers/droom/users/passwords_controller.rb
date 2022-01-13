@@ -17,9 +17,8 @@ module Droom::Users
     def clear_session
       original_token       = params[:reset_password_token]
       reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
-      if Droom::User.find_by_reset_password_token(reset_password_token)
-        sign_out(resource_name)
-      else
+      sign_out(resource_name)
+      unless Droom::User.find_by_reset_password_token(reset_password_token)
         redirect_to droom.expired_reset_password_token_url
       end
     end
