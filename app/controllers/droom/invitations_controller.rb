@@ -20,7 +20,7 @@ module Droom
     end
     
     def create
-      if @invitation.update_attributes(invitation_params)
+      if @invitation.update(invitation_params)
         render :partial => "created"
       else
         respond_with @invitation

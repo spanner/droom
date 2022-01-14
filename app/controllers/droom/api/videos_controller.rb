@@ -14,7 +14,7 @@ module Droom::Api
     end
 
     def update
-      if @video.update_attributes(video_params)
+      if @video.update(video_params)
         return_video
       else
         return_errors

@@ -24,12 +24,12 @@ module Droom
     end
 
     def update
-      @organisation_type.update_attributes(organisation_type_params)
+      @organisation_type.update(organisation_type_params)
       render :partial => 'organisation_type'
     end
 
     def create
-      if @organisation_type.update_attributes(organisation_type_params)
+      if @organisation_type.update(organisation_type_params)
         render :partial => "created"
       else
         respond_with @organisation_type

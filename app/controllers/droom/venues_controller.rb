@@ -17,7 +17,7 @@ module Droom
     end
 
     def update
-      @venue.update_attributes(params[:venue])
+      @venue.update(params[:venue])
       respond_with @venue
     end
 
