@@ -261,11 +261,11 @@ module Droom
     end
 
     def external?
-      !organisation || organisation.external?
+      !organisation || (organisation.external? && Droom.config.external_organisations?)
     end
 
     def internal?
-      organisation && !organisation.external?
+      organisation && (!Droom.config.external_organisations? || !organisation.external?)
     end
 
 

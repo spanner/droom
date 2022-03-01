@@ -3,7 +3,7 @@
 
 - if organisation.new_record?
   - title = t(:add_organisation)
-- elsif organisation.external?
+- elsif organisation.external? && Droom.config.external_organisations?
   - if organisation == current_user.organisation
     - title = t(:edit_your_organisation)
   - else
