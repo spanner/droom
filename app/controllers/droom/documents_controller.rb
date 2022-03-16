@@ -52,7 +52,8 @@ module Droom
     end
 
     def destroy
-      @document.enqueue_for_croucher_deindexing # calling search_client method
+      @document.destroy
+      # @document.enqueue_for_croucher_deindexing # calling search_client method
       head :ok
     end
 
