@@ -62,7 +62,8 @@
 
       .detail
         - if event.description?
-          = sanitize(event.description)
+          .content
+            = sanitize(event.description)
         - if show_folder && !full_attachments
           - if event.folder.populated? || can?(:read, event.folder)
             .attachments
