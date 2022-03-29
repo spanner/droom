@@ -18,11 +18,20 @@ svg.icon
     display: inline-block
   &.pint-sized
     width: 20px
-    height: 20px
+    height: 18px
   &.pint-sized2
     width: 20px
     height: 20px
     margin-top: -2px
+    margin-left: 2px
+    @media not all and (min-resolution:.001dpcm)
+      @supports (-webkit-appearance:none) and (stroke-color:transparent)
+        height: 16px
+        margin-left: 0
+    @-moz-document url-prefix()
+      height: 20px
+      margin: 2px
+
   &.small
     width: 20px
     height: 20px
@@ -31,9 +40,8 @@ svg.icon
       min-height: 20px
       width: calc(100% - 32px)
   &.medium
-    width: 30px
+    width: 24px
     height: 30px
-    margin: 2px
     &+span
       min-height: 30px
       width: calc(100% - 22px)
