@@ -1,6 +1,12 @@
+# This is user as data object: all the fields we need to manage or present the user.
+# It does not include authentication information.
+#
+# Also note btw that the address book is squashed down to one email, one phone and one mobile.
+# We don't yet support remote management of all that detail, but users can update their listing,
+# which has the effect of adding a new preferred address but not deleting the old.
+#
 class Droom::UserSerializer < ActiveModel::Serializer
   attributes :uid,
-             :authentication_token,
              :status,
              :title,
              :given_name,

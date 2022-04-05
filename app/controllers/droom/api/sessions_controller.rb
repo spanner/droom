@@ -3,6 +3,7 @@ module Droom::Api
     include Droom::Concerns::LocalApi
 
     respond_to :json
+    # skip_before_action :authenticate_user!, raise: false
     skip_before_action :verify_authenticity_token, raise: false
     before_action :set_access_control_headers
 
@@ -22,9 +23,9 @@ module Droom::Api
     end
 
     # This is called on every request by a remote service.
-    # Lots of care has to be taken here, to respond quickly but lapse correctly,
+    # Care has to be taken here, to respond quickly but lapse correctly,
     # and never to set up a cascade of mutual enquiry.
-    # also must make sure that we check, not sign in. Signing in will create a new session id...
+    # also must make sure that we check, *not sign in*, as signing in would create a new session id.
     #
     def authenticate
       token = params[:tok]
@@ -38,6 +39,7 @@ module Droom::Api
             render json: { errors: "Session timed out" }, status: :unauthorized
           else
             bypass_sign_in @user
+            @user.set_last_request_at!
             render json: @user, serializer: Droom::UserAuthSerializer
           end
         else
@@ -62,10 +64,12 @@ module Droom::Api
       end
     end
 
-
     def api_controller?
       true
     end
 
+    def devise_controller?
+      true
+    end
   end
 end

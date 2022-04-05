@@ -25,7 +25,7 @@ class UserProperties < ActiveRecord::Migration
     Droom::User.reset_column_information
     Droom::Person.all.each do |p|
       if u = Droom::User.find(p.user_id)
-        u.update_attributes p.attributes.slice(*%w{organisation_id phone description description post_line1 post_line2 post_city post_region post_country post_code mobile image})
+        u.update p.attributes.slice(*%w{organisation_id phone description description post_line1 post_line2 post_city post_region post_country post_code mobile image})
       end
     end
 

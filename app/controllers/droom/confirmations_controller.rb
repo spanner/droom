@@ -26,7 +26,7 @@ module Droom
     #
     def update
       if self.resource = resource_class.where(id: params[:id], confirmation_token: params[resource_name][:confirmation_token]).first
-        result = resource.update_attributes(permitted_params)
+        result = resource.update(permitted_params)
         if result && resource.password_match?
           set_flash_message :notice, :confirmed
           resource.confirm!

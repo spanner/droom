@@ -17,7 +17,6 @@ class Droom::UserAuthSerializer < ActiveModel::Serializer
              :password_set,
              :images
 
-
   def name
     object.colloquial_name
   end

@@ -34,4 +34,8 @@ module Droom::Concerns::AddressBookProperty
     end
   end
 
+  def address_type_name
+    address_type.name if address_type
+  end
+
 end

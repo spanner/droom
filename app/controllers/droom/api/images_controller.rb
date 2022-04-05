@@ -15,7 +15,7 @@ module Droom::Api
     end
 
     def update
-      if @image.update_attributes(image_params)
+      if @image.update(image_params)
         return_image
       else
         return_errors

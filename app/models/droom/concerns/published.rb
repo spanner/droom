@@ -23,7 +23,7 @@ module Droom::Concerns::Published
 
   def publish!
     unless publishing?
-      update_attributes({
+      update({
         published_title: title,
         published_subtitle: subtitle,
         published_intro: intro,

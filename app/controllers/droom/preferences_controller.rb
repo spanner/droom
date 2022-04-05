@@ -6,13 +6,13 @@ module Droom
     load_and_authorize_resource :through => :current_user
 
     def create
-      @preference.update_attributes(params[:preference])
+      @preference.update(params[:preference])
       @preference.save
       render :partial => "preference"
     end
 
     def update
-      @preference.update_attributes(params[:preference])
+      @preference.update(params[:preference])
       @preference.save
       render :partial => "preference"
     end

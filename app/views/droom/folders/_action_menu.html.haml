@@ -8,6 +8,8 @@
       %li
         = link_to t(:add_subfolder), droom.new_folder_folder_url(folder), :class => "add", :data => {:action => "popup", :type => "html", :affected => "#folder_#{folder.id}"}
       %li
+        = link_to t(:move_folder), droom.move_folder_folder_url(folder), :class => "edit", :id => "move_folder_#{folder.id}", :data => {:action => "popup", :type => "html", :affected => "#folders"}
+      %li
         = link_to t(:delete_folder), droom.folder_url(folder), :method => 'delete', :class => 'delete', :data => {:action => "remove", :removed => "#folder_#{folder.id}", :confirm => t(:confirm_delete_folder, :path => folder.path)}
       - if folder.populated?
         / %li

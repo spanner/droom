@@ -1,5 +1,4 @@
 div.popup
-
   input[type="text"], input[type="password"], input[type="email"],  input[type="tel"], input[type="url"], input[type="date"], input[type="time"], textarea, [contenteditable]:not([contenteditable=false]), 
     padding: 8px
     border: 1px solid $pale
@@ -30,6 +29,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
   &[disabled]
     color: $pale
     background-color: #fff
+    background-image: none
     border-color: $verypale
     opacity: 0.75
   &.valid, &.invalid
@@ -40,6 +40,11 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
     background-position: right 3px
   &.invalid
     background-position: right -97px
+  &.waiting
+    background:
+      image: image-url('droom/spinner.gif')
+      position: right 3px top 3px
+      repeat: no-repeat
   &::-webkit-input-placeholder
     color: $pale
     font-weight: lighter
@@ -76,6 +81,8 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
 select
   position: relative
   -webkit-appearance: none
+  -webkit-border-radius: 0
+  -webkit-padding: 8px
   -webkit-padding-end: 24px
   font-size: 1.2em
   border: 1px solid $pale
@@ -90,13 +97,11 @@ select
     image: image-url('droom/symbols/select.svg')
     size: 10px
     repeat: no-repeat
-  &:hover
-    color: $hover
   &.small
     font-size: 0.9em
     -webkit-padding-end: 16px
 
-input[type="submit"]
+input[type="submit"], button.confirm
   +button($green)
   display: inline-block
   transition: width 0.5s ease-out, height 0.5s ease-out, font-size 0.5s ease-out, padding 0.5s ease-out
@@ -114,16 +119,37 @@ input[type="submit"]
       image: image-url('droom/spinner.gif')
   &.positive
     +button($green, white)
-  &.negative
+  &.negative, &.dangerous
     +button($red, white)
+  &.edit
+    +button($blue, white)
+  &.publish
+    +button($purple, white)
+  &.reset
+    +button($pale, white)
+    padding: 9px 14px
+  &.new
+    +button($green, white)
+  &.back
+    +button($mid, white)
+  &.shortcut
+    +button($reddish, white)
+  &.minor
+    +button($pale, white)
+  &.cancel
+    +button($pale, white)
   &.large
     font-size: 1.5em
+    padding: 20px
   &.next
     float: right
   &.disabled
     +buttonbg($coolgrey00)
     color: $mid
     box-shadow: none
+
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus, select:-webkit-autofill, select:-webkit-autofill:hover, select:-webkit-autofill:focus
+  transition: background-color 5000s ease-in-out 0s
 
 #margin
   input[type="text"], input[type="email"], input[type="password"]
@@ -144,8 +170,14 @@ input[type="submit"]
     min-height: 4em
 
 fieldset.disabled
+  label
+    color: $pale
   input[type="submit"]
     +button(white, $pale)
+
+span.disabled, p.disabled
+  label
+    color: $pale
 
 label
   &.required
@@ -158,6 +190,8 @@ label
     display: inline-block
     vertical-align: top
     white-space: nowrap
+    margin-right: 6px
+    overflow: hidden
 
 .error
   color: $error
@@ -206,6 +240,13 @@ form.waiting
 
 textarea
   line-height: 1.5
+  &.small
+    font-size: 85%
+  &.medium
+    height: 142px
+  &.long
+    height: 360px
+
 
 // checkbox cosmetics
 

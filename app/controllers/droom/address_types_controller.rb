@@ -17,7 +17,7 @@ module Droom
     end
 
     def create
-      @address_type.update_attributes(address_type_params)
+      @address_type.update(address_type_params)
       respond_with @address_type
     end
 
@@ -26,7 +26,7 @@ module Droom
     end
     
     def update
-      @address_type.update_attributes(address_type_params)
+      @address_type.update(address_type_params)
       respond_with @address_type
     end
 

@@ -75,12 +75,12 @@ module Droom
       current_user.admin? || current_user.permitted?(permission_code)
     end
 
-    def action_menulink(thing, html_options={})
+    def action_menulink(thing, html_options={}, group=nil)
       if can?(:edit, thing)
         classname = thing.class.to_s.underscore.split('/').last
         html_options.reverse_merge!({
           :class => "",
-          :data => {:menu => "#{classname}_#{thing.id}"}
+          :data => {:menu => "#{classname}_#{thing.id}#{group.try(:id)}"}
         })
         html_options[:class] << ' menu'
         link_to t(:edit), "#", html_options if can?(:edit, thing)
@@ -209,6 +209,29 @@ module Droom
 
     def day_names
       ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    end
+
+    def check_recaptcha?
+      if ENV['RECAPTCHA_CHECK'] && ENV['RECAPTCHA_CHECK'] == 'true'
+        true
+      else
+        false
+      end
+    end
+
+    def recaptcha_execute(action)
+      id = "recaptcha_token_#{SecureRandom.hex(10)}"
+  
+      raw %Q{
+        <input name="recaptcha_token" type="hidden" id="#{id}"/>
+        <script>
+          grecaptcha.ready(function() {
+            grecaptcha.execute('#{ENV['RECAPTCHA_SITE_KEY']}', {action: '#{action}'}).then(function(token) {
+              document.getElementById("#{id}").value = token;
+            });
+          });
+        </script>
+      }
     end
   end
 end

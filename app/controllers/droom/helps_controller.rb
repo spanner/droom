@@ -11,7 +11,7 @@ module Droom
     end
 
     def create
-      if @help.update_attributes(help_params)
+      if @help.update(help_params)
         redirect_to droom.help_url(@help.slug)
       else
         render action: :new
@@ -19,7 +19,7 @@ module Droom
     end
 
     def update
-      if @help.update_attributes(help_params)
+      if @help.update(help_params)
         redirect_to droom.help_url(@help.slug)
       else
         render action: :edit

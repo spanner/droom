@@ -13,6 +13,7 @@ Droom::Engine.routes.draw do
     resources :users do
       post 'reindex', on: :member, as: :reindex
       get "whoami" , on: :collection, as: :whoami
+      get "authenticable", on: :member, as: :authenticable
     end
     resources :events
     resources :venues
@@ -38,6 +39,7 @@ Droom::Engine.routes.draw do
 
 
   devise_scope :user do
+    get "/users/expired_reset_password_token" => "users/passwords#expired_reset_password_token", as: :expired_reset_password_token
     get "/signup" => "users/registrations#new", as: :signup
     post '/register' => 'users/registrations#create', as: :register
     get "/users/registrations/confirm" => "users/registrations#confirm", as: :confirm_registration
@@ -51,6 +53,7 @@ Droom::Engine.routes.draw do
     delete '/api/users/sign_out' => 'api/sessions#destroy', as: :api_sign_out
     get '/api/authenticate/:tok' => 'api/sessions#authenticate', as: 'authenticate'
     get '/api/deauthenticate/:tok' => 'api/sessions#deauthenticate', as: 'deauthenticate'
+    get '/api/users/authenticable/:id' => 'api/users#authenticable', as: 'authenticable'
   end
 
   resources :helps
@@ -97,9 +100,13 @@ Droom::Engine.routes.draw do
 
   resources :folders do
     get "dropbox", on: :member, as: :dropbox
+    get "move_folder", on: :member
+    put "moved", on: :member
     resources :documents
     resources :folders
   end
+
+  get "child_folders" => "folders#child_folders"
 
   resources :organisations do
     resources :users
@@ -117,6 +124,7 @@ Droom::Engine.routes.draw do
     get "activity" => "users#activity", as: :activity
     get :preferences, on: :member, as: :preferences
     put :preference, on: :member, as: :set_preference
+    get :download, on: :collection
     get :admin, on: :collection
     put :setup, on: :collection
     put :reinvite, on: :member
@@ -129,7 +137,10 @@ Droom::Engine.routes.draw do
 
   resources :groups do
     resources :memberships
-    resources :group_permissions
+    resources :group_permissions do
+      post :upsert, on: :collection
+      delete :delete_by_ids, on: :collection, as: :delete
+    end
   end
 
   resources :event_types

@@ -24,12 +24,12 @@ module Droom
     end
 
     def update
-      @event_type.update_attributes(event_type_params)
+      @event_type.update(event_type_params)
       render :partial => 'event_type'
     end
 
     def create
-      if @event_type.update_attributes(event_type_params)
+      if @event_type.update(event_type_params)
         render :partial => "created"
       else
         respond_with @event_type

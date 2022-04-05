@@ -21,7 +21,7 @@ module Droom
     end
     
     def create
-      @service.update_attributes(service_params)
+      @service.update(service_params)
       respond_with @service
     end
 
@@ -30,7 +30,7 @@ module Droom
     end
     
     def update
-      @service.update_attributes(service_params)
+      @service.update(service_params)
       respond_with @service
     end
 
