@@ -21,3 +21,7 @@
     = f.text_area :description, class: "rte", data: {placeholder: t("placeholders.user.description")}
     
   = f.time_zone_select :timezone,nil, selected: user.try(:timezone), default: 'Hong Kong'
+
+  :javascript
+    $('#user_timezone').selectize();
+
