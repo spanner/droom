@@ -51,8 +51,6 @@ module Droom
       # add marker to send confirmation once the user is saved and permissions are known
       @user.send_confirmation!
 
-      byebug
-
       if @user.save
         respond_with @user
       end
