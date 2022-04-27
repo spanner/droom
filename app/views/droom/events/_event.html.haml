@@ -1,5 +1,6 @@
 - @seen_events ||= []
 - event ||= @event
+- event_invitation ||= @event_invitation
 - here ||= event == @event
 - full_attachments ||= false
 - show_folder = event.folder && can?(:read, event.folder)
@@ -75,4 +76,8 @@
   - if show_folder && full_attachments
     .addenda
       = render :partial => 'droom/events/attachments', :locals => {:event => event}
+      - if event_invitation
+        %h3
+          = t :invite_event
+        = render :partial => 'droom/events/event_invitation', :locals => {:event => event}
       = render :partial => 'droom/events/invitations', :locals => {:event => event}

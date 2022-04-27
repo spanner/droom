@@ -51,6 +51,7 @@ module Droom
     end
 
     def show
+      @event_invitation = Droom::Invitation.where(user_id: current_user.id, event_id: @event.id).first if @event
       respond_with @event do |format|
         format.js { render :partial => 'droom/events/event' }
         format.zip { send_file @event.documents_zipped.path, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@event.slug}.zip" }
