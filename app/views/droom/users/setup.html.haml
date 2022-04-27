@@ -26,5 +26,7 @@
     = t "user_setup.set_password"
   = render "droom/users/edit/password_fields", f: f, user: user, with_label: false, with_submit: false
 
+  = f.time_zone_select :timezone,nil, selected: user.try(:timezone), default: 'Hong Kong'
+
   %p.buttons{:data => {:role => "confirmation"}}>
     = f.submit t :continue
