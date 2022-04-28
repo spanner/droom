@@ -29,11 +29,16 @@ module Droom
     end
 
     def create
-      @document.save!
-      if %w{listing simple}.include?(params[:view])
-        render :partial => params[:view]
+      data = Document.where(name: params['document']['name'])
+      if data.exists?
+        render json: 'File name already exists', status: 422
       else
-        render :partial => 'listing'
+        @document.save!
+        if %w{listing simple}.include?(params[:view])
+          render :partial => params[:view]
+        else
+          render :partial => 'listing'
+        end
       end
     end
 

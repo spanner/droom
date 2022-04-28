@@ -62,7 +62,7 @@
 
       .detail
         - if event.description?
-          .content
+          .content{style: "width:100%"}
             = sanitize(event.description)
         - if show_folder && !full_attachments
           - if event.folder.populated? || can?(:read, event.folder)

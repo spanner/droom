@@ -43,7 +43,11 @@ jQuery ($) ->
 
     triggerFilefield: (e) =>
       e?.preventDefault()
-      @_filefield.click()   # won't work in IE
+      @_filefield.click() 
+      
+    removeSection: (e) =>
+      e?.preventDefault()
+      
 
     readFilefield: =>
       @readFiles @_filefield[0].files
@@ -183,9 +187,13 @@ class Upload
 
   error: () =>
     console.log "error", @_xhr
+    msg = if @_xhr.statusText then  @_xhr.statusText else @_xhr.responseText
     @_options.on_error?()
     @_li.addClass('erratic')
-    @_li.append $('<span class="error" />').text(@_xhr.statusText)
+    @_li.append $('<span class="error" />').text(msg)
+    @_li.append $('<span class="delete" />').text('x')
+    $('.delete').on 'click', ->
+      $('.uploading').css('display','none');
     @_li.signal_error()
 
   cancel: () =>
