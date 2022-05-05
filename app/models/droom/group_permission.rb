@@ -24,6 +24,5 @@ module Droom
         hash[gp.group_id][gp.permission.id] = gp
       end
     end
-    
   end
 end

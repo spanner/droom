@@ -1,7 +1,7 @@
 module Droom
   class MembershipsController < Droom::DroomController
     respond_to :js, :html
-    
+
     load_and_authorize_resource :group, :class => Droom::Group
     load_and_authorize_resource :membership, :through => :group, :class => Droom::Membership
 

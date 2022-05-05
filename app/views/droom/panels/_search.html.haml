@@ -7,7 +7,7 @@
     %p
       %label{:for => 'term'}
         = t :quick_search
-      = text_field_tag :term, params[:term], :placeholder => t(:quick_search_prompt), :autocomplete => "off", :autofocus => true
+      = text_field_tag :term, params[:term], :placeholder => t(:quick_search_prompt), :autocomplete => "off"
 
   #suggestion_box
     %p

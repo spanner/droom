@@ -21,11 +21,17 @@
       = t :or
       = link_to t(:cancel), '#', :class => 'cancel'
 
-      - if !@user.confirmed?
-        - if admin?
-          %p.admin
-            = f.check_box :send_confirmation, class: "fancy"
-            = f.label :send_confirmation
-        - elsif @user.organisation && organisation_admin?(@user.organisation)
+      - if admin?
+        %p.admin
+          %span.checkbox
+            = f.check_box :admin, class: "fancy"
+            = f.label :admin
+          - if !@user.confirmed?
+            %br
+            %span.checkbox
+              = f.check_box :send_confirmation, class: "fancy"
+              = f.label :send_confirmation
+      - elsif @user.organisation && organisation_admin?(@user.organisation)
+        %p.admin
           - @user.send_confirmation = true
           = f.hidden_field :send_confirmation

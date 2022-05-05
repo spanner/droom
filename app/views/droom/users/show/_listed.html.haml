@@ -2,28 +2,35 @@
 - user ||= listed || @user
 - membership ||= false
 - event ||= false
-- group ||= false
+- group ||= nil
 - liclass = "person"
 - liclass << " unconfirmed" unless user.confirmed?
 - ineditable ||= false
 
-- if membership
-  - group = membership.group
+- if can? :edit, user
+  - link_href = droom.edit_user_url(user)
+- else
+  - link_href = droom.user_url(user)
 
-%li.user.listed.row{id: "user_#{user.id}", class: liclass, data: {refreshing: true, url: droom.user_path(user, view: 'listed')} }
-  %span.user
-    %h2.name
-      - if user.image?
+- if group
+  - membership = group.membership_for(user)
+
+%li.user{id: "user_#{user.id}", class: liclass, data: {refreshing: true, url: droom.user_path(user, view: 'listed')} }
+  %h3
+    = link_to(link_href, data: {action: "popup"}) do
+      - if Droom.config.use_mugshots? && user.image?
         %span.mugshot{style: "background-image: url(#{user.image.url(:thumb)})"}
-      - else
-        %span.mugshot
-          %svg
-            %use{"xlink:href" => "#user_symbol"}
-      = link_to user.colloquial_name, droom.user_url(user), data: {action: "popup"}
-      - if user.organisation
-        %br
-        = link_to user.organisation.name, droom.organisation_url(user.organisation)
-    - if Droom.use_biogs? && user.description?
-      .description
-        = sanitize(user.description.html_safe)
-    = render "droom/users/show/contacts", user: user
+      %span.name
+        = truncate(user.colloquial_name, length: 42)
+    - if user.organisation
+      = link_to truncate(user.organisation.name, length: 50), droom.organisation_url(user.organisation), class: "organisation"
+  - if Droom.config.use_biogs? && user.description?
+    .description
+      = sanitize(user.description.html_safe)
+  = render "droom/users/show/contacts", user: user
+
+  .controls
+    - if membership
+      = link_to droom.group_membership_url(group, membership), title: "Remove from group", method: 'delete', class: 'delete', data: {action: "remove", removed: "#user_#{user.id}", confirm: t(:confirm_remove_member, name: user.colloquial_name, group: group.name)} do
+        %svg.icon
+          %use{href: "#cross_button_symbol"}

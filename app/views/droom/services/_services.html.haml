@@ -5,6 +5,7 @@
         - if can?(:create, Droom::Service)
           = link_to t(:add_service), new_service_url, :class => 'add', :data => {:action => 'popup', :affected => '#services'}
         - if can?(:create, Droom::Group)
+          %br
           = link_to t(:add_group), new_group_url, :class => 'add', :data => {:action => 'popup', :affected => '#services'}
         
       - @services.each do |service|

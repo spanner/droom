@@ -73,9 +73,12 @@ module Droom
     end
 
     def membership_for(user)
-      self.memberships.for(user).first
+      self.memberships.for_user(user).first
     end
 
+    def permission_slugs
+      permissions.map(&:slug).compact.uniq
+    end
 
     ## Search
     #

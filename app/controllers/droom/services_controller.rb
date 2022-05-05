@@ -21,8 +21,11 @@ module Droom
     end
     
     def create
-      @service.update(service_params)
-      respond_with @service
+      if @service.update(service_params)
+        redirect_to droom.service_url(@service)
+      else
+        render action: :new
+      end
     end
 
     def edit
@@ -30,8 +33,11 @@ module Droom
     end
     
     def update
-      @service.update(service_params)
-      respond_with @service
+      if @service.update(service_params)
+        redirect_to droom.service_url(@service)
+      else
+        render action: :edit
+      end
     end
 
     def destroy

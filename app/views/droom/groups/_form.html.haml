@@ -1,12 +1,11 @@
 = form_for @group, :html => {:class => 'edit group', :remote => true, :data => {:type => :html}} do |f|
   %p.name
     = f.text_field :name, :class => 'name', :placeholder => t(:group_name)
-    
+  %p.slug
+    = f.text_field :slug, :class => 'slug', :placeholder => t(:group_slug)
   %p.description
     = f.text_area :description, :class => 'name', :placeholder => t(:group_description)
     %br
-    = f.check_box :privileged
-    = f.label :privileged
     = f.check_box :directory
     = f.label :directory
 

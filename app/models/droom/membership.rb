@@ -21,6 +21,10 @@ module Droom
       where(["group_id = ?", group.id])
     }
 
+    scope :for_user, -> user {
+      where(["user_id = ?", user.id])
+    }
+
     def current?
       expires and expires > Time.now
     end

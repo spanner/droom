@@ -116,7 +116,7 @@ en:
   detach_upload: "Detach Upload"
   devices: "Devices"
   directory: "Directory"
-  directory_introduction: "The directory organises people by group. To find someone quickly, start typing their name on the right."
+  directory_introduction: "The directory organises people into adminsitrative groups so that access can be given or documents provided."
   document_count: 
     zero: "no documents"
     one: "one document"

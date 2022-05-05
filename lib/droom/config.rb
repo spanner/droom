@@ -24,6 +24,7 @@ module Droom
                   :default_scrap_type,
                   :use_chinese_names,
                   :use_biogs,
+                  :use_mugshots,
                   :use_separate_mobile_number,
                   :use_titles,
                   :use_honours,
@@ -165,6 +166,10 @@ module Droom
  
     def use_biogs?
       !!@use_biogs
+    end
+
+    def use_mugshots?
+      !!@use_mugshots
     end
  
     def registerable=(value)

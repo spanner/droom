@@ -59,7 +59,7 @@ table.toggles
       background-color: $coolgrey1
   td.name
     min-width: 140px
-    min-height: 36px
+    vertical-align: middle;
     line-height: 1
     text-align: left
     a
@@ -70,27 +70,31 @@ table.toggles
   td.toggle
     min-height: 32px
     text-align: center
+    vertical-align: middle;
     span.no, span.yes, a.yes, a.no
-      +icon("droom/minisymbols.png")
-      margin: 5px 0 0 3px
+      display: block
+      width: 32px
+      height: 32px
+      svg
+        width: 24px
+        height: 24px
+        margin: 4px
+        transition: opacity 0.4s ease-out
       &.yes
-        background-position: 0 -384px
+        color: $green
       &.no
-        background-position: 0 -528px
-        opacity: 0.3
+        color: $pale
         &:hover
           opacity: 1
       &.not_applicable
-        background-position: 0 -600px
-      &.waiting
-        background-image: image-url('droom/spinner.gif')
-        background-position: 2px 2px
-    span.no, span.yes
-      opacity: 0.3
-    a.no:hover
-      background-position: 0 -648px
-    a.yes:hover
-      background-position: 0 -480px
+        color: $pale
+      &.working
+        svg
+          opacity: 0
+        background:
+          image: image-url('droom/spinner.gif')
+          position: 9px 9px
+          repeat: no-repeat
   tr.unconfirmed
     td, th, td.name
       color: $pale

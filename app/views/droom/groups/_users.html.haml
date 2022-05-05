@@ -1,8 +1,5 @@
 - group ||= @group
 - users ||= @users
 
-.paginated
-  %ul.people
-    = render partial: "droom/users/show/listed", collection: users
-  .pagination.sliding<
-    = paginate(users, params: {controller: 'groups', action: "show", id: group.id, format: :js})
+%ul.users
+  = render partial: "droom/users/show/listed", collection: users, locals: {group: group}
