@@ -217,6 +217,7 @@ en:
     one: "One member"
     other: "%{count} members"
   group_name: "Name"
+  group_slug: "Slug (usually automatic)"
   has_been_created: "has been added to the system"
   headings:
     users: "Address book"
