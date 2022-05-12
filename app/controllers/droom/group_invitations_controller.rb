@@ -21,6 +21,7 @@ module Droom
     
     def create
       if @group_invitation.update(group_invitation_params)
+        Droom::GroupInvitationJob.perform_now(group_invitation_params[:group_id], params[:event_id])
         render :partial => "created"
       else
         respond_with @group_invitation
