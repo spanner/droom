@@ -31,7 +31,7 @@ module Droom
     def create
       data = Document.where(name: params[:document][:name])
       if data.exists?
-        render json: 'File name already exists', status: 409
+        render json: 'File with this name already exists!', status: 409
       else
         @document.save!
         if %w{listing simple}.include?(params[:view])

@@ -187,7 +187,8 @@ class Upload
 
   error: () =>
     console.log "error", @_xhr
-    msg = if @_xhr.statusText then  @_xhr.statusText else @_xhr.responseText
+    msg = if @_xhr.response then @_xhr.response else @_.statusText
+
     @_options.on_error?()
     @_li.addClass('erratic')
     @_li.append $('<span class="error" />').text(msg)
