@@ -25,10 +25,10 @@
 %div{:class => cssclasses.join(' '), id: "event_#{event.id}", data: div_data}
   = link_to event_url(event) do
     .datemark
-      %span.mon= event.start.strftime('%b')
-      %span.dom= event.start.strftime('%d')
+      %span.mon= date_by_timezone(event.start).strftime('%b')
+      %span.dom= date_by_timezone(event.start).strftime('%d')
       - if @year || event.start.year != Date.today.year
-        %span.year= event.start.strftime('%Y')
+        %span.year= date_by_timezone(event.start).strftime('%Y')
 
   .summary
     .heading
