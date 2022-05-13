@@ -25,7 +25,7 @@ jQuery ($) ->
       @enable()
       @_catcher.on "sorting", @disable
       @_catcher.on "not_sorting", @enable
- 
+
     enable: =>
       @_active = true
       @_catcher.on "dragenter", @lookAvailable
@@ -35,7 +35,7 @@ jQuery ($) ->
       @_active = false
       @_catcher.off "dragenter", @lookAvailable
       @_catcher.off "drop", @catchFiles
- 
+
     resetFilefield: () =>
       @_filefield?.remove()
       @_filefield = $('<input type="file" multiple="multiple" />').appendTo(@_form)
@@ -43,11 +43,11 @@ jQuery ($) ->
 
     triggerFilefield: (e) =>
       e?.preventDefault()
-      @_filefield.click() 
-      
+      @_filefield.click()
+
     removeSection: (e) =>
       e?.preventDefault()
-      
+
 
     readFilefield: =>
       @readFiles @_filefield[0].files
@@ -191,7 +191,7 @@ class Upload
     @_options.on_error?()
     @_li.addClass('erratic')
     @_li.append $('<span class="error" />').text(msg)
-    @_li.append $('<span class="delete" />').text('x')
+    @_li.append $('<span class="delete" style="background-color: inherit;" />').text('x')
     $('.delete').on 'click', ->
       $('.uploading').css('display','none');
     @_li.signal_error()
@@ -201,5 +201,3 @@ class Upload
     @_options.on_cancel?()
     @_li.fadeOut () ->
       $(@).remove()
-
-
