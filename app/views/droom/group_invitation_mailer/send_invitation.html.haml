@@ -20,4 +20,14 @@
 %p
   = link_to "Click here to view the event detail", event_url(@event)
 %p
-  Please don’t hesitate to contact me if you have any difficulties accessing the site or finding the information you need. If anything goes wrong or could be improved, feel free also to contact our web builder directly: his name is Aung Kyaw Phyo and he can be reached at akp@binarylab.io.
+  Please don’t hesitate to contact me if you have any difficulties accessing the site or finding the information 
+  you need. If anything goes wrong or could be improved, feel free also to contact our web builder 
+  directly: his name is Aung Kyaw Phyo and he can be reached at
+  = mail_to("akp@binarylab.io") + "."
+
+%p
+  Regards,
+  %br
+  David Foster
+  %br
+  = link_to "Croucher Foundation", "http://www.croucher.org.hk/", style: "color: black;"
