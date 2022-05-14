@@ -322,7 +322,7 @@ en:
   invite_event_accepted: "Accepted to join this event"
   invite_event_refused: "Refused to join this event"
   invite_event_text: "You have been invited to join this event"
-  invite_group: "invite a group"
+  invite_group: "Invite a group"
   invite_group_to: "Invite a group to %{name}"
   invite_person: "invite a new person"
   invite_to_group: "Invite and add to group"
