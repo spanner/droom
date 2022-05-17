@@ -5,6 +5,7 @@ module Droom
     before_action :get_folder, except: [:index, :suggest, :reposition]
     before_action :select_documents, only: [:index, :suggest]
     load_and_authorize_resource :document, :class => Droom::Document, :through => :folder, :shallow => true, except: [:index, :suggest]
+    before_action :find_by_name, only: [:create, :update]
 
     def index
       respond_with @documents do |format|
@@ -29,8 +30,7 @@ module Droom
     end
 
     def create
-      data = Document.where(name: params[:document][:name])
-      if data.exists?
+      if @data.exists?
         render json: 'File with this name already exists!', status: 409
       else
         @document.save!
@@ -47,8 +47,13 @@ module Droom
     end
 
     def update
-      @document.update(document_params)
-      render :partial => 'listing', :object => @document
+      @document.assign_attributes(document_params)
+      if @document.changed? && @data.blank?
+        @document.save
+        render json: @document.to_json
+      else
+        render json: 'File with this name already exists!', status: 409
+      end
     end
 
     def reposition
@@ -63,6 +68,10 @@ module Droom
     end
 
   protected
+
+    def find_by_name
+      @data = Document.where(name: document_params[:name])
+    end
 
     def select_documents
       if params[:q].present?
