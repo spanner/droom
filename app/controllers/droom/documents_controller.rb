@@ -70,7 +70,7 @@ module Droom
   protected
 
     def find_by_name
-      @data = Document.where(name: document_params[:name])
+      @data = Document.where(name: document_params[:name], folder_id: params[:folder_id])
     end
 
     def select_documents

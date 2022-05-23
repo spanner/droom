@@ -60,7 +60,8 @@
               = l(time_by_timezone(event.finish), :format => :natural)
           - if event.timezone == "London"
             = "(#{t(:uk_time)})"
-
+        %i.note{style: "display: block;"}
+          = "Above meeting time is automatically converted to your selected timezone (#{current_user.timezone}) of your profile."
       .detail
         - if event.description?
           .content{style: "width:100%"}
