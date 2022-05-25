@@ -48,7 +48,7 @@ module Droom
 
     def update
       @document.assign_attributes(document_params)
-      if @document.changed? && @data.blank?
+      if @document.description_changed? || @data.blank?
         @document.save
         render json: @document.to_json
       else
