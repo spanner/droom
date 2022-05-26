@@ -8,13 +8,13 @@
     = @event.name
   %br/
   Date:
-  = date_by_timezone(@event.start, @user).strftime('%b %d, %Y')
+  = datetime_by_timezone(@event.start, 'date', @user).strftime('%b %d, %Y')
   %br/
   Place:
   = @event.venue.definite_name
   %br/
   Time:
-  = l(time_by_timezone(@event.start, @user), :format => :natural)
+  = l(datetime_by_timezone(@event.start, 'time', @user), :format => :natural)
 %p
   Please click below link to view the event detail:
 %p

@@ -51,6 +51,15 @@ module Droom::Api
       head :ok
     end
 
+    def update_timezone
+      if current_user 
+        current_user.timezone = ActiveSupport::TimeZone::MAPPING.key(params[:timezone])
+        current_user.save
+        return current_user.timezone
+      end
+      return nil
+    end
+
   protected
 
     def find_or_create_user

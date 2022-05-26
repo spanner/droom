@@ -51,6 +51,9 @@ module Droom
     end
 
     def show
+      if current_user  
+        cookies[:timezone] = ActiveSupport::TimeZone::MAPPING.map{|key, value| break value if key == current_user.timezone }
+      end
       @event_invitation = Droom::Invitation.where(user_id: current_user.id, event_id: @event.id).first if @event
       respond_with @event do |format|
         format.js { render :partial => 'droom/events/event' }
