@@ -1,3 +1,4 @@
+- timezone = @user.timezone.present? ? @user.timezone : 'Hong Kong'
 %p
   Dear
   = @user.formal_name + ','
@@ -7,14 +8,11 @@
   %strong
     = @event.name
   %br/
-  Date:
-  = datetime_by_timezone(@event.start, 'date', @user).strftime('%b %d, %Y')
+  DateTime:
+  = "#{datetime_by_timezone(@event.start, 'date', @user).strftime('%b %d, %Y')}, #{l(datetime_by_timezone(@event.start, 'time', @user), :format => :natural)} (#{timezone} Time)"
   %br/
   Place:
   = @event.venue.definite_name
-  %br/
-  Time:
-  = l(datetime_by_timezone(@event.start, 'time', @user), :format => :natural)
 %p
   Please click below link to view the event detail:
 %p

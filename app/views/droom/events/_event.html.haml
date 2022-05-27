@@ -58,7 +58,7 @@
             = t :to
             %time
               = l(datetime_by_timezone(event.finish, 'time'), :format => :natural)
-          - if event.timezone == "London" && cookies[:timezone] == "Asia/Hong_Kong"
+          - if current_user && !current_user.timezone.present? &&  event.timezone == "London" && cookies[:timezone] == "Europe/London"
             = "(#{t(:uk_time)})"
         - unless cookies[:timezone] == "Asia/Hong_Kong" || ( event.timezone == "London" && cookies[:timezone] == "Europe/London" )
           %i.note{style: "display: block;"}
