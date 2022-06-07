@@ -30,7 +30,7 @@ module Droom
 
     def create
       if @data.exists?
-        render json: 'Sub-folder with this name already exists!', status: 409
+        render json: 'Folder with this name already exists!', status: 409
       else
         @folder.update(folder_params)
         respond_with @folder do |format|
@@ -46,7 +46,7 @@ module Droom
     def update
       @folder.assign_attributes(folder_params)
       if @folder.name_changed? && @data.exists?
-        render json: 'Sub-folder with this name already exists!', status: 409
+        render json: 'Folder with this name already exists!', status: 409
       else
         @folder.save
         respond_with @folder do |format|
