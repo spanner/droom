@@ -27,9 +27,9 @@
   = render "droom/users/edit/password_fields", f: f, user: user, with_label: false, with_submit: false
 
   %h3
-    = t "user_setup.time_zone"  
+    = t "user_setup.time_zone"
   .note Timezone is used to convert and display event's times according to your selected timezone here.
-  = f.time_zone_select :timezone,nil, selected: user.try(:timezone), default: 'Hong Kong'
+  = f.select :timezone, Timezone.names.map{ |value| [value, value] }, selected: user.try(:timezone), default: 'Hong Kong'
 
   %p.buttons{:data => {:role => "confirmation"}}>
     = f.submit t :continue
