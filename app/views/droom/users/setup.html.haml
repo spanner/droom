@@ -29,7 +29,7 @@
   %h3
     = t "user_setup.time_zone"
   .note Timezone is used to convert and display event's times according to your selected timezone here.
-  = f.select :timezone, Timezone.names.map{ |value| [value, value] }, selected: user.try(:timezone), default: 'Hong Kong'
+  = f.select :timezone, Timezones.for_selection.map{ |key, value| [value, key] }, {}
 
   %p.buttons{:data => {:role => "confirmation"}}>
     = f.submit t :continue
