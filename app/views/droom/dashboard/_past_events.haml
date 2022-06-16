@@ -6,7 +6,7 @@
   %section
     #past_events
       %h2.section
-        = link_to main_app.calendar_url do
+        = link_to droom.past_events_url do
           = t(:recent_events)
           - if calendar.events.past.count > 5
             %span.addendum

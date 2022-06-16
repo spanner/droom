@@ -10,9 +10,6 @@ require "droom/scrubbers"
 
 
 module Droom  
-  # Droom configuration is handled by accessors on the Droom base module.
-  # Boolean items also offer the interrogative form.
-  
   mattr_accessor :config
   @@config = Droom::Config.new
 

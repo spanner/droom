@@ -1,0 +1,9 @@
+- years = Droom::Event.pluck(:start).compact.map(&:year).uniq.sort.reverse
+
+%p.navigation
+  = link_to_unless_current "Future events", droom.events_url
+  \|
+  = link_to_unless_current "Past events", droom.past_events_url
+  - years.each do |y|
+    \|
+    = link_to_unless_current y, events_url(year: y)

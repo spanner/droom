@@ -1,3 +1,5 @@
+require 'net/https'
+
 module Droom::Users
   class RegistrationsController < Devise::RegistrationsController
     before_action :set_access_control_headers
@@ -14,6 +16,24 @@ module Droom::Users
       else
         head :forbidden
       end
+    end
+
+    def create
+      if helpers.check_recaptcha?
+        min_score = 0.5
+        secret_key = ENV['RECAPTCHA_SECRET_KEY']
+        token = params[:recaptcha_token]
+
+        uri = URI.parse("https://www.google.com/recaptcha/api/siteverify?secret=#{secret_key}&response=#{token}")
+        response = Net::HTTP.get_response(uri)
+        json = JSON.parse(response.body)
+        result = json['success'] && json['score'] > min_score && json['action'] == 'submit'
+
+        unless result
+          return redirect_to signup_url
+        end
+      end
+      super
     end
 
     def after_sign_up_path_for(resource)

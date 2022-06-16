@@ -27,19 +27,6 @@ module Droom::Api
       render json: { errors: exception.message }.to_json, status: :internal_server_error
     end
     
-    def echo_auth
-      Rails.logger.warn "??? token_and_options: #{ActionController::HttpAuthentication::Token.token_and_options(request).inspect}"
-      Rails.logger.warn "    token auth header is #{request.headers["HTTP_AUTHORIZATION"]}"
-    end
-
-    def echo_user_status
-      Rails.logger.warn ">>> user_signed_in? is #{user_signed_in?.inspect}"
-      if user_signed_in?
-        Rails.logger.warn "    current_user is #{current_user.inspect}"
-        Rails.logger.warn "    permissions: is #{current_user.permission_codes.inspect}"
-      end
-    end
-    
     def name_from_controller
       params[:controller].sub("Controller", "").underscore.split('/').last
     end

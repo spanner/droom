@@ -3,6 +3,7 @@ module Droom::Api
 
     before_action :get_users, only: [:index]
     before_action :find_or_create_user, only: [:create]
+    skip_before_action :assert_local_request!, only: [:update_timezone]
     load_resource find_by: :uid, class: "Droom::User"
 
     def index
@@ -19,8 +20,17 @@ module Droom::Api
       render json: current_user
     end
 
+    # This is a background call to request the user information necessary for session creation.
+    # It usually happens on acceptable of an invitation, or some other situation where
+    # a remote object is triggering user confirmation or automatic login.
+    #
+    def authenticable
+      @user.ensure_unique_session_id!
+      render json: @user, serializer: Droom::UserAuthSerializer
+    end
+
     def update
-      @user.update_attributes(user_params)
+      @user.update(user_params)
       render json: @user
     end
 
@@ -42,6 +52,14 @@ module Droom::Api
       head :ok
     end
 
+    def update_timezone
+      if params[:timezone]
+        timezone = Timezones.find_by_key(params[:timezone])
+        current_user.update(timezone: timezone)
+        return current_user.timezone
+      end
+    end
+
   protected
 
     def find_or_create_user
@@ -51,6 +69,9 @@ module Droom::Api
         end
         if params[:user][:email].present?
           @user ||= Droom::User.where(email: params[:user][:email]).first
+          unless @user
+            @user ||= Droom::Email.where(email: params[:user][:email]).first.try(:user)
+          end
         end
       end
       params = user_params
@@ -71,7 +92,7 @@ module Droom::Api
     end
 
     def user_params
-      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :affiliation, :email, :phone, :mobile, :description, :address, :post_code, :correspondence_address, :country_code, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image_data, :image_name)
+      params.require(:user).permit(:uid, :person_uid, :title, :family_name, :given_name, :chinese_name, :honours, :affiliation, :email, :phone, :mobile, :description, :address, :post_code, :correspondence_address, :country_code, :organisation_id, :female, :defer_confirmation, :send_confirmation, :password, :password_confirmation, :confirmed, :confirmed_at, :image_data, :image_name, :last_request_at)
     end
 
   end

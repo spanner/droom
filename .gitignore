@@ -10,3 +10,4 @@ spec/dummy/tmp/
 /spec/dummy/webdav/*
 
 /.idea/
+.ruby-version

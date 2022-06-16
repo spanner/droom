@@ -31,12 +31,12 @@ module Droom
     end
 
     def update
-      @group.update_attributes(group_params)
+      @group.update(group_params)
       render :partial => 'group'
     end
 
     def create
-      if @group.update_attributes(group_params)
+      if @group.update(group_params)
         render :partial => "created"
       else
         respond_with @group

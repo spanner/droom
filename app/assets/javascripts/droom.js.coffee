@@ -8,6 +8,7 @@
 #= require sortablejs/Sortable
 #= require jquery.cookie/jquery.cookie
 #= require ep-jquery-tokeninput/src/jquery.tokeninput
+#= require imagesloaded/imagesloaded.pkgd
 
 #= require droom/lib/jquery.datepicker
 #= require droom/lib/jquery.animate-colors
@@ -25,6 +26,7 @@
 #= require droom/widgets
 #= require droom/editors
 #= require droom/grid
+#= require droom/document_editor
 #= require_self
 
 
@@ -67,8 +69,10 @@ jQuery ($) ->
     @find_including_self('[data-action="toggle"]').toggle()
     @find_including_self('[data-action="alternate"]').alternator()
     @find_including_self('[data-action="replace"]').replace_with_remote_content()
+    @find_including_self('[data-action="update_content"]').update_main_content()
     @find_including_self('[data-action="autofetch"]').replace_with_remote_content ".holder", {force: true}
     @find_including_self('[data-action="slide"]').sliding_link()
+    @find_including_self('[data-action="proxy"]').click_proxy()
     @find_including_self('[data-action="fit"]').self_sizes()
     @find_including_self('form[data-action="filter"]').filter_form()
     @find_including_self('form[data-action="quick_search"]').quick_search_form()
@@ -116,8 +120,11 @@ jQuery ($) ->
     @find_including_self('.sortable_files').sortable_files()
     @find_including_self('[data-draggable]').draggable()
     @find_including_self('.gridbox:not(.notice)').gridBox()
-    @find_including_self('.notice').notice()
     @find_including_self('.tagger').tagger()
     @find_including_self('form.search.quick').quick_search_form()
+
+    @find_including_self('#noticeboard').imagesLoaded =>
+      console.log "imagesLoaded ", @
+      $('.notice').notice()
 
     @

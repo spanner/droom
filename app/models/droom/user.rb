@@ -1,3 +1,5 @@
+require 'vcard'
+
 module Droom
   class User < Droom::DroomRecord
       include Droom::Concerns::Imaged
@@ -30,7 +32,7 @@ module Droom
     accepts_nested_attributes_for :organisation
 
     before_validation :ensure_uid!
-    before_save :ensure_authentication_token
+    before_save :ensure_authentication_token!
     before_save :org_admin_if_alone
     after_save :send_confirmation_if_directed
 
@@ -79,6 +81,12 @@ module Droom
       defer_confirmation && defer_confirmation != "false"
     end
 
+    # For users of peripheral services we can leave it up to them to require or offer confirmation.
+    #
+    def confirmation_required?
+      !confirmed? && data_room_user?
+    end
+
     # send_confirmation? is called after save by our own later confirmation mechanism.
     # If the send_confirmation flag has been set, we confirm.
     #
@@ -111,7 +119,7 @@ module Droom
 
     # Our old user accounts store passwords as salted sha512 digests. Current standard uses BCrypt
     # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
-  
+
     def valid_password?(password)
       begin
         super(password)
@@ -129,7 +137,7 @@ module Droom
           return false
         end
       end
-    end 
+    end
 
     # This is called from a warden hook during every authenticated request, either to the data room or its API.
     # The value of last_request_at is used to invalidate stale sessions.
@@ -152,6 +160,7 @@ module Droom
     end
 
     def clear_session_ids!
+      Rails.logger.warn "⚠️ clear_session_ids!"
       self.update_columns({
         session_id: "",
         unique_session_id: ""
@@ -175,7 +184,7 @@ module Droom
       Devise.secure_compare(send(attribute), token)
     end
 
-    def ensure_authentication_token
+    def ensure_authentication_token!
       if authentication_token.blank?
         self.authentication_token = generate_authentication_token
       end
@@ -184,6 +193,7 @@ module Droom
 
     def ensure_unique_session_id!
       unless unique_session_id.present?
+        Rails.logger.warn "✅ calling update_unique_session_id!"
         update_unique_session_id!(Devise.friendly_token)
       end
       unique_session_id
@@ -229,7 +239,7 @@ module Droom
     end
 
     def internal?
-      !organisation && !organisation.external?
+      organisation && !organisation.external?
     end
 
 
@@ -358,7 +368,7 @@ module Droom
     # Can hold multiple emails, phones and addresses for each user.
     # Address book data is simple and always nested.
     #
-    has_many :emails
+    has_many :emails, :dependent => :destroy
     accepts_nested_attributes_for :emails, :allow_destroy => true
     has_many :phones
     accepts_nested_attributes_for :phones, :allow_destroy => true
@@ -584,7 +594,7 @@ module Droom
     ## Names
     #
     def title_ordinary?
-      ['Mr', 'Ms', 'Mrs', '', nil].include?(title)
+      title.nil? || ['mr', 'ms', 'mrs', 'mr.', 'ms.', 'mrs.', ''].include?(title.downcase.strip)
     end
 
     def title_if_it_matters
@@ -615,19 +625,34 @@ module Droom
     def to_vcf
       @vcard ||= Vcard::Vcard::Maker.make2 do |maker|
         maker.add_name do |n|
-          n.given = name || ""
+          n.family = family_name || ""
+          n.given = given_name || ""
+          n.prefix = title unless title_ordinary?
         end
-        maker.add_addr {|a|
-          a.location = 'home' # until we do this properly with multiple contact sets
-          a.country = post_country || ""
-          a.region = post_region || ""
-          a.locality = post_city || ""
-          a.street = "#{post_line1}, #{post_line2}"
-          a.postalcode = post_code || ""
-        }
-        maker.add_tel phone { |t| t.location = 'home' } unless phone.blank?
-        maker.add_tel mobile { |t| t.location = 'cell' } unless mobile.blank?
-        maker.add_email email { |e| t.location = 'home' }
+        emails.each do |email|
+          if email.email?
+            location = email.address_type_name || 'home'
+            maker.add_email email.email { |e| t.location = location.downcase }
+          end
+        end
+        phones.each do |phone|
+          if phone.phone?
+            location = phone.address_type_name || 'cell'
+            location = 'cell' if location == 'Mobile'
+            maker.add_tel phone.phone { |e| t.location = location.downcase }
+          end
+        end
+        addresses.each do |address|
+          location = address.address_type_name || 'home'
+          maker.add_addr {|a|
+            a.location = location.downcase
+            a.country = address.country_code || ""
+            a.region = address.region || ""
+            a.locality = address.city || ""
+            a.street = "#{address.line_1}, #{address.line_2}"
+            a.postalcode = address.postal_code || ""
+          }
+        end
       end
       @vcard.to_s
     end
@@ -854,7 +879,7 @@ module Droom
 
     def subsume!(other_user)
       Droom::User.transaction do
-        %w{emails phones addresses memberships organisations scraps documents invitations memberships user_permissions dropbox_tokens dropbox_documents personal_folders}.each do |association|
+        %w{emails phones addresses memberships scraps documents invitations memberships user_permissions dropbox_tokens dropbox_documents personal_folders}.each do |association|
           self.send(association.to_sym) << other_user.send(association.to_sym)
         end
         %w{encrypted_password password_salt family_name given_name chinese_name title gender organisation_id description image}.each do |property|
@@ -869,6 +894,12 @@ module Droom
       end
     end
 
+    def delete_user_permissions(group_ids = [])
+      self.user_permissions.each do |perm|
+        group_id = perm.group_permission.group_id
+        perm.delete unless group_ids.map(&:to_i).include?(group_id)
+      end
+    end
 
   protected
 

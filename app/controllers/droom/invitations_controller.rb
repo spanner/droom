@@ -20,7 +20,7 @@ module Droom
     end
     
     def create
-      if @invitation.update_attributes(invitation_params)
+      if @invitation.update(invitation_params)
         render :partial => "created"
       else
         respond_with @invitation
@@ -29,12 +29,24 @@ module Droom
     
     def accept
       @invitation.update_attribute(:response, 2)
-      render :partial => "droom/invitations/invitation"
+      if params[:event_invitation]
+        @event = @invitation.event
+        @event_invitation = Droom::Invitation.where(user_id: current_user.id, event_id: @event.id).first if @event
+        render :partial => "droom/events/event_invitation"
+      else
+        render :partial => "droom/invitations/invitation"
+      end
     end
 
     def refuse
       @invitation.update_attribute(:response, 0)
-      render :partial => "droom/invitations/invitation"
+      if params[:event_invitation]
+        @event = @invitation.event
+        @event_invitation = Droom::Invitation.where(user_id: current_user.id, event_id: @event.id).first if @event
+        render :partial => "droom/events/event_invitation"
+      else
+        render :partial => "droom/invitations/invitation"
+      end
     end
 
     def toggle

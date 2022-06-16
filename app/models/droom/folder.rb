@@ -1,7 +1,7 @@
 module Droom
   class Folder < Droom::DroomRecord
     include ActsAsTree
-    include Droom::Concerns::Slugged
+    # don't use Slugged: we need to apply a dynamic parent scope.
 
     belongs_to :created_by, :class_name => "Droom::User"
     belongs_to :holder, :polymorphic => true
@@ -9,11 +9,9 @@ module Droom
     has_many :personal_folders, :dependent => :destroy
     acts_as_tree :order => "droom_folders.name ASC"
 
+    before_validation :set_properties
     validates :slug, :presence => true, :uniqueness => { :scope => :parent_id }
 
-    before_validation :set_properties
-    before_validation :slug_from_name
-    
     default_scope -> { includes(:documents) }
 
     scope :all_private, -> { where("#{table_name}.private = 1") }
@@ -21,7 +19,10 @@ module Droom
     scope :all_public, -> { where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
     scope :not_public, -> { where("#{table_name}.public <> 1 OR #{table_name}.private = 1)") }
     scope :by_name, -> { order("#{table_name}.name ASC") }
-    scope :other_than, -> folders {where.not(id: folders.map(&:id))}
+    scope :other_than, -> folders {
+      folders = [folders].flatten
+      where.not(id: folders.map(&:id))
+    }
     scope :visible_to, -> user {
       if user
         select('droom_folders.*')
@@ -134,7 +135,7 @@ module Droom
       children.each {|folder| folder.set_confidentiality!(confidential?) }
     end
 
-  protected
+    protected
 
     def set_properties
       if holder
@@ -145,10 +146,26 @@ module Droom
         end
         self.slug ||= holder.slug
       end
-      # folders originally only had slugs, so this happens from time to time
+
+      # pass new or existing slug through uniqueness check as it may have come from user or holder
+      base = slug.presence || name || "Folder"
+      self.slug = unique_slug(base)
+
+      # folders originally only had slugs, so this could happen too
       self.name ||= self.slug
-      self.public = !holder && (!parent || parent.public?)
-      true
+    end
+
+    # Protect against slug-collision within parent folder scope.
+    #
+    def unique_slug(base)
+      slug = base
+      addendum = 0
+      skope = parent ? parent.children : Folder.loose
+      while skope.other_than(self).find_by(slug: slug)
+        addendum += 1
+        slug = "#{base}_#{addendum}"
+      end
+      slug
     end
 
   end

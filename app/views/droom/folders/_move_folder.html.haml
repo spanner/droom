@@ -1,0 +1,72 @@
+%form.edit.folder{action: "/folders/#{@folder.id}/moved", :method => 'put'}
+    = hidden_field_tag :new_parent_id, ''
+    = select_tag 'folders', options_from_collection_for_select(Droom::Folder.roots, "id", "name"), id: 'folders_list_1', class: 'folders_list', prompt: "Please Select a Root Folder"
+    #child_folders
+    .buttons
+        %input{name: "submit", type: "submit", value: t(:save_folder)}
+        = t :or
+        = link_to t(:cancel), '#', :class => 'cancel'
+
+:javascript
+    $(document).ready( function() {
+
+        var fetch_child_folder = function(current_element){
+            current_element_id = current_element.attr('id');
+            var new_parent_id = current_element.children("option:selected").val();
+            var ids = $('.folders_list').map(function() {
+                        return $(this).attr('id');
+                    }).get();
+            
+            var current_element_index = $.inArray(current_element_id, ids);
+            var array_size = ids.size;
+            elements_to_remove = ids.slice(current_element_index+1,array_size);
+            
+            for ( var index = 0, length = elements_to_remove.length; index <= length; index++ ) {
+                remove = elements_to_remove[index];
+                var id_to_remove = ids.indexOf(remove);
+                if (id_to_remove !== -1) {
+                    ids.splice(id_to_remove, 1);
+                }
+                $('#'+remove).remove();
+                if(index == length){
+                    elements_to_remove = [];
+                }
+            }
+
+            $("#new_parent_id").val(new_parent_id);
+ 
+            selected_parent_id = current_element.children("option:selected").val();
+            $.ajax({url: "/child_folders?target_parent_id="+selected_parent_id, success: function(result){
+                var $option = $("<option/>", {
+                        "value": '',
+                        "html": "Please Select a Sub-Folder"
+                    });
+                if(result != ''){
+                    options = [$option];
+                    $.each(result, function (key, value) {
+                        options.push($option.clone().val(key).html(value));
+                    });
+
+                    new_length = $(".folders_list").length + 1;
+                    new_select_id = "folders_list_" + new_length;
+
+                    $('<select />', {
+                        name: 'child_folders_list',
+                        id: new_select_id,
+                        class: 'folders_list',
+                        append: options
+                    }).appendTo('#child_folders');
+
+                    $('#'+ new_select_id).on('change', function(e){
+                        fetch_child_folder($(this));
+                    });
+                }
+            }});
+        };
+
+        $('#folders_list_1').on('change', function(e){
+            fetch_child_folder($(this));
+        });
+    });
+
+

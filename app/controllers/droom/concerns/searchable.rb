@@ -1,3 +1,5 @@
+# This is used in the organisations controller and made available to non-droom classes.
+
 module Droom::Concerns::Searchable
   extend ActiveSupport::Concern
 

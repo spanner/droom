@@ -4,5 +4,8 @@
 - content_for :standfirst do
   = render :partial => "noticeboard_introduction"
 
-= render :partial => "noticeboard"
+  - if can? :create, Droom::Scrap
+    %p.admin
+      = link_to t(:add_notice), droom.new_scrap_url, :class => "add", :remote => true, :data => {:action => "popup", :type => "html", :affected => "#noticeboard"}
 
+= render :partial => "noticeboard"

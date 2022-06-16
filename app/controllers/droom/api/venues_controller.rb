@@ -14,7 +14,7 @@ module Droom::Api
     end
 
     def update
-      @venue.update_attributes(venue_params)
+      @venue.update(venue_params)
       render json: @venue
     end
 

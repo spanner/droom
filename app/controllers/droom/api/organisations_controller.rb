@@ -12,7 +12,7 @@ module Droom::Api
     end
 
     def update
-      if @organisation.update_attributes(organisation_params)
+      if @organisation.update(organisation_params)
         return_organisation
       else
         return_errors

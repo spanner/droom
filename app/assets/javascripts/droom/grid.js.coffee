@@ -5,12 +5,19 @@ $.fn.autoGrid = ->
 $.fn.gridBox = ->
   @each ->
     $el = $(@)
-    contents = $el.find('.content')
     row = 20
     space = 20
-    rows_touched = Math.ceil(contents.outerHeight() / (row + space))
-    $el.css "grid-row-end", "span #{rows_touched}"
-    $el.addClass('ready')
+    sizer = ->
+      contents = $el.find('.content')
+      console.log "sizer!", contents, contents.outerHeight()
+      rows_touched = Math.ceil(contents.outerHeight() / (row + space)) + 2
+      $el.css "grid-row-end", "span #{rows_touched}"
+      $el.addClass('ready')
+    sizer()
+    $el.find('img').on 'load', =>
+      console.log "resizer!"
+      sizer()
+
 
 $.fn.highlight = ->
   if @offset()

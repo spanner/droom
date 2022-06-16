@@ -6,7 +6,7 @@ module Droom
 
     def new
       @page = Droom::Page.new(slug: params[:slug])
-      render layout: Droom.pages_layout
+      render layout: Droom.page_layout
     end
 
     def show
@@ -18,7 +18,7 @@ module Droom
     end
 
     def create
-      if @page.update_attributes(page_params)
+      if @page.update(page_params)
         redirect_to droom.page_url(@page)
       else
         render action: :new
@@ -26,7 +26,7 @@ module Droom
     end
 
     def update
-      if @page.update_attributes(page_params)
+      if @page.update(page_params)
         redirect_to droom.page_url(@page)
       else
         render action: :edit

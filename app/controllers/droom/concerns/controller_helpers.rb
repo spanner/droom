@@ -20,17 +20,18 @@ module Droom::Concerns::ControllerHelpers
     before_action :check_user_is_confirmed, except: [:cors_check, :setup], unless: :devise_controller?
     before_action :check_user_setup, except: [:cors_check, :setup], unless: :devise_controller?
     before_action :check_user_has_organisation, except: [:cors_check, :setup_organisation], unless: :devise_controller?
-    before_action :check_data_room_permission, except: [:cors_check, :set_password]
+    before_action :check_data_room_permission, except: [:cors_check, :set_password, :setup], unless: :devise_controller?
 
     before_action :note_current_user, except: [:cors_check]
     before_action :set_section, except: [:cors_check]
     before_action :set_access_control_headers
 
     skip_before_action :verify_authenticity_token, only: [:cors_check], raise: false
-    after_action :update_auth_cookie, unless: :api_controller?
+    after_action :update_auth_cookie, except: [:cors_check], unless: :api_controller?
 
     layout :no_layout_if_pjax
   end
+
 
   # Usually overridden in a base ApiController
   #
@@ -47,7 +48,7 @@ module Droom::Concerns::ControllerHelpers
   def cors_check
     head :ok
   end
-  
+
   def set_access_control_headers
     if request.env["HTTP_ORIGIN"].present? && Droom.cors_domains.empty? || Droom.cors_domains.include?(request.env["HTTP_ORIGIN"])
       headers['Access-Control-Allow-Origin'] = request.env["HTTP_ORIGIN"]
@@ -121,8 +122,10 @@ module Droom::Concerns::ControllerHelpers
   #
   def update_auth_cookie
     if user_signed_in? && current_user.unique_session_id?
+      Rails.logger.warn "✅ setting auth_cookie after #{request.fullpath}"
       Droom::AuthCookie.new(warden.cookies).set(current_user)
     else
+      Rails.logger.warn "⚠️ unsetting auth_cookie after #{request.fullpath}"
       Droom::AuthCookie.new(warden.cookies).unset
     end
   end
@@ -146,14 +149,16 @@ module Droom::Concerns::ControllerHelpers
   ## Error responses
   #
   def not_authorized(exception)
+    Rails.logger.warn "⚠️ not_authorized"
     respond_to do |format|
-      format.html { render :file => "#{Rails.root}/public/401.html", :status => :forbidden, :layout => false }
+      format.html { render :file => "#{Rails.root}/public/403.html", :status => :forbidden, :layout => false }
       format.js { head :unauthorized }
       format.json { head :unauthorized }
     end
   end
 
   def not_allowed(exception)
+    Rails.logger.warn "⚠️ not_allowed"
     respond_to do |format|
       format.html { render :file => "#{Rails.root}/public/403.html", :status => :forbidden, :layout => false }
       format.js { head :forbidden }
@@ -162,6 +167,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def not_found(exception)
+    Rails.logger.warn "⚠️ not_found"
     @error = exception.message
     Honeybadger.notify(exception)
     respond_to do |format|
@@ -183,6 +189,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def prompt_for_confirmation
+    Rails.logger.warn "⚠️ prompt_for_confirmation"
     render template: "/devise/registrations/confirm", locals: {resource: current_user}
   end
 
@@ -194,6 +201,7 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def prompt_for_setup
+    Rails.logger.warn "⚠️ prompt_for_setup"
     render template: "/droom/users/setup", locals: {user: current_user}
   end
 
@@ -210,11 +218,13 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def prompt_for_organisation
+    Rails.logger.warn "⚠️ prompt_for_organisation"
     @organisations = Droom::Organisation.matching_email(current_user.email)
     render template: "/droom/users/setup_organisation"
   end
 
   def await_organisation_approval
+    Rails.logger.warn "⚠️ await_organisation_approval"
     @organisations = Droom::Organisation.matching_email(current_user.email)
     render template: "/droom/users/await_organisation_approval"
   end

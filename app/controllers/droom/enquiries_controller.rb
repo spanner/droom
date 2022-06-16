@@ -32,13 +32,13 @@ module Droom
     end
 
     def update
-      @enquiry.update_attributes(enquiry_params)
+      @enquiry.update(enquiry_params)
       respond_with @enquiry
     end
 
     def create
       @enquiry.request = request
-      if @enquiry.update_attributes(enquiry_params)
+      if @enquiry.update(enquiry_params)
         render
       else
         render template: 'edit'

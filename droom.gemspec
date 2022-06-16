@@ -17,9 +17,10 @@ Gem::Specification.new do |s|
 
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "rails", "~> 5.2"
+  s.add_dependency "rails", "~> 6.1"
   s.add_dependency "responders"
   s.add_dependency "acts_as_tree"
+  s.add_dependency "acts_as_list"
 
   s.add_dependency "active_model_serializers"
   s.add_dependency "api-pagination"
@@ -27,8 +28,8 @@ Gem::Specification.new do |s|
   s.add_dependency "settingslogic"
   s.add_dependency "request_store"
 
-  s.add_dependency "devise"
-  s.add_dependency "devise-security"
+  s.add_dependency "devise", "4.7.3"
+  s.add_dependency "devise-security", "0.15.0"
   s.add_dependency "devise_zxcvbn"
   s.add_dependency "cancancan"
 
@@ -53,6 +54,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rdiscount"
 
   s.add_dependency "searchkick"
+  s.add_dependency "elasticsearch"
   s.add_dependency "yomu"
   s.add_dependency "typhoeus"
 

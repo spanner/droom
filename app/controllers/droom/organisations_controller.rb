@@ -2,6 +2,7 @@ module Droom
   class OrganisationsController < Droom::DroomController
     include Droom::Concerns::Searchable
     helper Droom::DroomHelper
+    respond_to :html, :js
 
     load_and_authorize_resource
     before_action :set_view, only: [:show, :edit, :update, :create]
@@ -22,13 +23,13 @@ module Droom
     end
 
     def create
-      @organisation.update_attributes(organisation_params)
+      @organisation.update(organisation_params)
       @organisation.approve!(current_user)
       respond_with @organisation
     end
 
     def update
-      @organisation.update_attributes(organisation_params)
+      @organisation.update(organisation_params)
       respond_with @organisation
     end
 
@@ -42,8 +43,9 @@ module Droom
       redirect_to organisation_url
     end
 
+    # always an ajax call so for now we only confirm.
     def merge
-      @other_org = Droom::Organisation.find(params[:other_id])
+      @other_org = Droom::Organisation.find(merge_params[:other_id])
       @other_org.subsume(@organisation)
       head :no_content
     end
@@ -61,6 +63,10 @@ module Droom
       else
         {}
       end
+    end
+
+    def merge_params
+      params.require(:organisation).permit(:other_id)
     end
 
     def set_view

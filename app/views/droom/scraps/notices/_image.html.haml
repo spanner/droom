@@ -1,8 +1,7 @@
-- if notice.url?
-  = link_to notice.url_with_protocol do
-    %img{src: notice.image.url(:notice)}
-- else
-  %img{src: notice.image.url(:notice)}
-
 .content
+  - if notice.url?
+    = link_to notice.url_with_protocol do
+      %img{src: notice.image.url(:notice)}
+  - else
+    %img{src: notice.image.url(:notice)}
   = render "droom/scraps/notices/body", notice: notice, caption_limit: 300

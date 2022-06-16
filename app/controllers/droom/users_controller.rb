@@ -18,8 +18,13 @@ module Droom
       @users = paginated(@users, params[:pp].presence || 24)
       respond_with @users do |format|
         format.js { render :partial => 'droom/users/users' }
-        format.vcf { render :vcf => @users.map(&:to_vcf) }
       end
+    end
+
+    def download
+      @users = @users.internal.in_name_order.includes(:emails, :phones, :addresses)
+      @users = @users.matching(params[:q]) unless params[:q].blank?
+      render :vcf => @users.map(&:to_vcf)
     end
 
     def show
@@ -60,7 +65,8 @@ module Droom
     # This has to handle small preference updates over js and large account-management forms over html.
     #
     def update
-      if @user.update_attributes(user_params)
+      @user.delete_user_permissions(user_params[:group_ids]) unless user_params[:group_ids].blank?
+      if @user.update(user_params)
         respond_with @user, location: user_url(view: @view) do |format|
           format.js { head :no_content }
         end
@@ -85,7 +91,7 @@ module Droom
           flash[:notice] = t(:password_set)
           redirect_to params[:destination].presence || droom.dashboard_url
         else
-          render
+          raise Droom::AccessDenied
         end
       else
         render template: "/droom/users/request_password"
@@ -93,7 +99,7 @@ module Droom
     end
 
     def set_organisation
-      if current_user.update_attributes(set_organisation_params)
+      if current_user.update(set_organisation_params)
         redirect_to params[:destination].presence || droom.dashboard_url
       else
         render template: "/droom/users/setup_organisation"
@@ -124,14 +130,14 @@ module Droom
       filters[:groups] = params[:account_group] if params[:account_group].present?
       filters[:account_confirmation] = params[:account_confirmed] if params[:account_confirmed].present?
       filters[:organisation] = params[:organisation] if params[:organisation].present?
-  
+
       query = params[:q].presence || '*'
       arguments = {
         where: filters,
         aggs: [:groups, :account_confirmation, :organisation],
         order: {name: :asc}
       }
-  
+
       if params[:show] == "all"
         arguments[:limit] = 1000
       else
@@ -166,9 +172,11 @@ module Droom
         :country_code,
         :mobile,
         :female,
-        :image
+        :image,
+        :timezone,
+        group_ids: []
       ]
-      
+
       if current_user.organisation_admin?
         permitted_params += [
           :organisation_admin,
@@ -181,8 +189,7 @@ module Droom
           :organisation_id,
           :organisation_admin,
           :send_confirmation,
-          :defer_confirmation,
-          group_ids: []
+          :defer_confirmation
         ]
       end
 
@@ -201,11 +208,11 @@ module Droom
     end
 
     def setup_params
-      params.require(:user).permit(:title, :given_name, :family_name, :chinese_name, :honours, :password, :password_confirmation)
+      params.require(:user).permit(:title, :given_name, :family_name, :chinese_name, :honours, :password, :password_confirmation, :timezone)
     end
 
     def set_organisation_params
-      params.require(:user).permit(:organisation_id, organisation_attributes: [:name, :chinese_name, :url, :organisation_type_id, :description, :tags])
+      params.require(:user).permit(:organisation_id, organisation_attributes: [:name, :chinese_name, :url, :organisation_type_id, :description, :tags, :owner_id])
     end
 
     def set_view

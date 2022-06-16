@@ -14,7 +14,7 @@ module Droom::Api
     end
 
     def update
-      @event.update_attributes(event_params)
+      @event.update(event_params)
       render json: @event
     end
 
