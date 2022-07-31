@@ -1,14 +1,22 @@
+- url = signmein_url(u: @user.uid, t: @user.login_token)
 %p
   Hello
   = @user.formal_name + ','
 
 %p
-  Here is the login link that you may just have requested. Please click on the link below to sign in automatically:
+  Here is your login link. Please click on the link below to sign in automatically to the Control Room of the Lord Mayor's Show:
 
 %h3
-  = link_to "Sign in here",  signmein_url(u: @user.uid, t: @user.login_token)
+  = link_to ">> Sign in here", url
 
 %p
-  This link expires at 
-  = l(@user.login_token_created_at + Droom.config.login_token_ttl, format: :precise) + '.'
-  If you did not request the link, you can safely delete this message. Only you are receiving it.
+  Alternatively you can cut and paste the same address into your browser:
+
+%code
+  %pre
+    = url
+
+%p
+  The link expires at 
+  = l(@user.login_token_created_at + Droom.config.login_token_ttl, format: :natural_on_date) + '.'
+  If you did not request the link, you can safely delete this message.
