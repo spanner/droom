@@ -2,31 +2,46 @@
   %p.standfirst.green
     = flash[:notice]
 
-= form_for(resource, as: resource_name, url: session_path(resource_name), html: {id: "login", data: {role: "login"}}) do |f|
-  - if params[:backto].present?
-    = hidden_field_tag :backto, CGI.escape(params[:backto])
+#login
+  %form{id: "inviteme", class: "login", data: {role: "invitation"}}
+    - if params[:backto].present?
+      = hidden_field_tag :backto, CGI.escape(params[:backto])
 
-  %h1
-    = t(:sign_in)
+    %h1
+      = t(:sign_in)
 
-  %fieldset
-    %p
-      = t(:sign_in_intro)
+    %fieldset
+      %p
+        = t(:sign_in_email_intro)
 
-    %p.email
-      = f.email_field :email, class: 'login', autofocus: true, tabindex: 1, placeholder: t('placeholders.session.email')
-      %button.submit.inviteme{name: "inviteme"}
-        = t(:sign_in_by_email)
+      %p.email
+        %label{for: "invitation_email"} Email
+        = email_field_tag :email, "", class: 'login', autofocus: true, tabindex: 1, placeholder: t('placeholders.session.email')
+        %button.submit.inviteme{name: "inviteme"}
+          = t(:sign_in_by_email)
 
-    %p.password
-      = f.password_field :password, class: 'login', tabindex: 2, placeholder: t('placeholders.session.password')
-      = f.submit t(:sign_in_with_password), name: "login", class: "submit"
-      %br
-      = link_to t(:forgot_password), new_password_path(resource_name), class: "reminder note right"
+    .confirmation
+      %p.messages
 
-  .confirmation
-    %p.messages
-    %a.reset
-      %span
-        Back to login form
+  = form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "login", data: {role: "login"}}) do |f|
+    %fieldset
+      %p
+        = t(:sign_in_password_intro)
+
+      %p.email
+        = f.label :email
+        = f.email_field :email, class: 'login', tabindex: 2, placeholder: t('placeholders.session.email')
+
+      %p.password
+        = f.label :password
+        = f.password_field :password, class: 'login', tabindex: 3, placeholder: t('placeholders.session.password')
+        = f.submit t(:sign_in_with_password), name: "login", class: "submit"
+        %br
+        = link_to t(:forgot_password), new_password_path(resource_name), class: "reminder note right"
+
+    .confirmation
+      %p.messages
+      %a.reset
+        %span
+          Back to login form
     

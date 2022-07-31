@@ -107,6 +107,7 @@ module Droom::Concerns::ControllerHelpers
   def note_current_user
     if user_signed_in? && !devise_controller?
       RequestStore.store[:current_user] = current_user
+      RequestStore.store[:current_ip] = request.remote_ip
       current_user.set_last_request_at!
     end
   end
