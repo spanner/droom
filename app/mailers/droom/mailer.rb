@@ -1,7 +1,7 @@
 module Droom
   class Mailer < ActionMailer::Base
     layout Droom.email_layout
-    default from: %{#{Droom.email_from_name} <#{Droom.email_from}>}
+    default from: Droom.email_from
 
     def org_confirmation(organisation)
       @organisation = organisation
