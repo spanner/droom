@@ -150,20 +150,22 @@ module Droom::Concerns::ControllerHelpers
   ## Error responses
   #
   def not_authorized(exception)
-    Rails.logger.warn "⚠️ not_authorized"
+    Rails.logger.warn "⚠️ not_authorized #{exception.class}, #{exception.message}"
     respond_to do |format|
       format.html { render template: "droom/errors/403", :status => :unauthorized }
       format.js { head :unauthorized }
       format.json { head :unauthorized }
+      format.xlsx { head :unauthorized }
     end
   end
 
   def not_allowed(exception)
-    Rails.logger.warn "⚠️ not_allowed"
+    Rails.logger.warn "⚠️ not_allowed: #{exception.class}, #{exception.message}"
     respond_to do |format|
       format.html { render template: "droom/errors/401", :status => :forbidden }
       format.js { head :forbidden }
       format.json { head :forbidden }
+      format.xlsx { head :forbidden }
     end
   end
 
@@ -175,6 +177,7 @@ module Droom::Concerns::ControllerHelpers
       format.html { render template: "droom/errors/not_found", :status => :not_found }
       format.js { head :not_found }
       format.json { head :not_found }
+      format.xlsx { head :not_found }
     end
   end
 
