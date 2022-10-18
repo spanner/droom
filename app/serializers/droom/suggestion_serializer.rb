@@ -4,7 +4,7 @@ module Droom
   class SuggestionSerializer
     include JSONAPI::Serializer
 
-    attribute(:type) { |object| object['_type'].sub('droom/', '') }
+    attribute(:type) { |object| object['type'].sub('droom/', '') }
     attribute(:prompt) { |object| object['name'] }
     attribute(:value) { |object| object['name'] }
     attribute(:id) { |object| object['id'] }

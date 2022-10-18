@@ -53,12 +53,13 @@ module Droom
 
     def as_json(options={})
       json = {
-        :id => id,
-        :name => name,
-        :postcode => post_code,
-        :address => address.to_s,
-        :lat => lat,
-        :lng => lng
+        type: "droom/venue",
+        id: id,
+        name: name,
+        postcode: post_code,
+        address: address.to_s,
+        lat: lat,
+        lng: lng
       }
     end
 
@@ -81,6 +82,7 @@ module Droom
     def search_data
       data = {
         id: id,
+        type: "droom/venue",
         name: name,
         postcode: post_code,
         address: address,

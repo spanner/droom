@@ -725,6 +725,7 @@ module Droom
     scope :search_import, -> { includes(:organisation, :emails, :phones, :addresses, :groups) }
     def search_data
       data = {
+        type: "droom/user",
         uid: uid,
         title: strip_if_present(title),
         name: strip_if_present(name),

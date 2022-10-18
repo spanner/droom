@@ -1,6 +1,7 @@
 #account
-  %h1.pagetitle
-    =t :message_sent
+  #login
+    %h1.pagetitle
+      =t :message_sent
 
-  %p
-    = t :password_reset_message_sent, sender: Settings.email.address
+    %p
+      = t(:password_reset_message_sent, sender: Settings.email.address).html_safe

@@ -11,10 +11,10 @@ namespace :droom do
   end
 
   task :reindex => :environment do
-    %w{User Organisation Document Tag}.each do |classname|
+    %w{User Group Organisation Document Tag Event Venue}.each do |classname|
       print "* Indexing #{classname}..."
       klass = "Droom::#{classname}".constantize
-      klass.searchkick_index.delete if klass.searchkick_index
+      # klass.searchkick_index.delete if klass.searchkick_index
       klass.reindex
       print " done\n".colorize(:green)
     end

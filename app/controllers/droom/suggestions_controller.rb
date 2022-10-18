@@ -28,7 +28,7 @@ module Droom
       respond_with @suggestions do |format|
         format.json {
           serialized = @suggestions.map do |sugg|
-            klass = sugg._type.classify.constantize
+            klass = sugg.type.classify.constantize
             serialized = klass.serialize_suggestion(sugg)
             # conform to the old suggestion interface by returning only the list of records
             serialized['data']['attributes']
@@ -46,6 +46,7 @@ module Droom
     def get_classes
       suggestible_classes = Droom.suggestible_classes
       requested_types = [params[:type]].flatten.compact.uniq
+      Rails.logger.warn("🚘 requested_types: #{requested_types.inspect}")
       requested_types = Droom.suggestible_classes.keys if requested_types.empty?
       @types = suggestible_classes.keys & requested_types
       @klasses = suggestible_classes.values_at(*@types).map(&:constantize)

@@ -330,6 +330,7 @@ module Droom
 
     def search_data
       {
+        type: "droom/event",
         id: id,
         name: name,
         slug: slug,

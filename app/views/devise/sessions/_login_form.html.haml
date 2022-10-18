@@ -7,7 +7,7 @@
     - if params[:backto].present?
       = hidden_field_tag :backto, CGI.escape(params[:backto])
 
-    %h1
+    %h1.pagetitle
       = t(:sign_in)
 
     %fieldset

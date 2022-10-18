@@ -96,6 +96,8 @@ module Droom
 
     def search_data
       {
+        type: "droom/document",
+        id: id,
         name: name || "",
         filename: file_file_name || "",
         content_type: get_content_type,

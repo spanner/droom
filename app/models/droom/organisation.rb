@@ -252,8 +252,11 @@ module Droom
     ## Search
     #
     searchkick _all: false, callbacks: :async, default_fields: [:name, :chinese_name, :description], highlight: [:name, :chinese_name, :description], word_start: [:name, :chinese_name, :description]
+
     def search_data
       {
+        type: "droom/organisation",
+        id: id,
         name: name || "",
         chinese_name: chinese_name || "",
         owner_name: owner_name,

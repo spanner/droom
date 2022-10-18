@@ -86,6 +86,7 @@ module Droom
 
     def search_data
       {
+        type: "droom/group",
         id: id,
         name: name
       }
