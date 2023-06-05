@@ -5,9 +5,9 @@ module Droom
     has_many :user_permissions, :dependent => :destroy
     acts_as_list :scope => :service_id
     before_save :set_slug
-    
+
     validates :slug, :uniqueness => true
-    
+
   protected
     
     def set_slug

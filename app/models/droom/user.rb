@@ -646,12 +646,13 @@ module Droom
     end
 
     def permission_codes=(codes)
-      #TODO
+      self.permissions = Permission.where(slug: codes)
     end
 
     def permitted?(key)
-      permission_codes.include?(key)
+      admin? || permission_codes.include?(key)
     end
+    alias :has_permission? :permitted?
 
     def permissions_elsewhere?
       permission_codes.select{|pc| pc !~ /droom/}.any?
@@ -661,12 +662,15 @@ module Droom
       !Droom.require_login_permission? || admin? || permitted?('droom.login')
     end
 
+    def admin?
+      permission_codes.include?('droom.admin') || !!read_attribute(:admin)
+    end
+
 
     ## Other ownership
     #
     has_many :scraps, :foreign_key => "created_by_id"
     has_many :documents, :foreign_key => "created_by_id"
-
 
     ## Mailchimp integration
     #
