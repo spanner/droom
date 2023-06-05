@@ -1,6 +1,6 @@
 - document ||= @document
 - details ||= nil
-- cssclasses = ["dl", "small"]
+- cssclasses = %w{dl file}
 - cssclasses << document.file_extension.downcase
 - cssclasses << 'changed' if document.changed_since_creation?
 - brief ||= false

@@ -8,28 +8,35 @@
       = text_field_tag :q, params[:q], name: 'q', class: 'search', placeholder: t(:search), data: {slow: true}
       = submit_tag t(:search)
 
-    = link_to "▾ more options", '#', class: "select", data: {action: "toggle", affected: ".document_selection", sticky: true}
-
     .document_selection
       = render "droom/documents/facets"
       = render "droom/documents/options"
 
-  - if @q
-    - if @documents.any?
-      - if @documents.current_page > 1
-        .pagination.upper
-          = paginate @documents, :params => {:format => nil}
+  - if @q.present?
+    %p
+      Documents matching
+      %strong
+        = @q
 
-      - if @q.present?
-        - @documents.with_details.each do |document, details|
-          = render "droom/documents/document", document: document, details: details
-      - else
-        = render :partial => 'droom/documents/document', :collection => @documents
-
-      .pagination.lower
+  - if @documents.any?
+    - if @documents.current_page > 1
+      .pagination.upper
         = paginate @documents, :params => {:format => nil}
 
+    - if @q.present?
+      - @documents.with_highlights.each do |document, details|
+        = render "droom/documents/document", document: document, details: details
     - else
-      .nomatch
-        %h2
+      = render :partial => 'droom/documents/document', :collection => @documents
+
+    .pagination.lower
+      = paginate @documents, :params => {:format => nil}
+
+
+  - else
+    .nomatch
+      %h2
+        - if @q
           = t(:sorry_no_matches, q: @q).html_safe
+        - else
+          = t(:sorry_no_documents)

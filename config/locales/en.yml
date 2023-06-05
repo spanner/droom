@@ -558,6 +558,7 @@ en:
   "on": "on"
   signed_in_as: "Signed in as <strong>%{name}</strong>."
   slug_note: "Spaces and odd characters will be replaced with dashes"
+  sorry_no_documents: "No documents are held here."
   sorry_no_matches: "Sorry: we have found nothing matching <strong>%{q}</strong>."
   stream: "Stream"
   stream_events: "Stream events"
