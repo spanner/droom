@@ -49,7 +49,8 @@ module Droom::Concerns::Tagged
   end
 
   def tag_list=(tag_list)
-    self.tags = tag_list.split(/,\s*/).map { |t| Droom::Tag.find_or_create(t) }
+    tag_list = tag_list.split(/,\s*/) unless tag_list.is_a?(Array)
+    self.tags = tag_list.select(&:present?).map { |t| Droom::Tag.find_or_create(t) }
   end
 
   # To support ancient keywords= interface
