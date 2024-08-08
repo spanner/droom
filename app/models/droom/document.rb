@@ -109,8 +109,9 @@ module Droom
     end
 
     def get_content_type
-      content_type = Friendly::MIME.find(file_content_type) if file_content_type?
-      content_type || "Unknown"
+      # content_type = Friendly::MIME.find(file_content_type) if file_content_type?
+      # content_type || "Unknown"
+      "Unknown"
     end
 
     def get_event_type
