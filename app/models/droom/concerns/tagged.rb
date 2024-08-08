@@ -43,6 +43,10 @@ module Droom::Concerns::Tagged
   def tag_names
     tags.map(&:name).uniq
   end
+  
+  def tag_names=(names)
+    self.tags = names.select(&:present?).map { |t| Droom::Tag.find_or_create(t) }
+  end
 
   def tags_with_synonyms
     tags.includes(:tag_synonyms).map(&:with_synonyms).flatten.uniq.join(' ')
@@ -51,6 +55,10 @@ module Droom::Concerns::Tagged
   def tag_list=(tag_list)
     tag_list = tag_list.split(/,\s*/) unless tag_list.is_a?(Array)
     self.tags = tag_list.select(&:present?).map { |t| Droom::Tag.find_or_create(t) }
+  end
+
+  def has_tag?(tag)
+    tags.include?(tag)
   end
 
   # To support ancient keywords= interface
