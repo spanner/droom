@@ -8,6 +8,5 @@ module Droom
     def unsubscribed
       # No cleanup
     end
-
   end
 end
