@@ -265,7 +265,7 @@ en:
         content: "Enter help text and links here."
       organisation:
         name: "Organisation Name"
-        url: "Web link"
+        url: "Website or other URL"
         description: "Brief description"
         external: "External organisation?"
         administrator_ids: "Administrators"
@@ -516,7 +516,6 @@ en:
   quick_search: "Quick search"
   quick_search_prompt: "Type anything here"
   recent_events: "Past events"
-  register_organisation: "Apply to register your organisation"
   reject: "reject"
   remove: "Remove"
   save: "Save"

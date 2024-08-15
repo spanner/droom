@@ -1,0 +1,51 @@
+// either we have @organisation, or we do not
+
+- content_for :pagetitle do
+  = t "registration.register_organisation"
+
+- content_for :title do
+  =t "registration.title"
+
+- content_for :standfirst do
+  %p
+    =t "registration.preamble"
+
+%section.new_organisation
+  %h2
+    = t "registration.register_organisation"
+
+  - current_user.organisation = Droom::Organisation.new
+  = form_for current_user, url: droom.set_my_organisation_url, method: :put, html: {class: "user"} do |f|
+    %p.name.twocol<
+      %span.col>
+        = f.label :name, I18n.t("registration.user_name")
+        = f.text_field :name, required: true, autofocus: true, placeholder: t("placeholders.user.registration_name")
+      %span.col>
+        = f.label :email
+        = f.text_field :email, required: true, placeholder: t("placeholders.user.registration_email"), disabled: true
+    %p.role.onecol<
+      %span.col>
+        = f.label :role
+        = f.text_field :role, required: true, placeholder: t("placeholders.user.registration_role")
+
+    = f.fields_for :organisation do |orgf|
+      %p.name.onecol<
+        %span.col>
+          = orgf.label :name, I18n.t("registration.name")
+          = orgf.text_field :name, required: true, autofocus: true, placeholder: t("placeholders.organisation.registration_name")
+
+      %p.url.twocol<
+        %span.col.first>
+          = orgf.label :url, I18n.t("registration.url")
+          = orgf.url_field :url, required: true, :class => "url", placeholder: t("placeholders.organisation.registration_url")
+        %span.col.last>
+          = orgf.label :organisation_type_id
+          = orgf.select :organisation_type_id, Droom::OrganisationType.for_selection, include_blank: true, prompt: t(:organisation_type), required: true, class: 'preferences'
+
+      %p.description.onecol<
+        %span.col>
+          = orgf.label :description, I18n.t("registration.description")
+          = orgf.text_area :description, required: true, placeholder: t("placeholders.organisation.registration_description")
+
+    %p.buttons{:data => {:role => "confirmation"}}>
+      = f.submit t :continue

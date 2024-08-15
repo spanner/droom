@@ -11,7 +11,7 @@ module Droom::Concerns::ControllerHelpers
     rescue_from Droom::ConfirmationRequired, :with => :prompt_for_confirmation
     rescue_from Droom::SetupRequired, :with => :prompt_for_setup
     rescue_from Droom::OrganisationRequired, :with => :prompt_for_organisation
-    rescue_from Droom::OrganisationApprovalRequired, :with => :await_organisation_approval
+    rescue_from Droom::ApprovalRequired, :with => :await_organisation_approval
 
     prepend_before_action :read_auth_cookie, except: [:cors_check, :inviteme]
     before_action :authenticate_user!, except: [:cors_check, :inviteme]
@@ -114,6 +114,7 @@ module Droom::Concerns::ControllerHelpers
 
   def check_data_room_permission
     if user_signed_in? && !devise_controller? && !api_controller?
+      raise Droom::ApprovalRequired if current_user.awaiting_approval?
       raise Droom::AccessDenied unless current_user.data_room_user?
     end
   end
@@ -130,6 +131,7 @@ module Droom::Concerns::ControllerHelpers
       Droom::AuthCookie.new(warden.cookies).unset
     end
   end
+
 
   ## Exception reporting
   #
@@ -198,10 +200,14 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def check_user_setup
-    if user_signed_in? && (!current_user.encrypted_password? || !current_user.names?)
+    if user_signed_in? && !user_awaiting_approval? && (!current_user.encrypted_password? || !current_user.names?)
       @destination = request.fullpath
       raise Droom::SetupRequired
     end
+  end
+
+  def user_awaiting_approval?
+    current_user && current_user.awaiting_approval?
   end
 
   def prompt_for_setup
@@ -216,15 +222,19 @@ module Droom::Concerns::ControllerHelpers
         raise Droom::OrganisationRequired
 
       elsif !current_user.organisation.approved?
-        raise Droom::OrganisationApprovalRequired
+        raise Droom::ApprovalRequired
       end
     end
   end
 
   def prompt_for_organisation
     Rails.logger.warn "⚠️ prompt_for_organisation"
-    @organisations = Droom::Organisation.matching_email(current_user.email)
-    render template: "/droom/users/setup_organisation"
+    if current_user.awaiting_approval?
+      render template: "/droom/users/register_organisation"
+    else
+      @organisations = Droom::Organisation.matching_email(current_user.email)
+      render template: "/droom/users/setup_organisation"
+    end
   end
 
   def await_organisation_approval

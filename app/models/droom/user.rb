@@ -119,6 +119,7 @@ module Droom
     end
 
 
+
     # Our old user accounts store passwords as salted sha512 digests. Current standard uses BCrypt
     # so we migrate user accounts across in this rescue block whenever we hear BCrypt grumbling about the old hash.
   
@@ -170,6 +171,7 @@ module Droom
     def reset_login_token!
       self.update_column(:login_token, nil)
     end
+
 
     ## Session ID
     #
@@ -338,31 +340,49 @@ module Droom
       joins(:emails).where(droom_emails: {email: email})
     }
 
-    def self.find_for_authentication(tainted_conditions={})
-      from_email(tainted_conditions[:email]).first
-    end
-
-    # Confirmable and Recoverable both use the same resource-retrieval call so it is
-    # not easy to to override find-by-email without also affecting find-by-confirmation_token.
-    # Instead we just override the reset-sender.
-    # NB. for useful-failure purposes we have to return a new user object with errors set.
-    #
-    def self.send_reset_password_instructions(attributes={})
-      if user = from_email(attributes[:email]).first
-        user.send_reset_password_instructions
-      else
-        user = new(email: attributes[:email])
-        user.errors.add(:email, :not_found)
-      end
-      user
-    end
-
     def active_for_authentication?
       super && emails.any?
     end
 
-    def self.find_by_any_email(emails)
-      from_email(emails).first
+    def approved?
+      approved_at?
+    end
+
+    def disapproved?
+      disapproved_at?
+    end
+
+    def awaiting_approval?
+      requires_approval? && !disapproved? && !approved?
+    end
+
+    class << self
+      def find_for_authentication(tainted_conditions={})
+        from_email(tainted_conditions[:email]).first
+      end
+
+      def new_with_session(params, session)
+        new(params.merge(requires_approval: true))
+      end
+
+      # Confirmable and Recoverable both use the same resource-retrieval call so it is
+      # not easy to to override find-by-email without also affecting find-by-confirmation_token.
+      # Instead we just override the reset-sender.
+      # NB. for useful-failure purposes we have to return a new user object with errors set.
+      #
+      def send_reset_password_instructions(attributes={})
+        if user = from_email(attributes[:email]).first
+          user.send_reset_password_instructions
+        else
+          user = new(email: attributes[:email])
+          user.errors.add(:email, :not_found)
+        end
+        user
+      end
+
+      def find_by_any_email(emails)
+        from_email(emails).first
+      end
     end
 
     ## Emails
