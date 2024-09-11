@@ -6,7 +6,7 @@ module Droom
 
     has_many :users
     belongs_to :organisation_type, optional: true
-    belongs_to :owner, optional: false, class_name: 'Droom::User'
+    belongs_to :owner, optional: true, class_name: 'Droom::User'
     accepts_nested_attributes_for :owner
 
     belongs_to :approved_by, optional: true, class_name: 'Droom::User'
