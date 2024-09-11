@@ -64,7 +64,7 @@ module Droom
     # spammy requests have been discarded with :not_acceptable
     def register
       @organisation = Droom::Organisation.new(registration_params)
-      @organisation.owner.build(email: registration_params[:registration_email])
+      @organisation.build_owner(email: registration_params[:registration_email])
       render
     end
 
