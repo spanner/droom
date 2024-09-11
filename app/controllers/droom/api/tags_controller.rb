@@ -1,7 +1,7 @@
 module Droom::Api
   class TagsController < Droom::Api::ApiController
-    skip_before_action :authenticate_user!
-    skip_before_action :check_user_has_organisation
+    skip_before_action :authenticate_user!, raise: false
+    skip_before_action :check_user_setup, raise: false
     before_action :search_tags, only: [:index]
     load_resource class: "Droom::Tag"
 

@@ -4,7 +4,7 @@ module Droom
     helper Droom::DroomHelper
 
     respond_to :html
-    skip_before_action :check_user_has_organisation, only: [:setup, :set_organisation]
+    skip_before_action :check_user_setup, only: [:setup, :set_organisation]
     before_action :set_view, only: [:show, :new, :edit, :update]
     before_action :search_users, only: [:admin]
     # before_action :self_unless_admin, only: [:edit, :update]
