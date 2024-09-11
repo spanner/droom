@@ -92,6 +92,9 @@ module Droom
         @organisation.save!
         @user = @organisation.owner
         Droom::Mailer.org_confirmation(@organisation).deliver_later
+        Droom::User.gatekeepers.each do |user|
+          Droom::Mailer.org_notification(@organisation, user).deliver_later
+        end
         render template: "droom/organisations/registered"
       else
         render action: :register

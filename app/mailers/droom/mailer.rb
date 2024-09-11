@@ -25,10 +25,9 @@ module Droom
       mail(to: @admin.email, subject: @subject)
     end
 
-    def org_welcome(organisation, token)
+    def org_welcome(organisation)
       @organisation = organisation
       @user = organisation.owner
-      @token = token
       @subject = I18n.t("registration.welcome_subject", name: organisation.name)
       mail(to: @user.email, subject: @subject)
     end

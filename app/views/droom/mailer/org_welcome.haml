@@ -11,7 +11,7 @@
   has been approved.
 
 %h3
-  = link_to "Click here to sign in and complete your registration", confirmation_url(@user, :confirmation_token => @token)
+  = link_to "Click here to sign in and complete your registration", confirmation_url(@user, :confirmation_token => @user.confirmation_token)
 
 %p
   If you have not already, you will be asked to set a password on arrival.
