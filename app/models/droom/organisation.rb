@@ -7,7 +7,6 @@ module Droom
     has_many :users
     belongs_to :organisation_type, optional: true
     belongs_to :owner, optional: true, class_name: 'Droom::User'
-    accepts_nested_attributes_for :owner
 
     belongs_to :approved_by, optional: true, class_name: 'Droom::User'
     belongs_to :disapproved_by, optional: true, class_name: 'Droom::User'
@@ -38,7 +37,6 @@ module Droom
     default_scope -> {order("name ASC")}
 
     after_save :capture_owner
-    after_create :send_notifications
 
     # supports org-merge
     attr_accessor :other_id
@@ -47,6 +45,10 @@ module Droom
     # and then finally applied to the org owner if they are new.
     attr_accessor :registration_email
     attr_accessor :registration_email_token
+    attr_accessor :registration_given_name
+    attr_accessor :registration_family_name
+    attr_accessor :registration_phone
+    attr_accessor :registration_role
 
     def self.for_selection(with_external=false)
       organisations = approved.order("name asc")
@@ -131,17 +133,6 @@ module Droom
     def send_welcome_message
       if owner
         Droom.mailer.send(:org_welcome, self, owner.confirmation_token).deliver_later
-      end
-    end
-
-    def send_notifications
-      send_registration_confirmation_messages if external? && Droom.config.external_organisations?
-    end
-
-    def send_registration_confirmation_messages
-      Droom.mailer.send(:org_confirmation, self).deliver_later
-      Droom::User.gatekeepers.each do |admin|
-        Droom.mailer.send(:org_notification, self, admin).deliver_later
       end
     end
 

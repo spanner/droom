@@ -6,10 +6,10 @@
   An organisation has expressed interest.
   Please review and respond below.
 
-%h2
+%h2{style: "margin-bottom: 0"}
   = @organisation.name
 
-%p
+%p{style: "margin-top: 0.25em"}
   = sanitize @organisation.description
 
 %p
@@ -17,6 +17,8 @@
   %br
   %strong
     = @user.formal_name
+  - if @user.role?
+    = "(#{@user.role})"
   %br
   = mail_to @user.email, @user.email
 
@@ -34,5 +36,5 @@
 %p
   Best wishes,
 %p
-  The machinery
+  The Machinery
 

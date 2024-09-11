@@ -76,20 +76,25 @@ module Droom
       # patch in the validated email param
       # build new organisation with external markings
       @organisation = Droom::Organisation.new
-      @organisation.build_owner
       @organisation.assign_attributes(registration_params)
       @organisation.external = true
       @email = CGI.unescapeURIComponent(registration_params[:registration_email])
       if existing_user = Droom::User.from_email(@email).first
         @organisation.owner = existing_user
       else
-        # new user account will be created with no rights yet
+        @organisation.build_owner
+        # new user account will be created, but with no rights yet
         @organisation.owner.email = @email
+        @organisation.owner.given_name = @organisation.registration_given_name
+        @organisation.owner.family_name = @organisation.registration_family_name
+        @organisation.owner.phone = @organisation.registration_phone
+        @organisation.owner.role = @organisation.registration_role
         @organisation.owner.requires_approval = true
       end
 
       if @organisation.valid?
         @organisation.save!
+        @organisation.owner.save!
         @user = @organisation.owner
         Droom::Mailer.org_confirmation(@organisation).deliver_later
         Droom::User.gatekeepers.each do |user|
@@ -146,7 +151,7 @@ module Droom
 
     def registration_params
       if params[:organisation]
-        params.require(:organisation).permit(:registration_email, :registration_email_token, :name, :description, :keywords, :chinese_name, :organisation_type_id, :url, owner_attributes: [:given_name, :family_name, :chinese_name])
+        params.require(:organisation).permit(:name, :description, :keywords, :chinese_name, :organisation_type_id, :url, :registration_given_name, :registration_family_name, :registration_phone, :registration_role, :registration_email, :registration_email_token)
       end
     end
 

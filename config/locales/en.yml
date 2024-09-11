@@ -272,6 +272,11 @@ en:
         external: "External organisation?"
         administrator_ids: "Administrators"
         other_id: "Merge entirely into"
+        registration_given_name: "Given name"
+        registration_family_name: "Family name"
+        registration_email: "Email"
+        registration_phone: "Phone"
+        registration_role: "Role in organisation"
       permission:
         service_id: "Service"
         name: "Title or link text"

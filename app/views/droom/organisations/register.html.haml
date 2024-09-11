@@ -56,48 +56,38 @@
         %br
         = f.text_area :description, placeholder: t("placeholders.organisation.registration_description")
 
-  = f.fields_for :owner, @user do |uf|
     %fieldset
       %h2
         =t "registration.owner"
 
-      - if Droom.config.use_chinese_names?
-        %p.names.threecol<
-          %span.col.first>
-            = uf.label :given_name
-            %br
-            = uf.text_field :given_name, required: true, placeholder: t("placeholders.user.given_name")
-          %span.col>
-            = uf.label :family_name
-            %br
-            = uf.text_field :family_name, required: true, placeholder: t("placeholders.user.family_name")
-          %span.col.last>
-            = uf.label :chinese_name
-            %br
-            = uf.text_field :chinese_name, placeholder: t("placeholders.user.chinese_name")
-      - else
-        %p.names.twocol<
-          %span.col.first>
-            = uf.label :given_name
-            %br
-            = uf.text_field :given_name, required: true, placeholder: t("placeholders.user.given_name")
-          %span.col.last>
-            = uf.label :family_name
-            %br
-            = uf.text_field :family_name, required: true, placeholder: t("placeholders.user.family_name")
-        
+      %p.names.twocol<
+        %span.col.first>
+          = f.label :registration_given_name
+          %br
+          = f.text_field :registration_given_name, required: true, placeholder: t("placeholders.user.given_name")
+        %span.col.last>
+          = f.label :registration_family_name
+          %br
+          = f.text_field :registration_family_name, required: true, placeholder: t("placeholders.user.family_name")
+      
+      %p.contact.onecol<
+        %span.col>
+          = f.label :registration_role
+          %br
+          = f.text_field :registration_role, placeholder: t("placeholders.user.registration_role")
+
       %p.contact.twocol<
         %span.col>
-          = uf.label :email, class: "disabled"
+          = f.label :registration_email, class: "disabled"
           %br
           = f.text_field :registration_email, placeholder: t("placeholders.user.email"), disabled: true, value: CGI.unescapeURIComponent(@organisation.registration_email)
         %span.col>
-          = uf.label :phone
+          = f.label :registration_phone
           %br
-          = uf.text_field :phone, placeholder: t("placeholders.user.phone")
+          = f.text_field :registration_phone, required: true, placeholder: t("placeholders.user.phone")
 
-      %p.formnote
-        = t "registration.whatnext"
+    %p.formnote
+      = t "registration.whatnext"
 
   .buttons
     = f.submit t("registration.submit")
