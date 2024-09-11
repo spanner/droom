@@ -21,6 +21,7 @@ module Droom
   class SetupRequired < DroomError; end
   class OrganisationRequired < DroomError; end
   class ApprovalRequired < DroomError; end
+  class EmailConfirmationRequired < DroomError; end
 
 
   class << self

@@ -3,6 +3,13 @@ module Droom
     layout Droom.email_layout
     default from: Droom.email_from
 
+    def org_registration_invitation(email)
+      @subject = I18n.t("registration.invitation_subject")
+      @token = Devise.token_generator.digest(Droom::User, 'email', email)
+      @email = CGI.escapeURIComponent(email)
+      mail(to: email, subject: @subject)
+    end
+
     def org_confirmation(organisation)
       @organisation = organisation
       @user = organisation.owner

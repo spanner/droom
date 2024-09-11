@@ -6,7 +6,9 @@ module Droom
 
     has_many :users
     belongs_to :organisation_type, optional: true
-    belongs_to :owner, optional: true, class_name: 'Droom::User'
+    belongs_to :owner, optional: false, class_name: 'Droom::User'
+    accepts_nested_attributes_for :owner
+
     belongs_to :approved_by, optional: true, class_name: 'Droom::User'
     belongs_to :disapproved_by, optional: true, class_name: 'Droom::User'
 
@@ -38,7 +40,13 @@ module Droom
     after_save :capture_owner
     after_create :send_notifications
 
+    # supports org-merge
     attr_accessor :other_id
+    
+    # supports registration: these values are passed through
+    # and then finally applied to the org owner if they are new.
+    attr_accessor :registration_email
+    attr_accessor :registration_email_token
 
     def self.for_selection(with_external=false)
       organisations = approved.order("name asc")

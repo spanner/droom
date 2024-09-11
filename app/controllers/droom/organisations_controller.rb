@@ -4,8 +4,14 @@ module Droom
     helper Droom::DroomHelper
     respond_to :html
 
-    load_and_authorize_resource
+    load_and_authorize_resource except: [:registerme, :register]
     before_action :set_view, only: [:show, :edit, :update, :create]
+    
+    skip_before_action :authenticate_user!, only: [:registerme, :register, :propose], raise: false
+    skip_before_action :check_user_setup, only: [:registerme, :register, :propose], raise: false
+    before_action :validate_registration_email, only: [:register, :propose]
+
+    rescue_from Droom::EmailConfirmationRequired, with: :invalid_registration
 
     def show
       raise ActiveRecord::RecordNotFound unless admin? || @organisation.approved?
@@ -38,6 +44,61 @@ module Droom
       respond_with @organisation
     end
 
+
+    # ** REGISTRATION
+    # proposal of new organisation by anonymous or known user
+    #
+    # `registerme` generates a link and sends it to the given email address
+    # the link includes hashed confirmation of the email, so that it cannot subsequently be changed.
+    def registerme
+      if Droom.config.invite_organisation_registration? && registerme_params[:email].present?
+        Droom::Mailer.org_registration_invitation(registerme_params[:email]).deliver_now
+        render partial: "droom/organisations/registration_invitation_sent"
+      else
+        head :not_acceptable
+      end
+    end
+
+    # `register` displays a blank registration form
+    # after validating email by hashed confirmation token.
+    # spammy requests have been discarded with :not_acceptable
+    def register
+      @organisation = Droom::Organisation.new(registration_params)
+      @organisation.owner.build(email: registration_params[:registration_email])
+      render
+    end
+
+    # `propose` completes registration and saves the proposed organisation
+    # validates email confirmation token again
+    # if it's one we already know, the existing user account will take ownership of the proposed organisation.
+    # spammy requests have been discarded with :not_acceptable
+    def propose
+      # patch in the validated email param
+      # build new organisation with external markings
+      @organisation = Droom::Organisation.new
+      @organisation.build_owner
+      @organisation.assign_attributes(registration_params)
+      @organisation.external = true
+      @email = CGI.unescapeURIComponent(registration_params[:registration_email])
+      if existing_user = Droom::User.from_email(@email).first
+        @organisation.owner = existing_user
+      else
+        # new user account will be created with no rights yet
+        @organisation.owner.email = @email
+        @organisation.owner.requires_approval = true
+      end
+
+      if @organisation.valid?
+        @organisation.save!
+        @user = @organisation.owner
+        Droom::Mailer.org_confirmation(@organisation).deliver_later
+        render template: "droom/organisations/registered"
+      else
+        render action: :register
+      end
+    end
+
+    # admin actions in response to registration
     def approve
       @organisation.approve!(current_user)
       redirect_to organisation_url
@@ -48,6 +109,8 @@ module Droom
       redirect_to organisation_url
     end
 
+
+    # ** HOUSEKEEPING
     # always an ajax call so for now we only confirm.
     def merge
       @other_org = Droom::Organisation.find(merge_params[:other_id])
@@ -60,6 +123,10 @@ module Droom
       head :ok
     end
 
+    def invalid_registration
+      head :not_acceptable
+    end
+
   protected
 
     def organisation_params
@@ -67,6 +134,16 @@ module Droom
         params.require(:organisation).permit(:name, :description, :keywords, :owner, :owner_id, :chinese_name, :phone, :address, :organisation_type_id, :url, :facebook_page, :twitter_id, :instagram_id, :weibo_id, :image, :logo, :external, :joinable, :email_domain, tag_ids: [], administrator_ids: [])
       else
         {}
+      end
+    end
+
+    def registerme_params
+      params.permit(:email)
+    end
+
+    def registration_params
+      if params[:organisation]
+        params.require(:organisation).permit(:registration_email, :registration_email_token, :name, :description, :keywords, :chinese_name, :organisation_type_id, :url, owner_attributes: [:given_name, :family_name, :chinese_name])
       end
     end
 
@@ -98,6 +175,24 @@ module Droom
 
     def non_admin_filter
       { approved: true }
+    end
+
+    # Organisation registration is allowed to unregistered users and is not authorized in the usual way,
+    # but we start with an email round trip and then carry the email validation through the rest of the process.
+    #
+    def validate_registration_email
+      @email = CGI.unescapeURIComponent(registration_params[:registration_email])
+      @token = CGI.unescapeURIComponent(registration_params[:registration_email_token])
+      Rails.logger.warn("✋ validate_registration_email: #{@email} vs #{@token}")
+      if @email.blank? || @token.blank?
+        Rails.logger.warn("✋  something missing")
+        raise Droom::EmailConfirmationRequired
+      end
+      check_token = Devise.token_generator.digest(Droom::User, 'email', @email)
+      if check_token != @token
+        Rails.logger.warn("✋  token not ok")
+        raise Droom::EmailConfirmationRequired
+      end
     end
 
   end

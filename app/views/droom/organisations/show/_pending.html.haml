@@ -1,7 +1,14 @@
 - pending ||= nil
 - organisation ||= pending || @organisation
+- cssclass = "pending"
 
-.organisation.holder{:id => "organisation_#{organisation.id}", :data => {:refreshing => true, :url => droom.organisation_path(organisation, view: "pending")} }
+/// useful after refreshment
+- if organisation.approved?
+  - cssclass << " approved"
+- if organisation.disapproved?
+  - cssclass << " disapproved"
+
+.organisation.holder{:id => "organisation_#{organisation.id}", class: cssclass, :data => {:refreshing => true, :url => droom.organisation_path(organisation, view: "pending")} }
   - if admin?
     = render partial: "droom/organisations/show/status", locals: {organisation: organisation}
 

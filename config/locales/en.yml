@@ -155,6 +155,8 @@ en:
   edit_your_profile: "Edit your address book card"
   edit_your_profile_note: 'This is the contact information that <a href="%{url}" data-action="popup">other people see</a> when you are listed.'
   email_note: "This can be any address that we have on file for you."
+  email_unexpected: "If you were not expecting this message, you can safely delete or ignore it. No action is taken without your confirmation."
+  email_prefer_cut_paste: "If you prefer to cut and paste the url directly into your browser, it is this:"
   errors:
     attributes:
       name:
@@ -390,15 +392,7 @@ en:
   or: "or"
   or_create_organisation: "Alternatively, you can apply to register a new organisation below. Your application will require the approval of an HKFx administrator."
   organisation_applications: "Organisations applying to join"
-  organisation_owner: "Your account"
-  organisation_confirmation: "When your organisation is accepted, an email will be sent to this address explaining how to set a password and submit funding proposals."
-  organisation_information: "Applying organisation"
-  organisation_registered: "Registration received"
-  organisation_registered_please_wait: "Your application will be processed shortly and you will receive an email explaining how to proceed."
-  organisation_registered_thanks: "Thank you for registering"
-  organisation_step1: "You will receive an email confirming your address and inviting you either to join an existing HKFx organisation or propose a new one."
-  organisation_tag_instructions: "Please choose tags to describe your organisation."
-  organisation_type: "Organisation type"
+  organisation_owner: "Contact information"
   organisations_introduction: "This page shows all the organisations taking part here and the users who are allowed to sign in as their representatives."
   organisations: "Directory"
   other: "other"
@@ -437,9 +431,9 @@ en:
   password_reset_welcome: "Please use the form below to set a new password for your account. A confirmation box will appear when your password meets the requirements, and the submit button will go green and become clickable when the passwords match."
   password_set: "Thank you. Your password has been set and your account is fully active."
   pending_organisations_introduction:
-    zero: "No applications"
-    one: "Review one application"
-    other: "Review %{count} applications"
+    zero: "No new applications at present."
+    one: "There is one application to review."
+    other: "There are %{count} applications to review."
   person_email: "Email"
   person_forename: "Forename"
   person_name: "Name"
@@ -470,8 +464,8 @@ en:
       description: "Brief description. Please keep within about 100 words."
       email_domain: "@example.com"
       keywords: "Start typing here then choose from the list"
-      name: "Organisation name"
-      url: "Full url including http part"
+      name: "Formal name for display"
+      url: "Including https part"
     phone:
       phone: "Phone number"
     scrap:
@@ -516,6 +510,18 @@ en:
   quick_search: "Quick search"
   quick_search_prompt: "Type anything here"
   recent_events: "Past events"
+  registration:
+    hello: "Hello, and thank you for your interest. Please click below to confirm your email address and fill in a short expression of interest form."
+    intro: "Thank you for your interest. Please use this form to give a brief introduction to your organisation."
+    invitation_subject: "Expression of interest"
+    link: "Click here to introduce your organisation"
+    owner: "Contact information"
+    page_title: "Registration"
+    submit: "Register"
+    whatnext: "Should your organisation be accepted, a confirmation email will be sent to this address."
+    confirm_registered: "Registration complete"
+    thanks: "Thank you for registering your interest in participation."
+    now_you_wait: "Our administrators will review your application shortly and you should hear from us within a few days."
   reject: "reject"
   remove: "Remove"
   save: "Save"
@@ -589,6 +595,7 @@ en:
       dom: "%d"
       time_on_date: "%l:%M%P on %-d %B %Y"
       filename: "%Y-%B-%d"
+  title: "Unnamed Droom site"
   to: "to"
   tooltips:
     click_to_make_tag: "Click to make this a new keyword"

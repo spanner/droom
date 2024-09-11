@@ -1,0 +1,16 @@
+- url = droom.register_organisations_url(organisation: {registration_email: @email, registration_email_token: @token})
+
+%p
+  = t("registration.hello")
+
+%p
+  = link_to t("registration.link"), url
+
+%p
+  = t("email_prefer_cut_paste")
+
+%pre
+  = url
+
+%p
+  = t("email_unexpected")

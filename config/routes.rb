@@ -36,8 +36,8 @@ Droom::Engine.routes.draw do
 
   devise_scope :user do
     get "/signup" => "users/registrations#new", as: :signup
-    post '/register' => 'users/registrations#create', as: :register
-    get "/users/registrations/confirm" => "users/registrations#confirm", as: :confirm_registration
+    # post '/register' => 'users/registrations#create', as: :register
+    # get "/users/registrations/confirm" => "users/registrations#confirm", as: :confirm_registration
     get "/users/:id/welcome/:confirmation_token" => "users/confirmations#show", as: :welcome
     patch "/users/:id/confirm" => "users/confirmations#update", as: :confirm_password
 
@@ -105,6 +105,9 @@ Droom::Engine.routes.draw do
     resources :users
     collection do
       get :pending
+      post :registerme
+      get :register
+      post :propose
     end
     member do
       get :approve

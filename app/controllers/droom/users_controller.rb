@@ -97,6 +97,8 @@ module Droom
     end
 
     def set_organisation
+      Rails.logger.warn "set_organisation_params"
+      Rails.logger.warn JSON.generate(set_organisation_params)
       if current_user.update(set_organisation_params)
         redirect_to params[:destination].presence || droom.dashboard_url
       else

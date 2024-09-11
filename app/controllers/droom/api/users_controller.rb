@@ -3,7 +3,7 @@ module Droom::Api
 
     before_action :get_users, only: [:index]
     before_action :find_or_create_user, only: [:create]
-    load_resource find_by: :uid, class: "Droom::User", except: [:inviteme]
+    load_resource find_by: :uid, class: "Droom::User", except: [:inviteme, :registerme]
 
     def index
       render json: @users
@@ -25,6 +25,7 @@ module Droom::Api
       # response must not be a way to discover user email addresses.
       head :no_content
     end
+
 
     # This would usually be a session-resumption call from a front end SPA
     #

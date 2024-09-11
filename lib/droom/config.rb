@@ -20,6 +20,7 @@ module Droom
                   :margin_dashboard_modules,
                   :panels,
                   :use_noticeboard,
+                  :use_tags,
                   :scrap_types,
                   :default_scrap_type,
                   :use_chinese_names,
@@ -32,6 +33,7 @@ module Droom
                   :use_organisations,
                   :require_organisation,
                   :external_organisations,
+                  :invite_organisation_registration,
                   :enable_mailing_lists,
                   :mailman_table_name,
                   :mailing_lists_active_by_default,
@@ -144,6 +146,10 @@ module Droom
       !!@use_noticeboard
     end
  
+    def use_tags?
+      !!@use_tags
+    end
+ 
     def scrap_types
       @scrap_types ||= %w{image text quote link event document}
     end
@@ -190,6 +196,10 @@ module Droom
 
     def external_organisations?
       !!@external_organisations
+    end
+
+    def invite_organisation_registration?
+      !!@invite_organisation_registration
     end
 
     def stream_shared?

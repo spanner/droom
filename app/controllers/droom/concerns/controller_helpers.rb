@@ -17,13 +17,10 @@ module Droom::Concerns::ControllerHelpers
     before_action :authenticate_user!, except: [:cors_check, :inviteme]
     before_action :set_exception_context
 
-    before_action :check_user_is_confirmed, except: [:cors_check, :setup, :inviteme], unless: :devise_controller?
     before_action :check_user_setup, except: [:cors_check, :setup, :inviteme], unless: :devise_controller?
-    before_action :check_user_has_organisation, except: [:cors_check, :setup_organisation, :inviteme], unless: :devise_controller?
-    before_action :check_data_room_permission, except: [:cors_check, :set_password, :inviteme], unless: :devise_controller?
 
-    before_action :note_current_user, except: [:cors_check, :inviteme]
-    before_action :set_section, except: [:cors_check, :inviteme]
+    before_action :note_current_user, except: [:cors_check, :inviteme, :registerme]
+    before_action :set_section, except: [:cors_check, :inviteme, :registerme]
     before_action :set_access_control_headers
 
     skip_before_action :verify_authenticity_token, only: [:cors_check], raise: false
@@ -200,6 +197,13 @@ module Droom::Concerns::ControllerHelpers
   end
 
   def check_user_setup
+    check_user_is_confirmed
+    check_user_ready
+    check_user_has_organisation
+    check_data_room_permission
+  end
+
+  def check_user_ready
     if user_signed_in? && !user_awaiting_approval? && (!current_user.encrypted_password? || !current_user.names?)
       @destination = request.fullpath
       raise Droom::SetupRequired
@@ -220,7 +224,6 @@ module Droom::Concerns::ControllerHelpers
       if !current_user.organisation
         @destination = request.fullpath
         raise Droom::OrganisationRequired
-
       elsif !current_user.organisation.approved?
         raise Droom::ApprovalRequired
       end

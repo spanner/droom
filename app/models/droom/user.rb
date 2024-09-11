@@ -18,9 +18,7 @@ module Droom
            :recoverable,
            :trackable,
            :confirmable,
-           # :session_limitable,
            :lockable,
-           :registerable,
            :timeoutable,
            reconfirmable: false,
            lock_strategy: :failed_attempts,
@@ -341,7 +339,7 @@ module Droom
     }
 
     def active_for_authentication?
-      super && emails.any?
+      super && emails.any? && !awaiting_approval?
     end
 
     def approved?

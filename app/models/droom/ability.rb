@@ -7,6 +7,7 @@ module Droom
 
       can :create, Droom::Enquiry
       can :read, Droom::Tag
+      can [:registerme, :register, :propose],  Droom::Organisation
 
       if user.persisted?
         if user.admin?
