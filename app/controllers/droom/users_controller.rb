@@ -45,11 +45,12 @@ module Droom
       if current_user.organisation_admin? && !current_user.admin?
         @user.organisation = current_user.organisation
       end
+      # created users are presumed approved
+      @user.approved_at = Time.now
       # add marker to block the automatic devise confirmation message
       @user.defer_confirmation!
       # add marker to send confirmation once the user is saved and permissions are known
       @user.send_confirmation!
-
       if @user.save
         respond_with @user
       end
