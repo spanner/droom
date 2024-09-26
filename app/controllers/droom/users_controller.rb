@@ -145,7 +145,7 @@ module Droom
         arguments[:page] = (params[:page].presence || 1).to_i
       end
 
-      @users = Droom::User.search query, arguments
+      @users = Droom::User.search query, **arguments
     end
 
     def user_params
