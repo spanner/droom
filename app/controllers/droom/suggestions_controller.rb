@@ -10,7 +10,7 @@ module Droom
       max = params[:limit] || 20
       show_when_empty = params[:empty] == "all"
 
-      Rails.logger.warn("🚘 fragment: #{fragment}")
+      # Rails.logger.warn("🚘 fragment: #{fragment}")
 
       if !show_when_empty && fragment.blank?
         @suggestions = []
@@ -23,7 +23,7 @@ module Droom
         end
       end
 
-      Rails.logger.warn("🚘 @suggestions: #{@suggestions.inspect}")
+      # Rails.logger.warn("🚘 @suggestions: #{@suggestions.inspect}")
 
       respond_with @suggestions do |format|
         format.json {
@@ -46,7 +46,7 @@ module Droom
     def get_classes
       suggestible_classes = Droom.suggestible_classes
       requested_types = [params[:type]].flatten.compact.uniq
-      Rails.logger.warn("🚘 requested_types: #{requested_types.inspect}")
+      # Rails.logger.warn("🚘 requested_types: #{requested_types.inspect}")
       requested_types = Droom.suggestible_classes.keys if requested_types.empty?
       @types = suggestible_classes.keys & requested_types
       @klasses = suggestible_classes.values_at(*@types).map(&:constantize)

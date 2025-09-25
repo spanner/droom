@@ -11,7 +11,7 @@ module Droom
   protected
     
     def flat_name
-      name.underscore..gsub(/\s+/, '_')
+      name.underscore.gsub(/\s+/, '_')
     end
 
     def set_slug

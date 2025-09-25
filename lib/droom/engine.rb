@@ -32,8 +32,6 @@ module Droom
       Devise.parent_controller = "Droom::DroomController"
     end
 
-    config.assets.paths << Droom::Engine.root.join('node_modules')
-
     ActiveSupport::Reloader.to_prepare do
       Devise::SessionsController.layout Droom.devise_layout
       Devise::RegistrationsController.layout Droom.devise_layout
