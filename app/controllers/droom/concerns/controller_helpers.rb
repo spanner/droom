@@ -121,10 +121,8 @@ module Droom::Concerns::ControllerHelpers
   #
   def update_auth_cookie
     if user_signed_in? && current_user.unique_session_id?
-      Rails.logger.warn "✅ setting auth_cookie after #{request.fullpath} with user #{current_user.inspect}"
       Droom::AuthCookie.new(warden.cookies).set(current_user)
     else
-      Rails.logger.warn "⚠️ unsetting auth_cookie after #{request.fullpath}"
       Droom::AuthCookie.new(warden.cookies).unset
     end
   end
