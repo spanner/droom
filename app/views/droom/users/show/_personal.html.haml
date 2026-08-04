@@ -12,7 +12,7 @@
   #personal_info_content
     #left_pane
       - if @user.image?
-        - img = @user.image.url(:thumb)
+        - img = @user.thumbnail_url
       - else
         - img = image_url('droom/missing/user.png')
 

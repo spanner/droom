@@ -19,7 +19,7 @@
   %h3
     = link_to(link_href, data: {action: "popup"}) do
       - if Droom.config.use_mugshots? && user.image?
-        %span.mugshot{style: "background-image: url(#{user.image.url(:thumb)})"}
+        %span.mugshot{style: "background-image: url(#{user.thumbnail_url})"}
       %span.name
         = truncate(user.colloquial_name, length: 42)
     - if user.organisation

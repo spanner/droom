@@ -1,8 +1,8 @@
 - if notice.url?
   = link_to notice.url_with_protocol do
-    %img{src: notice.image.url(:notice)}
+    %img{src: notice.image_url(:notice)}
 - else
-  %img{src: notice.image.url(:notice)}
+  %img{src: notice.image_url(:notice)}
 
 - if notice.body?
   .content

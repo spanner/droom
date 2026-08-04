@@ -11,15 +11,13 @@ module Droom
     belongs_to :approved_by, optional: true, class_name: 'Droom::User'
     belongs_to :disapproved_by, optional: true, class_name: 'Droom::User'
 
-    has_attached_file :logo,
-                      default_url: :nil,
-                      styles: {
-                        standard: "520x520#",
-                        icon: "32x32#",
-                        thumb: "130x130#"
-                      }
+    has_one_attached :logo
 
-    validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+    LOGO_VARIANTS = {
+      standard: { resize_to_fill: [520, 520], strip: true },
+      icon: { resize_to_fill: [32, 32], strip: true },
+      thumb: { resize_to_fill: [130, 130], strip: true }
+    }.freeze
 
     scope :added_since, -> date { where("created_at > ?", date) }
     scope :disapproved, -> { where.not(disapproved_at: nil) }
@@ -145,27 +143,13 @@ module Droom
       users.where(id: ids).update_all(organisation_admin: true)
     end
 
-    def logo_url(style=:standard, decache=true)
-      if logo?
-        url = logo.url(style, decache)
-        url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
-      end
+    def logo?
+      logo.attached?
     end
 
-    # logo_data should be a fully specified data: url in base64 with prefix. Paperclip knows what to do with it.
-    #
-    def logo_data=(data_uri)
-      if data_uri.present?
-        self.logo = data_uri
-      end
-    end
-
-    # If logo_data is given then the file name should be also supplied as `logo_name`.
-    # You normally want to call this method after logo_url= or logo_data=, eg by ordering
-    # parameters in the controller.
-    #
-    def logo_name=(name)
-      self.logo_file_name = name
+    def logo_url(style = :standard, _decache = true)
+      return unless logo?
+      attachment_variant_url(logo, LOGO_VARIANTS[style.to_sym] || LOGO_VARIANTS[:standard])
     end
 
     def url_with_protocol

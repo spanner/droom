@@ -6,15 +6,18 @@ module Droom
     belongs_to :folder
     belongs_to :scrap, dependent: :destroy, optional: true
 
-    has_attached_file :file,
-                      fog_directory: -> a { a.instance.file_bucket }
+    has_one_attached :file
 
     acts_as_list scope: :folder_id
 
     before_create :inherit_confidentiality
+    before_save :mirror_file_columns
 
-    validates :file, :presence => true
-    do_not_validate_attachment_file_type :file
+    # Legacy rows carry only the paperclip columns until the S3 migration
+    # task attaches their blobs, so presence is satisfied by either.
+    validate do
+      errors.add(:file, :blank) unless file.attached? || file_file_name.present?
+    end
 
     scope :all_private, -> { where("private = 1") }
     scope :not_private, -> { where("private <> 1 OR private IS NULL") }
@@ -56,12 +59,23 @@ module Droom
       self.folder = nil if self.folder == holder.folder
     end
 
-    def file_ok?
-      file.exists?
+    def file?
+      file.attached? || file_file_name.present?
     end
-    
-    def original_file
-      open(self.file.url)
+
+    def file_ok?
+      file.attached?
+    end
+
+    # The search index, `matching` scope, folder ordering and several views
+    # read the old paperclip columns, so keep them populated on new uploads.
+    def mirror_file_columns
+      if (change = attachment_changes["file"]) && change.respond_to?(:blob)
+        self.file_file_name = change.blob.filename.to_s
+        self.file_content_type = change.blob.content_type
+        self.file_file_size = change.blob.byte_size
+        self.file_updated_at = Time.current
+      end
     end
 
     def full_path
@@ -78,15 +92,6 @@ module Droom
       else
         ""
       end
-    end
-
-    ## Filing
-    #
-    # Some installations like to use different buckets for various purposes.
-    # Override `file_bucket` if you want to choose a bucket at runtime.
-    #
-    def file_bucket
-      Settings.aws.asset_bucket
     end
 
     ## Search
@@ -168,35 +173,11 @@ module Droom
       # noop here
     end
 
-    # Pass block to perform operations with a local file, which will be
-    # pulled down from S3 if no other version is available.
-    #
-    def with_local_file
-      if file?
-        if File.file?(file.path)
-          yield file.path
-        elsif file.queued_for_write[:original]
-          yield file.queued_for_write[:original].path
-        else
-          tempfile_path = copy_to_local_tempfile
-          yield tempfile_path
-          File.delete(tempfile_path) if File.file?(tempfile_path)
-        end
-      end
-    end
-
-    def copy_to_local_tempfile
-      if file?
-        begin
-          folder = self.class.to_s.downcase.pluralize
-          tempfile_path = Rails.root.join("tmp/#{folder}/#{id}/#{file_file_name}")
-          FileUtils.mkdir_p(Rails.root.join("tmp/#{folder}/#{id}"))
-          file.copy_to_local_file(:original, tempfile_path)
-        rescue => e
-          # raise Cdr::FileReadError, "Original file could not be read: #{e.message}"
-          Rails.logger.warn "File read failure: #{e.message}"
-        end
-        tempfile_path
+    # Pass block to perform operations with a local file, pulled down from
+    # storage. Legacy rows whose blob has not been migrated yet are skipped.
+    def with_local_file(&block)
+      if file.attached?
+        file.blob.open { |tempfile| yield tempfile.path }
       end
     end
 

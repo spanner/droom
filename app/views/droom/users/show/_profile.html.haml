@@ -1,6 +1,6 @@
 - user ||= @user
 - if user.image?
-  - mugstyle =  "background-image: url(#{user.image.url('thumb')})"
+  - mugstyle =  "background-image: url(#{user.thumbnail_url})"
 - else
   - mugstyle =  ""
 

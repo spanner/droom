@@ -1,76 +1,53 @@
 module Droom::Concerns::Imaged
   extend ActiveSupport::Concern
 
+  # The old paperclip styles, as ActiveStorage variant transformations.
+  # Override `image_variants` in the including class to change the set.
+  IMAGE_VARIANTS = {
+    icon: { resize_to_fill: [32, 32], strip: true },
+    thumb: { resize_to_fill: [128, 96], format: :png, strip: true },
+    standard: { resize_to_limit: [640, 480], format: :jpg, quality: 50, strip: true },
+    hero: { resize_to_limit: [1920, 1080], format: :jpg, quality: 25, strip: true }
+  }.freeze
+
   included do
-    has_attached_file :image,
-                      styles: {
-                        icon: "32x32#",
-                        thumb: ["128x96#", :png],
-                        standard: ["640x480>", :jpg],
-                        hero: ["1920x1080>", :jpg]
-                      },
-                      convert_options: {
-                        icon: "-strip",
-                        thumb: "-strip",
-                        standard: "-quality 50 -strip",
-                        hero: "-quality 25 -strip"
-                      }
-    validates_attachment :image, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+    has_one_attached :image
   end
 
-  ## Images
-  #
-  def image_url(style=:standard, decache=true)
-    if image?
-      url = image.url(style, decache)
-      url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
+  class_methods do
+    def image_variants
+      IMAGE_VARIANTS
+    end
+  end
+
+  def image?
+    image.attached?
+  end
+
+  def image_url(style = :standard, _decache = true)
+    return "" unless image?
+    style = :thumb if style.to_s == "thumbnail"
+    spec = self.class.image_variants[style.to_sym] || self.class.image_variants[:standard]
+    attachment_variant_url(image, spec)
+  end
+
+  # Absolute app-hosted URL (redirect route) for a variant of any attachment.
+  def attachment_variant_url(attachment, spec)
+    helpers = Rails.application.routes.url_helpers
+    path = if attachment.variable?
+      helpers.rails_representation_path(attachment.variant(spec), only_path: true)
     else
-      ""
+      helpers.rails_blob_path(attachment, only_path: true)
     end
+    "#{Settings.protocol}://#{Settings.host}#{path}"
   end
 
-  def icon_url(decache=true)
-    if image?
-      url = image.url(:icon, decache)
-      url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
-    else
-      ""
-    end
+  def icon_url(_decache = true)
+    image_url(:icon)
   end
 
-  def thumbnail_url(decache=true)
-    if image?
-      url = image.url(:thumbnail, decache)
-      url.sub(/^\//, "#{Settings.protocol}://#{Settings.host}/")
-    else
-      ""
-    end
-  end
-
-  # Images usually come to us as data: urls but can also be given as actual url or assigned directly as file.
-  #
-  def image_url=(address)
-    if address.present?
-      self.image = URI(address)
-    end
-  rescue OpenURI::HTTPError => e
-    Rails.logger.warn "Cannot read image url #{address} because: #{e}. Skipping."
-  end
-
-  # image_data should be a fully specified data: url in base64 with prefix. Paperclip knows what to do with it.
-  #
-  def image_data=(data_uri)
-    if data_uri.present?
-      self.image = data_uri
-    end
-  end
-
-  # If image_data is given then the file name should be also supplied as `image_name`.
-  # You normally want to call this method after image_url= or image_data=, eg by ordering
-  # parameters in the controller.
-  #
-  def image_name=(name)
-    self.image_file_name = name
+  def thumbnail_url(_decache = true)
+    image_url(:thumb)
   end
 
   def thumbnail

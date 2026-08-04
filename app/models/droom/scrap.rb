@@ -1,3 +1,5 @@
+require "open-uri"
+
 module Droom
   class Scrap < Droom::DroomRecord
     belongs_to :created_by, :class_name => "Droom::User", optional: true
@@ -9,13 +11,15 @@ module Droom
     belongs_to :document, :class_name => "Droom::Document", optional: true, dependent: :destroy
     accepts_nested_attributes_for :document
 
-    has_attached_file :image,
-                      :styles => {
-                        :notice => "960x",
-                        :icon => "32x32#",
-                        :thumb => "130x73#"
-                      }
-    do_not_validate_attachment_file_type :image
+    include Droom::Concerns::Imaged
+
+    def self.image_variants
+      {
+        notice: { resize_to_limit: [960, nil], strip: true },
+        icon: { resize_to_fill: [32, 32], strip: true },
+        thumb: { resize_to_fill: [130, 73], strip: true }
+      }
+    end
 
     before_save :get_youtube_thumbnail
     before_validation :name_associates
@@ -106,9 +110,15 @@ module Droom
   protected
   
     def get_youtube_thumbnail
-      if scraptype == "video" && youtube_id?
-        self.image = URI("http://img.youtube.com/vi/#{youtube_id}/0.jpg")
+      if scraptype == "video" && youtube_id? && !image.attached?
+        image.attach(
+          io: URI.open("https://img.youtube.com/vi/#{youtube_id}/0.jpg"),
+          filename: "#{youtube_id}.jpg",
+          content_type: "image/jpeg"
+        )
       end
+    rescue OpenURI::HTTPError, SocketError => e
+      Rails.logger.warn "Cannot fetch youtube thumbnail for #{youtube_id}: #{e}. Skipping."
     end
     
     def name_associates

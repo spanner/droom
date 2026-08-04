@@ -263,14 +263,6 @@ module Droom
       @yt_client ||= YouTubeIt::Client.new(:dev_key => "AI39si473p0K4e6id0ZrM1vniyk8pdbqr67hH39hyFjW_JQoLg9xi6BecWFtraoPMCeYQmRgIc_XudGKVU8tmeQF8VHwjOUg8Q")
     end
  
-    def aws_bucket_name
-      @aws_bucket_name ||= nil
-    end
- 
-    def aws_bucket
-      @aws_bucket ||= Fog::Storage.new(Droom::Engine.config.paperclip_defaults[:fog_credentials]).directories.get(@aws_bucket_name)
-    end
- 
     def required_calendar_names
       @required_calendar_names ||= %w{main stream}
     end

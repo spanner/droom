@@ -12,7 +12,7 @@
 
   .specifics.image
     - if @scrap.image?
-      - img = @scrap.image.url(:thumb)
+      - img = @scrap.thumbnail_url
     - else
       - img = ""
 

@@ -6,7 +6,7 @@
       .playable
       
   - elsif scrap.image?
-    = image_tag(scrap.image.url(:cropped))
+    = image_tag(scrap.image_url(:thumb))
     
   - else
     - if scrap.wordiness == 'text' || scrap.wordiness == 'paragraph'
