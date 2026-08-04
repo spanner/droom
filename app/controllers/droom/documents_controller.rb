@@ -18,7 +18,9 @@ module Droom
 
     def show
       if @document.file.attached?
-        redirect_to @document.file.url(expires_in: 600), allow_other_host: true
+        # Streams through the host app's authenticated ActiveStorage proxy —
+        # the bucket is closed and never serves the public directly.
+        redirect_to main_app.url_for(@document.file)
       else
         raise ActiveRecord::RecordNotFound
       end
