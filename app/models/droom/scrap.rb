@@ -38,7 +38,7 @@ module Droom
 
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
-      where('droom_scraps.name LIKE :f OR droom_scraps.body LIKE :f OR droom_scraps.note LIKE :f', :f => fragment)
+      where('droom_scraps.name ILIKE :f OR droom_scraps.body ILIKE :f OR droom_scraps.note ILIKE :f', :f => fragment)
     }
     
     scope :visible_to, -> user { where("1=1") }

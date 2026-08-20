@@ -37,7 +37,7 @@ module Droom
 
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
-      where('droom_documents.name LIKE :f OR droom_documents.file_file_name LIKE :f', :f => fragment)
+      where('droom_documents.name ILIKE :f OR droom_documents.file_file_name ILIKE :f', :f => fragment)
     }
 
     scope :in_folders, -> folders{

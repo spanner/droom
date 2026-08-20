@@ -116,7 +116,7 @@ module Droom
     #
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
-      where('tags.name like ?', fragment)
+      where('tags.name ilike ?', fragment)
     }
   
     # The public-facing search engine is faceted and relies on a similar but broader suggestion mechanism

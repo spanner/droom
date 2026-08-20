@@ -81,7 +81,7 @@ module Droom
 
     scope :matching, -> fragment { 
       fragment = "%#{fragment}%"
-      where('droom_events.name like :f OR droom_events.description like :f', :f => fragment)
+      where('droom_events.name ilike :f OR droom_events.description ilike :f', :f => fragment)
     }
 
 

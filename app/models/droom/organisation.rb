@@ -29,7 +29,7 @@ module Droom
 
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
-      where('droom_organisations.name LIKE :f', :f => fragment)
+      where('droom_organisations.name ILIKE :f', :f => fragment)
     }
 
     default_scope -> {order("name ASC")}

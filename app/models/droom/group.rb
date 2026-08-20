@@ -46,7 +46,7 @@ module Droom
 
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
-      where('droom_groups.name like ?', fragment)
+      where('droom_groups.name ilike ?', fragment)
     }
 
     scope :not_shown_in_directory, -> {

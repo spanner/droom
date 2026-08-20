@@ -13,7 +13,7 @@ module Droom
 
     scope :matching, -> fragment {
       fragment = "%#{fragment}%"
-      where('droom_venues.name like ?', fragment)
+      where('droom_venues.name ilike ?', fragment)
     }
     
     scope :in_name_order, -> {
