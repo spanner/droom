@@ -1,6 +1,9 @@
 - if flash[:notice]
   %p.standfirst.green
     = flash[:notice]
+- if flash[:alert]
+  %p.standfirst.red
+    = flash[:alert]
 
 #login
   %form{id: "inviteme", class: "login", data: {role: "invitation"}}

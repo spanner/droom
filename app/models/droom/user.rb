@@ -334,8 +334,9 @@ module Droom
 
     # The only difficulty is to support devise login using any known email address.
     #
+    # Case-insensitive: MySQL collation used to hide this, PostgreSQL does not.
     scope :from_email, -> email {
-      joins(:emails).where(droom_emails: {email: email})
+      joins(:emails).where("lower(droom_emails.email) IN (?)", Array(email).map { |e| Droom::Email.normalize(e) }.compact)
     }
 
     def active_for_authentication?
@@ -410,9 +411,9 @@ module Droom
     end
 
     def add_email(email, address_type=nil)
-      if email && email.present?
+      if email = Droom::Email.normalize(email)
         if persisted?
-          emails.where(email: email).first_or_create(address_type: address_type, default: true)
+          emails.where("lower(email) = ?", email).first_or_create(email: email, address_type: address_type, default: true)
         else
           emails.build(email: email, address_type: address_type, default: true)
         end
