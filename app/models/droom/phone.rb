@@ -3,7 +3,7 @@ module Droom
     include Droom::Concerns::AddressBookProperty
 
     scope :populated, -> {
-      where('phone <> "" and phone IS NOT NULL')
+      where("phone <> '' and phone IS NOT NULL")
     }
   end
 end
