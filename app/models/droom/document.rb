@@ -19,16 +19,15 @@ module Droom
       errors.add(:file, :blank) unless file.attached? || file_file_name.present?
     end
 
-    scope :all_private, -> { where("private = 1") }
-    scope :not_private, -> { where("private <> 1 OR private IS NULL") }
-    scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
-    scope :not_public, -> { where("public <> 1 OR private = 1)") }
+    scope :all_private, -> { where(private: true) }
+    scope :not_private, -> { where(private: [false, nil]) }
+    scope :all_public, -> { where(public: true, private: [false, nil]) }
+    scope :not_public, -> { where(public: [false, nil]).or(where(private: true)) }
 
     scope :visible_to, -> user {
       if user
         select('droom_documents.*')
-          .joins('LEFT OUTER JOIN droom_folders AS df ON droom_documents.folder_id = df.id')
-          .where(["(droom_documents.public = 1 OR dpf.user_id = ?)", user.id])
+          .where(public: true)
           .group('droom_documents.id')
       else
         all_public

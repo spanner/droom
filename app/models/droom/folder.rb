@@ -13,15 +13,15 @@ module Droom
 
     default_scope -> { includes(:documents) }
 
-    scope :all_private, -> { where("#{table_name}.private = 1") }
-    scope :not_private, -> { where("#{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
-    scope :all_public, -> { where("#{table_name}.public = 1 AND #{table_name}.private <> 1 OR #{table_name}.private IS NULL") }
-    scope :not_public, -> { where("#{table_name}.public <> 1 OR #{table_name}.private = 1)") }
+    scope :all_private, -> { where(private: true) }
+    scope :not_private, -> { where(private: [false, nil]) }
+    scope :all_public, -> { where(public: true, private: [false, nil]) }
+    scope :not_public, -> { where(public: [false, nil]).or(where(private: true)) }
     scope :by_name, -> { order("#{table_name}.name ASC") }
     scope :visible_to, -> user {
       if user
         select('droom_folders.*')
-          .where("(droom_folders.public = 1)")
+          .where(public: true)
           .group('droom_folders.id')
       else
         all_public

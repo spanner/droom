@@ -24,10 +24,10 @@ module Droom
       [:name, :description]
     end
 
-    scope :all_private, -> { where("private = 1") }
-    scope :not_private, -> { where("private <> 1 OR private IS NULL") }
-    scope :all_public, -> { where("public = 1 AND private <> 1 OR private IS NULL") }
-    scope :not_public, -> { where("public <> 1 OR private = 1)") }
+    scope :all_private, -> { where(private: true) }
+    scope :not_private, -> { where(private: [false, nil]) }
+    scope :all_public, -> { where(public: true, private: [false, nil]) }
+    scope :not_public, -> { where(public: [false, nil]).or(where(private: true)) }
 
     scope :visible_to, -> user {
       if user

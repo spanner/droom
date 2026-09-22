@@ -5,7 +5,6 @@ module Droom
     include Droom::Concerns::Slugged
 
     has_many :events, :dependent => :nullify
-    has_many :folders, through: :events
 
     has_folder within: "Events" # here the within arguments sets the name of our parent folder
 
@@ -39,7 +38,10 @@ module Droom
     def distribute_confidentiality
       folder.set_confidentiality!(private?)
       # catch any event folders in the wrong place
-      folders.other_than(folder.family).each {|folder| folder.set_confidentiality!(private?) }
+      # Not a has_many :through — droom_folders.holder_id is a string column and
+      # PG will not compare it with droom_events.id.
+      event_folders = Droom::Folder.where(holder_type: "Droom::Event", holder_id: events.pluck(:id).map(&:to_s))
+      event_folders.other_than(folder.family).each {|folder| folder.set_confidentiality!(private?) }
     end
 
   end
