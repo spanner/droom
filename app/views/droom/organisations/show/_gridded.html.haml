@@ -1,18 +1,12 @@
 - gridded ||= nil
 - organisation ||= gridded || @organisation
 - cssclass = "organisation gridbox"
-- cssclass << " pending" if organisation.pending?
-- cssclass << " disapproved" if organisation.disapproved?
 
 %div{id: "organisation_#{organisation.id}", class: cssclass, data: {refreshing: true, url: droom.organisation_path(organisation, view: 'gridded')} }
-  - unless organisation.pending?
-    = action_menu(organisation)
-    = action_menulink(organisation)
+  = action_menu(organisation)
+  = action_menulink(organisation)
       
   .content
-    - if admin? and organisation.pending?
-      = render partial: "droom/organisations/show/status", locals: {organisation: organisation}
-
     %h2.name<
       - if organisation.url
         = link_to organisation.name, organisation.url, :class => "name"

@@ -18,9 +18,7 @@ Droom::Engine.routes.draw do
     resources :videos
     resources :pages
     resources :tags
-    resources :organisations do
-      post :register, on: :collection
-    end
+    resources :organisations
   end
 
   devise_for :users,
@@ -103,15 +101,7 @@ Droom::Engine.routes.draw do
 
   resources :organisations do
     resources :users
-    collection do
-      get :pending
-      post :registerme
-      get :register
-      post :propose
-    end
     member do
-      get :approve
-      get :disapprove
       put :merge
     end
   end
