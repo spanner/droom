@@ -33,7 +33,6 @@ module Droom
                   :use_organisations,
                   :require_organisation,
                   :external_organisations,
-                  :invite_organisation_registration,
                   :enable_mailing_lists,
                   :mailman_table_name,
                   :mailing_lists_active_by_default,
@@ -196,10 +195,6 @@ module Droom
 
     def external_organisations?
       !!@external_organisations
-    end
-
-    def invite_organisation_registration?
-      !!@invite_organisation_registration
     end
 
     def stream_shared?

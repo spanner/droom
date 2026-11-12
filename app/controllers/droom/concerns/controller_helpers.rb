@@ -19,8 +19,8 @@ module Droom::Concerns::ControllerHelpers
 
     before_action :check_user_setup, except: [:cors_check, :setup, :inviteme], unless: :devise_controller?
 
-    before_action :note_current_user, except: [:cors_check, :inviteme, :registerme]
-    before_action :set_section, except: [:cors_check, :inviteme, :registerme]
+    before_action :note_current_user, except: [:cors_check, :inviteme]
+    before_action :set_section, except: [:cors_check, :inviteme]
     before_action :set_access_control_headers
 
     skip_before_action :verify_authenticity_token, only: [:cors_check], raise: false
@@ -222,8 +222,6 @@ module Droom::Concerns::ControllerHelpers
       if !current_user.organisation
         @destination = request.fullpath
         raise Droom::OrganisationRequired
-      elsif !current_user.organisation.approved?
-        raise Droom::ApprovalRequired
       end
     end
   end

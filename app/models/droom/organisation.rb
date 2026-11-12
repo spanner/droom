@@ -8,9 +8,6 @@ module Droom
     belongs_to :organisation_type, optional: true
     belongs_to :owner, optional: true, class_name: 'Droom::User'
 
-    belongs_to :approved_by, optional: true, class_name: 'Droom::User'
-    belongs_to :disapproved_by, optional: true, class_name: 'Droom::User'
-
     has_one_attached :logo
 
     LOGO_VARIANTS = {
@@ -20,9 +17,6 @@ module Droom
     }.freeze
 
     scope :added_since, -> date { where("created_at > ?", date) }
-    scope :disapproved, -> { where.not(disapproved_at: nil) }
-    scope :approved, -> { where.not(approved_at: nil) }
-    scope :pending, -> { where(approved_at: nil, disapproved_at: nil) }
     scope :by_date, -> { order(created_at: :asc) }
     scope :external, -> { where(external: true) }
     scope :internal, -> { where(external: false) }
@@ -39,23 +33,14 @@ module Droom
     # supports org-merge
     attr_accessor :other_id
     
-    # supports registration: these values are passed through
-    # and then finally applied to the org owner if they are new.
-    attr_accessor :registration_email
-    attr_accessor :registration_email_token
-    attr_accessor :registration_given_name
-    attr_accessor :registration_family_name
-    attr_accessor :registration_phone
-    attr_accessor :registration_role
-
     def self.for_selection(with_external=false)
-      organisations = approved.order("name asc")
+      organisations = order("name asc")
       organisations = organisations.where(external: false) unless with_external
       organisations.map{|f| [f.name, f.id] }.unshift(['', ''])
     end
 
     def self.for_selection_with_owner(with_external=false)
-      organisations = approved.order("name asc").includes(:owner)
+      organisations = order("name asc").includes(:owner)
       organisations = organisations.where(external: false) unless with_external
       organisations.map{|o| ["#{o.name} (#{o.owner_name || 'No owner'})", o.id] }.unshift(['', ''])
     end
@@ -63,75 +48,6 @@ module Droom
     def self.matching_email(email)
       domain = email.split('@').last
       where(joinable: true, email_domain: domain)
-    end
-
-    def self.approve_all
-      Searchkick.callbacks(:bulk) do
-        u = Droom::User.first
-        all.each {|o| o.approve!(u)}
-      end
-    end
-
-    def self.disapprove_all
-      Searchkick.callbacks(:bulk) do
-        u = Droom::User.first
-        all.each {|o| o.disapprove!(u)}
-      end
-    end
-
-    # loud version for normal vetting process
-    #
-    def approve!(approving_user=nil)
-      unless approved?
-        self.update({
-          approved_at: Time.now,
-          approved_by: approving_user,
-          disapproved_at: nil,
-          disapproved_by: nil
-        })
-        send_welcome_message if approving_user
-      end
-    end
-
-    # quiet version for seeding and admin tasks
-    #
-    def approve
-      unless approved?
-        self.update({
-          approved_at: Time.now,
-          disapproved_at: nil,
-          disapproved_by: nil
-        })
-      end
-    end
-
-    def approved?
-      approved_at?
-    end
-
-    def disapprove!(user)
-      unless disapproved?
-        self.update({
-          disapproved_at: Time.now,
-          disapproved_by: user,
-          approved_at: nil,
-          approved_by: nil
-        })
-      end
-    end
-
-    def disapproved?
-      disapproved_at?
-    end
-
-    def pending?
-      !approved? && !disapproved?
-    end
-
-    def send_welcome_message
-      if owner
-        Droom.mailer.send(:org_welcome, self, owner.confirmation_token).deliver_later
-      end
     end
 
     def administrator_ids
@@ -246,7 +162,6 @@ module Droom
         tags: tag_names,
         all_tags: tags_with_synonyms,
         people: users.map(&:name).join(', '),
-        approved: approved?,
         external: external?,
         created_at: created_at
       }
